@@ -13,20 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.helper.econcept.transfrom;
+package org.ihtsdo.temp;
 
-import java.io.IOException;
-import org.ihtsdo.tk.dto.concept.TkConcept;
+public interface I_Count {
 
-/**
- *
- * @author kec
- */
-public interface EConceptTransformerBI {
-    
-    
-    public void process(TkConcept c) throws Exception;
-    
-    public void close() throws IOException;
-    
+    public void increment();
+
 }

@@ -13,20 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.helper.econcept.transfrom;
+package org.ihtsdo.concept.component.processor;
 
-import java.io.IOException;
-import org.ihtsdo.tk.dto.concept.TkConcept;
+import org.ihtsdo.concept.component.ConceptComponent;
+import org.ihtsdo.tk.api.ComponentChroncileBI;
+import org.ihtsdo.tk.api.ProcessComponentChronicleBI;
 
 /**
  *
  * @author kec
  */
-public interface EConceptTransformerBI {
-    
-    
-    public void process(TkConcept c) throws Exception;
-    
-    public void close() throws IOException;
+public class VersionFlusher implements ProcessComponentChronicleBI {
+
+    @Override
+    public void process(ComponentChroncileBI cc) throws Exception {
+        ConceptComponent component = (ConceptComponent) cc;
+        component.clearVersions();
+    }
     
 }

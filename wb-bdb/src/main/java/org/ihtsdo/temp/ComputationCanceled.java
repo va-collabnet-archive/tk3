@@ -13,20 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.helper.econcept.transfrom;
+package org.ihtsdo.temp;
 
-import java.io.IOException;
-import org.ihtsdo.tk.dto.concept.TkConcept;
+public class ComputationCanceled extends Exception {
 
-/**
- *
- * @author kec
- */
-public interface EConceptTransformerBI {
-    
-    
-    public void process(TkConcept c) throws Exception;
-    
-    public void close() throws IOException;
-    
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    public ComputationCanceled() {
+       super();
+    }
+
+    public ComputationCanceled(String message) {
+        super(message);
+    }
+
+    public ComputationCanceled(Throwable cause) {
+        super(cause);
+    }
+
+    public ComputationCanceled(String message, Throwable cause) {
+        super(message, cause);
+   }
+
 }

@@ -13,20 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.helper.econcept.transfrom;
 
-import java.io.IOException;
-import org.ihtsdo.tk.dto.concept.TkConcept;
+
+
+package org.ihtsdo.db.change;
 
 /**
  *
  * @author kec
  */
-public interface EConceptTransformerBI {
-    
-    
-    public void process(TkConcept c) throws Exception;
-    
-    public void close() throws IOException;
-    
+public class BdbCommitSequence {
+   private static short commitSequence = Short.MIN_VALUE;
+
+   //~--- methods -------------------------------------------------------------
+
+   public static synchronized short nextSequence() {
+      if (commitSequence >= Short.MAX_VALUE) {
+         commitSequence = Short.MIN_VALUE;
+      }
+
+      return commitSequence++;
+   }
+
+   //~--- get methods ---------------------------------------------------------
+
+   public static short getCommitSequence() {
+      return commitSequence;
+   }
 }

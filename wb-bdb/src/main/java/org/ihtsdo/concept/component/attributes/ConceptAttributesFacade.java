@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 International Health Terminology Standards Development Organisation.
+ * Copyright 2012 International Health Terminology Standards Development Organisation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.helper.econcept.transfrom;
+package org.ihtsdo.concept.component.attributes;
 
-import java.io.IOException;
-import org.ihtsdo.tk.dto.concept.TkConcept;
+import java.beans.PropertyVetoException;
+import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
 
 /**
  *
  * @author kec
  */
-public interface EConceptTransformerBI {
-    
-    
-    public void process(TkConcept c) throws Exception;
-    
-    public void close() throws IOException;
-    
+public interface ConceptAttributesFacade extends ConAttrVersionBI {
+    void setDefined(boolean defined) throws PropertyVetoException;
+    ConceptAttributesRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time);
 }
