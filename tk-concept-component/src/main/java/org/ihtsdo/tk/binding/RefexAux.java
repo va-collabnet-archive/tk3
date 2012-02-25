@@ -27,4 +27,12 @@ public class RefexAux {
             new ConceptSpec("viewer image",
             UUID.fromString("5f5be40f-24c1-374f-bd04-4a5003e366ea"));
 
+        public static ConceptSpec BOOLEAN_CIRCLE_ICONS_FALSE =
+            new ConceptSpec("89138782-bfe6-3e0a-8796-2e882260b327",
+            UUID.fromString("false with forbidden icon"));
+
+        public static ConceptSpec BOOLEAN_CIRCLE_ICONS_TRUE =
+            new ConceptSpec("true with circle check icon",
+            UUID.fromString("00ff1b42-1b98-31f7-ba67-af3181ce1175"));
+
 }
