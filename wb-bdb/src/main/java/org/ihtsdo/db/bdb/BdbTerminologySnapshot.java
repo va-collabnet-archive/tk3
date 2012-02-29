@@ -2,6 +2,8 @@ package org.ihtsdo.db.bdb;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.beans.PropertyChangeListener;
+import java.beans.VetoableChangeListener;
 import org.ihtsdo.concept.ConceptVersion;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
@@ -20,8 +22,14 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import org.ihtsdo.concept.Concept;
+import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
 import org.ihtsdo.tk.api.cs.ChangeSetPolicy;
 import org.ihtsdo.tk.api.cs.ChangeSetWriterThreading;
+import org.ihtsdo.tk.api.description.DescriptionVersionBI;
+import org.ihtsdo.tk.api.refex.RefexChronicleBI;
+import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
+import org.ihtsdo.tk.db.DbDependency;
 
 public class BdbTerminologySnapshot implements TerminologySnapshotDI {
    private BdbTerminologyStore store;
@@ -102,11 +110,6 @@ public class BdbTerminologySnapshot implements TerminologySnapshotDI {
    //~--- get methods ---------------------------------------------------------
 
    @Override
-   public TerminologyBuilderBI getAmender(EditCoordinate ec) {
-      return store.getTerminologyBuilder(ec, vc);
-   }
-
-   @Override
    public TerminologyBuilderBI getBuilder(EditCoordinate ec) {
       return store.getTerminologyBuilder(ec, vc);
    }
@@ -140,7 +143,7 @@ public class BdbTerminologySnapshot implements TerminologySnapshotDI {
 
    @Override
    public ConceptVersionBI getConceptForNid(int nid) throws IOException {
-      return getConceptForNid(store.getConceptNidForNid(nid));
+      return new ConceptVersion((Concept) store.getConceptForNid(nid), vc);
    }
 
    @Override
@@ -202,4 +205,89 @@ public class BdbTerminologySnapshot implements TerminologySnapshotDI {
    public ViewCoordinate getViewCoordinate() {
       return vc;
    }
+
+    @Override
+    public int getConceptNidForNid(Integer nid) {
+        return store.getConceptNidForNid(nid);
+    }
+
+    @Override
+    public void addPropertyChangeListener(CONCEPT_EVENT pce, PropertyChangeListener l) {
+        store.addPropertyChangeListener(pce, l);
+    }
+
+    @Override
+    public void addTermChangeListener(TermChangeListener cl) {
+        store.addTermChangeListener(cl);
+    }
+
+    @Override
+    public void addVetoablePropertyChangeListener(CONCEPT_EVENT pce, VetoableChangeListener l) {
+       store.addVetoablePropertyChangeListener(pce, l);
+    }
+
+    @Override
+    public void forget(ConAttrVersionBI attr) throws IOException {
+        store.forget(attr);
+    }
+
+    @Override
+    public void forget(ConceptChronicleBI concept) throws IOException {
+        store.forget(concept);
+    }
+
+    @Override
+    public void forget(DescriptionVersionBI desc) throws IOException {
+       store.forget(desc);
+    }
+
+    @Override
+    public void forget(RefexChronicleBI extension) throws IOException {
+        store.forget(extension);
+    }
+
+    @Override
+    public void forget(RelationshipVersionBI rel) throws IOException {
+        store.forget(rel);
+    }
+
+    @Override
+    public NidBitSetBI getAllConceptNids() throws IOException {
+        return store.getAllConceptNids();
+    }
+
+    @Override
+    public NidBitSetBI getEmptyNidSet() throws IOException {
+        return store.getEmptyNidSet();
+    }
+
+    @Override
+    public ViewCoordinate getMetadataVC() throws IOException {
+        return store.getMetadataVC();
+    }
+
+    @Override
+    public void iterateConceptDataInParallel(ProcessUnfetchedConceptDataBI processor) throws Exception {
+        store.iterateConceptDataInParallel(processor);
+    }
+
+    @Override
+    public void iterateConceptDataInSequence(ProcessUnfetchedConceptDataBI processor) throws Exception {
+        store.iterateConceptDataInSequence(processor);
+    }
+
+    @Override
+    public void loadEconFiles(File[] econFiles) throws Exception {
+        store.loadEconFiles(econFiles);
+    }
+
+    @Override
+    public void removeTermChangeListener(TermChangeListener cl) {
+        store.removeTermChangeListener(cl);
+    }
+
+    @Override
+    public boolean satisfiesDependencies(Collection<DbDependency> dependencies) {
+        return store.satisfiesDependencies(dependencies);
+    }
 }

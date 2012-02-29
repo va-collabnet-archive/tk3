@@ -600,4 +600,9 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
 
         return cac;
     }
+
+    @Override
+    public EditCoordinate getEditCoordinate() {
+        return ec;
+    }
 }

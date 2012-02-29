@@ -10,6 +10,7 @@ import org.ihtsdo.tk.api.blueprint.RefexCAB;
 import org.ihtsdo.tk.api.blueprint.RelCAB;
 import org.ihtsdo.tk.api.conattr.ConAttrChronicleBI;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.tk.api.coordinate.EditCoordinate;
 import org.ihtsdo.tk.api.description.DescriptionChronicleBI;
 import org.ihtsdo.tk.api.media.MediaChronicleBI;
 
@@ -136,4 +137,6 @@ public interface TerminologyBuilderBI {
      * @throws InvalidAmendmentSpec
      */
     ConAttrChronicleBI constructIfNotCurrent(ConAttrAB blueprint) throws IOException, InvalidCAB, ContradictionException;
+
+    EditCoordinate getEditCoordinate();
 }

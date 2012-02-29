@@ -322,7 +322,7 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
     }
 
     @Override
-    public int getConceptNidForNid(int nid) throws IOException {
+    public int getConceptNidForNid(int nid)  {
         return Bdb.getConceptNid(nid);
     }
 

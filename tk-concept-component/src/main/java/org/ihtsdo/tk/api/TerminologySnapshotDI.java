@@ -15,18 +15,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
-public interface TerminologySnapshotDI extends TerminologyTransactionDI {
+public interface TerminologySnapshotDI extends TerminologyDI {
     
    PositionBI newPosition(PathBI path, long time) throws IOException;
-
-   /**
-    * 
-    * @param ec
-    * @return
-    * @deprecated use getBuilder
-    */
-   @Deprecated
-   TerminologyBuilderBI getAmender(EditCoordinate ec);
 
    TerminologyBuilderBI getBuilder(EditCoordinate ec);
 
@@ -57,4 +48,6 @@ public interface TerminologySnapshotDI extends TerminologyTransactionDI {
    int[] getPossibleChildren(int cNid) throws IOException;
 
    ViewCoordinate getViewCoordinate();
+
+   int getConceptNidForNid(Integer nid);
 }
