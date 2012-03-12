@@ -1,7 +1,6 @@
 package org.ihtsdo.db.bdb;
 
 //~--- non-JDK imports --------------------------------------------------------
-
 import java.beans.PropertyChangeListener;
 import java.beans.VetoableChangeListener;
 import org.ihtsdo.concept.ConceptVersion;
@@ -32,179 +31,180 @@ import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.tk.db.DbDependency;
 
 public class BdbTerminologySnapshot implements TerminologySnapshotDI {
-   private BdbTerminologyStore store;
 
-    private ViewCoordinate      vc;
+    private BdbTerminologyStore store;
+    private ViewCoordinate vc;
 
-   //~--- constructors --------------------------------------------------------
+    //~--- constructors --------------------------------------------------------
+    public BdbTerminologySnapshot(BdbTerminologyStore store, ViewCoordinate coordinate) {
+        super();
+        this.store = store;
+        this.vc = coordinate;
+    }
 
-   public BdbTerminologySnapshot(BdbTerminologyStore store, ViewCoordinate coordinate) {
-      super();
-      this.store = store;
-      this.vc    = coordinate;
-   }
+    //~--- methods -------------------------------------------------------------
+    @Override
+    public void addChangeSetGenerator(String key, ChangeSetGeneratorBI writer) {
+        store.addChangeSetGenerator(key, writer);
+    }
 
-   //~--- methods -------------------------------------------------------------
+    @Override
+    public void addUncommitted(ConceptChronicleBI concept) throws IOException {
+        BdbCommitManager.addUncommitted(concept);
+    }
 
-   @Override
-   public void addChangeSetGenerator(String key, ChangeSetGeneratorBI writer) {
-      store.addChangeSetGenerator(key, writer);
-   }
+    @Override
+    public void addUncommitted(ConceptVersionBI cv) throws IOException {
+        BdbCommitManager.addUncommitted(cv);
+    }
 
-   @Override
-   public void addUncommitted(ConceptChronicleBI concept) throws IOException {
-      BdbCommitManager.addUncommitted(concept);
-   }
+    @Override
+    public void cancel() throws IOException {
+        BdbCommitManager.cancel();
+    }
 
-   @Override
-   public void addUncommitted(ConceptVersionBI cv) throws IOException {
-      BdbCommitManager.addUncommitted(cv);
-   }
+    @Override
+    public void cancel(ConceptChronicleBI cc) throws IOException {
+        throw new UnsupportedOperationException();
+    }
 
-   @Override
-   public void cancel() throws IOException {
-      BdbCommitManager.cancel();
-   }
+    @Override
+    public void cancel(ConceptVersionBI concept) throws IOException {
+        throw new UnsupportedOperationException();
+    }
 
-   @Override
-   public void cancel(ConceptChronicleBI cc) throws IOException {
-      throw new UnsupportedOperationException();
-   }
+    @Override
+    public void commit() throws IOException {
+        BdbCommitManager.commit(ChangeSetPolicy.MUTABLE_ONLY, ChangeSetWriterThreading.SINGLE_THREAD);
+    }
 
-   @Override
-   public void cancel(ConceptVersionBI concept) throws IOException {
-      throw new UnsupportedOperationException();
-   }
+    @Override
+    public void commit(ConceptChronicleBI cc) throws IOException {
+        throw new UnsupportedOperationException();
+    }
 
-   @Override
-   public void commit() throws IOException {
-      BdbCommitManager.commit(ChangeSetPolicy.MUTABLE_ONLY, ChangeSetWriterThreading.SINGLE_THREAD);
-   }
+    @Override
+    public void commit(ConceptVersionBI cv) throws IOException {
+        commit(cv);
+    }
 
-   @Override
-   public void commit(ConceptChronicleBI cc) throws IOException {
-      throw new UnsupportedOperationException();
-   }
+    @Override
+    public ChangeSetGeneratorBI createDtoChangeSetGenerator(File changeSetFileName,
+            File changeSetTempFileName, ChangeSetGenerationPolicy policy) {
+        return store.createDtoChangeSetGenerator(changeSetFileName, changeSetTempFileName, policy);
+    }
 
-   @Override
-   public void commit(ConceptVersionBI cv) throws IOException {
-      commit(cv);
-   }
-
-   @Override
-   public ChangeSetGeneratorBI createDtoChangeSetGenerator(File changeSetFileName,
-           File changeSetTempFileName, ChangeSetGenerationPolicy policy) {
-      return store.createDtoChangeSetGenerator(changeSetFileName, changeSetTempFileName, policy);
-   }
-   
-   @Override
-   public PositionBI newPosition(PathBI path, long time) throws IOException {
+    @Override
+    public PositionBI newPosition(PathBI path, long time) throws IOException {
         return store.newPosition(path, time);
-   }
+    }
 
-   @Override
-   public void removeChangeSetGenerator(String key) {
-      store.removeChangeSetGenerator(key);
-   }
+    @Override
+    public void removeChangeSetGenerator(String key) {
+        store.removeChangeSetGenerator(key);
+    }
 
-   //~--- get methods ---------------------------------------------------------
+    //~--- get methods ---------------------------------------------------------
+    @Override
+    public TerminologyBuilderBI getBuilder(EditCoordinate ec) {
+        return store.getTerminologyBuilder(ec, vc);
+    }
 
-   @Override
-   public TerminologyBuilderBI getBuilder(EditCoordinate ec) {
-      return store.getTerminologyBuilder(ec, vc);
-   }
+    @Override
+    public ComponentVersionBI getComponentVersion(Collection<UUID> uuids)
+            throws IOException, ContradictionException {
+        return store.getComponentVersion(vc, uuids);
+    }
 
-   @Override
-   public ComponentVersionBI getComponentVersion(Collection<UUID> uuids)
-           throws IOException, ContradictionException {
-      return store.getComponentVersion(vc, uuids);
-   }
+    @Override
+    public ComponentVersionBI getComponentVersion(ComponentContainerBI cc)
+            throws IOException, ContradictionException {
+        return getComponentVersion(cc.getNid());
+    }
 
-   @Override
-   public ComponentVersionBI getComponentVersion(ComponentContainerBI cc)
-           throws IOException, ContradictionException {
-      return getComponentVersion(cc.getNid());
-   }
+    @Override
+    public ComponentVersionBI getComponentVersion(int nid) throws IOException, ContradictionException {
+        return store.getComponentVersion(vc, nid);
+    }
 
-   @Override
-   public ComponentVersionBI getComponentVersion(int nid) throws IOException, ContradictionException {
-      return store.getComponentVersion(vc, nid);
-   }
+    @Override
+    public ComponentVersionBI getComponentVersion(UUID... uuids) throws IOException, ContradictionException {
+        return store.getComponentVersion(vc, uuids);
+    }
 
-   @Override
-   public ComponentVersionBI getComponentVersion(UUID... uuids) throws IOException, ContradictionException {
-      return store.getComponentVersion(vc, uuids);
-   }
+    @Override
+    public ComponentVersionBI getComponentVersionFromAlternateId(String alternateId) throws IOException, ContradictionException {
+        return store.getComponentVersionFromAlternateId(vc, alternateId);
+    }
 
-   @Override
-   public ComponentVersionBI getComponentVersionFromAlternateId(String alternateId) throws IOException, ContradictionException {
-      return store.getComponentVersionFromAlternateId(vc, alternateId);
-   }
+    @Override
+    public ConceptVersionBI getConceptForNid(int nid) throws IOException {
+        return new ConceptVersion((Concept) store.getConceptForNid(nid), vc);
+    }
 
-   @Override
-   public ConceptVersionBI getConceptForNid(int nid) throws IOException {
-      return new ConceptVersion((Concept) store.getConceptForNid(nid), vc);
-   }
+    @Override
+    public ConceptVersionBI getConceptVersion(Collection<UUID> uuids) throws IOException {
+        return new ConceptVersion(Bdb.getConcept(Bdb.uuidsToNid(uuids)), vc);
+    }
 
-   @Override
-   public ConceptVersionBI getConceptVersion(Collection<UUID> uuids) throws IOException {
-      return new ConceptVersion(Bdb.getConcept(Bdb.uuidsToNid(uuids)), vc);
-   }
+    @Override
+    public ConceptVersionBI getConceptVersion(ConceptContainerBI cc) throws IOException {
+        return getConceptVersion(cc.getCnid());
+    }
 
-   @Override
-   public ConceptVersionBI getConceptVersion(ConceptContainerBI cc) throws IOException {
-      return getConceptVersion(cc.getCnid());
-   }
+    @Override
+    public ConceptVersionBI getConceptVersion(int cNid) throws IOException {
+        return new ConceptVersion(Bdb.getConcept(cNid), vc);
+    }
 
-   @Override
-   public ConceptVersionBI getConceptVersion(int cNid) throws IOException {
-      return new ConceptVersion(Bdb.getConcept(cNid), vc);
-   }
+    @Override
+    public ConceptVersionBI getConceptVersion(UUID... uuids) throws IOException {
+        return new ConceptVersion(Bdb.getConcept(Bdb.uuidToNid(uuids)), vc);
+    }
 
-   @Override
-   public ConceptVersionBI getConceptVersion(UUID... uuids) throws IOException {
-      return new ConceptVersion(Bdb.getConcept(Bdb.uuidToNid(uuids)), vc);
-   }
+    @Override
+    public ConceptVersionBI getConceptVersionFromAlternateId(String alternateId) throws IOException {
+        Concept c = store.getConceptFromAlternateId(alternateId);
+        if (c != null) {
+            return new ConceptVersion(c, vc);
+        }
+        return null;
+    }
 
-   @Override
-   public ConceptVersionBI getConceptVersionFromAlternateId(String alternateId) throws IOException {
-      return new ConceptVersion(store.getConceptFromAlternateId(alternateId), vc);
-   }
+    @Override
+    public Map<Integer, ConceptVersionBI> getConceptVersions(NidBitSetBI cNids) throws IOException {
+        return store.getConceptVersions(vc, cNids);
+    }
 
-   @Override
-   public Map<Integer, ConceptVersionBI> getConceptVersions(NidBitSetBI cNids) throws IOException {
-      return store.getConceptVersions(vc, cNids);
-   }
+    @Override
+    public PathBI getPath(int pathNid) throws IOException {
+        return store.getPath(pathNid);
+    }
 
-   @Override
-   public PathBI getPath(int pathNid) throws IOException {
-      return store.getPath(pathNid);
-   }
+    @Override
+    public Set<PathBI> getPathSetFromPositionSet(Set<PositionBI> positions) throws IOException {
+        return store.getPathSetFromPositionSet(positions);
+    }
 
-   @Override
-   public Set<PathBI> getPathSetFromPositionSet(Set<PositionBI> positions) throws IOException {
-      return store.getPathSetFromPositionSet(positions);
-   }
+    @Override
+    public Set<PathBI> getPathSetFromSapSet(Set<Integer> sapNids) throws IOException {
+        return store.getPathSetFromSapSet(sapNids);
+    }
 
-   @Override
-   public Set<PathBI> getPathSetFromSapSet(Set<Integer> sapNids) throws IOException {
-      return store.getPathSetFromSapSet(sapNids);
-   }
+    @Override
+    public Set<PositionBI> getPositionSet(Set<Integer> sapNids) throws IOException {
+        return store.getPositionSet(sapNids);
+    }
 
-   @Override
-   public Set<PositionBI> getPositionSet(Set<Integer> sapNids) throws IOException {
-      return store.getPositionSet(sapNids);
-   }
+    @Override
+    public int[] getPossibleChildren(int cNid) throws IOException {
+        return store.getPossibleChildren(cNid, vc);
+    }
 
-   @Override
-   public int[] getPossibleChildren(int cNid) throws IOException {
-      return store.getPossibleChildren(cNid, vc);
-   }
-
-   @Override
-   public ViewCoordinate getViewCoordinate() {
-      return vc;
-   }
+    @Override
+    public ViewCoordinate getViewCoordinate() {
+        return vc;
+    }
 
     @Override
     public int getConceptNidForNid(Integer nid) {
@@ -223,7 +223,7 @@ public class BdbTerminologySnapshot implements TerminologySnapshotDI {
 
     @Override
     public void addVetoablePropertyChangeListener(CONCEPT_EVENT pce, VetoableChangeListener l) {
-       store.addVetoablePropertyChangeListener(pce, l);
+        store.addVetoablePropertyChangeListener(pce, l);
     }
 
     @Override
@@ -238,7 +238,7 @@ public class BdbTerminologySnapshot implements TerminologySnapshotDI {
 
     @Override
     public void forget(DescriptionVersionBI desc) throws IOException {
-       store.forget(desc);
+        store.forget(desc);
     }
 
     @Override

@@ -322,7 +322,7 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
     }
 
     @Override
-    public int getConceptNidForNid(int nid)  {
+    public int getConceptNidForNid(int nid) {
         return Bdb.getConceptNid(nid);
     }
 
@@ -830,7 +830,7 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
         Collection<Integer> cnids = searchLucene(altId, SearchType.CONCEPT);
         if (cnids.size() > 1) {
             NidSet ns = new NidSet();
-            for (int nid: cnids) {
+            for (int nid : cnids) {
                 ns.add(nid);
             }
             throw new IOException("Non-unique match for: " + altId + " " + cnids);
@@ -846,7 +846,6 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
         Concept c = getConceptFromAlternateId(altId);
         return new ConceptVersion(c, vc);
     }
-    
 
     public static enum SearchType {
 
@@ -867,9 +866,11 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
                     AceLog.getAppLog().fine("StandardAnalyzer query returned " + result.topDocs.totalHits + " hits");
                 }
             } else {
-                AceLog.getAppLog().info(
-                        "StandardAnalyzer query returned no results. Now trying WhitespaceAnalyzer query");
-                q = new QueryParser(LuceneManager.version, "desc", new WhitespaceAnalyzer()).parse(query);
+                if (AceLog.getAppLog().isLoggable(Level.FINE)) {
+                    AceLog.getAppLog().fine(
+                            "StandardAnalyzer query returned no results. Now trying WhitespaceAnalyzer query");
+                    q = new QueryParser(LuceneManager.version, "desc", new WhitespaceAnalyzer()).parse(query);
+                }
                 result = LuceneManager.search(q);
             }
 

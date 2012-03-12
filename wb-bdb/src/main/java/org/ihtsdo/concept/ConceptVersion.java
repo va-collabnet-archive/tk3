@@ -54,6 +54,9 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     //~--- constructors --------------------------------------------------------
     public ConceptVersion(Concept concept, ViewCoordinate coordinate) {
         super();
+        if (concept == null) {
+            throw new IllegalArgumentException();
+        }
         this.concept = concept;
         this.vc = new ViewCoordinate(coordinate);
     }

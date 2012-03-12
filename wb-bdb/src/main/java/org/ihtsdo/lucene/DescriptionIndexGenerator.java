@@ -70,8 +70,6 @@ public class DescriptionIndexGenerator extends IndexGenerator {
                 doc.add(new Field("desc", p.getDenotation().toString(), Field.Store.NO,
                         Field.Index.ANALYZED));
             }
-        } else {
-            AceLog.getAppLog().alertAndLogException(new Exception("Identifier is null"));
         }
     }
 }
