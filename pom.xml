@@ -290,6 +290,5 @@
         <module>tk-helpers</module>
         <module>tk-cern-prim</module>
         <module>wb-bdb</module>
-        <module>tk-junit-ext</module>
     </modules>
 </project>
