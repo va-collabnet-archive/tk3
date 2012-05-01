@@ -2,10 +2,7 @@ package org.ihtsdo.db.bdb;
 
 //~--- non-JDK imports --------------------------------------------------------
 import org.ihtsdo.tk.binding.SnomedMetadataRfx;
-import org.ihtsdo.tk.binding.SnomedMetadataRf1;
 import org.ihtsdo.tk.binding.TermAux;
-import org.ihtsdo.tk.binding.Taxonomies;
-import org.ihtsdo.tk.binding.SnomedMetadataRf2;
 import java.beans.PropertyChangeListener;
 import java.beans.VetoableChangeListener;
 import java.io.*;
@@ -17,6 +14,7 @@ import java.util.logging.Logger;
 import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
 import org.ihtsdo.concept.*;
@@ -55,8 +53,6 @@ import org.ihtsdo.tk.dto.concept.TkConcept;
 public class BdbTerminologyStore implements TerminologyStoreDI {
 
     private static ViewCoordinate metadataVC = null;
-    private static boolean isReleaseFormatSetup = false;
-    private static int releaseFormat = 0;
 
     //~--- methods -------------------------------------------------------------
     @Override
@@ -198,35 +194,6 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
         return true;
     }
 
-    @Override
-    public boolean usesRf2Metadata() throws IOException {
-        if (isReleaseFormatSetup == false) {
-            UUID snomedRootUuid = Taxonomies.SNOMED.getUuids()[0];
-            if (hasUuid(snomedRootUuid)) {
-                int snomedRootNid = Bdb.uuidToNid(snomedRootUuid);
-                Concept cb = Bdb.getConcept(snomedRootNid);
-                int rootStatusNid = cb.getConAttrs().getVersions().iterator().next().getStatusNid();
-                int rf1CurrentNid = Bdb.uuidToNid(SnomedMetadataRf1.CURRENT_RF1.getUuids());
-                int rf2ActiveValueNid = Bdb.uuidToNid(SnomedMetadataRf2.ACTIVE_VALUE_RF2.getUuids());
-
-                if (rootStatusNid == rf1CurrentNid) {
-                    releaseFormat = 1;
-                    isReleaseFormatSetup = true;
-                } else if (rootStatusNid == rf2ActiveValueNid) {
-                    releaseFormat = 2;
-                    isReleaseFormatSetup = true;
-                } else {
-                    throw new IOException("usesRf2Metadata current/active status did not match Rf1 or Rf2.");
-                }
-            }
-        }
-
-        if (releaseFormat == 2) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     public int uuidsToNid(Collection<UUID> uuids) throws IOException {
         return Bdb.uuidsToNid(uuids);
@@ -242,7 +209,7 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
         return Bdb.getConceptDb().getReadOnlyConceptIdSet();
     }
 
-    @Override
+   
     public KindOfCacheBI getCache(ViewCoordinate coordinate) throws Exception {
         TypeCache c = new IsaCache(Bdb.getConceptDb().getConceptNidSet());
 
@@ -352,7 +319,7 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
             throw new IOException(e);
         }
 
-        return Collections.unmodifiableMap(new HashMap<Integer, ConceptVersionBI>(processor.conceptMap));
+        return Collections.unmodifiableMap(new HashMap<>(processor.conceptMap));
     }
 
     @Override
@@ -365,7 +332,7 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
             throw new IOException(e);
         }
 
-        return Collections.unmodifiableMap(new HashMap<Integer, ConceptChronicleBI>(processor.conceptMap));
+        return Collections.unmodifiableMap(new HashMap<>(processor.conceptMap));
     }
 
     @Override
@@ -377,7 +344,7 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
     public Collection<DbDependency> getLatestChangeSetDependencies() throws IOException {
         BdbProperty[] keysToCheck = new BdbProperty[]{BdbProperty.LAST_CHANGE_SET_WRITTEN,
             BdbProperty.LAST_CHANGE_SET_READ};
-        List<DbDependency> latestDependencies = new ArrayList<DbDependency>(2);
+        List<DbDependency> latestDependencies = new ArrayList<>(2);
 
         for (BdbProperty prop : keysToCheck) {
             String value = Bdb.getProperty(prop.toString());
@@ -444,7 +411,7 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
 
     @Override
     public Set<PathBI> getPathSetFromPositionSet(Set<PositionBI> positions) throws IOException {
-        HashSet<PathBI> paths = new HashSet<PathBI>(positions.size());
+        HashSet<PathBI> paths = new HashSet<>(positions.size());
 
         for (PositionBI position : positions) {
             paths.add(position.getPath());
@@ -457,7 +424,7 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
 
     @Override
     public Set<PathBI> getPathSetFromSapSet(Set<Integer> sapNids) throws IOException {
-        HashSet<PathBI> paths = new HashSet<PathBI>(sapNids.size());
+        HashSet<PathBI> paths = new HashSet<>(sapNids.size());
 
         for (int sap : sapNids) {
             PathBI path = Bdb.getSapDb().getPosition(sap).getPath();
@@ -471,7 +438,7 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
 
     @Override
     public Set<PositionBI> getPositionSet(Set<Integer> sapNids) throws IOException {
-        HashSet<PositionBI> positions = new HashSet<PositionBI>(sapNids.size());
+        HashSet<PositionBI> positions = new HashSet<>(sapNids.size());
 
         for (int sap : sapNids) {
 
@@ -646,7 +613,7 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
         ExecutorService executors = Executors.newCachedThreadPool(
                 new NamedThreadFactory(loadBdbMultiDbThreadGroup, "converter "));
         try {
-            LinkedBlockingQueue<ConceptConverter> converters = new LinkedBlockingQueue<ConceptConverter>();
+            LinkedBlockingQueue<ConceptConverter> converters = new LinkedBlockingQueue<>();
             int runtimeConverterSize = Runtime.getRuntime().availableProcessors() * 2;
             int converterSize = runtimeConverterSize;
             AtomicInteger conceptsRead = new AtomicInteger();
@@ -717,7 +684,7 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
     //~--- inner classes -------------------------------------------------------
     private class ConceptGetter implements I_ProcessUnfetchedConceptData {
 
-        Map<Integer, ConceptChronicleBI> conceptMap = new ConcurrentHashMap<Integer, ConceptChronicleBI>();
+        Map<Integer, ConceptChronicleBI> conceptMap = new ConcurrentHashMap<>();
         NidBitSetBI cNids;
 
         //~--- constructors -----------------------------------------------------
@@ -756,7 +723,7 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
 
     private class ConceptVersionGetter implements I_ProcessUnfetchedConceptData {
 
-        Map<Integer, ConceptVersionBI> conceptMap = new ConcurrentHashMap<Integer, ConceptVersionBI>();
+        Map<Integer, ConceptVersionBI> conceptMap = new ConcurrentHashMap<>();
         NidBitSetBI cNids;
         ViewCoordinate coordinate;
 
@@ -874,7 +841,7 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
                 result = LuceneManager.search(q);
             }
 
-            HashSet<Integer> nidSet = new HashSet<Integer>(result.topDocs.totalHits);
+            HashSet<Integer> nidSet = new HashSet<>(result.topDocs.totalHits);
             for (int i = 0; i < result.topDocs.totalHits; i++) {
                 Document doc = result.searcher.doc(result.topDocs.scoreDocs[i].doc);
 
@@ -899,7 +866,7 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
 
             }
             return nidSet;
-        } catch (Exception e) {
+        } catch (ParseException | IOException | NumberFormatException e) {
             throw new IOException(e);
         }
     }

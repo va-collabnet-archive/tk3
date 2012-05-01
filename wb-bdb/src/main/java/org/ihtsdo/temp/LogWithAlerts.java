@@ -31,21 +31,12 @@ package org.ihtsdo.temp;
  * limitations under the License.
  */
 
-import java.awt.Component;
-import java.awt.Frame;
-import java.awt.Toolkit;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 import java.util.logging.Filter;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 public class LogWithAlerts {
 
@@ -60,122 +51,12 @@ public class LogWithAlerts {
         return logger;
     }
 
-    public void alertAndLogException(Component parent, Throwable ex) {
-        alertAndLog(parent, Level.SEVERE, ex.getLocalizedMessage(), ex);
-    }
-
     public void alertAndLogException(Throwable ex) {
-        alertAndLog(null, Level.SEVERE, ex.getLocalizedMessage(), ex);
+        alertAndLog(Level.SEVERE, ex.getLocalizedMessage(), ex);
     }
 
     public void alertAndLog(Level level, String message, Throwable ex) {
-        alertAndLog(null, level, message, ex);
-    }
-
-    public void alertAndLog(final Component parent, final Level level, final String message, final Throwable ex) {
-        if (DwfaEnv.isHeadless() == false) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        alertAndLogPrivate(getActiveFrame(parent), level, message, ex);
-                    }
-
-                });
-            
-        } else {
-            getLogger().log(level, message, ex);
-        }
-    }
-
-    private void alertAndLogPrivate(Component parent, Level level, String message, Throwable ex) {
-        try {
-            parent = getActiveFrame(parent);
-            getLogger().log(level, message, ex);
-            message = "<html>" + message;
-            if (level.intValue() <= Level.INFO.intValue()) {
-                JOptionPane.showMessageDialog(parent, message, "Information has been logged",
-                    JOptionPane.INFORMATION_MESSAGE);
-            } else if (level.intValue() <= Level.WARNING.intValue()) {
-                JOptionPane.showMessageDialog(parent, message, "A warning has been logged", JOptionPane.WARNING_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(parent, message, "An error has been logged", JOptionPane.ERROR_MESSAGE);
-            }
-            if (parent != null) {
-                SwingUtilities.invokeLater(new FocusParentLater(parent));
-            } else {
-                getLogger().log(Level.SEVERE, "No parent for alert");
-            }
-        } catch (Throwable e) {
-            getLogger().log(Level.SEVERE, e.getLocalizedMessage(), e);
-        }
-    }
-
-    private static class FocusParentLater implements Runnable {
-        Component parent;
-
-        private FocusParentLater(Component parent) {
-            super();
-            this.parent = parent;
-        }
-
-        @Override
-        public void run() {
-            parent.requestFocus();
-        }
-
-    }
-
-    private static JFrame activeFrame;
-
-    public static Component getActiveFrame(Component parent) {
-        if (parent == null) {
-            for (Frame f : Frame.getFrames()) {
-                if (f.isActive()) {
-                    parent = f;
-                    break;
-                }
-            }
-            if (parent == null) {
-                if (SwingUtilities.isEventDispatchThread()) {
-                    setupActiveFrame();
-                } else {
-                    try {
-                        SwingUtilities.invokeAndWait(new Runnable() {
-                            @Override
-                            public void run() {
-                                setupActiveFrame();
-                            }
-                        });
-                    } catch (InterruptedException e) {
-                        Logger.getAnonymousLogger().log(Level.SEVERE, e.getLocalizedMessage(), e);
-                    } catch (InvocationTargetException e) {
-                        Logger.getAnonymousLogger().log(Level.SEVERE, e.getLocalizedMessage(), e);
-                    }
-                }
-            }
-        }
-        if (parent != null) {
-            return parent;
-        } else {
-            return activeFrame;
-        }
-    }
-
-    private static void setupActiveFrame() {
-        if (activeFrame == null) {
-        	for (Frame f: Frame.getFrames()) {
-        		if (f.isActive()) {
-        			activeFrame = (JFrame) f;
-        		}
-        	}
-        	if (activeFrame == null) {
-                activeFrame = new JFrame();
-                activeFrame.setContentPane(new JLabel("Startup..."));
-                activeFrame.pack();
-                activeFrame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - 10,
-                        (Toolkit.getDefaultToolkit().getScreenSize().height / 2) - 10);
-           	}
-        }
+        getLogger().log(level, message, ex);
     }
 
     public void addHandler(Handler arg0) throws SecurityException {

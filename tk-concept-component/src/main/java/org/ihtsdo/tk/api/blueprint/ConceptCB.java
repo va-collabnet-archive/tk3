@@ -23,9 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
 import org.ihtsdo.tk.api.concept.ConceptVersionBI;
 import org.ihtsdo.tk.api.description.DescriptionVersionBI;
 import org.ihtsdo.tk.api.media.MediaVersionBI;
@@ -47,17 +45,17 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
             UUID.fromString("620d1f30-5285-11e0-b8af-0800200c9a66");
     private String fullySpecifiedName;
     private String preferredName;
-    private List<String> fsns = new ArrayList<String>();
-    private List<String> prefNames = new ArrayList<String>();
+    private List<String> fsns = new ArrayList<>();
+    private List<String> prefNames = new ArrayList<>();
     private boolean initialCaseSensitive = false;
     private String lang;
     private UUID isaType;
     private boolean defined;
-    private List<DescCAB> fsnCABs = new ArrayList<DescCAB>();
-    private List<DescCAB> prefCABs = new ArrayList<DescCAB>();
-    private List<DescCAB> descCABs = new ArrayList<DescCAB>();
-    private List<RelCAB> relCABs = new ArrayList<RelCAB>();
-    private List<MediaCAB> mediaCABs = new ArrayList<MediaCAB>();
+    private List<DescCAB> fsnCABs = new ArrayList<>();
+    private List<DescCAB> prefCABs = new ArrayList<>();
+    private List<DescCAB> descCABs = new ArrayList<>();
+    private List<RelCAB> relCABs = new ArrayList<>();
+    private List<MediaCAB> mediaCABs = new ArrayList<>();
     private ConAttrAB conAttr;
     private int usRefexNid = SnomedMetadataRfx.getUS_DIALECT_REFEX_NID();
     private int gbRefexNid = SnomedMetadataRfx.getGB_DIALECT_REFEX_NID();
@@ -182,15 +180,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
     public void propertyChange(PropertyChangeEvent pce) {
         try {
             recomputeUuid();
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidCAB ex) {
-            Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ContradictionException ex) {
+        } catch (NoSuchAlgorithmException | InvalidCAB | ContradictionException | IOException ex) {
             Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -199,7 +189,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
     public final void comupteComponentUuid() throws RuntimeException {
         try {
             StringBuilder sb = new StringBuilder();
-            List<String> descs = new ArrayList<String>();
+            List<String> descs = new ArrayList<>();
             descs.addAll(fsns);
             descs.addAll(prefNames);
             java.util.Collections.sort(descs);
@@ -209,9 +199,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
             setComponentUuid(
                     UuidT5Generator.get(conceptSpecNamespace,
                     sb.toString()));
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        } catch (NoSuchAlgorithmException ex) {
+        } catch (IOException | NoSuchAlgorithmException ex) {
             throw new RuntimeException(ex);
         }
     }
@@ -430,12 +418,8 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
 
     public DescCAB makeFsnCAB() throws IOException, InvalidCAB, ContradictionException {
         //get rf1/rf2 concepts
-        UUID fsnUuid = null;
-        if (Ts.get().usesRf2Metadata()) {
-            fsnUuid = SnomedMetadataRf2.FULLY_SPECIFIED_NAME_RF2.getLenient().getPrimUuid();
-        } else {
-            fsnUuid = SnomedMetadataRf1.FULLY_SPECIFIED_DESCRIPTION_TYPE.getLenient().getPrimUuid();
-        }
+        UUID fsnUuid = SnomedMetadataRf2.FULLY_SPECIFIED_NAME_RF2.getLenient().getPrimUuid();
+         
         return new DescCAB(
                 getComponentUuid(),
                 fsnUuid,
@@ -446,12 +430,8 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
 
     public DescCAB makePreferredCAB() throws IOException, InvalidCAB, ContradictionException {
         //get rf1/rf2 concepts
-        UUID synUuid = null;
-        if (Ts.get().usesRf2Metadata()) {
-            synUuid = SnomedMetadataRf2.SYNONYM_RF2.getLenient().getPrimUuid();
-        } else {
-            synUuid = SnomedMetadataRf1.SYNOMYM_DESCRIPTION_TYPE_RF1.getLenient().getPrimUuid();
-        }
+        UUID synUuid = SnomedMetadataRf2.SYNONYM_RF2.getLenient().getPrimUuid();
+        
         return new DescCAB(
                 getComponentUuid(),
                 synUuid, //from PREFERRED
@@ -462,7 +442,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
 
     public List<RelCAB> getParentCABs() throws IOException, InvalidCAB, ContradictionException {
         List<RelCAB> parentCabs =
-                new ArrayList<RelCAB>(getParents().size());
+                new ArrayList<>(getParents().size());
         for (UUID parentUuid : parents) {
             RelCAB parent = new RelCAB(
                     getComponentUuid(),

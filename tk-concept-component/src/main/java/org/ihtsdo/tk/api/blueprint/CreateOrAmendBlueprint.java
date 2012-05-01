@@ -33,7 +33,6 @@ import org.ihtsdo.tk.api.ComponentVersionBI;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
-import org.ihtsdo.tk.binding.SnomedMetadataRf1;
 import org.ihtsdo.tk.binding.SnomedMetadataRf2;
 
 /**
@@ -69,13 +68,10 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
 
     public CreateOrAmendBlueprint(UUID componentUuid, ComponentVersionBI cv, ViewCoordinate vc) throws IOException, InvalidCAB, ContradictionException {
         try {
-            if (Ts.get().usesRf2Metadata()) {
-                currentStatusUuid = SnomedMetadataRf2.ACTIVE_VALUE_RF2.getLenient().getPrimUuid();
-                retiredStatusUuid = SnomedMetadataRf2.INACTIVE_VALUE_RF2.getLenient().getPrimUuid();
-            } else {
-                currentStatusUuid = SnomedMetadataRf1.CURRENT_RF1.getLenient().getPrimUuid();
-                retiredStatusUuid = SnomedMetadataRf1.RETIRED_INACTIVE_STATUS_RF1.getLenient().getPrimUuid();
-            }
+
+            currentStatusUuid = SnomedMetadataRf2.ACTIVE_VALUE_RF2.getLenient().getPrimUuid();
+            retiredStatusUuid = SnomedMetadataRf2.INACTIVE_VALUE_RF2.getLenient().getPrimUuid();
+
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -157,12 +153,12 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
         }
         return annotations;
     }
-    
-    public void setAnnotationBlueprint(RefexCAB annotation){
+
+    public void setAnnotationBlueprint(RefexCAB annotation) {
         annotations.add(annotation);
     }
-    
-    public void replaceAnnotationBlueprints(List<RefexCAB> annotations){
+
+    public void replaceAnnotationBlueprints(List<RefexCAB> annotations) {
         this.annotations = annotations;
     }
 

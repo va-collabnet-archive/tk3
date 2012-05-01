@@ -55,12 +55,10 @@ public class SnomedMetadataRfx {
     private static int GB_DIALECT_REFEX_NID;
     private static int SYNONYMY_REFEX_NID;
     private static int REFERS_TO_REFEX_NID;
-
     private static int STATUS_DUPLICATE_NID;
     private static int STATUS_AMBIGUOUS_NID;
     private static int STATUS_ERRONEOUS_NID;
     private static int STATUS_OUTDATED_NID;
-
     // DESCRIPTION CONCEPTSPECS
     private static ConceptSpec DESC_PREFERRED;
     private static ConceptSpec DESC_ACCEPTABLE;
@@ -72,7 +70,6 @@ public class SnomedMetadataRfx {
     private static ConceptSpec STATUS_LIMITED;
     private static ConceptSpec STATUS_CURRENT;
     private static ConceptSpec STATUS_RETIRED;
-
     //REFEX CONCEPTS
     private static ConceptSpec REFEX_NON_HUMAN;
     private static ConceptSpec REFEX_VTM;
@@ -197,6 +194,7 @@ public class SnomedMetadataRfx {
         }
         return STATUS_CURRENT;
     }
+
     public static ConceptSpec getSTATUS_RETIRED() throws IOException {
         if (isReleaseFormatSetupB == false) {
             setupSnoRf1Rf2();
@@ -281,6 +279,7 @@ public class SnomedMetadataRfx {
         return REFERS_TO_REFEX_NID;
     }
     // DESCRIPTION CONCEPTS
+
     public static ConceptSpec getSTATUS_DUPLICATE() throws IOException {
         if (isReleaseFormatSetupB == false) {
             setupSnoRf1Rf2();
@@ -288,20 +287,21 @@ public class SnomedMetadataRfx {
         return STATUS_DUPLICATE;
     }
     // STATUS CONCEPTS
+
     public static ConceptSpec getDESC_PREFERRED() throws IOException {
         if (isReleaseFormatSetupB == false) {
             setupSnoRf1Rf2();
         }
         return DESC_PREFERRED;
     }
-    
+
     public static ConceptSpec getDESC_ACCEPTABLE() throws IOException {
         if (isReleaseFormatSetupB == false) {
             setupSnoRf1Rf2();
         }
         return DESC_ACCEPTABLE;
     }
-    
+
     public static ConceptSpec getSTATUS_AMBIGUOUS() throws IOException {
         if (isReleaseFormatSetupB == false) {
             setupSnoRf1Rf2();
@@ -362,13 +362,8 @@ public class SnomedMetadataRfx {
     private static void setupSnoRf1Rf2() throws IOException {
         TerminologyStoreDI tf = Ts.get();
 
-        if (tf.usesRf2Metadata()) {
-            isReleaseFormatSetupB = true;
-            releaseFormat = 2;
-        } else {
-            isReleaseFormatSetupB = true;
-            releaseFormat = 1;
-        }
+        isReleaseFormatSetupB = true;
+        releaseFormat = 2;
 
         if (releaseFormat == 1) {
             // DESCRIPTIONS
@@ -430,7 +425,7 @@ public class SnomedMetadataRfx {
             STATUS_AMBIGUOUS = SnomedMetadataRf1.AMBIGUOUS_INACTIVE_STATUS_RF1;
             STATUS_AMBIGUOUS_NID = tf.getNidForUuids(STATUS_AMBIGUOUS.getUuids());
             STATUS_ERRONEOUS = SnomedMetadataRf1.ERRONEOUS_INACTIVE_STATUS_RF1;
-            STATUS_ERRONEOUS_NID  = tf.getNidForUuids(STATUS_ERRONEOUS.getUuids());
+            STATUS_ERRONEOUS_NID = tf.getNidForUuids(STATUS_ERRONEOUS.getUuids());
             STATUS_OUTDATED = SnomedMetadataRf1.OUTDATED_INACTIVE_STATUS_RF1;
             STATUS_OUTDATED_NID = tf.getNidForUuids(STATUS_OUTDATED.getUuids());
             STATUS_LIMITED = SnomedMetadataRf1.LIMITED_ACTIVE_STATUS_RF1;
@@ -499,7 +494,7 @@ public class SnomedMetadataRfx {
             STATUS_AMBIGUOUS = SnomedMetadataRf2.AMBIGUOUS_COMPONENT_RF2;
             STATUS_AMBIGUOUS_NID = tf.getNidForUuids(STATUS_AMBIGUOUS.getUuids());
             STATUS_ERRONEOUS = SnomedMetadataRf2.ERRONEOUS_COMPONENT_RF2;
-            STATUS_ERRONEOUS_NID  = tf.getNidForUuids(STATUS_ERRONEOUS.getUuids());
+            STATUS_ERRONEOUS_NID = tf.getNidForUuids(STATUS_ERRONEOUS.getUuids());
             STATUS_OUTDATED = SnomedMetadataRf2.OUTDATED_COMPONENT_RF2;
             STATUS_OUTDATED_NID = tf.getNidForUuids(STATUS_OUTDATED.getUuids());
             STATUS_LIMITED = SnomedMetadataRf2.LIMITED_COMPONENT_RF2;

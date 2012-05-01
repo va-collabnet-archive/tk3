@@ -16,7 +16,6 @@ import org.ihtsdo.db.bdb.computer.version.PositionMapper.RELATIVE_POSITION;
 import org.ihtsdo.temp.AceLog;
 import org.ihtsdo.temp.I_AmTypedPart;
 import org.ihtsdo.temp.PositionSetReadOnly;
-import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ContradictionManagerBI;
 import org.ihtsdo.tk.api.NidSet;
 import org.ihtsdo.tk.api.NidSetBI;
@@ -28,7 +27,6 @@ import org.ihtsdo.tk.api.coordinate.PositionSet;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.id.IdBI;
 import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
-import org.ihtsdo.tk.binding.SnomedMetadataRf1;
 import org.ihtsdo.tk.binding.SnomedMetadataRf2;
 import org.ihtsdo.tk.spec.ValidationException;
 
@@ -40,7 +38,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
             ContradictionManagerBI contradictionManager,
             NidSetBI allowedStatus) throws RuntimeException {
         List<V> partsToCompare =
-                new ArrayList<V>(partsForPosition);
+                new ArrayList<>(partsForPosition);
         for (V prevPartToTest : partsToCompare) {
             switch (mapper.fastRelativePosition(part,
                     prevPartToTest, precedencePolicy)) {
@@ -133,7 +131,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
             PositionBI viewPosition,
             List<? extends V> versions, Precedence precedencePolicy,
             ContradictionManagerBI contradictionManager) {
-        List<V> specifiedVersions = new ArrayList<V>();
+        List<V> specifiedVersions = new ArrayList<>();
         addSpecifiedVersions(allowedStatus, (NidSetBI) null,
                 new PositionSetReadOnly(viewPosition),
                 specifiedVersions, versions, precedencePolicy,
@@ -144,8 +142,8 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
 
     public Collection<IdBI> getSpecifiedIdParts(PositionSet positions,
             List<IdBI> versions, int[] authorityNids) {
-        HashSet<IdBI> specifiedIdParts = new HashSet<IdBI>();
-        HashSet<Integer> authorityNidsFilterList = new HashSet<Integer>();
+        HashSet<IdBI> specifiedIdParts = new HashSet<>();
+        HashSet<Integer> authorityNidsFilterList = new HashSet<>();
         if (authorityNids != null && authorityNids.length > 0) {
             for (int i = 0; i < authorityNids.length; i++) {
                 authorityNidsFilterList.add(authorityNids[i]);
@@ -210,7 +208,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
                         c.getPositionSet(), matchingVersions, versions, c.getPrecedence(),
                         c.getContradictionManager(), new StatedFilter(c.getClassifierNid()));
             } else if (c.getRelAssertionType() == RelAssertionType.INFERRED_THEN_STATED) {
-                List<V> possibleValues = new ArrayList<V>();
+                List<V> possibleValues = new ArrayList<>();
                 addSpecifiedVersionsWithPositions(c.getAllowedStatusNids(), null,
                         c.getPositionSet(), possibleValues, versions, c.getPrecedence(),
                         c.getContradictionManager(), new InferredFilter(c.getClassifierNid()));
@@ -317,10 +315,8 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
             if (inferredNidSet == null) {
                 try {
                     NidSetBI tempInferred = new NidSet();
-                    tempInferred.add(SnomedMetadataRf1.INFERRED_DEFINING_CHARACTERISTIC_TYPE_RF1.getLenient().getNid());
-                    if (Ts.get().usesRf2Metadata()) {
-                        tempInferred.add(SnomedMetadataRf2.INFERRED_RELATIONSHIP_RF2.getLenient().getNid());
-                    }
+                    tempInferred.add(SnomedMetadataRf2.INFERRED_RELATIONSHIP_RF2.getLenient().getNid());
+                    
                     inferredNidSet = tempInferred;
                 } catch (ValidationException ex) {
                     throw new RuntimeException(ex);
@@ -355,9 +351,9 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
             List<? extends V> versions,
             Precedence precedencePolicy,
             ContradictionManagerBI contradictionManager, InferredFilter[] filters) {
-        HashSet<V> partsToAdd = new HashSet<V>();
+        HashSet<V> partsToAdd = new HashSet<>();
         for (PositionBI p : positions) {
-            HashSet<V> partsForPosition = new HashSet<V>();
+            HashSet<V> partsForPosition = new HashSet<>();
             PositionMapper mapper = Bdb.getSapDb().getMapper(p);
             nextpart:
             for (V part : versions) {
@@ -392,7 +388,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
                 }
             }
             if (allowedStatus != null) {
-                List<V> partsToCompare = new ArrayList<V>(partsForPosition);
+                List<V> partsToCompare = new ArrayList<>(partsForPosition);
                 for (V part : partsToCompare) {
                     if (allowedStatus != null) {
                         if (!allowedStatus.contains(part.getStatusNid())) {
@@ -415,9 +411,9 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
             List<? extends V> versions,
             Precedence precedencePolicy,
             ContradictionManagerBI contradictionManager, InferredFilter filter) {
-        HashSet<V> partsToAdd = new HashSet<V>();
+        HashSet<V> partsToAdd = new HashSet<>();
         for (PositionBI p : positions) {
-            HashSet<V> partsForPosition = new HashSet<V>();
+            HashSet<V> partsForPosition = new HashSet<>();
             PositionMapper mapper = Bdb.getSapDb().getMapper(p);
             nextpart:
             for (V part : versions) {
@@ -450,7 +446,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
                 }
             }
             if (allowedStatus != null && allowedStatus.size() > 0) {
-                List<V> partsToCompare = new ArrayList<V>(partsForPosition);
+                List<V> partsToCompare = new ArrayList<>(partsForPosition);
                 for (V part : partsToCompare) {
                     if (allowedStatus != null && allowedStatus.size() > 0) {
                         if (!allowedStatus.contains(part.getStatusNid())) {
@@ -484,8 +480,8 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
         if (versions == null) {
             return;
         }
-        HashSet<V> versionsToAdd = new HashSet<V>();
-        HashSet<V> rejectedVersions = new HashSet<V>();
+        HashSet<V> versionsToAdd = new HashSet<>();
+        HashSet<V> rejectedVersions = new HashSet<>();
         nextpart:
         for (V part : versions) {
             if (part.getTime() == Long.MIN_VALUE
@@ -506,7 +502,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
             }
             versionsToAdd.add(part);
         }
-        ArrayList<V> versionToRemove = new ArrayList<V>();
+        ArrayList<V> versionToRemove = new ArrayList<>();
         for (V reject : rejectedVersions) {
             for (V possibleAdd : versionsToAdd) {
                 if (reject.getPathNid() == possibleAdd.getPathNid()) {
@@ -519,7 +515,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
         versionsToAdd.removeAll(versionToRemove);
 
         SortedSet<V> sortedVersionsToAdd =
-                new TreeSet<V>(new SortVersionsByTimeThenAuthor());
+                new TreeSet<>(new SortVersionsByTimeThenAuthor());
         sortedVersionsToAdd.addAll(versionsToAdd);
         specifiedVersions.addAll(sortedVersionsToAdd);
     }

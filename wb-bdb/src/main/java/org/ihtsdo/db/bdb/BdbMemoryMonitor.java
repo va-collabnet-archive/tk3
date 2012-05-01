@@ -43,20 +43,20 @@ public class BdbMemoryMonitor {
   }
 
   public BdbMemoryMonitor() {
-    MemoryMXBean mbean = ManagementFactory.getMemoryMXBean();
-    NotificationEmitter emitter = (NotificationEmitter) mbean;
-    emitter.addNotificationListener(new NotificationListener() {
-      public void handleNotification(Notification n, Object hb) {
-        if (n.getType().equals(
-            MemoryNotificationInfo.MEMORY_THRESHOLD_EXCEEDED)) {
-          long maxMemory = tenuredGenPool.getUsage().getMax();
-          long usedMemory = tenuredGenPool.getUsage().getUsed();
-          for (LowMemoryListener listener : listeners) {
-            listener.memoryUsageLow(usedMemory, maxMemory);
-          }
-        }
-      }
-    }, null, null);
+//    MemoryMXBean mbean = ManagementFactory.getMemoryMXBean();
+//    NotificationEmitter emitter = (NotificationEmitter) mbean;
+//    emitter.addNotificationListener(new NotificationListener() {
+//      public void handleNotification(Notification n, Object hb) {
+//        if (n.getType().equals(
+//            MemoryNotificationInfo.MEMORY_THRESHOLD_EXCEEDED)) {
+//          long maxMemory = tenuredGenPool.getUsage().getMax();
+//          long usedMemory = tenuredGenPool.getUsage().getUsed();
+//          for (LowMemoryListener listener : listeners) {
+//            listener.memoryUsageLow(usedMemory, maxMemory);
+//          }
+//        }
+//      }
+//    }, null, null);
   }
 
   public boolean addListener(LowMemoryListener listener) {

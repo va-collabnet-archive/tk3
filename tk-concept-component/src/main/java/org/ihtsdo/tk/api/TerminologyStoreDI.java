@@ -22,11 +22,6 @@ public interface TerminologyStoreDI extends TerminologyDI {
 
         DB_LOCATION, BASELINE_FILES;
     }
-
-   boolean usesRf2Metadata() throws IOException;
-
-   KindOfCacheBI getCache(ViewCoordinate vc) throws Exception;
-
    ComponentChroncileBI<?> getComponent(Collection<UUID> uuids) throws IOException;
 
    ComponentChroncileBI<?> getComponent(ComponentContainerBI cc) throws IOException;
