@@ -278,7 +278,7 @@
                             <minimumTokens>100</minimumTokens>
                             <minimumPriority>3</minimumPriority>
           <!-- Change minimum priority to see more or less messages -->
-                            <targetJdk>1.6</targetJdk>
+                            <targetJdk>1.7</targetJdk>
                         </configuration>
                     </plugin>
                 </configuration>
@@ -286,7 +286,7 @@
         </plugins>
     </build>
     <modules>
-        <module>tk-concept-component</module>
+        <module>tk-api-dto</module>
         <module>tk-helpers</module>
         <module>tk-cern-prim</module>
         <module>wb-bdb</module>
