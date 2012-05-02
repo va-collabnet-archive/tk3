@@ -1,6 +1,8 @@
 package org.ihtsdo.concept;
 
 //~--- non-JDK imports --------------------------------------------------------
+import org.ihtsdo.bdb.concept.I_ManageConceptData;
+import org.ihtsdo.bdb.concept.ConceptDataSimpleReference;
 import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.*;
@@ -14,7 +16,7 @@ import org.ihtsdo.concept.component.image.Image;
 import org.ihtsdo.concept.component.processor.AdjudicationAnalogCreator;
 import org.ihtsdo.concept.component.processor.VersionFlusher;
 import org.ihtsdo.concept.component.refex.RefexMember;
-import org.ihtsdo.concept.component.refex.RefexMemberFactory;
+import org.ihtsdo.bdb.concept.component.RefexMemberFactory;
 import org.ihtsdo.concept.component.relationship.Relationship;
 import org.ihtsdo.concept.component.relationship.RelationshipRevision;
 import org.ihtsdo.concept.component.relationship.group.RelGroupChronicle;
@@ -85,7 +87,6 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
     //~--- fields --------------------------------------------------------------
     private boolean canceled = false;
-    private boolean removeInvalidXrefs = false;
     NidSetBI allowedStatus;
     NidSetBI allowedTypes;
     ContradictionManagerBI contradictionManager;
@@ -116,9 +117,6 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
                 throw new UnsupportedOperationException("Can't handle reference type: " + refType);
         }
 
-        if (Bdb.watchList.containsKey(nid)) {
-            AceLog.getAppLog().info("$$$$$$$$$$$$$$ Constructing concept: " + nid + " $$$$$$$$$$$$$$");
-        }
     }
 
     /**
@@ -135,9 +133,6 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         this.hashCode = Hashcode.compute(nid);
         data = new ConceptDataSimpleReference(this, roBytes, mutableBytes);
 
-        if (Bdb.watchList.containsKey(nid)) {
-            AceLog.getAppLog().info("############  Constructing concept: " + nid + " ############");
-        }
     }
 
     //~--- methods -------------------------------------------------------------
@@ -249,7 +244,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     public static void enableComponentsCRHM() {
-        componentsCRHM = new ConcurrentReferenceHashMap<Integer, Object>(ConcurrentReferenceHashMap.ReferenceType.STRONG,
+        componentsCRHM = new ConcurrentReferenceHashMap<>(ConcurrentReferenceHashMap.ReferenceType.STRONG,
                 ConcurrentReferenceHashMap.ReferenceType.WEAK);
     }
 
@@ -294,11 +289,11 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     private static void init() {
-        conceptsCRHM = new ConcurrentReferenceHashMap<Integer, Concept>(ConcurrentReferenceHashMap.ReferenceType.STRONG,
+        conceptsCRHM = new ConcurrentReferenceHashMap<>(ConcurrentReferenceHashMap.ReferenceType.STRONG,
                 ConcurrentReferenceHashMap.ReferenceType.WEAK);
-        componentsCRHM = new ConcurrentReferenceHashMap<Integer, Object>(ConcurrentReferenceHashMap.ReferenceType.STRONG,
+        componentsCRHM = new ConcurrentReferenceHashMap<>(ConcurrentReferenceHashMap.ReferenceType.STRONG,
                 ConcurrentReferenceHashMap.ReferenceType.WEAK);
-        unresolvedAnnotations = new ArrayList<TkRefexAbstractMember<?>>();
+        unresolvedAnnotations = new ArrayList<>();
         fsXmlDescNid = Integer.MIN_VALUE;
         fsDescNid = Integer.MIN_VALUE;
         rf1LangRefexNidSet = new NidSet();
@@ -584,7 +579,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     public static void resolveUnresolvedAnnotations() throws IOException {
-        List<TkRefexAbstractMember<?>> cantResolve = new ArrayList<TkRefexAbstractMember<?>>();
+        List<TkRefexAbstractMember<?>> cantResolve = new ArrayList<>();
 
         for (TkRefexAbstractMember<?> er : unresolvedAnnotations) {
             ConceptComponent cc;
@@ -672,7 +667,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
     public Collection<RefexMember<?, ?>> getExtensions() throws IOException {
         if (isCanceled()) {
-            return new ArrayList<RefexMember<?, ?>>();
+            return new ArrayList<>();
         }
 
         return data.getRefsetMembers();
@@ -811,10 +806,6 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
         conceptsCRHM.put(nid, c);
 
-        if (Bdb.watchList.containsKey(nid) && newConcept) {
-            AceLog.getAppLog().info(c.toLongString());
-        }
-
         return c;
     }
 
@@ -851,10 +842,10 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     public Collection<? extends RelGroupChronicleBI> getAllRelGroups() throws IOException {
-        ArrayList<RelGroupChronicleBI> results = new ArrayList<RelGroupChronicleBI>();
-        Map<Integer, HashSet<RelationshipChronicleBI>> statedGroupMap = new HashMap<Integer, HashSet<RelationshipChronicleBI>>();
+        ArrayList<RelGroupChronicleBI> results = new ArrayList<>();
+        Map<Integer, HashSet<RelationshipChronicleBI>> statedGroupMap = new HashMap<>();
         Map<Integer, HashSet<RelationshipChronicleBI>> inferredGroupMap =
-                new HashMap<Integer, HashSet<RelationshipChronicleBI>>();
+                new HashMap<>();
 
         for (RelationshipChronicleBI r : getRelsOutgoing()) {
 
@@ -867,7 +858,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
                         HashSet<RelationshipChronicleBI> relsInGroup = inferredGroupMap.get(group);
 
                         if (relsInGroup == null) {
-                            relsInGroup = new HashSet<RelationshipChronicleBI>();
+                            relsInGroup = new HashSet<>();
                             inferredGroupMap.put(group, relsInGroup);
                         }
 
@@ -876,7 +867,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
                         HashSet<RelationshipChronicleBI> relsInGroup = statedGroupMap.get(group);
 
                         if (relsInGroup == null) {
-                            relsInGroup = new HashSet<RelationshipChronicleBI>();
+                            relsInGroup = new HashSet<>();
                             statedGroupMap.put(group, relsInGroup);
                         }
 
@@ -899,7 +890,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
     @Override
     public Set<Integer> getAllSapNids() throws IOException {
-        Set<Integer> sapNids = new HashSet<Integer>();
+        Set<Integer> sapNids = new HashSet<>();
 
         if (getConceptAttributes() != null) {
             sapNids.addAll(getConceptAttributes().getComponentSapNids());
@@ -944,10 +935,10 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             PositionSetBI viewPositions, Precedence precedence, ContradictionManagerBI contradictionMgr)
             throws IOException {
         if (isCanceled()) {
-            return new ArrayList<ConceptAttributes.Version>();
+            return new ArrayList<>();
         }
 
-        List<ConceptAttributes.Version> versions = new ArrayList<ConceptAttributes.Version>(2);
+        List<ConceptAttributes.Version> versions = new ArrayList<>(2);
 
         versions.addAll(getConceptAttributes().getVersions(allowedStatus, viewPositions, precedence,
                 contradictionMgr));
@@ -964,7 +955,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     public ArrayList<ConceptAttributes> getConceptAttributesList() throws IOException {
-        ArrayList<ConceptAttributes> returnList = new ArrayList<ConceptAttributes>(1);
+        ArrayList<ConceptAttributes> returnList = new ArrayList<>(1);
 
         returnList.add(getConceptAttributes());
 
@@ -1016,7 +1007,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             return getConceptAttributes().getCurrentRefexMembers(xyz, refsetNid);
         }
 
-        return new ArrayList<RefexVersionBI<?>>(0);
+        return new ArrayList<>(0);
     }
 
     @Override
@@ -1025,7 +1016,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             return getConceptAttributes().getCurrentRefexes(xyz);
         }
 
-        return new ArrayList<RefexVersionBI<?>>(0);
+        return new ArrayList<>(0);
     }
 
     @Override
@@ -1056,7 +1047,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             throws IOException {
         Collection<? extends RefexChronicleBI<?>> refexes = getRefsetMembers();
         List<RefexVersionBI<?>> returnValues =
-                new ArrayList<RefexVersionBI<?>>(refexes.size());
+                new ArrayList<>(refexes.size());
 
         for (RefexChronicleBI<?> refex : refexes) {
             for (RefexVersionBI<?> version : refex.getVersions(vc)) {
@@ -1072,7 +1063,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             throws IOException {
         ConcurrentSkipListSet<RefexMember<?, ?>> refsetMembers = getRefsetMembers();
         List<RefexVersionBI<?>> returnValues =
-                new ArrayList<RefexVersionBI<?>>(refsetMembers.size());
+                new ArrayList<>(refsetMembers.size());
 
         for (RefexMember refex : refsetMembers) {
             for (Object o : refex.getVersions(vc, cuttoffTime)) {
@@ -1113,11 +1104,11 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             ContradictionManagerBI contradictionMgr)
             throws IOException {
         if (isCanceled()) {
-            return new ConcurrentSkipListSet<Description.Version>(new ComponentComparator());
+            return new ConcurrentSkipListSet<>(new ComponentComparator());
         }
 
         Collection<Description> descriptions = getDescriptions();
-        List<Description.Version> versions = new ArrayList<Version>(descriptions.size());
+        List<Description.Version> versions = new ArrayList<>(descriptions.size());
 
         for (Description d : descriptions) {
             versions.addAll(d.getVersions(allowedStatus, allowedTypes, viewPositions, precedence,
@@ -1129,7 +1120,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
     public Collection<Description> getDescriptions() throws IOException {
         if (isCanceled()) {
-            return new ConcurrentSkipListSet<Description>(new ComponentComparator());
+            return new ConcurrentSkipListSet<>(new ComponentComparator());
         }
 
         return data.getDescriptions();
@@ -1142,7 +1133,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
     public Collection<Relationship> getDestRels(NidSetBI allowedTypes) throws IOException {
         if (isCanceled()) {
-            return new ArrayList<Relationship>();
+            return new ArrayList<>();
         }
 
         return data.getDestRels(allowedTypes);
@@ -1196,7 +1187,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             LANGUAGE_SORT_PREF sortPref, Precedence precedencePolicy,
             ContradictionManagerBI contradictionManager)
             throws IOException {
-        Description.Version result = null;
+        Description.Version result;
 
         switch (sortPref) {
             case TYPE_B4_LANG:
@@ -1262,11 +1253,11 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             PositionSetBI viewPositions, Precedence precedence, ContradictionManagerBI contradictionMgr)
             throws IOException {
         if (isCanceled()) {
-            return new ConcurrentSkipListSet<Image.Version>(new ComponentComparator());
+            return new ConcurrentSkipListSet<>(new ComponentComparator());
         }
 
         Collection<Image> media = getImages();
-        List<Image.Version> versions = new ArrayList<Image.Version>(media.size());
+        List<Image.Version> versions = new ArrayList<>(media.size());
 
         for (Image m : media) {
             versions.addAll(m.getVersions(allowedStatus, allowedTypes, viewPositions, precedence,
@@ -1278,7 +1269,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
     public Collection<Relationship> getNativeSourceRels() throws IOException {
         if (isCanceled()) {
-            return new ConcurrentSkipListSet<Relationship>(new ComponentComparator());
+            return new ConcurrentSkipListSet<>(new ComponentComparator());
         }
 
         return data.getSourceRels();
@@ -1434,7 +1425,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
     @Override
     public Collection<? extends RelGroupVersionBI> getRelGroups(ViewCoordinate vc) throws IOException {
-        ArrayList<RelGroupVersionBI> results = new ArrayList<RelGroupVersionBI>();
+        ArrayList<RelGroupVersionBI> results = new ArrayList<>();
 
         if (vc.getRelAssertionType() == RelAssertionType.INFERRED_THEN_STATED) {
             ViewCoordinate tempVc = new ViewCoordinate(vc);
@@ -1451,7 +1442,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     private void getRelGroups(ViewCoordinate vc, ArrayList<RelGroupVersionBI> results) throws IOException {
-        Map<Integer, HashSet<RelationshipChronicleBI>> groupMap = new HashMap<Integer, HashSet<RelationshipChronicleBI>>();
+        Map<Integer, HashSet<RelationshipChronicleBI>> groupMap = new HashMap<>();
         ViewCoordinate tempVc = new ViewCoordinate(vc);
 
         tempVc.setAllowedStatusNids(null);
@@ -1464,7 +1455,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
                     HashSet<RelationshipChronicleBI> relsInGroup = groupMap.get(group);
 
                     if (relsInGroup == null) {
-                        relsInGroup = new HashSet<RelationshipChronicleBI>();
+                        relsInGroup = new HashSet<>();
                         groupMap.put(group, relsInGroup);
                     }
 
@@ -1492,7 +1483,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     @Override
     public Collection<Relationship> getRelsIncoming() throws IOException {
         if (isCanceled()) {
-            return new ArrayList<Relationship>();
+            return new ArrayList<>();
         }
 
         return data.getDestRels();
@@ -1572,11 +1563,11 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             PositionSetBI viewPositions, Precedence precedence, ContradictionManagerBI contradictionMgr)
             throws IOException {
         if (isCanceled()) {
-            return new ArrayList<Relationship.Version>();
+            return new ArrayList<>();
         }
 
         Collection<Relationship> rels = getNativeSourceRels();
-        List<Relationship.Version> versions = new ArrayList<Relationship.Version>(rels.size());
+        List<Relationship.Version> versions = new ArrayList<>(rels.size());
 
         for (Relationship r : rels) {
             versions.addAll(r.getVersions(allowedStatus, allowedTypes, viewPositions, precedence,
@@ -1608,7 +1599,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         if (descriptions.size() > 0) {
             if (descriptions.size() > 1) {
                 List<Description.Version> matchedList =
-                        new ArrayList<Description.Version>();
+                        new ArrayList<>();
 
                 for (int typeId : typePrefOrder.getListValues()) {
                     for (Description.Version d : descriptions) {
@@ -1645,7 +1636,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             throw new RuntimeException(e);
         }
 
-        return new ArrayList<UUID>();
+        return new ArrayList<>();
     }
 
     public List<UUID> getUidsForComponent(int componentNid) throws IOException {
@@ -1656,7 +1647,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         AceLog.getAppLog().alertAndLogException(new Exception("Null component: " + componentNid
                 + " for concept: " + this.toLongString()));
 
-        return new ArrayList<UUID>();
+        return new ArrayList<>();
     }
 
     public NidListBI getUncommittedNids() {
@@ -1675,7 +1666,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
     @Override
     public Collection<ConceptVersion> getVersions(ViewCoordinate c) {
-        ArrayList<ConceptVersion> cvList = new ArrayList<ConceptVersion>(1);
+        ArrayList<ConceptVersion> cvList = new ArrayList<>(1);
 
         cvList.add(new ConceptVersion(this, c));
 

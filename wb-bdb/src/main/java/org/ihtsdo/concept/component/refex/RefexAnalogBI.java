@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.ihtsdo.concept.component.refex;
 
 import java.beans.PropertyVetoException;
@@ -27,10 +26,11 @@ import org.ihtsdo.tk.api.refex.RefexVersionBI;
  */
 public interface RefexAnalogBI<R extends RefexRevision<R, ?>>
         extends RefexVersionBI, AnalogBI {
-	
-	void setRefexNid(int refexNid) throws PropertyVetoException;
-        void setReferencedComponentNid(int componentNid) throws PropertyVetoException;
-        
-        R makeAnalog(int statusNid, int authorNid, int pathNid, long time);
 
+    void setRefexNid(int refexNid) throws PropertyVetoException;
+
+    void setReferencedComponentNid(int componentNid) throws PropertyVetoException;
+
+    @Override
+    R makeAnalog(int statusNid, int authorNid, int pathNid, long time);
 }

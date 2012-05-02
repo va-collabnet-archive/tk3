@@ -51,7 +51,7 @@ public class Image extends ConceptComponent<ImageRevision, Image>
         super();
     }
 
-    protected Image(Concept enclosingConcept, TupleInput input) throws IOException {
+    public Image(Concept enclosingConcept, TupleInput input) throws IOException {
         super(enclosingConcept.getNid(), input);
     }
 

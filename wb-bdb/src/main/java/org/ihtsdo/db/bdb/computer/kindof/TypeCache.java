@@ -9,8 +9,8 @@ import java.util.logging.Level;
 
 import org.ihtsdo.concept.Concept;
 import org.ihtsdo.concept.ConceptVersion;
-import org.ihtsdo.concept.I_ProcessUnfetchedConceptData;
-import org.ihtsdo.concept.ParallelConceptIterator;
+import org.ihtsdo.bdb.concept.I_ProcessUnfetchedConceptData;
+import org.ihtsdo.bdb.concept.ParallelConceptIterator;
 import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.temp.AceLog;
 import org.ihtsdo.tk.api.ConceptFetcherBI;

@@ -16,9 +16,9 @@ import org.ihtsdo.concept.component.identifier.IdentifierVersion;
 import org.ihtsdo.concept.component.identifier.IdentifierVersionLong;
 import org.ihtsdo.concept.component.identifier.IdentifierVersionString;
 import org.ihtsdo.concept.component.identifier.IdentifierVersionUuid;
-import org.ihtsdo.concept.component.refex.AnnotationWriter;
+import org.ihtsdo.bdb.concept.component.AnnotationWriter;
 import org.ihtsdo.concept.component.refex.RefexMember;
-import org.ihtsdo.concept.component.refex.RefexMemberFactory;
+import org.ihtsdo.bdb.concept.component.RefexMemberFactory;
 import org.ihtsdo.concept.component.refex.RefexRevision;
 import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.db.util.NidPairForRefset;
@@ -126,7 +126,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         assert nid != Integer.MAX_VALUE : "Processing nid: " + enclosingConceptNid;
 
         if (eComponent.getAnnotations() != null) {
-            this.annotations = new ConcurrentSkipListSet<RefexMember<?, ?>>();
+            this.annotations = new ConcurrentSkipListSet<>();
 
             for (TkRefexAbstractMember<?> eAnnot : eComponent.getAnnotations()) {
                 RefexMember<?, ?> annot = RefexMemberFactory.create(eAnnot, enclosingConceptNid);
@@ -188,7 +188,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
     @Override
     public boolean addAnnotation(RefexChronicleBI annotation) throws IOException {
         if (annotations == null) {
-            annotations = new ConcurrentSkipListSet<RefexMember<?, ?>>(new Comparator<RefexChronicleBI>() {
+            annotations = new ConcurrentSkipListSet<>(new Comparator<RefexChronicleBI>() {
 
                 @Override
                 public int compare(RefexChronicleBI t, RefexChronicleBI t1) {
@@ -207,7 +207,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
     public boolean addIdVersion(IdentifierVersion srcId) {
         if (additionalIdVersions == null) {
-            additionalIdVersions = new ArrayList<IdentifierVersion>();
+            additionalIdVersions = new ArrayList<>();
         }
 
         boolean returnValue = additionalIdVersions.add(srcId);
@@ -369,7 +369,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
 
         if (additionalIdVersions != null) {
-            List<IdentifierVersion> toRemove = new ArrayList<IdentifierVersion>();
+            List<IdentifierVersion> toRemove = new ArrayList<>();
 
             for (IdentifierVersion idv : additionalIdVersions) {
                 if (idv.getTime() == Long.MAX_VALUE) {
@@ -387,7 +387,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
 
         if (revisions != null) {
-            List<R> toRemove = new ArrayList<R>();
+            List<R> toRemove = new ArrayList<>();
 
             for (R r : revisions) {
                 if (r.getTime() == Long.MAX_VALUE) {
@@ -403,7 +403,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
 
         if (annotations != null) {
-            List<Object> toRemove = new ArrayList<Object>();
+            List<Object> toRemove = new ArrayList<>();
 
             for (RefexMember<?, ?> a : annotations) {
                 a.clearVersions();
@@ -412,7 +412,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
                     toRemove.add(a);
                 } else if (a.revisions != null) {
                     for (RefexRevision rv : a.revisions) {
-                        List<RefexRevision> revToRemove = new ArrayList<RefexRevision>();
+                        List<RefexRevision> revToRemove = new ArrayList<>();
 
                         if (rv.getTime() == Long.MAX_VALUE) {
                             revToRemove.add(rv);
@@ -515,7 +515,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             return;
         }
 
-        additionalIdVersions = new ArrayList<IdentifierVersion>(list.size());
+        additionalIdVersions = new ArrayList<>(list.size());
 
         for (TkIdentifier idv : list) {
             Object denotation = idv.getDenotation();
@@ -707,7 +707,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             if (this.annotations == null) {
                 this.annotations = another.annotations;
             } else {
-                HashMap<Integer, RefexMember<?, ?>> anotherAnnotationMap = new HashMap<Integer, RefexMember<?, ?>>();
+                HashMap<Integer, RefexMember<?, ?>> anotherAnnotationMap = new HashMap<>();
 
                 for (RefexChronicleBI annotation : another.annotations) {
                     anotherAnnotationMap.put(annotation.getNid(), (RefexMember<?, ?>) annotation);
@@ -777,7 +777,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         int listSize = input.readShort();
 
         if (listSize != 0) {
-            additionalIdVersions = new ArrayList<IdentifierVersion>(listSize);
+            additionalIdVersions = new ArrayList<>(listSize);
         }
 
         for (int i = 0; i < listSize; i++) {
@@ -1053,7 +1053,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
     }
 
     private void writeIdentifierToBdb(TupleOutput output, int maxReadOnlyStatusAtPositionNid) {
-        List<IdentifierVersion> partsToWrite = new ArrayList<IdentifierVersion>();
+        List<IdentifierVersion> partsToWrite = new ArrayList<>();
 
         if (additionalIdVersions != null) {
             for (IdentifierVersion p : additionalIdVersions) {
@@ -1091,7 +1091,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
     @Override
     public Set<Integer> getAllNidsForId() throws IOException {
-        HashSet<Integer> allNids = new HashSet<Integer>();
+        HashSet<Integer> allNids = new HashSet<>();
 
         allNids.add(nid);
         allNids.add(getStatusNid());
@@ -1103,7 +1103,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
     @Override
     public Set<Integer> getAllNidsForVersion() throws IOException {
-        HashSet<Integer> allNids = new HashSet<Integer>();
+        HashSet<Integer> allNids = new HashSet<>();
 
         allNids.add(nid);
         allNids.add(getStatusNid());
@@ -1125,7 +1125,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             size = size + annotations.size();
         }
 
-        HashSet<Integer> sapNids = new HashSet<Integer>(size);
+        HashSet<Integer> sapNids = new HashSet<>(size);
 
         if (annotations != null) {
             for (RefexChronicleBI<?> annotation : annotations) {
@@ -1187,7 +1187,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             size = size + annotations.size();
         }
 
-        HashSet<Integer> sapNids = new HashSet<Integer>(size);
+        HashSet<Integer> sapNids = new HashSet<>(size);
 
         sapNids.addAll(getVersionSapNids());
         sapNids.addAll(getIdSapNids());
@@ -1208,7 +1208,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             return Collections.unmodifiableCollection(new ArrayList<RefexVersionBI<?>>());
         }
 
-        Collection<RefexVersionBI<?>> returnValues = new ArrayList<RefexVersionBI<?>>();
+        Collection<RefexVersionBI<?>> returnValues = new ArrayList<>();
 
         for (RefexChronicleBI<?> refex : annotations) {
             for (RefexVersionBI<?> version : refex.getVersions(xyz)) {
@@ -1223,7 +1223,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
     public Collection<? extends RefexVersionBI<?>> getCurrentAnnotationMembers(ViewCoordinate xyz,
             int refexNid)
             throws IOException {
-        Collection<RefexVersionBI<?>> returnValues = new ArrayList<RefexVersionBI<?>>();
+        Collection<RefexVersionBI<?>> returnValues = new ArrayList<>();
 
         if (annotations != null) {
             for (RefexChronicleBI<?> refex : annotations) {
@@ -1255,7 +1255,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             throws IOException {
         Collection<? extends RefexChronicleBI<?>> refexes = getRefexes(refsetNid);
         List<RefexVersionBI<?>> returnValues =
-                new ArrayList<RefexVersionBI<?>>(refexes.size());
+                new ArrayList<>(refexes.size());
 
         for (RefexChronicleBI<?> refex : refexes) {
             for (RefexVersionBI<?> version : refex.getVersions(xyz)) {
@@ -1270,7 +1270,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
     public Collection<? extends RefexVersionBI<?>> getCurrentRefexes(ViewCoordinate xyz) throws IOException {
         Collection<? extends RefexChronicleBI<?>> refexes = getRefexes();
         List<RefexVersionBI<?>> returnValues =
-                new ArrayList<RefexVersionBI<?>>(refexes.size());
+                new ArrayList<>(refexes.size());
 
         for (RefexChronicleBI<?> refex : refexes) {
             for (RefexVersionBI<?> version : refex.getVersions(xyz)) {
@@ -1321,7 +1321,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             size = size + additionalIdVersions.size();
         }
 
-        HashSet<Integer> sapNids = new HashSet<Integer>(size);
+        HashSet<Integer> sapNids = new HashSet<>(size);
 
         assert primordialSapNid != 0;
         sapNids.add(primordialSapNid);
@@ -1336,7 +1336,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
     }
 
     public final List<IdBI> getIdVersions() {
-        List<IdBI> returnValues = new ArrayList<IdBI>();
+        List<IdBI> returnValues = new ArrayList<>();
 
         if (additionalIdVersions != null) {
             returnValues.addAll(additionalIdVersions);
@@ -1352,7 +1352,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         Collection<? extends RefexVersionBI<?>> currentRefexes = new HashSet(getCurrentRefexes(xyz));
         Collection<? extends RefexChronicleBI<?>> refexes = getRefexes();
         List<RefexVersionBI<?>> returnValues =
-                new ArrayList<RefexVersionBI<?>>(refexes.size());
+                new ArrayList<>(refexes.size());
         ViewCoordinate allStatus = new ViewCoordinate(xyz);
 
         allStatus.setAllowedStatusNids(null);
@@ -1399,7 +1399,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
     public Set<PositionBI> getPositions() throws IOException {
         List<? extends Version> localVersions = getVersions();
-        Set<PositionBI> positions = new HashSet<PositionBI>(localVersions.size());
+        Set<PositionBI> positions = new HashSet<>(localVersions.size());
 
         for (Version v : localVersions) {
             positions.add(v.getPosition());
@@ -1420,7 +1420,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
     @Override
     public Collection<? extends RefexChronicleBI<?>> getRefexMembers(int refsetNid) throws IOException {
         Collection<? extends RefexChronicleBI<?>> r = getRefexes();
-        List<RefexChronicleBI<?>> returnValues = new ArrayList<RefexChronicleBI<?>>(r.size());
+        List<RefexChronicleBI<?>> returnValues = new ArrayList<>(r.size());
 
         for (RefexChronicleBI<?> rcbi : r) {
             if (rcbi.getRefexNid() == refsetNid) {
@@ -1434,8 +1434,8 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
     @Override
     public Collection<? extends RefexChronicleBI<?>> getRefexes() throws IOException {
         List<NidPairForRefset> pairs = Bdb.getRefsetPairs(nid);
-        List<RefexChronicleBI<?>> returnValues = new ArrayList<RefexChronicleBI<?>>(pairs.size());
-        HashSet<Integer> addedMembers = new HashSet<Integer>();
+        List<RefexChronicleBI<?>> returnValues = new ArrayList<>(pairs.size());
+        HashSet<Integer> addedMembers = new HashSet<>();
 
         if ((pairs != null) && !pairs.isEmpty()) {
             for (NidPairForRefset pair : pairs) {
@@ -1479,10 +1479,10 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         List<NidPairForRefset> pairs = Bdb.getRefsetPairs(nid);
 
         if ((pairs == null) || pairs.isEmpty()) {
-            return new HashSet<Integer>(0);
+            return new HashSet<>(0);
         }
 
-        HashSet<Integer> returnValues = new HashSet<Integer>(pairs.size());
+        HashSet<Integer> returnValues = new HashSet<>(pairs.size());
 
         for (NidPairForRefset pair : pairs) {
             RefexChronicleBI<?> ext = (RefexChronicleBI<?>) Bdb.getComponent(pair.getMemberNid());
@@ -1503,11 +1503,11 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         List<NidPairForRefset> pairs = Bdb.getRefsetPairs(nid);
 
         if ((pairs == null) || pairs.isEmpty()) {
-            return new ArrayList<RefexChronicleBI<?>>(0);
+            return new ArrayList<>(0);
         }
 
-        List<RefexChronicleBI<?>> returnValues = new ArrayList<RefexChronicleBI<?>>(pairs.size());
-        HashSet<Integer> addedMembers = new HashSet<Integer>();
+        List<RefexChronicleBI<?>> returnValues = new ArrayList<>(pairs.size());
+        HashSet<Integer> addedMembers = new HashSet<>();
 
         for (NidPairForRefset pair : pairs) {
             RefexChronicleBI<?> ext = (RefexChronicleBI<?>) Bdb.getComponent(pair.getMemberNid());
@@ -1538,7 +1538,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
     @Override
     public final List<UUID> getUUIDs() {
-        List<UUID> returnValues = new ArrayList<UUID>();
+        List<UUID> returnValues = new ArrayList<>();
 
         returnValues.add(new UUID(primordialMsb, primordialLsb));
 
@@ -1568,7 +1568,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             size = size + revisions.size();
         }
 
-        HashMap<Integer, ConceptComponent<R, C>.Version> sapMap = new HashMap<Integer, ConceptComponent<R, C>.Version>(size);
+        HashMap<Integer, ConceptComponent<R, C>.Version> sapMap = new HashMap<>(size);
 
         for (Version v : getVersions()) {
             sapMap.put(v.getSapNid(), v);
@@ -1584,7 +1584,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             size = size + revisions.size();
         }
 
-        HashSet<Integer> sapNids = new HashSet<Integer>(size);
+        HashSet<Integer> sapNids = new HashSet<>(size);
 
         assert primordialSapNid != 0 : "Processing nid: " + enclosingConceptNid;
         sapNids.add(primordialSapNid);

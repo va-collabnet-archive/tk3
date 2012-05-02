@@ -104,6 +104,7 @@ public class PrimitiveIntObjectMap implements Externalizable {
         init();
     }
 
+    @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         indexIntervals  = in.readInt();
         intervalShifts  = in.readInt();
@@ -119,6 +120,7 @@ public class PrimitiveIntObjectMap implements Externalizable {
         totalSize  = in.readInt();
     }
 
+    @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeInt(indexIntervals);
         out.writeInt(intervalShifts);
@@ -397,6 +399,7 @@ public class PrimitiveIntObjectMap implements Externalizable {
             this.pageSize = tableSize << this.shifts;
         }
 
+        @Override
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
             pageSize    = in.readInt();
             pageId      = in.readInt();
@@ -408,6 +411,7 @@ public class PrimitiveIntObjectMap implements Externalizable {
             filledSlots = in.readInt();
         }
 
+        @Override
         public void writeExternal(ObjectOutput out) throws IOException {
             out.writeInt(pageSize);
             out.writeInt(pageId);

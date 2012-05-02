@@ -16,8 +16,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 
 import org.ihtsdo.concept.Concept;
-import org.ihtsdo.concept.ConceptBdb;
-import org.ihtsdo.concept.OFFSETS;
+import org.ihtsdo.bdb.concept.ConceptBdb;
+import org.ihtsdo.bdb.concept.OFFSETS;
 import org.ihtsdo.db.bdb.BdbMemoryMonitor.LowMemoryListener;
 import org.ihtsdo.db.bdb.computer.kindof.IsaCache;
 import org.ihtsdo.db.bdb.computer.kindof.KindOfComputer;
@@ -63,8 +63,6 @@ public class Bdb {
     public static ThreadGroup dbdThreadGroup =
             new ThreadGroup("db threads");
     private static ExecutorService syncService;
-    public static ConcurrentHashMap<Integer, Integer> watchList =
-            new ConcurrentHashMap<Integer, Integer>();
     private static BdbPathManager pathManager;
     private static boolean closed = true;
     private static BdbMemoryMonitor memoryMonitor = new BdbMemoryMonitor();
@@ -246,8 +244,7 @@ public class Bdb {
 
     public static void setup(String dbRoot) {
         System.out.println("setup dbRoot: " + dbRoot);
-        sapNidCache = new ConcurrentHashMap<String, Integer>();
-        watchList = new ConcurrentHashMap<Integer, Integer>();
+        sapNidCache = new ConcurrentHashMap<>();
         try {
             closed = false;
             syncService = Executors.newFixedThreadPool(1,
@@ -619,7 +616,6 @@ public class Bdb {
         sapNidCache = null;
         statusAtPositionDb = null;
         uuidsToNidMapDb = null;
-        watchList = null;
         xref = null;
        
         Concept.reset();
@@ -707,14 +703,6 @@ public class Bdb {
         } catch (DatabaseException e) {
             throw new IOException(e);
         }
-    }
-
-    public static void addToWatchList(Concept c) {
-        watchList.put(c.getNid(), c.getConceptNid());
-    }
-
-    public static void removeFromWatchList(Concept c) {
-        watchList.remove(c.getNid());
     }
 
     public static UUID getPrimUuidForConcept(int cNid) throws IOException {

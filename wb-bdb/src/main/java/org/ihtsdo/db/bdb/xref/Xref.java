@@ -12,8 +12,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.ihtsdo.concept.I_ProcessUnfetchedConceptData;
-import org.ihtsdo.concept.ParallelConceptIterator;
+import org.ihtsdo.bdb.concept.I_ProcessUnfetchedConceptData;
+import org.ihtsdo.bdb.concept.ParallelConceptIterator;
 import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.db.bdb.ComponentBdb;
 import org.ihtsdo.db.util.NidPair;

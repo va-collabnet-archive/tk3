@@ -19,7 +19,7 @@ import org.ihtsdo.concept.component.attributes.ConceptAttributes;
 import org.ihtsdo.concept.component.attributes.ConceptAttributesRevision;
 import org.ihtsdo.concept.component.description.Description;
 import org.ihtsdo.concept.component.description.DescriptionRevision;
-import org.ihtsdo.concept.component.identifier.IdentifierSet;
+import org.ihtsdo.bdb.concept.component.IdentifierSet;
 import org.ihtsdo.concept.component.refex.RefexMember;
 import org.ihtsdo.concept.component.refex.RefexRevision;
 import org.ihtsdo.concept.component.relationship.Relationship;
@@ -102,10 +102,6 @@ public class BdbCommitManager {
         GlobalPropertyChange.firePropertyChange(TerminologyStoreDI.CONCEPT_EVENT.ADD_UNCOMMITTED, null, concept);
 
         if (concept.isUncommitted() == false) {
-            if (Bdb.watchList.containsKey(concept.getNid())) {
-                AceLog.getAppLog().info("--- Removing uncommitted concept: " + concept.getNid() + " --- ");
-            }
-
             removeUncommitted(concept);
 
             try {
@@ -121,10 +117,6 @@ public class BdbCommitManager {
         }
 
         concept.modified();
-
-        if (Bdb.watchList.containsKey(concept.getNid())) {
-            AceLog.getAppLog().info("---@@@ Adding uncommitted concept: " + concept.getNid() + " ---@@@ ");
-        }
 
         try {
 //            if (performCreationTests) {
@@ -162,10 +154,6 @@ public class BdbCommitManager {
             AceLog.getAppLog().alertAndLogException(ex);
         }
 
-        if (Bdb.watchList.containsKey(concept.getNid())) {
-            AceLog.getAppLog().info("---@@@ Adding uncommitted NO checks: " + concept.getNid() + " ---@@@ ");
-        }
-
         c = null;
 
         if (concept.isUncommitted()) {
@@ -177,10 +165,6 @@ public class BdbCommitManager {
             }
         } else {
             c = (Concept) concept;
-
-            if (Bdb.watchList.containsKey(concept.getNid())) {
-                AceLog.getAppLog().info("--- Removing uncommitted concept: " + concept.getNid() + " --- ");
-            }
 
             removeUncommitted(c);
         }
@@ -949,10 +933,6 @@ public class BdbCommitManager {
 
     private static void writeUncommitted(Concept c) throws InterruptedException {
         if (c != null) {
-            if (Bdb.watchList.containsKey(c.getNid())) {
-                AceLog.getAppLog().info("---@@@ writeUncommitted checks: " + c.getNid() + " ---@@@ ");
-            }
-
             dbWriterPermit.acquire();
             dbWriterService.execute(new SetNidsForCid(c));
             dbWriterService.execute(new ConceptWriter(c));

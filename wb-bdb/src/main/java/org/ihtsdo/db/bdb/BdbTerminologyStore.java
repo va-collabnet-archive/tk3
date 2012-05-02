@@ -1,6 +1,8 @@
 package org.ihtsdo.db.bdb;
 
 //~--- non-JDK imports --------------------------------------------------------
+import org.ihtsdo.bdb.concept.I_ProcessUnfetchedConceptData;
+import org.ihtsdo.bdb.concept.ParallelConceptIterator;
 import org.ihtsdo.tk.binding.SnomedMetadataRfx;
 import org.ihtsdo.tk.binding.TermAux;
 import java.beans.PropertyChangeListener;

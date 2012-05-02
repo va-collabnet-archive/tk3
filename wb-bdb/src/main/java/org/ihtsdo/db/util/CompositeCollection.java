@@ -93,6 +93,7 @@ public class CompositeCollection
      * 
      * @return total number of elements in all contained containers
      */
+    @Override
     public int size() {
         int size = 0;
         for ( int i = this.all.length - 1; i >= 0; i-- ) {
@@ -108,6 +109,7 @@ public class CompositeCollection
      * 
      * @return true if all of the contained collections are empty
      */
+    @Override
     public boolean isEmpty() {
         for ( int i = this.all.length - 1; i >= 0; i-- ) {
             if ( this.all[i].isEmpty() == false ) {
@@ -126,6 +128,7 @@ public class CompositeCollection
      *            the object to search for
      * @return true if obj is contained in any of the contained collections
      */
+    @Override
     public boolean contains(final Object obj) {
         for ( int i = this.all.length - 1; i >= 0; i-- ) {
             if ( this.all[i].contains( obj ) ) {
@@ -146,6 +149,7 @@ public class CompositeCollection
      *         should not be relied upon.
      * @see IteratorChain
      */
+    @Override
     public Iterator iterator() {
         if ( this.all.length == 0 ) {
             return Collections.EMPTY_LIST.iterator();
@@ -162,6 +166,7 @@ public class CompositeCollection
      * 
      * @return an object array of all the elements in the collection
      */
+    @Override
     public Object[] toArray() {
         final Object[] result = new Object[this.size()];
         int i = 0;
@@ -179,6 +184,7 @@ public class CompositeCollection
      *            the array to use, populating if possible
      * @return an array of all the elements in the collection
      */
+    @Override
     public Object[] toArray(final Object[] array) {
         final int size = this.size();
         Object[] result;
@@ -219,6 +225,7 @@ public class CompositeCollection
      * @throws IllegalArgumentException
      *             if the object cannot be added
      */
+    @Override
     public boolean add(final Object obj) {
         if ( this.mutator == null ) {
             throw new UnsupportedOperationException( "add() is not supported on CompositeCollection without a CollectionMutator strategy" );
@@ -245,6 +252,7 @@ public class CompositeCollection
      * @throws IllegalArgumentException
      *             if the object cannot be removed
      */
+    @Override
     public boolean remove(final Object obj) {
         if ( this.mutator == null ) {
             throw new UnsupportedOperationException( "remove() is not supported on CompositeCollection without a CollectionMutator strategy" );
@@ -265,6 +273,7 @@ public class CompositeCollection
      *            the collection to check for
      * @return true if all elements contained
      */
+    @Override
     public boolean containsAll(final Collection coll) {
         for ( final Iterator it = coll.iterator(); it.hasNext(); ) {
             if ( this.contains( it.next() ) == false ) {
@@ -293,6 +302,7 @@ public class CompositeCollection
      * @throws IllegalArgumentException
      *             if the object cannot be added
      */
+    @Override
     public boolean addAll(final Collection coll) {
         if ( this.mutator == null ) {
             throw new UnsupportedOperationException( "addAll() is not supported on CompositeCollection without a CollectionMutator strategy" );
@@ -314,6 +324,7 @@ public class CompositeCollection
      * @throws UnsupportedOperationException
      *             if removeAll is unsupported
      */
+    @Override
     public boolean removeAll(final Collection coll) {
         if ( coll.isEmpty() ) {
             return false;
@@ -338,6 +349,7 @@ public class CompositeCollection
      * @throws UnsupportedOperationException
      *             if retainAll is unsupported
      */
+    @Override
     public boolean retainAll(final Collection coll) {
         boolean changed = false;
         for ( int i = this.all.length - 1; i >= 0; i-- ) {
@@ -354,6 +366,7 @@ public class CompositeCollection
      * @throws UnsupportedOperationException
      *             if clear is unsupported
      */
+    @Override
     public void clear() {
         for ( int i = 0; i < this.all.length; ++i ) {
             this.all[i].clear();

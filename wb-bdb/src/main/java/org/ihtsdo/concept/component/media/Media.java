@@ -50,7 +50,7 @@ public class Media extends ConceptComponent<MediaRevision, Media>
         super();
     }
 
-    protected Media(Concept enclosingConcept, TupleInput input) throws IOException {
+    public Media(Concept enclosingConcept, TupleInput input) throws IOException {
         super(enclosingConcept.getNid(), input);
     }
 

@@ -13,7 +13,7 @@ import org.ihtsdo.concept.component.description.DescriptionRevision;
 import org.ihtsdo.concept.component.image.Image;
 import org.ihtsdo.concept.component.image.ImageRevision;
 import org.ihtsdo.concept.component.refex.RefexMember;
-import org.ihtsdo.concept.component.refex.RefexMemberFactory;
+import org.ihtsdo.bdb.concept.component.RefexMemberFactory;
 import org.ihtsdo.concept.component.refex.RefexRevision;
 import org.ihtsdo.concept.component.relationship.Relationship;
 import org.ihtsdo.concept.component.relationship.RelationshipRevision;

@@ -8,13 +8,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.Timer;
 import org.ihtsdo.concept.Concept;
-import org.ihtsdo.concept.I_ProcessUnfetchedConceptData;
-import org.ihtsdo.concept.ParallelConceptIterator;
-import org.ihtsdo.db.bdb.Bdb;
+import org.ihtsdo.bdb.concept.I_ProcessUnfetchedConceptData;
+import org.ihtsdo.bdb.concept.ParallelConceptIterator;
 import org.ihtsdo.helper.time.TimeHelper;
 import org.ihtsdo.temp.AceLog;
 import org.ihtsdo.temp.ConsoleActivityViewer;
 import org.ihtsdo.temp.I_ShowActivity;
+import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ConceptFetcherBI;
 import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.NidSetBI;
@@ -24,13 +24,12 @@ import org.ihtsdo.tk.api.cs.ChangeSetWriterThreading;
 
 public class ChangeSetWriterHandler implements Runnable, I_ProcessUnfetchedConceptData, ActionListener {
 
-   private static ConcurrentHashMap<String, ChangeSetGeneratorBI> writerMap = new ConcurrentHashMap<String, ChangeSetGeneratorBI>();
+   private static ConcurrentHashMap<String, ChangeSetGeneratorBI> writerMap = new ConcurrentHashMap<>();
    public static AtomicInteger changeSetWriters = new AtomicInteger();
    private NidBitSetBI cNidsToWrite;
    private long commitTime;
    private String commitTimeStr;
    private NidSetBI sapNidsFromCommit;
-   private int conceptCount;
    private I_ShowActivity activity;
    private long startTime = System.currentTimeMillis();
    private AtomicInteger processedCount = new AtomicInteger();
@@ -51,19 +50,17 @@ public class ChangeSetWriterHandler implements Runnable, I_ProcessUnfetchedConce
       changedCount = cNidsToWrite.cardinality();
       this.commitTime = commitTime;
       this.commitTimeStr = TimeHelper.formatDate(commitTime)
-              + "; gVer: " + Bdb.gVersion.incrementAndGet()
               + " (" + cNidsToWrite.cardinality() + " concepts)";
       this.sapNidsFromCommit = sapNidsFromCommit;
       this.changeSetWriterThreading = changeSetWriterThreading;
       changeSetWriters.incrementAndGet();
       this.changeSetPolicy = changeSetPolicy;
-      writerListForHandler = new ArrayList<ChangeSetGeneratorBI>(writerMap.values());
+      writerListForHandler = new ArrayList<>(writerMap.values());
    }
 
    @Override
    public void run() {
       try {
-         conceptCount = Bdb.getConceptDb().getCount();
 
          activity = new ConsoleActivityViewer();
          activity.setIndeterminate(true);
@@ -76,16 +73,16 @@ public class ChangeSetWriterHandler implements Runnable, I_ProcessUnfetchedConce
             writer.open(sapNidsFromCommit);
          }
          activity.setValue(0);
-         activity.setMaximum(conceptCount);
+         activity.setMaximum(changedCount);
          activity.setIndeterminate(false);
 
          activity.setProgressInfoLower("Iterating over concepts...");
          switch (changeSetWriterThreading) {
             case MULTI_THREAD:
-               Bdb.getConceptDb().iterateConceptDataInParallel(this);
+               Ts.get().iterateConceptDataInParallel(this);
                break;
             case SINGLE_THREAD:
-               Bdb.getConceptDb().iterateConceptDataInSequence(this);
+               Ts.get().iterateConceptDataInSequence(this);
                break;
             default:
                throw new RuntimeException("Can't handle threading: " + changeSetWriterThreading);
@@ -142,7 +139,7 @@ public class ChangeSetWriterHandler implements Runnable, I_ProcessUnfetchedConce
       long elapsed = endTime - startTime;
       String elapsedStr = TimeHelper.getElapsedTimeString(elapsed);
 
-      String remainingStr = TimeHelper.getRemainingTimeString(completed, conceptCount, elapsed);
+      String remainingStr = TimeHelper.getRemainingTimeString(completed, changedCount, elapsed);
 
       activity.setProgressInfoLower("Elapsed: " + elapsedStr + ";  Remaining: " + remainingStr
               + " processed: " + processedChangedCount + "/" + changedCount);

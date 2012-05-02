@@ -3,7 +3,7 @@ package org.ihtsdo.lucene;
 import java.io.IOException;
 
 import org.apache.lucene.index.IndexWriter;
-import org.ihtsdo.concept.I_ProcessConceptData;
+import org.ihtsdo.bdb.concept.I_ProcessConceptData;
 import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.tk.api.NidBitSetBI;
 
