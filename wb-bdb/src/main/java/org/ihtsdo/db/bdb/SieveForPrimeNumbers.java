@@ -81,7 +81,7 @@ public class SieveForPrimeNumbers {
         }
 
 
-        List<Integer> primes = new ArrayList<Integer>();
+        List<Integer> primes = new ArrayList<>();
         primes.add(2);
         for (int i = 3; i <= max; i += 2) {
             if (!sieve.is_composite(i)) {
