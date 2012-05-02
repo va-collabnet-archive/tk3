@@ -9,9 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.cc.P;
 import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.concept.Concept;
-import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.helper.time.TimeHelper;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.*;
@@ -54,7 +54,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
     }
 
     public Revision(int statusNid, int authorNid, int pathNid, long time, C primordialComponent) {
-        this.sapNid = Bdb.getSapDb().getSapNid(statusNid, authorNid, pathNid, time);
+        this.sapNid = P.s.getSapNid(statusNid, authorNid, pathNid, time);
         assert sapNid != 0;
         this.primordialComponent = primordialComponent;
         primordialComponent.clearVersions();
@@ -79,7 +79,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
     protected String assertionString() {
         try {
-            return Ts.get().getConcept(primordialComponent.enclosingConceptNid).toLongString();
+            return P.s.getConcept(primordialComponent.enclosingConceptNid).toLongString();
         } catch (IOException ex) {
             Logger.getLogger(ConceptComponent.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -240,7 +240,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
     @Override
     public Set<Integer> getAllNidsForVersion() throws IOException {
-        HashSet<Integer> allNids = new HashSet<Integer>();
+        HashSet<Integer> allNids = new HashSet<>();
 
         allNids.add(primordialComponent.nid);
         allNids.add(getStatusNid());
@@ -262,7 +262,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
     @Override
     public int getAuthorNid() {
-        return Bdb.getSapDb().getAuthorNid(sapNid);
+        return P.s.getAuthorNidForSapNid(sapNid);
     }
 
     @Override
@@ -329,12 +329,12 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
     @Override
     public int getPathNid() {
-        return Bdb.getSapDb().getPathNid(sapNid);
+        return P.s.getPathNidForSapNid(sapNid);
     }
 
     @Override
     public PositionBI getPosition() throws IOException {
-        return new Position(getTime(), Ts.get().getPath(getPathNid()));
+        return new Position(getTime(), P.s.getPath(getPathNid()));
     }
 
     public Set<PositionBI> getPositions() throws IOException {
@@ -357,8 +357,9 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
     }
 
     @Override
+    @Deprecated
     public Collection<? extends RefexChronicleBI<?>> getRefexes(int refsetNid) throws IOException {
-        return primordialComponent.getRefexes(refsetNid);
+        return primordialComponent.getRefexMembers(refsetNid);
     }
 
     @Override
@@ -372,12 +373,12 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
     
     @Override
     public int getStatusNid() {
-        return Bdb.getSapDb().getStatusNid(sapNid);
+        return P.s.getStatusNidForSapNid(sapNid);
     }
 
     @Override
     public long getTime() {
-        return Bdb.getSapDb().getTime(sapNid);
+        return P.s.getTimeForSapNid(sapNid);
     }
 
     @Override
@@ -413,7 +414,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
     @Override
     public boolean isBaselineGeneration() {
-        return sapNid <= Bdb.getSapDb().getReadOnlyMax();
+        return sapNid <= P.s.getMaxReadOnlySap();
     }
 
     @Override
@@ -430,7 +431,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
         }
 
         if (authorNid != getPathNid()) {
-            this.sapNid = Bdb.getSapNid(getStatusNid(), authorNid, getPathNid(), Long.MAX_VALUE);
+            this.sapNid = P.s.getSapNid(getStatusNid(), authorNid, getPathNid(), Long.MAX_VALUE);
             modified();
         }
     }
@@ -447,11 +448,11 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
                     + "Use makeAnalog instead.");
         }
 
-        this.sapNid = Bdb.getSapNid(getStatusNid(), getAuthorNid(), pathId, Long.MAX_VALUE);
+        this.sapNid = P.s.getSapNid(getStatusNid(), getAuthorNid(), pathId, Long.MAX_VALUE);
     }
 
     public void setStatusAtPosition(int statusNid, int authorNid, int pathNid, long time) {
-        this.sapNid = Bdb.getSapDb().getSapNid(statusNid, authorNid, pathNid, time);
+        this.sapNid = P.s.getSapNid(statusNid, authorNid, pathNid, time);
         modified();
     }
 
@@ -463,7 +464,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
         }
 
         try {
-            this.sapNid = Bdb.getSapNid(statusNid, getAuthorNid(), getPathNid(), Long.MAX_VALUE);
+            this.sapNid = P.s.getSapNid(statusNid, getAuthorNid(), getPathNid(), Long.MAX_VALUE);
         } catch (Exception e) {
             throw new RuntimeException();
         }
@@ -480,7 +481,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
         if (time != getTime()) {
             try {
-                this.sapNid = Bdb.getSapNid(getStatusNid(), getAuthorNid(), getPathNid(), time);
+                this.sapNid = P.s.getSapNid(getStatusNid(), getAuthorNid(), getPathNid(), time);
             } catch (Exception e) {
                 throw new RuntimeException();
             }

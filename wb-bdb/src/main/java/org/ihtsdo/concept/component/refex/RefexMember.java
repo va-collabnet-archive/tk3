@@ -13,8 +13,8 @@ import org.ihtsdo.concept.component.RevisionSet;
 import org.ihtsdo.concept.component.attributes.ConceptAttributes;
 import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.db.bdb.computer.version.VersionComputer;
-import org.ihtsdo.db.util.NidPair;
-import org.ihtsdo.db.util.NidPairForRefset;
+import org.ihtsdo.cc.NidPair;
+import org.ihtsdo.cc.NidPairForRefset;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.ComponentVersionBI;
 import org.ihtsdo.tk.api.ContradictionException;
@@ -36,7 +36,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
-import org.ihtsdo.tk.Ts;
+import org.ihtsdo.cc.P;
 import org.ihtsdo.tk.api.blueprint.InvalidCAB;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 
@@ -286,7 +286,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
     public RefexCAB makeBlueprint(ViewCoordinate vc) throws IOException,
         InvalidCAB, ContradictionException {
         RefexCAB rcs = new RefexCAB(getTkRefsetType(), 
-                Ts.get().getUuidPrimordialForNid(getReferencedComponentNid()),
+                P.s.getUuidPrimordialForNid(getReferencedComponentNid()),
                 getRefexNid(),
                 getVersion(vc), vc);
 

@@ -20,8 +20,8 @@ import org.ihtsdo.concept.component.relationship.Relationship;
 import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.db.bdb.BdbCommitManager;
 import org.ihtsdo.db.bdb.I_GetNidData;
-import org.ihtsdo.db.util.NidPair;
-import org.ihtsdo.db.util.NidPairForRel;
+import org.ihtsdo.cc.NidPair;
+import org.ihtsdo.cc.NidPairForRel;
 import org.ihtsdo.tk.api.NidSetBI;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -35,7 +35,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
-import org.ihtsdo.concept.ComponentComparator;
+import org.ihtsdo.cc.concept.ComponentComparator;
 import org.ihtsdo.concept.Concept;
 import org.ihtsdo.temp.AceLog;
 

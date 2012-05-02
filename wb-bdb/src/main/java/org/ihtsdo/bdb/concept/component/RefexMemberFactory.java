@@ -32,10 +32,10 @@ import org.ihtsdo.tk.dto.concept.component.refex.type_member.TkRefexMember;
 import org.ihtsdo.tk.dto.concept.component.refex.type_string.TkRefexStringMember;
 
 import com.sleepycat.bind.tuple.TupleInput;
+import org.ihtsdo.cc.P;
 import org.ihtsdo.concept.Concept;
 import org.ihtsdo.concept.component.refex.RefexMember;
 import org.ihtsdo.db.bdb.Bdb;
-import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentChroncileBI;
 import org.ihtsdo.tk.api.blueprint.InvalidCAB;
 import org.ihtsdo.tk.api.blueprint.RefexCAB;
@@ -46,14 +46,14 @@ import org.ihtsdo.tk.dto.concept.component.refex.TK_REFEX_TYPE;
 public class RefexMemberFactory {
 
     public static RefexMember<?, ?> reCreate(RefexCAB res, RefexMember<?, ?> member, EditCoordinate ec) throws IOException, InvalidCAB {
-        Concept refexColCon = (Concept) Ts.get().getConcept(res.getRefexColNid());
+        Concept refexColCon = (Concept) P.s.getConcept(res.getRefexColNid());
         member.refsetNid = refexColCon.getNid();
         member.nid = Bdb.uuidToNid(res.getMemberUUID());
         if (refexColCon.isAnnotationStyleRefex()) {
-            int rcNid = Ts.get().getNidForUuids(res.getRcUuid());
-            member.enclosingConceptNid = Ts.get().getConceptNidForNid(rcNid);
+            int rcNid = P.s.getNidForUuids(res.getRcUuid());
+            member.enclosingConceptNid = P.s.getConceptNidForNid(rcNid);
             Bdb.getNidCNidMap().setCNidForNid(member.enclosingConceptNid, member.nid);
-            ComponentChroncileBI<?> component = Ts.get().getComponent(res.getRcUuid());
+            ComponentChroncileBI<?> component = P.s.getComponent(res.getRcUuid());
         } else {
             member.enclosingConceptNid = refexColCon.getNid();
             Bdb.getNidCNidMap().setCNidForNid(member.enclosingConceptNid, member.nid);
@@ -161,14 +161,14 @@ public class RefexMemberFactory {
             EditCoordinate ec, long time)
             throws IOException, InvalidCAB {
         RefexMember<?, ?> member = createBlank(res);
-        Concept refexColCon = (Concept) Ts.get().getConcept(res.getRefexColNid());
+        Concept refexColCon = (Concept) P.s.getConcept(res.getRefexColNid());
         int refexNid = Bdb.uuidToNid(res.getMemberUUID());
         member.nid = refexNid;
         if (refexColCon.isAnnotationStyleRefex()) {
-            int rcNid = Ts.get().getNidForUuids(res.getRcUuid());
-            member.enclosingConceptNid = Ts.get().getConceptNidForNid(rcNid);
+            int rcNid = P.s.getNidForUuids(res.getRcUuid());
+            member.enclosingConceptNid = P.s.getConceptNidForNid(rcNid);
             Bdb.getNidCNidMap().setCNidForNid(member.enclosingConceptNid, refexNid);
-            Ts.get().getComponent(res.getRcUuid()).addAnnotation(member);
+            P.s.getComponent(res.getRcUuid()).addAnnotation(member);
         } else {
             member.enclosingConceptNid = refexColCon.getNid();
             Bdb.getNidCNidMap().setCNidForNid(member.enclosingConceptNid, refexNid);
@@ -197,7 +197,7 @@ public class RefexMemberFactory {
 
         }
         if (refexColCon.isAnnotationStyleRefex()) {
-            int rcNid = Ts.get().getNidForUuids(res.getRcUuid());
+            int rcNid = P.s.getNidForUuids(res.getRcUuid());
             Bdb.getConceptDb().writeConcept(
                     Bdb.getConcept(Bdb.getNidCNidMap().getCNid(rcNid)));
         } else {

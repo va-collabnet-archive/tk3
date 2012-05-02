@@ -1,10 +1,9 @@
-package org.ihtsdo.db.util;
+package org.ihtsdo.cc;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.ihtsdo.cern.colt.list.IntArrayList;
-import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.hash.Hashcode;
 
@@ -17,7 +16,7 @@ public abstract class NidPair implements Comparable<NidPair> {
     public static NidPair getNidPair(long nids) {
         int nid1 = (int) nids;
         int nid2 = (int) (nids >>> 32);
-        if (Bdb.getConceptNid(nid2) == nid2) {
+        if (P.s.getConceptNidForNid(nid2) == nid2) {
             return getTypeNidRelNidPair(nid2, nid1);
         }
         return getRefsetNidMemberNidPair(nid1, nid2);
@@ -25,11 +24,11 @@ public abstract class NidPair implements Comparable<NidPair> {
 
     
     public static List<NidPairForRel> getNidPairsForRel(long[] nidPairArray) {
-        List<NidPairForRel> returnValues = new ArrayList<NidPairForRel>(nidPairArray.length);
+        List<NidPairForRel> returnValues = new ArrayList<>(nidPairArray.length);
         for (long nids: nidPairArray) {
             int nid1 = (int) nids;
             int nid2 = (int) (nids >>> 32);
-            if (Bdb.nidCidMapDb.getCNid(nid2) == nid2) {
+            if (P.s.getConceptNidForNid(nid2) == nid2) {
                 returnValues.add(new NidPairForRel(nid1, nid2));
             }
         }
@@ -38,7 +37,7 @@ public abstract class NidPair implements Comparable<NidPair> {
 
     public static List<NidPairForRel> getNidPairsForRel(long[] nidPairArray, 
             NidSetBI relTypes) {
-        List<NidPairForRel> returnValues = new ArrayList<NidPairForRel>(nidPairArray.length);
+        List<NidPairForRel> returnValues = new ArrayList<>(nidPairArray.length);
         for (long nids: nidPairArray) {
             int nid1 = (int) nids;
             int nid2 = (int) (nids >>> 32);
@@ -56,7 +55,7 @@ public abstract class NidPair implements Comparable<NidPair> {
             int nid1 = (int) nids;
             int nid2 = (int) (nids >>> 32);
             if (relTypes.contains(nid2)) {
-                returnValues.add(Bdb.nidCidMapDb.getCNid(nid1));
+                returnValues.add(P.s.getConceptNidForNid(nid1));
             }
         }
         returnValues.trimToSize();
@@ -64,11 +63,11 @@ public abstract class NidPair implements Comparable<NidPair> {
     }
 
    public static List<NidPairForRefset> getNidPairsForRefset(long[] nidPairArray) {
-        List<NidPairForRefset> returnValues = new ArrayList<NidPairForRefset>(nidPairArray.length);
+        List<NidPairForRefset> returnValues = new ArrayList<>(nidPairArray.length);
         for (long nids: nidPairArray) {
             int nid1 = (int) nids;
             int nid2 = (int) (nids >>> 32);
-            if (Bdb.nidCidMapDb.getCNid(nid2) != nid2) {
+            if (P.s.getConceptNidForNid(nid2) != nid2) {
                 returnValues.add(new NidPairForRefset(nid1, nid2));
             }
         }

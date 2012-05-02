@@ -25,9 +25,9 @@ import org.ihtsdo.db.bdb.computer.version.PositionMapper;
 import org.ihtsdo.db.bdb.id.NidCNidMapBdb;
 import org.ihtsdo.db.bdb.sap.StatusAtPositionBdb;
 import org.ihtsdo.db.bdb.xref.Xref;
-import org.ihtsdo.db.util.NidPair;
-import org.ihtsdo.db.util.NidPairForRefset;
-import org.ihtsdo.db.util.NidPairForRel;
+import org.ihtsdo.cc.NidPair;
+import org.ihtsdo.cc.NidPairForRefset;
+import org.ihtsdo.cc.NidPairForRel;
 import org.ihtsdo.lucene.LuceneManager;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentBI;
@@ -38,6 +38,7 @@ import org.ihtsdo.tk.dto.concept.component.refex.TkRefexAbstractMember;
 
 import java.io.InputStream;
 import java.util.concurrent.ConcurrentSkipListSet;
+import org.ihtsdo.cc.P;
 import org.ihtsdo.db.bdb.computer.ReferenceConcepts;
 import org.ihtsdo.db.bdb.nidmaps.UuidToNidMapBdb;
 import org.ihtsdo.helper.io.FileIO;
@@ -125,7 +126,7 @@ public class Bdb {
     public static int getCachePercent() {
         return Bdb.mutable.bdbEnv.getMutableConfig().getCachePercent();
     }
-    static ConcurrentSkipListSet<Concept> annotationConcepts = new ConcurrentSkipListSet<Concept>();
+    static ConcurrentSkipListSet<Concept> annotationConcepts = new ConcurrentSkipListSet<>();
 
     public static void xrefAnnotation(RefexChronicleBI annotation) throws IOException {
         Concept refexConcept = Concept.get(annotation.getRefexNid());
@@ -302,8 +303,9 @@ public class Bdb {
 //                Terms.set(tf);
 //            }
             BdbTerminologyStore ts = new BdbTerminologyStore();
-            if (Ts.get() == null) {
+            if (P.s == null) {
                 Ts.set(ts);
+                P.s = ts;
             }
 
 
@@ -324,7 +326,7 @@ public class Bdb {
             AceLog.getAppLog().info("readOnly shared cache: "
                     + Bdb.readOnly.bdbEnv.getConfig().getSharedCache());
 
-        } catch (Exception e) {
+        } catch (IOException | DatabaseException | IllegalArgumentException e) {
             throw new RuntimeException(e);
         }
     }
@@ -373,7 +375,7 @@ public class Bdb {
             throw new IOException(e);
         }
     }
-    private static ConcurrentHashMap<String, Integer> sapNidCache = new ConcurrentHashMap<String, Integer>();
+    private static ConcurrentHashMap<String, Integer> sapNidCache = new ConcurrentHashMap<>();
 
     public static int getSapNid(TkRevision version) {
         assert version.getTime() != 0 : "Time is 0; was it initialized?";
@@ -396,7 +398,7 @@ public class Bdb {
                 version.getTime());
 
         if (sapNidCache.size() > 500) {
-            sapNidCache = new ConcurrentHashMap<String, Integer>();
+            sapNidCache = new ConcurrentHashMap<>();
         }
         sapNidCache.put(sapNidKey, sapNid);
         return sapNid;
@@ -514,9 +516,7 @@ public class Bdb {
                 activity.setProgressInfoUpper("Database sync complete.");
                 activity.setProgressInfoLower("Elapsed: " + elapsedStr);
                 activity.complete();
-            } catch (DatabaseException e) {
-                AceLog.getAppLog().alertAndLogException(e);
-            } catch (IOException e) {
+            } catch (DatabaseException | IOException e) {
                 AceLog.getAppLog().alertAndLogException(e);
             } catch (ComputationCanceled e) {
                 // Nothing to do 
@@ -543,13 +543,6 @@ public class Bdb {
         if (closed == false && mutable != null && mutable.bdbEnv != null) {
             closed = true;
             try {
-//                for (JFrame f : OpenFrames.getFrames()) {
-//                    if (f.isVisible() ) {//removed && ActivityViewer.getActivityFrame() != f
-//                        f.setVisible(false);
-//                        f.dispose();
-//                    }
-//                }
-//                ActivityViewer.toFront();
                 I_ShowActivity activity = new ConsoleActivityViewer();
             
                 activity.setStopButtonVisible(false);

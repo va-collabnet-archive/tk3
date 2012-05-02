@@ -17,7 +17,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.Set;
-import org.ihtsdo.tk.Ts;
+import org.ihtsdo.cc.P;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.blueprint.InvalidCAB;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
@@ -130,7 +130,7 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
     public RefexCAB makeBlueprint(ViewCoordinate vc) throws IOException,
             InvalidCAB, ContradictionException {
         RefexCAB rcs = new RefexCAB(getTkRefsetType(),
-                Ts.get().getUuidPrimordialForNid(getReferencedComponentNid()),
+                P.s.getUuidPrimordialForNid(getReferencedComponentNid()),
                 getRefexNid(),
                 getVersion(vc), vc);
 

@@ -56,7 +56,7 @@ public interface TerminologyStoreDI extends TerminologyDI {
 
    ConceptChronicleBI getConceptForNid(int nid) throws IOException;
 
-   int getConceptNidForNid(int nid) throws IOException;
+   int getConceptNidForNid(int nid);
 
    ConceptVersionBI getConceptVersion(ViewCoordinate vc, Collection<UUID> uuids) throws IOException;
 
@@ -103,8 +103,4 @@ public interface TerminologyStoreDI extends TerminologyDI {
    
    boolean hasUuid(List<UUID> memberUUIDs);
 
-   int getPathNidForSapNid(int sapNid);
-   int getAuthorNidForSapNid(int sapNid);
-   int getStatusNidForSapNid(int sapNid);
-   long getTimeForSapNid(int sapNid);
 }

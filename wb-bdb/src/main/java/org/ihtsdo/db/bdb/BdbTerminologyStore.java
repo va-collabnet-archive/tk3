@@ -19,7 +19,11 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
-import org.ihtsdo.concept.*;
+import org.ihtsdo.cc.NidPairForRefset;
+import org.ihtsdo.cc.NidPairForRel;
+import org.ihtsdo.cc.PersistentStoreI;
+import org.ihtsdo.concept.Concept;
+import org.ihtsdo.concept.ConceptVersion;
 import org.ihtsdo.cs.ChangeSetWriterHandler;
 import org.ihtsdo.cs.econcept.EConceptChangeSetWriter;
 import org.ihtsdo.db.bdb.computer.ReferenceConcepts;
@@ -34,6 +38,7 @@ import org.ihtsdo.temp.AceLog;
 import org.ihtsdo.temp.PositionSetReadOnly;
 import org.ihtsdo.temp.SearchResult;
 import org.ihtsdo.tk.api.*;
+import org.ihtsdo.tk.api.TerminologyDI.CONCEPT_EVENT;
 import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.tk.api.changeset.ChangeSetGeneratorBI;
 import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
@@ -51,8 +56,9 @@ import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.tk.db.DbDependency;
 import org.ihtsdo.tk.db.EccsDependency;
 import org.ihtsdo.tk.dto.concept.TkConcept;
+import org.ihtsdo.tk.dto.concept.component.TkRevision;
 
-public class BdbTerminologyStore implements TerminologyStoreDI {
+public class BdbTerminologyStore implements PersistentStoreI {
 
     private static ViewCoordinate metadataVC = null;
 
@@ -196,7 +202,6 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
         return true;
     }
 
-
     public int uuidsToNid(Collection<UUID> uuids) throws IOException {
         return Bdb.uuidsToNid(uuids);
     }
@@ -211,7 +216,6 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
         return Bdb.getConceptDb().getReadOnlyConceptIdSet();
     }
 
-   
     public KindOfCacheBI getCache(ViewCoordinate coordinate) throws Exception {
         TypeCache c = new IsaCache(Bdb.getConceptDb().getConceptNidSet());
 
@@ -558,6 +562,41 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
         GlobalPropertyChange.addPropertyChangeListener(pce, l);
     }
 
+    @Override
+    public int getSapNid(int statusNid, int authorNid, int pathNid, long time) {
+        return Bdb.getSapDb().getSapNid(statusNid, authorNid, pathNid, time);
+    }
+
+    @Override
+    public int getMaxReadOnlySap() {
+        return Bdb.getSapDb().getReadOnlyMax();
+    }
+
+    @Override
+    public int getSapNid(TkRevision version) {
+        return Bdb.getSapNid(version);
+    }
+
+    @Override
+    public void resetConceptNidForNid(int cNid, int nid) throws IOException {
+        Bdb.getNidCNidMap().resetCidForNid(cNid, nid);
+    }
+
+    @Override
+    public void setConceptNidForNid(int cNid, int nid) throws IOException {
+        Bdb.getNidCNidMap().setCNidForNid(cNid, nid);
+    }
+
+    @Override
+    public boolean hasConcept(int cNid) throws IOException {
+        return Bdb.isConcept(cNid);
+    }
+
+    @Override
+    public void xrefAnnotation(RefexChronicleBI annotation) throws IOException {
+        Bdb.xrefAnnotation(annotation);
+    }
+
     private static class ConceptConverter implements Runnable {
 
         Throwable exception = null;
@@ -871,5 +910,15 @@ public class BdbTerminologyStore implements TerminologyStoreDI {
         } catch (ParseException | IOException | NumberFormatException e) {
             throw new IOException(e);
         }
+    }
+
+    @Override
+    public List<NidPairForRel> getDestRelPairs(int cNid) {
+        return Bdb.getDestRelPairs(cNid);
+    }
+
+    @Override
+    public List<NidPairForRefset> getRefsetPairs(int nid) {
+        return Bdb.getRefsetPairs(nid);
     }
 }

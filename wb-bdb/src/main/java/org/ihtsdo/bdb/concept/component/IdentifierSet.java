@@ -34,8 +34,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.ReentrantLock;
+import org.ihtsdo.cc.P;
 import org.ihtsdo.temp.AceLog;
-import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.NidBitSetItrBI;
 
 public class IdentifierSet implements NidBitSetBI, Serializable {
@@ -166,7 +166,7 @@ public class IdentifierSet implements NidBitSetBI, Serializable {
          buff.append("[");
 
          while ((count < toStringMax) && idIterator.next()) {
-                buff.append(Ts.get().getComponent(idIterator.nid()).toString());
+                buff.append(P.s.getComponent(idIterator.nid()).toString());
 
             count++;
 
@@ -347,7 +347,7 @@ public class IdentifierSet implements NidBitSetBI, Serializable {
 
          try {
             if (nid() != Integer.MAX_VALUE) {
-               Object component = Ts.get().getComponent(nid());
+               Object component = P.s.getComponent(nid());
 
                if (component != null) {
                   buff.append(component.toString());

@@ -54,15 +54,15 @@ public class UuidToNidMapBdb extends ComponentBdb {
    private int                                          maxGenOneSize             = 10000;
    private int                                          maxGenTwoSize             = maxGenOneSize * 10;
    private ConcurrentSkipListSet<Short>                 loadedDbKeys              =
-      new ConcurrentSkipListSet<Short>();
+      new ConcurrentSkipListSet<>();
    private ConcurrentHashMap<UUID, Integer>             gen2UuidIntMap            =
-      new ConcurrentHashMap<UUID, Integer>();
+      new ConcurrentHashMap<>();
    private ConcurrentHashMap<UUID, Integer>             gen1UuidIntMap            =
-      new ConcurrentHashMap<UUID, Integer>();
+      new ConcurrentHashMap<>();
    private ConcurrentSkipListSet<UUID>                  backingSet                =
-      new ConcurrentSkipListSet<UUID>();
+      new ConcurrentSkipListSet<>();
    private ConcurrentHashMap<Short, Set<UuidIntRecord>> unwrittenUuidIntRecordMap =
-      new ConcurrentHashMap<Short, Set<UuidIntRecord>>();
+      new ConcurrentHashMap<>();
    private AtomicInteger unwrittenCount = new AtomicInteger(0);
    private AtomicInteger newGen2Puts    = new AtomicInteger(0);
    private AtomicInteger newGen1Puts    = new AtomicInteger(0);
@@ -171,7 +171,7 @@ public class UuidToNidMapBdb extends ComponentBdb {
             try {
                gen2UuidIntMap = gen1UuidIntMap;
                clearLoadedDbKeys();
-               gen1UuidIntMap = new ConcurrentHashMap<UUID, Integer>();
+               gen1UuidIntMap = new ConcurrentHashMap<>();
                newGen1Puts.set(0);
             } finally {
                locks.unlockWriteAll();
@@ -194,7 +194,7 @@ public class UuidToNidMapBdb extends ComponentBdb {
             int genTwoSize = gen2UuidIntMap.size();
 
             if (genTwoSize > maxGenTwoSize) {
-               gen2UuidIntMap = new ConcurrentHashMap<UUID, Integer>();
+               gen2UuidIntMap = new ConcurrentHashMap<>();
                newGen2Puts.set(0);
                clearLoadedDbKeys();
             } else {
@@ -334,7 +334,7 @@ public class UuidToNidMapBdb extends ComponentBdb {
    }
 
    private List<UUID> getFromDb(int nid) {
-      List<UUID> uuids = new ArrayList<UUID>(2);
+      List<UUID> uuids = new ArrayList<>(2);
 
       for (Map.Entry<UUID, Integer> entry : gen1UuidIntMap.entrySet()) {
          if (entry.getValue() == nid) {
@@ -436,7 +436,7 @@ public class UuidToNidMapBdb extends ComponentBdb {
             return binder.entryToObject(theData);
          }
 
-         return new ConcurrentSkipListSet<UuidIntRecord>();
+         return new ConcurrentSkipListSet<>();
       } finally {
          locks.unlockRead(dbKey);
       }
@@ -494,7 +494,7 @@ public class UuidToNidMapBdb extends ComponentBdb {
          return binder.entryToObject(theData);
       }
 
-      return new ConcurrentSkipListSet<UuidIntRecord>();
+      return new ConcurrentSkipListSet<>();
    }
 
    public List<UUID> getUuidsForNid(int nid) throws IOException {

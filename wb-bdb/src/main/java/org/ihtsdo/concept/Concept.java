@@ -1,6 +1,7 @@
 package org.ihtsdo.concept;
 
 //~--- non-JDK imports --------------------------------------------------------
+import org.ihtsdo.cc.concept.ComponentComparator;
 import org.ihtsdo.bdb.concept.I_ManageConceptData;
 import org.ihtsdo.bdb.concept.ConceptDataSimpleReference;
 import java.io.IOException;
@@ -13,10 +14,11 @@ import org.ihtsdo.concept.component.attributes.ConceptAttributes;
 import org.ihtsdo.concept.component.description.Description;
 import org.ihtsdo.concept.component.description.Description.Version;
 import org.ihtsdo.concept.component.image.Image;
-import org.ihtsdo.concept.component.processor.AdjudicationAnalogCreator;
+import org.ihtsdo.cc.concept.component.processor.AdjudicationAnalogCreator;
 import org.ihtsdo.concept.component.processor.VersionFlusher;
 import org.ihtsdo.concept.component.refex.RefexMember;
 import org.ihtsdo.bdb.concept.component.RefexMemberFactory;
+import org.ihtsdo.cc.P;
 import org.ihtsdo.concept.component.relationship.Relationship;
 import org.ihtsdo.concept.component.relationship.RelationshipRevision;
 import org.ihtsdo.concept.component.relationship.group.RelGroupChronicle;
@@ -27,15 +29,14 @@ import org.ihtsdo.db.bdb.BdbMemoryMonitor.LowMemoryListener;
 import org.ihtsdo.db.bdb.computer.ReferenceConcepts;
 import org.ihtsdo.db.bdb.computer.kindof.KindOfComputer;
 import org.ihtsdo.db.change.LastChange;
-import org.ihtsdo.db.util.NidPair;
-import org.ihtsdo.db.util.NidPairForRefset;
-import org.ihtsdo.db.util.NidPairForRel;
+import org.ihtsdo.cc.NidPair;
+import org.ihtsdo.cc.NidPairForRefset;
+import org.ihtsdo.cc.NidPairForRel;
 import org.ihtsdo.db.util.ReferenceType;
 import org.ihtsdo.lucene.LuceneManager;
 import org.ihtsdo.temp.AceLog;
 import org.ihtsdo.temp.I_ShowActivity;
 import org.ihtsdo.temp.LanguageSortPrefs.LANGUAGE_SORT_PREF;
-import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.blueprint.ConceptCB;
 import org.ihtsdo.tk.api.blueprint.InvalidCAB;
@@ -450,7 +451,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             if (c.isAnnotationStyleRefex()) {
                 for (TkRefexAbstractMember<?> er : eConcept.getRefsetMembers()) {
                     ConceptComponent cc;
-                    Object referencedComponent = Ts.get().getComponent(er.getComponentUuid());
+                    Object referencedComponent = P.s.getComponent(er.getComponentUuid());
 
                     if (referencedComponent != null) {
                         if (referencedComponent instanceof Concept) {
@@ -459,14 +460,14 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
                             cc = (ConceptComponent) referencedComponent;
                         }
 
-                        RefexMember r = (RefexMember) Ts.get().getComponent(er.getPrimordialComponentUuid());
+                        RefexMember r = (RefexMember) P.s.getComponent(er.getPrimordialComponentUuid());
 
                         if (r == null) {
                             cc.addAnnotation(RefexMemberFactory.create(er,
-                                    Ts.get().getConceptNidForNid(cc.getNid())));
+                                    P.s.getConceptNidForNid(cc.getNid())));
                         } else {
                             r.merge((RefexMember) RefexMemberFactory.create(er,
-                                    Ts.get().getConceptNidForNid(cc.getNid())));
+                                    P.s.getConceptNidForNid(cc.getNid())));
                         }
                     } else {
                         unresolvedAnnotations.add(er);
@@ -583,7 +584,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
         for (TkRefexAbstractMember<?> er : unresolvedAnnotations) {
             ConceptComponent cc;
-            Object referencedComponent = Ts.get().getComponent(er.getComponentUuid());
+            Object referencedComponent = P.s.getComponent(er.getComponentUuid());
 
             if (referencedComponent != null) {
                 if (referencedComponent instanceof Concept) {
@@ -592,13 +593,13 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
                     cc = (ConceptComponent) referencedComponent;
                 }
 
-                RefexMember r = (RefexMember) Ts.get().getComponent(er.getPrimordialComponentUuid());
+                RefexMember r = (RefexMember) P.s.getComponent(er.getPrimordialComponentUuid());
 
                 if (r == null) {
-                    cc.addAnnotation(RefexMemberFactory.create(er, Ts.get().getConceptNidForNid(cc.getNid())));
+                    cc.addAnnotation(RefexMemberFactory.create(er, P.s.getConceptNidForNid(cc.getNid())));
                 } else {
                     r.merge((RefexMember) RefexMemberFactory.create(er,
-                            Ts.get().getConceptNidForNid(cc.getNid())));
+                            P.s.getConceptNidForNid(cc.getNid())));
                 }
             }
         }
@@ -1095,7 +1096,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             }
         }
 
-        throw new IOException("No description: " + nid + " " + Ts.get().getUuidsForNid(nid) + " found in\n"
+        throw new IOException("No description: " + nid + " " + P.s.getUuidsForNid(nid) + " found in\n"
                 + toLongString());
     }
 
@@ -1401,8 +1402,9 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     @Override
+    @Deprecated
     public Collection<? extends RefexChronicleBI<?>> getRefexes(int refsetNid) throws IOException {
-        return getConceptAttributes().getRefexes(refsetNid);
+        return getConceptAttributes().getRefexMembers(refsetNid);
     }
 
     public RefexMember<?, ?> getRefsetMember(int memberNid) throws IOException {

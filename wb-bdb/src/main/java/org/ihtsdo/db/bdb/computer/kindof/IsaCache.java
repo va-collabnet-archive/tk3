@@ -2,10 +2,10 @@ package org.ihtsdo.db.bdb.computer.kindof;
 
 import java.io.IOException;
 import java.util.UUID;
+import org.ihtsdo.cc.P;
 
 import org.ihtsdo.concept.Concept;
 import org.ihtsdo.concept.ConceptVersion;
-import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ConceptFetcherBI;
 import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.NidSet;
@@ -53,7 +53,7 @@ public class IsaCache extends TypeCache {
 	}
 
 	public void updateConcept(int cNid) throws Exception {
-		Concept c = (Concept) Ts.get().getConcept(cNid);
+		Concept c = (Concept) P.s.getConcept(cNid);
 		NidSet parentSet = getParentSet(c);
 		typeMap.put(cNid, parentSet.getSetValues());
 	}

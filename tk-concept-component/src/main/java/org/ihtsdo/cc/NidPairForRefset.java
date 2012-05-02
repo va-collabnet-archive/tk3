@@ -1,4 +1,4 @@
-package org.ihtsdo.db.util;
+package org.ihtsdo.cc;
 
 public class NidPairForRefset extends NidPair {
 

@@ -16,9 +16,9 @@ import org.ihtsdo.bdb.concept.I_ProcessUnfetchedConceptData;
 import org.ihtsdo.bdb.concept.ParallelConceptIterator;
 import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.db.bdb.ComponentBdb;
-import org.ihtsdo.db.util.NidPair;
-import org.ihtsdo.db.util.NidPairForRefset;
-import org.ihtsdo.db.util.NidPairForRel;
+import org.ihtsdo.cc.NidPair;
+import org.ihtsdo.cc.NidPairForRefset;
+import org.ihtsdo.cc.NidPairForRel;
 import org.ihtsdo.tk.api.NidBitSetBI;
 
 import com.sleepycat.bind.tuple.LongBinding;

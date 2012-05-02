@@ -14,10 +14,10 @@ import org.ihtsdo.concept.component.image.Image;
 import org.ihtsdo.concept.component.image.ImageRevision;
 import org.ihtsdo.concept.component.refex.RefexMember;
 import org.ihtsdo.bdb.concept.component.RefexMemberFactory;
+import org.ihtsdo.cc.P;
 import org.ihtsdo.concept.component.refex.RefexRevision;
 import org.ihtsdo.concept.component.relationship.Relationship;
 import org.ihtsdo.concept.component.relationship.RelationshipRevision;
-import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentChroncileBI;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.blueprint.ConAttrAB;
@@ -63,13 +63,13 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             return updateRefex(refex, blueprint);
         }
         RefexChronicleBI<?> annot = createRefex(blueprint);
-        ComponentChroncileBI<?> component = Ts.get().getComponent(annot.getReferencedComponentNid());
+        ComponentChroncileBI<?> component = P.s.getComponent(annot.getReferencedComponentNid());
         component.addAnnotation(annot);
         return annot;
     }
 
     public ConceptAttributes getConAttr(ConAttrAB blueprint) throws IOException, InvalidCAB {
-        ConceptAttributes cac = (ConceptAttributes) Ts.get().getConcept(blueprint.getComponentUuid()).getConAttrs();
+        ConceptAttributes cac = (ConceptAttributes) P.s.getConcept(blueprint.getComponentUuid()).getConAttrs();
         if (cac == null) {
             throw new InvalidCAB("ConAttrAB can only be used for amendment, not creation."
                     + " Use ConceptCB instead. " + blueprint);
@@ -98,9 +98,9 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
 
     private RefexMember<?, ?> getRefex(RefexCAB blueprint)
             throws InvalidCAB, IOException {
-        if (Ts.get().hasUuid(blueprint.getMemberUUID())) {
+        if (P.s.hasUuid(blueprint.getMemberUUID())) {
             ComponentChroncileBI<?> component =
-                    Ts.get().getComponent(blueprint.getMemberUUID());
+                    P.s.getComponent(blueprint.getMemberUUID());
             if (component == null) {
                 return null;
             }
@@ -157,9 +157,9 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
 
     private RelationshipChronicleBI getRel(RelCAB blueprint)
             throws InvalidCAB, IOException {
-        if (Ts.get().hasUuid(blueprint.getComponentUuid())) {
+        if (P.s.hasUuid(blueprint.getComponentUuid())) {
             ComponentChroncileBI<?> component =
-                    Ts.get().getComponent(blueprint.getComponentUuid());
+                    P.s.getComponent(blueprint.getComponentUuid());
             if (component == null) {
                 return null;
             }
@@ -179,7 +179,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         RelationshipChronicleBI relc = getRel(blueprint);
 
         if (relc == null) {
-            Concept c = (Concept) Ts.get().getConcept(blueprint.getSourceNid());
+            Concept c = (Concept) P.s.getConcept(blueprint.getSourceNid());
             Relationship r = new Relationship();
             relc = r;
             Bdb.gVersion.incrementAndGet();
@@ -257,9 +257,9 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
 
     private DescriptionChronicleBI getDesc(DescCAB blueprint)
             throws InvalidCAB, IOException {
-        if (Ts.get().hasUuid(blueprint.getComponentUuid())) {
+        if (P.s.hasUuid(blueprint.getComponentUuid())) {
             ComponentChroncileBI<?> component =
-                    Ts.get().getComponent(blueprint.getComponentUuid());
+                    P.s.getComponent(blueprint.getComponentUuid());
             if (component == null) {
                 return null;
             }
@@ -296,7 +296,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
 
         if (desc == null) {
             int conceptNid = blueprint.getConceptNid();
-            Concept c = (Concept) Ts.get().getConcept(blueprint.getConceptNid());
+            Concept c = (Concept) P.s.getConcept(blueprint.getConceptNid());
             Description d = new Description();
             desc = d;
             Bdb.gVersion.incrementAndGet();
@@ -350,9 +350,9 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
 
     private MediaChronicleBI getMedia(MediaCAB blueprint)
             throws InvalidCAB, IOException {
-        if (Ts.get().hasUuid(blueprint.getComponentUuid())) {
+        if (P.s.hasUuid(blueprint.getComponentUuid())) {
             ComponentChroncileBI<?> component =
-                    Ts.get().getComponent(blueprint.getComponentUuid());
+                    P.s.getComponent(blueprint.getComponentUuid());
             if (component == null) {
                 return null;
             }
@@ -388,7 +388,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         MediaChronicleBI imgC = getMedia(blueprint);
 
         if (imgC == null) {
-            Concept c = (Concept) Ts.get().getConcept(blueprint.getConceptNid());
+            Concept c = (Concept) P.s.getConcept(blueprint.getConceptNid());
             Image img = new Image();
             imgC = img;
             Bdb.gVersion.incrementAndGet();
@@ -441,9 +441,9 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
 
     private ConceptChronicleBI getConcept(ConceptCB blueprint)
             throws InvalidCAB, IOException {
-        if (Ts.get().hasUuid(blueprint.getComponentUuid())) {
+        if (P.s.hasUuid(blueprint.getComponentUuid())) {
             ComponentChroncileBI<?> component =
-                    Ts.get().getComponent(blueprint.getComponentUuid());
+                    P.s.getComponent(blueprint.getComponentUuid());
             if (component == null) {
                 return null;
             }

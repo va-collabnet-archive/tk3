@@ -2,7 +2,6 @@ package org.ihtsdo.bdb.concept;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.bdb.concept.OFFSETS;
 import com.sleepycat.bind.tuple.TupleInput;
 
 
@@ -26,7 +25,6 @@ import org.ihtsdo.db.bdb.BdbCommitManager;
 import org.ihtsdo.db.bdb.I_GetNidData;
 import org.ihtsdo.db.bdb.NidDataFromBdb;
 import org.ihtsdo.db.bdb.NidDataInMemory;
-import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentChroncileBI;
 import org.ihtsdo.tk.api.NidList;
 import org.ihtsdo.tk.api.NidListBI;
@@ -50,6 +48,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
+import org.ihtsdo.cc.P;
 import org.ihtsdo.concept.Concept;
 
 public class ConceptDataSimpleReference extends ConceptDataManager {
@@ -140,7 +139,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
             } else if (cc instanceof RefexChronicleBI) {
                RefexChronicleBI r = (RefexChronicleBI) cc;
 
-               affectedConceptNids.add(Ts.get().getConceptNidForNid(r.getReferencedComponentNid()));
+               affectedConceptNids.add(P.s.getConceptNidForNid(r.getReferencedComponentNid()));
                affectedConceptNids.add(r.getRefexNid());
             } else {
                affectedConceptNids.add(getNid());

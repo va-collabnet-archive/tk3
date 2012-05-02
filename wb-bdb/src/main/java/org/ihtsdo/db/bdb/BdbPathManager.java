@@ -287,7 +287,7 @@ public class BdbPathManager {
 
     private List<PositionBI> getPathOriginsWithDepth(int nid, int depth) throws IOException {
         try {
-            ArrayList<PositionBI> result = new ArrayList<PositionBI>();
+            ArrayList<PositionBI> result = new ArrayList<>();
             Concept pathConcept = Bdb.getConceptDb().getConcept(nid);
 
             for (RefexChronicleBI<?> extPart : pathConcept.getRefexes(ReferenceConcepts.REFSET_PATH_ORIGINS.getNid())) {

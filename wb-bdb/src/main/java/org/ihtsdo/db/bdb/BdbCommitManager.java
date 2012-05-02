@@ -20,6 +20,7 @@ import org.ihtsdo.concept.component.attributes.ConceptAttributesRevision;
 import org.ihtsdo.concept.component.description.Description;
 import org.ihtsdo.concept.component.description.DescriptionRevision;
 import org.ihtsdo.bdb.concept.component.IdentifierSet;
+import org.ihtsdo.cc.P;
 import org.ihtsdo.concept.component.refex.RefexMember;
 import org.ihtsdo.concept.component.refex.RefexRevision;
 import org.ihtsdo.concept.component.relationship.Relationship;
@@ -192,8 +193,8 @@ public class BdbCommitManager {
                             if (AceLog.getAppLog().isLoggable(Level.FINE)) {
                                 AceLog.getAppLog().fine(
                                         "Canceling on concept: "
-                                        + Ts.get().getComponent(uncommittedCNidsItr.nid()).toUserString() + " UUID: "
-                                        + Ts.get().getUuidsForNid(uncommittedCNidsItr.nid()).toString());
+                                        + P.s.getComponent(uncommittedCNidsItr.nid()).toUserString() + " UUID: "
+                                        + P.s.getUuidsForNid(uncommittedCNidsItr.nid()).toString());
                             }
                         }
 
@@ -204,9 +205,9 @@ public class BdbCommitManager {
                             if (AceLog.getAppLog().isLoggable(Level.FINE)) {
                                 AceLog.getAppLog().fine(
                                         "Canceling on concept: "
-                                        + Ts.get().getComponent(uncommittedCNidsNoChecksItr.nid()).toUserString()
+                                        + P.s.getComponent(uncommittedCNidsNoChecksItr.nid()).toUserString()
                                         + " UUID: "
-                                        + Ts.get().getUuidsForNid(uncommittedCNidsNoChecksItr.nid()).toString());
+                                        + P.s.getUuidsForNid(uncommittedCNidsNoChecksItr.nid()).toString());
                             }
                         }
 
@@ -384,7 +385,7 @@ public class BdbCommitManager {
 
         try {
             AceLog.getAppLog().info("Committing concept: " + c.toUserString() + " UUID: "
-                    + Ts.get().getUuidsForNid(c.getNid()).toString());
+                    + P.s.getUuidsForNid(c.getNid()).toString());
 
 //            int errorCount = 0;
 //            int warningCount = 0;

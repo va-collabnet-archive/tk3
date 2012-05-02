@@ -20,5 +20,11 @@
       <artifactId>tk-api-dto</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.ihtsdo.tk</groupId>
+      <artifactId>tk-cern-prim</artifactId>
+      <version>3.0.1-SNAPSHOT</version>
+      <type>jar</type>
+    </dependency>
   </dependencies>
 </project>

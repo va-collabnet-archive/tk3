@@ -10,11 +10,11 @@ import javax.swing.Timer;
 import org.ihtsdo.concept.Concept;
 import org.ihtsdo.bdb.concept.I_ProcessUnfetchedConceptData;
 import org.ihtsdo.bdb.concept.ParallelConceptIterator;
+import org.ihtsdo.cc.P;
 import org.ihtsdo.helper.time.TimeHelper;
 import org.ihtsdo.temp.AceLog;
 import org.ihtsdo.temp.ConsoleActivityViewer;
 import org.ihtsdo.temp.I_ShowActivity;
-import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ConceptFetcherBI;
 import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.NidSetBI;
@@ -79,10 +79,10 @@ public class ChangeSetWriterHandler implements Runnable, I_ProcessUnfetchedConce
          activity.setProgressInfoLower("Iterating over concepts...");
          switch (changeSetWriterThreading) {
             case MULTI_THREAD:
-               Ts.get().iterateConceptDataInParallel(this);
+               P.s.iterateConceptDataInParallel(this);
                break;
             case SINGLE_THREAD:
-               Ts.get().iterateConceptDataInSequence(this);
+               P.s.iterateConceptDataInSequence(this);
                break;
             default:
                throw new RuntimeException("Can't handle threading: " + changeSetWriterThreading);

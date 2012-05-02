@@ -2,7 +2,6 @@ package org.ihtsdo.concept.component.relationship.group;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentChroncileBI;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.NidSetBI;
@@ -30,6 +29,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import org.ihtsdo.cc.P;
 import org.ihtsdo.tk.api.*;
 
 public class RelGroupVersion implements RelGroupVersionBI {
@@ -308,7 +308,7 @@ public class RelGroupVersion implements RelGroupVersionBI {
 
     @Override
     public PositionBI getPosition() throws IOException {
-        return new Position(getTime(), Ts.get().getPath(getPathNid()));
+        return new Position(getTime(), P.s.getPath(getPathNid()));
     }
 
     @Override
@@ -337,8 +337,9 @@ public class RelGroupVersion implements RelGroupVersionBI {
     }
 
     @Override
+    @Deprecated
     public Collection<? extends RefexChronicleBI<?>> getRefexes(int refsetNid) throws IOException {
-        return rg.getRefexes(refsetNid);
+        return rg.getRefexMembers(refsetNid);
     }
 
     @Override
