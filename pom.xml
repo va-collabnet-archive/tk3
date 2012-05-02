@@ -287,6 +287,7 @@
     </build>
     <modules>
         <module>tk-api-dto</module>
+        <module>tk-concept-component</module>
         <module>tk-helpers</module>
         <module>tk-cern-prim</module>
         <module>wb-bdb</module>

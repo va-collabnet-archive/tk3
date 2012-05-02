@@ -24,7 +24,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>tk-concept-component</artifactId>
+            <artifactId>tk-api-dto</artifactId>
             <version>${project.version}</version>
         </dependency>    
     </dependencies>
