@@ -10,11 +10,11 @@ import org.ihtsdo.concept.component.attributes.ConceptAttributes;
 import org.ihtsdo.concept.component.attributes.ConceptAttributesRevision;
 import org.ihtsdo.concept.component.description.Description;
 import org.ihtsdo.concept.component.description.DescriptionRevision;
-import org.ihtsdo.concept.component.image.Image;
-import org.ihtsdo.concept.component.image.ImageRevision;
 import org.ihtsdo.concept.component.refex.RefexMember;
-import org.ihtsdo.bdb.concept.component.RefexMemberFactory;
+import org.ihtsdo.concept.component.refex.RefexMemberFactory;
 import org.ihtsdo.cc.P;
+import org.ihtsdo.concept.component.media.Media;
+import org.ihtsdo.concept.component.media.MediaRevision;
 import org.ihtsdo.concept.component.refex.RefexRevision;
 import org.ihtsdo.concept.component.relationship.Relationship;
 import org.ihtsdo.concept.component.relationship.RelationshipRevision;
@@ -181,7 +181,6 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         if (relc == null) {
             Concept c = (Concept) P.s.getConcept(blueprint.getSourceNid());
             Relationship r = new Relationship();
-            relc = r;
             Bdb.gVersion.incrementAndGet();
             r.enclosingConceptNid = c.getNid();
             r.nid = Bdb.uuidToNid(blueprint.getComponentUuid());
@@ -298,7 +297,6 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             int conceptNid = blueprint.getConceptNid();
             Concept c = (Concept) P.s.getConcept(blueprint.getConceptNid());
             Description d = new Description();
-            desc = d;
             Bdb.gVersion.incrementAndGet();
             d.enclosingConceptNid = c.getNid();
             d.nid = Bdb.uuidToNid(blueprint.getComponentUuid());
@@ -389,8 +387,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
 
         if (imgC == null) {
             Concept c = (Concept) P.s.getConcept(blueprint.getConceptNid());
-            Image img = new Image();
-            imgC = img;
+            Media img = new Media();
             Bdb.gVersion.incrementAndGet();
             img.enclosingConceptNid = c.getNid();
             img.nid = Bdb.uuidToNid(blueprint.getComponentUuid());
@@ -410,7 +407,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
                     if (img.revisions == null) {
                         img.revisions = new RevisionSet(img.primordialSapNid);
                     }
-                    img.revisions.add((ImageRevision) img.makeAnalog(blueprint.getStatusNid(),
+                    img.revisions.add((MediaRevision) img.makeAnalog(blueprint.getStatusNid(),
                             ec.getAuthorNid(), p, Long.MAX_VALUE));
                 }
             }
@@ -422,9 +419,9 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             }
             return img;
         } else {
-            Image img = (Image) imgC;
+            Media img = (Media) imgC;
             for (int p : ec.getEditPaths().getSetValues()) {
-                ImageRevision imgR = img.makeAnalog(blueprint.getStatusNid(),
+                MediaRevision imgR = img.makeAnalog(blueprint.getStatusNid(),
                         ec.getAuthorNid(),
                         p,
                         Long.MAX_VALUE);

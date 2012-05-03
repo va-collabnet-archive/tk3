@@ -24,7 +24,7 @@ import org.ihtsdo.concept.component.refex.RefexMember;
 import org.ihtsdo.concept.component.refex.type_nid.NidMember;
 import org.ihtsdo.concept.component.refex.type_nid_int.NidIntMember;
 import org.ihtsdo.concept.component.refex.type_nid_long.NidLongMember;
-import org.ihtsdo.db.bdb.computer.ReferenceConcepts;
+import org.ihtsdo.cc.ReferenceConcepts;
 import org.ihtsdo.temp.AceLog;
 import org.ihtsdo.tk.api.Path;
 import org.ihtsdo.tk.api.PathBI;

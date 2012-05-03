@@ -6,7 +6,6 @@ package org.ihtsdo.bdb.concept;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.bdb.concept.OFFSETS;
 import com.sleepycat.bind.tuple.TupleInput;
 
 
@@ -14,7 +13,6 @@ import org.ihtsdo.bdb.concept.component.AnnotationIndexBinder;
 import org.ihtsdo.bdb.concept.component.AnnotationStyleBinder;
 import org.ihtsdo.bdb.concept.component.DataVersionBinder;
 import org.ihtsdo.concept.component.description.Description;
-import org.ihtsdo.concept.component.image.Image;
 import org.ihtsdo.concept.component.refex.RefexMember;
 import org.ihtsdo.concept.component.relationship.Relationship;
 import org.ihtsdo.db.bdb.Bdb;
@@ -37,6 +35,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
 import org.ihtsdo.cc.concept.ComponentComparator;
 import org.ihtsdo.concept.Concept;
+import org.ihtsdo.concept.component.media.Media;
 import org.ihtsdo.temp.AceLog;
 
 /**
@@ -94,7 +93,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
     * .component.image.Image)
     */
    @Override
-   public void add(Image img) throws IOException {
+   public void add(Media img) throws IOException {
       getImages().addDirect(img);
       getImageNids().add(img.nid);
       modified();
@@ -148,7 +147,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
       modified();
    }
 
-   void processNewImage(Image img) throws IOException {
+   void processNewImage(Media img) throws IOException {
       assert img.nid != 0 : "imgNid is 0: " + this;
       getImageNids().add(img.nid);
       modified();
@@ -205,7 +204,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
       Collection<Integer> descNids   = getDescNids();
       Collection<Integer> srcRelNids = getSrcRelNids();
       Collection<Integer> imgNids    = getImageNids();
-      Collection<Integer> memberNids = new ArrayList<Integer>(0);
+      Collection<Integer> memberNids = new ArrayList<>(0);
 
       if (!isAnnotationStyleSet()) {
          memberNids = getMemberNids();
@@ -213,7 +212,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
 
       int                size             = 1 + descNids.size() + srcRelNids.size() + imgNids.size()
                                             + memberNids.size();
-      ArrayList<Integer> allContainedNids = new ArrayList<Integer>(size);
+      ArrayList<Integer> allContainedNids = new ArrayList<>(size);
 
       allContainedNids.add(enclosingConcept.getNid());
       assert enclosingConcept.getNid() != 0;
@@ -257,7 +256,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
       // Need to make sure there are no pending db writes prior calling this method.
       BdbCommitManager.waitTillWritesFinished();
 
-      List<Relationship> destRels = new ArrayList<Relationship>();
+      List<Relationship> destRels = new ArrayList<>();
 
       for (NidPairForRel pair : Bdb.getDestRelPairs(enclosingConcept.getNid())) {
          int     relNid     = pair.getRelNid();
@@ -287,7 +286,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
       // Need to make sure there are no pending db writes prior calling this method.
       BdbCommitManager.waitTillWritesFinished();
 
-      List<Relationship> destRels = new ArrayList<Relationship>();
+      List<Relationship> destRels = new ArrayList<>();
 
       for (NidPairForRel pair : Bdb.getDestRelPairs(enclosingConcept.getNid())) {
          if (allowedTypes.contains(pair.getTypeNid())) {
@@ -458,15 +457,15 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
    }
 
 
-   public class AddImageSet extends ConcurrentSkipListSet<Image> {
+   public class AddMediaSet extends ConcurrentSkipListSet<Media> {
       private static final long serialVersionUID = 1L;
 
       //~--- constructors -----------------------------------------------------
 
-      public AddImageSet(Collection<? extends Image> c) {
+      public AddMediaSet(Collection<? extends Media> c) {
          super(new ComponentComparator());
 
-         for (Image i : c) {
+         for (Media i : c) {
             addDirect(i);
          }
       }
@@ -474,7 +473,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
       //~--- methods ----------------------------------------------------------
 
       @Override
-      public boolean add(Image e) {
+      public boolean add(Media e) {
          try {
             boolean returnValue = super.add(e);
 
@@ -486,7 +485,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
          }
       }
 
-      public final boolean addDirect(Image e) {
+      public final boolean addDirect(Media e) {
          return super.add(e);
       }
    }

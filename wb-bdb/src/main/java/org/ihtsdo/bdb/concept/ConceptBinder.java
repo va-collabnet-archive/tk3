@@ -15,17 +15,15 @@ import org.ihtsdo.concept.component.attributes.ConceptAttributes;
 import org.ihtsdo.bdb.concept.component.ConceptAttributesBinder;
 import org.ihtsdo.concept.component.attributes.ConceptAttributesRevision;
 import org.ihtsdo.bdb.concept.component.DescriptionBinder;
-import org.ihtsdo.bdb.concept.component.ImageBinder;
 import org.ihtsdo.concept.component.refex.RefexMember;
 import org.ihtsdo.bdb.concept.component.RefexMemberBinder;
 import org.ihtsdo.bdb.concept.component.RelationshipBinder;
-import org.ihtsdo.db.bdb.Bdb;
 
 import com.sleepycat.bind.tuple.TupleBinding;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
+import org.ihtsdo.bdb.concept.component.*;
 import org.ihtsdo.concept.Concept;
-import org.ihtsdo.temp.AceLog;
 
 public class ConceptBinder extends TupleBinding<Concept> {
 
@@ -66,7 +64,7 @@ public class ConceptBinder extends TupleBinding<Concept> {
                     new RelationshipBinder());
             byte[] imageOutput = getComponentBytes(conceptData, primordial,
                     OFFSETS.IMAGES, conceptData.getImagesIfChanged(),
-                    new ImageBinder());
+                    new MediaBinder());
             byte[] refsetOutput = getRefsetBytes(conceptData, primordial,
                     OFFSETS.REFSET_MEMBERS, conceptData.getRefsetMembersIfChanged(),
                     new RefexMemberBinder(concept));
@@ -140,7 +138,7 @@ public class ConceptBinder extends TupleBinding<Concept> {
             finalOutput.writeFast(memberNidOutput); // MEMBER_NIDS
             finalOutput.writeFast(imageOutput);    // IMAGES
 
-        } catch (Exception ex) {
+        } catch (IOException | InterruptedException | ExecutionException ex) {
             throw new RuntimeException(ex);
         }
     }
@@ -148,7 +146,7 @@ public class ConceptBinder extends TupleBinding<Concept> {
 
     private byte[] getNidSetBytes(I_ManageConceptData conceptData,
             boolean primordial, Set<Integer> nidsReadOnly, Set<Integer> nids) {
-        HashSet<Integer> nidsToWrite = new HashSet<Integer>(nids);
+        HashSet<Integer> nidsToWrite = new HashSet<>(nids);
         nidsToWrite.removeAll(nidsReadOnly);
         TupleOutput output = new TupleOutput();
         intSetBinder.objectToEntry(nidsToWrite, output);
@@ -169,7 +167,7 @@ public class ConceptBinder extends TupleBinding<Concept> {
         } else {
             TupleOutput output = new TupleOutput();
             if (attributes != null && attributes.getTime() != Long.MIN_VALUE) {
-                List<ConceptAttributes> attrList = new ArrayList<ConceptAttributes>();
+                List<ConceptAttributes> attrList = new ArrayList<>();
                 attrList.add(attributes);
                 conceptComponentBinder.objectToEntry(attrList, output);
                 componentBytes = output.toByteArray();

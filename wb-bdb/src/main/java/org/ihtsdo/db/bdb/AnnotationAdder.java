@@ -23,7 +23,7 @@ import org.ihtsdo.concept.Concept;
 import org.ihtsdo.bdb.concept.I_ProcessUnfetchedConceptData;
 import org.ihtsdo.bdb.concept.ParallelConceptIterator;
 import org.ihtsdo.bdb.concept.component.IdentifierSet;
-import org.ihtsdo.bdb.concept.component.RefexMemberFactory;
+import org.ihtsdo.concept.component.refex.RefexMemberFactory;
 import org.ihtsdo.temp.AceLog;
 import org.ihtsdo.tk.api.ComponentChroncileBI;
 import org.ihtsdo.tk.api.ConceptFetcherBI;

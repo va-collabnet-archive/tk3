@@ -19,14 +19,11 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
-import org.ihtsdo.cc.NidPairForRefset;
-import org.ihtsdo.cc.NidPairForRel;
-import org.ihtsdo.cc.PersistentStoreI;
+import org.ihtsdo.cc.*;
 import org.ihtsdo.concept.Concept;
 import org.ihtsdo.concept.ConceptVersion;
 import org.ihtsdo.cs.ChangeSetWriterHandler;
 import org.ihtsdo.cs.econcept.EConceptChangeSetWriter;
-import org.ihtsdo.db.bdb.computer.ReferenceConcepts;
 import org.ihtsdo.db.bdb.computer.kindof.IsaCache;
 import org.ihtsdo.db.bdb.computer.kindof.KindOfComputer;
 import org.ihtsdo.db.bdb.computer.kindof.TypeCache;
@@ -921,4 +918,15 @@ public class BdbTerminologyStore implements PersistentStoreI {
     public List<NidPairForRefset> getRefsetPairs(int nid) {
         return Bdb.getRefsetPairs(nid);
     }
+    
+    @Override
+    public void addXrefPair(int nid, NidPair pair) {
+        Bdb.addXrefPair(nid, pair);
+    }
+
+    @Override
+    public void forgetXrefPair(int nid, NidPair pair) {
+        Bdb.forgetXrefPair(nid, pair);
+    }
+
 }

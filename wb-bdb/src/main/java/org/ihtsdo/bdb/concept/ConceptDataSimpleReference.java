@@ -13,8 +13,6 @@ import org.ihtsdo.bdb.concept.component.ConceptAttributesBinder;
 import org.ihtsdo.concept.component.description.Description;
 import org.ihtsdo.bdb.concept.component.DescriptionBinder;
 import org.ihtsdo.concept.component.identifier.IdentifierVersion;
-import org.ihtsdo.concept.component.image.Image;
-import org.ihtsdo.bdb.concept.component.ImageBinder;
 import org.ihtsdo.concept.component.refex.RefexMember;
 import org.ihtsdo.bdb.concept.component.RefexMemberBinder;
 import org.ihtsdo.concept.component.refex.RefexRevision;
@@ -34,8 +32,6 @@ import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.relationship.RelationshipChronicleBI;
 import org.ihtsdo.tk.api.relationship.group.RelGroupChronicleBI;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -48,38 +44,40 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
+import org.ihtsdo.bdb.concept.component.*;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.concept.Concept;
+import org.ihtsdo.concept.component.media.Media;
 
 public class ConceptDataSimpleReference extends ConceptDataManager {
    private AtomicReference<ConceptAttributes>              attributes =
-      new AtomicReference<ConceptAttributes>();
-   private AtomicReference<AddSrcRelSet>                   srcRels    = new AtomicReference<AddSrcRelSet>();
+      new AtomicReference<>();
+   private AtomicReference<AddSrcRelSet>                   srcRels    = new AtomicReference<>();
    private AtomicReference<ConcurrentSkipListSet<Integer>> srcRelNids =
-      new AtomicReference<ConcurrentSkipListSet<Integer>>();
+      new AtomicReference<>();
    ReentrantLock                                                               sourceRelLock     =
       new ReentrantLock();
    ReentrantLock                                                               refsetMembersLock =
       new ReentrantLock();
    private AtomicReference<ConcurrentHashMap<Integer, RefexMember<?, ?>>> refsetMembersMap       =
-      new AtomicReference<ConcurrentHashMap<Integer, RefexMember<?, ?>>>();
+      new AtomicReference<>();
    private AtomicReference<AddMemberSet>                                   refsetMembers      =
-      new AtomicReference<AddMemberSet>();
+      new AtomicReference<>();
    private AtomicReference<ConcurrentHashMap<Integer, RefexMember<?, ?>>> refsetComponentMap =
-      new AtomicReference<ConcurrentHashMap<Integer, RefexMember<?, ?>>>();
+      new AtomicReference<>();
    private AtomicReference<ConcurrentSkipListSet<Integer>> memberNids =
-      new AtomicReference<ConcurrentSkipListSet<Integer>>();
+      new AtomicReference<>();
    private ReentrantLock                                   memberMapLock  = new ReentrantLock();
-   private AtomicReference<AddImageSet>                    images         =
-      new AtomicReference<AddImageSet>();
+   private AtomicReference<AddMediaSet>                    images         =
+      new AtomicReference<>();
    ReentrantLock                                               imageLock = new ReentrantLock();
    private AtomicReference<ConcurrentSkipListSet<Integer>> imageNids      =
-      new AtomicReference<ConcurrentSkipListSet<Integer>>();
+      new AtomicReference<>();
    private AtomicReference<AddDescriptionSet>              descriptions  =
-      new AtomicReference<AddDescriptionSet>();
+      new AtomicReference<>();
    ReentrantLock                                               descLock = new ReentrantLock();
    private AtomicReference<ConcurrentSkipListSet<Integer>> descNids      =
-      new AtomicReference<ConcurrentSkipListSet<Integer>>();
+      new AtomicReference<>();
    ReentrantLock       attrLock = new ReentrantLock();
    private Boolean annotationIndex;
    private Boolean annotationStyleRefset;
@@ -226,7 +224,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
    }
 
    private void cancel(Collection<? extends ConceptComponent<?, ?>> componentList) throws IOException {
-      ArrayList<ConceptComponent<?, ?>> toRemove = new ArrayList<ConceptComponent<?, ?>>();
+      ArrayList<ConceptComponent<?, ?>> toRemove = new ArrayList<>();
 
       if (componentList != null) {
          for (ConceptComponent<?, ?> cc : componentList) {
@@ -327,7 +325,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
       }
 
       if (images.get() != null) {
-         for (Image component : images.get()) {
+         for (Media component : images.get()) {
             assert component.readyToWriteComponent();
          }
       }
@@ -371,7 +369,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
 
    private List<? extends ConceptComponent<?,
            ?>> removeCanceledFromList(Collection<? extends ConceptComponent<?, ?>> ccList) {
-      List<ConceptComponent<?, ?>> toRemove = new ArrayList<ConceptComponent<?, ?>>();
+      List<ConceptComponent<?, ?>> toRemove = new ArrayList<>();
 
       if (ccList != null) {
          synchronized (ccList) {
@@ -382,7 +380,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
                   Concept.componentsCRHM.remove(cc.getNid());
                } else {
                   if (cc.revisions != null) {
-                     List<Revision<?, ?>> revisionToRemove = new ArrayList<Revision<?, ?>>();
+                     List<Revision<?, ?>> revisionToRemove = new ArrayList<>();
 
                      for (Revision<?, ?> r : cc.revisions) {
                         if (r.getTime() == Long.MIN_VALUE) {
@@ -421,13 +419,9 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
 
       try {
          if ((refsetMembersMap.get() == null) || (refsetComponentMap.get() == null)) {
-            ConcurrentHashMap<Integer, RefexMember<?, ?>> memberMap = new ConcurrentHashMap<Integer,
-                                                                          RefexMember<?,
-                                                                             ?>>(refsetMemberList.size(),
+            ConcurrentHashMap<Integer, RefexMember<?, ?>> memberMap = new ConcurrentHashMap<>(refsetMemberList.size(),
                                                                                 0.75f, 2);
-            ConcurrentHashMap<Integer, RefexMember<?, ?>> componentMap = new ConcurrentHashMap<Integer,
-                                                                             RefexMember<?,
-                                                                                ?>>(refsetMemberList.size(),
+            ConcurrentHashMap<Integer, RefexMember<?, ?>> componentMap = new ConcurrentHashMap<>(refsetMemberList.size(),
                                                                                    0.75f, 2);
 
             for (RefexMember<?, ?> m : refsetMemberList) {
@@ -446,7 +440,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
    //~--- get methods ---------------------------------------------------------
 
    private RefexChronicleBI<?> getAnnotation(int nid) throws IOException {
-      RefexChronicleBI<?> cc = null;
+      RefexChronicleBI<?> cc;
 
       // recursive search through all annotations...
       if (getConceptAttributes() != null) {
@@ -478,7 +472,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
       }
 
       if (getImages() != null) {
-         for (Image i : getImages()) {
+         for (Media i : getImages()) {
             cc = getAnnotation(i.annotations, nid);
 
             if (cc != null) {
@@ -544,7 +538,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
       }
 
       if (getImageNids().contains(nid)) {
-         for (Image i : getImages()) {
+         for (Media i : getImages()) {
             if (i.getNid() == nid) {
                return i;
             }
@@ -593,7 +587,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
 
    @Override
    public Collection<Integer> getConceptNidsAffectedByCommit() throws IOException {
-      Collection<Integer> uncommittedNids = new HashSet<Integer>();
+      Collection<Integer> uncommittedNids = new HashSet<>();
 
       addConceptNidsAffectedByCommit(attributes.get(), uncommittedNids);
       addConceptNidsAffectedByCommit(srcRels.get(), uncommittedNids);
@@ -607,7 +601,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
    @Override
    public Set<Integer> getDescNids() throws IOException {
       if (descNids.get() == null) {
-         ConcurrentSkipListSet<Integer> temp = new ConcurrentSkipListSet<Integer>(getDescNidsReadOnly());
+         ConcurrentSkipListSet<Integer> temp = new ConcurrentSkipListSet<>(getDescNidsReadOnly());
 
          temp.addAll(getMutableIntSet(OFFSETS.DESC_NIDS));
          descNids.compareAndSet(null, temp);
@@ -665,14 +659,14 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
    }
 
    @Override
-   public AddImageSet getImages() throws IOException {
+   public AddMediaSet getImages() throws IOException {
       if (images.get() == null) {
          imageLock.lock();
 
          try {
             if (images.get() == null) {
                images.compareAndSet(null,
-                                    new AddImageSet(getList(new ImageBinder(), OFFSETS.IMAGES,
+                                    new AddMediaSet(getList(new MediaBinder(), OFFSETS.IMAGES,
                                        enclosingConcept)));
             }
          } finally {
@@ -686,7 +680,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
    }
 
    @Override
-   public Collection<Image> getImagesIfChanged() throws IOException {
+   public Collection<Media> getImagesIfChanged() throws IOException {
       return images.get();
    }
 
@@ -710,7 +704,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
          readOnlyInput.skipFast(listStart);
          componentList = binder.entryToObject(readOnlyInput);
       } else {
-         componentList = new ArrayList<C>();
+         componentList = new ArrayList<>();
       }
 
       assert componentList != null;
@@ -752,7 +746,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
          readOnlyInput.skipFast(listStart);
          componentList = binder.entryToObject(readOnlyInput);
       } else {
-         componentList = new ArrayList<RefexMember<?, ?>>();
+         componentList = new ArrayList<>();
       }
 
       assert componentList != null;
@@ -779,7 +773,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
    @Override
    public Set<Integer> getMemberNids() throws IOException {
       if (memberNids.get() == null) {
-         ConcurrentSkipListSet<Integer> temp = new ConcurrentSkipListSet<Integer>(getMemberNidsReadOnly());
+         ConcurrentSkipListSet<Integer> temp = new ConcurrentSkipListSet<>(getMemberNidsReadOnly());
 
          temp.addAll(getMutableIntSet(OFFSETS.MEMBER_NIDS));
          memberNids.compareAndSet(null, temp);
@@ -797,7 +791,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
       TupleInput mutableInput = nidData.getMutableTupleInput();
 
       if (mutableInput.available() < OFFSETS.getHeaderSize()) {
-         return new ConcurrentSkipListSet<Integer>();
+         return new ConcurrentSkipListSet<>();
       }
 
       mutableInput.mark(OFFSETS.getHeaderSize());
@@ -821,7 +815,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
       TupleInput readOnlyInput = nidData.getReadOnlyTupleInput();
 
       if (readOnlyInput.available() < OFFSETS.getHeaderSize()) {
-         return new ConcurrentSkipListSet<Integer>();
+         return new ConcurrentSkipListSet<>();
       }
 
       readOnlyInput.mark(OFFSETS.getHeaderSize());
@@ -898,7 +892,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
    @Override
    public AddMemberSet getRefsetMembers() throws IOException {
       if (isAnnotationStyleRefex() && isAnnotationIndex()) {
-         ArrayList<RefexMember<?, ?>> members = new ArrayList<RefexMember<?, ?>>(getMemberNids().size());
+         ArrayList<RefexMember<?, ?>> members = new ArrayList<>(getMemberNids().size());
 
          for (int memberNid : getMemberNids()) {
             RefexMember<?, ?> member = (RefexMember<?, ?>) Bdb.getComponent(memberNid);
@@ -964,7 +958,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
    @Override
    public Set<Integer> getSrcRelNids() throws IOException {
       if (srcRelNids.get() == null) {
-         ConcurrentSkipListSet<Integer> temp = new ConcurrentSkipListSet<Integer>(getSrcRelNidsReadOnly());
+         ConcurrentSkipListSet<Integer> temp = new ConcurrentSkipListSet<>(getSrcRelNidsReadOnly());
 
          temp.addAll(getMutableIntSet(OFFSETS.SRC_REL_NIDS));
          srcRelNids.compareAndSet(null, temp);

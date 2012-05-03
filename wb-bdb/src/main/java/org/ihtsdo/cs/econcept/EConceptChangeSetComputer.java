@@ -10,12 +10,11 @@ import org.ihtsdo.concept.component.identifier.IdentifierVersion;
 import org.ihtsdo.concept.component.identifier.IdentifierVersionLong;
 import org.ihtsdo.concept.component.identifier.IdentifierVersionString;
 import org.ihtsdo.concept.component.identifier.IdentifierVersionUuid;
-import org.ihtsdo.concept.component.image.Image;
 import org.ihtsdo.concept.component.refex.RefexMember;
 import org.ihtsdo.concept.component.relationship.Relationship;
 import org.ihtsdo.cs.I_ComputeEConceptForChangeSet;
 import org.ihtsdo.db.bdb.BdbCommitManager;
-import org.ihtsdo.db.bdb.computer.ReferenceConcepts;
+import org.ihtsdo.cc.ReferenceConcepts;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.tk.dto.concept.component.TkComponent;
@@ -39,6 +38,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.ihtsdo.cc.P;
+import org.ihtsdo.concept.component.media.Media;
 import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.temp.AceLog;
 import org.ihtsdo.tk.api.id.LongIdBI;
@@ -162,10 +162,10 @@ public class EConceptChangeSetComputer implements I_ComputeEConceptForChangeSet 
     private List<TkMedia> processMedia(Concept c, AtomicBoolean changed) throws IOException {
         List<TkMedia> eImages = new ArrayList<>();
 
-        for (Image img : c.getImages()) {
+        for (Media img : c.getImages()) {
             TkMedia eImg = null;
 
-            for (Image.Version v : img.getVersions()) {
+            for (Media.Version v : img.getVersions()) {
                 if (v.sapIsInRange(minSapNid, maxSapNid) && (v.getTime() != Long.MIN_VALUE)
                         && (v.getTime() != Long.MAX_VALUE)) {
                     if ((commitSapNids == null) || commitSapNids.contains(v.getSapNid())) {

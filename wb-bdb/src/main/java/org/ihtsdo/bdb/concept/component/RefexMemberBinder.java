@@ -2,6 +2,7 @@ package org.ihtsdo.bdb.concept.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.ihtsdo.concept.component.refex.RefexMemberFactory;
 import com.sleepycat.bind.tuple.TupleBinding;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;

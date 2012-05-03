@@ -6,12 +6,11 @@ import com.sleepycat.bind.tuple.TupleInput;
 
 
 import org.ihtsdo.bdb.concept.ConceptDataManager.AddDescriptionSet;
-import org.ihtsdo.bdb.concept.ConceptDataManager.AddImageSet;
+import org.ihtsdo.bdb.concept.ConceptDataManager.AddMediaSet;
 import org.ihtsdo.bdb.concept.ConceptDataManager.AddMemberSet;
 import org.ihtsdo.bdb.concept.ConceptDataManager.AddSrcRelSet;
 import org.ihtsdo.concept.component.attributes.ConceptAttributes;
 import org.ihtsdo.concept.component.description.Description;
-import org.ihtsdo.concept.component.image.Image;
 import org.ihtsdo.concept.component.refex.RefexMember;
 import org.ihtsdo.concept.component.relationship.Relationship;
 import org.ihtsdo.tk.api.ComponentChroncileBI;
@@ -26,11 +25,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import org.ihtsdo.concept.component.media.Media;
 
 public interface I_ManageConceptData {
    void add(Description desc) throws IOException;
 
-   void add(Image img) throws IOException;
+   void add(Media img) throws IOException;
 
    void add(RefexMember<?, ?> refsetMember) throws IOException;
 
@@ -86,9 +86,9 @@ public interface I_ManageConceptData {
 
    Set<Integer> getImageNidsReadOnly() throws IOException;
 
-   AddImageSet getImages() throws IOException;
+   AddMediaSet getImages() throws IOException;
 
-   Collection<Image> getImagesIfChanged() throws IOException;
+   Collection<Media> getImagesIfChanged() throws IOException;
 
    long getLastChange();
 

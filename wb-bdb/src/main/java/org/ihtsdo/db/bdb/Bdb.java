@@ -39,7 +39,7 @@ import org.ihtsdo.tk.dto.concept.component.refex.TkRefexAbstractMember;
 import java.io.InputStream;
 import java.util.concurrent.ConcurrentSkipListSet;
 import org.ihtsdo.cc.P;
-import org.ihtsdo.db.bdb.computer.ReferenceConcepts;
+import org.ihtsdo.cc.ReferenceConcepts;
 import org.ihtsdo.db.bdb.nidmaps.UuidToNidMapBdb;
 import org.ihtsdo.helper.io.FileIO;
 import org.ihtsdo.helper.thread.NamedThreadFactory;

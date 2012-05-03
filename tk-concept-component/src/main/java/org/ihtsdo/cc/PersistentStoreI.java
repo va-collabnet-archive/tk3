@@ -48,4 +48,8 @@ public interface PersistentStoreI extends TerminologyStoreDI {
 
     List<NidPairForRefset> getRefsetPairs(int nid);
 
+    void addXrefPair(int nid, NidPair pair);
+
+    void forgetXrefPair(int nid, NidPair pair);
+
 }
