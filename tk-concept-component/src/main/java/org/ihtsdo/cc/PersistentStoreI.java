@@ -17,6 +17,7 @@ package org.ihtsdo.cc;
 
 import java.io.IOException;
 import java.util.List;
+import org.ihtsdo.concept.ConceptDataFetcherI;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.api.TerminologyStoreDI;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
@@ -65,4 +66,6 @@ public interface PersistentStoreI extends TerminologyStoreDI {
             ChangeSetWriterThreading changeSetWriterThreading) throws IOException;
 
     int[] getDestRelOriginNids(int cNid, NidSetBI relTypes);
+    
+    ConceptDataFetcherI getConceptDataFetcher(int cNid) throws IOException;
 }

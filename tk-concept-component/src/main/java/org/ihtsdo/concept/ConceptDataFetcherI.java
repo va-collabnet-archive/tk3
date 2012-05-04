@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.sleepycat.bind.tuple.TupleInput;
 
-public interface I_GetNidData {
+public interface ConceptDataFetcherI {
 
 	public byte[] getReadOnlyBytes() throws IOException;
 

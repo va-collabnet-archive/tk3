@@ -19,8 +19,6 @@ import org.ihtsdo.concept.component.RefexMemberBinder;
 import org.ihtsdo.concept.component.refex.RefexRevision;
 import org.ihtsdo.concept.component.relationship.Relationship;
 import org.ihtsdo.concept.component.RelationshipBinder;
-import org.ihtsdo.db.bdb.NidDataFromBdb;
-import org.ihtsdo.db.bdb.NidDataInMemory;
 import org.ihtsdo.tk.api.ComponentChroncileBI;
 import org.ihtsdo.tk.api.NidList;
 import org.ihtsdo.tk.api.NidListBI;
@@ -81,7 +79,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
    //~--- constructors --------------------------------------------------------
 
    public ConceptDataSimpleReference(Concept enclosingConcept) throws IOException {
-      super(new NidDataFromBdb(enclosingConcept.getNid()));
+      super(P.s.getConceptDataFetcher(enclosingConcept.getNid()));
       assert enclosingConcept != null : "enclosing concept cannot be null.";
       this.enclosingConcept = enclosingConcept;
    }
@@ -802,7 +800,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
       return binder.entryToObject(mutableInput);
    }
 
-   public I_GetNidData getNidData() {
+   public ConceptDataFetcherI getNidData() {
       return nidData;
    }
 

@@ -1,11 +1,11 @@
-package org.ihtsdo.db.bdb;
+package org.ihtsdo.concept;
 
-import org.ihtsdo.concept.I_GetNidData;
+import org.ihtsdo.concept.ConceptDataFetcherI;
 import java.io.IOException;
 
 import com.sleepycat.bind.tuple.TupleInput;
 
-public class NidDataInMemory implements I_GetNidData {
+public class NidDataInMemory implements ConceptDataFetcherI {
 
 	private byte[] readOnlyBytes;
 	private byte[] readWriteBytes;

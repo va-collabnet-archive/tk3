@@ -55,11 +55,11 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
    protected long         lastWrite          = Long.MIN_VALUE;
    protected long         lastExtinctRemoval = Long.MIN_VALUE;
    protected Concept      enclosingConcept;
-   protected I_GetNidData nidData;
+   protected ConceptDataFetcherI nidData;
 
    //~--- constructors --------------------------------------------------------
 
-   public ConceptDataManager(I_GetNidData nidData) throws IOException {
+   public ConceptDataManager(ConceptDataFetcherI nidData) throws IOException {
       super();
       this.nidData    = nidData;
       this.lastChange = getDataVersion();

@@ -1,6 +1,6 @@
 package org.ihtsdo.db.bdb;
 
-import org.ihtsdo.concept.I_GetNidData;
+import org.ihtsdo.concept.ConceptDataFetcherI;
 import java.io.IOException;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
@@ -16,7 +16,7 @@ import com.sleepycat.bind.tuple.TupleInput;
 import org.ihtsdo.helper.thread.NamedThreadFactory;
 import org.ihtsdo.temp.AceLog;
 
-public class NidDataFromBdb implements I_GetNidData {
+public class NidDataFromBdb implements ConceptDataFetcherI {
 
     public static enum REF_TYPE {
 
@@ -73,7 +73,7 @@ public class NidDataFromBdb implements I_GetNidData {
     }
 
     /* (non-Javadoc)
-     * @see org.ihtsdo.db.bdb.I_GetNidData#getReadOnlyBytes()
+     * @see org.ihtsdo.db.bdb.ConceptDataFetcherI#getReadOnlyBytes()
      */
     @Override
     public synchronized byte[] getReadOnlyBytes() throws IOException {
@@ -85,19 +85,17 @@ public class NidDataFromBdb implements I_GetNidData {
                 byte[] bytes = readOnlyFuture.get();
                 switch (refType) {
                     case SOFT:
-                        readOnlyBytes = new SoftReference<byte[]>(bytes);
+                        readOnlyBytes = new SoftReference<>(bytes);
                         break;
                     case WEAK:
-                        readOnlyBytes = new WeakReference<byte[]>(bytes);
+                        readOnlyBytes = new WeakReference<>(bytes);
                         break;
                     default:
                         throw new RuntimeException("Don't know how to handle: " + refType);
                 }
                 readOnlyFuture = null;
                 return bytes;
-            } catch (InterruptedException e) {
-                throw new IOException(e);
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 throw new IOException(e);
             }
         }
@@ -110,7 +108,7 @@ public class NidDataFromBdb implements I_GetNidData {
     }
 
     /* (non-Javadoc)
-     * @see org.ihtsdo.db.bdb.I_GetNidData#getReadWriteBytes()
+     * @see org.ihtsdo.db.bdb.ConceptDataFetcherI#getReadWriteBytes()
      */
     @Override
     public synchronized byte[] getReadWriteBytes() throws IOException {
@@ -122,9 +120,7 @@ public class NidDataFromBdb implements I_GetNidData {
             try {
                 readWriteBytes = readWriteFuture.get();
                 readWriteFuture = null;
-            } catch (InterruptedException e) {
-                throw new IOException(e);
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 throw new IOException(e);
             }
         }
@@ -132,7 +128,7 @@ public class NidDataFromBdb implements I_GetNidData {
     }
 
     /* (non-Javadoc)
-     * @see org.ihtsdo.db.bdb.I_GetNidData#getReadOnlyTupleInput()
+     * @see org.ihtsdo.db.bdb.ConceptDataFetcherI#getReadOnlyTupleInput()
      */
     @Override
     public synchronized TupleInput getReadOnlyTupleInput() throws IOException {
@@ -140,7 +136,7 @@ public class NidDataFromBdb implements I_GetNidData {
     }
 
     /* (non-Javadoc)
-     * @see org.ihtsdo.db.bdb.I_GetNidData#getReadWriteTupleInput()
+     * @see org.ihtsdo.db.bdb.ConceptDataFetcherI#getReadWriteTupleInput()
      */
     @Override
     public synchronized TupleInput getMutableTupleInput() throws IOException {

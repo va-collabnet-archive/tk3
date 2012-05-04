@@ -33,6 +33,7 @@ import org.ihtsdo.helper.thread.NamedThreadFactory;
 import org.ihtsdo.lucene.LuceneManager;
 import org.ihtsdo.temp.AceLog;
 import org.ihtsdo.cc.PositionSetReadOnly;
+import org.ihtsdo.concept.ConceptDataFetcherI;
 import org.ihtsdo.lucene.SearchResult;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.TerminologyDI.CONCEPT_EVENT;
@@ -976,6 +977,11 @@ public class BdbTerminologyStore implements PersistentStoreI {
     @Override
     public int[] getDestRelOriginNids(int cNid, NidSetBI relTypes) {
         return Bdb.xref.getDestRelOrigins(cNid, relTypes);
+    }
+
+    @Override
+    public ConceptDataFetcherI getConceptDataFetcher(int cNid) throws IOException {
+        return new NidDataFromBdb(cNid);
     }
 
 }
