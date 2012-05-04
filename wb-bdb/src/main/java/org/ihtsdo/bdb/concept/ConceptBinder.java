@@ -1,5 +1,9 @@
 package org.ihtsdo.bdb.concept;
 
+import org.ihtsdo.concept.IntSetBinder;
+import org.ihtsdo.concept.OFFSETS;
+import org.ihtsdo.concept.component.MediaBinder;
+import org.ihtsdo.concept.I_ManageConceptData;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,15 +13,15 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import org.ihtsdo.concept.component.ConceptComponent;
-import org.ihtsdo.bdb.concept.component.ConceptComponentBinder;
+import org.ihtsdo.concept.component.ConceptComponentBinder;
 import org.ihtsdo.concept.component.Revision;
 import org.ihtsdo.concept.component.attributes.ConceptAttributes;
-import org.ihtsdo.bdb.concept.component.ConceptAttributesBinder;
+import org.ihtsdo.concept.component.ConceptAttributesBinder;
 import org.ihtsdo.concept.component.attributes.ConceptAttributesRevision;
-import org.ihtsdo.bdb.concept.component.DescriptionBinder;
+import org.ihtsdo.concept.component.DescriptionBinder;
 import org.ihtsdo.concept.component.refex.RefexMember;
-import org.ihtsdo.bdb.concept.component.RefexMemberBinder;
-import org.ihtsdo.bdb.concept.component.RelationshipBinder;
+import org.ihtsdo.concept.component.RefexMemberBinder;
+import org.ihtsdo.concept.component.RelationshipBinder;
 
 import com.sleepycat.bind.tuple.TupleBinding;
 import com.sleepycat.bind.tuple.TupleInput;

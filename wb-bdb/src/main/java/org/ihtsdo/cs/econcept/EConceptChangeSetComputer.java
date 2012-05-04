@@ -13,7 +13,6 @@ import org.ihtsdo.concept.component.identifier.IdentifierVersionUuid;
 import org.ihtsdo.concept.component.refex.RefexMember;
 import org.ihtsdo.concept.component.relationship.Relationship;
 import org.ihtsdo.cs.I_ComputeEConceptForChangeSet;
-import org.ihtsdo.db.bdb.BdbCommitManager;
 import org.ihtsdo.cc.ReferenceConcepts;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
@@ -237,7 +236,7 @@ public class EConceptChangeSetComputer implements I_ComputeEConceptForChangeSet 
         }
 
         if (!membersToRemove.isEmpty()) {
-            BdbCommitManager.writeImmediate(c);
+            P.s.addUncommittedNoChecks(c);
         }
 
         return eRefsetMembers;

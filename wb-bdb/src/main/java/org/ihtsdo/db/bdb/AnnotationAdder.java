@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import org.ihtsdo.concept.Concept;
 import org.ihtsdo.bdb.concept.I_ProcessUnfetchedConceptData;
 import org.ihtsdo.bdb.concept.ParallelConceptIterator;
-import org.ihtsdo.bdb.concept.component.IdentifierSet;
+import org.ihtsdo.concept.component.IdentifierSet;
 import org.ihtsdo.concept.component.refex.RefexMemberFactory;
 import org.ihtsdo.temp.AceLog;
 import org.ihtsdo.tk.api.ComponentChroncileBI;

@@ -17,13 +17,11 @@ import org.ihtsdo.concept.component.identifier.IdentifierVersion;
 import org.ihtsdo.concept.component.identifier.IdentifierVersionLong;
 import org.ihtsdo.concept.component.identifier.IdentifierVersionString;
 import org.ihtsdo.concept.component.identifier.IdentifierVersionUuid;
-import org.ihtsdo.bdb.concept.component.AnnotationWriter;
 import org.ihtsdo.concept.component.refex.RefexMember;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.concept.component.refex.RefexRevision;
 import org.ihtsdo.cc.NidPairForRefset;
 import org.ihtsdo.helper.time.TimeHelper;
-import org.ihtsdo.temp.AceLog;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.coordinate.EditCoordinate;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
@@ -40,8 +38,11 @@ import org.ihtsdo.tk.dto.concept.component.refex.TkRefexAbstractMember;
 import org.ihtsdo.tk.hash.Hashcode;
 
 public abstract class ConceptComponent<R extends Revision<R, C>, C extends ConceptComponent<R, C>>
-        implements ComponentBI, ComponentVersionBI, IdBI, AnalogBI, AnalogGeneratorBI<R>, Comparable<ConceptComponent> {
+        implements ComponentBI, ComponentVersionBI, IdBI, AnalogBI, AnalogGeneratorBI<R>, Comparable<ConceptComponent> {    
+    
+    protected static final Logger logger = Logger.getLogger(ConceptComponent.class.getName());
 
+    
     private static AtomicBoolean fixAlert = new AtomicBoolean(false);
     private static AnnotationWriter annotationWriter = new AnnotationWriter();
     //~--- fields --------------------------------------------------------------
@@ -79,12 +80,10 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             P.s.resetConceptNidForNid(this.enclosingConceptNid, this.nid);
 
             if (fixAlert.compareAndSet(true, false)) {
-                AceLog.getAppLog().alertAndLogException(new Exception("a. Datafix warning. See log for details."));
-                System.out.println("a-Datafix: cNid " + cNid + " "
-                        + P.s.getUuidsForNid(cNid) + " incorrect for: "
-                        + this.nid + " " + P.s.getUuidsForNid(this.nid)
-                        + " should have been: " + this.enclosingConceptNid
-                        + P.s.getUuidsForNid(this.enclosingConceptNid));
+                logger.log(Level.SEVERE, "a. Datafix warning. See log for details.", 
+                        new Exception(String.format("a-Datafix: cNid %s %s incorrect for: %s %s should have been: {4}{5}", 
+                        cNid, P.s.getUuidsForNid(cNid), this.nid, P.s.getUuidsForNid(this.nid), 
+                            this.enclosingConceptNid, P.s.getUuidsForNid(this.enclosingConceptNid))));
             }
 
         }
@@ -108,12 +107,10 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         } else if (cNid != this.enclosingConceptNid) {
             P.s.resetConceptNidForNid(this.enclosingConceptNid, this.nid);
             if (fixAlert.compareAndSet(true, false)) {
-                AceLog.getAppLog().alertAndLogException(new Exception("b. Datafix warning. See log for details."));
-                System.out.println("b-Datafix: cNid " + cNid + " "
-                        + P.s.getUuidsForNid(cNid) + " incorrect for: "
-                        + this.nid + " " + P.s.getUuidsForNid(this.nid)
-                        + " should have been: " + this.enclosingConceptNid
-                        + P.s.getUuidsForNid(this.enclosingConceptNid));
+                logger.log(Level.SEVERE, "b. Datafix warning. See log for details.", 
+                        new Exception(String.format("b-Datafix: cNid %s %s incorrect for: %s %s should have been: {4}{5}", 
+                        cNid, P.s.getUuidsForNid(cNid), this.nid, P.s.getUuidsForNid(this.nid), 
+                            this.enclosingConceptNid, P.s.getUuidsForNid(this.enclosingConceptNid))));
             }
         }
 
@@ -248,8 +245,9 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         } catch (IOException e) {
             try {
                 buf.append(e.getLocalizedMessage());
+                logger.log(Level.WARNING, e.getLocalizedMessage(), e);
             } catch (IOException ex) {
-                AceLog.getAppLog().alertAndLogException(ex);
+                logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
             }
         }
     }
@@ -300,7 +298,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             try {
                 buf.append(e.getLocalizedMessage());
             } catch (IOException ex) {
-                AceLog.getAppLog().alertAndLogException(ex);
+                logger.log(Level.WARNING, ex.getLocalizedMessage(), ex);
             }
         }
     }
@@ -316,7 +314,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         try {
             return P.s.getConcept(enclosingConceptNid).toLongString();
         } catch (IOException ex) {
-            Logger.getLogger(ConceptComponent.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         }
 
         return toString();
@@ -703,10 +701,10 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
                     }
                 }
             } else {
-                AceLog.getAppLog().warning("No enclosingConceptNid for: " + this);
+                logger.log(Level.WARNING, "No enclosingConceptNid for: {0}", this);
             }
-        } catch (IOException e) {
-            AceLog.getAppLog().alertAndLogException(e);
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, null, ex);
         }
     }
 

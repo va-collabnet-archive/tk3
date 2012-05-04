@@ -24,6 +24,8 @@ import org.ihtsdo.tk.hash.Hashcode;
 public abstract class Revision<V extends Revision<V, C>, C extends ConceptComponent<V, C>>
         implements ComponentVersionBI, AnalogBI, AnalogGeneratorBI<V> {
 
+    protected static final Logger logger = Logger.getLogger(ConceptComponent.class.getName());
+
     public static SimpleDateFormat fileDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss");
     //~--- fields --------------------------------------------------------------
     public C primordialComponent;

@@ -3,14 +3,14 @@ package org.ihtsdo.concept;
 //~--- non-JDK imports --------------------------------------------------------
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.ihtsdo.cc.LanguageSortPrefs.LANGUAGE_SORT_PREF;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.ReferenceConcepts;
 import org.ihtsdo.cern.colt.map.OpenIntIntHashMap;
 import org.ihtsdo.concept.component.relationship.group.RelGroupVersion;
-import org.ihtsdo.temp.AceLog;
-import org.ihtsdo.temp.LanguageSortPrefs.LANGUAGE_SORT_PREF;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.blueprint.ConceptCB;
 import org.ihtsdo.tk.api.blueprint.InvalidCAB;
@@ -425,7 +425,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
     @Override
     public Collection<? extends DescriptionVersionBI> getDescsActive() throws IOException {
-        Collection<DescriptionVersionBI> returnValues = new ArrayList<DescriptionVersionBI>();
+        Collection<DescriptionVersionBI> returnValues = new ArrayList<>();
 
         for (DescriptionChronicleBI desc : getDescs()) {
             returnValues.addAll(desc.getVersions(vc));
@@ -441,7 +441,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
     @Override
     public Collection<? extends DescriptionVersionBI> getDescsActive(NidSetBI typeNids) throws IOException {
-        Collection<DescriptionVersionBI> results = new ArrayList<DescriptionVersionBI>();
+        Collection<DescriptionVersionBI> results = new ArrayList<>();
 
         for (DescriptionVersionBI d : getDescsActive()) {
             if (typeNids.contains(d.getTypeNid())) {
@@ -485,7 +485,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
     @Override
     public Collection<? extends MediaVersionBI> getMediaActive() throws IOException, ContradictionException {
-        Collection<MediaVersionBI> returnValues = new ArrayList<MediaVersionBI>();
+        Collection<MediaVersionBI> returnValues = new ArrayList<>();
 
         for (MediaChronicleBI media : getMedia()) {
             returnValues.addAll(media.getVersions(vc));
@@ -511,7 +511,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     }
 
     private Collection<List<Integer>> getNidPathsToRootNoAdd(List<Integer> nidPath) throws IOException {
-        TreeSet<List<Integer>> pathList = new TreeSet<List<Integer>>(new Comparator<List<Integer>>() {
+        TreeSet<List<Integer>> pathList = new TreeSet<>(new Comparator<List<Integer>>() {
 
             @Override
             public int compare(List<Integer> o1, List<Integer> o2) {
@@ -542,7 +542,8 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
                 }
             }
         } catch (ContradictionException ex) {
-            AceLog.getAppLog().alertAndLogException(ex);
+            Concept.logger.log(Level.SEVERE, "Contradiction exception.", ex);
+            
         }
 
         return pathList;
@@ -626,7 +627,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
     @Override
     public Collection<? extends RelGroupVersionBI> getRelGroups() throws IOException, ContradictionException {
-        ArrayList<RelGroupVersionBI> results = new ArrayList<RelGroupVersionBI>();
+        ArrayList<RelGroupVersionBI> results = new ArrayList<>();
 
         for (RelGroupChronicleBI rgc : concept.getRelGroups(vc)) {
             RelGroupVersionBI rgv = new RelGroupVersion(rgc, vc);
@@ -653,7 +654,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     @Override
     public Collection<? extends RelationshipVersionBI> getRelsIncomingActive()
             throws IOException, ContradictionException {
-        Collection<RelationshipVersionBI> returnValues = new ArrayList<RelationshipVersionBI>();
+        Collection<RelationshipVersionBI> returnValues = new ArrayList<>();
 
         for (RelationshipChronicleBI rel : getRelsIncoming()) {
             returnValues.addAll(rel.getVersions(vc));
@@ -665,7 +666,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     @Override
     public Collection<? extends RelationshipVersionBI> getRelsIncomingActiveIsa()
             throws IOException, ContradictionException {
-        Collection<RelationshipVersionBI> returnValues = new ArrayList<RelationshipVersionBI>();
+        Collection<RelationshipVersionBI> returnValues = new ArrayList<>();
 
         for (RelationshipChronicleBI rel : getRelsIncoming()) {
             for (RelationshipVersionBI rv : rel.getVersions(vc)) {
@@ -680,7 +681,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
     @Override
     public Collection<? extends ConceptVersionBI> getRelsIncomingOrigins() throws IOException {
-        HashSet<ConceptVersionBI> conceptSet = new HashSet<ConceptVersionBI>();
+        HashSet<ConceptVersionBI> conceptSet = new HashSet<>();
 
         for (RelationshipChronicleBI rel : getRelsIncoming()) {
             for (RelationshipVersionBI relv : rel.getVersions()) {
@@ -701,7 +702,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     @Override
     public Collection<? extends ConceptVersionBI> getRelsIncomingOrigins(NidSetBI typeNids)
             throws IOException {
-        HashSet<ConceptVersionBI> conceptSet = new HashSet<ConceptVersionBI>();
+        HashSet<ConceptVersionBI> conceptSet = new HashSet<>();
 
         for (RelationshipChronicleBI rel : getRelsIncoming()) {
             for (RelationshipVersionBI relv : rel.getVersions()) {
@@ -719,7 +720,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     @Override
     public Collection<? extends ConceptVersionBI> getRelsIncomingOriginsActive()
             throws IOException, ContradictionException {
-        HashSet<ConceptVersionBI> conceptSet = new HashSet<ConceptVersionBI>();
+        HashSet<ConceptVersionBI> conceptSet = new HashSet<>();
 
         for (RelationshipChronicleBI rel : getRelsIncoming()) {
             for (RelationshipVersionBI relv : rel.getVersions(vc)) {
@@ -741,7 +742,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     @Override
     public Collection<? extends ConceptVersionBI> getRelsIncomingOriginsActive(NidSetBI typeNids)
             throws IOException, ContradictionException {
-        HashSet<ConceptVersionBI> conceptSet = new HashSet<ConceptVersionBI>();
+        HashSet<ConceptVersionBI> conceptSet = new HashSet<>();
 
         for (RelationshipChronicleBI rel : getRelsIncoming()) {
             for (RelationshipVersionBI relv : rel.getVersions(vc)) {
@@ -759,7 +760,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     @Override
     public Collection<? extends ConceptVersionBI> getRelsIncomingOriginsActiveIsa()
             throws IOException, ContradictionException {
-        HashSet<ConceptVersionBI> conceptSet = new HashSet<ConceptVersionBI>();
+        HashSet<ConceptVersionBI> conceptSet = new HashSet<>();
 
         for (RelationshipChronicleBI rel : getRelsIncoming()) {
             for (RelationshipVersionBI relv : rel.getVersions(vc)) {
@@ -776,7 +777,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
     @Override
     public Collection<? extends ConceptVersionBI> getRelsIncomingOriginsIsa() throws IOException {
-        HashSet<ConceptVersionBI> conceptSet = new HashSet<ConceptVersionBI>();
+        HashSet<ConceptVersionBI> conceptSet = new HashSet<>();
 
         for (RelationshipChronicleBI rel : getRelsIncoming()) {
             for (RelationshipVersionBI relv : rel.getVersions()) {
@@ -797,7 +798,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
         Collection<? extends RelationshipChronicleBI> allRels = concept.getRelsOutgoing();
         Collection<RelationshipChronicleBI> results =
-                new ArrayList<RelationshipChronicleBI>(allRels.size());
+                new ArrayList<>(allRels.size());
 
         switch (vc.getRelAssertionType()) {
             case INFERRED:
@@ -837,7 +838,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     @Override
     public Collection<? extends RelationshipVersionBI> getRelsOutgoingActive()
             throws IOException, ContradictionException {
-        Collection<RelationshipVersionBI> returnValues = new ArrayList<RelationshipVersionBI>();
+        Collection<RelationshipVersionBI> returnValues = new ArrayList<>();
 
         for (RelationshipChronicleBI rel : getRelsOutgoing()) {
             returnValues.addAll(rel.getVersions(vc));
@@ -849,7 +850,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     @Override
     public Collection<? extends RelationshipVersionBI> getRelsOutgoingActiveIsa()
             throws IOException, ContradictionException {
-        Collection<RelationshipVersionBI> returnValues = new ArrayList<RelationshipVersionBI>();
+        Collection<RelationshipVersionBI> returnValues = new ArrayList<>();
 
         for (RelationshipChronicleBI rel : getRelsOutgoing()) {
             for (RelationshipVersionBI rv : rel.getVersions(vc)) {
@@ -864,7 +865,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
     @Override
     public Collection<? extends ConceptVersionBI> getRelsOutgoingDestinations() throws IOException {
-        HashSet<ConceptVersionBI> conceptSet = new HashSet<ConceptVersionBI>();
+        HashSet<ConceptVersionBI> conceptSet = new HashSet<>();
 
         for (RelationshipChronicleBI rel : getRelsOutgoing()) {
             for (RelationshipVersionBI relv : rel.getVersions()) {
@@ -885,7 +886,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     @Override
     public Collection<? extends ConceptVersionBI> getRelsOutgoingDestinations(NidSetBI typeNids)
             throws IOException {
-        HashSet<ConceptVersionBI> conceptSet = new HashSet<ConceptVersionBI>();
+        HashSet<ConceptVersionBI> conceptSet = new HashSet<>();
 
         for (RelationshipChronicleBI rel : getRelsOutgoing()) {
             for (RelationshipVersionBI relv : rel.getVersions()) {
@@ -903,7 +904,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     @Override
     public Collection<? extends ConceptVersionBI> getRelsOutgoingDestinationsActive()
             throws IOException, ContradictionException {
-        HashSet<ConceptVersionBI> conceptSet = new HashSet<ConceptVersionBI>();
+        HashSet<ConceptVersionBI> conceptSet = new HashSet<>();
 
         for (RelationshipChronicleBI rel : getRelsOutgoing()) {
             for (RelationshipVersionBI relv : rel.getVersions(vc)) {
@@ -925,7 +926,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     @Override
     public Collection<? extends ConceptVersionBI> getRelsOutgoingDestinationsActive(NidSetBI typeNids)
             throws IOException, ContradictionException {
-        HashSet<ConceptVersionBI> conceptSet = new HashSet<ConceptVersionBI>();
+        HashSet<ConceptVersionBI> conceptSet = new HashSet<>();
 
         for (RelationshipChronicleBI rel : getRelsOutgoing()) {
             for (RelationshipVersionBI relv : rel.getVersions(vc)) {
@@ -943,7 +944,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     @Override
     public Collection<? extends ConceptVersionBI> getRelsOutgoingDestinationsActiveIsa()
             throws IOException, ContradictionException {
-        HashSet<ConceptVersionBI> conceptSet = new HashSet<ConceptVersionBI>();
+        HashSet<ConceptVersionBI> conceptSet = new HashSet<>();
 
         for (RelationshipChronicleBI rel : getRelsOutgoing()) {
             for (RelationshipVersionBI relv : rel.getVersions(vc)) {
@@ -960,7 +961,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
     @Override
     public Collection<? extends ConceptVersionBI> getRelsOutgoingDestinationsIsa() throws IOException {
-        HashSet<ConceptVersionBI> conceptSet = new HashSet<ConceptVersionBI>();
+        HashSet<ConceptVersionBI> conceptSet = new HashSet<>();
 
         for (RelationshipChronicleBI rel : getRelsOutgoing()) {
             for (RelationshipVersionBI relv : rel.getVersions()) {

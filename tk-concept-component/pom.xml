@@ -38,5 +38,11 @@
       <version>3.0.1-SNAPSHOT</version>
       <type>jar</type>
     </dependency>
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-core</artifactId>
+      <version>3.5.0</version>
+      <type>jar</type>
+    </dependency>
   </dependencies>
 </project>

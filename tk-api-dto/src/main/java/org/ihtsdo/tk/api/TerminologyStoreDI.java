@@ -19,7 +19,6 @@ import java.util.UUID;
 
 public interface TerminologyStoreDI extends TerminologyDI {
     enum DatabaseOptionPreferences {
-
         DB_LOCATION, BASELINE_FILES;
     }
    ComponentChroncileBI<?> getComponent(Collection<UUID> uuids) throws IOException;
@@ -80,8 +79,6 @@ public interface TerminologyStoreDI extends TerminologyDI {
 
    int[] getPossibleChildren(int cNid, ViewCoordinate vc) throws IOException;
 
-   long getSequence();
-
    TerminologySnapshotDI getSnapshot(ViewCoordinate vc);
 
    TerminologyBuilderBI getTerminologyBuilder(EditCoordinate ec, ViewCoordinate vc);
@@ -102,5 +99,9 @@ public interface TerminologyStoreDI extends TerminologyDI {
    boolean hasUuid(UUID memberUUID);
    
    boolean hasUuid(List<UUID> memberUUIDs);
+
+   long getSequence();
+   
+   int getConceptCount() throws IOException;
 
 }

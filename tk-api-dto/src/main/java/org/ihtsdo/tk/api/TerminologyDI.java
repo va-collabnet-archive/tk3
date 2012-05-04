@@ -19,10 +19,14 @@ import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.tk.db.DbDependency;
 
 public interface TerminologyDI {
-
+    
    void addUncommitted(ConceptChronicleBI cc) throws IOException;
 
    void addUncommitted(ConceptVersionBI cv) throws IOException;
+
+   void addUncommittedNoChecks(ConceptChronicleBI cc) throws IOException;
+
+   void addUncommittedNoChecks(ConceptVersionBI cv) throws IOException;
 
    void commit() throws IOException;
 
@@ -63,7 +67,7 @@ public interface TerminologyDI {
      */
     void addVetoablePropertyChangeListener(TerminologyStoreDI.CONCEPT_EVENT pce, VetoableChangeListener l);
 
-    void forget(ConAttrVersionBI attr) throws IOException;
+    boolean forget(ConAttrVersionBI attr) throws IOException;
 
     void forget(ConceptChronicleBI concept) throws IOException;
 

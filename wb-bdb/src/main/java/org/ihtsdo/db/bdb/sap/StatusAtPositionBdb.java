@@ -12,7 +12,6 @@ import com.sleepycat.je.OperationStatus;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
@@ -20,7 +19,6 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.db.bdb.ComponentBdb;
-import org.ihtsdo.db.bdb.computer.version.PositionMapper;
 import org.ihtsdo.temp.AceLog;
 import org.ihtsdo.tk.api.*;
 
@@ -34,10 +32,8 @@ public class StatusAtPositionBdb extends ComponentBdb {
     private static int initialPosition = -1;
     private static PositionArrayBinder positionArrayBinder =
             new PositionArrayBinder();
-    private static ConcurrentHashMap<PositionBI, PositionMapper> mapperCache =
-            new ConcurrentHashMap<PositionBI, PositionMapper>();
     private static final Map<UncommittedStatusForPath, Integer> uncomittedStatusPathEntries =
-            new ConcurrentHashMap<UncommittedStatusForPath, Integer>();
+            new ConcurrentHashMap<>();
     private static CountDownLatch setupLatch = new CountDownLatch(1);
     private static AtomicInteger misses = new AtomicInteger(0);
     private static AtomicInteger hits = new AtomicInteger(0);
@@ -80,7 +76,6 @@ public class StatusAtPositionBdb extends ComponentBdb {
                 }
 
                 uncomittedStatusPathEntries.clear();
-                mapperCache.clear();
             } finally {
                 expandPermit.release();
             }
@@ -97,10 +92,6 @@ public class StatusAtPositionBdb extends ComponentBdb {
         }
     }
 
-    public void clearMapperCache() {
-        mapperCache.clear();
-    }
-
     @Override
     public void close() {
         try {
@@ -113,8 +104,6 @@ public class StatusAtPositionBdb extends ComponentBdb {
         initialPosition = -1;
         positionArrayBinder =
                 new PositionArrayBinder();
-        mapperCache =
-                new ConcurrentHashMap<PositionBI, PositionMapper>();
         uncomittedStatusPathEntries.clear();
         setupLatch = new CountDownLatch(1);
         misses = new AtomicInteger(0);
@@ -138,7 +127,6 @@ public class StatusAtPositionBdb extends ComponentBdb {
                 }
 
                 uncomittedStatusPathEntries.clear();
-                mapperCache.clear();
             } finally {
                 expandPermit.release();
             }
@@ -236,7 +224,6 @@ public class StatusAtPositionBdb extends ComponentBdb {
         misses.set(0);
         initialPosition = -1;
         currentPaths = null;
-        mapperCache.clear();
         
     }
 
@@ -256,39 +243,6 @@ public class StatusAtPositionBdb extends ComponentBdb {
             super.sync();
         } finally {
             expandPermit.release();
-        }
-    }
-
-    /**
-    * TODO make this trim algorithm more intelligent.
-    */
-    private static void trimCache() {
-        boolean continueTrim = mapperCache.size() > 1;
-        long now = System.currentTimeMillis();
-
-        while (continueTrim) {
-            Entry<PositionBI, PositionMapper> looser = null;
-
-            for (Entry<PositionBI, PositionMapper> entry : mapperCache.entrySet()) {
-                if (looser == null) {
-                    looser = entry;
-                } else {
-                    if (looser.getValue().getLastRequestTime() > entry.getValue().getLastRequestTime()) {
-                        looser = entry;
-                    } else if (looser.getValue().getLastRequestTime() == entry.getValue().getLastRequestTime()) {
-                        if (looser.getValue().getQueryCount() > entry.getValue().getQueryCount()) {
-                            looser = entry;
-                        }
-                    }
-                }
-            }
-
-            if (now - looser.getValue().getLastRequestTime() > 1000) {
-                mapperCache.remove(looser.getKey());
-                continueTrim = mapperCache.size() > 1;
-            } else {
-                continueTrim = false;
-            }
         }
     }
 
@@ -328,28 +282,6 @@ public class StatusAtPositionBdb extends ComponentBdb {
         }
 
         return initialPosition;
-    }
-
-    public PositionMapper getMapper(PositionBI position) {
-        PositionMapper pm = mapperCache.get(position);
-
-        if (pm != null) {
-            return pm;
-        }
-
-        pm = new PositionMapper(position);
-
-        PositionMapper existing = mapperCache.putIfAbsent(position, pm);
-
-        if (existing != null) {
-            pm = existing;
-        } else {
-            pm.queueForSetup();
-        }
-
-        trimCache();
-
-        return pm;
     }
 
     private int getMutableIndex(int index) {
@@ -428,7 +360,6 @@ public class StatusAtPositionBdb extends ComponentBdb {
 
                     int statusAtPositionNid = sequence.getAndIncrement();
 
-                    mapperCache.clear();
                     mutableArray.setSize(getMutableIndex(statusAtPositionNid) + 1);
                     mutableArray.statusNids[getMutableIndex(statusAtPositionNid)] = statusNid;
                     mutableArray.authorNids[getMutableIndex(statusAtPositionNid)] = authorNid;
@@ -463,7 +394,6 @@ public class StatusAtPositionBdb extends ComponentBdb {
 
             int statusAtPositionNid = sequence.getAndIncrement();
 
-            mapperCache.clear();
             mutableArray.setSize(getMutableIndex(statusAtPositionNid) + 1);
             mutableArray.statusNids[getMutableIndex(statusAtPositionNid)] = statusNid;
             mutableArray.authorNids[getMutableIndex(statusAtPositionNid)] = authorNid;

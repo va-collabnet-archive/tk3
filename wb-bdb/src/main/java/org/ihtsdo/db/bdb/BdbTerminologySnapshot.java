@@ -227,8 +227,8 @@ public class BdbTerminologySnapshot implements TerminologySnapshotDI {
     }
 
     @Override
-    public void forget(ConAttrVersionBI attr) throws IOException {
-        store.forget(attr);
+    public boolean forget(ConAttrVersionBI attr) throws IOException {
+        return store.forget(attr);
     }
 
     @Override
@@ -290,4 +290,15 @@ public class BdbTerminologySnapshot implements TerminologySnapshotDI {
     public boolean satisfiesDependencies(Collection<DbDependency> dependencies) {
         return store.satisfiesDependencies(dependencies);
     }
+
+    @Override
+    public void addUncommittedNoChecks(ConceptChronicleBI cc) throws IOException {
+        BdbCommitManager.addUncommittedNoChecks(cc);
+    }
+
+    @Override
+    public void addUncommittedNoChecks(ConceptVersionBI cv) throws IOException {
+        BdbCommitManager.addUncommittedNoChecks(cv);
+    }
+    
 }

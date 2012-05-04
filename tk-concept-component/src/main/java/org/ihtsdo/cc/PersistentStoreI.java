@@ -17,7 +17,11 @@ package org.ihtsdo.cc;
 
 import java.io.IOException;
 import java.util.List;
+import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.api.TerminologyStoreDI;
+import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.tk.api.cs.ChangeSetPolicy;
+import org.ihtsdo.tk.api.cs.ChangeSetWriterThreading;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.dto.concept.component.TkRevision;
 
@@ -52,4 +56,13 @@ public interface PersistentStoreI extends TerminologyStoreDI {
 
     void forgetXrefPair(int nid, NidPair pair);
 
+    long getLastCancel();
+    long getLastCommit();
+    long incrementAndGetSequence();
+    void waitTillWritesFinished();
+
+    boolean commit(ConceptChronicleBI cc, ChangeSetPolicy changeSetPolicy,
+            ChangeSetWriterThreading changeSetWriterThreading) throws IOException;
+
+    int[] getDestRelOriginNids(int cNid, NidSetBI relTypes);
 }

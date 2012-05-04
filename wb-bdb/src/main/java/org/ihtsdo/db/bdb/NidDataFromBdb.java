@@ -1,5 +1,6 @@
 package org.ihtsdo.db.bdb;
 
+import org.ihtsdo.concept.I_GetNidData;
 import java.io.IOException;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;

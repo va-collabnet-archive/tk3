@@ -9,7 +9,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -19,7 +18,7 @@ import org.ihtsdo.concept.component.attributes.ConceptAttributes;
 import org.ihtsdo.concept.component.attributes.ConceptAttributesRevision;
 import org.ihtsdo.concept.component.description.Description;
 import org.ihtsdo.concept.component.description.DescriptionRevision;
-import org.ihtsdo.bdb.concept.component.IdentifierSet;
+import org.ihtsdo.concept.component.IdentifierSet;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.concept.component.refex.RefexMember;
 import org.ihtsdo.concept.component.refex.RefexRevision;
@@ -48,13 +47,10 @@ public class BdbCommitManager {
     public static String pluginRoot = "plugins";
     private static final AtomicInteger writerCount = new AtomicInteger(0);
     private static boolean writeChangeSets = true;
-    private static NidBitSetBI uncommittedDescNids = new IdentifierSet();
     private static NidBitSetBI uncommittedCNidsNoChecks = new IdentifierSet();
     private static NidBitSetBI uncommittedCNids = new IdentifierSet();
     private static boolean performCreationTests = true;
     private static boolean performCommitTests = true;
-    private static Semaphore luceneWriterPermit = new Semaphore(PERMIT_COUNT);
-    private static AtomicReference<Concept> lastUncommitted = new AtomicReference<>();
     private static long lastDoUpdate = Long.MIN_VALUE;
     private static long lastCommit = Bdb.gVersion.incrementAndGet();
     private static long lastCancel = Integer.MIN_VALUE;
@@ -63,7 +59,6 @@ public class BdbCommitManager {
             new ThreadGroup("commit manager threads");
     private static ExecutorService changeSetWriterService;
     private static ExecutorService dbWriterService;
-    private static ExecutorService luceneWriterService;
     /**
      * <p> listeners </p>
      */
@@ -119,9 +114,6 @@ public class BdbCommitManager {
     }
 
 
-    public static void addUncommittedDescNid(int dNid) {
-        uncommittedDescNids.setMember(dNid);
-    }
 
     public static void addUncommittedNoChecks(ConceptChronicleBI concept) {
         Concept c = (Concept) concept;
@@ -139,12 +131,7 @@ public class BdbCommitManager {
 
         if (concept.isUncommitted()) {
             uncommittedCNidsNoChecks.setMember(concept.getNid());
-            c = lastUncommitted.getAndSet((Concept) concept);
-
-            if (c == concept) {
-                c = null;
-            }
-        } else {
+         } else {
             c = (Concept) concept;
 
             removeUncommitted(c);
@@ -204,8 +191,6 @@ public class BdbCommitManager {
                     }
             }
         }
-
-        fireCancel();
     }
 
     public static boolean commit(ChangeSetPolicy changeSetPolicy,
@@ -225,10 +210,6 @@ public class BdbCommitManager {
                         } catch (PropertyVetoException ex) {
                             return false;
                         }
-                        flushUncommitted();
-
-                        int errorCount = 0;
-                        int warningCount = 0;
 
                         if (performCreationTests) {
                             NidBitSetItrBI uncommittedCNidItr = uncommittedCNids.iterator();
@@ -303,12 +284,7 @@ public class BdbCommitManager {
                             notifyCommit();
                             uncommittedCNids.clear();
                             uncommittedCNidsNoChecks = Bdb.getConceptDb().getEmptyIdSet();
-                            luceneWriterPermit.acquire();
-
-                            IdentifierSet descNidsToCommit = new IdentifierSet((IdentifierSet) uncommittedDescNids);
-
-                            uncommittedDescNids.clear();
-                            luceneWriterService.execute(new DescLuceneWriter(descNidsToCommit));
+                            LuceneManager.commitDescriptionsToLucene();
                         }
                         GlobalPropertyChange.firePropertyChange(TerminologyStoreDI.CONCEPT_EVENT.POST_COMMIT, null, allUncommitted);
 
@@ -324,7 +300,6 @@ public class BdbCommitManager {
             AceLog.getAppLog().alertAndLogException(e1);
         }
 
-        fireCommit();
 
         if (performCommit) {
             return true;
@@ -412,45 +387,19 @@ public class BdbCommitManager {
 
                 uncommittedCNids.andNot(commitSet);
                 uncommittedCNidsNoChecks.andNot(commitSet);
-                luceneWriterPermit.acquire();
-
-                IdentifierSet descNidsToCommit = new IdentifierSet();
-
-                for (int dnid : c.getDescNids()) {
-                    descNidsToCommit.setMember(dnid);
-                    uncommittedDescNids.setNotMember(dnid);
-                }
-
-                luceneWriterService.execute(new DescLuceneWriter(descNidsToCommit));
+                LuceneManager.commitDescriptionsToLucene(c);
             }
         } catch (Exception e1) {
             AceLog.getAppLog().alertAndLogException(e1);
         }
 
         GlobalPropertyChange.firePropertyChange(TerminologyStoreDI.CONCEPT_EVENT.POST_COMMIT, null, allUncommitted);
-        fireCommit();
-
+ 
         if (performCommit) {
             return true;
         }
 
         return false;
-    }
-
-    public static void fireCancel() {
- //
-    }
-
-    private static void fireCommit() {
-//
-    }
-
-    private static void flushUncommitted() throws InterruptedException {
-        Concept c = lastUncommitted.getAndSet(null);
-
-        if (c != null) {
-            writeUncommitted(c);
-        }
     }
 
     public static boolean forget(ConAttrVersionBI attr) throws IOException {
@@ -717,8 +666,6 @@ public class BdbCommitManager {
                 new NamedThreadFactory(commitManagerThreadGroup, "Change set writer"));
         dbWriterService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),
                 new NamedThreadFactory(commitManagerThreadGroup, "Db writer"));
-        luceneWriterService = Executors.newFixedThreadPool(1,
-                new NamedThreadFactory(commitManagerThreadGroup, "Lucene writer"));
     }
 
     public static void resumeChangeSetWriters() {
@@ -731,10 +678,6 @@ public class BdbCommitManager {
         dbWriterService.shutdown();
         AceLog.getAppLog().info("Awaiting termination of dbWriterService.");
         dbWriterService.awaitTermination(90, TimeUnit.MINUTES);
-        AceLog.getAppLog().info("Shutting down luceneWriterService.");
-        luceneWriterService.shutdown();
-        AceLog.getAppLog().info("Awaiting termination of luceneWriterService.");
-        luceneWriterService.awaitTermination(90, TimeUnit.MINUTES);
         AceLog.getAppLog().info("Shutting down changeSetWriterService.");
         changeSetWriterService.shutdown();
         AceLog.getAppLog().info("Awaiting termination of changeSetWriterService.");
@@ -755,10 +698,6 @@ public class BdbCommitManager {
                 dbWriterPermit.release(PERMIT_COUNT);
             }
         }
-    }
-
-    public static void writeImmediate(Concept concept) {
-        new ConceptWriter(concept).run();
     }
 
     private static void writeUncommitted(Concept c) throws InterruptedException {
@@ -862,48 +801,6 @@ public class BdbCommitManager {
                 dbWriterPermit.release();
                 writerCount.decrementAndGet();
             }
-        }
-    }
-
-    private static class DescLuceneWriter implements Runnable {
-
-        private int batchSize = 200;
-        private IdentifierSet descNidsToWrite;
-
-        //~--- constructors -----------------------------------------------------
-        public DescLuceneWriter(IdentifierSet descNidsToCommit) {
-            super();
-            this.descNidsToWrite = descNidsToCommit;
-        }
-
-        //~--- methods ----------------------------------------------------------
-        @Override
-        public void run() {
-            try {
-                ArrayList<Description> toIndex = new ArrayList<>(batchSize + 1);
-                NidBitSetItrBI idItr = descNidsToWrite.iterator();
-                int count = 0;
-
-                while (idItr.next()) {
-                    count++;
-
-                    Description d = (Description) Bdb.getComponent(idItr.nid());
-
-                    toIndex.add(d);
-
-                    if (count > batchSize) {
-                        count = 0;
-                        LuceneManager.writeToLucene(toIndex);
-                        toIndex = new ArrayList<>(batchSize + 1);
-                    }
-                }
-
-                LuceneManager.writeToLucene(toIndex);
-            } catch (Exception e) {
-                AceLog.getAppLog().alertAndLogException(e);
-            }
-
-            luceneWriterPermit.release();
         }
     }
 

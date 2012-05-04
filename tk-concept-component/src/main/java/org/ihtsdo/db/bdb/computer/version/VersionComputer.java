@@ -8,21 +8,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.ihtsdo.cc.PositionSetReadOnly;
 
 import org.ihtsdo.concept.component.ConceptComponent;
-import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.cc.ReferenceConcepts;
-import org.ihtsdo.db.bdb.computer.version.PositionMapper.RELATIVE_POSITION;
-import org.ihtsdo.temp.AceLog;
-import org.ihtsdo.temp.I_AmTypedPart;
-import org.ihtsdo.temp.PositionSetReadOnly;
-import org.ihtsdo.tk.api.ContradictionManagerBI;
-import org.ihtsdo.tk.api.NidSet;
-import org.ihtsdo.tk.api.NidSetBI;
-import org.ihtsdo.tk.api.PositionBI;
-import org.ihtsdo.tk.api.PositionSetBI;
-import org.ihtsdo.tk.api.Precedence;
-import org.ihtsdo.tk.api.RelAssertionType;
+import org.ihtsdo.db.bdb.computer.version.PositionMapperBI.RelativePosition;
+import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.coordinate.PositionSet;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.id.IdBI;
@@ -32,8 +26,30 @@ import org.ihtsdo.tk.spec.ValidationException;
 
 public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
 
+    protected static final Logger logger = Logger.getLogger(VersionComputer.class.getName());
+    private static ConcurrentHashMap<PositionBI, PositionMapperBI> mapperCache =
+            new ConcurrentHashMap<>();
+
+    public static PositionMapperBI getMapper(PositionBI position) {
+        PositionMapperBI pm = mapperCache.get(position);
+
+        if (pm != null) {
+            return pm;
+        }
+
+        pm = new RelativePositionComputer(position);
+
+        PositionMapperBI existing = mapperCache.putIfAbsent(position, pm);
+
+        if (existing != null) {
+            pm = existing;
+        }
+
+        return pm;
+    }
+
     private void handlePart(HashSet<V> partsForPosition,
-            PositionMapper mapper, V part,
+            PositionMapperBI mapper, V part,
             Precedence precedencePolicy,
             ContradictionManagerBI contradictionManager,
             NidSetBI allowedStatus) throws RuntimeException {
@@ -71,21 +87,21 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
                     // Duplicate values encountered.
                     errorCount++;
                     if (errorCount < 5) {
-                        AceLog.getAppLog().warning(
-                                RELATIVE_POSITION.EQUAL
+                        logger.log(
+                                Level.WARNING, "{0}"
                                 + " should never happen. "
-                                + "Data is malformed. sap: " + part.getSapNid()
-                                + " Part:\n"
-                                + part
-                                + " \n  Part to test: \n"
-                                + prevPartToTest);
+                                + "Data is malformed. sap: {1} Part:\n{2} \n  Part to test: \n{3}",
+                                new Object[]{RelativePosition.EQUAL,
+                                    part.getSapNid(),
+                                    part,
+                                    prevPartToTest});
                     }
                     break;
                 case UNREACHABLE:
                     // Should have failed mapper.onRoute(part)
                     // above.
                     throw new RuntimeException(
-                            RELATIVE_POSITION.UNREACHABLE
+                            RelativePosition.UNREACHABLE
                             + " should never happen.");
             }
         }
@@ -152,12 +168,12 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
 
         if (positions != null && !positions.isEmpty()) {
             for (PositionBI position : positions) {
-                PositionMapper mapper = Bdb.getSapDb().getMapper(position);
+                PositionMapperBI mapper = getMapper(position);
                 for (IdBI part : versions) {
                     if (part.getTime() > Long.MIN_VALUE
                             && (authorityNidsFilterList.isEmpty()
                             || authorityNidsFilterList.contains(part.getAuthorityNid()))) {
-                        if (mapper.idsOnRoute(part)) {
+                        if (mapper.onRoute(part)) {
                             specifiedIdParts.add(part);
                         }
                     }
@@ -228,11 +244,11 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
     /**
      *
      * @param allowedStatus
-     *            <code>null</code> is a wildcard.
+     * <code>null</code> is a wildcard.
      * @param allowedTypes
-     *            <code>null</code> is a wildcard.
+     * <code>null</code> is a wildcard.
      * @param positions
-     *            <code>null</code> is a wildcard.
+     * <code>null</code> is a wildcard.
      * @param specifiedVersions
      * @param addUncommitted
      * @param versions
@@ -253,7 +269,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
                     contradictionManager, null);
         }
     }
-    
+
     public void addSpecifiedVersions(NidSetBI allowedStatus,
             NidSetBI allowedTypes, PositionSetBI positions,
             List<V> specifiedVersions, List<? extends V> versions,
@@ -264,31 +280,33 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
             addSpecifiedVersionsNullPositions(allowedStatus, allowedTypes,
                     specifiedVersions, versions, precedencePolicy,
                     contradictionManager, null);
-        } else if(cutoffTime != 0){
+        } else if (cutoffTime != 0) {
             //add more filters here if needed
             InferredFilter[] filters = new InferredFilter[1];
             filters[0] = new CutoffFilter(cutoffTime);
             addSpecifiedVersionsWithCutoff(allowedStatus, allowedTypes,
                     positions, specifiedVersions, versions, precedencePolicy,
-                    contradictionManager,filters);
-        }else {
+                    contradictionManager, filters);
+        } else {
             addSpecifiedVersionsWithPositions(allowedStatus, allowedTypes,
                     positions, specifiedVersions, versions, precedencePolicy,
                     contradictionManager, null);
         }
     }
-    
-    static class CutoffFilter extends InferredFilter{
+
+    static class CutoffFilter extends InferredFilter {
+
         Long cutoffTime;
-        private CutoffFilter(long cutoffTime){
+
+        private CutoffFilter(long cutoffTime) {
             this.cutoffTime = cutoffTime;
         }
-        
+
         @Override
         public boolean pass(ConceptComponent<?, ?>.Version part) {
-            if(part.getTime() > cutoffTime){
+            if (part.getTime() > cutoffTime) {
                 return false;
-            }else if(part.getTime() < cutoffTime){
+            } else if (part.getTime() < cutoffTime) {
                 return true;
             }
             return false;
@@ -316,7 +334,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
                 try {
                     NidSetBI tempInferred = new NidSet();
                     tempInferred.add(SnomedMetadataRf2.INFERRED_RELATIONSHIP_RF2.getLenient().getNid());
-                    
+
                     inferredNidSet = tempInferred;
                 } catch (ValidationException ex) {
                     throw new RuntimeException(ex);
@@ -354,7 +372,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
         HashSet<V> partsToAdd = new HashSet<>();
         for (PositionBI p : positions) {
             HashSet<V> partsForPosition = new HashSet<>();
-            PositionMapper mapper = Bdb.getSapDb().getMapper(p);
+            PositionMapperBI mapper = getMapper(p);
             nextpart:
             for (V part : versions) {
                 if (part.getTime() == Long.MIN_VALUE) {
@@ -367,7 +385,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
                 }
                 if (allowedTypes != null) {
                     if (allowedTypes.contains(
-                            ((I_AmTypedPart) part).getTypeNid()) == false) {
+                            ((TypedComponentVersionBI) part).getTypeNid()) == false) {
                         if (mapper.onRoute(part)) {
                             handlePart(partsForPosition, mapper, part,
                                     precedencePolicy, contradictionManager,
@@ -414,7 +432,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
         HashSet<V> partsToAdd = new HashSet<>();
         for (PositionBI p : positions) {
             HashSet<V> partsForPosition = new HashSet<>();
-            PositionMapper mapper = Bdb.getSapDb().getMapper(p);
+            PositionMapperBI mapper = getMapper(p);
             nextpart:
             for (V part : versions) {
                 if (part.getTime() == Long.MIN_VALUE) {
@@ -425,7 +443,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
                 }
                 if (allowedTypes != null) {
                     if (allowedTypes.contains(
-                            ((I_AmTypedPart) part).getTypeNid()) == false) {
+                            ((TypedComponentVersionBI) part).getTypeNid()) == false) {
                         if (mapper.onRoute(part)) {
                             handlePart(partsForPosition, mapper, part,
                                     precedencePolicy, contradictionManager,
@@ -496,7 +514,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
             }
             if (allowedTypes != null
                     && allowedTypes.contains(
-                    ((I_AmTypedPart) part).getTypeNid()) == false) {
+                    ((TypedComponentVersionBI) part).getTypeNid()) == false) {
                 rejectedVersions.add(part);
                 continue nextpart;
             }

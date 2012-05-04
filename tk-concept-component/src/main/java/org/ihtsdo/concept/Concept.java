@@ -2,14 +2,14 @@ package org.ihtsdo.concept;
 
 //~--- non-JDK imports --------------------------------------------------------
 import org.ihtsdo.cc.concept.ComponentComparator;
-import org.ihtsdo.bdb.concept.I_ManageConceptData;
-import org.ihtsdo.bdb.concept.ConceptDataSimpleReference;
 import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListSet;
-import javax.lang.model.type.ReferenceType;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jsr166y.ConcurrentReferenceHashMap;
+import org.ihtsdo.cc.LanguageSortPrefs.LANGUAGE_SORT_PREF;
 import org.ihtsdo.concept.component.ConceptComponent;
 import org.ihtsdo.concept.component.attributes.ConceptAttributes;
 import org.ihtsdo.concept.component.description.Description;
@@ -17,15 +17,11 @@ import org.ihtsdo.concept.component.description.Description.Version;
 import org.ihtsdo.cc.concept.component.processor.AdjudicationAnalogCreator;
 import org.ihtsdo.concept.component.processor.VersionFlusher;
 import org.ihtsdo.concept.component.refex.RefexMember;
-import org.ihtsdo.bdb.concept.component.RefexMemberFactory;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.concept.component.relationship.Relationship;
 import org.ihtsdo.concept.component.relationship.RelationshipRevision;
 import org.ihtsdo.concept.component.relationship.group.RelGroupChronicle;
 import org.ihtsdo.concept.component.relationship.group.RelGroupVersion;
-import org.ihtsdo.db.bdb.Bdb;
-import org.ihtsdo.db.bdb.BdbCommitManager;
-import org.ihtsdo.db.bdb.BdbMemoryMonitor.LowMemoryListener;
 import org.ihtsdo.db.bdb.computer.kindof.KindOfComputer;
 import org.ihtsdo.db.change.LastChange;
 import org.ihtsdo.cc.NidPair;
@@ -34,11 +30,7 @@ import org.ihtsdo.cc.NidPairForRel;
 import org.ihtsdo.cc.ReferenceConcepts;
 import org.ihtsdo.concept.component.media.Media;
 import org.ihtsdo.concept.component.refex.RefexMemberFactory;
-import org.ihtsdo.db.util.ReferenceType;
 import org.ihtsdo.lucene.LuceneManager;
-import org.ihtsdo.temp.AceLog;
-import org.ihtsdo.temp.I_ShowActivity;
-import org.ihtsdo.temp.LanguageSortPrefs.LANGUAGE_SORT_PREF;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.blueprint.ConceptCB;
 import org.ihtsdo.tk.api.blueprint.InvalidCAB;
@@ -74,6 +66,8 @@ import org.ihtsdo.tk.hash.Hashcode;
 
 public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
+    protected static final Logger logger = Logger.getLogger(Concept.class.getName());
+
     public static ReferenceType refType = ReferenceType.WEAK;
     private static int fsXmlDescNid = Integer.MIN_VALUE;
     private static int fsDescNid = Integer.MIN_VALUE;
@@ -85,7 +79,6 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
     //~--- static initializers -------------------------------------------------
     static {
-        Bdb.addMemoryMonitorListener(new ConceptLowMemoryListener());
         init();
     }
     //~--- fields --------------------------------------------------------------
@@ -162,31 +155,25 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         LastChange.touchComponents(getConceptNidsAffectedByCommit());
         data.cancel();
 
-        if (BdbCommitManager.forget(getConceptAttributes())) {
-            Bdb.getConceptDb().forget(this);
+        if (P.s.forget(getConceptAttributes())) {
             canceled = true;
         }
 
         try {
             KindOfComputer.updateIsaCache(this.getNid());
         } catch (Exception e) {
-            AceLog.getAppLog().alertAndLogException(e);
+            logger.log(Level.SEVERE, "", e);
         }
-
-        BdbCommitManager.fireCancel();
     }
 
-    private void collectPossibleKindOf(I_ShowActivity activity, NidSetBI isATypes,
+    private void collectPossibleKindOf(NidSetBI isATypes,
             NidBitSetBI possibleKindOfConcepts, int cNid)
             throws IOException {
-        for (int cNidForOrigin : Bdb.xref.getDestRelOrigins(cNid, isATypes)) {
-            if ((activity != null) && activity.isCanceled()) {
-                return;
-            }
-
+        for (int cNidForOrigin : P.s.getDestRelOriginNids(cNid, isATypes)) {
+ 
             if (possibleKindOfConcepts.isMember(cNidForOrigin) == false) {
                 possibleKindOfConcepts.setMember(cNidForOrigin);
-                collectPossibleKindOf(activity, isATypes, possibleKindOfConcepts, cNidForOrigin);
+                collectPossibleKindOf(isATypes, possibleKindOfConcepts, cNidForOrigin);
             }
         }
     }
@@ -197,13 +184,13 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             throws IOException {
         this.modified();
 
-        return BdbCommitManager.commit(this, ChangeSetPolicy.get(changeSetPolicy),
+        return P.s.commit(this, ChangeSetPolicy.get(changeSetPolicy),
                 ChangeSetWriterThreading.get(changeSetWriterThreading));
     }
 
     public boolean commit(ChangeSetPolicy changeSetPolicy, ChangeSetWriterThreading changeSetWriterThreading)
             throws IOException {
-        return BdbCommitManager.commit(this, changeSetPolicy, changeSetWriterThreading);
+        return P.s.commit(this, changeSetPolicy, changeSetWriterThreading);
     }
 
     @Override
@@ -328,7 +315,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         Concept c = get(conceptNid);
 
         mergeWithEConcept(eConcept, c, true);
-        BdbCommitManager.addUncommittedNoChecks(c);
+        P.s.addUncommittedNoChecks(c);
 
         return c;
     }
@@ -439,11 +426,11 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
                     int iNid = P.s.getNidForUuids(eImg.primordialUuid);
 
                     if (currentImageNids.contains(iNid)) {
-                        Image img = c.getImage(iNid);
+                        Media img = c.getImage(iNid);
 
-                        img.merge(new Image(eImg, c));
+                        img.merge(new Media(eImg, c));
                     } else {
-                        c.getImages().add(new Image(eImg, c));
+                        c.getImages().add(new Media(eImg, c));
                     }
                 }
             }
@@ -498,7 +485,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         try {
             KindOfComputer.updateIsaCache(c.getNid());
         } catch (Exception ex) {
-            AceLog.getAppLog().alertAndLogException(ex);
+            logger.log(Level.SEVERE, "is-a cache error", ex);
         }
 
         return c;
@@ -607,7 +594,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         }
 
         if (!cantResolve.isEmpty()) {
-            AceLog.getAppLog().alertAndLogException(new Exception("Can't resolve some annotations on import: "
+            logger.log(Level.SEVERE, "Can't resolve annotations on import", new Exception("Can't resolve some annotations on import: "
                     + cantResolve));
         }
     }
@@ -662,7 +649,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             buff.append(data.getImageNids());
             buff.append("\n");
         } catch (IOException e) {
-            AceLog.getAppLog().alertAndLogException(e);
+            logger.log(Level.SEVERE, "IOException ", e);
         }
 
         return buff.toString();
@@ -709,7 +696,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             return errString;
         }
        } catch (IOException ex) {
-            AceLog.getAppLog().nonModalAlertAndLogException(ex);
+            logger.log(Level.WARNING, "Exception getting text", ex);
             return ex.getLocalizedMessage();
         }
 
@@ -728,7 +715,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
             return "canceled concept";
         } catch (Exception ex) {
-            AceLog.getAppLog().alertAndLogException(ex);
+            logger.log(Level.SEVERE, "Exception in toString().", ex);
 
             return ex.toString();
         }
@@ -743,7 +730,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
             return "canceled concept";
         } catch (Exception ex) {
-            AceLog.getAppLog().alertAndLogException(ex);
+            logger.log(Level.SEVERE, "Exception in toUserSTring()", ex);
 
             return ex.toString();
         }
@@ -753,13 +740,13 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         for (Relationship r : getNativeSourceRels()) {
             NidPairForRel npr = NidPair.getTypeNidRelNidPair(r.getTypeNid(), r.getNid());
 
-            Bdb.addXrefPair(r.getDestinationNid(), npr);
+            P.s.addXrefPair(r.getDestinationNid(), npr);
 
             if (r.revisions != null) {
                 for (RelationshipRevision p : r.revisions) {
                     if (p.getTypeNid() != r.getTypeNid()) {
                         npr = NidPair.getTypeNidRelNidPair(p.getTypeNid(), r.getNid());
-                        Bdb.addXrefPair(r.getDestinationNid(), npr);
+                        P.s.addXrefPair(r.getDestinationNid(), npr);
                     }
                 }
             }
@@ -768,7 +755,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         for (RefexMember<?, ?> m : getRefsetMembers()) {
             NidPairForRefset npr = NidPair.getRefsetNidMemberNidPair(m.getRefexNid(), m.getNid());
 
-            Bdb.addXrefPair(m.referencedComponentNid, npr);
+            P.s.addXrefPair(m.referencedComponentNid, npr);
         }
     }
 
@@ -776,7 +763,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     public static Concept get(TkConcept eConcept) throws IOException {
         int conceptNid = P.s.getNidForUuids(eConcept.getConceptAttributes().getPrimordialComponentUuid());
 
-        Bdb.getNidCNidMap().setCNidForNid(conceptNid, conceptNid);
+        P.s.setConceptNidForNid(conceptNid, conceptNid);
         assert conceptNid != Integer.MAX_VALUE : "no conceptNid for uuids";
 
         Concept c = get(conceptNid);
@@ -785,7 +772,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         try {
             return mergeWithEConcept(eConcept, c, false);
         } catch (Throwable t) {
-            AceLog.getAppLog().severe("Cannot merge with eConcept: \n" + eConcept, t);
+            logger.log(Level.SEVERE, "Cannot merge with eConcept: \n" + eConcept, t);
         }
         return null;
     }
@@ -912,7 +899,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         }
 
         if (getImages() != null) {
-            for (Image i : getImages()) {
+            for (Media i : getImages()) {
                 sapNids.addAll(i.getComponentSapNids());
             }
         }
@@ -1083,7 +1070,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         return data;
     }
 
-    public Set<Integer> getDescNids() {
+    public Set<Integer> getDescNids() throws IOException {
         return data.getDescNids();
     }
     public long getDataVersion() {
@@ -1174,12 +1161,12 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         return conceptsCRHM.get(nid);
     }
 
-    public Image getImage(int nid) throws IOException {
+    public Media getImage(int nid) throws IOException {
         if (isCanceled()) {
             return null;
         }
 
-        for (Image i : data.getImages()) {
+        for (Media i : data.getImages()) {
             if (i.getNid() == nid) {
                 return i;
             }
@@ -1301,12 +1288,12 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public NidBitSetBI getPossibleKindOfConcepts(NidSetBI isATypes, I_ShowActivity activity)
+    public NidBitSetBI getPossibleKindOfConcepts(NidSetBI isATypes)
             throws IOException {
-        NidBitSetBI possibleKindOfConcepts = Bdb.getConceptDb().getEmptyIdSet();
+        NidBitSetBI possibleKindOfConcepts = P.s.getEmptyNidSet();
 
         possibleKindOfConcepts.setMember(getNid());
-        collectPossibleKindOf(activity, isATypes, possibleKindOfConcepts, nid);
+        collectPossibleKindOf(isATypes, possibleKindOfConcepts, nid);
 
         return possibleKindOfConcepts;
     }
@@ -1651,7 +1638,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             return getComponent(componentNid).getUUIDs();
         }
 
-        AceLog.getAppLog().alertAndLogException(new Exception("Null component: " + componentNid
+        logger.log(Level.SEVERE, "Null component for concept.", new Exception("Null component: " + componentNid
                 + " for concept: " + this.toLongString()));
 
         return new ArrayList<>();
@@ -1720,7 +1707,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     public boolean hasExtensionsForComponent(int nid) throws IOException {
-        List<NidPairForRefset> refsetPairs = Bdb.getRefsetPairs(nid);
+        List<NidPairForRefset> refsetPairs = P.s.getRefsetPairs(nid);
 
         if ((refsetPairs != null) && (refsetPairs.size() > 0)) {
             return true;
@@ -1799,7 +1786,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
     private static void setImagesFromEConcept(TkConcept eConcept, Concept c) throws IOException {
         for (TkMedia eImage : eConcept.getImages()) {
-            Image img = new Image(eImage, c);
+            Media img = new Media(eImage, c);
 
             c.data.add(img);
         }
@@ -1826,19 +1813,6 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             Relationship rel = new Relationship(eRel, c);
 
             c.data.add(rel);
-        }
-    }
-
-    //~--- inner classes -------------------------------------------------------
-    public static class ConceptLowMemoryListener implements LowMemoryListener {
-
-        @Override
-        public void memoryUsageLow(long usedMemory, long maxMemory) {
-            double percentageUsed = ((double) usedMemory) / maxMemory;
-
-            AceLog.getAppLog().warning("Memory low. Percent used: " + percentageUsed
-                    + " Concept trying to recover memory by dieting concepts. ");
-            new Thread(new Diet(maxMemory), "Diet").start();
         }
     }
 
@@ -1872,20 +1846,18 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
                 percentageUsed = ((double) usedMemory) / maxMemory;
 
                 if (percentageUsed > 0.85) {
-                    KindOfComputer.trimCache();
                     usedMemory = maxMemory - Runtime.getRuntime().freeMemory();
                     percentageUsed = ((double) usedMemory) / maxMemory;
-                    AceLog.getAppLog().info("Concept Diet + KindOfComputer.trimCache() finished recover memory. "
-                            + "Percent used: " + percentageUsed);
+                    logger.log(Level.INFO,"Concept Diet + KindOfComputer.trimCache() finished recover memory. " + "Percent used: {0}", percentageUsed);
                 } else {
-                    AceLog.getAppLog().info("Concept Diet finished recover memory. " + "Percent used: "
-                            + percentageUsed);
+                    logger.log(Level.INFO,"Concept Diet finished recover memory. "
+                            + "Percent used: {0}", percentageUsed);
                 }
             } else {
                 usedMemory = maxMemory - Runtime.getRuntime().freeMemory();
                 percentageUsed = ((double) usedMemory) / maxMemory;
-                AceLog.getAppLog().info("GC ONLY Diet finished recover memory. " + "Percent used: "
-                        + percentageUsed);
+                logger.log(Level.INFO,"GC ONLY Diet finished recover memory. "
+                        + "Percent used: {0}", percentageUsed);
             }
         }
     }

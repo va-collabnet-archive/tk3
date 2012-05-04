@@ -17,11 +17,10 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.ihtsdo.concept.Concept;
 import org.ihtsdo.bdb.concept.ConceptBdb;
-import org.ihtsdo.bdb.concept.OFFSETS;
+import org.ihtsdo.concept.OFFSETS;
 import org.ihtsdo.db.bdb.BdbMemoryMonitor.LowMemoryListener;
 import org.ihtsdo.db.bdb.computer.kindof.IsaCache;
 import org.ihtsdo.db.bdb.computer.kindof.KindOfComputer;
-import org.ihtsdo.db.bdb.computer.version.PositionMapper;
 import org.ihtsdo.db.bdb.id.NidCNidMapBdb;
 import org.ihtsdo.db.bdb.sap.StatusAtPositionBdb;
 import org.ihtsdo.db.bdb.xref.Xref;
@@ -252,7 +251,6 @@ public class Bdb {
                     new NamedThreadFactory(dbdThreadGroup, "Sync service"));
 
             BdbCommitManager.reset();
-            PositionMapper.reset();
             NidDataFromBdb.resetExecutorPool();
             BdbPathManager.reset();
             
@@ -568,7 +566,6 @@ public class Bdb {
 
 
                 activity.setProgressInfoLower("5/11: Starting PositionMapper close.");
-                PositionMapper.close();
                 activity.setProgressInfoLower("6/11: Canceling uncommitted changes.");
                 BdbCommitManager.cancel();
                 activity.setProgressInfoLower("7/11: Starting BdbCommitManager shutdown.");

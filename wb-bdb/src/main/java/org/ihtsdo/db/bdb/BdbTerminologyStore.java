@@ -32,8 +32,8 @@ import org.ihtsdo.db.change.LastChange;
 import org.ihtsdo.helper.thread.NamedThreadFactory;
 import org.ihtsdo.lucene.LuceneManager;
 import org.ihtsdo.temp.AceLog;
-import org.ihtsdo.temp.PositionSetReadOnly;
-import org.ihtsdo.temp.SearchResult;
+import org.ihtsdo.cc.PositionSetReadOnly;
+import org.ihtsdo.lucene.SearchResult;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.TerminologyDI.CONCEPT_EVENT;
 import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
@@ -107,8 +107,12 @@ public class BdbTerminologyStore implements PersistentStoreI {
     }
 
     @Override
-    public void forget(ConAttrVersionBI attr) throws IOException {
-        BdbCommitManager.forget(attr);
+    public boolean forget(ConAttrVersionBI attr) throws IOException {
+        boolean forgotten = BdbCommitManager.forget(attr);
+        if (forgotten) {
+            Bdb.getConceptDb().forget((Concept)attr.getEnclosingConcept());
+        }
+        return forgotten;
     }
 
     @Override
@@ -927,6 +931,51 @@ public class BdbTerminologyStore implements PersistentStoreI {
     @Override
     public void forgetXrefPair(int nid, NidPair pair) {
         Bdb.forgetXrefPair(nid, pair);
+    }
+
+    @Override
+    public long getLastCommit() {
+        return BdbCommitManager.getLastCommit();
+    }
+
+    @Override
+    public long getLastCancel() {
+        return BdbCommitManager.getLastCancel();
+    }
+
+    @Override
+    public long incrementAndGetSequence() {
+        return Bdb.gVersion.incrementAndGet();
+    }
+
+    @Override
+    public void addUncommittedNoChecks(ConceptChronicleBI cc) throws IOException {
+        BdbCommitManager.addUncommittedNoChecks(cc);
+    }
+
+    @Override
+    public void addUncommittedNoChecks(ConceptVersionBI cv) throws IOException {
+        BdbCommitManager.addUncommittedNoChecks(cv);
+    }
+
+    @Override
+    public int getConceptCount() throws IOException {
+       return Bdb.getConceptDb().getCount();
+    }
+
+    @Override
+    public void waitTillWritesFinished() {
+        BdbCommitManager.waitTillWritesFinished();
+    }
+
+    @Override
+    public boolean commit(ConceptChronicleBI cc, ChangeSetPolicy changeSetPolicy, ChangeSetWriterThreading changeSetWriterThreading) throws IOException {
+        return BdbCommitManager.commit((Concept) cc, changeSetPolicy, changeSetWriterThreading);
+    }
+
+    @Override
+    public int[] getDestRelOriginNids(int cNid, NidSetBI relTypes) {
+        return Bdb.xref.getDestRelOrigins(cNid, relTypes);
     }
 
 }
