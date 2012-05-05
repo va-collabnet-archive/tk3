@@ -12,7 +12,7 @@ import org.ihtsdo.cc.identifier.IdentifierVersionString;
 import org.ihtsdo.cc.identifier.IdentifierVersionUuid;
 import org.ihtsdo.cc.refex.RefexMember;
 import org.ihtsdo.cc.relationship.Relationship;
-import org.ihtsdo.cs.I_ComputeEConceptForChangeSet;
+import org.ihtsdo.cs.ComputeEConceptForChangeSetI;
 import org.ihtsdo.cc.ReferenceConcepts;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
@@ -36,10 +36,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.media.Media;
-import org.ihtsdo.bdb.Bdb;
-import org.ihtsdo.bdb.temp.AceLog;
+import org.ihtsdo.cs.ChangeSetWriterHandler;
 import org.ihtsdo.tk.api.id.LongIdBI;
 import org.ihtsdo.tk.api.id.StringIdBI;
 import org.ihtsdo.tk.api.id.UuidIdBI;
@@ -51,7 +51,7 @@ import org.ihtsdo.tk.dto.concept.component.identifier.TkIdentifierUuid;
 import org.ihtsdo.tk.dto.concept.component.media.TkMediaRevision;
 import org.ihtsdo.tk.dto.concept.component.relationship.TkRelationshipRevision;
 
-public class EConceptChangeSetComputer implements I_ComputeEConceptForChangeSet {
+public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
 
     private int minSapNid = Integer.MIN_VALUE;
     private int maxSapNid = Integer.MAX_VALUE;
@@ -82,7 +82,7 @@ public class EConceptChangeSetComputer implements I_ComputeEConceptForChangeSet 
 
             case MUTABLE_ONLY:
                 maxSapNid = Integer.MAX_VALUE;
-                minSapNid = Bdb.getSapDb().getReadOnlyMax() + 1;
+                minSapNid = P.s.getMaxReadOnlySap() + 1;
 
                 break;
 
@@ -219,7 +219,7 @@ public class EConceptChangeSetComputer implements I_ComputeEConceptForChangeSet 
                                         setupFirstVersion(eMember, v);
                                     }
                                 } catch (Exception e) {
-                                    AceLog.getAppLog().info("Failed in getting Concept for: " + member.toString() + " and " + v.toString());
+                                    ChangeSetWriterHandler.logger.log(Level.WARNING, "Failed in getting Concept for: " + member.toString() + " and " + v.toString(), e);
                                 }
                             } else {
                                 TkRevision eRevision = v.getERefsetRevision();
@@ -275,7 +275,7 @@ public class EConceptChangeSetComputer implements I_ComputeEConceptForChangeSet 
                                 setupRevision(ecr, v, ecv);
                             }
                         } catch (AssertionError e) {
-                            AceLog.getAppLog().alertAndLogException(new Exception(e.getLocalizedMessage() + "\n\n"
+                            ChangeSetWriterHandler.logger.log(Level.SEVERE, e.getLocalizedMessage(), new Exception(e.getLocalizedMessage() + "\n\n"
                                     + c.toLongString(), e));
 
                             throw e;
@@ -418,7 +418,7 @@ public class EConceptChangeSetComputer implements I_ComputeEConceptForChangeSet 
     //~--- get methods ---------------------------------------------------------
 
     /*
-     * (non-Javadoc) @see org.ihtsdo.cs.I_ComputeEConceptForChangeSet#getEConcept(org.ihtsdo.concept .Concept)
+     * (non-Javadoc) @see org.ihtsdo.cs.ComputeEConceptForChangeSetI#getEConcept(org.ihtsdo.concept .Concept)
      */
     @Override
     public TkConcept getEConcept(Concept c) throws IOException {

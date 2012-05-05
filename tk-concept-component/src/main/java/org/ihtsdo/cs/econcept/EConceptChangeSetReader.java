@@ -12,41 +12,30 @@ import java.util.Date;
 import java.util.logging.Level;
 
 import org.ihtsdo.cc.concept.Concept;
-import org.ihtsdo.bdb.Bdb;
-import org.ihtsdo.bdb.BdbProperty;
 
 import org.ihtsdo.helper.time.TimeHelper;
-import org.ihtsdo.bdb.temp.AceLog;
-import org.ihtsdo.bdb.temp.I_Count;
-import org.ihtsdo.bdb.temp.I_ReadChangeSet;
+import org.ihtsdo.cc.P;
+import org.ihtsdo.cs.ChangeSetWriterHandler;
+import org.ihtsdo.cs.CsProperty;
+import org.ihtsdo.cs.I_ReadChangeSet;
 import org.ihtsdo.tk.dto.concept.TkConcept;
 
 public class EConceptChangeSetReader implements I_ReadChangeSet {
 
     /**
-	 *
-	 */
+     *
+     */
     private static final long serialVersionUID = 1L;
-
     private File changeSetFile;
-
     private File csreFile;
     private transient FileWriter csreOut;
     private File csrcFile;
     private transient FileWriter csrcOut;
-
-    private I_Count counter;
-
     private DataInputStream dataStream;
-
     private int count = 0;
-
     private int conceptCount = 0;
-
     private int unvalidated = 0;
-
     private boolean initialized = false;
-
     private Long nextCommit;
     private String nextCommitStr;
     private boolean noCommit = false;
@@ -58,14 +47,13 @@ public class EConceptChangeSetReader implements I_ReadChangeSet {
     public void setNoCommit(boolean noCommit) {
         this.noCommit = noCommit;
     }
-
- 	private boolean fileContentMerged = false;
+    private boolean fileContentMerged = false;
 
     public EConceptChangeSetReader() {
         super();
     }
 
-   @Override
+    @Override
     public long nextCommitTime() throws IOException, ClassNotFoundException {
         lazyInit();
         if (nextCommit == null) {
@@ -74,7 +62,7 @@ public class EConceptChangeSetReader implements I_ReadChangeSet {
                 assert nextCommit != Long.MAX_VALUE;
                 nextCommitStr = TimeHelper.getFileDateFormat().format(new Date(nextCommit));
             } catch (EOFException e) {
-                AceLog.getAppLog().info("No next commit time for file: " + changeSetFile);
+                ChangeSetWriterHandler.logger.log(Level.INFO, "No next commit time for file: {0}", changeSetFile);
                 nextCommit = Long.MAX_VALUE;
                 nextCommitStr = "end of time";
             }
@@ -82,12 +70,11 @@ public class EConceptChangeSetReader implements I_ReadChangeSet {
         return nextCommit;
     }
 
-   @Override
+    @Override
     public void readUntil(long endTime) throws IOException, ClassNotFoundException {
-        if (AceLog.getEditLog().isLoggable(Level.INFO)) {
-            AceLog.getEditLog().info(
-                "Reading from log " + changeSetFile.getName() + " until " +
-                TimeHelper.getFileDateFormat().format(new Date(endTime)));
+        if (ChangeSetWriterHandler.logger.isLoggable(Level.INFO)) {
+            ChangeSetWriterHandler.logger.log(
+                    Level.INFO, "Reading from log {0} until {1}", new Object[]{changeSetFile.getName(), TimeHelper.getFileDateFormat().format(new Date(endTime))});
         }
         while ((nextCommitTime() <= endTime) && (nextCommitTime() != Long.MAX_VALUE)) {
             try {
@@ -100,29 +87,26 @@ public class EConceptChangeSetReader implements I_ReadChangeSet {
                 }
                 //AceLog.getEditLog().info("Reading change set entry: \n" + eConcept);
                 count++;
-                if (counter != null) {
-                    counter.increment();
+                conceptCount++;
+                if (ChangeSetWriterHandler.logger.isLoggable(Level.FINE)) {
+                    ChangeSetWriterHandler.logger.log(Level.FINE, "Read eConcept... {0}", eConcept);
                 }
-                        conceptCount++;
-                        if (AceLog.getEditLog().isLoggable(Level.FINE)) {
-                            AceLog.getEditLog().fine("Read eConcept... " + eConcept);
-                        }
-                        if (!noCommit) {
-                            commitEConcept(eConcept, nextCommit);
-                        }
-                 nextCommit = dataStream.readLong();
+                if (!noCommit) {
+                    commitEConcept(eConcept, nextCommit);
+                }
+                nextCommit = dataStream.readLong();
             } catch (EOFException ex) {
                 dataStream.close();
                 if (changeSetFile.length() == 0) {
                     changeSetFile.delete();
                 }
-                AceLog.getEditLog().info(
-                    "\n  +++++----------------\n End of change set: " + changeSetFile.getName()
+                ChangeSetWriterHandler.logger.info(
+                        "\n  +++++----------------\n End of change set: " + changeSetFile.getName()
                         + "\n  +++++---------------\n");
                 nextCommit = Long.MAX_VALUE;
-                Bdb.setProperty(changeSetFile.getName(),
-                    Long.toString(changeSetFile.length()));
-                Bdb.setProperty(BdbProperty.LAST_CHANGE_SET_READ.toString(),
+                P.s.setProperty(changeSetFile.getName(),
+                        Long.toString(changeSetFile.length()));
+                P.s.setProperty(CsProperty.LAST_CHANGE_SET_READ.toString(),
                         changeSetFile.getName());
                 if (csreOut != null) {
                     csreOut.flush();
@@ -139,17 +123,15 @@ public class EConceptChangeSetReader implements I_ReadChangeSet {
             }
         }
         Concept.resolveUnresolvedAnnotations();
-        AceLog.getAppLog().info(
-            "Change set " + changeSetFile.getName() + " contains " + count + " change objects. "
-                + "\n unvalidated objects: " + unvalidated + "\n imported concepts: " + conceptCount);
+        ChangeSetWriterHandler.logger.log(
+                Level.INFO, "Change set {0} contains {1}" + " change objects. " + "\n unvalidated objects: {2}\n imported concepts: {3}", new Object[]{changeSetFile.getName(), count, unvalidated, conceptCount});
 
     }
 
-   @Override
+    @Override
     public void read() throws IOException, ClassNotFoundException {
         readUntil(Long.MAX_VALUE);
     }
-
 
     private Concept commitEConcept(TkConcept eConcept, long time) throws IOException,
             ClassNotFoundException {
@@ -163,7 +145,7 @@ public class EConceptChangeSetReader implements I_ReadChangeSet {
                 csrcOut.append(TimeHelper.formatDateForFile(time));
                 csrcOut.append("\n********** before ***********\n");
 
-                Concept before = Concept.get(Bdb.uuidToNid(eConcept.getPrimordialUuid()));
+                Concept before = Concept.get(P.s.getNidForUuids(eConcept.getPrimordialUuid()));
                 csrcOut.append(before.toLongString());
                 csrcOut.flush();
                 Concept after = Concept.mergeAndWrite(eConcept);
@@ -171,71 +153,66 @@ public class EConceptChangeSetReader implements I_ReadChangeSet {
                 csrcOut.append(after.toLongString());
                 return after;
             } else {
-            	if (!fileContentMerged) {
-	                int conceptNid = Bdb.uuidToNid(eConcept.getPrimordialUuid());
-	                long lastChange = Concept.get(conceptNid).getData().getLastChange();
+                if (!fileContentMerged) {
+                    int conceptNid = P.s.getNidForUuids(eConcept.getPrimordialUuid());
+                    long lastChange = Concept.get(conceptNid).getData().getLastChange();
 
-	                Concept mergedConcept =  Concept.mergeAndWrite(eConcept);
-	                
-	                if (mergedConcept.getData().getLastChange() != lastChange) {
-	                	fileContentMerged = true;
-	                }
-	                
-	                return mergedConcept;
-            	} else {
-            		return Concept.mergeAndWrite(eConcept);
-            	}
+                    Concept mergedConcept = Concept.mergeAndWrite(eConcept);
+
+                    if (mergedConcept.getData().getLastChange() != lastChange) {
+                        fileContentMerged = true;
+                    }
+
+                    return mergedConcept;
+                } else {
+                    return Concept.mergeAndWrite(eConcept);
+                }
             }
         } catch (Exception e) {
-            AceLog.getEditLog().severe(
-                "Error committing bean in change set: " + changeSetFile + "\nUniversalAceBean:  \n" + eConcept);
+            ChangeSetWriterHandler.logger.log(
+                    Level.SEVERE, "Error committing bean in change set: {0}\nUniversalAceBean:  \n{1}", new Object[]{changeSetFile, eConcept});
             throw new IOException(e);
         }
     }
 
     private void lazyInit() throws FileNotFoundException, IOException, ClassNotFoundException {
-        String lastImportSize = Bdb.getProperty(changeSetFile.getName());
+        String lastImportSize = P.s.getProperty(changeSetFile.getName());
         if (lastImportSize != null) {
             long lastSize = Long.parseLong(lastImportSize);
             if (lastSize == changeSetFile.length()) {
-                AceLog.getAppLog().finer(
-                    "Change set already fully read: " + changeSetFile.getName());
+                ChangeSetWriterHandler.logger.log(
+                        Level.FINER, "Change set already fully read: {0}", changeSetFile.getName());
                 // already imported, set to nothing to do...
                 nextCommit = Long.MAX_VALUE;
                 initialized = true;
             }
         }
         if (initialized == false) {
-                 FileInputStream fis = new FileInputStream(changeSetFile);
-                BufferedInputStream bis = new BufferedInputStream(fis);
-                dataStream = new DataInputStream(bis);
+            FileInputStream fis = new FileInputStream(changeSetFile);
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            dataStream = new DataInputStream(bis);
 
-                if (EConceptChangeSetWriter.writeDebugFiles) {
-                    csreFile = new File(changeSetFile.getParentFile(), changeSetFile.getName() + ".csre");
-                    csreOut = new FileWriter(csreFile, true);
-                    csrcFile = new File(changeSetFile.getParentFile(), changeSetFile.getName() + ".csrc");
-                    csrcOut = new FileWriter(csrcFile, true);
-                }
+            if (EConceptChangeSetWriter.writeDebugFiles) {
+                csreFile = new File(changeSetFile.getParentFile(), changeSetFile.getName() + ".csre");
+                csreOut = new FileWriter(csreFile, true);
+                csrcFile = new File(changeSetFile.getParentFile(), changeSetFile.getName() + ".csrc");
+                csrcOut = new FileWriter(csrcFile, true);
+            }
             initialized = true;
         }
     }
 
-   @Override
+    @Override
     public File getChangeSetFile() {
         return changeSetFile;
     }
 
-   @Override
+    @Override
     public void setChangeSetFile(File changeSetFile) {
         this.changeSetFile = changeSetFile;
     }
 
-   @Override
-    public void setCounter(I_Count counter) {
-        this.counter = counter;
-    }
-
-   @Override
+    @Override
     public int availableBytes() throws FileNotFoundException, IOException, ClassNotFoundException {
         lazyInit();
         if (dataStream != null) {
@@ -244,8 +221,8 @@ public class EConceptChangeSetReader implements I_ReadChangeSet {
         return 0;
     }
 
-	@Override
-	public boolean isContentMerged() {
-		return fileContentMerged;
-	}
+    @Override
+    public boolean isContentMerged() {
+        return fileContentMerged;
+    }
 }

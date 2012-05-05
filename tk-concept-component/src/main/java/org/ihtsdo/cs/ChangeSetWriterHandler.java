@@ -1,18 +1,14 @@
 package org.ihtsdo.cs;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import javax.swing.Timer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.helper.time.TimeHelper;
-import org.ihtsdo.bdb.temp.AceLog;
-import org.ihtsdo.bdb.temp.ConsoleActivityViewer;
-import org.ihtsdo.bdb.temp.I_ShowActivity;
 import org.ihtsdo.tk.api.ConceptFetcherBI;
 import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.NidSetBI;
@@ -21,7 +17,9 @@ import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.tk.api.changeset.ChangeSetGeneratorBI;
 import org.ihtsdo.tk.api.cs.ChangeSetWriterThreading;
 
-public class ChangeSetWriterHandler implements Runnable, ProcessUnfetchedConceptDataBI, ActionListener {
+public class ChangeSetWriterHandler implements Runnable, ProcessUnfetchedConceptDataBI {
+
+   public static final Logger logger = Logger.getLogger(ChangeSetWriterHandler.class.getName());
 
    private static ConcurrentHashMap<String, ChangeSetGeneratorBI> writerMap = new ConcurrentHashMap<>();
    public static AtomicInteger changeSetWriters = new AtomicInteger();
@@ -29,14 +27,12 @@ public class ChangeSetWriterHandler implements Runnable, ProcessUnfetchedConcept
    private long commitTime;
    private String commitTimeStr;
    private NidSetBI sapNidsFromCommit;
-   private I_ShowActivity activity;
    private long startTime = System.currentTimeMillis();
    private AtomicInteger processedCount = new AtomicInteger();
    private AtomicInteger processedChangedCount = new AtomicInteger();
    private int changedCount = Integer.MIN_VALUE;
    private ChangeSetWriterThreading changeSetWriterThreading;
    private ChangeSetGenerationPolicy changeSetPolicy;
-   private Timer timer;
    private List<ChangeSetGeneratorBI> writerListForHandler;
 
    public ChangeSetWriterHandler(NidBitSetBI cNidsToWrite,
@@ -61,21 +57,9 @@ public class ChangeSetWriterHandler implements Runnable, ProcessUnfetchedConcept
    public void run() {
       try {
 
-         activity = new ConsoleActivityViewer();
-         activity.setIndeterminate(true);
-         activity.setProgressInfoUpper("CS writer: " + commitTimeStr + "...");
-         activity.setProgressInfoLower("Opening change set writers...");
-         timer = new Timer(2000, this);
-         timer.start();
-         activity.setStopButtonVisible(false);
          for (ChangeSetGeneratorBI writer : writerListForHandler) {
             writer.open(sapNidsFromCommit);
          }
-         activity.setValue(0);
-         activity.setMaximum(changedCount);
-         activity.setIndeterminate(false);
-
-         activity.setProgressInfoLower("Iterating over concepts...");
          switch (changeSetWriterThreading) {
             case MULTI_THREAD:
                P.s.iterateConceptDataInParallel(this);
@@ -87,7 +71,6 @@ public class ChangeSetWriterHandler implements Runnable, ProcessUnfetchedConcept
                throw new RuntimeException("Can't handle threading: " + changeSetWriterThreading);
          }
 
-         activity.setProgressInfoLower("Committing change set writers...");
          for (ChangeSetGeneratorBI writer : writerListForHandler) {
             writer.commit();
          }
@@ -96,11 +79,8 @@ public class ChangeSetWriterHandler implements Runnable, ProcessUnfetchedConcept
          long elapsed = endTime - startTime;
          String elapsedStr = TimeHelper.getElapsedTimeString(elapsed);
 
-         activity.setProgressInfoUpper("Change sets written for: " + commitTimeStr);
-         activity.setProgressInfoLower("Elapsed: " + elapsedStr);
-         activity.complete();
-      } catch (Exception e) {
-         AceLog.getAppLog().alertAndLogException(e);
+       } catch (Exception e) {
+         logger.log(Level.SEVERE, e.getLocalizedMessage(), e);
       } 
    }
 
@@ -130,23 +110,6 @@ public class ChangeSetWriterHandler implements Runnable, ProcessUnfetchedConcept
       return true;
    }
 
-   @Override
-   public void actionPerformed(ActionEvent e) {
-      int completed = processedCount.incrementAndGet();
-      activity.setValue(completed);
-      long endTime = System.currentTimeMillis();
-      long elapsed = endTime - startTime;
-      String elapsedStr = TimeHelper.getElapsedTimeString(elapsed);
-
-      String remainingStr = TimeHelper.getRemainingTimeString(completed, changedCount, elapsed);
-
-      activity.setProgressInfoLower("Elapsed: " + elapsedStr + ";  Remaining: " + remainingStr
-              + " processed: " + processedChangedCount + "/" + changedCount);
-      if (activity.isCompleteForComparison()) {
-         timer.stop();
-      }
-   }
-   
    @Override
    public NidBitSetBI getNidSet() {
       return cNidsToWrite;

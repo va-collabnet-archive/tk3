@@ -1,9 +1,9 @@
 /**
  * 
  */
-package org.ihtsdo.bdb;
+package org.ihtsdo.cs;
 
-public enum BdbProperty {
+public enum CsProperty {
 	LAST_CHANGE_SET_WRITTEN, LAST_CHANGE_SET_READ;
 	
 	public String toString() {

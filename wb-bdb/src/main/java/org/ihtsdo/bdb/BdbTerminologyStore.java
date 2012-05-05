@@ -1,6 +1,7 @@
 package org.ihtsdo.bdb;
 
 //~--- non-JDK imports --------------------------------------------------------
+import org.ihtsdo.cs.CsProperty;
 import org.ihtsdo.bdb.concept.I_ProcessUnfetchedConceptData;
 import org.ihtsdo.bdb.concept.ParallelConceptIterator;
 import org.ihtsdo.tk.binding.SnomedMetadataRfx;
@@ -350,11 +351,11 @@ public class BdbTerminologyStore implements PersistentStoreI {
 
     @Override
     public Collection<DbDependency> getLatestChangeSetDependencies() throws IOException {
-        BdbProperty[] keysToCheck = new BdbProperty[]{BdbProperty.LAST_CHANGE_SET_WRITTEN,
-            BdbProperty.LAST_CHANGE_SET_READ};
+        CsProperty[] keysToCheck = new CsProperty[]{CsProperty.LAST_CHANGE_SET_WRITTEN,
+            CsProperty.LAST_CHANGE_SET_READ};
         List<DbDependency> latestDependencies = new ArrayList<>(2);
 
-        for (BdbProperty prop : keysToCheck) {
+        for (CsProperty prop : keysToCheck) {
             String value = Bdb.getProperty(prop.toString());
 
             if (value != null) {
@@ -982,6 +983,25 @@ public class BdbTerminologyStore implements PersistentStoreI {
     @Override
     public ConceptDataFetcherI getConceptDataFetcher(int cNid) throws IOException {
         return new NidDataFromBdb(cNid);
+    }
+    @Override
+    public Map<String, String> getProperties() throws IOException {
+        return Bdb.getProperties();
+    }
+
+    @Override
+    public String getProperty(String key) throws IOException {
+        return Bdb.getProperty(key);
+    }
+
+    @Override
+    public void setProperty(String key, String value) throws IOException {
+        Bdb.setProperty(key, value);
+    }
+
+    @Override
+    public void cancelAfterCommit(NidSetBI commitSapNids) throws IOException {
+        Bdb.getSapDb().cancelAfterCommit(commitSapNids);
     }
 
 }

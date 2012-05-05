@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.bdb.temp;
+package org.ihtsdo.cs;
 
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Provides an interface to read change sets. Provides methods to allow reading
@@ -70,13 +69,6 @@ public interface I_ReadChangeSet extends Serializable {
      * @param changeSetFile the change set file to validate and read.
      */
     public File getChangeSetFile();
-
-    /**
-     * A counter to be incremented each time a change set component is imported.
-     * 
-     * @param counter
-     */
-    public void setCounter(I_Count counter);
 
     public int availableBytes() throws FileNotFoundException, IOException, ClassNotFoundException;
 

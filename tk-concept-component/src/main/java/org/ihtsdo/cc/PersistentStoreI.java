@@ -17,6 +17,7 @@ package org.ihtsdo.cc;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import org.ihtsdo.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.api.TerminologyStoreDI;
@@ -68,4 +69,13 @@ public interface PersistentStoreI extends TerminologyStoreDI {
     int[] getDestRelOriginNids(int cNid, NidSetBI relTypes);
     
     ConceptDataFetcherI getConceptDataFetcher(int cNid) throws IOException;
+    
+    Map<String, String> getProperties() throws IOException;
+
+    String getProperty(String key) throws IOException;
+
+    void setProperty(String key, String value) throws IOException;
+    
+    void cancelAfterCommit(NidSetBI commitSapNids) throws IOException;
+
 }

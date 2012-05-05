@@ -9,15 +9,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
 
 import org.ihtsdo.cc.concept.Concept;
-import org.ihtsdo.cs.I_ComputeEConceptForChangeSet;
-import org.ihtsdo.bdb.Bdb;
-import org.ihtsdo.bdb.BdbProperty;
+import org.ihtsdo.cs.ComputeEConceptForChangeSetI;
 import org.ihtsdo.helper.econcept.transfrom.EConceptTransformerBI;
 import org.ihtsdo.helper.io.FileIO;
 import org.ihtsdo.helper.time.TimeHelper;
-import org.ihtsdo.bdb.temp.AceLog;
+import org.ihtsdo.cc.P;
+import org.ihtsdo.cs.ChangeSetWriterHandler;
+import org.ihtsdo.cs.CsProperty;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.tk.api.changeset.ChangeSetGeneratorBI;
@@ -40,7 +41,7 @@ public class EConceptChangeSetWriter implements ChangeSetGeneratorBI {
     private NidSetBI commitSapNids;
     private File tempFile;
     private transient DataOutputStream tempOut;
-    private I_ComputeEConceptForChangeSet computer;
+    private ComputeEConceptForChangeSetI computer;
     private ChangeSetGenerationPolicy policy;
     private Semaphore writePermit = new Semaphore(1);
     private boolean timeStampEnabled = true;
@@ -77,12 +78,12 @@ public class EConceptChangeSetWriter implements ChangeSetGeneratorBI {
     @Override
     public void open(NidSetBI commitSapNids) throws IOException {
         if (changeSetFile.exists()) {
-            Bdb.setProperty(changeSetFile.getName(),
+            P.s.setProperty(changeSetFile.getName(),
                     Long.toString(changeSetFile.length()));
         } else {
-            Bdb.setProperty(changeSetFile.getName(), "0");
+            P.s.setProperty(changeSetFile.getName(), "0");
         }
-        Bdb.setProperty(BdbProperty.LAST_CHANGE_SET_WRITTEN.toString(),
+        P.s.setProperty(CsProperty.LAST_CHANGE_SET_WRITTEN.toString(),
                 changeSetFile.getName());
         this.commitSapNids = commitSapNids;
         computer = new EConceptChangeSetComputer(policy, commitSapNids);
@@ -91,8 +92,8 @@ public class EConceptChangeSetWriter implements ChangeSetGeneratorBI {
             changeSetFile.createNewFile();
         }
         FileIO.copyFile(changeSetFile.getCanonicalPath(), tempFile.getCanonicalPath());
-        AceLog.getAppLog().info(
-                "Copying from: " + changeSetFile.getCanonicalPath() + "\n        to: " + tempFile.getCanonicalPath());
+        ChangeSetWriterHandler.logger.log(
+                Level.INFO, "Copying from: {0}\n        to: {1}", new Object[]{changeSetFile.getCanonicalPath(), tempFile.getCanonicalPath()});
         tempOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(tempFile, true)));
         if (writeDebugFiles) {
             cswcFile = new File(changeSetFile.getParentFile(), changeSetFile.getName() + ".cswc");
@@ -129,12 +130,12 @@ public class EConceptChangeSetWriter implements ChangeSetGeneratorBI {
             if (tempFile.exists()) {
                 if (tempFile.length() > 0) {
                     if (tempFile.renameTo(changeSetFile) == false) {
-                        AceLog.getAppLog().warning("tempFile.renameTo failed. Attempting FileIO.copyFile...");
+                        ChangeSetWriterHandler.logger.warning("tempFile.renameTo failed. Attempting FileIO.copyFile...");
                         FileIO.copyFile(tempFile.getCanonicalPath(), changeSetFile.getCanonicalPath());
                     }
                     if (validateAfterWrite) {
                         try {
-                            AceLog.getAppLog().info("validating " + changeSetFile + " after write.");
+                            ChangeSetWriterHandler.logger.info("validating " + changeSetFile + " after write.");
                             EConceptChangeSetReader reader = new EConceptChangeSetReader();
                             reader.setChangeSetFile(changeSetFile);
                             reader.setNoCommit(true);
@@ -145,9 +146,9 @@ public class EConceptChangeSetWriter implements ChangeSetGeneratorBI {
                                 csweFile.delete();
                             }
                         } catch (IOException ex) {
-                            AceLog.getAppLog().alertAndLogException(new Exception("Change set write did not validate " + changeSetFile, ex));
+                            ChangeSetWriterHandler.logger.log(Level.SEVERE, ex.getLocalizedMessage(), new Exception("Change set write did not validate " + changeSetFile, ex));
                         } catch (ClassNotFoundException ex) {
-                            AceLog.getAppLog().alertAndLogException(new Exception("Change set write did not validate" + changeSetFile, ex));
+                            ChangeSetWriterHandler.logger.log(Level.SEVERE, ex.getLocalizedMessage(), new Exception("Change set write did not validate" + changeSetFile, ex));
                         }
                     }
                     tempFile = new File(canonicalFileString);
@@ -157,11 +158,11 @@ public class EConceptChangeSetWriter implements ChangeSetGeneratorBI {
             if (changeSetFile.length() == 0) {
                 changeSetFile.delete();
             } else {
-                AceLog.getAppLog().info("Finished writing: " + changeSetFile.getName()
+                ChangeSetWriterHandler.logger.info("Finished writing: " + changeSetFile.getName()
                         + " size: " + changeSetFile.length());
-                Bdb.setProperty(changeSetFile.getName(),
+                P.s.setProperty(changeSetFile.getName(),
                         Long.toString(changeSetFile.length()));
-                Bdb.setProperty(BdbProperty.LAST_CHANGE_SET_WRITTEN.toString(),
+                P.s.setProperty(CsProperty.LAST_CHANGE_SET_WRITTEN.toString(),
                         changeSetFile.getName());
             }
         }
@@ -178,8 +179,7 @@ public class EConceptChangeSetWriter implements ChangeSetGeneratorBI {
         assert time != Long.MIN_VALUE;
         Concept c = (Concept) igcd;
         if (c.isCanceled()) {
-            AceLog.getAppLog().info("Writing canceled concept suppressed: "
-                    + c.toLongString());
+            ChangeSetWriterHandler.logger.log(Level.INFO, "Writing canceled concept suppressed: {0}", c.toLongString());
         } else {
             TkConcept eC = null;
             long start = System.currentTimeMillis();
@@ -200,15 +200,15 @@ public class EConceptChangeSetWriter implements ChangeSetGeneratorBI {
                     long totalTime = System.currentTimeMillis() - start;
                 }
             } catch (Throwable e) {
-                AceLog.getAppLog().severe("\n##################################################################\n"
+                ChangeSetWriterHandler.logger.log(Level.SEVERE, e.getLocalizedMessage(), "\n##################################################################\n"
                         + "Exception writing change set for concept: \n"
                         + c.toLongString()
                         + "\n\neConcept: "
                         + eC
                         + "\n##################################################################\n");
-                AceLog.getAppLog().alertAndLogException(new Exception("Exception writing change set for: " + c
+                ChangeSetWriterHandler.logger.log(Level.SEVERE, e.getLocalizedMessage(), new Exception("Exception writing change set for: " + c
                         + "\n See log for details", e));
-                Bdb.getSapDb().cancelAfterCommit(commitSapNids);
+                P.s.cancelAfterCommit(commitSapNids);
 
             }
             if (cswcOut != null) {
