@@ -17,7 +17,7 @@ import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.concept.ConceptVersion;
-import org.ihtsdo.temp.AceLog;
+import org.ihtsdo.bdb.temp.AceLog;
 import org.ihtsdo.tk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 

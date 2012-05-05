@@ -16,6 +16,7 @@
 
 package org.ihtsdo.db.bdb;
 
+import org.ihtsdo.bdb.SieveForPrimeNumbers;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.After;

@@ -3,7 +3,7 @@ package org.ihtsdo.bdb.concept;
 import org.ihtsdo.cc.concept.OFFSETS;
 import java.io.IOException;
 
-import org.ihtsdo.db.bdb.Bdb;
+import org.ihtsdo.bdb.Bdb;
 
 import com.sleepycat.bind.tuple.LongBinding;
 import com.sleepycat.je.DatabaseEntry;

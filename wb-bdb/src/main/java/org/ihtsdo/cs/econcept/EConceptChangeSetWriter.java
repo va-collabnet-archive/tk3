@@ -12,12 +12,12 @@ import java.util.concurrent.Semaphore;
 
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cs.I_ComputeEConceptForChangeSet;
-import org.ihtsdo.db.bdb.Bdb;
-import org.ihtsdo.db.bdb.BdbProperty;
+import org.ihtsdo.bdb.Bdb;
+import org.ihtsdo.bdb.BdbProperty;
 import org.ihtsdo.helper.econcept.transfrom.EConceptTransformerBI;
 import org.ihtsdo.helper.io.FileIO;
 import org.ihtsdo.helper.time.TimeHelper;
-import org.ihtsdo.temp.AceLog;
+import org.ihtsdo.bdb.temp.AceLog;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.tk.api.changeset.ChangeSetGeneratorBI;

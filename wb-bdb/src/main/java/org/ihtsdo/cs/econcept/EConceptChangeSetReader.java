@@ -12,13 +12,13 @@ import java.util.Date;
 import java.util.logging.Level;
 
 import org.ihtsdo.cc.concept.Concept;
-import org.ihtsdo.db.bdb.Bdb;
-import org.ihtsdo.db.bdb.BdbProperty;
+import org.ihtsdo.bdb.Bdb;
+import org.ihtsdo.bdb.BdbProperty;
 
 import org.ihtsdo.helper.time.TimeHelper;
-import org.ihtsdo.temp.AceLog;
-import org.ihtsdo.temp.I_Count;
-import org.ihtsdo.temp.I_ReadChangeSet;
+import org.ihtsdo.bdb.temp.AceLog;
+import org.ihtsdo.bdb.temp.I_Count;
+import org.ihtsdo.bdb.temp.I_ReadChangeSet;
 import org.ihtsdo.tk.dto.concept.TkConcept;
 
 public class EConceptChangeSetReader implements I_ReadChangeSet {

@@ -3,7 +3,7 @@ package org.ihtsdo.bdb.concept;
 import java.io.IOException;
 import org.ihtsdo.cc.concept.Concept;
 
-import org.ihtsdo.temp.I_TrackContinuation;
+import org.ihtsdo.bdb.temp.I_TrackContinuation;
 import org.ihtsdo.tk.api.NidBitSetBI;
 
 public interface I_ProcessConceptData extends I_TrackContinuation {

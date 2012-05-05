@@ -11,9 +11,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.ihtsdo.db.bdb.Bdb;
-import org.ihtsdo.db.bdb.ComponentBdb;
-import org.ihtsdo.db.bdb.id.NidCNidMapBdb;
+import org.ihtsdo.bdb.Bdb;
+import org.ihtsdo.bdb.ComponentBdb;
+import org.ihtsdo.bdb.id.NidCNidMapBdb;
 
 import com.sleepycat.bind.tuple.IntegerBinding;
 import com.sleepycat.je.Cursor;
@@ -26,7 +26,7 @@ import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.component.IdentifierSet;
 import org.ihtsdo.cc.component.IdentifierSetReadOnly;
 import org.ihtsdo.helper.thread.NamedThreadFactory;
-import org.ihtsdo.temp.AceLog;
+import org.ihtsdo.bdb.temp.AceLog;
 import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.NidBitSetItrBI;
 import org.ihtsdo.tk.api.ProcessUnfetchedConceptDataBI;
