@@ -17,7 +17,7 @@ package org.ihtsdo.cc;
 
 import java.io.IOException;
 import java.util.List;
-import org.ihtsdo.concept.ConceptDataFetcherI;
+import org.ihtsdo.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.api.TerminologyStoreDI;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
