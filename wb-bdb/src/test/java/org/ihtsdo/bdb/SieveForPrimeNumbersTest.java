@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.ihtsdo.db.bdb;
+package org.ihtsdo.bdb;
 
 import org.ihtsdo.bdb.SieveForPrimeNumbers;
 import java.util.Arrays;
