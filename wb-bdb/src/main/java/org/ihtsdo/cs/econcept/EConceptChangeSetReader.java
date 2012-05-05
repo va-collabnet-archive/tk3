@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.logging.Level;
 
-import org.ihtsdo.concept.Concept;
+import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.db.bdb.BdbProperty;
 

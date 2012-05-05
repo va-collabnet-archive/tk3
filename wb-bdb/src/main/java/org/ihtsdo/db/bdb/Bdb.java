@@ -15,19 +15,19 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 
-import org.ihtsdo.concept.Concept;
+import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.bdb.concept.ConceptBdb;
-import org.ihtsdo.concept.OFFSETS;
+import org.ihtsdo.cc.concept.OFFSETS;
 import org.ihtsdo.db.bdb.BdbMemoryMonitor.LowMemoryListener;
-import org.ihtsdo.db.bdb.computer.kindof.IsaCache;
-import org.ihtsdo.db.bdb.computer.kindof.KindOfComputer;
+import org.ihtsdo.cc.computer.kindof.IsaCache;
+import org.ihtsdo.cc.computer.kindof.KindOfComputer;
 import org.ihtsdo.db.bdb.id.NidCNidMapBdb;
 import org.ihtsdo.db.bdb.sap.StatusAtPositionBdb;
 import org.ihtsdo.db.bdb.xref.Xref;
 import org.ihtsdo.cc.NidPair;
 import org.ihtsdo.cc.NidPairForRefset;
 import org.ihtsdo.cc.NidPairForRel;
-import org.ihtsdo.lucene.LuceneManager;
+import org.ihtsdo.cc.lucene.LuceneManager;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentBI;
 import org.ihtsdo.tk.api.ComponentChroncileBI;

@@ -2,7 +2,7 @@ package org.ihtsdo.bdb.concept;
 
 import java.io.IOException;
 import java.util.List;
-import org.ihtsdo.concept.Concept;
+import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.tk.api.ConceptFetcherBI;
 
 import org.ihtsdo.tk.api.NidBitSetBI;

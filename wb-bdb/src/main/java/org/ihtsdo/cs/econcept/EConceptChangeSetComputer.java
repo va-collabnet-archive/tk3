@@ -1,17 +1,17 @@
 package org.ihtsdo.cs.econcept;
 
 //~--- non-JDK imports --------------------------------------------------------
-import org.ihtsdo.concept.Concept;
-import org.ihtsdo.concept.component.ConceptComponent;
-import org.ihtsdo.concept.component.ConceptComponent.IDENTIFIER_PART_TYPES;
-import org.ihtsdo.concept.component.attributes.ConceptAttributes;
-import org.ihtsdo.concept.component.description.Description;
-import org.ihtsdo.concept.component.identifier.IdentifierVersion;
-import org.ihtsdo.concept.component.identifier.IdentifierVersionLong;
-import org.ihtsdo.concept.component.identifier.IdentifierVersionString;
-import org.ihtsdo.concept.component.identifier.IdentifierVersionUuid;
-import org.ihtsdo.concept.component.refex.RefexMember;
-import org.ihtsdo.concept.component.relationship.Relationship;
+import org.ihtsdo.cc.concept.Concept;
+import org.ihtsdo.cc.component.ConceptComponent;
+import org.ihtsdo.cc.component.ConceptComponent.IDENTIFIER_PART_TYPES;
+import org.ihtsdo.cc.attributes.ConceptAttributes;
+import org.ihtsdo.cc.description.Description;
+import org.ihtsdo.cc.identifier.IdentifierVersion;
+import org.ihtsdo.cc.identifier.IdentifierVersionLong;
+import org.ihtsdo.cc.identifier.IdentifierVersionString;
+import org.ihtsdo.cc.identifier.IdentifierVersionUuid;
+import org.ihtsdo.cc.refex.RefexMember;
+import org.ihtsdo.cc.relationship.Relationship;
 import org.ihtsdo.cs.I_ComputeEConceptForChangeSet;
 import org.ihtsdo.cc.ReferenceConcepts;
 import org.ihtsdo.tk.api.NidSetBI;
@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.ihtsdo.cc.P;
-import org.ihtsdo.concept.component.media.Media;
+import org.ihtsdo.cc.media.Media;
 import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.temp.AceLog;
 import org.ihtsdo.tk.api.id.LongIdBI;

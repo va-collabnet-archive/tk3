@@ -1,6 +1,6 @@
 package org.ihtsdo.db.bdb;
 
-import org.ihtsdo.concept.ConceptDataFetcherI;
+import org.ihtsdo.cc.concept.ConceptDataFetcherI;
 import java.io.IOException;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;

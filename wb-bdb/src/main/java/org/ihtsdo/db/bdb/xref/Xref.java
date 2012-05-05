@@ -30,8 +30,8 @@ import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
-import org.ihtsdo.concept.Concept;
-import org.ihtsdo.db.change.LastChange;
+import org.ihtsdo.cc.concept.Concept;
+import org.ihtsdo.cc.change.LastChange;
 import org.ihtsdo.tk.api.ConceptFetcherBI;
 import org.ihtsdo.tk.api.NidSetBI;
 

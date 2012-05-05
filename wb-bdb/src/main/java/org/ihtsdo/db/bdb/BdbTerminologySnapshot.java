@@ -3,7 +3,7 @@ package org.ihtsdo.db.bdb;
 //~--- non-JDK imports --------------------------------------------------------
 import java.beans.PropertyChangeListener;
 import java.beans.VetoableChangeListener;
-import org.ihtsdo.concept.ConceptVersion;
+import org.ihtsdo.cc.concept.ConceptVersion;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.tk.api.changeset.ChangeSetGeneratorBI;
@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import org.ihtsdo.concept.Concept;
+import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
 import org.ihtsdo.tk.api.cs.ChangeSetPolicy;
 import org.ihtsdo.tk.api.cs.ChangeSetWriterThreading;

@@ -1,6 +1,6 @@
 package org.ihtsdo.bdb.concept;
 
-import org.ihtsdo.concept.OFFSETS;
+import org.ihtsdo.cc.concept.OFFSETS;
 import java.io.IOException;
 
 import org.ihtsdo.db.bdb.Bdb;

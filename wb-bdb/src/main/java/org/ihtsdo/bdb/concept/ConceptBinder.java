@@ -1,9 +1,9 @@
 package org.ihtsdo.bdb.concept;
 
-import org.ihtsdo.concept.IntSetBinder;
-import org.ihtsdo.concept.OFFSETS;
-import org.ihtsdo.concept.component.MediaBinder;
-import org.ihtsdo.concept.I_ManageConceptData;
+import org.ihtsdo.cc.concept.IntSetBinder;
+import org.ihtsdo.cc.concept.OFFSETS;
+import org.ihtsdo.cc.component.MediaBinder;
+import org.ihtsdo.cc.concept.I_ManageConceptData;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,22 +12,22 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
-import org.ihtsdo.concept.component.ConceptComponent;
-import org.ihtsdo.concept.component.ConceptComponentBinder;
-import org.ihtsdo.concept.component.Revision;
-import org.ihtsdo.concept.component.attributes.ConceptAttributes;
-import org.ihtsdo.concept.component.ConceptAttributesBinder;
-import org.ihtsdo.concept.component.attributes.ConceptAttributesRevision;
-import org.ihtsdo.concept.component.DescriptionBinder;
-import org.ihtsdo.concept.component.refex.RefexMember;
-import org.ihtsdo.concept.component.RefexMemberBinder;
-import org.ihtsdo.concept.component.RelationshipBinder;
+import org.ihtsdo.cc.component.ConceptComponent;
+import org.ihtsdo.cc.component.ConceptComponentBinder;
+import org.ihtsdo.cc.component.Revision;
+import org.ihtsdo.cc.attributes.ConceptAttributes;
+import org.ihtsdo.cc.component.ConceptAttributesBinder;
+import org.ihtsdo.cc.attributes.ConceptAttributesRevision;
+import org.ihtsdo.cc.component.DescriptionBinder;
+import org.ihtsdo.cc.refex.RefexMember;
+import org.ihtsdo.cc.component.RefexMemberBinder;
+import org.ihtsdo.cc.component.RelationshipBinder;
 
 import com.sleepycat.bind.tuple.TupleBinding;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 import org.ihtsdo.bdb.concept.component.*;
-import org.ihtsdo.concept.Concept;
+import org.ihtsdo.cc.concept.Concept;
 
 public class ConceptBinder extends TupleBinding<Concept> {
 
