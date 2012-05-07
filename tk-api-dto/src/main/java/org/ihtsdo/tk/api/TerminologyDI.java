@@ -94,6 +94,14 @@ public interface TerminologyDI {
     void removeTermChangeListener(TermChangeListener cl);
 
     boolean satisfiesDependencies(Collection<DbDependency> dependencies);
+    
+        
+   int getPathNidForSapNid(int sapNid);
+   int getAuthorNidForSapNid(int sapNid);
+   int getStatusNidForSapNid(int sapNid);
+   long getTimeForSapNid(int sapNid);
+   
+
 
     public static enum CONCEPT_EVENT {
 

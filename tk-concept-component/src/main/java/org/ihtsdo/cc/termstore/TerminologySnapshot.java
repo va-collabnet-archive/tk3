@@ -33,6 +33,26 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
     private PersistentStoreI store;
     private ViewCoordinate vc;
 
+
+    @Override
+    public long getTimeForSapNid(int sapNid) {
+        return store.getTimeForSapNid(sapNid);
+    }
+
+    @Override
+    public int getStatusNidForSapNid(int sapNid) {
+        return store.getStatusNidForSapNid(sapNid);
+    }
+
+    @Override
+    public int getPathNidForSapNid(int sapNid) {
+        return store.getPathNidForSapNid(sapNid);
+    }
+
+    @Override
+    public int getAuthorNidForSapNid(int sapNid) {
+        return store.getAuthorNidForSapNid(sapNid);
+    }
     //~--- constructors --------------------------------------------------------
     public TerminologySnapshot(PersistentStoreI store, ViewCoordinate coordinate) {
         super();

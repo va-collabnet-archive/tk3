@@ -35,12 +35,6 @@ import org.ihtsdo.tk.dto.concept.component.TkRevision;
  * @author kec
  */
 public interface PersistentStoreI extends TerminologyStoreDI {
-    
-   int getPathNidForSapNid(int sapNid);
-   int getAuthorNidForSapNid(int sapNid);
-   int getStatusNidForSapNid(int sapNid);
-   long getTimeForSapNid(int sapNid);
-   
    int getSapNid(int statusNid, int authorNid, int pathNid, long time);
    int getMaxReadOnlySap();
    int getSapNid(TkRevision version);
