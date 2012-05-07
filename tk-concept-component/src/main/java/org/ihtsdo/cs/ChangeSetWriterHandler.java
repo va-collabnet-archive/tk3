@@ -19,8 +19,6 @@ import org.ihtsdo.tk.api.cs.ChangeSetWriterThreading;
 
 public class ChangeSetWriterHandler implements Runnable, ProcessUnfetchedConceptDataBI {
 
-   public static final Logger logger = Logger.getLogger(ChangeSetWriterHandler.class.getName());
-
    private static ConcurrentHashMap<String, ChangeSetGeneratorBI> writerMap = new ConcurrentHashMap<>();
    public static AtomicInteger changeSetWriters = new AtomicInteger();
    private NidBitSetBI cNidsToWrite;
@@ -80,7 +78,7 @@ public class ChangeSetWriterHandler implements Runnable, ProcessUnfetchedConcept
          String elapsedStr = TimeHelper.getElapsedTimeString(elapsed);
 
        } catch (Exception e) {
-         logger.log(Level.SEVERE, e.getLocalizedMessage(), e);
+         ChangeSetLogger.logger.log(Level.SEVERE, e.getLocalizedMessage(), e);
       } 
    }
 

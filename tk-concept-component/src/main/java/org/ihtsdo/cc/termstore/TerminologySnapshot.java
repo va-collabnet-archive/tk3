@@ -1,4 +1,4 @@
-package org.ihtsdo.bdb;
+package org.ihtsdo.cc.termstore;
 
 //~--- non-JDK imports --------------------------------------------------------
 import java.beans.PropertyChangeListener;
@@ -23,20 +23,18 @@ import java.util.Set;
 import java.util.UUID;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
-import org.ihtsdo.tk.api.cs.ChangeSetPolicy;
-import org.ihtsdo.tk.api.cs.ChangeSetWriterThreading;
 import org.ihtsdo.tk.api.description.DescriptionVersionBI;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.tk.db.DbDependency;
 
-public class BdbTerminologySnapshot implements TerminologySnapshotDI {
+public class TerminologySnapshot implements TerminologySnapshotDI {
 
-    private BdbTerminologyStore store;
+    private PersistentStoreI store;
     private ViewCoordinate vc;
 
     //~--- constructors --------------------------------------------------------
-    public BdbTerminologySnapshot(BdbTerminologyStore store, ViewCoordinate coordinate) {
+    public TerminologySnapshot(PersistentStoreI store, ViewCoordinate coordinate) {
         super();
         this.store = store;
         this.vc = coordinate;
@@ -50,17 +48,17 @@ public class BdbTerminologySnapshot implements TerminologySnapshotDI {
 
     @Override
     public void addUncommitted(ConceptChronicleBI concept) throws IOException {
-        BdbCommitManager.addUncommitted(concept);
+        store.addUncommitted(concept);
     }
 
     @Override
     public void addUncommitted(ConceptVersionBI cv) throws IOException {
-        BdbCommitManager.addUncommitted(cv);
+        store.addUncommitted(cv);
     }
 
     @Override
     public void cancel() throws IOException {
-        BdbCommitManager.cancel();
+        store.cancel();
     }
 
     @Override
@@ -75,7 +73,7 @@ public class BdbTerminologySnapshot implements TerminologySnapshotDI {
 
     @Override
     public void commit() throws IOException {
-        BdbCommitManager.commit(ChangeSetPolicy.MUTABLE_ONLY, ChangeSetWriterThreading.SINGLE_THREAD);
+        store.commit();
     }
 
     @Override
@@ -144,7 +142,7 @@ public class BdbTerminologySnapshot implements TerminologySnapshotDI {
 
     @Override
     public ConceptVersionBI getConceptVersion(Collection<UUID> uuids) throws IOException {
-        return new ConceptVersion(Bdb.getConcept(Bdb.uuidsToNid(uuids)), vc);
+        return new ConceptVersion((Concept) store.getConcept(store.getNidForUuids(uuids)), vc);
     }
 
     @Override
@@ -154,17 +152,17 @@ public class BdbTerminologySnapshot implements TerminologySnapshotDI {
 
     @Override
     public ConceptVersionBI getConceptVersion(int cNid) throws IOException {
-        return new ConceptVersion(Bdb.getConcept(cNid), vc);
+        return new ConceptVersion((Concept) store.getConcept(cNid), vc);
     }
 
     @Override
     public ConceptVersionBI getConceptVersion(UUID... uuids) throws IOException {
-        return new ConceptVersion(Bdb.getConcept(Bdb.uuidToNid(uuids)), vc);
+        return new ConceptVersion((Concept) store.getConcept(store.getNidForUuids(uuids)), vc);
     }
 
     @Override
     public ConceptVersionBI getConceptVersionFromAlternateId(String alternateId) throws IOException {
-        Concept c = store.getConceptFromAlternateId(alternateId);
+        Concept c = (Concept) store.getConceptFromAlternateId(alternateId);
         if (c != null) {
             return new ConceptVersion(c, vc);
         }
@@ -293,12 +291,12 @@ public class BdbTerminologySnapshot implements TerminologySnapshotDI {
 
     @Override
     public void addUncommittedNoChecks(ConceptChronicleBI cc) throws IOException {
-        BdbCommitManager.addUncommittedNoChecks(cc);
+        store.addUncommittedNoChecks(cc);
     }
 
     @Override
     public void addUncommittedNoChecks(ConceptVersionBI cv) throws IOException {
-        BdbCommitManager.addUncommittedNoChecks(cv);
+        store.addUncommittedNoChecks(cv);
     }
     
 }

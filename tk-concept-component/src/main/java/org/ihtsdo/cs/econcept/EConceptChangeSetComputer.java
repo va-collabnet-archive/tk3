@@ -39,6 +39,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.media.Media;
+import org.ihtsdo.cs.ChangeSetLogger;
 import org.ihtsdo.cs.ChangeSetWriterHandler;
 import org.ihtsdo.tk.api.id.LongIdBI;
 import org.ihtsdo.tk.api.id.StringIdBI;
@@ -219,7 +220,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
                                         setupFirstVersion(eMember, v);
                                     }
                                 } catch (Exception e) {
-                                    ChangeSetWriterHandler.logger.log(Level.WARNING, "Failed in getting Concept for: " + member.toString() + " and " + v.toString(), e);
+                                    ChangeSetLogger.logger.log(Level.WARNING, "Failed in getting Concept for: " + member.toString() + " and " + v.toString(), e);
                                 }
                             } else {
                                 TkRevision eRevision = v.getERefsetRevision();
@@ -275,7 +276,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
                                 setupRevision(ecr, v, ecv);
                             }
                         } catch (AssertionError e) {
-                            ChangeSetWriterHandler.logger.log(Level.SEVERE, e.getLocalizedMessage(), new Exception(e.getLocalizedMessage() + "\n\n"
+                            ChangeSetLogger.logger.log(Level.SEVERE, e.getLocalizedMessage(), new Exception(e.getLocalizedMessage() + "\n\n"
                                     + c.toLongString(), e));
 
                             throw e;

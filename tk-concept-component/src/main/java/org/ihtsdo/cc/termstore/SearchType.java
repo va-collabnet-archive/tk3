@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.cc;
-
-import org.ihtsdo.cc.termstore.PersistentStoreI;
+package org.ihtsdo.cc.termstore;
 
 /**
  *
  * @author kec
  */
-public class P {
-    public static PersistentStoreI s;
+public enum SearchType {
+    CONCEPT, DESCRIPTION
+    
 }

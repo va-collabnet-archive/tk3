@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.cc;
+package org.ihtsdo.cc.termstore;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import org.ihtsdo.cc.NidPair;
+import org.ihtsdo.cc.NidPairForRefset;
+import org.ihtsdo.cc.NidPairForRel;
 import org.ihtsdo.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.api.TerminologyStoreDI;
@@ -38,25 +41,12 @@ public interface PersistentStoreI extends TerminologyStoreDI {
    int getStatusNidForSapNid(int sapNid);
    long getTimeForSapNid(int sapNid);
    
-   // For a lower level interface? 
-   void setConceptNidForNid(int cNid, int nid) throws IOException;
-   void resetConceptNidForNid(int cNid, int nid) throws IOException;
    int getSapNid(int statusNid, int authorNid, int pathNid, long time);
    int getMaxReadOnlySap();
    int getSapNid(TkRevision version);
    void xrefAnnotation(RefexChronicleBI annotation) throws IOException;
    boolean hasConcept(int cNid) throws IOException;
-   /**
-    * @TODO modify the write concept routine to update the identifiers map (UUIDs, etc)
-    * Possibly remove identifiers from Lucene?
-    */
-   List<NidPairForRel> getDestRelPairs(int cNid);
 
-    List<NidPairForRefset> getRefsetPairs(int nid);
-
-    void addXrefPair(int nid, NidPair pair);
-
-    void forgetXrefPair(int nid, NidPair pair);
 
     long getLastCancel();
     long getLastCommit();
@@ -66,16 +56,31 @@ public interface PersistentStoreI extends TerminologyStoreDI {
     boolean commit(ConceptChronicleBI cc, ChangeSetPolicy changeSetPolicy,
             ChangeSetWriterThreading changeSetWriterThreading) throws IOException;
 
-    int[] getDestRelOriginNids(int cNid, NidSetBI relTypes);
     
-    ConceptDataFetcherI getConceptDataFetcher(int cNid) throws IOException;
     
     Map<String, String> getProperties() throws IOException;
-
     String getProperty(String key) throws IOException;
-
     void setProperty(String key, String value) throws IOException;
-    
     void cancelAfterCommit(NidSetBI commitSapNids) throws IOException;
+    
+    // Method to wrap for client...
+    ConceptDataFetcherI getConceptDataFetcher(int cNid) throws IOException;
+    
+    // Methods to remove from this interface...
+    
+    void addXrefPair(int nid, NidPair pair);
+    void forgetXrefPair(int nid, NidPair pair);
+   /**
+    * @TODO modify the write concept routine to update the identifiers map (UUIDs, etc)
+    * Possibly remove identifiers from Lucene?
+    */
+    List<NidPairForRel> getDestRelPairs(int cNid);
+    List<NidPairForRefset> getRefsetPairs(int nid);
+    int[] getDestRelOriginNids(int cNid, NidSetBI relTypes);
+   // For a lower level interface? 
+   void setConceptNidForNid(int cNid, int nid) throws IOException;
+   void resetConceptNidForNid(int cNid, int nid) throws IOException;
+    
+    
 
 }

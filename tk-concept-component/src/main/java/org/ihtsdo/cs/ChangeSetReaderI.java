@@ -30,7 +30,7 @@ import java.io.Serializable;
  * @author kec
  * 
  */
-public interface I_ReadChangeSet extends Serializable {
+public interface ChangeSetReaderI extends Serializable {
 
     /**
      * 

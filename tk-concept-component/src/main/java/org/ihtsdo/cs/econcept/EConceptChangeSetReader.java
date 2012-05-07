@@ -15,12 +15,13 @@ import org.ihtsdo.cc.concept.Concept;
 
 import org.ihtsdo.helper.time.TimeHelper;
 import org.ihtsdo.cc.P;
+import org.ihtsdo.cs.ChangeSetLogger;
 import org.ihtsdo.cs.ChangeSetWriterHandler;
 import org.ihtsdo.cs.CsProperty;
-import org.ihtsdo.cs.I_ReadChangeSet;
+import org.ihtsdo.cs.ChangeSetReaderI;
 import org.ihtsdo.tk.dto.concept.TkConcept;
 
-public class EConceptChangeSetReader implements I_ReadChangeSet {
+public class EConceptChangeSetReader implements ChangeSetReaderI {
 
     /**
      *
@@ -62,7 +63,7 @@ public class EConceptChangeSetReader implements I_ReadChangeSet {
                 assert nextCommit != Long.MAX_VALUE;
                 nextCommitStr = TimeHelper.getFileDateFormat().format(new Date(nextCommit));
             } catch (EOFException e) {
-                ChangeSetWriterHandler.logger.log(Level.INFO, "No next commit time for file: {0}", changeSetFile);
+                ChangeSetLogger.logger.log(Level.INFO, "No next commit time for file: {0}", changeSetFile);
                 nextCommit = Long.MAX_VALUE;
                 nextCommitStr = "end of time";
             }
@@ -72,8 +73,8 @@ public class EConceptChangeSetReader implements I_ReadChangeSet {
 
     @Override
     public void readUntil(long endTime) throws IOException, ClassNotFoundException {
-        if (ChangeSetWriterHandler.logger.isLoggable(Level.INFO)) {
-            ChangeSetWriterHandler.logger.log(
+        if (ChangeSetLogger.logger.isLoggable(Level.INFO)) {
+            ChangeSetLogger.logger.log(
                     Level.INFO, "Reading from log {0} until {1}", new Object[]{changeSetFile.getName(), TimeHelper.getFileDateFormat().format(new Date(endTime))});
         }
         while ((nextCommitTime() <= endTime) && (nextCommitTime() != Long.MAX_VALUE)) {
@@ -85,11 +86,13 @@ public class EConceptChangeSetReader implements I_ReadChangeSet {
                     csreOut.append("\n*******************************\n");
                     csreOut.append(eConcept.toString());
                 }
-                //AceLog.getEditLog().info("Reading change set entry: \n" + eConcept);
+                if (ChangeSetLogger.logger.isLoggable(Level.FINE)) {
+                    ChangeSetLogger.logger.log(Level.FINE, "Reading change set entry: \n{0}", eConcept);
+                }
                 count++;
                 conceptCount++;
-                if (ChangeSetWriterHandler.logger.isLoggable(Level.FINE)) {
-                    ChangeSetWriterHandler.logger.log(Level.FINE, "Read eConcept... {0}", eConcept);
+                if (ChangeSetLogger.logger.isLoggable(Level.FINE)) {
+                    ChangeSetLogger.logger.log(Level.FINE, "Read eConcept... {0}", eConcept);
                 }
                 if (!noCommit) {
                     commitEConcept(eConcept, nextCommit);
@@ -100,9 +103,8 @@ public class EConceptChangeSetReader implements I_ReadChangeSet {
                 if (changeSetFile.length() == 0) {
                     changeSetFile.delete();
                 }
-                ChangeSetWriterHandler.logger.info(
-                        "\n  +++++----------------\n End of change set: " + changeSetFile.getName()
-                        + "\n  +++++---------------\n");
+                ChangeSetLogger.logger.log(
+                        Level.INFO, "\n  +++++----------------\n End of change set: {0}\n  +++++---------------\n", changeSetFile.getName());
                 nextCommit = Long.MAX_VALUE;
                 P.s.setProperty(changeSetFile.getName(),
                         Long.toString(changeSetFile.length()));
@@ -123,7 +125,7 @@ public class EConceptChangeSetReader implements I_ReadChangeSet {
             }
         }
         Concept.resolveUnresolvedAnnotations();
-        ChangeSetWriterHandler.logger.log(
+        ChangeSetLogger.logger.log(
                 Level.INFO, "Change set {0} contains {1}" + " change objects. " + "\n unvalidated objects: {2}\n imported concepts: {3}", new Object[]{changeSetFile.getName(), count, unvalidated, conceptCount});
 
     }
@@ -169,7 +171,7 @@ public class EConceptChangeSetReader implements I_ReadChangeSet {
                 }
             }
         } catch (Exception e) {
-            ChangeSetWriterHandler.logger.log(
+            ChangeSetLogger.logger.log(
                     Level.SEVERE, "Error committing bean in change set: {0}\nUniversalAceBean:  \n{1}", new Object[]{changeSetFile, eConcept});
             throw new IOException(e);
         }
@@ -180,7 +182,7 @@ public class EConceptChangeSetReader implements I_ReadChangeSet {
         if (lastImportSize != null) {
             long lastSize = Long.parseLong(lastImportSize);
             if (lastSize == changeSetFile.length()) {
-                ChangeSetWriterHandler.logger.log(
+                ChangeSetLogger.logger.log(
                         Level.FINER, "Change set already fully read: {0}", changeSetFile.getName());
                 // already imported, set to nothing to do...
                 nextCommit = Long.MAX_VALUE;

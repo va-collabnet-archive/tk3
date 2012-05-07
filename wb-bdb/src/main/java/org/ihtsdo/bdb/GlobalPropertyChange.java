@@ -34,7 +34,7 @@ public class GlobalPropertyChange {
         String objStr;
 
         public WeakRefListener(PropertyChangeListener l) {
-            this.wr = new WeakReference<PropertyChangeListener>(l);
+            this.wr = new WeakReference<>(l);
             objStr = l.toString();
             hash = 7;
             hash = 13 * hash + (this.wr != null ? this.wr.hashCode() : 0);
@@ -77,7 +77,7 @@ public class GlobalPropertyChange {
         String objStr;
 
         public WeakRefVetoListener(VetoableChangeListener l) {
-            this.wr = new WeakReference<VetoableChangeListener>(l);
+            this.wr = new WeakReference<>(l);
             this.objStr = l.toString();
             hash = 7;
             hash = 13 * hash + (this.wr != null ? this.wr.hashCode() : 0);
@@ -123,8 +123,8 @@ public class GlobalPropertyChange {
     }
     private static PropertyChangeSupport gPcs;
     private static VetoableChangeSupport gVcs;
-    private static List<PropertyChangeListener> listenerToRemove = new ArrayList<PropertyChangeListener>();
-    private static List<VetoableChangeListener> vetoListenerToRemove = new ArrayList<VetoableChangeListener>();
+    private static List<PropertyChangeListener> listenerToRemove = new ArrayList<>();
+    private static List<VetoableChangeListener> vetoListenerToRemove = new ArrayList<>();
     
     public static void addPropertyChangeListener(TerminologyStoreDI.CONCEPT_EVENT eventType, PropertyChangeListener listener) {
         gPcs.addPropertyChangeListener(eventType.toString(), new WeakRefListener(listener));

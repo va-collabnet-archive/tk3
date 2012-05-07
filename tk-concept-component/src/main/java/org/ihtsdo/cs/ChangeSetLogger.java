@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.cc;
+package org.ihtsdo.cs;
 
-import org.ihtsdo.cc.termstore.PersistentStoreI;
+import java.util.logging.Logger;
 
 /**
  *
  * @author kec
  */
-public class P {
-    public static PersistentStoreI s;
+public class ChangeSetLogger {
+       public static final Logger logger = Logger.getLogger(ChangeSetLogger.class.getName());
 }
