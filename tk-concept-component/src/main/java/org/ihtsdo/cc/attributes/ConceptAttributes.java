@@ -39,7 +39,7 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
         implements ConAttrAnalogBI<ConceptAttributesRevision> {
 
     private static VersionComputer<ConceptAttributes.Version> computer =
-            new VersionComputer<ConceptAttributes.Version>();
+            new VersionComputer<>();
     //~--- fields --------------------------------------------------------------
     private boolean defined;
     List<Version> versions;

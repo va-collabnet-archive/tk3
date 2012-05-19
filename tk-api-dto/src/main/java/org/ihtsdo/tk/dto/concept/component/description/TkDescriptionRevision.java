@@ -15,15 +15,20 @@ import java.io.IOException;
 
 import java.util.Map;
 import java.util.UUID;
+import javax.xml.bind.annotation.XmlAttribute;
 
 public class TkDescriptionRevision extends TkRevision implements I_DescribeExternally {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlAttribute
    public boolean initialCaseSignificant;
+   @XmlAttribute
    public String  lang;
+   @XmlAttribute
    public String  text;
+   @XmlAttribute
    public UUID    typeUuid;
 
    //~--- constructors --------------------------------------------------------

@@ -19,17 +19,24 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlAttribute;
 
 public class TkRelationship extends TkComponent<TkRelationshipRevision> implements I_RelateExternally {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlAttribute
    public UUID c1Uuid;
+   @XmlAttribute
    public UUID c2Uuid;
+   @XmlAttribute
    public UUID characteristicUuid;
+   @XmlAttribute
    public UUID refinabilityUuid;
+   @XmlAttribute
    public int  relGroup;
+   @XmlAttribute
    public UUID typeUuid;
 
    //~--- constructors --------------------------------------------------------

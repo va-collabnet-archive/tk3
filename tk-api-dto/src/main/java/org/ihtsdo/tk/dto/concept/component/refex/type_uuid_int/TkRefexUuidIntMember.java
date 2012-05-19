@@ -18,6 +18,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlAttribute;
 import org.ihtsdo.tk.api.TerminologyStoreDI;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
@@ -27,7 +28,9 @@ public class TkRefexUuidIntMember extends TkRefexAbstractMember<TkRefexUuidIntRe
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlAttribute
    public UUID uuid1;
+   @XmlAttribute
    public int  int1;
 
    //~--- constructors --------------------------------------------------------
@@ -156,7 +159,7 @@ public class TkRefexUuidIntMember extends TkRefexAbstractMember<TkRefexUuidIntRe
       int versionSize = in.readInt();
 
       if (versionSize > 0) {
-         revisions = new ArrayList<TkRefexUuidIntRevision>(versionSize);
+         revisions = new ArrayList<>(versionSize);
 
          for (int i = 0; i < versionSize; i++) {
             revisions.add(new TkRefexUuidIntRevision(in, dataVersion));

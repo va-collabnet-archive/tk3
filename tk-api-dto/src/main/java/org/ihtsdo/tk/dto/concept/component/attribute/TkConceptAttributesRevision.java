@@ -14,12 +14,14 @@ import java.io.IOException;
 
 import java.util.Map;
 import java.util.UUID;
+import javax.xml.bind.annotation.XmlAttribute;
 
 public class TkConceptAttributesRevision extends TkRevision implements I_ConceptualizeExternally {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlAttribute
    public boolean defined;
 
    //~--- constructors --------------------------------------------------------

@@ -18,6 +18,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlAttribute;
 import org.ihtsdo.tk.api.TerminologyStoreDI;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
@@ -27,8 +28,11 @@ public class TkRefexUuidUuidStringMember extends TkRefexAbstractMember<TkRefexUu
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlAttribute
    public UUID   uuid1;
+   @XmlAttribute
    public UUID   uuid2;
+   @XmlAttribute
    public String string1;
 
    //~--- constructors --------------------------------------------------------

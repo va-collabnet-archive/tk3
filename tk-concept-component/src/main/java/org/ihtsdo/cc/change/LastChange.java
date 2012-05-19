@@ -286,6 +286,9 @@ public class LastChange {
    private static class Notifier extends TimerTask {
       @Override
       public void run() {
+          if (LastChange.changedXrefs == null || LastChange.changedComponents == null) {
+              return;
+          }
          ConcurrentSkipListSet<Integer> changedXrefs =
             LastChange.changedXrefs.getAndSet(new ConcurrentSkipListSet<Integer>());
          ConcurrentSkipListSet<Integer> changedComponents =

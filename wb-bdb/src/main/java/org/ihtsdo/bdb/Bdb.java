@@ -282,7 +282,12 @@ public class Bdb {
 //            inform(activity, "loading concept database...");
             conceptDb = new ConceptBdb(readOnly, mutable);
             
-           
+            BdbTerminologyStore ts = new BdbTerminologyStore();
+            if (P.s == null) {
+                Ts.set(ts);
+                P.s = ts;
+            }
+            
             Concept.reset();
 
             ReferenceConcepts.reset();
@@ -300,11 +305,6 @@ public class Bdb {
 //            } else {
 //                Terms.set(tf);
 //            }
-            BdbTerminologyStore ts = new BdbTerminologyStore();
-            if (P.s == null) {
-                Ts.set(ts);
-                P.s = ts;
-            }
 
 
 //             inform(activity, "loading cross references...");

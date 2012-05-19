@@ -20,16 +20,24 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement(name="e-description")
 public class TkDescription extends TkComponent<TkDescriptionRevision> implements I_DescribeExternally {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlAttribute
    public UUID    conceptUuid;
+   @XmlAttribute
    public boolean initialCaseSignificant;
+   @XmlAttribute
    public String  lang;
+   @XmlAttribute
    public String  text;
+   @XmlAttribute
    public UUID    typeUuid;
 
    //~--- constructors --------------------------------------------------------

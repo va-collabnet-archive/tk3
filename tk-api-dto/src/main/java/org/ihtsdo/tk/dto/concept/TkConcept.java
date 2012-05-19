@@ -38,6 +38,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.*;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.description.DescriptionChronicleBI;
 import org.ihtsdo.tk.api.media.MediaChronicleBI;
@@ -57,19 +58,26 @@ import org.ihtsdo.tk.api.refex.type_member.RefexMemberVersionBI;
 import org.ihtsdo.tk.api.refex.type_string.RefexStringVersionBI;
 import org.ihtsdo.tk.api.relationship.RelationshipChronicleBI;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name="concept")
 public class TkConcept {
 
     public static final String PADDING = "     ";
     public static final int dataVersion = 7;
     public static final long serialVersionUID = 1;
     //~--- fields --------------------------------------------------------------
-    public boolean annotationStyleRefex = false;
-    public TkConceptAttributes conceptAttributes;
-    public List<TkDescription> descriptions;
-    public List<TkMedia> media;
-    public UUID primordialUuid;
-    public List<TkRefexAbstractMember<?>> refsetMembers;
-    public List<TkRelationship> relationships;
+    @XmlAttribute
+    protected boolean annotationStyleRefex = false;
+    protected TkConceptAttributes conceptAttributes;
+
+    @XmlElementWrapper(name="descriptions")
+    @XmlElement(name="desc")
+    protected List<TkDescription> descriptions;
+    protected List<TkMedia> media;
+    @XmlAttribute
+    protected UUID primordialUuid;
+    protected List<TkRefexAbstractMember<?>> refsetMembers;
+    protected List<TkRelationship> relationships;
 
     //~--- constructors --------------------------------------------------------
     public TkConcept() {
@@ -83,19 +91,19 @@ public class TkConcept {
 
     public TkConcept(ConceptChronicleBI c) throws IOException {
         conceptAttributes = new TkConceptAttributes(c.getConAttrs());
-        relationships = new ArrayList<TkRelationship>(c.getRelsOutgoing().size());
+        relationships = new ArrayList<>(c.getRelsOutgoing().size());
 
         for (RelationshipChronicleBI rel : c.getRelsOutgoing()) {
             relationships.add(new TkRelationship(rel));
         }
 
-        descriptions = new ArrayList<TkDescription>(c.getDescs().size());
+        descriptions = new ArrayList<>(c.getDescs().size());
 
         for (DescriptionChronicleBI desc : c.getDescs()) {
             descriptions.add(new TkDescription(desc));
         }
 
-        media = new ArrayList<TkMedia>(c.getMedia().size());
+        media = new ArrayList<>(c.getMedia().size());
 
         for (MediaChronicleBI mediaChronicle : c.getMedia()) {
             TkMedia tkMedia = new TkMedia(mediaChronicle);
@@ -106,7 +114,7 @@ public class TkConcept {
             Collection<? extends RefexChronicleBI> members = c.getRefsetMembers();
 
             if (members != null) {
-                refsetMembers = new ArrayList<TkRefexAbstractMember<?>>(members.size());
+                refsetMembers = new ArrayList<>(members.size());
 
                 for (RefexChronicleBI m : members) {
                     TkRefexAbstractMember<?> member = convertRefex(m);
@@ -162,7 +170,7 @@ public class TkConcept {
         }
 
         if (another.descriptions != null) {
-            this.descriptions = new ArrayList<TkDescription>(another.descriptions.size());
+            this.descriptions = new ArrayList<>(another.descriptions.size());
 
             for (TkDescription d : another.descriptions) {
                 this.descriptions.add(d.makeConversion(conversionMap, offset, mapAll));
@@ -170,7 +178,7 @@ public class TkConcept {
         }
 
         if (another.media != null) {
-            this.media = new ArrayList<TkMedia>(another.media.size());
+            this.media = new ArrayList<>(another.media.size());
 
             for (TkMedia d : another.media) {
                 this.media.add(d.makeConversion(conversionMap, offset, mapAll));
@@ -180,7 +188,7 @@ public class TkConcept {
         this.primordialUuid = conversionMap.get(another.primordialUuid);
 
         if (another.refsetMembers != null) {
-            this.refsetMembers = new ArrayList<TkRefexAbstractMember<?>>(another.refsetMembers.size());
+            this.refsetMembers = new ArrayList<>(another.refsetMembers.size());
 
             for (TkRefexAbstractMember<?> d : another.refsetMembers) {
                 this.refsetMembers.add((TkRefexAbstractMember<?>) d.makeConversion(conversionMap, offset,
@@ -189,7 +197,7 @@ public class TkConcept {
         }
 
         if (another.relationships != null) {
-            this.relationships = new ArrayList<TkRelationship>(another.relationships.size());
+            this.relationships = new ArrayList<>(another.relationships.size());
 
             for (TkRelationship d : another.relationships) {
                 this.relationships.add(d.makeConversion(conversionMap, offset, mapAll));
@@ -220,7 +228,7 @@ public class TkConcept {
                 another.getChronicle().getVersion(descVc).getDescsActive();
 
         if (activeDescriptions != null) {
-            this.descriptions = new ArrayList<TkDescription>(activeDescriptions.size());
+            this.descriptions = new ArrayList<>(activeDescriptions.size());
             nextDescription:
             for (DescriptionVersionBI d : activeDescriptions) {
                 for (int nid : d.getAllNidsForVersion()) {
@@ -238,7 +246,7 @@ public class TkConcept {
         Collection<? extends MediaVersionBI> activeMedia = another.getMediaActive();
 
         if (activeMedia != null) {
-            this.media = new ArrayList<TkMedia>(activeMedia.size());
+            this.media = new ArrayList<>(activeMedia.size());
             nextMedia:
             for (MediaVersionBI m : activeMedia) {
                 for (int nid : m.getAllNidsForVersion()) {
@@ -256,7 +264,7 @@ public class TkConcept {
         Collection<? extends RefexVersionBI<?>> activeRefsetMembers = another.getRefsetMembersActive();
 
         if (activeRefsetMembers != null) {
-            this.refsetMembers = new ArrayList<TkRefexAbstractMember<?>>(activeRefsetMembers.size());
+            this.refsetMembers = new ArrayList<>(activeRefsetMembers.size());
             nextRefsetMember:
             for (RefexVersionBI rxm : activeRefsetMembers) {
                 for (int nid : rxm.getAllNidsForVersion()) {
@@ -274,7 +282,7 @@ public class TkConcept {
         Collection<? extends RelationshipVersionBI> rels = another.getChronicle().getVersion(relVc).getRelsOutgoingActive();
 
         if (rels != null) {
-            this.relationships = new ArrayList<TkRelationship>(rels.size());
+            this.relationships = new ArrayList<>(rels.size());
             nextRel:
             for (RelationshipVersionBI rel : rels) {
                 int destNid = rel.getDestinationNid();
@@ -387,7 +395,7 @@ public class TkConcept {
      */
     @Override
     public int hashCode() {
-        return this.conceptAttributes.primordialUuid.hashCode();
+        return this.conceptAttributes.getPrimordialComponentUuid().hashCode();
     }
 
     public final void readExternal(DataInput in) throws IOException, ClassNotFoundException {
@@ -399,7 +407,7 @@ public class TkConcept {
 
         if (readDataVersion == 1) {
             conceptAttributes = new TkConceptAttributes(in, readDataVersion);
-            primordialUuid = conceptAttributes.primordialUuid;
+            primordialUuid = conceptAttributes.getPrimordialComponentUuid();
         } else {
             primordialUuid = new UUID(in.readLong(), in.readLong());
 
@@ -413,7 +421,7 @@ public class TkConcept {
         int descCount = in.readInt();
 
         if (descCount > 0) {
-            descriptions = new ArrayList<TkDescription>(descCount);
+            descriptions = new ArrayList<>(descCount);
 
             for (int i = 0; i < descCount; i++) {
                 descriptions.add(new TkDescription(in, readDataVersion));
@@ -423,7 +431,7 @@ public class TkConcept {
         int relCount = in.readInt();
 
         if (relCount > 0) {
-            relationships = new ArrayList<TkRelationship>(relCount);
+            relationships = new ArrayList<>(relCount);
 
             for (int i = 0; i < relCount; i++) {
                 relationships.add(new TkRelationship(in, readDataVersion));
@@ -433,7 +441,7 @@ public class TkConcept {
         int imgCount = in.readInt();
 
         if (imgCount > 0) {
-            media = new ArrayList<TkMedia>(imgCount);
+            media = new ArrayList<>(imgCount);
 
             for (int i = 0; i < imgCount; i++) {
                 media.add(new TkMedia(in, readDataVersion));
@@ -443,7 +451,7 @@ public class TkConcept {
         int refsetMemberCount = in.readInt();
 
         if (refsetMemberCount > 0) {
-            refsetMembers = new ArrayList<TkRefexAbstractMember<?>>(refsetMemberCount);
+            refsetMembers = new ArrayList<>(refsetMemberCount);
 
             for (int i = 0; i < refsetMemberCount; i++) {
                 TK_REFEX_TYPE type = TK_REFEX_TYPE.readType(in);
@@ -611,7 +619,7 @@ public class TkConcept {
         out.writeInt(dataVersion);
 
         if (primordialUuid == null) {
-            primordialUuid = conceptAttributes.primordialUuid;
+            primordialUuid = conceptAttributes.getPrimordialComponentUuid();
         }
 
         out.writeLong(primordialUuid.getMostSignificantBits());

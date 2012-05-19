@@ -19,12 +19,14 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlAttribute;
 
 public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlAttribute
    public long longValue;
 
    //~--- constructors --------------------------------------------------------

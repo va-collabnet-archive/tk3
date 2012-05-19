@@ -17,6 +17,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlAttribute;
 import org.ihtsdo.tk.api.TerminologyStoreDI;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
@@ -26,8 +27,9 @@ public class TkRefexUuidLongMember extends TkRefexAbstractMember<TkRefexUuidLong
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlAttribute
    public UUID                          uuid1;
-   public List<TkRefexUuidLongRevision> extraVersions;
+   @XmlAttribute
    public long                          long1;
 
    //~--- constructors --------------------------------------------------------
@@ -155,10 +157,10 @@ public class TkRefexUuidLongMember extends TkRefexAbstractMember<TkRefexUuidLong
       int versionSize = in.readInt();
 
       if (versionSize > 0) {
-         extraVersions = new ArrayList<TkRefexUuidLongRevision>(versionSize);
+         revisions = new ArrayList<>(versionSize);
 
          for (int i = 0; i < versionSize; i++) {
-            extraVersions.add(new TkRefexUuidLongRevision(in, dataVersion));
+            revisions.add(new TkRefexUuidLongRevision(in, dataVersion));
          }
       }
    }
@@ -188,12 +190,12 @@ public class TkRefexUuidLongMember extends TkRefexAbstractMember<TkRefexUuidLong
       out.writeLong(uuid1.getLeastSignificantBits());
       out.writeLong(long1);
 
-      if (extraVersions == null) {
+      if (revisions == null) {
          out.writeInt(0);
       } else {
-         out.writeInt(extraVersions.size());
+         out.writeInt(revisions.size());
 
-         for (TkRefexUuidLongRevision rmv : extraVersions) {
+         for (TkRefexUuidLongRevision rmv : revisions) {
             rmv.writeExternal(out);
          }
       }
@@ -211,12 +213,12 @@ public class TkRefexUuidLongMember extends TkRefexAbstractMember<TkRefexUuidLong
 
    @Override
    public List<TkRefexUuidLongRevision> getRevisionList() {
-      return extraVersions;
+      return revisions;
    }
 
    @Override
    public List<TkRefexUuidLongRevision> getRevisions() {
-      return extraVersions;
+      return revisions;
    }
 
    @Override

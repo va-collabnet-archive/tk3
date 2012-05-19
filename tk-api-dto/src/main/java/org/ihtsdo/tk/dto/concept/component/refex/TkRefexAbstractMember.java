@@ -18,13 +18,16 @@ import java.io.IOException;
 
 import java.util.Map;
 import java.util.UUID;
+import javax.xml.bind.annotation.XmlAttribute;
 
 public abstract class TkRefexAbstractMember<V extends TkRevision> extends TkComponent<V> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlAttribute
    public UUID componentUuid;
+   @XmlAttribute
    public UUID refexUuid;
 
    //~--- constructors --------------------------------------------------------

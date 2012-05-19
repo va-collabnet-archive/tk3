@@ -15,15 +15,20 @@ import java.io.IOException;
 
 import java.util.Map;
 import java.util.UUID;
+import javax.xml.bind.annotation.XmlAttribute;
 
 public class TkRelationshipRevision extends TkRevision {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlAttribute
    public UUID characteristicUuid;
+   @XmlAttribute
    public int  group;
+   @XmlAttribute
    public UUID refinabilityUuid;
+   @XmlAttribute
    public UUID typeUuid;
 
    //~--- constructors --------------------------------------------------------

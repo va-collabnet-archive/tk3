@@ -20,15 +20,23 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class TkRevision implements I_VersionExternally {
 
     private static final long serialVersionUID = 1;
     public static UUID unspecifiedUserUuid = UUID.fromString("f7495b58-6630-3499-a44e-2052b5fcf06c");
     //~--- fields --------------------------------------------------------------
+    @XmlAttribute
     public long time = Long.MIN_VALUE;
+    @XmlAttribute
     public UUID authorUuid;
+    @XmlAttribute
     public UUID pathUuid;
+    @XmlAttribute
     public UUID statusUuid;
 
     //~--- constructors --------------------------------------------------------

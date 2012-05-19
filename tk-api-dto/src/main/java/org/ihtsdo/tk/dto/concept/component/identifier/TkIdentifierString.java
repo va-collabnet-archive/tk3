@@ -13,12 +13,14 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
+import javax.xml.bind.annotation.XmlAttribute;
 
 public class TkIdentifierString extends TkIdentifier {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlAttribute
    public String denotation;
 
    //~--- constructors --------------------------------------------------------

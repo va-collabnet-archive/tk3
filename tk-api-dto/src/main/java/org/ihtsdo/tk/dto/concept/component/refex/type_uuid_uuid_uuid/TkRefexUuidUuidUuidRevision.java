@@ -15,14 +15,18 @@ import java.io.IOException;
 
 import java.util.Map;
 import java.util.UUID;
+import javax.xml.bind.annotation.XmlAttribute;
 
 public class TkRefexUuidUuidUuidRevision extends TkRevision {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlAttribute
    public UUID uuid1;
+   @XmlAttribute
    public UUID uuid2;
+   @XmlAttribute
    public UUID uuid3;
 
    //~--- constructors --------------------------------------------------------

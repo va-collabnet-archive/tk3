@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import java.util.Map;
 import java.util.UUID;
+import javax.xml.bind.annotation.XmlAttribute;
 import org.ihtsdo.tk.api.refex.type_nid.RefexNidVersionBI;
 
 public class TkRefexUuidRevision extends TkRevision {
@@ -21,6 +22,7 @@ public class TkRefexUuidRevision extends TkRevision {
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlAttribute
    public UUID uuid1;
 
    //~--- constructors --------------------------------------------------------

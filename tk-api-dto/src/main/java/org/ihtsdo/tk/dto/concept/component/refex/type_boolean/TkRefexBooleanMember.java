@@ -18,12 +18,14 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlAttribute;
 
 public class TkRefexBooleanMember extends TkRefexAbstractMember<TkRefexBooleanRevision> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlAttribute
    public boolean booleanValue;
 
    //~--- constructors --------------------------------------------------------

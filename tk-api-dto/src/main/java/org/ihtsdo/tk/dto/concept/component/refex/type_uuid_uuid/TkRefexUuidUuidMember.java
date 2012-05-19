@@ -20,13 +20,16 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlAttribute;
 
 public class TkRefexUuidUuidMember extends TkRefexAbstractMember<TkRefexUuidUuidRevision> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlAttribute
    public UUID uuid1;
+   @XmlAttribute
    public UUID uuid2;
 
    //~--- constructors --------------------------------------------------------
