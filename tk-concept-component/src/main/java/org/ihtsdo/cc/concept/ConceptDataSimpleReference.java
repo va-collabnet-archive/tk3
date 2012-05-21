@@ -91,6 +91,13 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
       this.enclosingConcept = enclosingConcept;
    }
 
+   public ConceptDataSimpleReference(Concept enclosingConcept, NidDataInMemory data)
+           throws IOException {
+      super(data);
+      assert enclosingConcept != null : "enclosing concept cannot be null.";
+      this.enclosingConcept = enclosingConcept;
+   }
+
    //~--- methods -------------------------------------------------------------
 
    /*
@@ -296,7 +303,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
             removeCanceledFromList(srcRels.get());
          }
 
-         lastExtinctRemoval = P.s.incrementAndGetSequence();
+         lastExtinctRemoval = P.s.getSequence();
       }
    }
 

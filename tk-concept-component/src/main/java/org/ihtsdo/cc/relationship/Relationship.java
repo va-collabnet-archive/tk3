@@ -170,10 +170,10 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
 
         // nid, list size, and conceptNid are read already by the binder...
         c2Nid = input.readInt();
-        setCharacteristicNid(input.readInt());
+        characteristicNid = input.readInt();
         group = input.readInt();
-        setRefinabilityNid(input.readInt());
-        setTypeNid(input.readInt());
+        refinabilityNid = input.readInt();
+        typeNid = input.readInt();
 
         int additionalVersionCount = input.readShort();
 
@@ -492,6 +492,11 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
             modified();
         }
     }
+    private void setCharacteristicNidFromBdb(int characteristicNid) {
+        if (this.characteristicNid != characteristicNid) {
+            this.characteristicNid = characteristicNid;
+        }
+    }
 
     @Override
     public void setDestinationNid(int dNid) throws PropertyVetoException {
@@ -507,6 +512,9 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
             modified();
         }
     }
+    public void setDestinationNidFromBdb(int dNid) throws PropertyVetoException {
+        this.c2Nid = dNid;
+    }
 
     @Override
     public void setGroup(int group) {
@@ -520,6 +528,9 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
             this.refinabilityNid = refinabilityNid;
             modified();
         }
+    }
+    public void setRefinabilityNidFromBdb(int refinabilityNid) {
+       this.refinabilityNid = refinabilityNid;
     }
 
     @Override
@@ -535,6 +546,9 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
             this.typeNid = typeNid;
             modified();
         }
+    }
+    public void setTypeNidFromBdb(int typeNid) {
+        this.typeNid = typeNid;
     }
 
     //~--- inner classes -------------------------------------------------------

@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
 import org.ihtsdo.cc.P;
-import org.ihtsdo.cc.concept.ComponentComparator;
 import org.ihtsdo.cc.media.Media;
 import org.ihtsdo.cc.lucene.LuceneManager;
 
@@ -64,6 +63,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
       this.nidData    = nidData;
       this.lastChange = getDataVersion();
       this.lastWrite  = this.lastChange;
+      this.lastExtinctRemoval = P.s.getSequence();
    }
 
    //~--- methods -------------------------------------------------------------

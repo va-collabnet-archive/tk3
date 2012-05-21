@@ -1,8 +1,10 @@
 package org.ihtsdo.cc.concept;
 
 //~--- non-JDK imports --------------------------------------------------------
+import java.io.DataInputStream;
 import org.ihtsdo.cc.concept.ComponentComparator;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map.Entry;
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -103,6 +105,27 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             case SOFT:
             case WEAK:
                 data = new ConceptDataSimpleReference(this);
+
+                break;
+
+            case STRONG:
+                throw new UnsupportedOperationException();
+
+            default:
+                throw new UnsupportedOperationException("Can't handle reference type: " + refType);
+        }
+
+    }
+    private Concept(int nid, NidDataInMemory conceptData) throws IOException {
+        super();
+        assert nid != Integer.MAX_VALUE : "nid == Integer.MAX_VALUE";
+        this.nid = nid;
+        this.hashCode = Hashcode.compute(nid);
+
+        switch (refType) {
+            case SOFT:
+            case WEAK:
+                this.data = new ConceptDataSimpleReference(this, conceptData);
 
                 break;
 
@@ -795,6 +818,25 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         }
 
         conceptsCRHM.put(nid, c);
+
+        return c;
+    }
+    public static Concept get(InputStream is) throws IOException {
+        DataInputStream dis = new DataInputStream(is);
+        int nid = dis.readInt();
+        assert nid != Integer.MAX_VALUE : "nid == Integer.MAX_VALUE";
+        
+        Concept c = conceptsCRHM.get(nid);
+        NidDataInMemory ndim = new NidDataInMemory(is);
+        if (c == null) {
+            Concept newC = new Concept(nid, ndim);
+
+            c = conceptsCRHM.putIfAbsent(nid, newC);
+
+            if (c == null) {
+                c = newC;
+            }
+        }
 
         return c;
     }
