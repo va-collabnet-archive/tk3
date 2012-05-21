@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement(name="relationship-revision")
 public class TkRelationshipRevision extends TkRevision {
    public static final long serialVersionUID = 1;
 

@@ -20,7 +20,9 @@ import java.io.IOException;
 
 import java.util.*;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement(name="relationship")
 public class TkRelationship extends TkComponent<TkRelationshipRevision> implements I_RelateExternally {
    public static final long serialVersionUID = 1;
 

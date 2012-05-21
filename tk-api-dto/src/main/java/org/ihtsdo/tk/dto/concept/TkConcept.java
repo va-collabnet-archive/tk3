@@ -70,13 +70,19 @@ public class TkConcept {
     protected boolean annotationStyleRefex = false;
     protected TkConceptAttributes conceptAttributes;
 
-    @XmlElementWrapper(name="descriptions")
-    @XmlElement(name="desc")
+    @XmlElementWrapper(name="description-collection")
+    @XmlElement(name="description")
     protected List<TkDescription> descriptions;
-    protected List<TkMedia> media;
+    @XmlElementWrapper(name="media-collection")
+    @XmlElement(name="media")
+     protected List<TkMedia> media;
     @XmlAttribute
     protected UUID primordialUuid;
+    @XmlElementWrapper(name="refex-member-collection")
+    @XmlElement(name="refex")
     protected List<TkRefexAbstractMember<?>> refsetMembers;
+    @XmlElementWrapper(name="relationship-collection")
+    @XmlElement(name="relationship")
     protected List<TkRelationship> relationships;
 
     //~--- constructors --------------------------------------------------------

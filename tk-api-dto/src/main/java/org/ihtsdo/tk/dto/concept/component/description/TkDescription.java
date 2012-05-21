@@ -23,7 +23,7 @@ import java.util.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="e-description")
+@XmlRootElement(name="description")
 public class TkDescription extends TkComponent<TkDescriptionRevision> implements I_DescribeExternally {
    public static final long serialVersionUID = 1;
 
@@ -65,7 +65,7 @@ public class TkDescription extends TkComponent<TkDescriptionRevision> implements
       time                   = part.getTime();
 
       if (partCount > 1) {
-         revisions = new ArrayList<TkDescriptionRevision>(partCount - 1);
+         revisions = new ArrayList<>(partCount - 1);
 
          while (itr.hasNext()) {
              DescriptionVersionBI dv = itr.next();
@@ -186,7 +186,7 @@ public class TkDescription extends TkComponent<TkDescriptionRevision> implements
       int versionLength = in.readInt();
 
       if (versionLength > 0) {
-         revisions = new ArrayList<TkDescriptionRevision>(versionLength);
+         revisions = new ArrayList<>(versionLength);
 
          for (int i = 0; i < versionLength; i++) {
             revisions.add(new TkDescriptionRevision(in, dataVersion));

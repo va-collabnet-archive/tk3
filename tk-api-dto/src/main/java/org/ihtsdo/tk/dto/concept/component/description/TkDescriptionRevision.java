@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement(name="description-revision")
 public class TkDescriptionRevision extends TkRevision implements I_DescribeExternally {
    public static final long serialVersionUID = 1;
 

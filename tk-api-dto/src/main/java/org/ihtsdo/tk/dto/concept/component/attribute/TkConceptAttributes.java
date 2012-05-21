@@ -18,7 +18,9 @@ import java.io.IOException;
 
 import java.util.*;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement(name="attributes")
 public class TkConceptAttributes extends TkComponent<TkConceptAttributesRevision>
         implements I_ConceptualizeExternally {
    public static final long serialVersionUID = 1;
