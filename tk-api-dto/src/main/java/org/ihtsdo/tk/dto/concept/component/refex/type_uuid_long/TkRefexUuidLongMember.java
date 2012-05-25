@@ -46,7 +46,7 @@ public class TkRefexUuidLongMember extends TkRefexAbstractMember<TkRefexUuidLong
       this.long1 = rv.getLong1();
 
       if (partCount > 1) {
-         revisions = new ArrayList<TkRefexUuidLongRevision>(partCount - 1);
+         revisions = new ArrayList<>(partCount - 1);
 
          while (itr.hasNext()) {
             rv = itr.next();

@@ -29,7 +29,7 @@ public class BooleanMember extends RefexMember<BooleanRevision, BooleanMember>
         implements RefexBooleanAnalogBI<BooleanRevision> {
 
     private static VersionComputer<RefexMember<BooleanRevision, BooleanMember>.Version> computer =
-            new VersionComputer<RefexMember<BooleanRevision, BooleanMember>.Version>();
+            new VersionComputer<>();
     //~--- fields --------------------------------------------------------------
     private boolean booleanValue;
 
@@ -202,7 +202,7 @@ public class BooleanMember extends RefexMember<BooleanRevision, BooleanMember>
                 count = count + revisions.size();
             }
 
-            ArrayList<Version> list = new ArrayList<Version>(count);
+            ArrayList<Version> list = new ArrayList<>(count);
 
             if (getTime() != Long.MIN_VALUE) {
                 list.add(new Version(this));

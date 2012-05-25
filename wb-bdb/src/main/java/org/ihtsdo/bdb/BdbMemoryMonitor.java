@@ -36,7 +36,7 @@ import javax.management.NotificationListener;
  */
 public class BdbMemoryMonitor {
   private final Collection<LowMemoryListener> listeners =
-      new ArrayList<LowMemoryListener>();
+      new ArrayList<>();
 
   public interface LowMemoryListener {
     public void memoryUsageLow(long usedMemory, long maxMemory);

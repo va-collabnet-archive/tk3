@@ -130,11 +130,7 @@ public class RelCAB extends CreateOrAmendBlueprint {
         if (getComponentUuid() == null) {
             try {
                 recomputeUuid();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            } catch (InvalidCAB ex) {
-                throw new RuntimeException(ex);
-            } catch (NoSuchAlgorithmException ex) {
+            } catch (    IOException | InvalidCAB | NoSuchAlgorithmException ex) {
                 throw new RuntimeException(ex);
             }
         }

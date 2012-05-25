@@ -31,7 +31,7 @@ public class UuidNidBinder extends TupleBinding<Set<UuidIntRecord>> {
     public Set<UuidIntRecord> entryToObject(TupleInput input) {
         int size = input.readInt();
         Set<UuidIntRecord> uuidNidRecSet = 
-                new ConcurrentSkipListSet<UuidIntRecord>();
+                new ConcurrentSkipListSet<>();
         for (int i = 0; i < size; i++) {
             uuidNidRecSet.add(new UuidIntRecord(input.readLong(), 
                     input.readLong(), 

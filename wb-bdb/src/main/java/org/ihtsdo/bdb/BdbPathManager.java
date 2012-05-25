@@ -90,7 +90,7 @@ public class BdbPathManager {
     @SuppressWarnings("unchecked")
     private void setupPathMap() throws IOException {
         if (pathMap == null) {
-            pathMap = new ConcurrentHashMap<Integer, PathBI>();
+            pathMap = new ConcurrentHashMap<>();
 
             try {
                 getPathRefsetConcept();
@@ -205,7 +205,7 @@ public class BdbPathManager {
     }
 
     public Set<PathBI> getAll() {
-        return new HashSet<PathBI>(pathMap.values());
+        return new HashSet<>(pathMap.values());
     }
 
     public List<PositionBI> getAllPathOrigins(int nid) throws IOException {
@@ -215,7 +215,7 @@ public class BdbPathManager {
             p = getFromDisk(nid);
         }
 
-        return new ArrayList<PositionBI>(p.getInheritedOrigins());
+        return new ArrayList<>(p.getInheritedOrigins());
     }
 
     @SuppressWarnings("unchecked")
@@ -239,7 +239,7 @@ public class BdbPathManager {
     }
 
     public List<PathBI> getPathChildren(int nid) {
-        List<PathBI> children = new ArrayList<PathBI>();
+        List<PathBI> children = new ArrayList<>();
 
         for (PathBI p : pathMap.values()) {
             if (p.getOrigins() != null) {
@@ -257,7 +257,7 @@ public class BdbPathManager {
     @SuppressWarnings("unchecked")
     public Set<Integer> getPathNids() throws IOException {
         try {
-            HashSet<Integer> result = new HashSet<Integer>();
+            HashSet<Integer> result = new HashSet<>();
 
             for (RefexMember extPart : getPathRefsetConcept().getExtensions()) {
                 RefexNidLongVersionBI conceptExtension = (RefexNidLongVersionBI) extPart;

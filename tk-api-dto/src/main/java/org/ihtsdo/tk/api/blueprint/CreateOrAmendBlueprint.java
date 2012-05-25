@@ -47,7 +47,7 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
     private UUID statusUuid;
     private ComponentVersionBI cv;
     private ViewCoordinate vc;
-    private List<RefexCAB> annotations = new ArrayList<RefexCAB>();
+    private List<RefexCAB> annotations = new ArrayList<>();
     protected PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     public synchronized void removePropertyChangeListener(String string, PropertyChangeListener pl) {
@@ -90,15 +90,7 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent pce) {
         try {
             recomputeUuid();
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidCAB ex) {
-            Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ContradictionException ex) {
+        } catch (NoSuchAlgorithmException | InvalidCAB | ContradictionException | IOException ex) {
             Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(Level.SEVERE, null, ex);
         }
 

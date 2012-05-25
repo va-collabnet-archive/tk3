@@ -34,7 +34,7 @@ public class NidListHelper {
             return;
         }
 
-        ArrayList<List<UUID>> outList = new ArrayList<List<UUID>>();
+        ArrayList<List<UUID>> outList = new ArrayList<>();
         for (int i : list.getListValues()) {
             if (i != 0 && i != Integer.MAX_VALUE) {
                 outList.add(Ts.get().getUuidsForNid(i));

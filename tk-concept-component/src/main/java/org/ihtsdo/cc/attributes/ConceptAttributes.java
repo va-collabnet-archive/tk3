@@ -82,7 +82,7 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
             List< ConAttrAnalogBI> returnTuples, Precedence precedencePolicy,
             ContradictionManagerBI contradictionManager, long time)
             throws IOException {
-        List<Version> returnList = new ArrayList<Version>();
+        List<Version> returnList = new ArrayList<>();
 
         computer.addSpecifiedVersions(allowedStatus, null, positionSet, returnList, getVersions(),
                 precedencePolicy, contradictionManager, time);
@@ -231,7 +231,7 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
 
     @Override
     public void writeToBdb(TupleOutput output, int maxReadOnlyStatusAtPositionNid) {
-        List<ConceptAttributesRevision> partsToWrite = new ArrayList<ConceptAttributesRevision>();
+        List<ConceptAttributesRevision> partsToWrite = new ArrayList<>();
 
         if (revisions != null) {
             for (ConceptAttributesRevision p : revisions) {
@@ -278,7 +278,7 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
 
     public List<Version> getTuples(NidSetBI allowedStatus, PositionBI viewPosition,
             Precedence precedencePolicy, ContradictionManagerBI contradictionManager) {
-        List<Version> returnList = new ArrayList<Version>();
+        List<Version> returnList = new ArrayList<>();
 
         addTuples(allowedStatus, viewPosition, returnList, precedencePolicy, contradictionManager);
 
@@ -287,7 +287,7 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
 
     public List<Version> getTuples(NidSetBI allowedStatus, PositionSetBI viewPositionSet,
             Precedence precedencePolicy, ContradictionManagerBI contradictionManager) {
-        List<Version> returnList = new ArrayList<Version>();
+        List<Version> returnList = new ArrayList<>();
 
         computer.addSpecifiedVersions(allowedStatus, viewPositionSet, returnList, getVersions(),
                 precedencePolicy, contradictionManager);
@@ -333,7 +333,7 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
                 count = count + revisions.size();
             }
 
-            list = new ArrayList<Version>(count);
+            list = new ArrayList<>(count);
 
             if (getTime() != Long.MIN_VALUE) {
                 list.add(new Version(this));
@@ -362,7 +362,7 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
      */
     @Override
     public List<ConceptAttributes.Version> getVersions(ViewCoordinate c) {
-        List<Version> returnTuples = new ArrayList<Version>(2);
+        List<Version> returnTuples = new ArrayList<>(2);
 
         computer.addSpecifiedVersions(c.getAllowedStatusNids(), (NidSetBI) null, c.getPositionSet(),
                 returnTuples, getVersions(), c.getPrecedence(),
@@ -373,7 +373,7 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
 
     public Collection<Version> getVersions(NidSetBI allowedStatus, PositionSetBI viewPositions,
             Precedence precedence, ContradictionManagerBI contradictionMgr) {
-        List<Version> returnTuples = new ArrayList<Version>(2);
+        List<Version> returnTuples = new ArrayList<>(2);
 
         computer.addSpecifiedVersions(allowedStatus, viewPositions, returnTuples, getVersions(), precedence,
                 contradictionMgr);

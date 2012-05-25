@@ -727,7 +727,7 @@ public class UuidArrayList extends AbstractUuidList {
 
 	@Override
 	public ArrayList<UUID> toList() {
-		ArrayList<UUID> resultList = new ArrayList<UUID>(size);
+		ArrayList<UUID> resultList = new ArrayList<>(size);
 		for (int i = 0; i < size; i++) {
 			resultList.add(new UUID(elements[i * 2], elements[i * 2 + 1]));
 		}

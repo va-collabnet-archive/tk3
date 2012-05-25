@@ -84,7 +84,7 @@ public class CidCidCidMemberTest {
         testObj2 = makeTestObject1();
         
         // Put testComponent1 in a collection 
-        Set<NidNidNidMember> coll = new java.util.HashSet<NidNidNidMember>();
+        Set<NidNidNidMember> coll = new java.util.HashSet<>();
         coll.add(testObj1);
 
         // Test for the presence of testComponent1 by using the  

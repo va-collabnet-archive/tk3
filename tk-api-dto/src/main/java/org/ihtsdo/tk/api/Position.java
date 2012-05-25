@@ -171,7 +171,7 @@ public class Position implements PositionBI, Serializable {
         }
 
         int size = in.readInt();
-        List<PositionBI> origins = new ArrayList<PositionBI>(size);
+        List<PositionBI> origins = new ArrayList<>(size);
 
         for (int i = 0; i < size; i++) {
             origins.add(readPosition(in));
@@ -273,7 +273,7 @@ public class Position implements PositionBI, Serializable {
             return depth;
         }
 
-        List<PositionBI> depthOrigins = new ArrayList<PositionBI>(path.getOrigins());
+        List<PositionBI> depthOrigins = new ArrayList<>(path.getOrigins());
 
         while (depthOrigins.size() > 0) {
             depth++;
@@ -284,7 +284,7 @@ public class Position implements PositionBI, Serializable {
                 }
             }
 
-            List<PositionBI> newOrigins = new ArrayList<PositionBI>();
+            List<PositionBI> newOrigins = new ArrayList<>();
 
             for (PositionBI p : depthOrigins) {
                 newOrigins.addAll(p.getPath().getOrigins());

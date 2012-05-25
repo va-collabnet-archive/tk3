@@ -66,9 +66,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
                     memberType.name()
                     + getPrimUuidStrForNidProp(RefexProperty.COLLECTION_NID)
                     + getRcUuid().toString());
-        } catch (NoSuchAlgorithmException ex) {
-            throw new RuntimeException(ex);
-        } catch (UnsupportedEncodingException ex) {
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
             throw new RuntimeException(ex);
         }
     }
@@ -110,9 +108,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
                     + getPrimUuidStrForNidProp(RefexProperty.COLLECTION_NID)
                     + getPrimUuidStrForNidProp(RefexProperty.RC_UUID)
                     + sb.toString());
-        } catch (NoSuchAlgorithmException ex) {
-            throw new RuntimeException(ex);
-        } catch (UnsupportedEncodingException ex) {
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
             throw new RuntimeException(ex);
         }
     }
@@ -146,7 +142,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
                 + " props: " + this.properties);
     }
     protected EnumMap<RefexProperty, Object> properties =
-            new EnumMap<RefexProperty, Object>(RefexProperty.class);
+            new EnumMap<>(RefexProperty.class);
 
     /**
      * This constructor creates a MEMBER_UUID that is computed from a type 5

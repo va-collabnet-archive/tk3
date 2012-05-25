@@ -46,7 +46,7 @@ public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision
       this.longValue = rv.getLong1();
 
       if (partCount > 1) {
-         revisions = new ArrayList<TkRefexLongRevision>(partCount - 1);
+         revisions = new ArrayList<>(partCount - 1);
 
          while (itr.hasNext()) {
             rv = itr.next();
@@ -132,7 +132,7 @@ public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision
       int versionSize = in.readInt();
 
       if (versionSize > 0) {
-         revisions = new ArrayList<TkRefexLongRevision>(versionSize);
+         revisions = new ArrayList<>(versionSize);
 
          for (int i = 0; i < versionSize; i++) {
             revisions.add(new TkRefexLongRevision(in, dataVersion));

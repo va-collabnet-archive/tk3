@@ -48,7 +48,7 @@ public class TkRefexUuidIntMember extends TkRefexAbstractMember<TkRefexUuidIntRe
       this.int1 = rv.getInt1();
  
       if (partCount > 1) {
-         revisions = new ArrayList<TkRefexUuidIntRevision>(partCount - 1);
+         revisions = new ArrayList<>(partCount - 1);
 
          while (relItr.hasNext()) {
             rv = relItr.next();

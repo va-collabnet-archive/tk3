@@ -55,7 +55,7 @@ public class NidSet implements NidSetBI, Serializable, ListDataListener {
             }
         }
         if (duplicates) {
-            HashSet<Integer> hashSetValues = new HashSet<Integer>();
+            HashSet<Integer> hashSetValues = new HashSet<>();
             for (int i : values) {
                 hashSetValues.add(i);
             }
@@ -169,7 +169,7 @@ public class NidSet implements NidSetBI, Serializable, ListDataListener {
     }
 
     public HashSet<Integer> getAsSet() {
-        HashSet<Integer> members = new HashSet<Integer>();
+        HashSet<Integer> members = new HashSet<>();
         for (int elem : setValues) {
             members.add(elem);
         }
@@ -276,7 +276,7 @@ public class NidSet implements NidSetBI, Serializable, ListDataListener {
         return buf.toString();
     }
     
-    private Set<ListDataListener> listeners = new HashSet<ListDataListener>();
+    private Set<ListDataListener> listeners = new HashSet<>();
 
     @Override
     public void intervalAdded(ListDataEvent e) {

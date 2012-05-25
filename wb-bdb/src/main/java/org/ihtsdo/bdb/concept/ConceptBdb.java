@@ -20,6 +20,7 @@ import com.sleepycat.je.Cursor;
 import com.sleepycat.je.CursorConfig;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseEntry;
+import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
 import org.ihtsdo.cc.concept.Concept;
@@ -135,8 +136,8 @@ public class ConceptBdb extends ComponentBdb {
         int idsPerParallelConceptIterator = cardinality / executors;
     	//AceLog.getAppLog().info("Iterate in parallel. idsPerParallelConceptIterator: " + idsPerParallelConceptIterator);
         NidBitSetItrBI idsItr = ids.iterator();
-        List<Future<Boolean>> futures = new ArrayList<Future<Boolean>>(executors + 1);
-        List<ParallelConceptIterator> pcis = new ArrayList<ParallelConceptIterator>();
+        List<Future<Boolean>> futures = new ArrayList<>(executors + 1);
+        List<ParallelConceptIterator> pcis = new ArrayList<>();
         int sum = 0;
         while (idsItr.next()) {
             int first = idsItr.nid();
@@ -182,8 +183,7 @@ public class ConceptBdb extends ComponentBdb {
             IdentifierSet nidMap = new IdentifierSet(size + 2);
             CursorConfig cursorConfig = new CursorConfig();
             cursorConfig.setReadUncommitted(true);
-            Cursor cursor = db.openCursor(null, cursorConfig);
-            try {
+            try (Cursor cursor = db.openCursor(null, cursorConfig)) {
                 DatabaseEntry foundKey = new DatabaseEntry();
                 DatabaseEntry foundData = new DatabaseEntry();
                 foundData.setPartial(true);
@@ -194,8 +194,6 @@ public class ConceptBdb extends ComponentBdb {
                 }
                 cursor.close();
                 return nidMap;
-            } finally {
-                cursor.close();
             }
         }
     }
@@ -243,7 +241,7 @@ public class ConceptBdb extends ComponentBdb {
             // Perform the deletion. All records that use this key are
             // deleted.
             mutable.delete(null, key);
-        } catch (Exception e) {
+        } catch (DatabaseException | UnsupportedOperationException | IllegalArgumentException e) {
             throw new IOException(e);
         }
         conceptIdSet.setNotMember(cNid);

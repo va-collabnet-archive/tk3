@@ -37,7 +37,7 @@ import org.ihtsdo.tk.api.refex.type_string.RefexStringVersionBI;
 public class StringMember extends RefexMember<StringRevision, StringMember>
         implements RefexStringAnalogBI<StringRevision> {
    private static VersionComputer<RefexMember<StringRevision, StringMember>.Version> computer =
-      new VersionComputer<RefexMember<StringRevision, StringMember>.Version>();
+      new VersionComputer<>();
 
    //~--- fields --------------------------------------------------------------
 
@@ -58,7 +58,7 @@ public class StringMember extends RefexMember<StringRevision, StringMember>
       stringValue = refsetMember.getString1();
 
       if (refsetMember.getRevisionList() != null) {
-         revisions = new RevisionSet<StringRevision, StringMember>(primordialSapNid);
+         revisions = new RevisionSet<>(primordialSapNid);
 
          for (TkRefexStringRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new StringRevision(eVersion, this));
@@ -216,7 +216,7 @@ public class StringMember extends RefexMember<StringRevision, StringMember>
             count = count + revisions.size();
          }
 
-         ArrayList<Version> list = new ArrayList<Version>(count);
+         ArrayList<Version> list = new ArrayList<>(count);
 
          if (getTime() != Long.MIN_VALUE) {
             list.add(new Version(this));

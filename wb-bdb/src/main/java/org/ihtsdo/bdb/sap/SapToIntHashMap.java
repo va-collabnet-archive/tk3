@@ -71,7 +71,7 @@ public class SapToIntHashMap {
    }
 
    private void setup(int initialCapacity) {
-      map = new ConcurrentHashMap<StatusAuthorPosition, Integer>(initialCapacity);
+      map = new ConcurrentHashMap<>(initialCapacity);
    }
 
    public Collection<Integer> values() {

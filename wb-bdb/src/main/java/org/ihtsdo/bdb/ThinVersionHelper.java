@@ -66,7 +66,7 @@ public class ThinVersionHelper {
          */
     }
 
-    private static ThreadLocal<SimpleDateFormat> dateFormatterTL = new ThreadLocal<SimpleDateFormat>();
+    private static ThreadLocal<SimpleDateFormat> dateFormatterTL = new ThreadLocal<>();
 
     public static int convert(long time) {
         if (time == Long.MAX_VALUE) {

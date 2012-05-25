@@ -124,7 +124,7 @@ public class RelGroupVersion implements RelGroupVersionBI {
 
     @Override
     public Collection<? extends RelationshipVersionBI> getAllCurrentRelVersions() {
-        ArrayList<RelationshipVersionBI> results = new ArrayList<RelationshipVersionBI>();
+        ArrayList<RelationshipVersionBI> results = new ArrayList<>();
 
         for (RelationshipChronicleBI relc : rg.getRels()) {
             if (coordinate != null) {
@@ -158,7 +158,7 @@ public class RelGroupVersion implements RelGroupVersionBI {
 
     @Override
     public Collection<? extends RelationshipVersionBI> getAllRels() throws ContradictionException {
-        ArrayList<RelationshipVersionBI> results = new ArrayList<RelationshipVersionBI>();
+        ArrayList<RelationshipVersionBI> results = new ArrayList<>();
 
         for (RelationshipChronicleBI relc : rg.getRels()) {
             if (coordinate != null) {
@@ -257,7 +257,7 @@ public class RelGroupVersion implements RelGroupVersionBI {
 
     @Override
     public Collection<? extends RelationshipVersionBI> getCurrentRels() throws ContradictionException {
-        ArrayList<RelationshipVersionBI> results = new ArrayList<RelationshipVersionBI>();
+        ArrayList<RelationshipVersionBI> results = new ArrayList<>();
 
         for (RelationshipChronicleBI relc : rg.getRels()) {
             if (coordinate != null) {

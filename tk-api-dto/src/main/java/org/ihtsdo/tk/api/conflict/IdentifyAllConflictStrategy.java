@@ -134,7 +134,7 @@ public class IdentifyAllConflictStrategy extends ContradictionManagementStrategy
 
     @Override
     public <T extends ComponentVersionBI> List<T> resolveVersions(T part1, T part2) {
-        ArrayList<T> values = new ArrayList<T>();
+        ArrayList<T> values = new ArrayList<>();
         values.add(part1);
         values.add(part2);
         return values;

@@ -497,7 +497,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V>
         void setTable(HashEntry<K, V>[] newTable) {
             threshold = (int) (newTable.length * loadFactor);
             table = newTable;
-            refQueue = new ReferenceQueue<Object>();
+            refQueue = new ReferenceQueue<>();
         }
 
         /**

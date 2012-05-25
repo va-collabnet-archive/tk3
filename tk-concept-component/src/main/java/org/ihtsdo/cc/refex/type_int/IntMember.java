@@ -37,7 +37,7 @@ import org.ihtsdo.tk.api.refex.type_int.RefexIntVersionBI;
 public class IntMember extends RefexMember<IntRevision, IntMember>
         implements RefexIntAnalogBI<IntRevision> {
    private static VersionComputer<RefexMember<IntRevision, IntMember>.Version> computer =
-      new VersionComputer<RefexMember<IntRevision, IntMember>.Version>();
+      new VersionComputer<>();
 
    //~--- fields --------------------------------------------------------------
 
@@ -58,7 +58,7 @@ public class IntMember extends RefexMember<IntRevision, IntMember>
       int1 = refsetMember.getIntValue();
 
       if (refsetMember.getRevisionList() != null) {
-         revisions = new RevisionSet<IntRevision, IntMember>(primordialSapNid);
+         revisions = new RevisionSet<>(primordialSapNid);
 
          for (TkRefexIntRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new IntRevision(eVersion, this));
@@ -216,7 +216,7 @@ public class IntMember extends RefexMember<IntRevision, IntMember>
             count = count + revisions.size();
          }
 
-         ArrayList<Version> list = new ArrayList<Version>(count);
+         ArrayList<Version> list = new ArrayList<>(count);
 
          if (getTime() != Long.MIN_VALUE) {
             list.add(new Version(this));

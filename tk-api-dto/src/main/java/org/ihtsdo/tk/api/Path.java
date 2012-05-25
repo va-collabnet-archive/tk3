@@ -62,9 +62,9 @@ public class Path implements PathBI, Serializable {
         super();
         this.conceptNid = conceptId;
         if (origins != null) {
-            this.origins = new CopyOnWriteArraySet<PositionBI>(origins);
+            this.origins = new CopyOnWriteArraySet<>(origins);
         } else {
-            this.origins = new CopyOnWriteArraySet<PositionBI>();
+            this.origins = new CopyOnWriteArraySet<>();
         }
     }
 
@@ -110,7 +110,7 @@ public class Path implements PathBI, Serializable {
 
     @Override
     public Set<PositionBI> getInheritedOrigins() {
-        HashSet<PositionBI> inheritedOrigins = new HashSet<PositionBI>();
+        HashSet<PositionBI> inheritedOrigins = new HashSet<>();
         for (PositionBI origin : this.origins) {
             inheritedOrigins.addAll(origin.getPath().getInheritedOrigins());
             inheritedOrigins.add(origin);
@@ -132,7 +132,7 @@ public class Path implements PathBI, Serializable {
                 }
             }
         }
-        Set<PositionBI> normalisedOrigins = new HashSet<PositionBI>(inheritedOrigins);
+        Set<PositionBI> normalisedOrigins = new HashSet<>(inheritedOrigins);
         for (PositionBI a : inheritedOrigins) {
             for (PositionBI b : inheritedOrigins) {
                 if ((a.getPath().getConceptNid()) == b.getPath().getConceptNid() && (a.getTime() < b.getTime())) {
@@ -200,7 +200,7 @@ public class Path implements PathBI, Serializable {
             Logger.getLogger(Path.class.getName()).log(Level.SEVERE, "ReadPath error. {0} missing. Substuting WB Aux ", pathIdList);
         }
         int size = in.readInt();
-        List<PositionBI> origins = new ArrayList<PositionBI>(size);
+        List<PositionBI> origins = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             origins.add(Position.readPosition(in));
         }
@@ -209,7 +209,7 @@ public class Path implements PathBI, Serializable {
 
     public static Set<PathBI> readPathSet(ObjectInputStream in) throws IOException, ClassNotFoundException {
         int size = in.readInt();
-        Set<PathBI> positions = new HashSet<PathBI>(size);
+        Set<PathBI> positions = new HashSet<>(size);
         for (int i = 0; i < size; i++) {
             positions.add(readPath(in));
         }
@@ -244,7 +244,7 @@ public class Path implements PathBI, Serializable {
     @Override
     public List<UUID> getUUIDs() {
         try {
-            return new ArrayList<UUID>(Ts.get().getUuidsForNid(conceptNid));
+            return new ArrayList<>(Ts.get().getUuidsForNid(conceptNid));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

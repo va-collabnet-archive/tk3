@@ -37,7 +37,7 @@ import org.ihtsdo.tk.api.refex.type_long.RefexLongVersionBI;
 public class LongMember extends RefexMember<LongRevision, LongMember>
         implements RefexLongAnalogBI<LongRevision> {
    private static VersionComputer<RefexMember<LongRevision, LongMember>.Version> computer =
-      new VersionComputer<RefexMember<LongRevision, LongMember>.Version>();
+      new VersionComputer<>();
 
    //~--- fields --------------------------------------------------------------
 
@@ -58,7 +58,7 @@ public class LongMember extends RefexMember<LongRevision, LongMember>
       longValue = refsetMember.getLongValue();
 
       if (refsetMember.getRevisionList() != null) {
-         revisions = new RevisionSet<LongRevision, LongMember>(primordialSapNid);
+         revisions = new RevisionSet<>(primordialSapNid);
 
          for (TkRefexLongRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new LongRevision(eVersion, this));
@@ -215,7 +215,7 @@ public class LongMember extends RefexMember<LongRevision, LongMember>
             count = count + revisions.size();
          }
 
-         ArrayList<Version> list = new ArrayList<Version>(count);
+         ArrayList<Version> list = new ArrayList<>(count);
 
          if (getTime() != Long.MIN_VALUE) {
             list.add(new Version(this));

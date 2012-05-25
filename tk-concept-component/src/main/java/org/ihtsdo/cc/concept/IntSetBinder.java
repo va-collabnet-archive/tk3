@@ -14,11 +14,11 @@ public class IntSetBinder extends TupleBinding<Set<Integer>> {
 	@Override
 	public ConcurrentSkipListSet<Integer> entryToObject(TupleInput input) {
 		int size = input.readInt();
-		List<Integer> setValues = new ArrayList<Integer>(size);
+		List<Integer> setValues = new ArrayList<>(size);
 		for (int i = 0; i < size; i++) {
 			setValues.add(input.readInt());
 		}
-		return new ConcurrentSkipListSet<Integer>(setValues);
+		return new ConcurrentSkipListSet<>(setValues);
 	}
 
 	@Override

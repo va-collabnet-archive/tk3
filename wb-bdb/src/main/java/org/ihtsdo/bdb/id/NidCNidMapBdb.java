@@ -42,7 +42,7 @@ public class NidCNidMapBdb extends ComponentBdb {
     private AtomicReference<int[][]> nidCNidMaps;
     private int readOnlyRecords;
     
-    static TreeSet<Integer> maxValueEntries = new TreeSet<Integer>();
+    static TreeSet<Integer> maxValueEntries = new TreeSet<>();
 
 
     //~--- constructors --------------------------------------------------------
@@ -131,7 +131,7 @@ public class NidCNidMapBdb extends ComponentBdb {
 
         int nidCidMapCount = ((maxId - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE) + 1;
 
-        nidCNidMaps = new AtomicReference<int[][]>(new int[nidCidMapCount][]);
+        nidCNidMaps = new AtomicReference<>(new int[nidCidMapCount][]);
         mapChanged = new boolean[nidCidMapCount];
         Arrays.fill(mapChanged, false);
 
@@ -159,9 +159,7 @@ public class NidCNidMapBdb extends ComponentBdb {
 
         cursorConfig.setReadUncommitted(true);
 
-        Cursor cursor = db.openCursor(null, cursorConfig);
-
-        try {
+        try (Cursor cursor = db.openCursor(null, cursorConfig)) {
             DatabaseEntry foundKey = new DatabaseEntry();
             DatabaseEntry foundData = new DatabaseEntry();
 
@@ -179,8 +177,6 @@ public class NidCNidMapBdb extends ComponentBdb {
 
             cursor.close();
             AceLog.getAppLog().fine(prefix + nidMap.keys().toList().toString());
-        } finally {
-            cursor.close();
         }
     }
 
@@ -301,7 +297,7 @@ public class NidCNidMapBdb extends ComponentBdb {
                     maxValueEntries.remove(-2147483648);
                     maxValueEntries.remove(-2147483647);
                     if ((maxValueEntries.size() > 0) && (key < nidCNidMaps.get().length - 1)) {
-                        ArrayList<Integer> toRemove = new ArrayList<Integer>(maxValueEntries.size());
+                        ArrayList<Integer> toRemove = new ArrayList<>(maxValueEntries.size());
                         for (int nid: maxValueEntries) {
                             if (getCNid(nid) != Integer.MAX_VALUE) {
                                 toRemove.add(nid);

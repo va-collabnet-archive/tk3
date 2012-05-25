@@ -18,7 +18,7 @@ public class EditPathWinsStrategy extends ContradictionManagementStrategy {
 
    @Override
    public <T extends ComponentVersionBI> List<T> resolveVersions(List<T> versions) {
-      List<T> returnValues = new ArrayList<T>(2);
+      List<T> returnValues = new ArrayList<>(2);
 
       for (T v : versions) {
          if (ec.getEditPaths().contains(v.getPathNid())) {
@@ -43,7 +43,7 @@ public class EditPathWinsStrategy extends ContradictionManagementStrategy {
        assert part2 != null;
        assert ec != null;
        
-      List<T> returnValues = new ArrayList<T>(2);
+      List<T> returnValues = new ArrayList<>(2);
 
       if (ec.getEditPaths().contains(part1.getPathNid())) {
          returnValues.add(part1);

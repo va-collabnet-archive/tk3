@@ -56,12 +56,12 @@ public class ConceptComponentBinder<V extends Revision<V, C>, C extends ConceptC
         HashMap<Integer, C> nidToConceptComponentMap = null;
         if (readOnlyConceptComponentList != null) {
             newConceptComponentList = readOnlyConceptComponentList;
-            nidToConceptComponentMap = new HashMap<Integer, C>(listSize);
+            nidToConceptComponentMap = new HashMap<>(listSize);
             for (C component : readOnlyConceptComponentList) {
                 nidToConceptComponentMap.put(component.nid, component);
             }
         } else {
-            newConceptComponentList = new ArrayList<C>(listSize);
+            newConceptComponentList = new ArrayList<>(listSize);
         }
         for (int index = 0; index < listSize; index++) {
             // All components must write the nid first...
@@ -121,7 +121,7 @@ public class ConceptComponentBinder<V extends Revision<V, C>, C extends ConceptC
 
     @Override
     public void objectToEntry(Collection<C> conceptComponentList, TupleOutput output) {
-        List<C> componentListToWrite = new ArrayList<C>(conceptComponentList.size());
+        List<C> componentListToWrite = new ArrayList<>(conceptComponentList.size());
         for (C conceptComponent : conceptComponentList) {
             componentsEncountered.incrementAndGet();
             if (conceptComponent.sapIsInRange(maxReadOnlyStatusAtPositionId + 1, Integer.MAX_VALUE) 

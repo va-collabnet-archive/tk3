@@ -36,7 +36,7 @@ public class NidSetHelper {
             return;
         }
 
-        ArrayList<List<UUID>> outList = new ArrayList<List<UUID>>();
+        ArrayList<List<UUID>> outList = new ArrayList<>();
         for (int i : set.getSetValues()) {
             List<UUID> uuids = Ts.get().getUuidsForNid(i);
             if (uuids != null && uuids.size() > 0) {
@@ -74,7 +74,7 @@ public class NidSetHelper {
                 } else {
                     set[i] = Ts.get().getNidForUuids((List<UUID>) in.readObject());
                 }
-            } catch (Exception e) {
+            } catch (IOException | ClassNotFoundException e) {
                 IOException newEx = new IOException();
                 newEx.initCause(e);
                 throw newEx;

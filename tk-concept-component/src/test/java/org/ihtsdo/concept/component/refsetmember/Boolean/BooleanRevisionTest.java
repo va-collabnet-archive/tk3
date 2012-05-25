@@ -87,7 +87,7 @@ public class BooleanRevisionTest {
         }
         
         // Put testComponent1 in a collection 
-        Set<BooleanRevision> coll = new java.util.HashSet<BooleanRevision>();
+        Set<BooleanRevision> coll = new java.util.HashSet<>();
         coll.add(testObj1);
 
         // Test for the presence of testComponent1 by using the  

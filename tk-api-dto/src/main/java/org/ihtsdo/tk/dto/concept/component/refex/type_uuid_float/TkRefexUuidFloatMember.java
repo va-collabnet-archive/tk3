@@ -51,7 +51,7 @@ public class TkRefexUuidFloatMember extends TkRefexAbstractMember<TkRefexUuidFlo
       this.floatValue = rv.getFloat1();
 
       if (partCount > 1) {
-         revisions = new ArrayList<TkRefexUuidFloatRevision>(partCount - 1);
+         revisions = new ArrayList<>(partCount - 1);
 
          while (itr.hasNext()) {
             rv = itr.next();
@@ -158,7 +158,7 @@ public class TkRefexUuidFloatMember extends TkRefexAbstractMember<TkRefexUuidFlo
       int versionSize = in.readInt();
 
       if (versionSize > 0) {
-         revisions = new ArrayList<TkRefexUuidFloatRevision>(versionSize);
+         revisions = new ArrayList<>(versionSize);
 
          for (int i = 0; i < versionSize; i++) {
             revisions.add(new TkRefexUuidFloatRevision(in, dataVersion));

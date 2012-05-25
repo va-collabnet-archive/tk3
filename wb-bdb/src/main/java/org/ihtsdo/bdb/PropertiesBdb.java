@@ -72,7 +72,7 @@ public class PropertiesBdb extends ComponentBdb {
             Cursor propCursor = mutable.openCursor(null, null);
             DatabaseEntry foundKey = new DatabaseEntry();
             DatabaseEntry foundData = new DatabaseEntry();
-            HashMap<String, String> propMap = new HashMap<String, String>();
+            HashMap<String, String> propMap = new HashMap<>();
             try {
                 while (propCursor.getNext(foundKey, foundData, LockMode.DEFAULT) == OperationStatus.SUCCESS) {
                     String key = (String) stringBinder.entryToObject(foundKey);
@@ -95,7 +95,7 @@ public class PropertiesBdb extends ComponentBdb {
                 propCursor.close();
             }
             return Collections.unmodifiableMap(propMap);
-        } catch (Exception e) {
+        } catch (DatabaseException | IllegalArgumentException e) {
             throw new IOException(e);
         }
     }

@@ -11,7 +11,7 @@ public class ConcurrentSet<E> implements Set<E> {
 	
 	ConcurrentSet<E> replacement = null;
 	public ConcurrentSet(int i) {
-		setMap = new ConcurrentHashMap<E, E>(5);
+		setMap = new ConcurrentHashMap<>(5);
 	}
 
 	@Override
@@ -145,7 +145,7 @@ public class ConcurrentSet<E> implements Set<E> {
 
 	public void setCapacity(int i) {
 		ConcurrentHashMap<E, E> old = setMap;
-		setMap = new ConcurrentHashMap<E, E>(i);
+		setMap = new ConcurrentHashMap<>(i);
 		addAll(old.keySet());
 	}
 	

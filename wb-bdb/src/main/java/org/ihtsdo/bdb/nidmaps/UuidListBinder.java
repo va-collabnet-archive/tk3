@@ -33,7 +33,7 @@ public class UuidListBinder extends TupleBinding<List<UUID>> {
     @Override
     public List<UUID> entryToObject(TupleInput ti) {
         int size = ti.readShort();
-        List<UUID> uuidList = new ArrayList<UUID>(size);
+        List<UUID> uuidList = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             uuidList.add(new UUID(ti.readLong(), ti.readLong()));
         }

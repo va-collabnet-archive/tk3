@@ -80,18 +80,17 @@ public class JarExtractor {
                 f.mkdir();
                 continue;
             }
-            // get the input stream
-            java.io.InputStream is = new BufferedInputStream(jf.getInputStream(je));
-            f.getParentFile().mkdirs();
-            java.io.FileOutputStream fos = new java.io.FileOutputStream(f);
-            byte[] buffer = new byte[102400];
-            int bytesRead;
-            while ((bytesRead = is.read(buffer, 0, 102400)) != -1) {
-                // write contents of 'is' to 'fos'
-                fos.write(buffer, 0, bytesRead);
+            try (java.io.InputStream is = new BufferedInputStream(jf.getInputStream(je))) {
+                f.getParentFile().mkdirs();
+                java.io.FileOutputStream fos = new java.io.FileOutputStream(f);
+                byte[] buffer = new byte[102400];
+                int bytesRead;
+                while ((bytesRead = is.read(buffer, 0, 102400)) != -1) {
+                    // write contents of 'is' to 'fos'
+                    fos.write(buffer, 0, bytesRead);
+                }
+                fos.close();
             }
-            fos.close();
-            is.close();
             f.setLastModified(je.getTime());
         }
     }
@@ -100,30 +99,29 @@ public class JarExtractor {
         destDir.mkdirs();
         FileInputStream fis = new FileInputStream(source);
         BufferedInputStream bis = new BufferedInputStream(fis);
-        JarInputStream jis = new JarInputStream(bis);
-        JarEntry je = jis.getNextJarEntry();
-        while (je != null) {
-            System.out.println("Jar entry (b): " + je.getName() + " compressed: " + je.getCompressedSize() + " size: "
-                + je.getSize() + " time: " + new Date(je.getTime()) + " comment: " + je.getComment());
-            java.io.File f = new java.io.File(destDir + java.io.File.separator + je.getName());
-
-            if (je.isDirectory()) { // if it is a directory, create it
-                f.mkdir();
-            } else {
-                f.getParentFile().mkdirs();
-                java.io.FileOutputStream fos = new java.io.FileOutputStream(f);
-                byte[] buffer = new byte[102400];
-                int bytesRead;
-                while ((bytesRead = jis.read(buffer, 0, 102400)) != -1) {
-                    // write contents of 'is' to 'fos'
-                    fos.write(buffer, 0, bytesRead);
+        try (JarInputStream jis = new JarInputStream(bis)) {
+            JarEntry je = jis.getNextJarEntry();
+            while (je != null) {
+                System.out.println("Jar entry (b): " + je.getName() + " compressed: " + je.getCompressedSize() + " size: "
+                    + je.getSize() + " time: " + new Date(je.getTime()) + " comment: " + je.getComment());
+                java.io.File f = new java.io.File(destDir + java.io.File.separator + je.getName());
+                if (je.isDirectory()) {
+                    f.mkdir();
+                } else {
+                    f.getParentFile().mkdirs();
+                    try (java.io.FileOutputStream fos = new java.io.FileOutputStream(f)) {
+                        byte[] buffer = new byte[102400];
+                        int bytesRead;
+                        while ((bytesRead = jis.read(buffer, 0, 102400)) != -1) {
+                            // write contents of 'is' to 'fos'
+                            fos.write(buffer, 0, bytesRead);
+                        }
+                    }
+                    f.setLastModified(je.getTime());
                 }
-                fos.close();
-                f.setLastModified(je.getTime());
+                je = jis.getNextJarEntry();
             }
-            je = jis.getNextJarEntry();
         }
-        jis.close();
     }
 
 }

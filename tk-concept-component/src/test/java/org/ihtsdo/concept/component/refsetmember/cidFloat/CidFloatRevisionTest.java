@@ -87,7 +87,7 @@ public class CidFloatRevisionTest {
         }
         
         // Put testComponent1 in a collection 
-        Set<NidFloatRevision> coll = new java.util.HashSet<NidFloatRevision>();
+        Set<NidFloatRevision> coll = new java.util.HashSet<>();
         coll.add(testObj1);
 
         // Test for the presence of testComponent1 by using the  

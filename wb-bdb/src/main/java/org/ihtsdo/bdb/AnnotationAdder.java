@@ -45,13 +45,13 @@ public class AnnotationAdder implements I_ProcessUnfetchedConceptData {
     }
     NidBitSetBI conceptNids = new IdentifierSet();
     ConcurrentHashMap<Integer, ConcurrentSkipListSet<TkRefexAbstractMember<?>>> membersForConcept =
-            new ConcurrentHashMap<Integer, ConcurrentSkipListSet<TkRefexAbstractMember<?>>>();
+            new ConcurrentHashMap<>();
 
     AnnotationAdder(List<TkRefexAbstractMember<?>> members) {
 
         TkRmComparator comparator = new TkRmComparator();
         int errors = 0;
-        Set<UUID> errorSet = new TreeSet<UUID>();
+        Set<UUID> errorSet = new TreeSet<>();
         for (TkRefexAbstractMember<?> member : members) {
             UUID componentUuid = member.getComponentUuid();
             int nid = Bdb.uuidToNid(componentUuid);
@@ -59,7 +59,7 @@ public class AnnotationAdder implements I_ProcessUnfetchedConceptData {
             if (cNid + Integer.MIN_VALUE >= 0) {
                 conceptNids.setMember(cNid);
                 ConcurrentSkipListSet<TkRefexAbstractMember<?>> set =
-                        new ConcurrentSkipListSet<TkRefexAbstractMember<?>>(comparator);
+                        new ConcurrentSkipListSet<>(comparator);
                 membersForConcept.putIfAbsent(cNid, set);
                 membersForConcept.get(cNid).add(member);
             } else {

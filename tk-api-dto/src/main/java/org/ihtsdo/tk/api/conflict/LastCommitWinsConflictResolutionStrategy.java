@@ -63,14 +63,14 @@ public class LastCommitWinsConflictResolutionStrategy extends ContradictionManag
     }
 
     private <T extends ComponentVersionBI> Collection<List<T>> getSortedVersionsCopy(List<T> originalVersions) {
-        Map<Integer, List<T>> map = new HashMap<Integer, List<T>>();
+        Map<Integer, List<T>> map = new HashMap<>();
 
         for (T v : originalVersions) {
             List<T> versions;
             if (map.containsKey(v.getNid())) {
                 versions = map.get(v.getNid());
             } else {
-                versions = new ArrayList<T>();
+                versions = new ArrayList<>();
             }
             versions.add(v);
             map.put(v.getNid(), versions);
@@ -86,7 +86,7 @@ public class LastCommitWinsConflictResolutionStrategy extends ContradictionManag
     private <T extends ComponentVersionBI> List<T> getLatestVersions(List<T> versions) {
         Collection<List<T>> sortedVersions = getSortedVersionsCopy(versions);
 
-        List<T> returnList = new ArrayList<T>();
+        List<T> returnList = new ArrayList<>();
 
         for (List<T> v : sortedVersions) {
             Iterator<T> iterator = v.iterator();
@@ -153,7 +153,7 @@ public class LastCommitWinsConflictResolutionStrategy extends ContradictionManag
 //    }
 
     private <T extends ComponentVersionBI> List<T> getSortedPartsCopy(List<T> versions) {
-        List<T> copy = new ArrayList<T>(versions);
+        List<T> copy = new ArrayList<>(versions);
         Collections.sort(copy, new PartDateOrderSortComparator(true));
 
         return copy;
@@ -170,7 +170,7 @@ public class LastCommitWinsConflictResolutionStrategy extends ContradictionManag
     
     @Override
     public <T extends ComponentVersionBI> List<T> resolveVersions(T part1, T part2) {
-        ArrayList<T> values = new ArrayList<T>();
+        ArrayList<T> values = new ArrayList<>();
         if (part1.getTime() > part2.getTime()) {
             values.add(part1);
         } else if (part1.getTime() < part2.getTime()) {

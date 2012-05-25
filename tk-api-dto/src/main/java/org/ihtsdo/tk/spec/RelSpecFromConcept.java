@@ -16,8 +16,8 @@ public class RelSpecFromConcept {
 	
 	ConceptVersionBI concept;
 	RelSpec relSpec;
-	ArrayList<RelSpec> indvRelSpecs = new ArrayList<RelSpec>();
-	ArrayList<RelSpec> allRelSpecs = new ArrayList<RelSpec>();
+	ArrayList<RelSpec> indvRelSpecs = new ArrayList<>();
+	ArrayList<RelSpec> allRelSpecs = new ArrayList<>();
 	
 	public RelSpecFromConcept (ConceptVersionBI arenaConcept){
 		this.concept = arenaConcept;
@@ -55,10 +55,7 @@ public class RelSpecFromConcept {
 				//add indv relSpecs to all Rel specs
 				allRelSpecs.addAll(indvRelSpecs);
 				}
-			} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}catch (ContradictionException e) {
+			} catch (IOException | ContradictionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

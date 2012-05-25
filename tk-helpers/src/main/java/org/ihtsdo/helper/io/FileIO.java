@@ -71,16 +71,16 @@ public class FileIO {
      * @throws IOException
      */
     public static void copyFile(File in, File out) throws IOException {
-        FileChannel sourceChannel = new FileInputStream(in).getChannel();
-        FileChannel destinationChannel = new FileOutputStream(out).getChannel();
-        // magic number for Windows, 64Mb - 32Kb)
-        int maxCount = (64 * 1024 * 1024) - (32 * 1024);
-        long size = sourceChannel.size();
-        long position = 0;
-        while (position < size) {
-            position += sourceChannel.transferTo(position, maxCount, destinationChannel);
+        FileChannel destinationChannel;
+        try (FileChannel sourceChannel = new FileInputStream(in).getChannel()) {
+            destinationChannel = new FileOutputStream(out).getChannel();
+            int maxCount = (64 * 1024 * 1024) - (32 * 1024);
+            long size = sourceChannel.size();
+            long position = 0;
+            while (position < size) {
+                position += sourceChannel.transferTo(position, maxCount, destinationChannel);
+            }
         }
-        sourceChannel.close();
         destinationChannel.close();
     }
 
@@ -237,10 +237,11 @@ public class FileIO {
      * @throws IOException 
      */
     public static String readLine(String inName) throws FileNotFoundException, IOException {
-        BufferedReader is = new BufferedReader(new FileReader(inName));
-        String line = null;
-        line = is.readLine();
-        is.close();
+        String line;
+        try (BufferedReader is = new BufferedReader(new FileReader(inName))) {
+            line = null;
+            line = is.readLine();
+        }
         return line;
     }
 
@@ -257,14 +258,15 @@ public class FileIO {
      * @throws IOException 
      */
     public void copyFileBuffered(String inName, String outName) throws FileNotFoundException, IOException {
-        InputStream is = new FileInputStream(inName);
-        OutputStream os = new FileOutputStream(outName);
-        int count = 0; // the byte count
-        byte[] b = new byte[BLKSIZ]; // the bytes read from the file
-        while ((count = is.read(b)) != -1) {
-            os.write(b, 0, count);
+        OutputStream os;
+        try (InputStream is = new FileInputStream(inName)) {
+            os = new FileOutputStream(outName);
+            int count = 0;
+            byte[] b = new byte[BLKSIZ];
+            while ((count = is.read(b)) != -1) {
+                os.write(b, 0, count);
+            }
         }
-        is.close();
         os.close();
     }
 
@@ -360,17 +362,13 @@ public class FileIO {
                             returnValue.setReturnValue(getObjFromFilesystemCore(parent, title, startDir, fileFilter));
                         } catch (FileNotFoundException e) {
                             returnValue.setEx(e);
-                        } catch (IOException e) {
-                            returnValue.setEx(e);
-                        } catch (ClassNotFoundException e) {
+                        } catch (                IOException | ClassNotFoundException e) {
                             returnValue.setEx(e);
                         }
                     }
 
                 });
-            } catch (InterruptedException e) {
-                throw new IOException(returnValue.getEx().getMessage(), e);
-            } catch (InvocationTargetException e) {
+            } catch (    InterruptedException | InvocationTargetException e) {
                 throw new IOException(returnValue.getEx().getMessage(), e);
             }
         }
@@ -440,9 +438,10 @@ public class FileIO {
             File objFile = new File(fd.getDirectory(), fd.getFile());
             FileInputStream fis = new FileInputStream(objFile);
             BufferedInputStream bis = new BufferedInputStream(fis);
-            ObjectInputStream ois = new ObjectInputStream(bis);
-            Object obj = ois.readObject();
-            ois.close();
+            Object obj;
+            try (ObjectInputStream ois = new ObjectInputStream(bis)) {
+                obj = ois.readObject();
+            }
             return new FileAndObject(obj, objFile);
         }
         throw new IOException("User did not select a file");
@@ -519,9 +518,7 @@ public class FileIO {
                     }
 
                 });
-            } catch (InterruptedException e) {
-                throw new IOException(returnValue.getEx().getMessage(), e);
-            } catch (InvocationTargetException e) {
+            } catch (    InterruptedException | InvocationTargetException e) {
                 throw new IOException(returnValue.getEx().getMessage(), e);
             }
         }
@@ -544,9 +541,9 @@ public class FileIO {
             File objFile = new File(fd.getDirectory(), fd.getFile());
             FileOutputStream fos = new FileOutputStream(objFile);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
-            ObjectOutputStream oos = new ObjectOutputStream(bos);
-            oos.writeObject(obj);
-            oos.close();
+            try (ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+                oos.writeObject(obj);
+            }
             return objFile;
         } else {
             throw new IOException("User canceled save operation");
@@ -588,9 +585,7 @@ public class FileIO {
                     }
 
                 });
-            } catch (InterruptedException e) {
-                throw new IOException(returnValue.getEx().getMessage(), e);
-            } catch (InvocationTargetException e) {
+            } catch (    InterruptedException | InvocationTargetException e) {
                 throw new IOException(returnValue.getEx().getMessage(), e);
             }
         }
@@ -615,23 +610,23 @@ public class FileIO {
             File objFile = new File(fd.getDirectory(), fd.getFile());
             FileOutputStream fos = new FileOutputStream(objFile);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
-            XMLEncoder encoder = new XMLEncoder(bos);
-            encoder.setExceptionListener(new ExceptionListener() {
-                @Override
-                public void exceptionThrown(Exception exception) {
-                    exception.printStackTrace();
+            try (XMLEncoder encoder = new XMLEncoder(bos)) {
+                encoder.setExceptionListener(new ExceptionListener() {
+                    @Override
+                    public void exceptionThrown(Exception exception) {
+                        exception.printStackTrace();
+                    }
+                });
+                if (delegates != null) {
+                    for (PersistenceDelegateSpec spec : delegates) {
+                        encoder.setPersistenceDelegate(spec.getType(), spec.getPersistenceDelegate());
+                    }
                 }
-            });
-            if (delegates != null) {
-                for (PersistenceDelegateSpec spec : delegates) {
-                    encoder.setPersistenceDelegate(spec.getType(), spec.getPersistenceDelegate());
+                if (owner != null) {
+                    encoder.setOwner(owner);
                 }
+                encoder.writeObject(obj);
             }
-            if (owner != null) {
-                encoder.setOwner(owner);
-            }
-            encoder.writeObject(obj);
-            encoder.close();
             return objFile;
         } else {
             throw new IOException("User canceled save operation");
@@ -756,7 +751,7 @@ public class FileIO {
      * @return
      */
     public static List<File> recursiveGetFiles(File rootFile, String prefix, String suffix, boolean excludeHidden) {
-        List<File> fileList = new ArrayList<File>();
+        List<File> fileList = new ArrayList<>();
         recursiveGetFiles(rootFile, fileList, prefix, suffix, excludeHidden);
         return fileList;
     }

@@ -298,9 +298,7 @@ public class ViewCoordinate implements Serializable {
          } else {
             sb.append(Integer.toString(nid));
          }
-      } catch (IOException ex) {
-         sb.append(ex.getLocalizedMessage());
-      } catch (ContradictionException ex) {
+      } catch (IOException | ContradictionException ex) {
          sb.append(ex.getLocalizedMessage());
       }
    }
@@ -310,7 +308,7 @@ public class ViewCoordinate implements Serializable {
    }
 
    public Collection<IsaCoordinate> getIsaCoordinates() {
-      List<IsaCoordinate> isaCoordinates = new ArrayList<IsaCoordinate>(positionSet.size());
+      List<IsaCoordinate> isaCoordinates = new ArrayList<>(positionSet.size());
 
       for (PositionBI p : positionSet) {
          isaCoordinates.add(new IsaCoordinate(p, allowedStatusNids, isaTypeNids, precedence,

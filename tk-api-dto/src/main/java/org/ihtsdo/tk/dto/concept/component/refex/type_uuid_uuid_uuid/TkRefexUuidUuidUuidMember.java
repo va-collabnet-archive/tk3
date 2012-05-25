@@ -54,7 +54,7 @@ public class TkRefexUuidUuidUuidMember extends TkRefexAbstractMember<TkRefexUuid
       this.uuid3 = ts.getUuidPrimordialForNid(rv.getNid3());
 
       if (partCount > 1) {
-         revisions = new ArrayList<TkRefexUuidUuidUuidRevision>(partCount - 1);
+         revisions = new ArrayList<>(partCount - 1);
 
          while (itr.hasNext()) {
             rv = itr.next();
@@ -171,7 +171,7 @@ public class TkRefexUuidUuidUuidMember extends TkRefexAbstractMember<TkRefexUuid
       int versionSize = in.readInt();
 
       if (versionSize > 0) {
-         revisions = new ArrayList<TkRefexUuidUuidUuidRevision>(versionSize);
+         revisions = new ArrayList<>(versionSize);
 
          for (int i = 0; i < versionSize; i++) {
             revisions.add(new TkRefexUuidUuidUuidRevision(in, dataVersion));

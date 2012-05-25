@@ -85,7 +85,7 @@ public class UuidArrayListTest {
 		testList = new UuidArrayList(1000);
 		assertTrue(testList.size() == 0);
 		UUID testValue = null;
-		List<UUID> listToTest = new ArrayList<UUID>();
+		List<UUID> listToTest = new ArrayList<>();
 		for (int i = 0; i < testSize; i++) {
 			if (testValue != null) {
 				testList.add(UuidUtil.convert(testValue));

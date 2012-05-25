@@ -46,7 +46,7 @@ public class TkRefexStringMember extends TkRefexAbstractMember<TkRefexStringRevi
       this.string1 = rv.getString1();
 
       if (partCount > 1) {
-         revisions = new ArrayList<TkRefexStringRevision>(partCount - 1);
+         revisions = new ArrayList<>(partCount - 1);
 
          while (itr.hasNext()) {
             rv = itr.next();
@@ -132,7 +132,7 @@ public class TkRefexStringMember extends TkRefexAbstractMember<TkRefexStringRevi
       int versionSize = in.readInt();
 
       if (versionSize > 0) {
-         revisions = new ArrayList<TkRefexStringRevision>(versionSize);
+         revisions = new ArrayList<>(versionSize);
 
          for (int i = 0; i < versionSize; i++) {
             revisions.add(new TkRefexStringRevision(in, dataVersion));

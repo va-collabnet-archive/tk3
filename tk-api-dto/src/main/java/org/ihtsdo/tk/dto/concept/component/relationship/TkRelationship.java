@@ -67,7 +67,7 @@ public class TkRelationship extends TkComponent<TkRelationshipRevision> implemen
       time               = rv.getTime();
 
       if (partCount > 1) {
-         revisions = new ArrayList<TkRelationshipRevision>(partCount - 1);
+         revisions = new ArrayList<>(partCount - 1);
 
          while (relItr.hasNext()) {
             rv = relItr.next();
@@ -216,7 +216,7 @@ public class TkRelationship extends TkComponent<TkRelationshipRevision> implemen
       int versionSize = in.readInt();
 
       if (versionSize > 0) {
-         revisions = new ArrayList<TkRelationshipRevision>(versionSize);
+         revisions = new ArrayList<>(versionSize);
 
          for (int i = 0; i < versionSize; i++) {
             revisions.add(new TkRelationshipRevision(in, dataVersion));

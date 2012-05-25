@@ -46,7 +46,7 @@ public class TkConceptAttributes extends TkComponent<TkConceptAttributesRevision
       this.defined = vers.isDefined();
 
       if (versions.size() > 1) {
-         revisions = new ArrayList<TkConceptAttributesRevision>(versions.size() - 1);
+         revisions = new ArrayList<>(versions.size() - 1);
 
          while (itr.hasNext()) {
             vers = itr.next();
@@ -134,7 +134,7 @@ public class TkConceptAttributes extends TkComponent<TkConceptAttributesRevision
       assert versionCount < 1024 : "Version count is: " + versionCount;
 
       if (versionCount > 0) {
-         revisions = new ArrayList<TkConceptAttributesRevision>(versionCount);
+         revisions = new ArrayList<>(versionCount);
 
          for (int i = 0; i < versionCount; i++) {
             revisions.add(new TkConceptAttributesRevision(in, dataVersion));

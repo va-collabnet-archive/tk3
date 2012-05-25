@@ -80,7 +80,7 @@ public class Xref extends ComponentBdb implements I_ProcessUnfetchedConceptData 
         rwl.writeLock().lock();
         try {
             if (!mutableXref.get().isEmpty()) {
-                ConcurrentHashMap<Integer, long[]> newXref = new ConcurrentHashMap<Integer, long[]>();
+                ConcurrentHashMap<Integer, long[]> newXref = new ConcurrentHashMap<>();
                 oldXref = mutableXref.getAndSet(newXref);
                 readOnlyXref.putAll(oldXref);
 
@@ -117,8 +117,8 @@ public class Xref extends ComponentBdb implements I_ProcessUnfetchedConceptData 
     @Override
     protected void init() throws IOException {
         Bdb.xref = this;
-        readOnlyXref = new HashMap<Integer, long[]>();
-        mutableXref = new AtomicReference<ConcurrentHashMap<Integer, long[]>>(
+        readOnlyXref = new HashMap<>();
+        mutableXref = new AtomicReference<>(
                 new ConcurrentHashMap<Integer, long[]>());
         rwl = new ReentrantReadWriteLock();
         if (readOnly == null && mutable.count() == 0) {
@@ -129,7 +129,7 @@ public class Xref extends ComponentBdb implements I_ProcessUnfetchedConceptData 
                 throw new IOException(e);
             }
         } else {
-            readOnlyXref = new HashMap<Integer, long[]>(Bdb.getConceptDb().getCount() * 2);
+            readOnlyXref = new HashMap<>(Bdb.getConceptDb().getCount() * 2);
             preloadReadOnly();
             readXref(readOnly);
             closeReadOnly();
@@ -144,8 +144,7 @@ public class Xref extends ComponentBdb implements I_ProcessUnfetchedConceptData 
         }
         CursorConfig cursorConfig = new CursorConfig();
         cursorConfig.setReadUncommitted(true);
-        Cursor cursor = db.openCursor(null, cursorConfig);
-        try {
+        try (Cursor cursor = db.openCursor(null, cursorConfig)) {
             DatabaseEntry foundKey = new DatabaseEntry();
             DatabaseEntry foundData = new DatabaseEntry();
             while (cursor.getNext(foundKey, foundData,
@@ -164,8 +163,6 @@ public class Xref extends ComponentBdb implements I_ProcessUnfetchedConceptData 
                     readOnlyXref.put(nid, xrefArray);
                 }
             }
-        } finally {
-            cursor.close();
         }
     }
 
@@ -175,7 +172,7 @@ public class Xref extends ComponentBdb implements I_ProcessUnfetchedConceptData 
         rwl.readLock().lock();
 
         try {
-            HashSet<NidPairForRel> result = new HashSet<NidPairForRel>();
+            HashSet<NidPairForRel> result = new HashSet<>();
             long[] allPairs = mutableXref.get().get(cNid);
             if (allPairs == null) {
                 allPairs = readOnlyXref.get(cNid);
@@ -183,7 +180,7 @@ public class Xref extends ComponentBdb implements I_ProcessUnfetchedConceptData 
             if (allPairs != null && allPairs.length != 0) {
                 return NidPair.getNidPairsForRel(allPairs);
             }
-            return new ArrayList<NidPairForRel>(result);
+            return new ArrayList<>(result);
         } finally {
             rwl.readLock().unlock();
         }
@@ -200,7 +197,7 @@ public class Xref extends ComponentBdb implements I_ProcessUnfetchedConceptData 
             if (allPairs != null && allPairs.length != 0) {
                 return NidPair.getNidPairsForRel(allPairs, relTypes);
             }
-            return new ArrayList<NidPairForRel>();
+            return new ArrayList<>();
         } finally {
             rwl.readLock().unlock();
         }
@@ -228,7 +225,7 @@ public class Xref extends ComponentBdb implements I_ProcessUnfetchedConceptData 
         // since underlying structure is concurrent...
         rwl.readLock().lock();
         try {
-            HashSet<NidPairForRefset> result = new HashSet<NidPairForRefset>();
+            HashSet<NidPairForRefset> result = new HashSet<>();
             long[] allPairs = mutableXref.get().get(nid);
             if (allPairs == null) {
                 allPairs = readOnlyXref.get(nid);
@@ -236,7 +233,7 @@ public class Xref extends ComponentBdb implements I_ProcessUnfetchedConceptData 
             if (allPairs != null && allPairs.length != 0) {
                 return NidPair.getNidPairsForRefset(allPairs);
             }
-            return new ArrayList<NidPairForRefset>(result);
+            return new ArrayList<>(result);
         } finally {
             rwl.readLock().unlock();
         }

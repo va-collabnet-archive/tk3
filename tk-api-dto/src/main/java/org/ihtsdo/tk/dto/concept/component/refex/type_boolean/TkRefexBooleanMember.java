@@ -45,7 +45,7 @@ public class TkRefexBooleanMember extends TkRefexAbstractMember<TkRefexBooleanRe
       this.booleanValue = rv.getBoolean1();
 
       if (partCount > 1) {
-         revisions = new ArrayList<TkRefexBooleanRevision>(partCount - 1);
+         revisions = new ArrayList<>(partCount - 1);
 
          while (itr.hasNext()) {
             rv = itr.next();
@@ -131,7 +131,7 @@ public class TkRefexBooleanMember extends TkRefexAbstractMember<TkRefexBooleanRe
       int versionSize = in.readInt();
 
       if (versionSize > 0) {
-         revisions = new ArrayList<TkRefexBooleanRevision>(versionSize);
+         revisions = new ArrayList<>(versionSize);
 
          for (int i = 0; i < versionSize; i++) {
             revisions.add(new TkRefexBooleanRevision(in, dataVersion));

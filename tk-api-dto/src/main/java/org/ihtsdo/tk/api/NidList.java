@@ -27,7 +27,7 @@ import org.ihtsdo.tk.Ts;
  */
 public class NidList implements NidListBI {
 
-    private List<Integer> listValues = new ArrayList<Integer>(2);
+    private List<Integer> listValues = new ArrayList<>(2);
 
     public NidList(int[] values) {
         super();
@@ -91,7 +91,6 @@ public class NidList implements NidListBI {
      */
     @Override
     public void clear() {
-        int oldSize = listValues.size();
         listValues.clear();
     }
 
@@ -192,7 +191,6 @@ public class NidList implements NidListBI {
      */
     @Override
     public Integer remove(int index) {
-        int oldSize = listValues.size();
         Integer returnValue = listValues.remove(index);
         return returnValue;
     }
@@ -204,9 +202,7 @@ public class NidList implements NidListBI {
      */
     @Override
     public boolean remove(Object o) {
-        int oldSize = listValues.size();
-        boolean returnValue = listValues.remove(o);
-        return returnValue;
+        return listValues.remove(o);
     }
 
     /*
@@ -216,7 +212,6 @@ public class NidList implements NidListBI {
      */
     @Override
     public boolean removeAll(Collection<?> c) {
-        int oldSize = listValues.size();
         boolean returnValue = listValues.removeAll(c);
         return returnValue;
     }
@@ -228,7 +223,6 @@ public class NidList implements NidListBI {
      */
     @Override
     public boolean retainAll(Collection<?> c) {
-        int oldSize = listValues.size();
         boolean returnValue = listValues.retainAll(c);
         return returnValue;
     }

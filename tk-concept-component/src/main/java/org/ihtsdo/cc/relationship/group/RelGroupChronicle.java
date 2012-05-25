@@ -97,7 +97,7 @@ public class RelGroupChronicle implements RelGroupChronicleBI {
 
    @Override
    public Set<Integer> getAllSapNids() throws IOException {
-      HashSet<Integer> sapNids = new HashSet<Integer>();
+      HashSet<Integer> sapNids = new HashSet<>();
 
       for (RelationshipChronicleBI r : rels) {
          sapNids.addAll(r.getAllSapNids());
@@ -170,7 +170,7 @@ public class RelGroupChronicle implements RelGroupChronicleBI {
 
    @Override
    public Set<PositionBI> getPositions() throws IOException {
-      Set<PositionBI> positions = new HashSet<PositionBI>();
+      Set<PositionBI> positions = new HashSet<>();
 
       for (RelationshipChronicleBI rc : rels) {
          positions.addAll(rc.getPositions());

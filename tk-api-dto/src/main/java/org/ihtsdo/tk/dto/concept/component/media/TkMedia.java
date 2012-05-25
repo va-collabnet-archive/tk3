@@ -52,7 +52,7 @@ public class TkMedia extends TkComponent<TkMediaRevision> {
       this.textDescription = mediaVersion.getTextDescription();
 
       if (partCount > 1) {
-         revisions = new ArrayList<TkMediaRevision>(partCount - 1);
+         revisions = new ArrayList<>(partCount - 1);
 
          while (itr.hasNext()) {
             mediaVersion = itr.next();
@@ -191,7 +191,7 @@ public class TkMedia extends TkComponent<TkMediaRevision> {
       int versionLength = in.readInt();
 
       if (versionLength > 0) {
-         revisions = new ArrayList<TkMediaRevision>(versionLength);
+         revisions = new ArrayList<>(versionLength);
 
          for (int i = 0; i < versionLength; i++) {
             revisions.add(new TkMediaRevision(in, dataVersion));

@@ -40,7 +40,7 @@ public class OpenUuidIntHashMapTest {
 		UuidArrayList list;
 		long start = System.currentTimeMillis();
 		UuidToIntHashMap nativeMap = new UuidToIntHashMap(testSize);
-		List<Long> testResults = new ArrayList<Long>();
+		List<Long> testResults = new ArrayList<>();
 		for (int r = 0; r < repeats; r++) {
 			list = new UuidArrayList(testSize);
 			for (int i = 0; i < testSize; i++) {
@@ -68,7 +68,7 @@ public class OpenUuidIntHashMapTest {
 		UuidArrayList list;
 		long start = System.currentTimeMillis();
 		UuidToIntHashMap nativeMap = new UuidToIntHashMap(testSize);
-		List<Long> testResults = new ArrayList<Long>();
+		List<Long> testResults = new ArrayList<>();
 		for (int r = 0; r < repeats; r++) {
 			list = new UuidArrayList(testSize);
 			for (int i = 0; i < testSize; i++) {
@@ -93,9 +93,9 @@ public class OpenUuidIntHashMapTest {
 
 	private void concurrentHashMapTest(int testSize, int repeats) {
 		long start = System.currentTimeMillis();
-		List<Long> testResults = new ArrayList<Long>();
+		List<Long> testResults = new ArrayList<>();
 		for (int r = 0; r < repeats; r++) {
-			ConcurrentHashMap<UUID, Integer> ids = new ConcurrentHashMap<UUID, Integer>(
+			ConcurrentHashMap<UUID, Integer> ids = new ConcurrentHashMap<>(
 					testSize);
 			UuidArrayList list = new UuidArrayList(testSize);
 			for (int i = 0; i < testSize; i++) {

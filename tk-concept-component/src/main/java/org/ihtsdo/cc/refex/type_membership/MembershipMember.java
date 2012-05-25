@@ -37,7 +37,7 @@ public class MembershipMember extends RefexMember<MembershipRevision, Membership
     implements RefexMemberAnalogBI<MembershipRevision> {
    
     private static VersionComputer<RefexMember<MembershipRevision, MembershipMember>.Version> computer =
-      new VersionComputer<RefexMember<MembershipRevision, MembershipMember>.Version>();
+      new VersionComputer<>();
 
    //~--- constructors --------------------------------------------------------
 
@@ -53,7 +53,7 @@ public class MembershipMember extends RefexMember<MembershipRevision, Membership
       super(refsetMember, enclosingConceptNid);
 
       if (refsetMember.getRevisionList() != null) {
-         revisions = new RevisionSet<MembershipRevision, MembershipMember>(primordialSapNid);
+         revisions = new RevisionSet<>(primordialSapNid);
 
          for (TkRefexRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new MembershipRevision(eVersion, this));
@@ -205,7 +205,7 @@ public class MembershipMember extends RefexMember<MembershipRevision, Membership
             count = count + revisions.size();
          }
 
-         ArrayList<Version> list = new ArrayList<Version>(count);
+         ArrayList<Version> list = new ArrayList<>(count);
 
          if (getTime() != Long.MIN_VALUE) {
             list.add(new Version(this));
