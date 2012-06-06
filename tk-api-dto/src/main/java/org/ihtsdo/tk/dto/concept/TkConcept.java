@@ -97,6 +97,7 @@ public class TkConcept {
 
     public TkConcept(ConceptChronicleBI c) throws IOException {
         conceptAttributes = new TkConceptAttributes(c.getConAttrs());
+        primordialUuid = conceptAttributes.primordialUuid;
         relationships = new ArrayList<>(c.getRelsOutgoing().size());
 
         for (RelationshipChronicleBI rel : c.getRelsOutgoing()) {
