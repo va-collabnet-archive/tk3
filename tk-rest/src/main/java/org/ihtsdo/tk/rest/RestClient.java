@@ -23,6 +23,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.util.*;
 import javax.ws.rs.core.MediaType;
 import org.ihtsdo.cc.NidPair;
@@ -46,7 +47,6 @@ import org.ihtsdo.tk.api.description.DescriptionVersionBI;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.tk.db.DbDependency;
-import org.ihtsdo.tk.dto.concept.component.TkRevision;
 
 /**
  *
@@ -55,6 +55,7 @@ import org.ihtsdo.tk.dto.concept.component.TkRevision;
 public class RestClient extends Termstore {
 
     public static final String defaultLocalHostSvr = "http://localhost:8080/rest/sim/";
+    public static final MediaType bdbMediaType = new MediaType("application", "bdb");
     private static String serverUrlStr = defaultLocalHostSvr;
     private static Client c;
     private static RestClient singleton;
@@ -70,7 +71,7 @@ public class RestClient extends Termstore {
     @Override
     public ConceptDataFetcherI getConceptDataFetcher(int cNid) throws IOException {
         WebResource r = c.resource(serverUrlStr + "concept/" + cNid);
-        InputStream is = r.accept(new MediaType("application", "bdb")).get(InputStream.class);
+        InputStream is = r.accept(bdbMediaType).get(InputStream.class);
         DataInputStream dis = new DataInputStream(is);
         int returnNid = dis.readInt();// the cnid
         assert returnNid == cNid : "cNid: " + cNid + " returnNid: " + returnNid;
@@ -140,6 +141,13 @@ public class RestClient extends Termstore {
     }
     
     @Override
+    public long incrementAndGetSequence() {
+        WebResource r = c.resource(serverUrlStr + "sequence/next");
+        String sequenceStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
+        return Long.parseLong(sequenceStr);
+    }
+
+    @Override
     public boolean hasConcept(int cNid) throws IOException {
         if (Concept.getIfInMap(cNid) != null) {
             return true;
@@ -150,27 +158,200 @@ public class RestClient extends Termstore {
         return false;
     }
 
-
-
     @Override
     public int getNidForUuids(Collection<UUID> uuids) throws IOException {
-        if (uuids.size() == 1) {
-            return getNidForUuid(uuids.iterator().next());
+        StringBuilder uuidSetStringBuilder = new StringBuilder();
+        Iterator<UUID> uuidItr = uuids.iterator();
+        while (uuidItr.hasNext()) {
+            uuidSetStringBuilder.append(uuidItr.next());
+            
+            if (uuidItr.hasNext()) {
+                uuidSetStringBuilder.append("&");
+            }
         }
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getNidForUuidSetString(uuidSetStringBuilder.toString());
     }
 
-    private int getNidForUuid(UUID uuid) {
-        WebResource r = c.resource(serverUrlStr + "nid/" + uuid);
+    private int getNidForUuidSetString(String uuidSetString) {
+        WebResource r = c.resource(serverUrlStr + "nid/" + uuidSetString);
         String nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
         return Integer.parseInt(nidStr);
     }
 
     @Override
     public int getNidForUuids(UUID... uuids) throws IOException {
-        if (uuids.length == 1) {
-            return getNidForUuid(uuids[0]);
+        StringBuilder uuidSetStringBuilder = new StringBuilder();
+        for (int i = 0; i < uuids.length; i++) {
+            uuidSetStringBuilder.append(uuids[i]);
+            if (i+1 < uuids.length) {
+                uuidSetStringBuilder.append("&");
+            }
         }
+        return getNidForUuidSetString(uuidSetStringBuilder.toString());
+    }
+
+    @Override
+    public String getProperty(String key) throws IOException {
+        WebResource r = c.resource(serverUrlStr + "property/" + key);
+        return r.accept(MediaType.TEXT_PLAIN).get(String.class);
+    }
+    
+    @Override
+    public Map<String, String> getProperties() throws IOException {
+        WebResource r = c.resource(serverUrlStr + "property/");
+        InputStream is = r.accept(bdbMediaType).get(InputStream.class);
+        ObjectInputStream ois = new ObjectInputStream(is);
+        try {
+            return (Map<String, String>) ois.readObject();
+        } catch (ClassNotFoundException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
+    public List<NidPairForRel> getDestRelPairs(int cNid) throws IOException {
+        WebResource r = c.resource(serverUrlStr + "nidpairs/destination/relationship/" + cNid);
+        InputStream is = r.accept(bdbMediaType).get(InputStream.class);
+        ObjectInputStream ois = new ObjectInputStream(is);
+        try {
+            return (List<NidPairForRel>) ois.readObject();
+        } catch (ClassNotFoundException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
+    public List<NidPairForRefset> getRefexPairs(int cNid) throws IOException {
+        WebResource r = c.resource(serverUrlStr + "nidpairs/refex" + cNid);
+        InputStream is = r.accept(bdbMediaType).get(InputStream.class);
+        ObjectInputStream ois = new ObjectInputStream(is);
+        try {
+            return (List<NidPairForRefset>) ois.readObject();
+        } catch (ClassNotFoundException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
+    public int[] getDestRelOriginNids(int cNid, NidSetBI relTypes) throws IOException {
+        WebResource r = c.resource(serverUrlStr + "nidpairs/refex" + cNid);
+        InputStream is = r.queryParam("relTypes", 
+                relTypes.getAmpersandString()).accept(bdbMediaType).get(InputStream.class);
+        ObjectInputStream ois = new ObjectInputStream(is);
+        try {
+            return (int[]) ois.readObject();
+        } catch (ClassNotFoundException ex) {
+            throw new IOException(ex);
+        }
+    }
+    
+    
+    @Override
+    public void waitTillWritesFinished() {
+        WebResource r = c.resource(serverUrlStr + "termstore/wait-for-writes");
+        r.accept(MediaType.TEXT_PLAIN).get(String.class);
+    }
+
+
+    @Override
+    public UUID getUuidPrimordialForNid(int nid) throws IOException {
+         WebResource r = c.resource(serverUrlStr + "uuid/primordial/" + nid);
+        return UUID.fromString(r.accept(MediaType.TEXT_PLAIN).get(String.class));
+   }
+
+    
+    @Override
+    public boolean hasUuid(UUID memberUUID) {
+        WebResource r = c.resource(serverUrlStr + "uuid/" + memberUUID.toString());
+        return Boolean.valueOf(r.accept(MediaType.TEXT_PLAIN).get(String.class));
+    }
+
+
+    @Override
+    public List<UUID> getUuidsForNid(int nid) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean hasPath(int nid) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean hasUuid(List<UUID> memberUUIDs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getConceptCount() throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int[] getPossibleChildren(int cNid, ViewCoordinate vc) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public TerminologySnapshotDI getSnapshot(ViewCoordinate vc) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    @Override
+    public Set<PositionBI> getPositionSet(Set<Integer> sapNids) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Set<PathBI> getPathSetFromSapSet(Set<Integer> sapNids) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Set<PathBI> getPathSetFromPositionSet(Set<PositionBI> positions) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public PathBI getPath(int pathNid) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    @Override
+    public Collection<DbDependency> getLatestChangeSetDependencies() throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<? extends PathBI> getPathChildren(int nid) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    
+    @Override
+    public NidBitSetBI getAllConceptNids() throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public NidBitSetBI getEmptyNidSet() throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    @Override
+    public void loadEconFiles(File[] econFiles) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean satisfiesDependencies(Collection<DbDependency> dependencies) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    //--------------------------------------------
+    @Override
+    public void setProperty(String key, String value) throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -180,42 +361,14 @@ public class RestClient extends Termstore {
     }
 
     @Override
-    public int getSapNid(TkRevision version) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void xrefAnnotation(RefexChronicleBI annotation) throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public long incrementAndGetSequence() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void waitTillWritesFinished() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean commit(ConceptChronicleBI cc, ChangeSetPolicy changeSetPolicy, ChangeSetWriterThreading changeSetWriterThreading) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Map<String, String> getProperties() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String getProperty(String key) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setProperty(String key, String value) throws IOException {
+    public boolean commit(ConceptChronicleBI cc, 
+                          ChangeSetPolicy changeSetPolicy, 
+                          ChangeSetWriterThreading changeSetWriterThreading) throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -233,22 +386,6 @@ public class RestClient extends Termstore {
     public void forgetXrefPair(int nid, NidPair pair) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    @Override
-    public List<NidPairForRel> getDestRelPairs(int cNid) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public List<NidPairForRefset> getRefsetPairs(int nid) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int[] getDestRelOriginNids(int cNid, NidSetBI relTypes) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     @Override
     public void setConceptNidForNid(int cNid, int nid) throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -258,32 +395,6 @@ public class RestClient extends Termstore {
     public void resetConceptNidForNid(int cNid, int nid) throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    @Override
-    public ComponentChroncileBI<?> getComponent(int nid) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Collection<DbDependency> getLatestChangeSetDependencies() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public List<? extends PathBI> getPathChildren(int nid) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int[] getPossibleChildren(int cNid, ViewCoordinate vc) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public TerminologySnapshotDI getSnapshot(ViewCoordinate vc) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     @Override
     public TerminologyBuilderBI getTerminologyBuilder(EditCoordinate ec, ViewCoordinate vc) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -295,37 +406,7 @@ public class RestClient extends Termstore {
     }
 
     @Override
-    public UUID getUuidPrimordialForNid(int nid) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public List<UUID> getUuidsForNid(int nid) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean hasPath(int nid) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public boolean hasUncommittedChanges() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean hasUuid(UUID memberUUID) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean hasUuid(List<UUID> memberUUIDs) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int getConceptCount() throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -369,25 +450,6 @@ public class RestClient extends Termstore {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public Set<PositionBI> getPositionSet(Set<Integer> sapNids) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Set<PathBI> getPathSetFromSapSet(Set<Integer> sapNids) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Set<PathBI> getPathSetFromPositionSet(Set<PositionBI> positions) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public PathBI getPath(int pathNid) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     @Override
     public void addPropertyChangeListener(CONCEPT_EVENT pce, PropertyChangeListener l) {
@@ -423,17 +485,6 @@ public class RestClient extends Termstore {
     public void forget(RelationshipVersionBI rel) throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    @Override
-    public NidBitSetBI getAllConceptNids() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public NidBitSetBI getEmptyNidSet() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     @Override
     public ViewCoordinate getMetadataVC() throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -446,16 +497,6 @@ public class RestClient extends Termstore {
 
     @Override
     public void iterateConceptDataInSequence(ProcessUnfetchedConceptDataBI processor) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void loadEconFiles(File[] econFiles) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean satisfiesDependencies(Collection<DbDependency> dependencies) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
