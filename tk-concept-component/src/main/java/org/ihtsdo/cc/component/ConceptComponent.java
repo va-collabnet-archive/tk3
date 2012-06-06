@@ -1377,7 +1377,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
     @Override
     public Collection<? extends RefexChronicleBI<?>> getRefexes() throws IOException {
-        List<NidPairForRefset> pairs = P.s.getRefsetPairs(nid);
+        List<NidPairForRefset> pairs = P.s.getRefexPairs(nid);
         List<RefexChronicleBI<?>> returnValues = new ArrayList<>(pairs.size());
         HashSet<Integer> addedMembers = new HashSet<>();
 
@@ -1420,7 +1420,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
     }
 
     public Set<Integer> getRefsetMemberSapNids() throws IOException {
-        List<NidPairForRefset> pairs = P.s.getRefsetPairs(nid);
+        List<NidPairForRefset> pairs = P.s.getRefexPairs(nid);
 
         if ((pairs == null) || pairs.isEmpty()) {
             return new HashSet<>(0);
@@ -1444,7 +1444,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
     }
 
     public Collection<? extends RefexChronicleBI<?>> getRefsetMembers() throws IOException {
-        List<NidPairForRefset> pairs = P.s.getRefsetPairs(nid);
+        List<NidPairForRefset> pairs = P.s.getRefexPairs(nid);
 
         if ((pairs == null) || pairs.isEmpty()) {
             return new ArrayList<>(0);

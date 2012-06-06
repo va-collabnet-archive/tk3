@@ -39,6 +39,7 @@ import org.ihtsdo.tk.api.changeset.ChangeSetGeneratorBI;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.concept.ConceptVersionBI;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.tk.dto.concept.component.TkRevision;
 
 /**
  *
@@ -262,6 +263,18 @@ public abstract class Termstore implements PersistentStoreI {
     @Override
     public void addUncommittedNoChecks(ConceptVersionBI cv) throws IOException {
         addUncommittedNoChecks(cv.getChronicle());
+    }
+    @Override
+    public int getSapNid(TkRevision version) throws IOException {
+        return getSapNid(getNidForUuids(version.statusUuid), 
+               getNidForUuids(version.authorUuid),
+               getNidForUuids(version.pathUuid), version.time);
+    }
+
+    
+    @Override
+    public final ComponentChroncileBI<?> getComponent(int nid) throws IOException {
+        return getConceptForNid(nid).getComponent(nid);
     }
 
 }

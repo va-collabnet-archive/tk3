@@ -28,7 +28,6 @@ import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.cs.ChangeSetPolicy;
 import org.ihtsdo.tk.api.cs.ChangeSetWriterThreading;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
-import org.ihtsdo.tk.dto.concept.component.TkRevision;
 
 /**
  *
@@ -37,7 +36,6 @@ import org.ihtsdo.tk.dto.concept.component.TkRevision;
 public interface PersistentStoreI extends TerminologyStoreDI {
    int getSapNid(int statusNid, int authorNid, int pathNid, long time);
    int getMaxReadOnlySap();
-   int getSapNid(TkRevision version);
    void xrefAnnotation(RefexChronicleBI annotation) throws IOException;
    boolean hasConcept(int cNid) throws IOException;
 
@@ -68,9 +66,9 @@ public interface PersistentStoreI extends TerminologyStoreDI {
     * @TODO modify the write concept routine to update the identifiers map (UUIDs, etc)
     * Possibly remove identifiers from Lucene?
     */
-    List<NidPairForRel> getDestRelPairs(int cNid);
-    List<NidPairForRefset> getRefsetPairs(int nid);
-    int[] getDestRelOriginNids(int cNid, NidSetBI relTypes);
+    List<NidPairForRel> getDestRelPairs(int cNid) throws IOException;
+    List<NidPairForRefset> getRefexPairs(int nid) throws IOException;
+    int[] getDestRelOriginNids(int cNid, NidSetBI relTypes) throws IOException;
    // For a lower level interface? 
    void setConceptNidForNid(int cNid, int nid) throws IOException;
    void resetConceptNidForNid(int cNid, int nid) throws IOException;

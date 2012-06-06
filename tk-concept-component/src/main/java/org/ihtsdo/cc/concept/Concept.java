@@ -954,6 +954,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         return getConceptAttributes().getAnnotations();
     }
 
+    @Override
     public ComponentChroncileBI<?> getComponent(int nid) throws IOException {
         return data.getComponent(nid);
     }
@@ -1749,7 +1750,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     public boolean hasExtensionsForComponent(int nid) throws IOException {
-        List<NidPairForRefset> refsetPairs = P.s.getRefsetPairs(nid);
+        List<NidPairForRefset> refsetPairs = P.s.getRefexPairs(nid);
 
         if ((refsetPairs != null) && (refsetPairs.size() > 0)) {
             return true;

@@ -1,5 +1,6 @@
 package org.ihtsdo.cc;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.hash.Hashcode;
 
-public abstract class NidPair implements Comparable<NidPair> {
+public abstract class NidPair implements Comparable<NidPair>, Serializable {
 
     protected int nid1;
     protected int nid2;
