@@ -290,5 +290,6 @@
         <module>tk-cern-prim</module>
         <module>wb-bdb</module>
     <module>tk-rest</module>
+    <module>tk-fx-model</module>
   </modules>
 </project>
