@@ -26,7 +26,9 @@ public interface NidSetBI {
 
     boolean contiguous();
     
-    public boolean addListDataListener(ListDataListener o);
+    boolean addListDataListener(ListDataListener o);
     
-    public boolean removeListDataListener(ListDataListener o);
+    boolean removeListDataListener(ListDataListener o);
+    
+    String getAmpersandString();
 }

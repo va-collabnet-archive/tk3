@@ -43,6 +43,10 @@ public interface ConceptChronicleBI extends ComponentChroncileBI<ConceptVersionB
 
    RefexVersionBI<?> getCurrentRefsetMemberForComponent(ViewCoordinate vc, int componentNid)
            throws IOException;
+   
+   ComponentChroncileBI<?> getComponent(int nid) throws IOException;
+   
+
 
    Collection<? extends RefexVersionBI<?>> getCurrentRefsetMembers(ViewCoordinate vc) throws IOException;
 

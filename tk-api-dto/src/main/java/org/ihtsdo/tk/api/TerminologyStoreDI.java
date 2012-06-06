@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.ihtsdo.tk.dto.concept.component.TkRevision;
 
 public interface TerminologyStoreDI extends TerminologyDI {
     enum DatabaseOptionPreferences {
@@ -103,5 +104,7 @@ public interface TerminologyStoreDI extends TerminologyDI {
    long getSequence();
    
    int getConceptCount() throws IOException;
+
+   int getSapNid(TkRevision version) throws IOException;
 
 }

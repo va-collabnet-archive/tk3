@@ -39,6 +39,17 @@ public class NidSet implements NidSetBI, Serializable, ListDataListener {
 
 
     private int[] setValues = new int[0];
+    public NidSet(String barString) {
+        super();
+        String[] strValues = barString.split("&");
+        
+        this.setValues = new int[strValues.length];
+        for (int i = 0; i < setValues.length; i++) {
+            this.setValues[i] = Integer.parseInt(strValues[i]);
+        }
+        Arrays.sort(this.setValues);
+        removeDups();
+    }
 
     public NidSet(NidSet another) {
         this(another.setValues);
@@ -48,25 +59,7 @@ public class NidSet implements NidSetBI, Serializable, ListDataListener {
         this.setValues = new int[values.length];
         System.arraycopy(values, 0, this.setValues, 0, values.length);
         Arrays.sort(this.setValues);
-        boolean duplicates = false;
-        for (int i = 1; i < values.length; i++) {
-            if (this.setValues[i - 1] == this.setValues[i]) {
-                duplicates = true;
-            }
-        }
-        if (duplicates) {
-            HashSet<Integer> hashSetValues = new HashSet<>();
-            for (int i : values) {
-                hashSetValues.add(i);
-            }
-            this.setValues = new int[hashSetValues.size()];
-            int i = 0;
-            for (Integer value : hashSetValues) {
-                this.setValues[i] = value;
-                i++;
-            }
-            Arrays.sort(this.setValues);
-        }
+        removeDups();
     }
 
     public NidSet() {
@@ -325,6 +318,40 @@ public class NidSet implements NidSetBI, Serializable, ListDataListener {
     @Override
     public boolean removeListDataListener(ListDataListener o) {
         return listeners.remove(o);
+    }
+
+    @Override
+    public String getAmpersandString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i < setValues.length; i++) {
+            sb.append(Integer.toString(setValues[i]));
+            if (i+1 < setValues.length) {
+                sb.append("&");
+            }            
+        }
+        return sb.toString();
+    }
+
+    private void removeDups() {
+        boolean duplicates = false;
+        for (int i = 1; i < setValues.length; i++) {
+            if (this.setValues[i - 1] == this.setValues[i]) {
+                duplicates = true;
+            }
+        }
+        if (duplicates) {
+            HashSet<Integer> hashSetValues = new HashSet<>();
+            for (int i : setValues) {
+                hashSetValues.add(i);
+            }
+            this.setValues = new int[hashSetValues.size()];
+            int i = 0;
+            for (Integer value : hashSetValues) {
+                this.setValues[i] = value;
+                i++;
+            }
+            Arrays.sort(this.setValues);
+        }
     }
     
 }
