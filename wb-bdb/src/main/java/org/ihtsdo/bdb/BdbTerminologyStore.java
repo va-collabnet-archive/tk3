@@ -165,10 +165,6 @@ public class BdbTerminologyStore extends Termstore {
 
         return c;
     }
-    @Override
-    public ComponentChroncileBI<?> getComponent(int nid) throws IOException {
-        return (ComponentChroncileBI<?>) Bdb.getComponent(nid);
-    }
 
     @Override
     public int getConceptNidForNid(int nid) {
@@ -593,7 +589,7 @@ public class BdbTerminologyStore extends Termstore {
     }
 
     @Override
-    public List<NidPairForRefset> getRefsetPairs(int nid) {
+    public List<NidPairForRefset> getRefexPairs(int nid) {
         return Bdb.getRefsetPairs(nid);
     }
     
