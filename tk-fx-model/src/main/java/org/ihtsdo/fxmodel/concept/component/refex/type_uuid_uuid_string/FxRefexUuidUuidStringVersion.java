@@ -1,11 +1,11 @@
-package org.ihtsdo.fxmodel.concept.component.refex.type_uuid_int;
+package org.ihtsdo.fxmodel.concept.component.refex.type_uuid_uuid_string;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.TerminologyStoreDI;
-import org.ihtsdo.tk.api.refex.type_nid_int.RefexNidIntVersionBI;
+import org.ihtsdo.tk.api.refex.type_nid_nid_string.RefexNidNidStringVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -15,29 +15,32 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class FxRefexUuidIntRevision extends FxVersion {
+public class FxRefexUuidUuidStringVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
    @XmlAttribute
-   public int  int1;
+   public String string1;
    @XmlAttribute
-   public UUID uuid1;
+   public UUID   uuid1;
+   @XmlAttribute
+   public UUID   uuid2;
 
    //~--- constructors --------------------------------------------------------
 
-   public FxRefexUuidIntRevision() {
+   public FxRefexUuidUuidStringVersion() {
       super();
    }
 
-   public FxRefexUuidIntRevision(RefexNidIntVersionBI another) throws IOException {
+   public FxRefexUuidUuidStringVersion(RefexNidNidStringVersionBI another) throws IOException {
       super(another);
 
       TerminologyStoreDI ts = Ts.get();
 
-      this.uuid1 = ts.getUuidPrimordialForNid(another.getNid1());
-      this.int1  = another.getInt1();
+      this.uuid1   = ts.getUuidPrimordialForNid(another.getNid1());
+      this.uuid2   = ts.getUuidPrimordialForNid(another.getNid2());
+      this.string1 = another.getString1();
    }
 
    //~--- methods -------------------------------------------------------------
@@ -45,20 +48,21 @@ public class FxRefexUuidIntRevision extends FxVersion {
    /**
     * Compares this object to the specified object. The result is <tt>true</tt>
     * if and only if the argument is not <tt>null</tt>, is a
-    * <tt>ERefsetCidIntVersion</tt> object, and contains the same values, field by field,
-    * as this <tt>ERefsetCidIntVersion</tt>.
+    * <tt>ERefsetCidCidStrVersion</tt> object, and contains the same values, field by field,
+    * as this <tt>ERefsetCidCidStrVersion</tt>.
     *
     * @param obj the object to compare with.
     * @return <code>true</code> if the objects are the same;
     *         <code>false</code> otherwise.
     */
+   @Override
    public boolean equals(Object obj) {
       if (obj == null) {
          return false;
       }
 
-      if (FxRefexUuidIntRevision.class.isAssignableFrom(obj.getClass())) {
-         FxRefexUuidIntRevision another = (FxRefexUuidIntRevision) obj;
+      if (FxRefexUuidUuidStringVersion.class.isAssignableFrom(obj.getClass())) {
+         FxRefexUuidUuidStringVersion another = (FxRefexUuidUuidStringVersion) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
@@ -68,8 +72,13 @@ public class FxRefexUuidIntRevision extends FxVersion {
             return false;
          }
 
-         // Compare intValue
-         if (this.int1 != another.int1) {
+         // Compare c2Uuid
+         if (!this.uuid2.equals(another.uuid2)) {
+            return false;
+         }
+
+         // Compare stringValue
+         if (!this.string1.equals(another.string1)) {
             return false;
          }
 
@@ -90,9 +99,10 @@ public class FxRefexUuidIntRevision extends FxVersion {
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" c1:");
       buff.append(informAboutUuid(this.uuid1));
-      buff.append(" int: ");
-      buff.append(this.int1);
-      buff.append(" ");
+      buff.append(" c2:");
+      buff.append(informAboutUuid(this.uuid2));
+      buff.append(" str:");
+      buff.append("'").append(this.string1).append("' ");
       buff.append(super.toString());
 
       return buff.toString();
@@ -100,21 +110,29 @@ public class FxRefexUuidIntRevision extends FxVersion {
 
    //~--- get methods ---------------------------------------------------------
 
-   public int getIntValue() {
-      return int1;
+   public String getString1() {
+      return string1;
    }
 
    public UUID getUuid1() {
       return uuid1;
    }
 
+   public UUID getUuid2() {
+      return uuid2;
+   }
+
    //~--- set methods ---------------------------------------------------------
 
-   public void setIntValue(int intValue) {
-      this.int1 = intValue;
+   public void setString1(String string1) {
+      this.string1 = string1;
    }
 
    public void setUuid1(UUID uuid1) {
       this.uuid1 = uuid1;
+   }
+
+   public void setUuid2(UUID uuid2) {
+      this.uuid2 = uuid2;
    }
 }

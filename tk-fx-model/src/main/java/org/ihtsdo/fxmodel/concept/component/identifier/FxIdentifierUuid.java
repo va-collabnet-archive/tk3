@@ -3,11 +3,15 @@ package org.ihtsdo.fxmodel.concept.component.identifier;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.tk.api.id.UuidIdBI;
+
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.Arrays;
 import java.util.UUID;
+
 import javax.xml.bind.annotation.XmlAttribute;
 
 public class FxIdentifierUuid extends FxIdentifier {
@@ -35,6 +39,7 @@ public class FxIdentifierUuid extends FxIdentifier {
       super(id);
       denotation = id.getDenotation();
    }
+
    //~--- methods -------------------------------------------------------------
 
    /**
@@ -81,6 +86,7 @@ public class FxIdentifierUuid extends FxIdentifier {
       return Arrays.hashCode(new int[] { denotation.hashCode(), statusUuid.hashCode(), pathUuid.hashCode(),
                                          (int) time, (int) (time >>> 32) });
    }
+
    /**
     * Returns a string representation of the object.
     */

@@ -1,39 +1,43 @@
-package org.ihtsdo.fxmodel.concept.component.identifier;
+package org.ihtsdo.fxmodel.concept.component.refex.type_uuid_float;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
-import org.ihtsdo.tk.api.id.LongIdBI;
+import org.ihtsdo.tk.Ts;
+import org.ihtsdo.tk.api.TerminologyStoreDI;
+import org.ihtsdo.tk.api.refex.type_nid_float.RefexNidFloatVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.DataInput;
-import java.io.DataOutput;
 import java.io.IOException;
 
-import java.util.Arrays;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class FxIdentifierLong extends FxIdentifier {
+public class FxRefexUuidFloatVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
    @XmlAttribute
-   public long denotation;
+   public float float1;
+   @XmlAttribute
+   public UUID  uuid1;
 
    //~--- constructors --------------------------------------------------------
 
-   public FxIdentifierLong() {
+   public FxRefexUuidFloatVersion() {
       super();
    }
 
-   public FxIdentifierLong(LongIdBI id) throws IOException {
-      super(id);
-      denotation = id.getDenotation();
+   public FxRefexUuidFloatVersion(RefexNidFloatVersionBI another) throws IOException {
+      super(another);
+
+      TerminologyStoreDI ts = Ts.get();
+
+      this.uuid1  = ts.getUuidPrimordialForNid(another.getNid1());
+      this.float1 = another.getFloat1();
    }
 
    //~--- methods -------------------------------------------------------------
@@ -41,8 +45,8 @@ public class FxIdentifierLong extends FxIdentifier {
    /**
     * Compares this object to the specified object. The result is <tt>true</tt>
     * if and only if the argument is not <tt>null</tt>, is a
-    * <tt>EIdentifierVersionLong</tt> object, and contains the same values, field by field,
-    * as this <tt>EIdentifierVersionLong</tt>.
+    * <tt>ERefsetCidFloatVersion</tt> object, and contains the same values, field by field,
+    * as this <tt>ERefsetCidFloatVersion</tt>.
     *
     * @param obj the object to compare with.
     * @return <code>true</code> if the objects are the same;
@@ -54,14 +58,19 @@ public class FxIdentifierLong extends FxIdentifier {
          return false;
       }
 
-      if (FxIdentifierLong.class.isAssignableFrom(obj.getClass())) {
-         FxIdentifierLong another = (FxIdentifierLong) obj;
+      if (FxRefexUuidFloatVersion.class.isAssignableFrom(obj.getClass())) {
+         FxRefexUuidFloatVersion another = (FxRefexUuidFloatVersion) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
-         // Compare denotation
-         if (this.denotation != another.denotation) {
+         // Compare c1Uuid
+         if (!this.uuid1.equals(another.uuid1)) {
+            return false;
+         }
+
+         // Compare floatValue
+         if (this.float1 != another.float1) {
             return false;
          }
 
@@ -73,19 +82,6 @@ public class FxIdentifierLong extends FxIdentifier {
    }
 
    /**
-    * Returns a hash code for this <code>EIdentifierVersionLong</code>.
-    *
-    * @return a hash code value for this <tt>EIdentifierVersionLong</tt>.
-    */
-   @Override
-   public int hashCode() {
-      return Arrays.hashCode(new int[] {
-         (int) denotation, (int) (denotation >>> 32), statusUuid.hashCode(), pathUuid.hashCode(), (int) time,
-         (int) (time >>> 32)
-      });
-   }
-
-   /**
     * Returns a string representation of the object.
     */
    @Override
@@ -93,35 +89,33 @@ public class FxIdentifierLong extends FxIdentifier {
       StringBuilder buff = new StringBuilder();
 
       buff.append(this.getClass().getSimpleName()).append(": ");
-      buff.append(" denotation:");
-      buff.append(this.denotation);
+      buff.append(" c1:");
+      buff.append(informAboutUuid(this.uuid1));
+      buff.append(" flt:");
+      buff.append(this.float1);
       buff.append(" ");
       buff.append(super.toString());
 
       return buff.toString();
    }
 
-   @Override
-   public void writeDenotation(DataOutput out) throws IOException {
-      out.writeLong(denotation);
-   }
-
    //~--- get methods ---------------------------------------------------------
 
-   @Override
-   public Long getDenotation() {
-      return denotation;
+   public float getFloat1() {
+      return float1;
    }
 
-   @Override
-   public IDENTIFIER_PART_TYPES getIdType() {
-      return IDENTIFIER_PART_TYPES.LONG;
+   public UUID getUuid1() {
+      return uuid1;
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   @Override
-   public void setDenotation(Object denotation) {
-      this.denotation = (Long) denotation;
+   public void setFloat1(float float1) {
+      this.float1 = float1;
+   }
+
+   public void setUuid1(UUID uuid1) {
+      this.uuid1 = uuid1;
    }
 }

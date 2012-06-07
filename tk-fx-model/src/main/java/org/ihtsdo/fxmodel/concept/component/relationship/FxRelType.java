@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+
+
 package org.ihtsdo.fxmodel.concept.component.relationship;
 
 /**
@@ -21,7 +23,5 @@ package org.ihtsdo.fxmodel.concept.component.relationship;
  * @author kec
  */
 public enum FxRelType {
-    STATED_HIERARCHY, STATED_ROLE,
-    INFERRED_HIERARCY, INFERRED_ROLE,
-    HISTORIC, QUALIFIER;
+   STATED_HIERARCHY, STATED_ROLE, INFERRED_HIERARCY, INFERRED_ROLE, HISTORIC, QUALIFIER;
 }

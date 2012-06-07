@@ -2,12 +2,12 @@ package org.ihtsdo.fxmodel.concept.component.identifier;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.id.IdBI;
 import org.ihtsdo.tk.api.id.LongIdBI;
 import org.ihtsdo.tk.api.id.StringIdBI;
 import org.ihtsdo.tk.api.id.UuidIdBI;
-import org.ihtsdo.fxmodel.concept.component.FxRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -16,15 +16,17 @@ import java.io.IOException;
 
 import java.util.Arrays;
 import java.util.UUID;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public abstract class FxIdentifier extends FxRevision {
+public abstract class FxIdentifier extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
+
    @XmlAttribute
    public UUID authorityUuid;
 
@@ -120,7 +122,6 @@ public abstract class FxIdentifier extends FxRevision {
    }
 
    public abstract void writeDenotation(DataOutput out) throws IOException;
-
 
    //~--- get methods ---------------------------------------------------------
 

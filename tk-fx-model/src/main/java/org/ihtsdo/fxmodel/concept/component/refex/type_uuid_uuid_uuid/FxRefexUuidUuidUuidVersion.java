@@ -1,11 +1,11 @@
-package org.ihtsdo.fxmodel.concept.component.refex.type_uuid_int;
+package org.ihtsdo.fxmodel.concept.component.refex.type_uuid_uuid_uuid;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.TerminologyStoreDI;
-import org.ihtsdo.tk.api.refex.type_nid_int.RefexNidIntVersionBI;
+import org.ihtsdo.tk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -15,29 +15,32 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class FxRefexUuidIntRevision extends FxVersion {
+public class FxRefexUuidUuidUuidVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
    @XmlAttribute
-   public int  int1;
-   @XmlAttribute
    public UUID uuid1;
+   @XmlAttribute
+   public UUID uuid2;
+   @XmlAttribute
+   public UUID uuid3;
 
    //~--- constructors --------------------------------------------------------
 
-   public FxRefexUuidIntRevision() {
+   public FxRefexUuidUuidUuidVersion() {
       super();
    }
 
-   public FxRefexUuidIntRevision(RefexNidIntVersionBI another) throws IOException {
+   public FxRefexUuidUuidUuidVersion(RefexNidNidNidVersionBI another) throws IOException {
       super(another);
 
       TerminologyStoreDI ts = Ts.get();
 
       this.uuid1 = ts.getUuidPrimordialForNid(another.getNid1());
-      this.int1  = another.getInt1();
+      this.uuid2 = ts.getUuidPrimordialForNid(another.getNid2());
+      this.uuid3 = ts.getUuidPrimordialForNid(another.getNid3());
    }
 
    //~--- methods -------------------------------------------------------------
@@ -45,8 +48,8 @@ public class FxRefexUuidIntRevision extends FxVersion {
    /**
     * Compares this object to the specified object. The result is <tt>true</tt>
     * if and only if the argument is not <tt>null</tt>, is a
-    * <tt>ERefsetCidIntVersion</tt> object, and contains the same values, field by field,
-    * as this <tt>ERefsetCidIntVersion</tt>.
+    * <tt>ERefsetCidCidCidVersion</tt> object, and contains the same values, field by field,
+    * as this <tt>ERefsetCidCidCidVersion</tt>.
     *
     * @param obj the object to compare with.
     * @return <code>true</code> if the objects are the same;
@@ -57,8 +60,8 @@ public class FxRefexUuidIntRevision extends FxVersion {
          return false;
       }
 
-      if (FxRefexUuidIntRevision.class.isAssignableFrom(obj.getClass())) {
-         FxRefexUuidIntRevision another = (FxRefexUuidIntRevision) obj;
+      if (FxRefexUuidUuidUuidVersion.class.isAssignableFrom(obj.getClass())) {
+         FxRefexUuidUuidUuidVersion another = (FxRefexUuidUuidUuidVersion) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
@@ -68,8 +71,13 @@ public class FxRefexUuidIntRevision extends FxVersion {
             return false;
          }
 
-         // Compare intValue
-         if (this.int1 != another.int1) {
+         // Compare c2Uuid
+         if (!this.uuid2.equals(another.uuid2)) {
+            return false;
+         }
+
+         // Compare c3Uuid
+         if (!this.uuid3.equals(another.uuid3)) {
             return false;
          }
 
@@ -90,8 +98,10 @@ public class FxRefexUuidIntRevision extends FxVersion {
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" c1:");
       buff.append(informAboutUuid(this.uuid1));
-      buff.append(" int: ");
-      buff.append(this.int1);
+      buff.append(" c2:");
+      buff.append(informAboutUuid(this.uuid2));
+      buff.append(" c3:");
+      buff.append(informAboutUuid(this.uuid3));
       buff.append(" ");
       buff.append(super.toString());
 
@@ -100,21 +110,29 @@ public class FxRefexUuidIntRevision extends FxVersion {
 
    //~--- get methods ---------------------------------------------------------
 
-   public int getIntValue() {
-      return int1;
-   }
-
    public UUID getUuid1() {
       return uuid1;
    }
 
-   //~--- set methods ---------------------------------------------------------
-
-   public void setIntValue(int intValue) {
-      this.int1 = intValue;
+   public UUID getUuid2() {
+      return uuid2;
    }
+
+   public UUID getUuid3() {
+      return uuid3;
+   }
+
+   //~--- set methods ---------------------------------------------------------
 
    public void setUuid1(UUID uuid1) {
       this.uuid1 = uuid1;
+   }
+
+   public void setUuid2(UUID uuid2) {
+      this.uuid2 = uuid2;
+   }
+
+   public void setUuid3(UUID uuid3) {
+      this.uuid3 = uuid3;
    }
 }

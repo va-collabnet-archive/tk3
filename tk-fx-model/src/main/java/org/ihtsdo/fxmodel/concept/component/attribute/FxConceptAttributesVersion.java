@@ -1,39 +1,35 @@
-package org.ihtsdo.fxmodel.concept.component.identifier;
+package org.ihtsdo.fxmodel.concept.component.attribute;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
-import org.ihtsdo.tk.api.id.LongIdBI;
+import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.DataInput;
-import java.io.DataOutput;
 import java.io.IOException;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.UUID;
-
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class FxIdentifierLong extends FxIdentifier {
+@XmlRootElement(name = "attributes-revision")
+public class FxConceptAttributesVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
    @XmlAttribute
-   public long denotation;
+   public boolean defined;
 
    //~--- constructors --------------------------------------------------------
 
-   public FxIdentifierLong() {
+   public FxConceptAttributesVersion() {
       super();
    }
 
-   public FxIdentifierLong(LongIdBI id) throws IOException {
-      super(id);
-      denotation = id.getDenotation();
+   public FxConceptAttributesVersion(ConAttrVersionBI another) throws IOException {
+      super(another);
+      this.defined = another.isDefined();
    }
 
    //~--- methods -------------------------------------------------------------
@@ -41,8 +37,8 @@ public class FxIdentifierLong extends FxIdentifier {
    /**
     * Compares this object to the specified object. The result is <tt>true</tt>
     * if and only if the argument is not <tt>null</tt>, is a
-    * <tt>EIdentifierVersionLong</tt> object, and contains the same values, field by field,
-    * as this <tt>EIdentifierVersionLong</tt>.
+    * <tt>EConceptAttributesVersion</tt> object, and contains the same values, field by field,
+    * as this <tt>EConceptAttributesVersion</tt>.
     *
     * @param obj the object to compare with.
     * @return <code>true</code> if the objects are the same;
@@ -54,14 +50,14 @@ public class FxIdentifierLong extends FxIdentifier {
          return false;
       }
 
-      if (FxIdentifierLong.class.isAssignableFrom(obj.getClass())) {
-         FxIdentifierLong another = (FxIdentifierLong) obj;
+      if (FxConceptAttributesVersion.class.isAssignableFrom(obj.getClass())) {
+         FxConceptAttributesVersion another = (FxConceptAttributesVersion) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
-         // Compare denotation
-         if (this.denotation != another.denotation) {
+         // Compare defined
+         if (this.defined != another.defined) {
             return false;
          }
 
@@ -73,19 +69,6 @@ public class FxIdentifierLong extends FxIdentifier {
    }
 
    /**
-    * Returns a hash code for this <code>EIdentifierVersionLong</code>.
-    *
-    * @return a hash code value for this <tt>EIdentifierVersionLong</tt>.
-    */
-   @Override
-   public int hashCode() {
-      return Arrays.hashCode(new int[] {
-         (int) denotation, (int) (denotation >>> 32), statusUuid.hashCode(), pathUuid.hashCode(), (int) time,
-         (int) (time >>> 32)
-      });
-   }
-
-   /**
     * Returns a string representation of the object.
     */
    @Override
@@ -93,35 +76,28 @@ public class FxIdentifierLong extends FxIdentifier {
       StringBuilder buff = new StringBuilder();
 
       buff.append(this.getClass().getSimpleName()).append(": ");
-      buff.append(" denotation:");
-      buff.append(this.denotation);
+      buff.append(" defined:");
+      buff.append(this.defined);
       buff.append(" ");
       buff.append(super.toString());
 
       return buff.toString();
    }
 
-   @Override
-   public void writeDenotation(DataOutput out) throws IOException {
-      out.writeLong(denotation);
-   }
-
    //~--- get methods ---------------------------------------------------------
 
-   @Override
-   public Long getDenotation() {
-      return denotation;
-   }
-
-   @Override
-   public IDENTIFIER_PART_TYPES getIdType() {
-      return IDENTIFIER_PART_TYPES.LONG;
+   /*
+    * (non-Javadoc)
+    *
+    * @see org.ihtsdo.etypes.I_ConceptualizeExternally#isDefined()
+    */
+   public boolean isDefined() {
+      return defined;
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   @Override
-   public void setDenotation(Object denotation) {
-      this.denotation = (Long) denotation;
+   public void setDefined(boolean defined) {
+      this.defined = defined;
    }
 }

@@ -13,81 +13,106 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
+
 package org.ihtsdo.fxmodel;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.ihtsdo.tk.Ts;
+
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.IOException;
+
 import java.util.Objects;
 import java.util.UUID;
-import org.ihtsdo.tk.Ts;
 
 /**
  *
  * @author kec
  */
 public class FxId {
+   private int        nid = Integer.MAX_VALUE;
+   private final long lsb;
+   private final long msb;
 
-    private int nid = Integer.MAX_VALUE;
-    private final long lsb;
-    private final long msb;
-    
-    public FxId(int nid) throws IOException {
-        this.nid = nid;
-        UUID primordialUuid = Ts.get().getUuidPrimordialForNid(nid);
-        this.lsb = primordialUuid.getLeastSignificantBits();
-        this.msb = primordialUuid.getMostSignificantBits();
-    }
-    public FxId(UUID primordialUuid) {
-        this.lsb = primordialUuid.getLeastSignificantBits();
-        this.msb = primordialUuid.getMostSignificantBits();
-    }
-    public FxId(UUID primordialUuid, Integer nid) {
-        this.lsb = primordialUuid.getLeastSignificantBits();
-        this.msb = primordialUuid.getMostSignificantBits();
-        this.nid = nid;
-    }
+   //~--- constructors --------------------------------------------------------
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 89 * hash + (int) (this.lsb ^ (this.lsb >>> 32));
-        hash = 89 * hash + (int) (this.msb ^ (this.msb >>> 32));
-        return hash;
-    }
+   public FxId(int nid) throws IOException {
+      this.nid = nid;
 
+      UUID primordialUuid = Ts.get().getUuidPrimordialForNid(nid);
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final FxId other = (FxId) obj;
-        if (!Objects.equals(this.msb, other.msb)) {
-            return false;
-        }
-        return this.msb == other.msb && this.lsb == other.lsb;
-    }
-    
-    public final int getNid() {
-        return nid;
-    }
-    
-    public final UUID getPrimordialUuid() {
-        return new UUID(msb, lsb);
-    }
-    
-    public final void setNid(int nid) {
-        if (this.nid != Integer.MAX_VALUE) {
-            throw new IllegalArgumentException("Nid is already set");
-        }
-        this.nid = nid;
-    }
+      this.lsb = primordialUuid.getLeastSignificantBits();
+      this.msb = primordialUuid.getMostSignificantBits();
+   }
 
-    @Override
-    public String toString() {
-        return "FxId{" + "nid=" + nid + ", primordialUuid=" + new UUID(msb, lsb) + '}';
-    }
+   public FxId(UUID primordialUuid) {
+      this.lsb = primordialUuid.getLeastSignificantBits();
+      this.msb = primordialUuid.getMostSignificantBits();
+   }
 
+   public FxId(UUID primordialUuid, Integer nid) {
+      this.lsb = primordialUuid.getLeastSignificantBits();
+      this.msb = primordialUuid.getMostSignificantBits();
+      this.nid = nid;
+   }
+
+   //~--- methods -------------------------------------------------------------
+
+   @Override
+   public boolean equals(Object obj) {
+      if (obj == null) {
+         return false;
+      }
+
+      if (getClass() != obj.getClass()) {
+         return false;
+      }
+
+      final FxId other = (FxId) obj;
+
+      if (!Objects.equals(this.msb, other.msb)) {
+         return false;
+      }
+
+      return (this.msb == other.msb) && (this.lsb == other.lsb);
+   }
+
+   @Override
+   public int hashCode() {
+      int hash = 7;
+
+      hash = 89 * hash + (int) (this.lsb ^ (this.lsb >>> 32));
+      hash = 89 * hash + (int) (this.msb ^ (this.msb >>> 32));
+
+      return hash;
+   }
+
+   @Override
+   public String toString() {
+      return "FxId{" + "nid=" + nid + ", primordialUuid=" + new UUID(msb, lsb) + '}';
+   }
+
+   //~--- get methods ---------------------------------------------------------
+
+   public final int getNid() {
+      return nid;
+   }
+
+   public final UUID getPrimordialUuid() {
+      return new UUID(msb, lsb);
+   }
+
+   //~--- set methods ---------------------------------------------------------
+
+   public final void setNid(int nid) {
+      if (this.nid != Integer.MAX_VALUE) {
+         throw new IllegalArgumentException("Nid is already set");
+      }
+
+      this.nid = nid;
+   }
 }

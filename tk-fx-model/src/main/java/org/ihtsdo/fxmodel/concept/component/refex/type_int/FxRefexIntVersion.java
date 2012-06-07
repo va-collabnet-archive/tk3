@@ -1,39 +1,33 @@
-package org.ihtsdo.fxmodel.concept.component.identifier;
+package org.ihtsdo.fxmodel.concept.component.refex.type_int;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
-import org.ihtsdo.tk.api.id.LongIdBI;
+import org.ihtsdo.tk.api.refex.type_int.RefexIntVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.DataInput;
-import java.io.DataOutput;
 import java.io.IOException;
-
-import java.util.Arrays;
-import java.util.Map;
-import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class FxIdentifierLong extends FxIdentifier {
+public class FxRefexIntVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
    @XmlAttribute
-   public long denotation;
+   public int intValue;
 
    //~--- constructors --------------------------------------------------------
 
-   public FxIdentifierLong() {
+   public FxRefexIntVersion() {
       super();
    }
 
-   public FxIdentifierLong(LongIdBI id) throws IOException {
-      super(id);
-      denotation = id.getDenotation();
+   public FxRefexIntVersion(RefexIntVersionBI another) throws IOException {
+      super(another);
+      this.intValue = another.getInt1();
    }
 
    //~--- methods -------------------------------------------------------------
@@ -41,8 +35,8 @@ public class FxIdentifierLong extends FxIdentifier {
    /**
     * Compares this object to the specified object. The result is <tt>true</tt>
     * if and only if the argument is not <tt>null</tt>, is a
-    * <tt>EIdentifierVersionLong</tt> object, and contains the same values, field by field,
-    * as this <tt>EIdentifierVersionLong</tt>.
+    * <tt>ERefsetIntVersion</tt> object, and contains the same values, field by field,
+    * as this <tt>ERefsetIntVersion</tt>.
     *
     * @param obj the object to compare with.
     * @return <code>true</code> if the objects are the same;
@@ -54,14 +48,14 @@ public class FxIdentifierLong extends FxIdentifier {
          return false;
       }
 
-      if (FxIdentifierLong.class.isAssignableFrom(obj.getClass())) {
-         FxIdentifierLong another = (FxIdentifierLong) obj;
+      if (FxRefexIntVersion.class.isAssignableFrom(obj.getClass())) {
+         FxRefexIntVersion another = (FxRefexIntVersion) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
-         // Compare denotation
-         if (this.denotation != another.denotation) {
+         // Compare intValue
+         if (this.intValue != another.intValue) {
             return false;
          }
 
@@ -73,19 +67,6 @@ public class FxIdentifierLong extends FxIdentifier {
    }
 
    /**
-    * Returns a hash code for this <code>EIdentifierVersionLong</code>.
-    *
-    * @return a hash code value for this <tt>EIdentifierVersionLong</tt>.
-    */
-   @Override
-   public int hashCode() {
-      return Arrays.hashCode(new int[] {
-         (int) denotation, (int) (denotation >>> 32), statusUuid.hashCode(), pathUuid.hashCode(), (int) time,
-         (int) (time >>> 32)
-      });
-   }
-
-   /**
     * Returns a string representation of the object.
     */
    @Override
@@ -93,35 +74,23 @@ public class FxIdentifierLong extends FxIdentifier {
       StringBuilder buff = new StringBuilder();
 
       buff.append(this.getClass().getSimpleName()).append(": ");
-      buff.append(" denotation:");
-      buff.append(this.denotation);
+      buff.append(" int: ");
+      buff.append(this.intValue);
       buff.append(" ");
       buff.append(super.toString());
 
       return buff.toString();
    }
 
-   @Override
-   public void writeDenotation(DataOutput out) throws IOException {
-      out.writeLong(denotation);
-   }
-
    //~--- get methods ---------------------------------------------------------
 
-   @Override
-   public Long getDenotation() {
-      return denotation;
-   }
-
-   @Override
-   public IDENTIFIER_PART_TYPES getIdType() {
-      return IDENTIFIER_PART_TYPES.LONG;
+   public int getIntValue() {
+      return intValue;
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   @Override
-   public void setDenotation(Object denotation) {
-      this.denotation = (Long) denotation;
+   public void setIntValue(int intValue) {
+      this.intValue = intValue;
    }
 }
