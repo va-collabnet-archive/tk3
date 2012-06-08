@@ -142,10 +142,11 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
     }
 
     @Override
-    public DescriptionRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+    public DescriptionRevision makeAnalog(int statusNid,long time, int authorNid, int moduleNid, int pathNid) {
         DescriptionRevision newR;
 
-        newR = new DescriptionRevision(this, statusNid, authorNid, pathNid, time, this);
+        newR = new DescriptionRevision(this, statusNid, time, authorNid,
+                moduleNid, pathNid, this);
         addRevision(newR);
 
         return newR;
@@ -469,8 +470,8 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
         }
 
         @Override
-        public DescriptionRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
-            return getCv().makeAnalog(statusNid, authorNid, pathNid, time);
+        public DescriptionRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+            return getCv().makeAnalog(statusNid, time, authorNid, moduleNid, pathNid);
         }
 
         @Override

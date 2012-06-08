@@ -104,12 +104,12 @@ public class NidFloatMember extends RefexMember<NidFloatRevision, NidFloatMember
 
    @Override
    public NidFloatRevision makeAnalog() {
-      return new NidFloatRevision(getStatusNid(), getAuthorNid(), getPathNid(), getTime(), this);
+      return new NidFloatRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
    }
 
    @Override
-   public NidFloatRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
-      NidFloatRevision newR = new NidFloatRevision(statusNid, authorNid, pathNid, time, this);
+   public NidFloatRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+      NidFloatRevision newR = new NidFloatRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);
 

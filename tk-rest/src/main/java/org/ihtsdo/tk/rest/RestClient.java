@@ -99,7 +99,14 @@ public class RestClient extends Termstore {
         String nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
         return Integer.parseInt(nidStr);
     }
-
+    
+    @Override
+    public int getModuleNidForSapNid(int sapNid) {
+        WebResource r = c.resource(serverUrlStr + "sap/module/" + sapNid);
+        String nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
+        return Integer.parseInt(nidStr);
+    }
+    
     @Override
     public int getStatusNidForSapNid(int sapNid) {
         WebResource r = c.resource(serverUrlStr + "sap/status/" + sapNid);
@@ -356,7 +363,7 @@ public class RestClient extends Termstore {
     }
 
     @Override
-    public int getSapNid(int statusNid, int authorNid, int pathNid, long time) {
+    public int getSapNid(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

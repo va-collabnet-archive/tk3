@@ -33,17 +33,17 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
         super(statusAtPositionNid, primordialComponent);
     }
 
-    public RefexRevision(TkRevision eVersion, C member) throws IOException {
-        super(P.s.getNidForUuids(eVersion.getStatusUuid()), P.s.getNidForUuids(eVersion.getAuthorUuid()),
-                P.s.getNidForUuids(eVersion.getPathUuid()), eVersion.getTime(), member);
+    public RefexRevision(TkRevision eVersion, C member)  throws IOException{
+        super(P.s.getNidForUuids(eVersion.getStatusUuid()), eVersion.getTime(), P.s.getNidForUuids(eVersion.getAuthorUuid()),
+                 P.s.getNidForUuids(eVersion.getModuleUuid()), P.s.getNidForUuids(eVersion.getPathUuid()),  member);
     }
 
     public RefexRevision(TupleInput input, C primordialComponent) {
         super(input, primordialComponent);
     }
 
-    public RefexRevision(int statusNid, int authorNid, int pathNid, long time, C primordialComponent) {
-        super(statusNid, authorNid, pathNid, time, primordialComponent);
+    public RefexRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, C primordialComponent) {
+        super(statusNid, time, authorNid, moduleNid, pathNid, primordialComponent);
     }
 
     //~--- methods -------------------------------------------------------------

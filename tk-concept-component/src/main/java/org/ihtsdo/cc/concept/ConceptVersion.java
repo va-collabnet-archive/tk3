@@ -493,6 +493,15 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
         return returnValues;
     }
+    
+    @Override
+    public int getModuleNid() {
+         try {
+            return getConAttrs().getModuleNid();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public int getNid() {

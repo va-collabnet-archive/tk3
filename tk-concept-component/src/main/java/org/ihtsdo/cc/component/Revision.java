@@ -54,8 +54,8 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
         assert sapNid != 0;
     }
 
-    public Revision(int statusNid, int authorNid, int pathNid, long time, C primordialComponent) {
-        this.sapNid = P.s.getSapNid(statusNid, authorNid, pathNid, time);
+    public Revision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, C primordialComponent) {
+        this.sapNid = P.s.getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
         assert sapNid != 0;
         this.primordialComponent = primordialComponent;
         primordialComponent.clearVersions();
@@ -131,7 +131,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
      */
 
     @Override
-    public abstract V makeAnalog(int statusNid, int authorNid, int pathNid, long time);
+    public abstract V makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid);
 
     protected void modified() {
         if (primordialComponent != null) {
@@ -162,18 +162,21 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
     public String toString() {
         StringBuffer buf = new StringBuffer();
 
-        buf.append(" sap:");
+        buf.append(" stamp:");
         buf.append(sapNid);
 
         try {
-            buf.append(" status:");
+            buf.append(" s:");
             ConceptComponent.addNidToBuffer(buf, getStatusNid());
-            buf.append(" author:");
-            ConceptComponent.addNidToBuffer(buf, getAuthorNid());
-            buf.append(" path:");
-            ConceptComponent.addNidToBuffer(buf, getPathNid());
-            buf.append(" tm: ");
+            buf.append(" t: ");
             buf.append(TimeHelper.formatDate(getTime()));
+            buf.append(" a:");
+            ConceptComponent.addNidToBuffer(buf, getAuthorNid());
+            buf.append(" m:");
+            ConceptComponent.addNidToBuffer(buf, getModuleNid());
+            buf.append(" p:");
+            ConceptComponent.addNidToBuffer(buf, getPathNid());
+            
             buf.append(" ");
             buf.append(getTime());
         } catch (Throwable e) {
@@ -322,6 +325,11 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
     public Collection<? extends RefexVersionBI<?>> getInactiveRefexes(ViewCoordinate xyz) throws IOException {
         return getChronicle().getInactiveRefexes(xyz);
     }
+    
+    @Override
+    public int getModuleNid() {
+        return P.s.getModuleNidForSapNid(sapNid);
+    }
 
     @Override
     public final int getNid() {
@@ -432,9 +440,26 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
         }
 
         if (authorNid != getPathNid()) {
-            this.sapNid = P.s.getSapNid(getStatusNid(), authorNid, getPathNid(), Long.MAX_VALUE);
+            this.sapNid = P.s.getSapNid(getStatusNid(),Long.MAX_VALUE, authorNid, getModuleNid(), getPathNid());
             modified();
         }
+    }
+    
+     @Override
+    public final void setModuleNid(int moduleNid) {
+        if (getTime() != Long.MAX_VALUE) {
+            throw new UnsupportedOperationException("Cannot change status if time != Long.MAX_VALUE; "
+                    + "Use makeAnalog instead.");
+        }
+
+        try {
+            this.sapNid = P.s.getSapNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), 
+                    moduleNid, getPathNid());
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+
+        modified();
     }
 
     @Override
@@ -449,11 +474,12 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
                     + "Use makeAnalog instead.");
         }
 
-        this.sapNid = P.s.getSapNid(getStatusNid(), getAuthorNid(), pathId, Long.MAX_VALUE);
+        this.sapNid = P.s.getSapNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), 
+                    getModuleNid(), pathId);
     }
 
-    public void setStatusAtPosition(int statusNid, int authorNid, int pathNid, long time) {
-        this.sapNid = P.s.getSapNid(statusNid, authorNid, pathNid, time);
+    public void setStatusAtPosition(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+        this.sapNid = P.s.getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
         modified();
     }
 
@@ -465,7 +491,8 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
         }
 
         try {
-            this.sapNid = P.s.getSapNid(statusNid, getAuthorNid(), getPathNid(), Long.MAX_VALUE);
+            this.sapNid = P.s.getSapNid(statusNid, Long.MAX_VALUE,
+                    getAuthorNid(), getModuleNid(), getPathNid());
         } catch (Exception e) {
             throw new RuntimeException();
         }
@@ -482,7 +509,8 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
         if (time != getTime()) {
             try {
-                this.sapNid = P.s.getSapNid(getStatusNid(), getAuthorNid(), getPathNid(), time);
+                this.sapNid = P.s.getSapNid(getStatusNid(), time, getAuthorNid(), 
+                    getModuleNid(), getPathNid());
             } catch (Exception e) {
                 throw new RuntimeException();
             }

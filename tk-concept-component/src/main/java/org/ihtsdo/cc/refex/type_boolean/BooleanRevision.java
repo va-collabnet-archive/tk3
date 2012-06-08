@@ -55,14 +55,15 @@ public class BooleanRevision extends RefexRevision<BooleanRevision, BooleanMembe
       booleanValue = input.readBoolean();
    }
 
-   protected BooleanRevision(int statusNid, int authorNid, int pathNid, long time,
-                             BooleanMember primoridalMember) {
-      super(statusNid, authorNid, pathNid, time, primoridalMember);
+   protected BooleanRevision(int statusNid, long time, int authorNid, int moduleNid,
+           int pathNid, BooleanMember primoridalMember) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
       this.booleanValue = primoridalMember.getBoolean1();
    }
 
-   protected BooleanRevision(int statusNid, int authorNid, int pathNid, long time, BooleanRevision another) {
-      super(statusNid, authorNid, pathNid, time, another.primordialComponent);
+   protected BooleanRevision(int statusNid, long time, int authorNid, int moduleNid,
+           int pathNid, BooleanRevision another) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       this.booleanValue = another.getBooleanValue();
    }
 
@@ -96,18 +97,20 @@ public class BooleanRevision extends RefexRevision<BooleanRevision, BooleanMembe
 
    @Override
    public BooleanRevision makeAnalog() {
-      return new BooleanRevision(getStatusNid(), getAuthorNid(), getPathNid(), getTime(), this);
+      return new BooleanRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(),  this);
    }
 
    @Override
-   public BooleanRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+   public BooleanRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid,
+           int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatusNid(statusNid);
 
          return this;
       }
 
-      BooleanRevision newR = new BooleanRevision(statusNid, authorNid, pathNid, time, this);
+      BooleanRevision newR = new BooleanRevision(statusNid, time, authorNid,
+              moduleNid, pathNid, this);
 
       primordialComponent.addRevision(newR);
 

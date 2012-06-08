@@ -34,7 +34,7 @@ import org.ihtsdo.tk.api.refex.RefexChronicleBI;
  * @author kec
  */
 public interface PersistentStoreI extends TerminologyStoreDI {
-   int getSapNid(int statusNid, int authorNid, int pathNid, long time);
+   int getSapNid(int statusNid, long time, int authorNid, int moduleNid, int pathNid);
    int getMaxReadOnlySap();
    void xrefAnnotation(RefexChronicleBI annotation) throws IOException;
    boolean hasConcept(int cNid) throws IOException;

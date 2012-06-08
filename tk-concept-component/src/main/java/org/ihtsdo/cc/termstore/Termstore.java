@@ -266,9 +266,11 @@ public abstract class Termstore implements PersistentStoreI {
     }
     @Override
     public int getSapNid(TkRevision version) throws IOException {
-        return getSapNid(getNidForUuids(version.statusUuid), 
+        return getSapNid(getNidForUuids(version.statusUuid),
+               version.time,
                getNidForUuids(version.authorUuid),
-               getNidForUuids(version.pathUuid), version.time);
+               getNidForUuids(version.moduleUuid),
+               getNidForUuids(version.pathUuid));
     }
 
     

@@ -60,19 +60,19 @@ public class NidLongRevision extends RefexRevision<NidLongRevision, NidLongMembe
       longValue = input.readLong();
    }
 
-   protected NidLongRevision(int statusNid, int authorNid, int pathNid, long time,
+   protected NidLongRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, 
                              NidLongMember primoridalMember) {
-      super(statusNid, authorNid, pathNid, time, primoridalMember);
+      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
       c1Nid     = primoridalMember.getC1Nid();
       longValue = primoridalMember.getLongValue();
    }
 
-   protected NidLongRevision(int statusNid, int authorNid, int pathNid, long time, NidLongRevision another) {
-      super(statusNid, authorNid, pathNid, time, another.primordialComponent);
+   protected NidLongRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
+           NidLongRevision another) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       c1Nid     = another.c1Nid;
       longValue = another.longValue;
    }
-
    //~--- methods -------------------------------------------------------------
 
    @Override
@@ -103,18 +103,18 @@ public class NidLongRevision extends RefexRevision<NidLongRevision, NidLongMembe
 
    @Override
    public NidLongRevision makeAnalog() {
-      return new NidLongRevision(getStatusNid(), getAuthorNid(), getPathNid(), getTime(), this);
+      return new NidLongRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
    }
 
    @Override
-   public NidLongRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+   public NidLongRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatusNid(statusNid);
 
          return this;
       }
 
-      NidLongRevision newR = new NidLongRevision(statusNid, authorNid, pathNid, time, this);
+      NidLongRevision newR = new NidLongRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
 
       primordialComponent.addRevision(newR);
 

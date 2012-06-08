@@ -55,17 +55,17 @@ public class NidNidRevision extends RefexRevision<NidNidRevision, NidNidMember>
       c1Nid = input.readInt();
       c2Nid = input.readInt();
    }
-
-
-   public NidNidRevision(int statusNid, int authorNid, int pathNid, long time,
-                         NidNidMember primoridalMember) {
-      super(statusNid, authorNid, pathNid, time, primoridalMember);
+   
+   public NidNidRevision(int statusNid, long time, int authorNid,
+           int moduleNid, int pathNid, NidNidMember primoridalMember) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
       c1Nid = primoridalMember.getC1Nid();
       c2Nid = primoridalMember.getC2Nid();
    }
 
-   protected NidNidRevision(int statusNid, int authorNid, int pathNid, long time, NidNidRevision another) {
-      super(statusNid, authorNid, pathNid, time, another.primordialComponent);
+   protected NidNidRevision(int statusNid, long time, int authorNid,
+           int moduleNid, int pathNid, NidNidRevision another) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       c1Nid = another.c1Nid;
       c2Nid = another.c2Nid;
    }
@@ -103,18 +103,20 @@ public class NidNidRevision extends RefexRevision<NidNidRevision, NidNidMember>
 
    @Override
    public NidNidRevision makeAnalog() {
-      return new NidNidRevision(getStatusNid(), getAuthorNid(), getPathNid(), getTime(), this);
+      return new NidNidRevision(getStatusNid(), getTime(), getAuthorNid(),
+              getModuleNid(), getPathNid(), this);
    }
 
    @Override
-   public NidNidRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+   public NidNidRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatusNid(statusNid);
 
          return this;
       }
 
-      NidNidRevision newR = new NidNidRevision(statusNid, authorNid, pathNid, time, this);
+      NidNidRevision newR = new NidNidRevision(statusNid, time,
+              authorNid, moduleNid, pathNid, this);
 
       primordialComponent.addRevision(newR);
 

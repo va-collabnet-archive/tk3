@@ -132,10 +132,10 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
     }
 
     @Override
-    public ConceptAttributesRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+    public ConceptAttributesRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
         ConceptAttributesRevision newR;
 
-        newR = new ConceptAttributesRevision(this, statusNid, authorNid, pathNid, time, this);
+        newR = new ConceptAttributesRevision(this, statusNid, time, authorNid, moduleNid, pathNid, this);
         addRevision(newR);
 
         return newR;
@@ -425,8 +425,8 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
         }
 
         @Override
-        public ConceptAttributesRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
-            return getCv().makeAnalog(statusNid, authorNid, pathNid, time);
+        public ConceptAttributesRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+            return getCv().makeAnalog(statusNid, time, authorNid, moduleNid, pathNid);
         }
 
         @Override

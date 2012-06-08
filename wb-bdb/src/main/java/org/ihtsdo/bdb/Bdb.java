@@ -145,6 +145,10 @@ public class Bdb {
     static int getStatusNidForSapNid(int sapNid) {
         return statusAtPositionDb.getStatusNid(sapNid);
     }
+    
+    static int getModuleNidForSapNid(int sapNid) {
+        return statusAtPositionDb.getModuleNid(sapNid);
+    }
     static long getTimeForSapNid(int sapNid) {
         return statusAtPositionDb.getTime(sapNid);
     }
@@ -391,9 +395,10 @@ public class Bdb {
         }
         sapNid = statusAtPositionDb.getSapNid(
                 uuidToNid(version.getStatusUuid()),
+                version.getTime(),
                 uuidToNid(version.getAuthorUuid()),
-                uuidToNid(version.getPathUuid()),
-                version.getTime());
+                uuidToNid(version.getModuleUuid()),
+                uuidToNid(version.getPathUuid()));
 
         if (sapNidCache.size() > 500) {
             sapNidCache = new ConcurrentHashMap<>();
@@ -402,14 +407,14 @@ public class Bdb {
         return sapNid;
     }
 
-    public static int getSapNid(int statusNid, int authorNid, int pathNid, long time) {
+    public static int getSapNid(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
         assert time != 0 : "Time is 0; was it initialized?";
         assert statusNid != Integer.MIN_VALUE : "Status is Integer.MIN_VALUE; was it initialized?";
         assert pathNid != Integer.MIN_VALUE : "Path is Integer.MIN_VALUE; was it initialized?";
         if (time == Long.MIN_VALUE) {
             return -1;
         }
-        return statusAtPositionDb.getSapNid(statusNid, authorNid, pathNid, time);
+        return statusAtPositionDb.getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
     }
 
     public static StatusAtPositionBdb getSapDb() {

@@ -53,6 +53,11 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
     public int getAuthorNidForSapNid(int sapNid) {
         return store.getAuthorNidForSapNid(sapNid);
     }
+    
+    @Override
+    public int getModuleNidForSapNid(int sapNid) {
+        return store.getModuleNidForSapNid(sapNid);
+    }
     //~--- constructors --------------------------------------------------------
     public TerminologySnapshot(PersistentStoreI store, ViewCoordinate coordinate) {
         super();

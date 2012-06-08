@@ -62,8 +62,8 @@ public class RelationshipRevision extends Revision<RelationshipRevision, Relatio
     }
 
     public RelationshipRevision(TkRelationshipRevision erv, Relationship primordialRel) throws IOException {
-        super(P.s.getNidForUuids(erv.getStatusUuid()), P.s.getNidForUuids(erv.getAuthorUuid()),
-                P.s.getNidForUuids(erv.getPathUuid()), erv.getTime(), primordialRel);
+        super(P.s.getNidForUuids(erv.getStatusUuid()), erv.getTime(), P.s.getNidForUuids(erv.getAuthorUuid()),
+                P.s.getNidForUuids(erv.getModuleUuid()), P.s.getNidForUuids(erv.getPathUuid()), primordialRel);
         this.characteristicNid = P.s.getNidForUuids(erv.getCharacteristicUuid());
         this.group = erv.getGroup();
         this.refinabilityNid = P.s.getNidForUuids(erv.getRefinabilityUuid());
@@ -79,9 +79,9 @@ public class RelationshipRevision extends Revision<RelationshipRevision, Relatio
         this.typeNid = input.readInt();
     }
 
-    public RelationshipRevision(RelationshipAnalogBI another, int statusNid, int authorNid, int pathNid, long time,
+    public RelationshipRevision(RelationshipAnalogBI another, int statusNid, long time, int authorNid, int moduleNid, int pathNid,
             Relationship primordialRel) {
-        super(statusNid, authorNid, pathNid, time, primordialRel);
+        super(statusNid, time, authorNid, moduleNid, pathNid, primordialRel);
         this.characteristicNid = another.getCharacteristicNid();
         this.group = another.getGroup();
         this.refinabilityNid = another.getRefinabilityNid();
@@ -113,7 +113,7 @@ public class RelationshipRevision extends Revision<RelationshipRevision, Relatio
     }
 
     @Override
-    public RelationshipRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+    public RelationshipRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
 
         if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
             this.setStatusNid(statusNid);
@@ -122,8 +122,8 @@ public class RelationshipRevision extends Revision<RelationshipRevision, Relatio
             return this;
         }
 
-        RelationshipRevision newR = new RelationshipRevision(this,
-                statusNid, authorNid, pathNid, time, this.primordialComponent);
+        RelationshipRevision newR = new RelationshipRevision(this, statusNid,
+                time, authorNid, moduleNid, pathNid, this.primordialComponent);
 
         this.primordialComponent.addRevision(newR);
 

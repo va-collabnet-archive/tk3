@@ -156,8 +156,8 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
 
 
     @Override
-    public RelationshipRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
-        RelationshipRevision newR = new RelationshipRevision(this, statusNid, authorNid, pathNid, time, this);
+    public RelationshipRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+        RelationshipRevision newR = new RelationshipRevision(this, statusNid, time, authorNid, moduleNid, pathNid, this);
 
         addRevision(newR);
 
@@ -572,8 +572,8 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
         }
 
         @Override
-        public RelationshipRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
-            return (RelationshipRevision) getCv().makeAnalog(statusNid, authorNid, pathNid, time);
+        public RelationshipRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+            return (RelationshipRevision) getCv().makeAnalog(statusNid, time, authorNid, moduleNid, pathNid);
         }
 
         @Override

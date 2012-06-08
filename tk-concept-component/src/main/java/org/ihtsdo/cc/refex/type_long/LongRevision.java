@@ -50,13 +50,13 @@ public class LongRevision extends RefexRevision<LongRevision, LongMember>
       longValue = input.readLong();
    }
 
-   public LongRevision(int statusNid, int authorNid, int pathNid, long time, LongMember primoridalMember) {
-      super(statusNid, authorNid, pathNid, time, primoridalMember);
+   public LongRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, LongMember primoridalMember) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
       longValue = primoridalMember.getLong1();
    }
 
-   protected LongRevision(int statusNid, int authorNid, int pathNid, long time, LongRevision another) {
-      super(statusNid, authorNid, pathNid, time, another.primordialComponent);
+   protected LongRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, LongRevision another) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       longValue = another.longValue;
    }
 
@@ -90,12 +90,20 @@ public class LongRevision extends RefexRevision<LongRevision, LongMember>
 
    @Override
    public LongRevision makeAnalog() {
-      return new LongRevision(getStatusNid(), getAuthorNid(), getPathNid(), getTime(), this);
+      return new LongRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
    }
-
+   
    @Override
-   public LongRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
-      LongRevision newR = new LongRevision(statusNid, authorNid, pathNid, time, this);
+   public LongRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
+         this.setStatusNid(statusNid);
+         this.setAuthorNid(authorNid);
+         this.setModuleNid(moduleNid);
+
+         return this;
+      }
+      LongRevision newR = new LongRevision(statusNid, time, authorNid,
+              moduleNid, pathNid, this);
 
       primordialComponent.addRevision(newR);
 

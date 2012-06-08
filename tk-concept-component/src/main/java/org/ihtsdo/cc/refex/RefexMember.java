@@ -425,8 +425,8 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
 
  
         @Override
-        public R makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
-            return getCv().makeAnalog(statusNid, authorNid, pathNid, time);
+        public R makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+            return getCv().makeAnalog(statusNid, time, authorNid, moduleNid, pathNid);
         }
 
         @Override

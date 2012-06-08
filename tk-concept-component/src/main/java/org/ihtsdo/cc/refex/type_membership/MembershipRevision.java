@@ -45,14 +45,14 @@ public class MembershipRevision extends RefexRevision<MembershipRevision, Member
    }
 
 
-   public MembershipRevision(int statusNid, int authorNid, int pathNid, long time,
+   public MembershipRevision(int statusNid, long time, int authorNid, int pathNid, int moduleNid,
                              MembershipMember primoridalMember) {
-      super(statusNid, authorNid, pathNid, time, primoridalMember);
+      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
    }
 
-   protected MembershipRevision(int statusNid, int authorNid, int pathNid, long time,
+   protected MembershipRevision(int statusNid, long time, int authorNid, int pathNid, int moduleNid,
                                 MembershipRevision another) {
-      super(statusNid, authorNid, pathNid, time, another.primordialComponent);
+      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -84,18 +84,18 @@ public class MembershipRevision extends RefexRevision<MembershipRevision, Member
 
    @Override
    public MembershipRevision makeAnalog() {
-      return new MembershipRevision(getStatusNid(), getAuthorNid(), getPathNid(), getTime(), this);
+      return new MembershipRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(),  this);
    }
 
    @Override
-   public MembershipRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+   public MembershipRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatusNid(statusNid);
 
          return this;
       }
 
-      MembershipRevision newR = new MembershipRevision(statusNid, authorNid, pathNid, time, this);
+      MembershipRevision newR = new MembershipRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
 
       primordialComponent.addRevision(newR);
 

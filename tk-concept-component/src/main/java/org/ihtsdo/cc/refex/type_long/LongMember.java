@@ -101,14 +101,14 @@ public class LongMember extends RefexMember<LongRevision, LongMember>
 
    @Override
    public LongRevision makeAnalog() {
-      LongRevision newR = new LongRevision(getStatusNid(), getAuthorNid(), getPathNid(), getTime(), this);
+      LongRevision newR = new LongRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
 
       return newR;
    }
 
    @Override
-   public LongRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
-      LongRevision newR = new LongRevision(statusNid, authorNid, pathNid, time, this);
+   public LongRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+      LongRevision newR = new LongRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);
 

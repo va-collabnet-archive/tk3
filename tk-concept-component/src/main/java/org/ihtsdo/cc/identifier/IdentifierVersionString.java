@@ -29,15 +29,16 @@ public class IdentifierVersionString extends IdentifierVersion implements String
         stringDenotation = input.readString();
     }
 
-    public IdentifierVersionString(IdentifierVersionString another, int statusNid, int authorNid, int pathNid,
-            long time) {
-        super(statusNid, authorNid, pathNid, time, another.authorityNid);
+    public IdentifierVersionString(IdentifierVersionString another, int statusNid, long time,int authorNid,
+           int moduleNid, int pathNid) {
+        super(statusNid, time, authorNid, moduleNid, pathNid, another.authorityNid);
         stringDenotation = (String) another.getDenotation();
     }
 
-    public IdentifierVersionString(int statusNid, int authorNid, int pathNid, long time, String denotation,
+    public IdentifierVersionString(int statusNid, long time,int authorNid,
+           int moduleNid, int pathNid, String denotation,
             int authorityNid) {
-        super(statusNid, authorNid, pathNid, time, authorityNid);
+        super(statusNid, time, authorNid, moduleNid, pathNid, authorityNid);
         stringDenotation = denotation;
     }
 

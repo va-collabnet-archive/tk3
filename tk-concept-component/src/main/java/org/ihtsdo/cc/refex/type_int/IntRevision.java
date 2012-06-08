@@ -54,13 +54,13 @@ public class IntRevision extends RefexRevision<IntRevision, IntMember>
       intValue = input.readInt();
    }
 
-   public IntRevision(int statusNid, int authorNid, int pathNid, long time, IntMember primoridalMember) {
-      super(statusNid, authorNid, pathNid, time, primoridalMember);
+   public IntRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, IntMember primoridalMember) {
+      super(statusNid, time, authorNid, moduleNid, pathNid,primoridalMember);
       intValue = primoridalMember.getInt1();
    }
 
-   protected IntRevision(int statusNid, int authorNid, int pathNid, long time, IntRevision another) {
-      super(statusNid, authorNid, pathNid, time, another.primordialComponent);
+   protected IntRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, IntRevision another) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       intValue = another.intValue;
    }
 
@@ -94,18 +94,20 @@ public class IntRevision extends RefexRevision<IntRevision, IntMember>
 
    @Override
    public IntRevision makeAnalog() {
-      return new IntRevision(getStatusNid(), getAuthorNid(), getPathNid(), getTime(), this);
+      return new IntRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
    }
 
    @Override
-   public IntRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+   public IntRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatusNid(statusNid);
+         this.setAuthorNid(authorNid);
+         this.setModuleNid(moduleNid);
 
          return this;
       }
 
-      IntRevision newR = new IntRevision(statusNid, authorNid, pathNid, time, this);
+      IntRevision newR = new IntRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
 
       primordialComponent.addRevision(newR);
 

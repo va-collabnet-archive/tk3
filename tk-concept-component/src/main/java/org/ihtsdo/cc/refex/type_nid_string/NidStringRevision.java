@@ -47,7 +47,7 @@ public class NidStringRevision extends RefexRevision<NidStringRevision, NidStrin
       c1Nid    = primoridalMember.getC1Nid();
       strValue = primoridalMember.getString1();
    }
-
+   
    public NidStringRevision(TkRefexUuidStringRevision eVersion, NidStringMember member) throws IOException {
       super(eVersion, member);
       c1Nid    = P.s.getNidForUuids(eVersion.getUuid1());
@@ -60,15 +60,15 @@ public class NidStringRevision extends RefexRevision<NidStringRevision, NidStrin
       strValue = input.readString();
    }
 
-   public NidStringRevision(int statusNid, int authorNid, int pathNid, long time,
+   public NidStringRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
                          NidStringMember primoridalMember) {
-      super(statusNid, authorNid, pathNid, time, primoridalMember);
+      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
       c1Nid    = primoridalMember.getC1Nid();
       strValue = primoridalMember.getString1();
    }
 
-   protected NidStringRevision(int statusNid, int authorNid, int pathNid, long time, NidStringRevision another) {
-      super(statusNid, authorNid, pathNid, time, another.primordialComponent);
+   protected NidStringRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, NidStringRevision another) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       c1Nid    = another.c1Nid;
       strValue = another.strValue;
    }
@@ -103,18 +103,18 @@ public class NidStringRevision extends RefexRevision<NidStringRevision, NidStrin
 
    @Override
    public NidStringRevision makeAnalog() {
-      return new NidStringRevision(getStatusNid(), getAuthorNid(), getPathNid(), getTime(), this);
+      return new NidStringRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(),  this);
    }
 
    @Override
-   public NidStringRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+   public NidStringRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatusNid(statusNid);
 
          return this;
       }
 
-      NidStringRevision newR = new NidStringRevision(statusNid, authorNid, pathNid, time, this);
+      NidStringRevision newR = new NidStringRevision(statusNid, time, authorNid, moduleNid, pathNid,this);
 
       primordialComponent.addRevision(newR);
 

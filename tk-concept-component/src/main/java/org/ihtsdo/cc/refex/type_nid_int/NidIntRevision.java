@@ -54,18 +54,19 @@ public class NidIntRevision extends RefexRevision<NidIntRevision, NidIntMember>
         intValue = input.readInt();
     }
 
-    protected NidIntRevision(int statusNid, int authorNid, int pathNid, long time,
-            NidIntMember primoridalMember) {
-        super(statusNid, authorNid, pathNid, time, primoridalMember);
-        c1Nid = primoridalMember.getC1Nid();
-        intValue = primoridalMember.getInt1();
-    }
+    protected NidIntRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, 
+                            NidIntMember primoridalMember) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
+      c1Nid    = primoridalMember.getC1Nid();
+      intValue = primoridalMember.getInt1();
+   }
 
-    protected NidIntRevision(int statusNid, int authorNid, int pathNid, long time, NidIntRevision another) {
-        super(statusNid, authorNid, pathNid, time, another.primordialComponent);
-        c1Nid = another.c1Nid;
-        intValue = another.intValue;
-    }
+   protected NidIntRevision(int statusNid, long time, int authorNid, int moduleNid,
+           int pathNid, NidIntRevision another) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
+      c1Nid    = another.c1Nid;
+      intValue = another.intValue;
+   }
 
     //~--- methods -------------------------------------------------------------
     @Override
@@ -96,18 +97,18 @@ public class NidIntRevision extends RefexRevision<NidIntRevision, NidIntMember>
 
     @Override
     public NidIntRevision makeAnalog() {
-        return new NidIntRevision(getStatusNid(), getAuthorNid(), getPathNid(), getTime(), this);
+        return new NidIntRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(),  this);
     }
 
     @Override
-    public NidIntRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+    public NidIntRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
         if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
             this.setStatusNid(statusNid);
 
             return this;
         }
 
-        NidIntRevision newR = new NidIntRevision(statusNid, authorNid, pathNid, time, this);
+        NidIntRevision newR = new NidIntRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
 
         primordialComponent.addRevision(newR);
 

@@ -100,14 +100,13 @@ public class StringMember extends RefexMember<StringRevision, StringMember>
 
    @Override
    public StringRevision makeAnalog() {
-      StringRevision newR = new StringRevision(getStatusNid(), getAuthorNid(), getPathNid(), getTime(), this);
-
+      StringRevision newR = new StringRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
       return newR;
    }
 
    @Override
-   public StringRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
-      StringRevision newR = new StringRevision(statusNid, authorNid, pathNid, time, this);
+   public StringRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+      StringRevision newR = new StringRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);
 

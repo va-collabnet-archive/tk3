@@ -72,7 +72,7 @@ public class StatusAtPositionBdb extends ComponentBdb {
 
                 for (int i = min; i < sequence.get(); i++) {
                     mutableArray.commitTimes[getMutableIndex(i)] = Long.MIN_VALUE;
-                    sapToIntMap.put(getStatusNid(i), getAuthorNid(i), getPathNid(i), Long.MIN_VALUE, i);
+                    sapToIntMap.put(getStatusNid(i), Long.MIN_VALUE, getAuthorNid(i), getModuleNid(i), getPathNid(i), i);
                 }
 
                 uncomittedStatusPathEntries.clear();
@@ -122,7 +122,7 @@ public class StatusAtPositionBdb extends ComponentBdb {
             try {
                 for (int sapNid : uncomittedStatusPathEntries.values()) {
                     mutableArray.commitTimes[getMutableIndex(sapNid)] = time;
-                    sapToIntMap.put(getStatusNid(sapNid), getAuthorNid(sapNid), getPathNid(sapNid), time, sapNid);
+                    sapToIntMap.put(getStatusNid(sapNid), time, getAuthorNid(sapNid), getModuleNid(sapNid), getPathNid(sapNid),  sapNid);
                     committedSapNids.add(sapNid);
                 }
 
@@ -170,8 +170,8 @@ public class StatusAtPositionBdb extends ComponentBdb {
 
             for (int i = 0; i < readOnlySize; i++) {
                 if (readOnlyArray.commitTimes[i] != 0) {
-                    sapToIntMap.put(readOnlyArray.statusNids[i], readOnlyArray.authorNids[i],
-                            readOnlyArray.pathNids[i], readOnlyArray.commitTimes[i], i);
+                    sapToIntMap.put(readOnlyArray.statusNids[i], readOnlyArray.commitTimes[i], readOnlyArray.authorNids[i],
+                            readOnlyArray.moduleNids[i], readOnlyArray.pathNids[i], i);
                 }
             }
 
@@ -189,8 +189,8 @@ public class StatusAtPositionBdb extends ComponentBdb {
                         " mutableIndex: " + mutableIndex + " pathNids.length: " + mutableArray.pathNids.length;
 
                 if (mutableArray.commitTimes[i] != 0) {
-                    sapToIntMap.put(mutableArray.statusNids[i], mutableArray.authorNids[i],
-                            mutableArray.pathNids[i], mutableArray.commitTimes[i], mutableIndex);
+                    sapToIntMap.put(mutableArray.statusNids[i], mutableArray.commitTimes[i], mutableArray.authorNids[i],
+                            mutableArray.moduleNids[i], mutableArray.pathNids[i],  mutableIndex);
                 }
             }
 
@@ -256,6 +256,18 @@ public class StatusAtPositionBdb extends ComponentBdb {
             return readOnlyArray.authorNids[sapNid];
         } else {
             return mutableArray.authorNids[getMutableIndex(sapNid)];
+        }
+    }
+    
+    public int getModuleNid(int sapNid) {
+        if (sapNid < 0) {
+            return Integer.MIN_VALUE;
+        }
+
+        if (sapNid < readOnlyArray.getSize()) {
+            return readOnlyArray.moduleNids[sapNid];
+        } else {
+            return mutableArray.moduleNids[getMutableIndex(sapNid)];
         }
     }
 
@@ -341,12 +353,12 @@ public class StatusAtPositionBdb extends ComponentBdb {
     }
 
     public int getSapNid(StatusAuthorPosition tsp) {
-        return getSapNid(tsp.getStatusNid(), tsp.getAuthorNid(), tsp.getPathNid(), tsp.getTime());
+        return getSapNid(tsp.getStatusNid(), tsp.getTime(), tsp.getAuthorNid(), tsp.getModuleNid(), tsp.getPathNid());
     }
 
-    public int getSapNid(int statusNid, int authorNid, int pathNid, long time) {
+    public int getSapNid(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
         if (time == Long.MAX_VALUE) {
-            UncommittedStatusForPath usp = new UncommittedStatusForPath(statusNid, authorNid, pathNid);
+            UncommittedStatusForPath usp = new UncommittedStatusForPath(statusNid, authorNid, pathNid, moduleNid);
 
             if (uncomittedStatusPathEntries.containsKey(usp)) {
                 return uncomittedStatusPathEntries.get(usp);
@@ -364,6 +376,7 @@ public class StatusAtPositionBdb extends ComponentBdb {
                     mutableArray.statusNids[getMutableIndex(statusAtPositionNid)] = statusNid;
                     mutableArray.authorNids[getMutableIndex(statusAtPositionNid)] = authorNid;
                     mutableArray.pathNids[getMutableIndex(statusAtPositionNid)] = pathNid;
+                    mutableArray.moduleNids[getMutableIndex(statusAtPositionNid)] = moduleNid;
                     mutableArray.commitTimes[getMutableIndex(statusAtPositionNid)] = time;
                     uncomittedStatusPathEntries.put(usp, statusAtPositionNid);
                     hits.incrementAndGet();
@@ -375,10 +388,10 @@ public class StatusAtPositionBdb extends ComponentBdb {
             }
         }
 
-        if (sapToIntMap.containsKey(statusNid, authorNid, pathNid, time)) {
+        if (sapToIntMap.containsKey(statusNid, time, authorNid, moduleNid, pathNid)) {
             hits.incrementAndGet();
 
-            return sapToIntMap.get(statusNid, authorNid, pathNid, time);
+            return sapToIntMap.get(statusNid, time, authorNid, moduleNid, pathNid);
         }
 
         expandPermit.acquireUninterruptibly();
@@ -386,10 +399,10 @@ public class StatusAtPositionBdb extends ComponentBdb {
         try {
 
             // Try one last time...
-            if (sapToIntMap.containsKey(statusNid, authorNid, pathNid, time)) {
+            if (sapToIntMap.containsKey(statusNid, time, authorNid, moduleNid, pathNid)) {
                 hits.incrementAndGet();
 
-                return sapToIntMap.get(statusNid, authorNid, pathNid, time);
+                return sapToIntMap.get(statusNid, time, authorNid, moduleNid, pathNid);
             }
 
             int statusAtPositionNid = sequence.getAndIncrement();
@@ -398,8 +411,9 @@ public class StatusAtPositionBdb extends ComponentBdb {
             mutableArray.statusNids[getMutableIndex(statusAtPositionNid)] = statusNid;
             mutableArray.authorNids[getMutableIndex(statusAtPositionNid)] = authorNid;
             mutableArray.pathNids[getMutableIndex(statusAtPositionNid)] = pathNid;
+            mutableArray.moduleNids[getMutableIndex(statusAtPositionNid)] = moduleNid;
             mutableArray.commitTimes[getMutableIndex(statusAtPositionNid)] = time;
-            sapToIntMap.put(statusNid, authorNid, pathNid, time, statusAtPositionNid);
+            sapToIntMap.put(statusNid, time, authorNid, moduleNid, pathNid, statusAtPositionNid);
             misses.incrementAndGet();
 
             return statusAtPositionNid;
@@ -470,6 +484,7 @@ public class StatusAtPositionBdb extends ComponentBdb {
                 pa.statusNids[i] = input.readInt();
                 pa.authorNids[i] = input.readInt();
                 pa.pathNids[i] = input.readInt();
+                pa.moduleNids[i] = input.readInt();
                 pa.commitTimes[i] = input.readLong();
             }
 
@@ -487,6 +502,7 @@ public class StatusAtPositionBdb extends ComponentBdb {
                 output.writeInt(pa.statusNids[i]);
                 output.writeInt(pa.authorNids[i]);
                 output.writeInt(pa.pathNids[i]);
+                output.writeInt(pa.moduleNids[i]);
                 output.writeLong(pa.commitTimes[i]);
             }
         }
@@ -498,6 +514,7 @@ public class StatusAtPositionBdb extends ComponentBdb {
         int[] authorNids;
         long[] commitTimes;
         int[] pathNids;
+        int[] moduleNids;
         int[] statusNids;
 
         //~--- constructors -----------------------------------------------------
@@ -505,6 +522,7 @@ public class StatusAtPositionBdb extends ComponentBdb {
             statusNids = new int[MIN_ARRAY_SIZE];
             authorNids = new int[MIN_ARRAY_SIZE];
             pathNids = new int[MIN_ARRAY_SIZE];
+            moduleNids = new int[MIN_ARRAY_SIZE];
             commitTimes = new long[MIN_ARRAY_SIZE];
             this.size = 0;
         }
@@ -513,6 +531,7 @@ public class StatusAtPositionBdb extends ComponentBdb {
             statusNids = new int[size];
             authorNids = new int[size];
             pathNids = new int[size];
+            moduleNids = new int[size];
             commitTimes = new long[size];
             this.size = size;
         }
@@ -535,6 +554,11 @@ public class StatusAtPositionBdb extends ComponentBdb {
 
                 System.arraycopy(pathNids, 0, tempPathNids, 0, pathNids.length);
                 pathNids = tempPathNids;
+                
+                int[] tempModuleNids = new int[newCapacity];
+
+                System.arraycopy(moduleNids, 0, tempModuleNids, 0, moduleNids.length);
+                moduleNids = tempModuleNids;
 
                 long[] tempCommitTimes = new long[newCapacity];
 

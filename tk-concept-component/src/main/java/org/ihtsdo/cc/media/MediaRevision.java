@@ -48,8 +48,8 @@ public class MediaRevision extends Revision<MediaRevision, Media>
    }
 
    public MediaRevision(TkMediaRevision eiv, Media primoridalMember) throws IOException {
-      super(P.s.getNidForUuids(eiv.getStatusUuid()), P.s.getNidForUuids(eiv.getAuthorUuid()),
-            P.s.getNidForUuids(eiv.getPathUuid()), eiv.getTime(), primoridalMember);
+      super(P.s.getNidForUuids(eiv.getStatusUuid()), eiv.getTime(), P.s.getNidForUuids(eiv.getAuthorUuid()),
+            P.s.getNidForUuids(eiv.getModuleUuid()), P.s.getNidForUuids(eiv.getPathUuid()), primoridalMember);
       this.textDescription = eiv.getTextDescription();
       this.typeNid         = P.s.getNidForUuids(eiv.getTypeUuid());
    }
@@ -60,9 +60,9 @@ public class MediaRevision extends Revision<MediaRevision, Media>
       this.typeNid         = input.readInt();
    }
 
-   protected MediaRevision(MediaVersionBI another, int statusNid, int authorNid, int pathNid, long time,
-                           Media primoridalMember) {
-      super(statusNid, authorNid, pathNid, time, primoridalMember);
+   protected MediaRevision(MediaVersionBI another, int statusNid, long time, int authorNid,
+           int moduleNid, int pathNid, Media primoridalMember) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
       this.textDescription = another.getTextDescription();
       this.typeNid         = another.getTypeNid();
    }
@@ -92,7 +92,7 @@ public class MediaRevision extends Revision<MediaRevision, Media>
    }
 
    @Override
-   public MediaRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+   public MediaRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatusNid(statusNid);
          this.setAuthorNid(authorNid);
@@ -102,8 +102,8 @@ public class MediaRevision extends Revision<MediaRevision, Media>
 
       MediaRevision newR;
 
-      newR = new MediaRevision(this, statusNid, authorNid, pathNid, time,
-                               this.primordialComponent);
+      newR = new MediaRevision(this.primordialComponent, statusNid, time, authorNid,
+              moduleNid, pathNid,this.primordialComponent);
       this.primordialComponent.addRevision(newR);
 
       return newR;

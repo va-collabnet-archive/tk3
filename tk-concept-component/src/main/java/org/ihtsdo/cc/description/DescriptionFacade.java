@@ -12,6 +12,6 @@ public interface DescriptionFacade
  void setLang(String lang) throws PropertyVetoException;
  public void setText(String text) throws PropertyVetoException;
  @Override
- DescriptionRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time);
+ DescriptionRevision makeAnalog(int statusNid,long time, int authorNid, int moduleNid, int pathNid);
 
 }

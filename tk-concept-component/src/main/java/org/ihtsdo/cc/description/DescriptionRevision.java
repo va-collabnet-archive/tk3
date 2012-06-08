@@ -70,8 +70,8 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
 
    public DescriptionRevision(TkDescriptionRevision edv, Description primoridalMember)
            throws IOException {
-      super(P.s.getNidForUuids(edv.getStatusUuid()), P.s.getNidForUuids(edv.getAuthorUuid()), P.s.getNidForUuids(edv.getPathUuid()),
-            edv.getTime(), primoridalMember);
+      super(P.s.getNidForUuids(edv.getStatusUuid()),edv.getTime(), P.s.getNidForUuids(edv.getAuthorUuid()),
+              P.s.getNidForUuids(edv.getModuleUuid()), P.s.getNidForUuids(edv.getPathUuid()),primoridalMember);
       initialCaseSignificant = edv.isInitialCaseSignificant();
       lang                   = edv.getLang();
       text                   = edv.getText();
@@ -97,9 +97,9 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
       typeNid                = input.readInt();
    }
 
-   protected DescriptionRevision(DescriptionVersionBI another, int statusNid, int authorNid, int pathNid,
-                                 long time, Description primoridalMember) {
-      super(statusNid, authorNid, pathNid, time, primoridalMember);
+   protected DescriptionRevision(DescriptionVersionBI another, int statusNid, long time,
+           int authorNid, int moduleNid, int pathNid, Description primoridalMember) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
       this.text                   = another.getText();
       this.typeNid                = another.getTypeNid();
       this.lang                   = another.getLang();
@@ -148,18 +148,19 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
    }
 
    @Override
-   public DescriptionRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+   public DescriptionRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatusNid(statusNid);
          this.setAuthorNid(authorNid);
+         this.setModuleNid(moduleNid);
 
          return this;
       }
 
       DescriptionRevision newR;
 
-      newR = new DescriptionRevision(this, statusNid, authorNid, pathNid, time,
-                                     this.primordialComponent);
+      newR = new DescriptionRevision(this.primordialComponent, statusNid, time, authorNid,
+                                     moduleNid, pathNid,this.primordialComponent);
       this.primordialComponent.addRevision(newR);
 
       return newR;

@@ -30,10 +30,9 @@ public class IdentifierVersionLong extends IdentifierVersion implements LongIdBI
       longDenotation = input.readLong();
    }
    
-   public IdentifierVersionLong(int statusNid, int authorNid, int pathNid, long time,
-                               int authorityNid, long denotation) {
-      super(statusNid, authorNid, pathNid, time, authorityNid);
-      this.longDenotation = denotation;
+   public IdentifierVersionLong(int statusNid, long time, int authorNid, int moduleNid,
+           int pathNid, int authorityNid, long denotation) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, authorityNid);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -83,7 +82,7 @@ public class IdentifierVersionLong extends IdentifierVersion implements LongIdBI
    protected void writeSourceIdToBdb(TupleOutput output) {
       output.writeLong(longDenotation);
    }
-
+   
    //~--- get methods ---------------------------------------------------------
 
    @Override

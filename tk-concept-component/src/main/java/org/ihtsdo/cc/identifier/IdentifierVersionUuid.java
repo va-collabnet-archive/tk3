@@ -36,15 +36,16 @@ public class IdentifierVersionUuid extends IdentifierVersion implements UuidIdBI
       lsb = input.readLong();
    }
 
-   public IdentifierVersionUuid(int statusNid, int authorNid, int pathNid, long time, int authorityNid, UUID uuid) {
-      super(statusNid, authorNid, pathNid, time, authorityNid);
+   public IdentifierVersionUuid(int statusNid, long time, int authorNid, int moduleNid,
+           int pathNid, int authorityNid, UUID uuid) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, authorityNid);
       msb = uuid.getMostSignificantBits();
       lsb = uuid.getLeastSignificantBits();
    }
 
-   public IdentifierVersionUuid(IdentifierVersionUuid another, int statusNid, int authorNid, int pathNid,
-                                long time) {
-      super(statusNid, authorNid, pathNid, time, another.authorityNid);
+   public IdentifierVersionUuid(IdentifierVersionUuid another,int statusNid, long time,
+           int authorNid, int moduleNid, int pathNid) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, another.authorityNid);
       msb = another.msb;
       lsb = another.lsb;
    }

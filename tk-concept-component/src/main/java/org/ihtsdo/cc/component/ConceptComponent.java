@@ -220,7 +220,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         IdentifierVersionLong v = null;
 
         for (int path : ec.getEditPaths().getSetValues()) {
-            v = new IdentifierVersionLong(statusNid, ec.getAuthorNid(), path, time,
+            v = new IdentifierVersionLong(statusNid, time, ec.getAuthorNid(), ec.getModuleNid(), path, 
                      authorityNid, longId);
         }
 
@@ -279,10 +279,10 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         return addRevision(r);
     }
 
-    public boolean addStringId(String stringId, int authorityNid, int statusNid, int authorNid, int pathNid,
-            long time) {
-        IdentifierVersionString v = new IdentifierVersionString(statusNid, authorNid, pathNid,
-                time, stringId, authorityNid);
+    public boolean addStringId(String stringId, int authorityNid, int statusNid,
+            long time, int authorNid, int moduleNid, int pathNid) {
+        IdentifierVersionString v = new IdentifierVersionString(statusNid, time, authorNid, moduleNid, pathNid,
+                stringId, authorityNid);
 
         return addIdVersion(v);
     }
@@ -303,9 +303,9 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
     }
 
-    public boolean addUuidId(UUID uuidId, int authorityNid, int statusNid, int authorNid, int pathNid,
-            long time) {
-        IdentifierVersionUuid v = new IdentifierVersionUuid(statusNid, authorNid, pathNid, time, authorityNid, uuidId);
+    public boolean addUuidId(UUID uuidId, int authorityNid, int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+        IdentifierVersionUuid v = new IdentifierVersionUuid(statusNid, time,
+                authorNid, moduleNid, pathNid, authorityNid, uuidId);
 
         return addIdVersion(v);
     }
@@ -602,7 +602,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
                 if (!cv.isBaselineGeneration() && (cv.getPathNid() != pathNid)
                         && (cv.getTime() != Long.MAX_VALUE)) {
                     changed = true;
-                    cv.makeAnalog(cv.getStatusNid(), ec.getAuthorNid(), pathNid, Long.MAX_VALUE);
+                    cv.makeAnalog(cv.getStatusNid(), Long.MAX_VALUE, ec.getModuleNid(), ec.getAuthorNid(), pathNid);
                 }
             }
         } else if (versions.size() > 1) {
@@ -610,7 +610,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
             if (versions.size() > 0) {
                 for (Version cv : resolution) {
-                    cv.makeAnalog(cv.getStatusNid(), ec.getAuthorNid(), pathNid, Long.MAX_VALUE);
+                    cv.makeAnalog(cv.getStatusNid(), Long.MAX_VALUE, ec.getModuleNid(), ec.getAuthorNid(), pathNid);
                     changed = true;
                 }
             }
@@ -808,12 +808,12 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         return changed;
     }
 
-    public final void resetUncommitted(int statusNid, int authorNid, int pathNid) {
+    public final void resetUncommitted(int statusNid, int authorNid, int pathNid, int moduleNid) {
         if (getTime() != Long.MIN_VALUE) {
             throw new UnsupportedOperationException("Cannot resetUncommitted if time != Long.MIN_VALUE");
         }
 
-        this.primordialSapNid = P.s.getSapNid(statusNid, authorNid, pathNid, Long.MAX_VALUE);
+        this.primordialSapNid = P.s.getSapNid(statusNid, Long.MAX_VALUE, authorNid, moduleNid, pathNid);
         assert primordialSapNid != 0 : "Processing nid: " + enclosingConceptNid;
         this.getEnclosingConcept().setIsCanceled(false);
         this.clearVersions();
@@ -1321,6 +1321,11 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
         return Collections.unmodifiableCollection(returnValues);
     }
+    
+    @Override
+    public int getModuleNid() {
+        return P.s.getModuleNidForSapNid(primordialSapNid);
+    }
 
     public final int getMutablePartCount() {
         return revisions.size();
@@ -1638,9 +1643,23 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
 
         if (authorNid != getAuthorNid()) {
-            this.primordialSapNid = P.s.getSapNid(getStatusNid(), authorNid, getPathNid(), Long.MAX_VALUE);
+            this.primordialSapNid = P.s.getSapNid(getStatusNid(), Long.MAX_VALUE, authorNid, getModuleNid(), getPathNid());
             assert primordialSapNid != 0 : "Processing nid: " + enclosingConceptNid;
             modified();
+        }
+    }
+    
+    @Override
+    public final void setModuleNid(int moduleId) {
+        if (getTime() != Long.MAX_VALUE) {
+            throw new UnsupportedOperationException(
+                    "Cannot change status if time != Long.MAX_VALUE; Use makeAnalog instead.");
+        }
+
+        if (moduleId != this.getModuleNid()) {
+            this.primordialSapNid = P.s.getSapNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), 
+                    moduleId, getPathNid());
+            assert primordialSapNid != 0 : "Processing nid: " + enclosingConceptNid;
         }
     }
 
@@ -1662,8 +1681,8 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
 
         if (pathId != getPathNid()) {
-            this.primordialSapNid = P.s.getSapNid(getStatusNid(), getAuthorNid(), pathId,
-                    Long.MAX_VALUE);
+            this.primordialSapNid = P.s.getSapNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(),
+                    getModuleNid(), pathId);
             assert primordialSapNid != 0 : "Processing nid: " + enclosingConceptNid;
             modified();
         }
@@ -1688,8 +1707,8 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
 
         if (statusId != this.getStatusNid()) {
-            this.primordialSapNid = P.s.getSapNid(statusId, getAuthorNid(), getPathNid(),
-                    Long.MAX_VALUE);
+            this.primordialSapNid = P.s.getSapNid(statusId, Long.MAX_VALUE, getAuthorNid(),
+                    getModuleNid(), getPathNid());
             assert primordialSapNid != 0 : "Processing nid: " + enclosingConceptNid;
         }
     }
@@ -1702,8 +1721,8 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
 
         if (time != getTime()) {
-            this.primordialSapNid = P.s.getSapNid(getStatusNid(), getAuthorNid(), getPathNid(),
-                    time);
+            this.primordialSapNid = P.s.getSapNid(getStatusNid(), time, getAuthorNid(),
+                    getModuleNid(), getPathNid());
             assert primordialSapNid != 0 : "Processing nid: " + enclosingConceptNid;
         }
     }
@@ -1923,6 +1942,11 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         public UUID getPrimUuid() {
             return new UUID(primordialMsb, primordialLsb);
         }
+        
+        @Override
+        public int getModuleNid() {
+            return cv.getModuleNid();
+        }
 
         @Override
         public Collection<? extends RefexChronicleBI<?>> getRefexMembers(int refsetNid) throws IOException {
@@ -1942,7 +1966,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
         public R getRevision() {
             if (cv == ConceptComponent.this) {
-                return makeAnalog(getStatusNid(), getAuthorNid(), getPathNid(), getTime());
+                return makeAnalog(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid());
             }
 
             return (R) cv;
@@ -2026,6 +2050,10 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
         public void setPathNid(int pathId) throws PropertyVetoException {
             ((AnalogBI) cv).setPathNid(pathId);
+        }
+        
+        public void setModuleNid(int moduleNid) throws PropertyVetoException {
+            ((AnalogBI) cv).setModuleNid(moduleNid);
         }
 
         public void setStatusNid(int statusNid) throws PropertyVetoException {

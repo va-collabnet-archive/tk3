@@ -28,16 +28,15 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
    private boolean defined = false;
 
    //~--- constructors --------------------------------------------------------
-
    public ConceptAttributesRevision(ConAttrAnalogBI another, ConceptAttributes primoridalMember) {
-      super(another.getStatusNid(), another.getAuthorNid(), another.getPathNid(), another.getTime(),
-            primoridalMember);
+      super(another.getStatusNid(), another.getTime(), another.getAuthorNid(), another.getModuleNid(),
+              another.getPathNid(), primoridalMember);
       this.defined = another.isDefined();
    }
 
-   public ConceptAttributesRevision(TkConceptAttributesRevision another, ConceptAttributes primoridalMember) throws IOException {
-      super(P.s.getNidForUuids(another.getStatusUuid()), P.s.getNidForUuids(another.getAuthorUuid()),
-            P.s.getNidForUuids(another.getPathUuid()), another.getTime(), primoridalMember);
+   public ConceptAttributesRevision(TkConceptAttributesRevision another, ConceptAttributes primoridalMember) throws IOException{
+      super(P.s.getNidForUuids(another.getStatusUuid()), another.getTime(), P.s.getNidForUuids(another.getAuthorUuid()),
+            P.s.getNidForUuids(another.getModuleUuid()), P.s.getNidForUuids(another.getPathUuid()), primoridalMember);
       this.defined = another.isDefined();
    }
 
@@ -50,14 +49,14 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
       defined = input.readBoolean();
    }
 
-   public ConceptAttributesRevision(int statusNid, int authorNid, int pathNid, long time,
-                                    ConceptAttributes primoridalMember) {
-      super(statusNid, authorNid, pathNid, time, primoridalMember);
+   public ConceptAttributesRevision(int statusNid, long time, int authorNid,
+                                    int moduleNid, int pathNid, ConceptAttributes primoridalMember) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
    }
-
-   public ConceptAttributesRevision(ConAttrAnalogBI another, int statusNid, int authorNid,
-                                    int pathNid, long time, ConceptAttributes primoridalMember) {
-      super(statusNid, authorNid, pathNid, time, primoridalMember);
+   
+   public ConceptAttributesRevision(ConAttrAnalogBI another, int statusNid, long time, int authorNid,
+                                    int moduleNid, int pathNid, ConceptAttributes primoridalMember) {
+      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
       this.defined = another.isDefined();
    }
 
@@ -89,7 +88,7 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
    }
 
    @Override
-   public ConceptAttributesRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+   public ConceptAttributesRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatusNid(statusNid);
          this.setAuthorNid(authorNid);
@@ -99,8 +98,8 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
 
       ConceptAttributesRevision newR;
 
-      newR = new ConceptAttributesRevision(this, statusNid, authorNid, pathNid, time,
-              this.primordialComponent);
+      newR = new ConceptAttributesRevision(this, statusNid, time, authorNid, pathNid,
+              moduleNid, this.primordialComponent);
       this.primordialComponent.addRevision(newR);
 
       return newR;

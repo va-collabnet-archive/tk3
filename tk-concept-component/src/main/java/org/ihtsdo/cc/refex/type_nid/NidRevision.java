@@ -50,13 +50,13 @@ public class NidRevision extends RefexRevision<NidRevision, NidMember>
         nid1 = input.readInt();
     }
 
-    protected NidRevision(int statusNid, int authorNid, int pathNid, long time, NidMember primoridalMember) {
-        super(statusNid, authorNid, pathNid, time, primoridalMember);
+    protected NidRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, NidMember primoridalMember) {
+        super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
         nid1 = primoridalMember.getC1Nid();
     }
 
-    protected NidRevision(int statusNid, int authorNid, int pathNid, long time, NidRevision another) {
-        super(statusNid, authorNid, pathNid, time, another.primordialComponent);
+    protected NidRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, NidRevision another) {
+        super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
         nid1 = another.nid1;
     }
 
@@ -90,18 +90,18 @@ public class NidRevision extends RefexRevision<NidRevision, NidMember>
 
     @Override
     public NidRevision makeAnalog() {
-        return new NidRevision(getStatusNid(), getAuthorNid(), getPathNid(), getTime(), this);
+        return new NidRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
     }
 
     @Override
-    public NidRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+    public NidRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
         if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
             this.setStatusNid(statusNid);
 
             return this;
         }
 
-        NidRevision newR = new NidRevision(statusNid, authorNid, pathNid, time, this);
+        NidRevision newR = new NidRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
 
         primordialComponent.addRevision(newR);
 

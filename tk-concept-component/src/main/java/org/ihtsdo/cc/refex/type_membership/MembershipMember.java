@@ -97,14 +97,14 @@ public class MembershipMember extends RefexMember<MembershipRevision, Membership
 
    @Override
    public MembershipRevision makeAnalog() {
-      MembershipRevision newR = new MembershipRevision(getStatusNid(), getAuthorNid(), getPathNid(), getTime(), this);
+      MembershipRevision newR = new MembershipRevision(getStatusNid(), getTime(), getModuleNid(), getAuthorNid(), getPathNid(), this);
 
       return newR;
    }
 
    @Override
-   public MembershipRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
-      MembershipRevision newR = new MembershipRevision(statusNid, authorNid, pathNid, time, this);
+   public MembershipRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+      MembershipRevision newR = new MembershipRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);
 

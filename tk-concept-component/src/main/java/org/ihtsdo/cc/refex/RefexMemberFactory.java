@@ -61,9 +61,10 @@ public class RefexMemberFactory {
             if (i == 0) {
                 member.setStatusAtPositionNid(
                         P.s.getSapNid(res.getInt(RefexProperty.STATUS_NID),
+                        Long.MAX_VALUE,
                         ec.getAuthorNid(),
-                        ec.getEditPaths().getSetValues()[i],
-                        Long.MAX_VALUE));
+                        ec.getModuleNid(),
+                        ec.getEditPaths().getSetValues()[i]));
                 member.setPrimordialUuid(res.getMemberUUID());
                 try {
                     res.setPropertiesExceptSap(member);
@@ -73,9 +74,10 @@ public class RefexMemberFactory {
 
             } else {
                 member.makeAnalog(res.getInt(RefexProperty.STATUS_NID),
+                        Long.MAX_VALUE,
                         ec.getAuthorNid(),
-                        ec.getEditPaths().getSetValues()[i],
-                        Long.MAX_VALUE);
+                        ec.getModuleNid(),
+                        ec.getEditPaths().getSetValues()[i]);
             }
 
         }

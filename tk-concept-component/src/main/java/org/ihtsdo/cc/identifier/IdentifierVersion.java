@@ -41,7 +41,8 @@ public abstract class IdentifierVersion
    protected IdentifierVersion(TkIdentifier idv) throws IOException {
       super();
       this.statusAtPositionNid = P.s.getSapNid(P.s.getNidForUuids(idv.getStatusUuid()),
-              P.s.getNidForUuids(idv.getAuthorUuid()), P.s.getNidForUuids(idv.getPathUuid()), idv.getTime());
+              idv.getTime(), P.s.getNidForUuids(idv.getAuthorUuid()), 
+              P.s.getNidForUuids(idv.getModuleUuid()), P.s.getNidForUuids(idv.getPathUuid()));
       this.authorityNid = P.s.getNidForUuids(idv.getAuthorityUuid());
    }
 
@@ -51,14 +52,14 @@ public abstract class IdentifierVersion
       authorityNid        = input.readInt();
    }
 
-   protected IdentifierVersion(int statusNid, int authorNid, int pathNid, long time, int authorityNid) {
-      this.statusAtPositionNid = P.s.getSapNid(statusNid, authorNid, pathNid, time);
+   protected IdentifierVersion(int statusNid, long time, int authorNid, int moduleNid, int pathNid, int authorityNid) {
+      this.statusAtPositionNid = P.s.getSapNid(statusNid, time, moduleNid, authorNid, pathNid);
       this.authorityNid = authorNid;
    }
 
-   protected IdentifierVersion(int statusNid, int authorNid, int pathNid, long time,
+   protected IdentifierVersion(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
                                IdentifierVersion idVersion) {
-      this(statusNid, authorNid, pathNid, time, idVersion.authorityNid);
+      this(statusNid, time, moduleNid, authorNid, pathNid, idVersion.authorityNid);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -163,6 +164,11 @@ public abstract class IdentifierVersion
    public int getAuthorityNid() {
       return authorityNid;
    }
+   
+   @Override
+   public int getModuleNid() {
+      return P.s.getModuleNidForSapNid(statusAtPositionNid);
+   }
 
    @Override
    public int getPathNid() {
@@ -199,7 +205,7 @@ public abstract class IdentifierVersion
          throw new UnsupportedOperationException("Time alreay committed.");
       }
 
-      this.statusAtPositionNid = P.s.getSapNid(getStatusNid(), getAuthorId(), getPathNid(), time);
+      this.statusAtPositionNid = P.s.getSapNid(getStatusNid(), time, getAuthorNid(), getModuleNid(), getPathNid());
    }
    
    public void setSapNid(int sapNid) {

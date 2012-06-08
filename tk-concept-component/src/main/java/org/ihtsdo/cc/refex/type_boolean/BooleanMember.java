@@ -88,14 +88,16 @@ public class BooleanMember extends RefexMember<BooleanRevision, BooleanMember>
 
     @Override
     public BooleanRevision makeAnalog() {
-        BooleanRevision newR = new BooleanRevision(getStatusNid(), getAuthorNid(), getPathNid(), getTime(), this);
+        BooleanRevision newR = new BooleanRevision(getStatusNid(), getTime(),
+                getAuthorNid(), getModuleNid(), getPathNid(), this);
 
         return newR;
     }
 
     @Override
-    public BooleanRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
-        BooleanRevision newR = new BooleanRevision(statusNid, authorNid, pathNid, time, this);
+    public BooleanRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+        BooleanRevision newR = new BooleanRevision(getStatusNid(), getTime(),
+                authorNid, moduleNid, getPathNid(), this);
 
         addRevision(newR);
 

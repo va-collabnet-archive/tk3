@@ -99,6 +99,7 @@ public interface TerminologyDI {
    int getPathNidForSapNid(int sapNid);
    int getAuthorNidForSapNid(int sapNid);
    int getStatusNidForSapNid(int sapNid);
+   int getModuleNidForSapNid(int sapNid);
    long getTimeForSapNid(int sapNid);
    
 

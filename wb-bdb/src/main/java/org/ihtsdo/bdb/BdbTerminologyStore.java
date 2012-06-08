@@ -404,8 +404,8 @@ public class BdbTerminologyStore extends Termstore {
     }
 
     @Override
-    public int getSapNid(int statusNid, int authorNid, int pathNid, long time) {
-        return Bdb.getSapDb().getSapNid(statusNid, authorNid, pathNid, time);
+    public int getSapNid(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+        return Bdb.getSapDb().getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
     }
 
     @Override
@@ -576,6 +576,11 @@ public class BdbTerminologyStore extends Termstore {
     @Override
     public int getStatusNidForSapNid(int sapNid) {
         return Bdb.getStatusNidForSapNid(sapNid);
+    }
+    
+    @Override
+    public int getModuleNidForSapNid(int sapNid) {
+        return Bdb.getModuleNidForSapNid(sapNid);
     }
 
     @Override

@@ -60,16 +60,16 @@ public class NidFloatRevision extends RefexRevision<NidFloatRevision, NidFloatMe
       floatValue = input.readFloat();
    }
 
-   public NidFloatRevision(int statusNid, int authorNid, int pathNid, long time,
+   public NidFloatRevision(int statusNid, long time, int authorNid, int pathNid, int moduleNid,
                            NidFloatMember primoridalMember) {
-      super(statusNid, authorNid, pathNid, time, primoridalMember);
+      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
       c1Nid      = primoridalMember.getC1Nid();
       floatValue = primoridalMember.getFloatValue();
    }
 
-   protected NidFloatRevision(int statusNid, int authorNid, int pathNid, long time,
+   protected NidFloatRevision(int statusNid, long time, int authorNid, int pathNid, int moduleNid,
                               NidFloatRevision another) {
-      super(statusNid, authorNid, pathNid, time, another.primordialComponent);
+      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       c1Nid      = another.c1Nid;
       floatValue = another.floatValue;
    }
@@ -104,18 +104,18 @@ public class NidFloatRevision extends RefexRevision<NidFloatRevision, NidFloatMe
 
    @Override
    public NidFloatRevision makeAnalog() {
-      return new NidFloatRevision(getStatusNid(), getAuthorNid(), getPathNid(), getTime(), this);
+      return new NidFloatRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
    }
 
    @Override
-   public NidFloatRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+   public NidFloatRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatusNid(statusNid);
 
          return this;
       }
 
-      NidFloatRevision newR = new NidFloatRevision(statusNid, authorNid, pathNid, time, this);
+      NidFloatRevision newR = new NidFloatRevision(statusNid, time, authorNid, moduleNid, pathNid,this);
 
       primordialComponent.addRevision(newR);
 

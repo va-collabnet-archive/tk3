@@ -130,10 +130,10 @@ public class Media extends ConceptComponent<MediaRevision, Media>
     }
 
     @Override
-    public MediaRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
+    public MediaRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
         MediaRevision newR;
 
-        newR = new MediaRevision(this, statusNid, authorNid, pathNid, time, this);
+        newR = new MediaRevision(this, statusNid, time, authorNid, moduleNid, pathNid, this);
         addRevision(newR);
 
         return newR;
@@ -442,8 +442,8 @@ public class Media extends ConceptComponent<MediaRevision, Media>
         }
 
         @Override
-        public MediaRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time) {
-            return (MediaRevision) getCv().makeAnalog(statusNid, authorNid, pathNid, time);
+        public MediaRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+            return (MediaRevision) getCv().makeAnalog(statusNid, time, authorNid, moduleNid, pathNid);
         }
 
         @Override
