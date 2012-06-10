@@ -2,10 +2,10 @@ package org.ihtsdo.fxmodel.concept.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.fxmodel.FxTime;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentBI;
 import org.ihtsdo.tk.api.ComponentVersionBI;
@@ -16,11 +16,9 @@ import org.ihtsdo.tk.api.id.IdBI;
 
 import java.io.IOException;
 
-import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.fxmodel.FxTime;
 
 public abstract class FxVersion {
    private static final long serialVersionUID    = 1;
@@ -30,11 +28,11 @@ public abstract class FxVersion {
 
    public final SimpleObjectProperty<FxComponentReference> statusReferenceProperty =
       new SimpleObjectProperty<>(this, "status", null);
-   public final FxTime                         fxTime          = new FxTime();
    public final SimpleObjectProperty<FxComponentReference> pathReferenceProperty =
       new SimpleObjectProperty<>(this, "path", null);
    public final SimpleObjectProperty<FxComponentReference> moduleReferenceProperty =
       new SimpleObjectProperty<>(this, "module", null);
+   public final FxTime                                     fxTime                  = new FxTime();
    public final SimpleObjectProperty<FxComponentReference> authorReferenceProperty =
       new SimpleObjectProperty<>(this, "author", null);
 
@@ -134,14 +132,16 @@ public abstract class FxVersion {
 
       buff.append(" s:");
       buff.append(statusReferenceProperty);
-      buff.append(" a:");
-      buff.append(authorReferenceProperty);
-      buff.append(" p:");
-      buff.append(pathReferenceProperty);
       buff.append(" t: ");
       buff.append(fxTime.getTimeText());
       buff.append(" ");
       buff.append(fxTime.getTime());
+      buff.append(" a:");
+      buff.append(authorReferenceProperty);
+      buff.append(" m:");
+      buff.append(moduleReferenceProperty);
+      buff.append(" p:");
+      buff.append(pathReferenceProperty);
 
       return buff.toString();
    }
@@ -150,6 +150,10 @@ public abstract class FxVersion {
 
    public FxComponentReference getAuthorReference() {
       return authorReferenceProperty.get();
+   }
+
+   public FxComponentReference getModuleReference() {
+      return moduleReferenceProperty.get();
    }
 
    /*
@@ -183,6 +187,10 @@ public abstract class FxVersion {
 
    public void setAuthorReference(FxComponentReference authorReference) {
       this.authorReferenceProperty.set(authorReference);
+   }
+
+   public void setModuleReference(FxComponentReference moduleReference) {
+      this.moduleReferenceProperty.set(moduleReference);
    }
 
    public void setPathReference(FxComponentReference pathReference) {

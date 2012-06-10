@@ -34,6 +34,7 @@ import org.ihtsdo.tk.dto.concept.component.refex.type_string.TkRefexStringMember
 import com.sleepycat.bind.tuple.TupleInput;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.concept.Concept;
+import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentChroncileBI;
 import org.ihtsdo.tk.api.blueprint.InvalidCAB;
 import org.ihtsdo.tk.api.blueprint.RefexCAB;
@@ -118,7 +119,8 @@ public class RefexMemberFactory {
 
             default:
                 throw new UnsupportedOperationException(
-                        "Can't handle member type: " + memberType);
+                        "Can't handle member type: " + memberType + " " + 
+                        Ts.get().getConceptForNid(nid).toLongString());
         }
     }
 

@@ -3,6 +3,9 @@ package org.ihtsdo.tk.dto.concept.component.refex;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 import org.ihtsdo.tk.api.refex.type_boolean.RefexBooleanVersionBI;
 import org.ihtsdo.tk.api.refex.type_nid.RefexNidVersionBI;
@@ -69,7 +72,13 @@ public enum TK_REFEX_TYPE {
             case 13:
                 return LONG;
         }
-        throw new UnsupportedOperationException("Can't handle type: " + type);
+        try {
+            throw new UnsupportedOperationException("Can't handle type: " + type + " " +
+                            Ts.get().getConceptForNid(type).toLongString());
+        } catch (IOException ex) {
+            Logger.getLogger(TK_REFEX_TYPE.class.getName()).log(Level.SEVERE, null, ex);
+            throw new UnsupportedOperationException("Can't handle type: " + type);
+        }
     }
     private int externalizedToken;
     private Class<? extends RefexVersionBI> rxc;

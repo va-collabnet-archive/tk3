@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class TimeHelper {
 
-    private static final ThreadLocal<SimpleDateFormat> localDateFormat =
+    public static final ThreadLocal<SimpleDateFormat> localDateFormat =
             new ThreadLocal< SimpleDateFormat>() {
 
                 @Override
@@ -34,7 +34,7 @@ public class TimeHelper {
                     return new SimpleDateFormat("MM/dd/yy HH:mm:ss");
                 }
             };
-    private static final ThreadLocal<SimpleDateFormat> localLongFileFormat =
+    public static final ThreadLocal<SimpleDateFormat> localLongFileFormat =
             new ThreadLocal< SimpleDateFormat>() {
 
                 @Override
@@ -43,7 +43,7 @@ public class TimeHelper {
                 }
             };
 
-    private static final ThreadLocal<SimpleDateFormat> localShortFileFormat =
+    public static final ThreadLocal<SimpleDateFormat> localShortFileFormat =
             new ThreadLocal< SimpleDateFormat>() {
 
                 @Override
@@ -97,13 +97,7 @@ public class TimeHelper {
     }
 
     private static String FormatDateForFile(Date date) {
-        if (date.getTime() == Long.MIN_VALUE) {
-            return "beginning of time";
-        }
-        if (date.getTime() == Long.MAX_VALUE) {
-            return "end of time";
-        }
-        return localLongFileFormat.get().format(date);
+        return formatDate(date, localLongFileFormat);
     }
 
     public static String formatDate(long time) {
@@ -111,12 +105,19 @@ public class TimeHelper {
     }
 
     private static String formatDate(Date date) {
+        return formatDate(date, localDateFormat);
+    }
+    
+    public static String formatDate(long time, ThreadLocal<SimpleDateFormat> formatter) {
+         return formatDate(new Date(time), localDateFormat);
+    }
+    public static String formatDate(Date date, ThreadLocal<SimpleDateFormat> formatter) {
         if (date.getTime() == Long.MIN_VALUE) {
             return "beginning of time";
         }
         if (date.getTime() == Long.MAX_VALUE) {
             return "end of time";
         }
-        return localDateFormat.get().format(date);
+        return formatter.get().format(date);
     }
 }
