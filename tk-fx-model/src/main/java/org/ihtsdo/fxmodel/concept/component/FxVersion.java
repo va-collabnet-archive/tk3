@@ -152,6 +152,10 @@ public abstract class FxVersion {
       return authorReferenceProperty.get();
    }
 
+   public FxTime getFxTime() {
+      return fxTime;
+   }
+
    public FxComponentReference getModuleReference() {
       return moduleReferenceProperty.get();
    }
