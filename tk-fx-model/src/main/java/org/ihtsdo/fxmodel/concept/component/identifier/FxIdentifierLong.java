@@ -36,55 +36,6 @@ public class FxIdentifierLong extends FxIdentifier {
       denotation = id.getDenotation();
    }
 
-   //~--- methods -------------------------------------------------------------
-
-   /**
-    * Compares this object to the specified object. The result is <tt>true</tt>
-    * if and only if the argument is not <tt>null</tt>, is a
-    * <tt>EIdentifierVersionLong</tt> object, and contains the same values, field by field,
-    * as this <tt>EIdentifierVersionLong</tt>.
-    *
-    * @param obj the object to compare with.
-    * @return <code>true</code> if the objects are the same;
-    *         <code>false</code> otherwise.
-    */
-   @Override
-   public boolean equals(Object obj) {
-      if (obj == null) {
-         return false;
-      }
-
-      if (FxIdentifierLong.class.isAssignableFrom(obj.getClass())) {
-         FxIdentifierLong another = (FxIdentifierLong) obj;
-
-         // =========================================================
-         // Compare properties of 'this' class to the 'another' class
-         // =========================================================
-         // Compare denotation
-         if (this.denotation != another.denotation) {
-            return false;
-         }
-
-         // Compare their parents
-         return super.equals(obj);
-      }
-
-      return false;
-   }
-
-   /**
-    * Returns a hash code for this <code>EIdentifierVersionLong</code>.
-    *
-    * @return a hash code value for this <tt>EIdentifierVersionLong</tt>.
-    */
-   @Override
-   public int hashCode() {
-      return Arrays.hashCode(new int[] {
-         (int) denotation, (int) (denotation >>> 32), statusUuid.hashCode(), pathUuid.hashCode(), (int) time,
-         (int) (time >>> 32)
-      });
-   }
-
    /**
     * Returns a string representation of the object.
     */

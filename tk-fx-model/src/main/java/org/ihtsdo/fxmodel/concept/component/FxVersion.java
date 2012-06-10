@@ -2,34 +2,41 @@ package org.ihtsdo.fxmodel.concept.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
+import org.ihtsdo.fxmodel.FxComponentReference;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentBI;
 import org.ihtsdo.tk.api.ComponentVersionBI;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
-import org.ihtsdo.tk.api.ext.I_VersionExternally;
 import org.ihtsdo.tk.api.id.IdBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.fxmodel.FxTime;
 
-public abstract class FxVersion implements I_VersionExternally {
+public abstract class FxVersion {
    private static final long serialVersionUID    = 1;
    public static UUID        unspecifiedUserUuid = UUID.fromString("f7495b58-6630-3499-a44e-2052b5fcf06c");
 
    //~--- fields --------------------------------------------------------------
 
-   public long time = Long.MIN_VALUE;
-   public UUID authorUuid;
-   public UUID pathUuid;
-   public UUID statusUuid;
+   public final SimpleObjectProperty<FxComponentReference> statusReferenceProperty =
+      new SimpleObjectProperty<>(this, "status", null);
+   public final FxTime                         fxTime          = new FxTime();
+   public final SimpleObjectProperty<FxComponentReference> pathReferenceProperty =
+      new SimpleObjectProperty<>(this, "path", null);
+   public final SimpleObjectProperty<FxComponentReference> moduleReferenceProperty =
+      new SimpleObjectProperty<>(this, "module", null);
+   public final SimpleObjectProperty<FxComponentReference> authorReferenceProperty =
+      new SimpleObjectProperty<>(this, "author", null);
 
    //~--- constructors --------------------------------------------------------
 
@@ -39,123 +46,26 @@ public abstract class FxVersion implements I_VersionExternally {
 
    public FxVersion(ComponentVersionBI another) throws IOException {
       super();
-      this.statusUuid = Ts.get().getComponent(another.getStatusNid()).getPrimUuid();
-      this.authorUuid = Ts.get().getComponent(another.getAuthorNid()).getPrimUuid();
-      this.pathUuid   = Ts.get().getComponent(another.getPathNid()).getPrimUuid();
-      assert pathUuid != null : another;
-      assert authorUuid != null : another;
-      assert statusUuid != null : another;
-      this.time = another.getTime();
+      statusReferenceProperty.set(new FxComponentReference(null, another.getStatusNid(), "status"));
+      fxTime.setTime(another.getTime());
+      authorReferenceProperty.set(new FxComponentReference(null, another.getAuthorNid(), "author"));
+      moduleReferenceProperty.set(new FxComponentReference(null, another.getModuleNid(), "module"));
+      pathReferenceProperty.set(new FxComponentReference(null, another.getPathNid(), "path"));
    }
 
    public FxVersion(IdBI id) throws IOException {
       super();
-      this.authorUuid = Ts.get().getComponent(id.getAuthorNid()).getPrimUuid();
-      this.pathUuid   = Ts.get().getComponent(id.getPathNid()).getPrimUuid();
-      this.statusUuid = Ts.get().getComponent(id.getStatusNid()).getPrimUuid();
-      this.time       = id.getTime();
-   }
-
-   public FxVersion(ComponentVersionBI another, Map<UUID, UUID> conversionMap, long offset, boolean mapAll)
-           throws IOException {
-      super();
-
-      if (mapAll) {
-         this.statusUuid = conversionMap.get(Ts.get().getComponent(another.getStatusNid()).getPrimUuid());
-         this.authorUuid = conversionMap.get(Ts.get().getComponent(another.getAuthorNid()).getPrimUuid());
-         this.pathUuid   = conversionMap.get(Ts.get().getComponent(another.getPathNid()).getPrimUuid());
-      } else {
-         this.statusUuid = Ts.get().getComponent(another.getStatusNid()).getPrimUuid();
-         this.authorUuid = Ts.get().getComponent(another.getAuthorNid()).getPrimUuid();
-         this.pathUuid   = Ts.get().getComponent(another.getPathNid()).getPrimUuid();
-      }
-
-      assert pathUuid != null : another;
-      assert authorUuid != null : another;
-      assert statusUuid != null : another;
-      this.time = another.getTime() + offset;
-   }
-
-   public FxVersion(FxVersion another, Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      super();
-
-      if (mapAll) {
-         this.statusUuid = conversionMap.get(another.statusUuid);
-         this.authorUuid = conversionMap.get(another.authorUuid);
-         this.pathUuid   = conversionMap.get(another.pathUuid);
-      } else {
-         this.statusUuid = another.statusUuid;
-         this.authorUuid = another.authorUuid;
-         this.pathUuid   = another.pathUuid;
-      }
-
-      assert pathUuid != null : another;
-      assert authorUuid != null : another;
-      assert statusUuid != null : another;
-      this.time = another.time + offset;
+      statusReferenceProperty.set(new FxComponentReference(null, id.getStatusNid(), "status"));
+      fxTime.setTime(id.getTime());
+      authorReferenceProperty.set(new FxComponentReference(null, id.getAuthorNid(), "author"));
+      moduleReferenceProperty.set(new FxComponentReference(null, id.getPathNid(), "module"));
+      pathReferenceProperty.set(new FxComponentReference(null, id.getModuleNid(), "path"));
    }
 
    //~--- methods -------------------------------------------------------------
 
-   /**
-    * Compares this object to the specified object. The result is <tt>true</tt> if and only if the argument
-    * is not <tt>null</tt>, is a <tt>EVersion</tt> object, and contains the same values, field by field, as
-    * this <tt>EVersion</tt>.
-    *
-    * @param obj the object to compare with.
-    * @return
-    * <code>true</code> if the objects are the same;
-    * <code>false</code> otherwise.
-    */
-   @Override
-   public boolean equals(Object obj) {
-      if (obj == null) {
-         return false;
-      }
-
-      if (FxVersion.class.isAssignableFrom(obj.getClass())) {
-         FxVersion another = (FxVersion) obj;
-
-         // =========================================================
-         // Compare properties of 'this' class to the 'another' class
-         // =========================================================
-         if (!this.statusUuid.equals(another.statusUuid)) {
-            return false;
-         }
-
-         if ((this.authorUuid != null) && (another.authorUuid != null)) {
-            if (!this.authorUuid.equals(another.authorUuid)) {
-               return false;
-            }
-         } else if (!((this.authorUuid == null) && (another.authorUuid == null))) {
-            return false;
-         }
-
-         if (!this.pathUuid.equals(another.pathUuid)) {
-            return false;
-         }
-
-         if (this.time != another.time) {
-            return false;
-         }
-
-         // Objects are equal! (Don't climb any higher in the hierarchy)
-         return true;
-      }
-
-      return false;
-   }
-
-   /**
-    * Returns a hash code for this
-    * <code>EVersion</code>.
-    *
-    * @return a hash code value for this <tt>EVersion</tt>.
-    */
-   @Override
-   public int hashCode() {
-      return Arrays.hashCode(new int[] { statusUuid.hashCode(), pathUuid.hashCode(), (int) time,
-                                         (int) (time >>> 32) });
+   public SimpleObjectProperty<FxComponentReference> authorReferenceProperty() {
+      return authorReferenceProperty;
    }
 
    public static CharSequence informAboutUuid(UUID uuid) {
@@ -207,6 +117,14 @@ public abstract class FxVersion implements I_VersionExternally {
       return sb;
    }
 
+   public SimpleObjectProperty<FxComponentReference> pathReferenceProperty() {
+      return pathReferenceProperty;
+   }
+
+   public SimpleObjectProperty<FxComponentReference> statusReferenceProperty() {
+      return statusReferenceProperty;
+   }
+
    /**
     * Returns a string representation of the object.
     */
@@ -215,42 +133,41 @@ public abstract class FxVersion implements I_VersionExternally {
       StringBuilder buff = new StringBuilder();
 
       buff.append(" s:");
-      buff.append(informAboutUuid(this.statusUuid));
+      buff.append(statusReferenceProperty);
       buff.append(" a:");
-      buff.append(informAboutUuid(this.authorUuid));
+      buff.append(authorReferenceProperty);
       buff.append(" p:");
-      buff.append(informAboutUuid(this.pathUuid));
+      buff.append(pathReferenceProperty);
       buff.append(" t: ");
-      buff.append(new Date(this.time)).append(" ").append(this.time);
+      buff.append(fxTime.getTimeText());
+      buff.append(" ");
+      buff.append(fxTime.getTime());
 
       return buff.toString();
    }
 
    //~--- get methods ---------------------------------------------------------
 
-   @Override
-   public UUID getAuthorUuid() {
-      return authorUuid;
+   public FxComponentReference getAuthorReference() {
+      return authorReferenceProperty.get();
    }
 
    /*
     * (non-Javadoc)
     *
-    * @see org.ihtsdo.etypes.I_VersionExternal#getPathUuid()
+    * @see org.ihtsdo.etypes.I_VersionExternal#getPathReference()
     */
-   @Override
-   public UUID getPathUuid() {
-      return pathUuid;
+   public FxComponentReference getPathReference() {
+      return pathReferenceProperty.get();
    }
 
    /*
     * (non-Javadoc)
     *
-    * @see org.ihtsdo.etypes.I_VersionExternal#getStatusUuid()
+    * @see org.ihtsdo.etypes.I_VersionExternal#getStatusReference()
     */
-   @Override
-   public UUID getStatusUuid() {
-      return statusUuid;
+   public FxComponentReference getStatusReference() {
+      return statusReferenceProperty.get();
    }
 
    /*
@@ -258,26 +175,25 @@ public abstract class FxVersion implements I_VersionExternally {
     *
     * @see org.ihtsdo.etypes.I_VersionExternal#getTime()
     */
-   @Override
    public long getTime() {
-      return time;
+      return fxTime.getTime();
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setAuthorUuid(UUID authorUuid) {
-      this.authorUuid = authorUuid;
+   public void setAuthorReference(FxComponentReference authorReference) {
+      this.authorReferenceProperty.set(authorReference);
    }
 
-   public void setPathUuid(UUID pathUuid) {
-      this.pathUuid = pathUuid;
+   public void setPathReference(FxComponentReference pathReference) {
+      this.pathReferenceProperty.set(pathReference);
    }
 
-   public void setStatusUuid(UUID statusUuid) {
-      this.statusUuid = statusUuid;
+   public void setStatusReference(FxComponentReference statusReference) {
+      this.statusReferenceProperty.set(statusReference);
    }
 
    public void setTime(long time) {
-      this.time = time;
+      fxTime.setTime(time);
    }
 }

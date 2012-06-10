@@ -207,10 +207,6 @@ public abstract class FxComponentChronicle<V extends FxVersion> {
       return primordialUuid;
    }
 
-   public List<V> getRevisions() {
-      return versions;
-   }
-
    public List<UUID> getUuids() {
       List<UUID> uuids = new ArrayList<>();
 

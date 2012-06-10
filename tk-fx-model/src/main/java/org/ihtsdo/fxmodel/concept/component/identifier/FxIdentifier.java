@@ -62,51 +62,6 @@ public abstract class FxIdentifier extends FxVersion {
    }
 
    /**
-    * Compares this object to the specified object. The result is <tt>true</tt>
-    * if and only if the argument is not <tt>null</tt>, is a
-    * <tt>EIdentifierVersion</tt> object, and contains the same values, field by field,
-    * as this <tt>EIdentifierVersion</tt>.
-    *
-    * @param obj the object to compare with.
-    * @return <code>true</code> if the objects are the same;
-    *         <code>false</code> otherwise.
-    */
-   @Override
-   public boolean equals(Object obj) {
-      if (obj == null) {
-         return false;
-      }
-
-      if (FxIdentifier.class.isAssignableFrom(obj.getClass())) {
-         FxIdentifier another = (FxIdentifier) obj;
-
-         // =========================================================
-         // Compare properties of 'this' class to the 'another' class
-         // =========================================================
-         // Compare authorityUuid
-         if (!this.authorityUuid.equals(another.authorityUuid)) {
-            return false;
-         }
-
-         // Compare their parents
-         return super.equals(obj);
-      }
-
-      return false;
-   }
-
-   /**
-    * Returns a hash code for this <code>EIdentifierVersion</code>.
-    *
-    * @return a hash code value for this <tt>EIdentifierVersion</tt>.
-    */
-   @Override
-   public int hashCode() {
-      return Arrays.hashCode(new int[] { statusUuid.hashCode(), pathUuid.hashCode(), (int) time,
-                                         (int) (time >>> 32) });
-   }
-
-   /**
     * Returns a string representation of the object.
     */
    @Override

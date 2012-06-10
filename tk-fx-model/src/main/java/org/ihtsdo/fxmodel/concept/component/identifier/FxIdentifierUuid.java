@@ -9,7 +9,6 @@ import org.ihtsdo.tk.api.id.UuidIdBI;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -41,51 +40,6 @@ public class FxIdentifierUuid extends FxIdentifier {
    }
 
    //~--- methods -------------------------------------------------------------
-
-   /**
-    * Compares this object to the specified object. The result is <tt>true</tt>
-    * if and only if the argument is not <tt>null</tt>, is a
-    * <tt>EIdentifierVersionUuid</tt> object, and contains the same values, field by field,
-    * as this <tt>EIdentifierVersionUuid</tt>.
-    *
-    * @param obj the object to compare with.
-    * @return <code>true</code> if the objects are the same;
-    *         <code>false</code> otherwise.
-    */
-   @Override
-   public boolean equals(Object obj) {
-      if (obj == null) {
-         return false;
-      }
-
-      if (FxIdentifierUuid.class.isAssignableFrom(obj.getClass())) {
-         FxIdentifierUuid another = (FxIdentifierUuid) obj;
-
-         // =========================================================
-         // Compare properties of 'this' class to the 'another' class
-         // =========================================================
-         // Compare denotation
-         if (!this.denotation.equals(another.denotation)) {
-            return false;
-         }
-
-         // Compare their parents
-         return super.equals(obj);
-      }
-
-      return false;
-   }
-
-   /**
-    * Returns a hash code for this <code>EIdentifierVersionUuid</code>.
-    *
-    * @return a hash code value for this <tt>EIdentifierVersionUuid</tt>.
-    */
-   @Override
-   public int hashCode() {
-      return Arrays.hashCode(new int[] { denotation.hashCode(), statusUuid.hashCode(), pathUuid.hashCode(),
-                                         (int) time, (int) (time >>> 32) });
-   }
 
    /**
     * Returns a string representation of the object.

@@ -25,5 +25,11 @@
       <version>3.0.1-SNAPSHOT</version>
       <type>jar</type>
     </dependency>
+    <dependency>
+      <groupId>org.ihtsdo.tk</groupId>
+      <artifactId>tk-helpers</artifactId>
+      <version>3.0.1-SNAPSHOT</version>
+      <type>jar</type>
+    </dependency>
   </dependencies>
 </project>

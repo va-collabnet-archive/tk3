@@ -2,10 +2,11 @@ package org.ihtsdo.fxmodel.concept.component.description;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javafx.beans.property.SimpleStringProperty;
+
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.description.DescriptionVersionBI;
-import org.ihtsdo.tk.api.ext.I_DescribeExternally;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -13,23 +14,15 @@ import java.io.IOException;
 
 import java.util.UUID;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement(name = "description-revision")
-public class FxDescriptionVersion extends FxVersion implements I_DescribeExternally {
+public class FxDescriptionVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   @XmlAttribute
-   public boolean initialCaseSignificant;
-   @XmlAttribute
-   public String  lang;
-   @XmlAttribute
-   public String  text;
-   @XmlAttribute
-   public UUID    typeUuid;
+   public boolean              initialCaseSignificant;
+   public SimpleStringProperty langProperty = new SimpleStringProperty();
+   public SimpleStringProperty textProperty = new SimpleStringProperty();
+   public UUID                 typeUuid;
 
    //~--- constructors --------------------------------------------------------
 
@@ -40,9 +33,9 @@ public class FxDescriptionVersion extends FxVersion implements I_DescribeExterna
    public FxDescriptionVersion(DescriptionVersionBI another) throws IOException {
       super(another);
       this.initialCaseSignificant = another.isInitialCaseSignificant();
-      this.lang                   = another.getLang();
-      this.text                   = another.getText();
-      this.typeUuid               = Ts.get().getUuidPrimordialForNid(another.getTypeNid());
+      this.langProperty.set(another.getLang());
+      this.textProperty.set(another.getText());
+      this.typeUuid = Ts.get().getUuidPrimordialForNid(another.getTypeNid());
    }
 
    //~--- methods -------------------------------------------------------------
@@ -74,13 +67,13 @@ public class FxDescriptionVersion extends FxVersion implements I_DescribeExterna
             return false;
          }
 
-         // Compare lang
-         if (!this.lang.equals(another.lang)) {
+         // Compare langProperty
+         if (!this.langProperty.equals(another.langProperty)) {
             return false;
          }
 
-         // Compare text
-         if (!this.text.equals(another.text)) {
+         // Compare textProperty
+         if (!this.textProperty.equals(another.textProperty)) {
             return false;
          }
 
@@ -107,9 +100,9 @@ public class FxDescriptionVersion extends FxVersion implements I_DescribeExterna
       buff.append(" ics:");
       buff.append(this.initialCaseSignificant);
       buff.append(" lang:");
-      buff.append("'").append(this.lang).append("'");
+      buff.append("'").append(this.langProperty).append("'");
       buff.append(" text:");
-      buff.append("'").append(this.text).append("'");
+      buff.append("'").append(this.textProperty).append("'");
       buff.append(" type:");
       buff.append(informAboutUuid(this.typeUuid));
       buff.append(" ");
@@ -125,9 +118,12 @@ public class FxDescriptionVersion extends FxVersion implements I_DescribeExterna
     *
     * @see org.ihtsdo.etypes.I_DescribeExternally#getLang()
     */
-   @Override
    public String getLang() {
-      return lang;
+      return langProperty.get();
+   }
+
+   public SimpleStringProperty getLangProperty() {
+      return langProperty;
    }
 
    /*
@@ -135,12 +131,14 @@ public class FxDescriptionVersion extends FxVersion implements I_DescribeExterna
     *
     * @see org.ihtsdo.etypes.I_DescribeExternally#getText()
     */
-   @Override
    public String getText() {
-      return text;
+      return textProperty.get();
    }
 
-   @Override
+   public SimpleStringProperty getTextProperty() {
+      return textProperty;
+   }
+
    public UUID getTypeUuid() {
       return typeUuid;
    }
@@ -150,7 +148,6 @@ public class FxDescriptionVersion extends FxVersion implements I_DescribeExterna
     *
     * @see org.ihtsdo.etypes.I_DescribeExternally#isInitialCaseSignificant()
     */
-   @Override
    public boolean isInitialCaseSignificant() {
       return initialCaseSignificant;
    }
@@ -162,11 +159,11 @@ public class FxDescriptionVersion extends FxVersion implements I_DescribeExterna
    }
 
    public void setLang(String lang) {
-      this.lang = lang;
+      this.langProperty.set(lang);
    }
 
    public void setText(String text) {
-      this.text = text;
+      this.textProperty.set(text);
    }
 
    public void setTypeUuid(UUID typeUuid) {
