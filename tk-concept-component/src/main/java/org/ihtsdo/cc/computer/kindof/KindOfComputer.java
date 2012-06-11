@@ -15,6 +15,7 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -138,7 +139,7 @@ public class KindOfComputer {
 
         boolean isClassifierEdit = false;
         for (IsaCoordinate loopCoordinate : isaCache.keySet()) {
-            ViewCoordinate vc = new ViewCoordinate(loopCoordinate.getCoordinate());
+            ViewCoordinate vc = new ViewCoordinate(UUID.randomUUID(), "loopCoordinate", loopCoordinate.getCoordinate());
             vc.setRelAssertionType(RelAssertionType.INFERRED);
             ConceptVersion cv = new ConceptVersion(concept, vc);
 

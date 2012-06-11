@@ -74,6 +74,9 @@ public interface TerminologyStoreDI extends TerminologyDI {
 
    int getNidForUuids(Collection<UUID> uuids) throws IOException;
 
+   Collection<UUID> getUuidCollection(Collection<Integer> nids) throws IOException;
+   Collection<Integer> getNidCollection(Collection<UUID> uuids) throws IOException;
+
    int getNidForUuids(UUID... uuids) throws IOException;
 
    List<? extends PathBI> getPathChildren(int nid);
@@ -106,5 +109,11 @@ public interface TerminologyStoreDI extends TerminologyDI {
    int getConceptCount() throws IOException;
 
    int getSapNid(TkRevision version) throws IOException;
+   
+   ViewCoordinate getViewCoordinate(UUID vcUuid) throws IOException;
+   
+   Collection<ViewCoordinate> getViewCoordinates() throws IOException;
+   
+   void putViewCoordinate(ViewCoordinate vc) throws IOException;
 
 }

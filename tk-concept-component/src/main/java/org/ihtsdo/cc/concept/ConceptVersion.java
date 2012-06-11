@@ -58,7 +58,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
             throw new IllegalArgumentException();
         }
         this.concept = concept;
-        this.vc = new ViewCoordinate(coordinate);
+        this.vc = new ViewCoordinate(UUID.randomUUID(), coordinate.getName() + " clone", coordinate);
     }
 
     //~--- methods -------------------------------------------------------------
@@ -1148,7 +1148,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     @Override
     public boolean isActive(NidSetBI allowedStatusNids) throws IOException {
 
-        ViewCoordinate tempVc = new ViewCoordinate(vc);
+        ViewCoordinate tempVc = new ViewCoordinate(UUID.randomUUID(), "isActive temp", vc);
         tempVc.getAllowedStatusNids().clear();
         tempVc.getAllowedStatusNids().addAll(allowedStatusNids.getSetValues());
 

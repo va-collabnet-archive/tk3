@@ -2,9 +2,11 @@ package org.ihtsdo.tk.api.coordinate;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.ihtsdo.tk.api.PositionSet;
+import java.io.Externalizable;
 import org.ihtsdo.tk.Ts;
-import org.ihtsdo.tk.api.ContradictionManagerBI;
 import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.ContradictionManagerBI;
 import org.ihtsdo.tk.api.NidList;
 import org.ihtsdo.tk.api.NidListBI;
 import org.ihtsdo.tk.api.NidSet;
@@ -19,31 +21,109 @@ import org.ihtsdo.tk.hash.Hashcode;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
-import java.io.Serializable;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
+import org.ihtsdo.tk.api.TerminologyStoreDI;
 
-public class ViewCoordinate implements Serializable {
-   private long                   lastModSequence = Long.MIN_VALUE;
-   private NidSetBI               allowedStatusNids;
-   private int                    classifierNid;
-   private ContradictionManagerBI contradictionManager;
-   private NidSetBI               isaTypeNids;
-   private NidListBI              langPrefList;
-   private LANGUAGE_SORT          langSort;
-   private int                    languageNid;
-   private PositionSetBI          positionSet;
-   private Precedence             precedence;
-   private RelAssertionType       relAssertionType;
-   private ViewCoordinate         vcWithAllStatusValues;
+public class ViewCoordinate implements Externalizable {
+   private long                     lastModSequence = Long.MIN_VALUE;
+   private NidSetBI                 allowedStatusNids;
+   private int                      classifierNid;
+   private ContradictionManagerBI   contradictionManager;
+   private NidSetBI                 isaTypeNids;
+   private NidListBI                langPrefList;
+   private LANGUAGE_SORT            langSort;
+   private int                      languageNid;
+   private String                   name;
+   private PositionSetBI            positionSet;
+   private Precedence               precedence;
+   private RelAssertionType         relAssertionType;
+   private UUID                     vcUuid;
+   private ViewCoordinate vcWithAllStatusValues; // transient
+
+   
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        TerminologyStoreDI ts = Ts.get();
+        out.writeLong(lastModSequence);
+        if (allowedStatusNids == null) {
+            out.writeObject(null);
+        } else {
+            out.writeObject(ts.getUuidCollection(allowedStatusNids.getAsSet()));
+        }
+        out.writeObject(ts.getUuidPrimordialForNid(classifierNid));
+        out.writeObject(contradictionManager);
+        if (isaTypeNids == null) {
+            out.writeObject(null);
+        } else {
+            out.writeObject(ts.getUuidCollection(isaTypeNids.getAsSet()));
+        }
+        if (langPrefList == null) {
+            out.writeObject(null);
+        } else {
+            out.writeObject(ts.getUuidCollection(langPrefList.getListValues()));
+        }
+        out.writeObject(langSort);
+        out.writeObject(ts.getUuidPrimordialForNid(languageNid));
+        out.writeObject(name);
+        out.writeObject(positionSet);
+        out.writeObject(precedence);
+        out.writeObject(relAssertionType);
+        out.writeObject(vcUuid);
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        TerminologyStoreDI ts = Ts.get();
+        lastModSequence = in.readLong();
+        Object readObject = in.readObject();
+        if (readObject == null) {
+            allowedStatusNids = null;
+        } else {
+            allowedStatusNids = new NidSet();
+            allowedStatusNids.addAll(ts.getNidCollection((Collection<UUID>) readObject));
+        }
+        classifierNid = ts.getNidForUuids((UUID) in.readObject());
+        contradictionManager = (ContradictionManagerBI) in.readObject();
+        readObject = in.readObject();
+        if (readObject == null) {
+            isaTypeNids = null;
+        } else {
+            isaTypeNids = new NidSet();
+            isaTypeNids.addAll(ts.getNidCollection((Collection<UUID>) readObject));
+        }
+        readObject = in.readObject();
+        if (readObject == null) {
+            langPrefList = null;
+        } else {
+            langPrefList = new NidList();
+            langPrefList.addAll(ts.getNidCollection((Collection<UUID>) readObject));
+        }
+        langSort = (LANGUAGE_SORT) in.readObject();
+        languageNid = ts.getNidForUuids((UUID) in.readObject());
+        name = (String) in.readObject();
+        positionSet = (PositionSetBI) in.readObject();
+        precedence = (Precedence) in.readObject();
+        relAssertionType = (RelAssertionType) in.readObject();
+        vcUuid = (UUID) in.readObject();
+    }
 
    //~--- constructors --------------------------------------------------------
 
-   public ViewCoordinate(ViewCoordinate another) {
+    public ViewCoordinate() {
+        super();
+    }
+    
+   protected ViewCoordinate(ViewCoordinate another) {
       super();
+      this.vcUuid     = another.vcUuid;
+      this.name       = another.name;
       this.precedence = another.precedence;
 
       if (another.positionSet != null) {
@@ -71,13 +151,20 @@ public class ViewCoordinate implements Serializable {
       this.lastModSequence = another.lastModSequence;
    }
 
-   public ViewCoordinate(Precedence precedence, PositionSetBI positionSet, NidSetBI allowedStatusNids,
-                         NidSetBI isaTypeNids, ContradictionManagerBI contradictionManager, int languageNid,
-                         int classifierNid, RelAssertionType relAssertionType, NidListBI langPrefList,
-                         LANGUAGE_SORT langSort) {
+   public ViewCoordinate(UUID vcUuid, String name, ViewCoordinate another) {
+      this(another);
+      this.vcUuid = vcUuid;
+      this.name   = name;
+   }
+
+   public ViewCoordinate(UUID vcUuid, String name, Precedence precedence, PositionSetBI positionSet,
+                         NidSetBI allowedStatusNids, NidSetBI isaTypeNids,
+                         ContradictionManagerBI contradictionManager, int languageNid, int classifierNid,
+                         RelAssertionType relAssertionType, NidListBI langPrefList, LANGUAGE_SORT langSort) {
       super();
       assert precedence != null;
       assert contradictionManager != null;
+      this.vcUuid     = vcUuid;
       this.precedence = precedence;
 
       if (positionSet != null) {
@@ -108,7 +195,7 @@ public class ViewCoordinate implements Serializable {
 
    public enum LANGUAGE_SORT {
       LANG_BEFORE_TYPE("language before type"), TYPE_BEFORE_LANG("type before language"),
-      LANG_REFEX("use language refex"), RF2_LANG_REFEX("use RF2 language refex");;
+      LANG_REFEX("use language refex"), RF2_LANG_REFEX("use RF2 language refex");
 
       private String desc;
 
@@ -242,7 +329,9 @@ public class ViewCoordinate implements Serializable {
       TerminologySnapshotDI snap = Ts.get().getSnapshot(this);
       StringBuilder         sb   = new StringBuilder();
 
-      sb.append("precedence: ").append(precedence);
+      sb.append("name: ").append(name);
+      sb.append("vcUuid: ").append(vcUuid);
+      sb.append("\nprecedence: ").append(precedence);
       sb.append(" \npositions: ").append(positionSet);
 
       String statusStr = "all";
@@ -338,6 +427,10 @@ public class ViewCoordinate implements Serializable {
       return lastModSequence;
    }
 
+   public String getName() {
+      return name;
+   }
+
    public PositionSetBI getPositionSet() {
       return positionSet;
    }
@@ -348,6 +441,10 @@ public class ViewCoordinate implements Serializable {
 
    public RelAssertionType getRelAssertionType() {
       return relAssertionType;
+   }
+
+   public UUID getVcUuid() {
+      return vcUuid;
    }
 
    public ViewCoordinate getVcWithAllStatusValues() {

@@ -1309,7 +1309,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         Collection<? extends RefexChronicleBI<?>> refexes = getRefexes();
         List<RefexVersionBI<?>> returnValues =
                 new ArrayList<>(refexes.size());
-        ViewCoordinate allStatus = new ViewCoordinate(xyz);
+        ViewCoordinate allStatus = xyz.getVcWithAllStatusValues();
 
         allStatus.setAllowedStatusNids(null);
 

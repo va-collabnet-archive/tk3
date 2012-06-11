@@ -26,6 +26,8 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
 import org.ihtsdo.cc.P;
+import org.ihtsdo.cc.PositionSetReadOnly;
+import org.ihtsdo.cc.ReferenceConcepts;
 import org.ihtsdo.cc.change.LastChange;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.concept.ConceptVersion;
@@ -38,7 +40,10 @@ import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.tk.api.changeset.ChangeSetGeneratorBI;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.concept.ConceptVersionBI;
+import org.ihtsdo.tk.api.conflict.IdentifyAllConflictStrategy;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.tk.binding.SnomedMetadataRfx;
+import org.ihtsdo.tk.binding.TermAux;
 import org.ihtsdo.tk.dto.concept.component.TkRevision;
 
 /**
@@ -277,6 +282,39 @@ public abstract class Termstore implements PersistentStoreI {
     @Override
     public final ComponentChroncileBI<?> getComponent(int nid) throws IOException {
         return getConceptForNid(nid).getComponent(nid);
+    }
+
+    protected ViewCoordinate makeMetaVc() throws IOException {
+        PathBI viewPath = new Path(TermAux.WB_AUX_PATH.getLenient().getNid(), null);
+        PositionBI viewPosition = new Position(Long.MAX_VALUE, viewPath);
+        PositionSetBI positionSet = new PositionSetReadOnly(viewPosition);
+        NidSet allowedStatusNids = new NidSet();
+        allowedStatusNids.add(TermAux.CURRENT.getLenient().getNid());
+        allowedStatusNids.add(SnomedMetadataRfx.getSTATUS_CURRENT_NID());
+        NidSetBI isaTypeNids = new NidSet();
+        isaTypeNids.add(TermAux.IS_A.getLenient().getNid());
+        ContradictionManagerBI contradictionManager = new IdentifyAllConflictStrategy();
+        int languageNid = SnomedMetadataRfx.getUS_DIALECT_REFEX_NID();
+        int classifierNid = ReferenceConcepts.SNOROCKET.getNid();
+        return new ViewCoordinate(UUID.fromString("014ae770-b32a-11e1-afa6-0800200c9a66"), "meta-vc", Precedence.PATH, positionSet, allowedStatusNids, isaTypeNids, contradictionManager, languageNid, classifierNid, RelAssertionType.INFERRED_THEN_STATED, null, ViewCoordinate.LANGUAGE_SORT.TYPE_BEFORE_LANG);
+    }
+
+    @Override
+    public Collection<UUID> getUuidCollection(Collection<Integer> nids) throws IOException {
+        List<UUID> uuids = new ArrayList<>();
+        for (Integer nid : nids) {
+            uuids.add(getUuidPrimordialForNid(nid));
+        }
+        return uuids;
+    }
+
+    @Override
+    public Collection<Integer> getNidCollection(Collection<UUID> uuids) throws IOException {
+        List<Integer> nids = new ArrayList<>();
+        for (UUID uuid : uuids) {
+            nids.add(getNidForUuids(uuid));
+        }
+        return nids;
     }
 
 }

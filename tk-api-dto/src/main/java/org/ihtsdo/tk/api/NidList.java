@@ -101,7 +101,7 @@ public class NidList implements NidListBI {
      */
     @Override
     public boolean contains(Object o) {
-        return listValues.contains(o);
+        return listValues.contains((Integer) o);
     }
 
     /*
@@ -202,7 +202,7 @@ public class NidList implements NidListBI {
      */
     @Override
     public boolean remove(Object o) {
-        return listValues.remove(o);
+        return listValues.remove((Integer) o);
     }
 
     /*

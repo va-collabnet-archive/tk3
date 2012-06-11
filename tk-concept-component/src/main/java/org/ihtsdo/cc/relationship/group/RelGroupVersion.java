@@ -47,7 +47,7 @@ public class RelGroupVersion implements RelGroupVersionBI {
         assert rg != null;
         assert coordinate != null;
         this.rg = rg;
-        this.coordinate = new ViewCoordinate(coordinate);
+        this.coordinate = new ViewCoordinate(UUID.randomUUID(), "RelGroupVersion temp", coordinate);
         setupLatest();
     }
 

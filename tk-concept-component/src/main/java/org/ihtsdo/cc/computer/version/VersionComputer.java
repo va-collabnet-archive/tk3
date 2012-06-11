@@ -17,7 +17,7 @@ import org.ihtsdo.cc.component.ConceptComponent;
 import org.ihtsdo.cc.ReferenceConcepts;
 import org.ihtsdo.cc.computer.version.PositionMapperBI.RelativePosition;
 import org.ihtsdo.tk.api.*;
-import org.ihtsdo.tk.api.coordinate.PositionSet;
+import org.ihtsdo.tk.api.PositionSet;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.id.IdBI;
 import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;

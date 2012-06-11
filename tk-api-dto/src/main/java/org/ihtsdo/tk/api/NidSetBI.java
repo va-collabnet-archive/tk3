@@ -1,5 +1,7 @@
 package org.ihtsdo.tk.api;
 
+import java.util.Collection;
+import java.util.HashSet;
 import javax.swing.event.ListDataListener;
 
 public interface NidSetBI {
@@ -13,7 +15,9 @@ public interface NidSetBI {
     void remove(int nid);
 
     NidSetBI addAll(int[] nids);
-
+    
+    NidSet addAll(Collection<Integer> keys);
+    
     void removeAll(int[] nids);
 
     void clear();
@@ -23,6 +27,8 @@ public interface NidSetBI {
     int getMax();
 
     int getMin();
+    
+    HashSet<Integer> getAsSet();
 
     boolean contiguous();
     

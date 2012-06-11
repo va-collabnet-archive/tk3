@@ -2,6 +2,7 @@ package org.ihtsdo.tk.api.coordinate;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.ihtsdo.tk.api.PositionSet;
 import org.ihtsdo.tk.api.ContradictionManagerBI;
 import org.ihtsdo.tk.api.NidSet;
 import org.ihtsdo.tk.api.NidSetBI;
@@ -16,6 +17,7 @@ import org.ihtsdo.tk.hash.Hashcode;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.UUID;
 
 public class IsaCoordinate implements Serializable {
 
@@ -132,7 +134,7 @@ public class IsaCoordinate implements Serializable {
    }
 
    public ViewCoordinate getCoordinate() {
-      return new ViewCoordinate(precedence, viewPositionSet, allowedStatusNids, relTypeNids,
+      return new ViewCoordinate(UUID.randomUUID(), "is-a coordinate", precedence, viewPositionSet, allowedStatusNids, relTypeNids,
                                 contradictionMgr, Integer.MIN_VALUE, classifierNid, relAssertionType, null,
                                 null);
    }

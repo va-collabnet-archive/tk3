@@ -2,7 +2,6 @@ package org.ihtsdo.cc.concept;
 
 //~--- non-JDK imports --------------------------------------------------------
 import java.io.DataInputStream;
-import org.ihtsdo.cc.concept.ComponentComparator;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map.Entry;
@@ -1395,7 +1394,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             Collection<Description.Version> descriptions, NidListBI typePrefOrder,
             NidListBI langRefexOrder, NidSetBI allowedStatus, PositionSetBI positionSet)
             throws IOException {
-        ViewCoordinate vc = new ViewCoordinate(Precedence.PATH, positionSet, allowedStatus, null,
+        ViewCoordinate vc = new ViewCoordinate(UUID.randomUUID(), "getRefexSpecifiedDesc", Precedence.PATH, positionSet, allowedStatus, null,
                 new IdentifyAllConflictStrategy(), Integer.MIN_VALUE, Integer.MIN_VALUE,
                 RelAssertionType.STATED, langRefexOrder, LANGUAGE_SORT.LANG_REFEX);
 
@@ -1465,7 +1464,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         ArrayList<RelGroupVersionBI> results = new ArrayList<>();
 
         if (vc.getRelAssertionType() == RelAssertionType.INFERRED_THEN_STATED) {
-            ViewCoordinate tempVc = new ViewCoordinate(vc);
+            ViewCoordinate tempVc = new ViewCoordinate(UUID.randomUUID(), "getRelGroups", vc);
 
             tempVc.setRelAssertionType(RelAssertionType.STATED);
             getRelGroups(tempVc, results);
@@ -1480,7 +1479,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
     private void getRelGroups(ViewCoordinate vc, ArrayList<RelGroupVersionBI> results) throws IOException {
         Map<Integer, HashSet<RelationshipChronicleBI>> groupMap = new HashMap<>();
-        ViewCoordinate tempVc = new ViewCoordinate(vc);
+        ViewCoordinate tempVc = new ViewCoordinate(UUID.randomUUID(), "getRelGroups", vc);
 
         tempVc.setAllowedStatusNids(null);
 
@@ -1535,7 +1534,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             Collection<Description.Version> descriptions, NidListBI typePrefOrder,
             NidListBI langRefexOrder, NidSetBI allowedStatus, PositionSetBI positionSet)
             throws IOException {
-        ViewCoordinate vc = new ViewCoordinate(Precedence.PATH, positionSet, allowedStatus, null,
+        ViewCoordinate vc = new ViewCoordinate(UUID.randomUUID(), "getRf2RefexSpecifiedDesc", Precedence.PATH, positionSet, allowedStatus, null,
                 new IdentifyAllConflictStrategy(), Integer.MIN_VALUE, Integer.MIN_VALUE,
                 RelAssertionType.STATED, langRefexOrder, LANGUAGE_SORT.RF2_LANG_REFEX);
 

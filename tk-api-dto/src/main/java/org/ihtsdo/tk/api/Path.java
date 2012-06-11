@@ -40,7 +40,8 @@ public class Path implements PathBI, Serializable {
         int objDataVersion = in.readInt();
 
         if (objDataVersion == 1) {
-            conceptNid = in.readInt();
+            UUID conceptUuid = (UUID) in.readObject();
+            conceptNid = Ts.get().getNidForUuids(conceptUuid);
             origins = (Set<PositionBI>) in.readObject();
         } else {
             throw new IOException("Can't handle dataversion: " + objDataVersion);
@@ -49,7 +50,7 @@ public class Path implements PathBI, Serializable {
 
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeInt(dataVersion);
-        out.writeInt(conceptNid);
+        out.writeObject(Ts.get().getUuidPrimordialForNid(conceptNid));
         out.writeObject(origins);
     }
     /**

@@ -2,6 +2,8 @@ package org.ihtsdo.bdb;
 
 import com.sleepycat.je.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -36,7 +38,11 @@ import org.ihtsdo.tk.dto.concept.component.TkRevision;
 import org.ihtsdo.tk.dto.concept.component.refex.TkRefexAbstractMember;
 
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.ReferenceConcepts;
 import org.ihtsdo.bdb.nidmaps.UuidToNidMapBdb;
@@ -47,6 +53,7 @@ import org.ihtsdo.bdb.temp.AceLog;
 import org.ihtsdo.bdb.temp.ComputationCanceled;
 import org.ihtsdo.bdb.temp.ConsoleActivityViewer;
 import org.ihtsdo.bdb.temp.I_ShowActivity;
+import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 
 public class Bdb {
 
@@ -66,6 +73,10 @@ public class Bdb {
     private static BdbPathManager pathManager;
     private static boolean closed = true;
     private static BdbMemoryMonitor memoryMonitor = new BdbMemoryMonitor();
+    private static ConcurrentHashMap<UUID, ViewCoordinate> viewCoordinates = new ConcurrentHashMap<>();
+    private static File bdbDirectory;
+    private static File viewCoordinateMapFile;
+
 
     public static boolean removeMemoryMonitorListener(LowMemoryListener listener) {
         return memoryMonitor.removeListener(listener);
@@ -151,6 +162,18 @@ public class Bdb {
     }
     static long getTimeForSapNid(int sapNid) {
         return statusAtPositionDb.getTime(sapNid);
+    }
+    
+    static ViewCoordinate getViewCoordinate(UUID vcUuid) {
+        return viewCoordinates.get(vcUuid);
+    }
+
+    static Collection<ViewCoordinate> getViewCoordinates() {
+        return viewCoordinates.values();
+    }
+
+    static void putViewCoordinate(ViewCoordinate vc) {
+        viewCoordinates.put(vc.getVcUuid(), vc);
     }
 
     private enum HeapSize {
@@ -261,7 +284,8 @@ public class Bdb {
             for (@SuppressWarnings("unused") OFFSETS o : OFFSETS.values()) {
                 // ensure all OFFSETS are initialized prior to multi-threading. 
             }
-            File bdbDirectory = new File(dbRoot);
+            bdbDirectory = new File(dbRoot);
+            viewCoordinateMapFile = new File(bdbDirectory, "viewCoordinates.oos");
             bdbDirectory.mkdirs();
             LuceneManager.setLuceneRootDir(bdbDirectory);
 
@@ -316,6 +340,16 @@ public class Bdb {
             //watchList.put(ReferenceConcepts.REFSET_PATH_ORIGINS.getNid(), ReferenceConcepts.REFSET_PATH_ORIGINS.getNid());
 
 //            inform(activity, "Loading paths...");
+            if (viewCoordinateMapFile.exists()) {
+                FileInputStream fis = new FileInputStream(viewCoordinateMapFile);
+                try (ObjectInputStream ois = new ObjectInputStream(fis)) {
+                    try {
+                        viewCoordinates = (ConcurrentHashMap<UUID, ViewCoordinate>) ois.readObject();
+                    } catch ( IOException | ClassNotFoundException ex) {
+                        Logger.getLogger(Bdb.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
             pathManager = BdbPathManager.get();
 //            tf.setPathManager(pathManager);
 //            inform(activity, "Database open...");
@@ -551,6 +585,13 @@ public class Bdb {
                 activity.setStopButtonVisible(false);
 
                 activity.setProgressInfoLower("1-a/11: Stopping Isa Cache generation.");
+                
+                
+                FileOutputStream fos = new FileOutputStream(viewCoordinateMapFile);
+                try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                    oos.writeObject(viewCoordinates);
+                }
+
                 for (IsaCache loopCache : KindOfComputer.getIsaCacheMap().values()) {
                     loopCache.getLatch().await();
                 }
