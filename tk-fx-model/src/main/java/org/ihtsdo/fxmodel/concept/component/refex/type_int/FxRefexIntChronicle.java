@@ -7,6 +7,8 @@ import javafx.collections.FXCollections;
 import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.refex.FX_REFEX_TYPE;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 import org.ihtsdo.tk.api.refex.type_int.RefexIntVersionBI;
@@ -26,13 +28,14 @@ public class FxRefexIntChronicle extends FxRefexChronicle<FxRefexIntVersion> {
       super();
    }
 
-   public FxRefexIntChronicle(FxConcept concept, RefexChronicleBI another) throws IOException {
-      super(concept, (RefexVersionBI) another.getPrimordialVersion());
+   public FxRefexIntChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)
+           throws IOException, ContradictionException {
+      super(ss, concept, (RefexVersionBI) another.getPrimordialVersion());
       this.versions =
          FXCollections.observableArrayList(new ArrayList<FxRefexIntVersion>(another.getVersions().size()));
 
       for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexIntVersion((RefexIntVersionBI) v));
+         this.versions.add(new FxRefexIntVersion(ss, (RefexIntVersionBI) v));
       }
    }
 

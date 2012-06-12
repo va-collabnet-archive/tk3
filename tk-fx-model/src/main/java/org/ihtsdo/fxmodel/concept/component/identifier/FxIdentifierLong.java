@@ -2,20 +2,17 @@ package org.ihtsdo.fxmodel.concept.component.identifier;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.tk.api.id.LongIdBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 
 public class FxIdentifierLong extends FxIdentifier {
    public static final long serialVersionUID = 1;
@@ -31,8 +28,8 @@ public class FxIdentifierLong extends FxIdentifier {
       super();
    }
 
-   public FxIdentifierLong(LongIdBI id) throws IOException {
-      super(id);
+   public FxIdentifierLong(TerminologySnapshotDI ss, LongIdBI id) throws IOException, ContradictionException {
+      super(ss, id);
       denotation = id.getDenotation();
    }
 

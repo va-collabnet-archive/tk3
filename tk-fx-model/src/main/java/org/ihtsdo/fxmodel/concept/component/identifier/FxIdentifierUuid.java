@@ -2,6 +2,9 @@ package org.ihtsdo.fxmodel.concept.component.identifier;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.id.UuidIdBI;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -28,14 +31,15 @@ public class FxIdentifierUuid extends FxIdentifier {
       super();
    }
 
-   public FxIdentifierUuid(UUID denotation) {
+   public FxIdentifierUuid(TerminologySnapshotDI ss, UUID denotation)
+           throws IOException, ContradictionException {
       super();
-      this.denotation    = denotation;
-      this.authorityUuid = generatedUuid;
+      this.denotation   = denotation;
+      this.authorityRef = new FxComponentReference(ss.getConceptVersion(generatedUuid));
    }
 
-   public FxIdentifierUuid(UuidIdBI id) throws IOException {
-      super(id);
+   public FxIdentifierUuid(TerminologySnapshotDI ss, UuidIdBI id) throws IOException, ContradictionException {
+      super(ss, id);
       denotation = id.getDenotation();
    }
 

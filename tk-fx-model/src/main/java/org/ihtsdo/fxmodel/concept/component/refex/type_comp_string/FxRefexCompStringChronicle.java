@@ -1,4 +1,4 @@
-package org.ihtsdo.fxmodel.concept.component.refex.type_member;
+package org.ihtsdo.fxmodel.concept.component.refex.type_comp_string;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -11,7 +11,7 @@ import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
-import org.ihtsdo.tk.api.refex.type_member.RefexMemberVersionBI;
+import org.ihtsdo.tk.api.refex.type_nid_string.RefexNidStringVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -19,23 +19,23 @@ import java.io.IOException;
 
 import java.util.*;
 
-public class FxRefexMembershipChronicle extends FxRefexChronicle<FxRefexMembershipVersion> {
+public class FxRefexCompStringChronicle extends FxRefexChronicle<FxRefexCompStringVersion> {
    public static final long serialVersionUID = 1;
 
    //~--- constructors --------------------------------------------------------
 
-   public FxRefexMembershipChronicle() {
+   public FxRefexCompStringChronicle() {
       super();
    }
 
-   public FxRefexMembershipChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)
+   public FxRefexCompStringChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)
            throws IOException, ContradictionException {
       super(ss, concept, (RefexVersionBI) another.getPrimordialVersion());
       this.versions = FXCollections.observableArrayList(
-         new ArrayList<FxRefexMembershipVersion>(another.getVersions().size()));
+         new ArrayList<FxRefexCompStringVersion>(another.getVersions().size()));
 
       for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexMembershipVersion(ss, (RefexMemberVersionBI) v));
+         this.versions.add(new FxRefexCompStringVersion(ss, (RefexNidStringVersionBI) v));
       }
    }
 
@@ -43,6 +43,6 @@ public class FxRefexMembershipChronicle extends FxRefexChronicle<FxRefexMembersh
 
    @Override
    public FX_REFEX_TYPE getType() {
-      return FX_REFEX_TYPE.MEMBER;
+      return FX_REFEX_TYPE.COMP_STR;
    }
 }

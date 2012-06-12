@@ -6,6 +6,8 @@ import javafx.collections.FXCollections;
 
 import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.FxComponentChronicle;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.relationship.RelationshipChronicleBI;
 import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 
@@ -24,13 +26,15 @@ public class FxRelationshipChronicle extends FxComponentChronicle<FxRelationship
       super();
    }
 
-   public FxRelationshipChronicle(FxConcept concept, RelationshipChronicleBI another) throws IOException {
-      super(concept, another.getPrimordialVersion());
+   public FxRelationshipChronicle(TerminologySnapshotDI ss, FxConcept concept,
+                                  RelationshipChronicleBI another)
+           throws IOException, ContradictionException {
+      super(ss, concept, another.getPrimordialVersion());
       this.versions = FXCollections.observableArrayList(
          new ArrayList<FxRelationshipVersion>(another.getVersions().size()));
 
       for (RelationshipVersionBI v : another.getVersions()) {
-         this.versions.add(new FxRelationshipVersion(v));
+         this.versions.add(new FxRelationshipVersion(ss, v));
       }
    }
 }

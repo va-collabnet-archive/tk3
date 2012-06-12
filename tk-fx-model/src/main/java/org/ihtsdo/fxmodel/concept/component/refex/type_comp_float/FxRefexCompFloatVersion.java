@@ -1,36 +1,41 @@
-package org.ihtsdo.fxmodel.concept.component.refex.type_int;
+package org.ihtsdo.fxmodel.concept.component.refex.type_comp_float;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.concept.component.FxVersion;
+import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
-import org.ihtsdo.tk.api.refex.type_int.RefexIntVersionBI;
+import org.ihtsdo.tk.api.TerminologyStoreDI;
+import org.ihtsdo.tk.api.refex.type_nid_float.RefexNidFloatVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import java.util.UUID;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompVersion;
 
-public class FxRefexIntVersion extends FxVersion {
+
+public class FxRefexCompFloatVersion extends FxRefexCompVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   @XmlAttribute
-   public int intValue;
+   public float float1;
 
    //~--- constructors --------------------------------------------------------
 
-   public FxRefexIntVersion() {
+   public FxRefexCompFloatVersion() {
       super();
    }
 
-   public FxRefexIntVersion(TerminologySnapshotDI ss, RefexIntVersionBI another)
+   public FxRefexCompFloatVersion(TerminologySnapshotDI ss, RefexNidFloatVersionBI another)
            throws IOException, ContradictionException {
       super(ss, another);
-      this.intValue = another.getInt1();
+
+      TerminologyStoreDI ts = Ts.get();
+
+      this.float1 = another.getFloat1();
    }
 
    //~--- methods -------------------------------------------------------------
@@ -38,8 +43,8 @@ public class FxRefexIntVersion extends FxVersion {
    /**
     * Compares this object to the specified object. The result is <tt>true</tt>
     * if and only if the argument is not <tt>null</tt>, is a
-    * <tt>ERefsetIntVersion</tt> object, and contains the same values, field by field,
-    * as this <tt>ERefsetIntVersion</tt>.
+    * <tt>ERefsetCidFloatVersion</tt> object, and contains the same values, field by field,
+    * as this <tt>ERefsetCidFloatVersion</tt>.
     *
     * @param obj the object to compare with.
     * @return <code>true</code> if the objects are the same;
@@ -51,14 +56,15 @@ public class FxRefexIntVersion extends FxVersion {
          return false;
       }
 
-      if (FxRefexIntVersion.class.isAssignableFrom(obj.getClass())) {
-         FxRefexIntVersion another = (FxRefexIntVersion) obj;
+      if (FxRefexCompFloatVersion.class.isAssignableFrom(obj.getClass())) {
+         FxRefexCompFloatVersion another = (FxRefexCompFloatVersion) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
-         // Compare intValue
-         if (this.intValue != another.intValue) {
+
+         // Compare floatValue
+         if (this.float1 != another.float1) {
             return false;
          }
 
@@ -77,8 +83,8 @@ public class FxRefexIntVersion extends FxVersion {
       StringBuilder buff = new StringBuilder();
 
       buff.append(this.getClass().getSimpleName()).append(": ");
-      buff.append(" int: ");
-      buff.append(this.intValue);
+      buff.append(" flt:");
+      buff.append(this.float1);
       buff.append(" ");
       buff.append(super.toString());
 
@@ -87,13 +93,13 @@ public class FxRefexIntVersion extends FxVersion {
 
    //~--- get methods ---------------------------------------------------------
 
-   public int getIntValue() {
-      return intValue;
+   public float getFloat1() {
+      return float1;
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setIntValue(int intValue) {
-      this.intValue = intValue;
+   public void setFloat1(float float1) {
+      this.float1 = float1;
    }
 }

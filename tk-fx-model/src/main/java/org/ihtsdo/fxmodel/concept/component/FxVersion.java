@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 
 public abstract class FxVersion {
    private static final long serialVersionUID    = 1;
@@ -42,22 +44,22 @@ public abstract class FxVersion {
       super();
    }
 
-   public FxVersion(ComponentVersionBI another) throws IOException {
+   public FxVersion(TerminologySnapshotDI ss, IdBI id) throws IOException, ContradictionException {
       super();
-      statusReferenceProperty.set(new FxComponentReference(null, another.getStatusNid(), "status"));
-      fxTime.setTime(another.getTime());
-      authorReferenceProperty.set(new FxComponentReference(null, another.getAuthorNid(), "author"));
-      moduleReferenceProperty.set(new FxComponentReference(null, another.getModuleNid(), "module"));
-      pathReferenceProperty.set(new FxComponentReference(null, another.getPathNid(), "path"));
+      statusReferenceProperty.set(new FxComponentReference(ss.getConceptVersion(id.getStatusNid())));
+      fxTime.setTime(id.getTime());
+      authorReferenceProperty.set(new FxComponentReference(ss.getConceptVersion(id.getAuthorNid())));
+      moduleReferenceProperty.set(new FxComponentReference(ss.getConceptVersion(id.getPathNid())));
+      pathReferenceProperty.set(new FxComponentReference(ss.getConceptVersion(id.getModuleNid())));
    }
 
-   public FxVersion(IdBI id) throws IOException {
+   public FxVersion(TerminologySnapshotDI ss, ComponentVersionBI another) throws IOException, ContradictionException {
       super();
-      statusReferenceProperty.set(new FxComponentReference(null, id.getStatusNid(), "status"));
-      fxTime.setTime(id.getTime());
-      authorReferenceProperty.set(new FxComponentReference(null, id.getAuthorNid(), "author"));
-      moduleReferenceProperty.set(new FxComponentReference(null, id.getPathNid(), "module"));
-      pathReferenceProperty.set(new FxComponentReference(null, id.getModuleNid(), "path"));
+      statusReferenceProperty.set(new FxComponentReference(ss.getConceptForNid(another.getStatusNid())));
+      fxTime.setTime(another.getTime());
+      authorReferenceProperty.set(new FxComponentReference(ss.getConceptForNid(another.getAuthorNid())));
+      moduleReferenceProperty.set(new FxComponentReference(ss.getConceptForNid(another.getModuleNid())));
+      pathReferenceProperty.set(new FxComponentReference(ss.getConceptForNid(another.getPathNid())));
    }
 
    //~--- methods -------------------------------------------------------------

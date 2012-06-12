@@ -5,14 +5,15 @@ package org.ihtsdo.fxmodel.concept.component.description;
 import javafx.beans.property.SimpleStringProperty;
 
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
-import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.description.DescriptionVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 
-import java.util.UUID;
+import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 
 public class FxDescriptionVersion extends FxVersion {
    public static final long serialVersionUID = 1;
@@ -22,7 +23,7 @@ public class FxDescriptionVersion extends FxVersion {
    public boolean              initialCaseSignificant;
    public SimpleStringProperty langProperty = new SimpleStringProperty();
    public SimpleStringProperty textProperty = new SimpleStringProperty();
-   public UUID                 typeUuid;
+   public FxComponentReference                 type;
 
    //~--- constructors --------------------------------------------------------
 
@@ -30,12 +31,12 @@ public class FxDescriptionVersion extends FxVersion {
       super();
    }
 
-   public FxDescriptionVersion(DescriptionVersionBI another) throws IOException {
-      super(another);
+   public FxDescriptionVersion(TerminologySnapshotDI ss, DescriptionVersionBI another) throws IOException, ContradictionException {
+      super(ss, another);
       this.initialCaseSignificant = another.isInitialCaseSignificant();
       this.langProperty.set(another.getLang());
       this.textProperty.set(another.getText());
-      this.typeUuid = Ts.get().getUuidPrimordialForNid(another.getTypeNid());
+      this.type = new FxComponentReference(ss.getConceptVersion(another.getTypeNid()));
    }
 
    //~--- methods -------------------------------------------------------------
@@ -78,7 +79,7 @@ public class FxDescriptionVersion extends FxVersion {
          }
 
          // Compare typeUuid
-         if (!this.typeUuid.equals(another.typeUuid)) {
+         if (!this.type.equals(another.type)) {
             return false;
          }
 
@@ -104,7 +105,7 @@ public class FxDescriptionVersion extends FxVersion {
       buff.append(" text:");
       buff.append("'").append(this.textProperty).append("'");
       buff.append(" type:");
-      buff.append(informAboutUuid(this.typeUuid));
+      buff.append(type.getText());
       buff.append(" ");
       buff.append(super.toString());
 
@@ -139,8 +140,8 @@ public class FxDescriptionVersion extends FxVersion {
       return textProperty;
    }
 
-   public UUID getTypeUuid() {
-      return typeUuid;
+   public FxComponentReference getType() {
+      return type;
    }
 
    /*
@@ -166,7 +167,7 @@ public class FxDescriptionVersion extends FxVersion {
       this.textProperty.set(text);
    }
 
-   public void setTypeUuid(UUID typeUuid) {
-      this.typeUuid = typeUuid;
+   public void setType(FxComponentReference type) {
+      this.type = type;
    }
 }

@@ -3,6 +3,8 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_boolean;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.type_boolean.RefexBooleanVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -25,8 +27,9 @@ public class FxRefexBooleanVersion extends FxVersion {
       super();
    }
 
-   public FxRefexBooleanVersion(RefexBooleanVersionBI another) throws IOException {
-      super(another);
+   public FxRefexBooleanVersion(TerminologySnapshotDI ss, RefexBooleanVersionBI another)
+           throws IOException, ContradictionException {
+      super(ss, another);
       this.booleanValue = another.getBoolean1();
    }
 

@@ -10,6 +10,8 @@ import org.ihtsdo.fxmodel.concept.component.identifier.FxIdentifier;
 import org.ihtsdo.fxmodel.concept.component.identifier.FxIdentifierUuid;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
 import org.ihtsdo.tk.api.ComponentVersionBI;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.id.IdBI;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 
@@ -36,7 +38,8 @@ public abstract class FxComponentChronicle<V extends FxVersion> {
       super();
    }
 
-   public FxComponentChronicle(FxConcept concept, ComponentVersionBI another) throws IOException {
+   public FxComponentChronicle(TerminologySnapshotDI ss, FxConcept concept, ComponentVersionBI another)
+           throws IOException, ContradictionException {
       super();
       this.concept        = concept;
       this.primordialUuid = another.getPrimUuid();
@@ -48,13 +51,13 @@ public abstract class FxComponentChronicle<V extends FxVersion> {
             FXCollections.observableArrayList(new ArrayList<FxIdentifier>(anotherAdditionalIds.size()));
          nextId:
          for (IdBI id : anotherAdditionalIds) {
-            this.additionalIds.add((FxIdentifier) FxIdentifier.convertId(id));
+            this.additionalIds.add((FxIdentifier) FxIdentifier.convertId(ss, id));
          }
       }
 
       Collection<? extends RefexChronicleBI<?>> anotherAnnotations = another.getAnnotations();
 
-      processAnnotations(anotherAnnotations);
+      processAnnotations(ss, anotherAnnotations);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -94,13 +97,15 @@ public abstract class FxComponentChronicle<V extends FxVersion> {
       return this.primordialUuid.hashCode();
    }
 
-   private void processAnnotations(Collection<? extends RefexChronicleBI<?>> annotations) throws IOException {
+   private void processAnnotations(TerminologySnapshotDI ss,
+                                   Collection<? extends RefexChronicleBI<?>> annotations)
+           throws IOException, ContradictionException {
       if ((annotations != null) &&!annotations.isEmpty()) {
          this.annotations =
             FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?>>(annotations.size()));
 
          for (RefexChronicleBI<?> r : annotations) {
-            this.annotations.add(FxConcept.convertRefex(concept, r));
+            this.annotations.add(FxConcept.convertRefex(ss, concept, r));
          }
       }
    }
@@ -178,21 +183,6 @@ public abstract class FxComponentChronicle<V extends FxVersion> {
 
    public FxConcept getConcept() {
       return concept;
-   }
-
-   public List<FxIdentifier> getEIdentifiers() {
-      List<FxIdentifier> ids;
-
-      if (additionalIds != null) {
-         ids = new ArrayList<>(additionalIds.size() + 1);
-         ids.addAll(additionalIds);
-      } else {
-         ids = new ArrayList<>(1);
-      }
-
-      ids.add(new FxIdentifierUuid(this.primordialUuid));
-
-      return ids;
    }
 
    public int getIdComponentCount() {

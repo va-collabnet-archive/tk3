@@ -2,25 +2,26 @@ package org.ihtsdo.fxmodel.concept.component.refex;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.ihtsdo.fxmodel.FxComponentReference;
 import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.FxComponentChronicle;
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
-import org.ihtsdo.tk.Ts;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 
-import java.util.UUID;
 
 public abstract class FxRefexChronicle<V extends FxVersion> extends FxComponentChronicle<V> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   public UUID componentUuid;
-   public UUID refexUuid;
+   public FxComponentReference componentRef;
+   public FxComponentReference refexRef;
 
    //~--- constructors --------------------------------------------------------
 
@@ -28,31 +29,32 @@ public abstract class FxRefexChronicle<V extends FxVersion> extends FxComponentC
       super();
    }
 
-   public FxRefexChronicle(FxConcept concept, RefexVersionBI another) throws IOException {
-      super(concept, another);
-      this.componentUuid = Ts.get().getComponent(another.getReferencedComponentNid()).getPrimUuid();
-      this.refexUuid     = Ts.get().getComponent(another.getRefexNid()).getPrimUuid();
+   public FxRefexChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexVersionBI another)
+           throws IOException, ContradictionException {
+      super(ss, concept, another);
+      this.componentRef = new FxComponentReference(ss, another.getReferencedComponentNid());
+      this.refexRef     = new FxComponentReference(ss.getConceptVersion(another.getRefexNid()));
    }
 
    //~--- get methods ---------------------------------------------------------
 
-   public UUID getComponentUuid() {
-      return componentUuid;
+   public FxComponentReference getComponentRef() {
+      return componentRef;
    }
 
-   public UUID getRefexUuid() {
-      return refexUuid;
+   public FxComponentReference getRefexRef() {
+      return refexRef;
    }
 
    public abstract FX_REFEX_TYPE getType();
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setComponentUuid(UUID componentUuid) {
-      this.componentUuid = componentUuid;
+   public void setComponentRef(FxComponentReference componentRef) {
+      this.componentRef = componentRef;
    }
 
-   public void setRefexUuid(UUID refexUuid) {
-      this.refexUuid = refexUuid;
+   public void setRefexUuid(FxComponentReference refexRef) {
+      this.refexRef = refexRef;
    }
 }

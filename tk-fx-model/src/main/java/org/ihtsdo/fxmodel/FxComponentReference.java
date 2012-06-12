@@ -23,6 +23,9 @@ package org.ihtsdo.fxmodel;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.concept.ConceptVersionBI;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Externalizable;
@@ -31,6 +34,9 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 import java.util.UUID;
+import org.ihtsdo.tk.api.ComponentVersionBI;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
+import org.ihtsdo.tk.api.description.DescriptionVersionBI;
 
 /**
  *
@@ -43,12 +49,32 @@ public class FxComponentReference implements Externalizable {
 
    //~--- constructors --------------------------------------------------------
 
+   public FxComponentReference(ConceptVersionBI concept) throws IOException, ContradictionException {
+      nidProperty.set(concept.getNid());
+      uuidProperty.set(concept.getPrimUuid());
+      textProperty.set(concept.getPreferredDescription().getText());
+   }
+
    public FxComponentReference(int nid) throws IOException {
       nidProperty.set(nid);
    }
 
    public FxComponentReference(UUID uuid) {
       uuidProperty.set(uuid);
+   }
+
+   public FxComponentReference(TerminologySnapshotDI ss, int nid) throws IOException, ContradictionException {
+       ComponentVersionBI component = ss.getComponentVersion(nid);
+       nidProperty.set(component.getNid());
+       uuidProperty.set(component.getPrimUuid());
+       if (component instanceof ConceptVersionBI) {
+           textProperty.set(((ConceptVersionBI) component).getPreferredDescription().getText());
+       } else if (component instanceof DescriptionVersionBI) {
+           textProperty.set(((DescriptionVersionBI) component).getText());
+       } else {
+           textProperty.set(component.getClass().getSimpleName());
+       }
+      
    }
 
    public FxComponentReference(UUID primordialUuid, Integer nid, String text) {
@@ -58,6 +84,22 @@ public class FxComponentReference implements Externalizable {
    }
 
    //~--- methods -------------------------------------------------------------
+
+   @Override
+   public boolean equals(Object obj) {
+      if (obj instanceof FxComponentReference) {
+         FxComponentReference another = (FxComponentReference) obj;
+
+         return nidProperty.equals(another.nidProperty) || uuidProperty.equals(another.uuidProperty);
+      }
+
+      return false;
+   }
+
+   @Override
+   public int hashCode() {
+      throw new UnsupportedOperationException();
+   }
 
    public SimpleObjectProperty<Integer> nidProperty() {
       return nidProperty;

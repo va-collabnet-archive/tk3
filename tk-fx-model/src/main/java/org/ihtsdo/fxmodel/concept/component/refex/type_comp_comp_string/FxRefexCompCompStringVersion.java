@@ -1,36 +1,33 @@
-package org.ihtsdo.fxmodel.concept.component.refex.type_int;
+package org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp_string;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.concept.component.FxVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp.FxRefexCompCompVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
-import org.ihtsdo.tk.api.refex.type_int.RefexIntVersionBI;
+import org.ihtsdo.tk.api.refex.type_nid_nid_string.RefexNidNidStringVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlAttribute;
-
-public class FxRefexIntVersion extends FxVersion {
+public class FxRefexCompCompStringVersion extends FxRefexCompCompVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   @XmlAttribute
-   public int intValue;
+   public String string1;
 
    //~--- constructors --------------------------------------------------------
 
-   public FxRefexIntVersion() {
+   public FxRefexCompCompStringVersion() {
       super();
    }
 
-   public FxRefexIntVersion(TerminologySnapshotDI ss, RefexIntVersionBI another)
+   public FxRefexCompCompStringVersion(TerminologySnapshotDI ss, RefexNidNidStringVersionBI another)
            throws IOException, ContradictionException {
       super(ss, another);
-      this.intValue = another.getInt1();
+      this.string1 = another.getString1();
    }
 
    //~--- methods -------------------------------------------------------------
@@ -38,8 +35,8 @@ public class FxRefexIntVersion extends FxVersion {
    /**
     * Compares this object to the specified object. The result is <tt>true</tt>
     * if and only if the argument is not <tt>null</tt>, is a
-    * <tt>ERefsetIntVersion</tt> object, and contains the same values, field by field,
-    * as this <tt>ERefsetIntVersion</tt>.
+    * <tt>ERefsetCidCidStrVersion</tt> object, and contains the same values, field by field,
+    * as this <tt>ERefsetCidCidStrVersion</tt>.
     *
     * @param obj the object to compare with.
     * @return <code>true</code> if the objects are the same;
@@ -51,14 +48,14 @@ public class FxRefexIntVersion extends FxVersion {
          return false;
       }
 
-      if (FxRefexIntVersion.class.isAssignableFrom(obj.getClass())) {
-         FxRefexIntVersion another = (FxRefexIntVersion) obj;
+      if (FxRefexCompCompStringVersion.class.isAssignableFrom(obj.getClass())) {
+         FxRefexCompCompStringVersion another = (FxRefexCompCompStringVersion) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
-         // Compare intValue
-         if (this.intValue != another.intValue) {
+         // Compare stringValue
+         if (!this.string1.equals(another.string1)) {
             return false;
          }
 
@@ -77,9 +74,8 @@ public class FxRefexIntVersion extends FxVersion {
       StringBuilder buff = new StringBuilder();
 
       buff.append(this.getClass().getSimpleName()).append(": ");
-      buff.append(" int: ");
-      buff.append(this.intValue);
-      buff.append(" ");
+      buff.append(" str:");
+      buff.append("'").append(this.string1).append("' ");
       buff.append(super.toString());
 
       return buff.toString();
@@ -87,13 +83,13 @@ public class FxRefexIntVersion extends FxVersion {
 
    //~--- get methods ---------------------------------------------------------
 
-   public int getIntValue() {
-      return intValue;
+   public String getString1() {
+      return string1;
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setIntValue(int intValue) {
-      this.intValue = intValue;
+   public void setString1(String string1) {
+      this.string1 = string1;
    }
 }

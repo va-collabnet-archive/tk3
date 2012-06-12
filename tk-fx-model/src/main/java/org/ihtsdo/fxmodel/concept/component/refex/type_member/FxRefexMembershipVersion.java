@@ -3,6 +3,8 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_member;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -18,8 +20,9 @@ public class FxRefexMembershipVersion extends FxVersion {
       super();
    }
 
-   public FxRefexMembershipVersion(RefexVersionBI another) throws IOException {
-      super(another);
+   public FxRefexMembershipVersion(TerminologySnapshotDI ss, RefexVersionBI another)
+           throws IOException, ContradictionException {
+      super(ss, another);
    }
 
    //~--- methods -------------------------------------------------------------

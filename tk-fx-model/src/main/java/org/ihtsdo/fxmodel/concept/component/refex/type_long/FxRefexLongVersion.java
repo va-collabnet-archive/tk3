@@ -3,6 +3,8 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_long;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.type_long.RefexLongVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -25,8 +27,9 @@ public class FxRefexLongVersion extends FxVersion {
       super();
    }
 
-   public FxRefexLongVersion(RefexLongVersionBI another) throws IOException {
-      super(another);
+   public FxRefexLongVersion(TerminologySnapshotDI ss, RefexLongVersionBI another)
+           throws IOException, ContradictionException {
+      super(ss, another);
       this.longValue = another.getLong1();
    }
 

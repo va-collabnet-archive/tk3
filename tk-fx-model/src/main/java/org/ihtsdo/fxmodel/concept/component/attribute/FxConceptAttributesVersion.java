@@ -3,6 +3,8 @@ package org.ihtsdo.fxmodel.concept.component.attribute;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -27,8 +29,9 @@ public class FxConceptAttributesVersion extends FxVersion {
       super();
    }
 
-   public FxConceptAttributesVersion(ConAttrVersionBI another) throws IOException {
-      super(another);
+   public FxConceptAttributesVersion(TerminologySnapshotDI ss, ConAttrVersionBI another)
+           throws IOException, ContradictionException {
+      super(ss, another);
       this.defined = another.isDefined();
    }
 

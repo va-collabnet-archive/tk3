@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.refex.FX_REFEX_TYPE;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 import org.ihtsdo.tk.api.refex.type_long.RefexLongVersionBI;
@@ -16,6 +17,7 @@ import org.ihtsdo.tk.api.refex.type_long.RefexLongVersionBI;
 import java.io.IOException;
 
 import java.util.*;
+import org.ihtsdo.tk.api.ContradictionException;
 
 public class FxRefexLongChronicle extends FxRefexChronicle<FxRefexLongVersion> {
    public static final long serialVersionUID = 1;
@@ -26,13 +28,14 @@ public class FxRefexLongChronicle extends FxRefexChronicle<FxRefexLongVersion> {
       super();
    }
 
-   public FxRefexLongChronicle(FxConcept concept, RefexChronicleBI another) throws IOException {
-      super(concept, (RefexVersionBI) another.getPrimordialVersion());
+   public FxRefexLongChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)
+           throws IOException, ContradictionException {
+      super(ss, concept, (RefexVersionBI) another.getPrimordialVersion());
       this.versions =
          FXCollections.observableArrayList(new ArrayList<FxRefexLongVersion>(another.getVersions().size()));
 
       for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexLongVersion((RefexLongVersionBI) v));
+         this.versions.add(new FxRefexLongVersion(ss, (RefexLongVersionBI) v));
       }
    }
 

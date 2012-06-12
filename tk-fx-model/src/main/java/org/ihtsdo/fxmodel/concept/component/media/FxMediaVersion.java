@@ -2,23 +2,24 @@ package org.ihtsdo.fxmodel.concept.component.media;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.ihtsdo.fxmodel.FxComponentReference;
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
-import org.ihtsdo.tk.Ts;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.media.MediaVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 
-import java.util.UUID;
 
 public class FxMediaVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   public String textDescription;
-   public UUID   typeUuid;
+   public String               textDescription;
+   public FxComponentReference typeRef;
 
    //~--- constructors --------------------------------------------------------
 
@@ -26,10 +27,11 @@ public class FxMediaVersion extends FxVersion {
       super();
    }
 
-   public FxMediaVersion(MediaVersionBI another) throws IOException {
-      super(another);
+   public FxMediaVersion(TerminologySnapshotDI ss, MediaVersionBI another)
+           throws IOException, ContradictionException {
+      super(ss, another);
       this.textDescription = another.getTextDescription();
-      this.typeUuid        = Ts.get().getUuidPrimordialForNid(another.getTypeNid());
+      this.typeRef         = new FxComponentReference(ss.getConceptVersion(another.getTypeNid()));
    }
 
    //~--- methods -------------------------------------------------------------
@@ -62,7 +64,7 @@ public class FxMediaVersion extends FxVersion {
          }
 
          // Compare typeUuid
-         if (!this.typeUuid.equals(another.typeUuid)) {
+         if (!this.typeRef.equals(another.typeRef)) {
             return false;
          }
 
@@ -84,7 +86,7 @@ public class FxMediaVersion extends FxVersion {
       buff.append(" desc:");
       buff.append("'").append(this.textDescription).append("'");
       buff.append(" type:");
-      buff.append(informAboutUuid(this.typeUuid));
+      buff.append(typeRef.getText());
       buff.append(" ");
       buff.append(super.toString());
 
@@ -97,8 +99,8 @@ public class FxMediaVersion extends FxVersion {
       return textDescription;
    }
 
-   public UUID getTypeUuid() {
-      return typeUuid;
+   public FxComponentReference getTypeRef() {
+      return typeRef;
    }
 
    //~--- set methods ---------------------------------------------------------
@@ -107,7 +109,7 @@ public class FxMediaVersion extends FxVersion {
       this.textDescription = textDescription;
    }
 
-   public void setTypeUuid(UUID typeUuid) {
-      this.typeUuid = typeUuid;
+   public void setTypeUuid(FxComponentReference typeRef) {
+      this.typeRef = typeRef;
    }
 }

@@ -25,20 +25,21 @@ import java.io.IOException;
 public enum FX_REFEX_TYPE {
 
    /**
-    * CID = Component IDentifier
+    * COMP = Component IDentifier
     *
     * @author kec
     *
     */
-   MEMBER(1, RefexVersionBI.class), CID(2, RefexNidVersionBI.class), CID_CID(3, RefexNidNidVersionBI.class),
-                                    CID_CID_CID(4, RefexNidNidNidVersionBI.class),
-                                    CID_CID_STR(5, RefexNidNidStringVersionBI.class),
+   MEMBER(1, RefexVersionBI.class), COMP(2, RefexNidVersionBI.class),
+                                    COMP_COMP(3, RefexNidNidVersionBI.class),
+                                    COMP_COMP_COMP(4, RefexNidNidNidVersionBI.class),
+                                    COMP_COMP_STR(5, RefexNidNidStringVersionBI.class),
                                     STR(6, RefexStringVersionBI.class), INT(7, RefexIntVersionBI.class),
-                                    CID_INT(8, RefexNidIntVersionBI.class),
+                                    COMP_INT(8, RefexNidIntVersionBI.class),
                                     BOOLEAN(9, RefexBooleanVersionBI.class),
-                                    CID_STR(10, RefexNidStringVersionBI.class),
-                                    CID_FLOAT(11, RefexNidFloatVersionBI.class),
-                                    CID_LONG(12, RefexNidLongVersionBI.class),
+                                    COMP_STR(10, RefexNidStringVersionBI.class),
+                                    COMP_FLOAT(11, RefexNidFloatVersionBI.class),
+                                    COMP_LONG(12, RefexNidLongVersionBI.class),
                                     LONG(13, RefexLongVersionBI.class), UNKNOWN(Byte.MAX_VALUE, null);
 
    private int                             externalizedToken;
@@ -55,31 +56,31 @@ public enum FX_REFEX_TYPE {
 
    public static FX_REFEX_TYPE classToType(Class<?> c) {
       if (RefexNidNidNidVersionBI.class.isAssignableFrom(c)) {
-         return CID_CID_CID;
+         return COMP_COMP_COMP;
       }
 
       if (RefexNidNidStringVersionBI.class.isAssignableFrom(c)) {
-         return CID_CID_STR;
+         return COMP_COMP_STR;
       }
 
       if (RefexNidNidVersionBI.class.isAssignableFrom(c)) {
-         return CID_CID;
+         return COMP_COMP;
       }
 
       if (RefexNidIntVersionBI.class.isAssignableFrom(c)) {
-         return CID_INT;
+         return COMP_INT;
       }
 
       if (RefexNidStringVersionBI.class.isAssignableFrom(c)) {
-         return CID_STR;
+         return COMP_STR;
       }
 
       if (RefexNidFloatVersionBI.class.isAssignableFrom(c)) {
-         return CID_FLOAT;
+         return COMP_FLOAT;
       }
 
       if (RefexNidLongVersionBI.class.isAssignableFrom(c)) {
-         return CID_LONG;
+         return COMP_LONG;
       }
 
       if (RefexBooleanVersionBI.class.isAssignableFrom(c)) {
@@ -87,7 +88,7 @@ public enum FX_REFEX_TYPE {
       }
 
       if (RefexNidVersionBI.class.isAssignableFrom(c)) {
-         return CID;
+         return COMP;
       }
 
       if (RefexStringVersionBI.class.isAssignableFrom(c)) {
@@ -127,16 +128,16 @@ public enum FX_REFEX_TYPE {
          return MEMBER;
 
       case 2 :
-         return CID;
+         return COMP;
 
       case 3 :
-         return CID_CID;
+         return COMP_COMP;
 
       case 4 :
-         return CID_CID_CID;
+         return COMP_COMP_COMP;
 
       case 5 :
-         return CID_CID_STR;
+         return COMP_COMP_STR;
 
       case 6 :
          return STR;
@@ -145,19 +146,19 @@ public enum FX_REFEX_TYPE {
          return INT;
 
       case 8 :
-         return CID_INT;
+         return COMP_INT;
 
       case 9 :
          return BOOLEAN;
 
       case 10 :
-         return CID_STR;
+         return COMP_STR;
 
       case 11 :
-         return CID_FLOAT;
+         return COMP_FLOAT;
 
       case 12 :
-         return CID_LONG;
+         return COMP_LONG;
 
       case 13 :
          return LONG;

@@ -1,36 +1,33 @@
-package org.ihtsdo.fxmodel.concept.component.refex.type_int;
+package org.ihtsdo.fxmodel.concept.component.refex.type_comp_long;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.concept.component.FxVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
-import org.ihtsdo.tk.api.refex.type_int.RefexIntVersionBI;
+import org.ihtsdo.tk.api.refex.type_nid_long.RefexNidLongVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlAttribute;
-
-public class FxRefexIntVersion extends FxVersion {
+public class FxRefexCompLongVersion extends FxRefexCompVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   @XmlAttribute
-   public int intValue;
+   public long long1;
 
    //~--- constructors --------------------------------------------------------
 
-   public FxRefexIntVersion() {
+   public FxRefexCompLongVersion() {
       super();
    }
 
-   public FxRefexIntVersion(TerminologySnapshotDI ss, RefexIntVersionBI another)
+   public FxRefexCompLongVersion(TerminologySnapshotDI ss, RefexNidLongVersionBI another)
            throws IOException, ContradictionException {
       super(ss, another);
-      this.intValue = another.getInt1();
+      this.long1 = another.getLong1();
    }
 
    //~--- methods -------------------------------------------------------------
@@ -38,8 +35,8 @@ public class FxRefexIntVersion extends FxVersion {
    /**
     * Compares this object to the specified object. The result is <tt>true</tt>
     * if and only if the argument is not <tt>null</tt>, is a
-    * <tt>ERefsetIntVersion</tt> object, and contains the same values, field by field,
-    * as this <tt>ERefsetIntVersion</tt>.
+    * <tt>ERefsetCidLongVersion</tt> object, and contains the same values, field by field,
+    * as this <tt>ERefsetCidLongVersion</tt>.
     *
     * @param obj the object to compare with.
     * @return <code>true</code> if the objects are the same;
@@ -51,14 +48,14 @@ public class FxRefexIntVersion extends FxVersion {
          return false;
       }
 
-      if (FxRefexIntVersion.class.isAssignableFrom(obj.getClass())) {
-         FxRefexIntVersion another = (FxRefexIntVersion) obj;
+      if (FxRefexCompLongVersion.class.isAssignableFrom(obj.getClass())) {
+         FxRefexCompLongVersion another = (FxRefexCompLongVersion) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
-         // Compare intValue
-         if (this.intValue != another.intValue) {
+         // Compare longValue
+         if (this.long1 != another.long1) {
             return false;
          }
 
@@ -77,8 +74,8 @@ public class FxRefexIntVersion extends FxVersion {
       StringBuilder buff = new StringBuilder();
 
       buff.append(this.getClass().getSimpleName()).append(": ");
-      buff.append(" int: ");
-      buff.append(this.intValue);
+      buff.append(" long: ");
+      buff.append(this.long1);
       buff.append(" ");
       buff.append(super.toString());
 
@@ -87,13 +84,13 @@ public class FxRefexIntVersion extends FxVersion {
 
    //~--- get methods ---------------------------------------------------------
 
-   public int getIntValue() {
-      return intValue;
+   public long getLong1() {
+      return long1;
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setIntValue(int intValue) {
-      this.intValue = intValue;
+   public void setLong1(long long1) {
+      this.long1 = long1;
    }
 }

@@ -6,6 +6,8 @@ import javafx.collections.FXCollections;
 
 import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.FxComponentChronicle;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.media.MediaChronicleBI;
 import org.ihtsdo.tk.api.media.MediaVersionBI;
 
@@ -29,13 +31,14 @@ public class FxMediaChronicle extends FxComponentChronicle<FxMediaVersion> {
       super();
    }
 
-   public FxMediaChronicle(FxConcept concept, MediaChronicleBI another) throws IOException {
-      super(concept, another.getPrimordialVersion());
+   public FxMediaChronicle(TerminologySnapshotDI ss, FxConcept concept, MediaChronicleBI another)
+           throws IOException, ContradictionException {
+      super(ss, concept, another.getPrimordialVersion());
       this.versions =
          FXCollections.observableArrayList(new ArrayList<FxMediaVersion>(another.getVersions().size()));
 
       for (MediaVersionBI v : another.getVersions()) {
-         this.versions.add(new FxMediaVersion(v));
+         this.versions.add(new FxMediaVersion(ss, v));
       }
 
       this.dataBytes = another.getPrimordialVersion().getMedia();

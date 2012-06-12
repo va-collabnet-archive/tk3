@@ -12,6 +12,9 @@ import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 import java.io.IOException;
 
 import java.util.UUID;
+import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 
 
 public class FxRelationshipVersion extends FxVersion {
@@ -19,10 +22,10 @@ public class FxRelationshipVersion extends FxVersion {
 
    //~--- fields --------------------------------------------------------------
 
-   public UUID characteristicUuid;
+   public FxComponentReference characteristicRef;
    public int  group;
-   public UUID refinabilityUuid;
-   public UUID typeUuid;
+   public FxComponentReference refinabilityRef;
+   public FxComponentReference typeRef;
 
    //~--- constructors --------------------------------------------------------
 
@@ -30,15 +33,15 @@ public class FxRelationshipVersion extends FxVersion {
       super();
    }
 
-   public FxRelationshipVersion(RelationshipVersionBI rv) throws IOException {
-      super(rv);
+   public FxRelationshipVersion(TerminologySnapshotDI ss, RelationshipVersionBI rv) throws IOException, ContradictionException {
+      super(ss, rv);
 
       TerminologyStoreDI ts = Ts.get();
 
-      characteristicUuid = ts.getUuidPrimordialForNid(rv.getCharacteristicNid());
-      refinabilityUuid   = ts.getUuidPrimordialForNid(rv.getRefinabilityNid());
+      characteristicRef = new FxComponentReference(ss.getConceptVersion(rv.getCharacteristicNid()));
+      refinabilityRef   = new FxComponentReference(ss.getConceptVersion(rv.getRefinabilityNid()));
       group              = rv.getGroup();
-      typeUuid           = ts.getUuidPrimordialForNid(rv.getTypeNid());
+      typeRef           = new FxComponentReference(ss.getConceptVersion(rv.getTypeNid()));
    }
 
    //~--- methods -------------------------------------------------------------
@@ -52,13 +55,13 @@ public class FxRelationshipVersion extends FxVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" type:");
-      buff.append(informAboutUuid(this.typeUuid));
+      buff.append(this.typeRef);
       buff.append(" grp:");
       buff.append(this.group);
       buff.append(" char:");
-      buff.append(this.characteristicUuid);
+      buff.append(this.characteristicRef);
       buff.append(" ref:");
-      buff.append(this.refinabilityUuid);
+      buff.append(this.refinabilityRef);
       buff.append(" ");
       buff.append(super.toString());
 
@@ -67,41 +70,41 @@ public class FxRelationshipVersion extends FxVersion {
 
    //~--- get methods ---------------------------------------------------------
 
-   public UUID getCharacteristicUuid() {
-      return characteristicUuid;
+   public FxComponentReference getCharacteristicRef() {
+      return characteristicRef;
    }
 
    public int getGroup() {
       return group;
    }
 
-   public UUID getRefinabilityUuid() {
-      return refinabilityUuid;
+   public FxComponentReference getRefinabilityRef() {
+      return refinabilityRef;
    }
 
    public int getRelGroup() {
       return group;
    }
 
-   public UUID getTypeUuid() {
-      return typeUuid;
+   public FxComponentReference getTypeRef() {
+      return typeRef;
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setCharacteristicUuid(UUID characteristicUuid) {
-      this.characteristicUuid = characteristicUuid;
+   public void setCharacteristicUuid(FxComponentReference characteristicRef) {
+      this.characteristicRef = characteristicRef;
    }
 
-   public void setRefinabilityUuid(UUID refinabilityUuid) {
-      this.refinabilityUuid = refinabilityUuid;
+   public void setRefinabilityRef(FxComponentReference refinabilityRef) {
+      this.refinabilityRef = refinabilityRef;
    }
 
    public void setRelGroup(int relGroup) {
       this.group = relGroup;
    }
 
-   public void setTypeUuid(UUID typeUuid) {
-      this.typeUuid = typeUuid;
+   public void setTypeUuid(FxComponentReference typeRef) {
+      this.typeRef = typeRef;
    }
 }

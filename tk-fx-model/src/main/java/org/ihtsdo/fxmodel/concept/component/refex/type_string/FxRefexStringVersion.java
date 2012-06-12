@@ -3,6 +3,8 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_string;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.type_string.RefexStringVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -25,8 +27,9 @@ public class FxRefexStringVersion extends FxVersion {
       super();
    }
 
-   public FxRefexStringVersion(RefexStringVersionBI another) throws IOException {
-      super(another);
+   public FxRefexStringVersion(TerminologySnapshotDI ss, RefexStringVersionBI another)
+           throws IOException, ContradictionException {
+      super(ss, another);
       this.string1 = another.getString1();
    }
 

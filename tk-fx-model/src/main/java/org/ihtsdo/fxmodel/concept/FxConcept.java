@@ -15,15 +15,17 @@ import org.ihtsdo.fxmodel.concept.component.refex.type_int.FxRefexIntChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.type_long.FxRefexLongChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.type_member.FxRefexMembershipChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.type_string.FxRefexStringChronicle;
-import org.ihtsdo.fxmodel.concept.component.refex.type_uuid.FxRefexUuidChronicle;
-import org.ihtsdo.fxmodel.concept.component.refex.type_uuid_float.FxRefexUuidFloatChronicle;
-import org.ihtsdo.fxmodel.concept.component.refex.type_uuid_int.FxRefexUuidIntMember;
-import org.ihtsdo.fxmodel.concept.component.refex.type_uuid_long.FxRefexUuidLongChronicle;
-import org.ihtsdo.fxmodel.concept.component.refex.type_uuid_string.FxRefexUuidStringChronicle;
-import org.ihtsdo.fxmodel.concept.component.refex.type_uuid_uuid.FxRefexUuidUuidChronicle;
-import org.ihtsdo.fxmodel.concept.component.refex.type_uuid_uuid_string.FxRefexUuidUuidStringChronicle;
-import org.ihtsdo.fxmodel.concept.component.refex.type_uuid_uuid_uuid.FxRefexUuidUuidUuidChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_float.FxRefexCompFloatChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_int.FxRefexCompIntChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_long.FxRefexCompLongChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_string.FxRefexCompStringChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp.FxRefexCompCompChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp_string.FxRefexCompCompStringChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp_comp.FxRefexCompCompCompChronicle;
 import org.ihtsdo.fxmodel.concept.component.relationship.FxRelationshipChronicle;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.description.DescriptionChronicleBI;
 import org.ihtsdo.tk.api.media.MediaChronicleBI;
@@ -70,27 +72,28 @@ public class FxConcept {
       super();
    }
 
-   public FxConcept(ConceptChronicleBI c) throws IOException {
-      conceptAttributes = new FxConceptAttributesChronicle(this, c.getConAttrs());
+   public FxConcept(TerminologySnapshotDI ss, ConceptChronicleBI c)
+           throws IOException, ContradictionException {
+      conceptAttributes = new FxConceptAttributesChronicle(ss, this, c.getConAttrs());
       primordialUuid    = conceptAttributes.primordialUuid;
       relationships     = FXCollections.observableArrayList(
          new ArrayList<FxRelationshipChronicle>(c.getRelsOutgoing().size()));
 
       for (RelationshipChronicleBI rel : c.getRelsOutgoing()) {
-         relationships.add(new FxRelationshipChronicle(this, rel));
+         relationships.add(new FxRelationshipChronicle(ss, this, rel));
       }
 
       descriptions =
          FXCollections.observableArrayList(new ArrayList<FxDescriptionChronicle>(c.getDescs().size()));
 
       for (DescriptionChronicleBI desc : c.getDescs()) {
-         descriptions.add(new FxDescriptionChronicle(this, desc));
+         descriptions.add(new FxDescriptionChronicle(ss, this, desc));
       }
 
       media = FXCollections.observableArrayList(new ArrayList<FxMediaChronicle>(c.getMedia().size()));
 
       for (MediaChronicleBI mediaChronicle : c.getMedia()) {
-         FxMediaChronicle tkMedia = new FxMediaChronicle(this, mediaChronicle);
+         FxMediaChronicle tkMedia = new FxMediaChronicle(ss, this, mediaChronicle);
 
          media.add(tkMedia);
       }
@@ -103,7 +106,7 @@ public class FxConcept {
                FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?>>(members.size()));
 
             for (RefexChronicleBI m : members) {
-               FxRefexChronicle<?> member = convertRefex(m);
+               FxRefexChronicle<?> member = convertRefex(ss, m);
 
                if (member != null) {
                   refsetMembers.add(member);
@@ -117,38 +120,40 @@ public class FxConcept {
 
    //~--- methods -------------------------------------------------------------
 
-   private FxRefexChronicle<?> convertRefex(RefexChronicleBI<?> m) throws IOException {
-      return convertRefex(this, m);
+   private FxRefexChronicle<?> convertRefex(TerminologySnapshotDI ss, RefexChronicleBI<?> m)
+           throws IOException, ContradictionException {
+      return convertRefex(ss, this, m);
    }
 
-   public static FxRefexChronicle<?> convertRefex(FxConcept concept, RefexChronicleBI<?> m)
-           throws IOException {
+   public static FxRefexChronicle<?> convertRefex(TerminologySnapshotDI ss, FxConcept concept,
+           RefexChronicleBI<?> m)
+           throws IOException, ContradictionException {
       if (m.getPrimordialVersion() instanceof RefexNidNidNidVersionBI) {
-         return new FxRefexUuidUuidUuidChronicle(concept, m);
+         return new FxRefexCompCompCompChronicle(ss, concept, m);
       } else if (m.getPrimordialVersion() instanceof RefexNidNidStringVersionBI) {
-         return new FxRefexUuidUuidStringChronicle(concept, m);
+         return new FxRefexCompCompStringChronicle(ss, concept, m);
       } else if (m.getPrimordialVersion() instanceof RefexNidNidVersionBI) {
-         return new FxRefexUuidUuidChronicle(concept, m);
+         return new FxRefexCompCompChronicle(ss, concept, m);
       } else if (m.getPrimordialVersion() instanceof RefexNidFloatVersionBI) {
-         return new FxRefexUuidFloatChronicle(concept, m);
+         return new FxRefexCompFloatChronicle(ss, concept, m);
       } else if (m.getPrimordialVersion() instanceof RefexNidIntVersionBI) {
-         return new FxRefexUuidIntMember(concept, m);
+         return new FxRefexCompIntChronicle(ss, concept, m);
       } else if (m.getPrimordialVersion() instanceof RefexNidLongVersionBI) {
-         return new FxRefexUuidLongChronicle(concept, m);
+         return new FxRefexCompLongChronicle(ss, concept, m);
       } else if (m.getPrimordialVersion() instanceof RefexNidStringVersionBI) {
-         return new FxRefexUuidStringChronicle(concept, m);
+         return new FxRefexCompStringChronicle(ss, concept, m);
       } else if (m.getPrimordialVersion() instanceof RefexNidVersionBI) {
-         return new FxRefexUuidChronicle(concept, m);
+         return new FxRefexCompChronicle(ss, concept, m);
       } else if (m.getPrimordialVersion() instanceof RefexIntVersionBI) {
-         return new FxRefexIntChronicle(concept, m);
+         return new FxRefexIntChronicle(ss, concept, m);
       } else if (m.getPrimordialVersion() instanceof RefexStringVersionBI) {
-         return new FxRefexStringChronicle(concept, m);
+         return new FxRefexStringChronicle(ss, concept, m);
       } else if (m.getPrimordialVersion() instanceof RefexLongVersionBI) {
-         return new FxRefexLongChronicle(concept, m);
+         return new FxRefexLongChronicle(ss, concept, m);
       } else if (m.getPrimordialVersion() instanceof RefexBooleanVersionBI) {
-         return new FxRefexBooleanChronicle(concept, m);
+         return new FxRefexBooleanChronicle(ss, concept, m);
       } else if (m.getPrimordialVersion() instanceof RefexMemberVersionBI) {
-         return new FxRefexMembershipChronicle(concept, m);
+         return new FxRefexMembershipChronicle(ss, concept, m);
       } else {
          throw new UnsupportedOperationException("Cannot handle: " + m);
       }

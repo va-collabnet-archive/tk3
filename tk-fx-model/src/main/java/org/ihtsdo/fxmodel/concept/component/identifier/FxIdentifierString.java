@@ -11,6 +11,8 @@ import java.io.IOException;
 
 
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 
 public class FxIdentifierString extends FxIdentifier {
    public static final long serialVersionUID = 1;
@@ -26,8 +28,8 @@ public class FxIdentifierString extends FxIdentifier {
       super();
    }
 
-   public FxIdentifierString(StringIdBI id) throws IOException {
-      super(id);
+   public FxIdentifierString(TerminologySnapshotDI ss, StringIdBI id) throws IOException, ContradictionException {
+      super(ss, id);
       denotation = id.getDenotation();
    }
 

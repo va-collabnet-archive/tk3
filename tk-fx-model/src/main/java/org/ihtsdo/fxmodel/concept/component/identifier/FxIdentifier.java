@@ -3,7 +3,8 @@ package org.ihtsdo.fxmodel.concept.component.identifier;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
-import org.ihtsdo.tk.Ts;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.id.IdBI;
 import org.ihtsdo.tk.api.id.LongIdBI;
 import org.ihtsdo.tk.api.id.StringIdBI;
@@ -14,21 +15,15 @@ import org.ihtsdo.tk.api.id.UuidIdBI;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import java.util.Arrays;
-import java.util.UUID;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.fxmodel.FxComponentReference;
 
-@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class FxIdentifier extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   @XmlAttribute
-   public UUID authorityUuid;
+   public FxComponentReference authorityRef;
 
    //~--- constructors --------------------------------------------------------
 
@@ -36,25 +31,26 @@ public abstract class FxIdentifier extends FxVersion {
       super();
    }
 
-   public FxIdentifier(IdBI id) throws IOException {
-      super(id);
-      this.authorityUuid = Ts.get().getComponent(id.getAuthorityNid()).getPrimUuid();
+   public FxIdentifier(TerminologySnapshotDI ss, IdBI id) throws IOException, ContradictionException {
+      super(ss, id);
+      this.authorityRef = new FxComponentReference(ss.getConceptVersion(id.getAuthorityNid()));
    }
 
    //~--- methods -------------------------------------------------------------
 
-   public static FxIdentifier convertId(IdBI id) throws IOException {
+   public static FxIdentifier convertId(TerminologySnapshotDI ss, IdBI id)
+           throws IOException, ContradictionException {
       Object denotation = id.getDenotation();
 
       switch (IDENTIFIER_PART_TYPES.getType(denotation.getClass())) {
       case LONG :
-         return new FxIdentifierLong((LongIdBI) id);
+         return new FxIdentifierLong(ss, (LongIdBI) id);
 
       case STRING :
-         return new FxIdentifierString((StringIdBI) id);
+         return new FxIdentifierString(ss, (StringIdBI) id);
 
       case UUID :
-         return new FxIdentifierUuid((UuidIdBI) id);
+         return new FxIdentifierUuid(ss, (UuidIdBI) id);
 
       default :
          throw new UnsupportedOperationException();
@@ -69,7 +65,7 @@ public abstract class FxIdentifier extends FxVersion {
       StringBuilder buff = new StringBuilder();
 
       buff.append(" authority:");
-      buff.append(informAboutUuid(this.authorityUuid));
+      buff.append(this.authorityRef);
       buff.append(" ");
       buff.append(super.toString());
 
@@ -80,8 +76,8 @@ public abstract class FxIdentifier extends FxVersion {
 
    //~--- get methods ---------------------------------------------------------
 
-   public UUID getAuthorityUuid() {
-      return authorityUuid;
+   public FxComponentReference getAuthorityRef() {
+      return authorityRef;
    }
 
    public abstract Object getDenotation();
@@ -90,8 +86,8 @@ public abstract class FxIdentifier extends FxVersion {
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setAuthorityUuid(UUID authorityUuid) {
-      this.authorityUuid = authorityUuid;
+   public void setAuthorityRef(FxComponentReference authorityRef) {
+      this.authorityRef = authorityRef;
    }
 
    public abstract void setDenotation(Object denotation);
