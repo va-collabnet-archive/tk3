@@ -80,7 +80,7 @@ public class FxRefexCompCompStringVersion extends FxRefexCompCompVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" str:");
-      buff.append("'").append(this.string1Property).append("' ");
+      buff.append("'").append(this.string1Property.get()).append("' ");
       buff.append(super.toString());
 
       return buff.toString();

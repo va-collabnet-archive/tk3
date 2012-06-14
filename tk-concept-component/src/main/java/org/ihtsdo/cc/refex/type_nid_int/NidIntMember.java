@@ -61,7 +61,7 @@ public class NidIntMember extends RefexMember<NidIntRevision, NidIntMember>
       intValue = refsetMember.getInt1();
 
       if (refsetMember.getRevisionList() != null) {
-         revisions = new RevisionSet<>(primordialSapNid);
+         revisions = new RevisionSet<>(primordialStampNid);
 
          for (TkRefexUuidIntRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new NidIntRevision(eVersion, this));

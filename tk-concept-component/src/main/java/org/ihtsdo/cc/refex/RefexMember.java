@@ -61,8 +61,8 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
         super(refsetMember, enclosingConceptNid);
         refsetNid = P.s.getNidForUuids(refsetMember.refexUuid);
         referencedComponentNid = P.s.getNidForUuids(refsetMember.getComponentUuid());
-        primordialSapNid = P.s.getSapNid(refsetMember);
-        assert primordialSapNid != Integer.MAX_VALUE;
+        primordialStampNid = P.s.getSapNid(refsetMember);
+        assert primordialStampNid != Integer.MAX_VALUE;
         assert referencedComponentNid != Integer.MAX_VALUE;
         assert refsetNid != Integer.MAX_VALUE;
     }
@@ -146,13 +146,13 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
 
         if (additionalVersionCount > 0) {
             if (revisions == null) {
-                revisions = new RevisionSet<>(primordialSapNid);
+                revisions = new RevisionSet<>(primordialStampNid);
             }
 
             for (int i = 0; i < additionalVersionCount; i++) {
                 R r = readMemberRevision(input);
 
-                if ((r.sapNid != -1) && (r.getTime() != Long.MIN_VALUE)) {
+                if ((r.stampNid != -1) && (r.getTime() != Long.MIN_VALUE)) {
                     revisions.add(r);
                 }
             }
@@ -242,7 +242,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
 
         if (revisions != null) {
             for (RefexRevision<R, C> p : revisions) {
-                if ((p.getStatusAtPositionNid() > maxReadOnlyStatusAtPositionNid)
+                if ((p.getStampNid() > maxReadOnlyStatusAtPositionNid)
                         && (p.getTime() != Long.MIN_VALUE)) {
                     additionalVersionsToWrite.add(p);
                 }

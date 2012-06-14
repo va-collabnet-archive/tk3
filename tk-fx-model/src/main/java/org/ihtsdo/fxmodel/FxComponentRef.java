@@ -13,13 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-
 package org.ihtsdo.fxmodel;
 
 //~--- non-JDK imports --------------------------------------------------------
-
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -46,160 +42,156 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement()
 public class FxComponentRef implements Externalizable {
-   public static final long serialVersionUID = 1;
 
-   //~--- fields --------------------------------------------------------------
+    public static final long serialVersionUID = 1;
+    //~--- fields --------------------------------------------------------------
+    private final SimpleObjectProperty<Integer> nidProperty = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<UUID> uuidProperty = new SimpleObjectProperty<>();
+    private final SimpleStringProperty textProperty = new SimpleStringProperty();
 
-   private final SimpleObjectProperty<Integer> nidProperty  = new SimpleObjectProperty<>();
-   private final SimpleObjectProperty<UUID>    uuidProperty = new SimpleObjectProperty<>();
-   private final SimpleStringProperty          textProperty = new SimpleStringProperty();
+    //~--- constructors --------------------------------------------------------
+    public FxComponentRef() {
+    }
 
-   //~--- constructors --------------------------------------------------------
+    public FxComponentRef(ConceptVersionBI concept) throws IOException, ContradictionException {
+        nidProperty.set(concept.getNid());
+        uuidProperty.set(concept.getPrimUuid());
+        textProperty.set(concept.getPreferredDescription().getText());
+    }
 
-   public FxComponentRef() {}
+    public FxComponentRef(int nid) throws IOException {
+        nidProperty.set(nid);
+    }
 
-   public FxComponentRef(ConceptVersionBI concept) throws IOException, ContradictionException {
-      nidProperty.set(concept.getNid());
-      uuidProperty.set(concept.getPrimUuid());
-      textProperty.set(concept.getPreferredDescription().getText());
-   }
+    public FxComponentRef(UUID uuid) {
+        uuidProperty.set(uuid);
+    }
 
-   public FxComponentRef(int nid) throws IOException {
-      nidProperty.set(nid);
-   }
+    public FxComponentRef(TerminologySnapshotDI ss, int nid) throws IOException, ContradictionException {
+        nidProperty.set(nid);
+        ComponentVersionBI component = ss.getComponentVersion(nid);
+        if (component != null) {
+            uuidProperty.set(component.getPrimUuid());
 
-   public FxComponentRef(UUID uuid) {
-      uuidProperty.set(uuid);
-   }
+            if (component instanceof ConceptVersionBI) {
+                textProperty.set(((ConceptVersionBI) component).getPreferredDescription().getText());
+            } else if (component instanceof DescriptionVersionBI) {
+                textProperty.set(((DescriptionVersionBI) component).getText());
+            } else {
+                textProperty.set(component.getClass().getSimpleName());
+            }
+        } else {
+            textProperty.setValue("null component");
+        }
+    }
 
-   public FxComponentRef(TerminologySnapshotDI ss, int nid) throws IOException, ContradictionException {
-      nidProperty.set(nid);
-      ComponentVersionBI component = ss.getComponentVersion(nid);
-      if (component != null) {
-         uuidProperty.set(component.getPrimUuid());
+    public FxComponentRef(UUID primordialUuid, Integer nid, String text) {
+        nidProperty.set(nid);
+        uuidProperty.set(primordialUuid);
+        textProperty.set(text);
+    }
 
-         if (component instanceof ConceptVersionBI) {
-            textProperty.set(((ConceptVersionBI) component).getPreferredDescription().getText());
-         } else if (component instanceof DescriptionVersionBI) {
-            textProperty.set(((DescriptionVersionBI) component).getText());
-         } else {
-            textProperty.set(component.getClass().getSimpleName());
-         }
-      } else {
-          textProperty.setValue("null component");
-      }
-   }
+    //~--- methods -------------------------------------------------------------
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof FxComponentRef) {
+            FxComponentRef another = (FxComponentRef) obj;
 
-   public FxComponentRef(UUID primordialUuid, Integer nid, String text) {
-      nidProperty.set(nid);
-      uuidProperty.set(primordialUuid);
-      textProperty.set(text);
-   }
+            return nidProperty.equals(another.nidProperty) || uuidProperty.equals(another.uuidProperty);
+        }
 
-   //~--- methods -------------------------------------------------------------
+        return false;
+    }
 
-   @Override
-   public boolean equals(Object obj) {
-      if (obj instanceof FxComponentRef) {
-         FxComponentRef another = (FxComponentRef) obj;
+    @Override
+    public int hashCode() {
+        throw new UnsupportedOperationException();
+    }
 
-         return nidProperty.equals(another.nidProperty) || uuidProperty.equals(another.uuidProperty);
-      }
+    public SimpleObjectProperty<Integer> nidProperty() {
+        return nidProperty;
+    }
 
-      return false;
-   }
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        textProperty.set(in.readUTF());
+        uuidProperty.set((UUID) in.readObject());
+        nidProperty.set((Integer) in.readObject());
+    }
 
-   @Override
-   public int hashCode() {
-      throw new UnsupportedOperationException();
-   }
+    public SimpleStringProperty textProperty() {
+        return textProperty;
+    }
 
-   public SimpleObjectProperty<Integer> nidProperty() {
-      return nidProperty;
-   }
+    @Override
+    public String toString() {
+        return "FxId{text=" + textProperty.get() + ", nid=" + nidProperty.get() + ", uuid=" + uuidProperty.get() + '}';
+    }
 
-   @Override
-   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-      textProperty.set(in.readUTF());
-      uuidProperty.set((UUID) in.readObject());
-      nidProperty.set((Integer) in.readObject());
-   }
+    public SimpleObjectProperty<UUID> uuidProperty() {
+        return uuidProperty;
+    }
 
-   public SimpleStringProperty textProperty() {
-      return textProperty;
-   }
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeUTF(textProperty.get());
+        out.writeObject(uuidProperty.get());
+        out.writeObject(nidProperty.get());
+    }
 
-   @Override
-   public String toString() {
-      return "FxId{text=" + textProperty + ", nid=" + nidProperty + ", uuid=" + uuidProperty + '}';
-   }
+    //~--- get methods ---------------------------------------------------------
+    /**
+     * Get the value of nid
+     *
+     * @return the value of nid
+     */
+    public Integer getNid() {
+        return nidProperty.get();
+    }
 
-   public SimpleObjectProperty<UUID> uuidProperty() {
-      return uuidProperty;
-   }
+    /**
+     * Get the value of text
+     *
+     * @return the value of text
+     */
+    public String getText() {
+        return textProperty.get();
+    }
 
-   @Override
-   public void writeExternal(ObjectOutput out) throws IOException {
-      out.writeUTF(textProperty.get());
-      out.writeObject(uuidProperty.get());
-      out.writeObject(nidProperty.get());
-   }
+    /**
+     * Get the value of uuid
+     *
+     * @return the value of uuid
+     */
+    public UUID getUuid() {
+        return uuidProperty.get();
+    }
 
-   //~--- get methods ---------------------------------------------------------
+    //~--- set methods ---------------------------------------------------------
+    /**
+     * Set the value of nid
+     *
+     * @param nid new value of nid
+     */
+    public void setNid(Integer nid) {
+        nidProperty.set(nid);
+    }
 
-   /**
-    * Get the value of nid
-    *
-    * @return the value of nid
-    */
-   public Integer getNid() {
-      return nidProperty.get();
-   }
+    /**
+     * Set the value of text
+     *
+     * @param text new value of text
+     */
+    public void setText(String text) {
+        textProperty.set(text);
+    }
 
-   /**
-    * Get the value of text
-    *
-    * @return the value of text
-    */
-   public String getText() {
-      return textProperty.get();
-   }
-
-   /**
-    * Get the value of uuid
-    *
-    * @return the value of uuid
-    */
-   public UUID getUuid() {
-      return uuidProperty.get();
-   }
-
-   //~--- set methods ---------------------------------------------------------
-
-   /**
-    * Set the value of nid
-    *
-    * @param nid new value of nid
-    */
-   public void setNid(Integer nid) {
-      nidProperty.set(nid);
-   }
-
-   /**
-    * Set the value of text
-    *
-    * @param text new value of text
-    */
-   public void setText(String text) {
-      textProperty.set(text);
-   }
-
-   /**
-    * Set the value of uuid
-    *
-    * @param uuid new value of uuid
-    */
-   public void setUuid(UUID uuid) {
-      uuidProperty.set(uuid);
-   }
+    /**
+     * Set the value of uuid
+     *
+     * @param uuid new value of uuid
+     */
+    public void setUuid(UUID uuid) {
+        uuidProperty.set(uuid);
+    }
 }

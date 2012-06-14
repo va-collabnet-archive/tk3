@@ -25,8 +25,8 @@ public class FxDescriptionVersion extends FxVersion {
 
    protected SimpleBooleanProperty initialCaseSignificantProperty = new SimpleBooleanProperty(this,
                                                                        "initialCaseSignificant");
-   protected SimpleStringProperty langProperty = new SimpleStringProperty();
-   protected SimpleStringProperty textProperty = new SimpleStringProperty();
+   protected SimpleStringProperty langProperty = new SimpleStringProperty(this, "lang");
+   protected SimpleStringProperty textProperty = new SimpleStringProperty(this, "text");
    protected FxComponentRef       type;
 
    //~--- constructors --------------------------------------------------------
@@ -108,11 +108,11 @@ public class FxDescriptionVersion extends FxVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" ics:");
-      buff.append(this.initialCaseSignificantProperty);
+      buff.append(this.initialCaseSignificantProperty.get());
       buff.append(" lang:");
-      buff.append("'").append(this.langProperty).append("'");
+      buff.append("'").append(this.langProperty.get()).append("'");
       buff.append(" text:");
-      buff.append("'").append(this.textProperty).append("'");
+      buff.append("'").append(this.textProperty.get()).append("'");
       buff.append(" type:");
       buff.append(type.getText());
       buff.append(" ");

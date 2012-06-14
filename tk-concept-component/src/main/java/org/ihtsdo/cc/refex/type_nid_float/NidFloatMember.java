@@ -61,7 +61,7 @@ public class NidFloatMember extends RefexMember<NidFloatRevision, NidFloatMember
       floatValue = refsetMember.getFloatValue();
 
       if (refsetMember.getRevisionList() != null) {
-         revisions = new RevisionSet<>(primordialSapNid);
+         revisions = new RevisionSet<>(primordialStampNid);
 
          for (TkRefexUuidFloatRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new NidFloatRevision(eVersion, this));

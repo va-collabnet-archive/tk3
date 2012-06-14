@@ -2,6 +2,8 @@ package org.ihtsdo.fxmodel.concept.component.identifier;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javafx.beans.property.SimpleObjectProperty;
+
 import org.ihtsdo.fxmodel.FxComponentRef;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
@@ -9,12 +11,10 @@ import org.ihtsdo.tk.api.id.UuidIdBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.UUID;
 
-import javax.xml.bind.annotation.XmlAttribute;
 
 public class FxIdentifierUuid extends FxIdentifier {
    public static final long serialVersionUID = 1;
@@ -22,7 +22,7 @@ public class FxIdentifierUuid extends FxIdentifier {
 
    //~--- fields --------------------------------------------------------------
 
-   protected UUID denotation;
+   protected SimpleObjectProperty<UUID> denotationProperty = new SimpleObjectProperty<>(this, "denotation");
 
    //~--- constructors --------------------------------------------------------
 
@@ -33,16 +33,20 @@ public class FxIdentifierUuid extends FxIdentifier {
    public FxIdentifierUuid(TerminologySnapshotDI ss, UUID denotation)
            throws IOException, ContradictionException {
       super();
-      this.denotation   = denotation;
+      this.denotationProperty.set(denotation);
       this.authorityRef = new FxComponentRef(ss.getConceptVersion(generatedUuid));
    }
 
    public FxIdentifierUuid(TerminologySnapshotDI ss, UuidIdBI id) throws IOException, ContradictionException {
       super(ss, id);
-      denotation = id.getDenotation();
+      denotationProperty.set(id.getDenotation());
    }
 
    //~--- methods -------------------------------------------------------------
+
+   public SimpleObjectProperty<UUID> denotationProperty() {
+      return denotationProperty;
+   }
 
    /**
     * Returns a string representation of the object.
@@ -53,24 +57,18 @@ public class FxIdentifierUuid extends FxIdentifier {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" denotation:");
-      buff.append(this.denotation);
+      buff.append(this.denotationProperty.get());
       buff.append(" ");
       buff.append(super.toString());
 
       return buff.toString();
    }
 
-   @Override
-   public void writeDenotation(DataOutput out) throws IOException {
-      out.writeLong(denotation.getMostSignificantBits());
-      out.writeLong(denotation.getLeastSignificantBits());
-   }
-
    //~--- get methods ---------------------------------------------------------
 
    @Override
    public UUID getDenotation() {
-      return denotation;
+      return denotationProperty.get();
    }
 
    @Override
@@ -82,6 +80,6 @@ public class FxIdentifierUuid extends FxIdentifier {
 
    @Override
    public void setDenotation(Object denotation) {
-      this.denotation = (UUID) denotation;
+      this.denotationProperty.set((UUID) denotation);
    }
 }

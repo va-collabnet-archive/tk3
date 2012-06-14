@@ -122,10 +122,10 @@ public class BooleanRevisionTest {
         member.revisions = null;
          
         member.nid = 1;
-        member.primordialSapNid = 1; 
+        member.primordialStampNid = 1; 
 
         obj.primordialComponent = member; 
-        obj.sapNid = 1; 
+        obj.stampNid = 1; 
         
         return obj; 
     }
@@ -139,10 +139,10 @@ public class BooleanRevisionTest {
         member.revisions = null;
          
         member.nid = 2;
-        member.primordialSapNid = 2; 
+        member.primordialStampNid = 2; 
  
         obj.primordialComponent = member; 
-        obj.sapNid = 2; 
+        obj.stampNid = 2; 
         
         return obj; 
         

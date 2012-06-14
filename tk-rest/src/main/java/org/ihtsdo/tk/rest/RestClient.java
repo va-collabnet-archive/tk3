@@ -16,6 +16,7 @@
 package org.ihtsdo.tk.rest;
 
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
@@ -37,6 +38,7 @@ import org.ihtsdo.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.cc.concept.NidDataInMemory;
 import org.ihtsdo.cc.termstore.TerminologySnapshot;
 import org.ihtsdo.cc.termstore.Termstore;
+import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
@@ -61,16 +63,20 @@ public class RestClient extends Termstore {
     public static final MediaType bdbMediaType = new MediaType("application", "bdb");
     private static String serverUrlStr = defaultLocalHostSvr;
     private static Client c;
-    private static RestClient singleton;
+    private static RestClient restClientSingleton;
+
+    public static RestClient getRestClient() {
+        return restClientSingleton;
+    }
 
     public static void setup(String serverUrlStr) {
         RestClient.serverUrlStr = serverUrlStr;
         ClientConfig cc = new DefaultClientConfig();
         cc.getClasses().add(ViewCoordinateSerializationProvider.class);
         c = Client.create(cc);
-        singleton = new RestClient();
-        P.s = singleton;
-        Ts.set(singleton);
+        restClientSingleton = new RestClient();
+        P.s = restClientSingleton;
+        Ts.set(restClientSingleton);
     }
 
     @Override
@@ -308,6 +314,13 @@ public class RestClient extends Termstore {
     @Override
     public ViewCoordinate getMetadataVC() throws IOException {
         return makeMetaVc();
+    }
+    
+    public FxConcept getFxConcept(UUID conceptUUID, UUID vcUuid) {
+        WebResource r = c.resource(serverUrlStr + "fx-concept/" + 
+                conceptUUID + "/" + vcUuid);
+        ClientResponse response = r.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
+        return response.getEntity(FxConcept.class);
     }
 
     @Override

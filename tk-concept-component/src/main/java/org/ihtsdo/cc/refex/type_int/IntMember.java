@@ -58,7 +58,7 @@ public class IntMember extends RefexMember<IntRevision, IntMember>
       int1 = refsetMember.getIntValue();
 
       if (refsetMember.getRevisionList() != null) {
-         revisions = new RevisionSet<>(primordialSapNid);
+         revisions = new RevisionSet<>(primordialStampNid);
 
          for (TkRefexIntRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new IntRevision(eVersion, this));

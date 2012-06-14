@@ -63,7 +63,7 @@ public class RelGroupVersion implements RelGroupVersionBI {
     }
 
     @Override
-    public boolean sapIsInRange(int min, int max) {
+    public boolean stampIsInRange(int min, int max) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -192,8 +192,8 @@ public class RelGroupVersion implements RelGroupVersionBI {
     }
 
     @Override
-    public Set<Integer> getAllSapNids() throws IOException {
-        return rg.getAllSapNids();
+    public Set<Integer> getAllStampNids() throws IOException {
+        return rg.getAllStampNids();
     }
 
     @Override
@@ -361,7 +361,7 @@ public class RelGroupVersion implements RelGroupVersionBI {
     }
 
     @Override
-    public int getSapNid() {
+    public int getStampNid() {
         throw new UnsupportedOperationException();
     }
 

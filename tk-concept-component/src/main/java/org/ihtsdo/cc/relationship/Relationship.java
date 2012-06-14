@@ -57,10 +57,10 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
         group = eRel.getRelGroup();
         setRefinabilityNid(P.s.getNidForUuids(eRel.getRefinabilityUuid()));
         setTypeNid(P.s.getNidForUuids(eRel.getTypeUuid()));
-        primordialSapNid = P.s.getSapNid(eRel);
+        primordialStampNid = P.s.getSapNid(eRel);
 
         if (eRel.getRevisionList() != null) {
-            revisions = new RevisionSet<>(primordialSapNid);
+            revisions = new RevisionSet<>(primordialStampNid);
 
             for (TkRelationshipRevision erv : eRel.getRevisionList()) {
                 revisions.add(new RelationshipRevision(erv, this));
@@ -178,7 +178,7 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
         int additionalVersionCount = input.readShort();
 
         if (additionalVersionCount > 0) {
-            revisions = new RevisionSet<>(primordialSapNid);
+            revisions = new RevisionSet<>(primordialStampNid);
 
             for (int i = 0; i < additionalVersionCount; i++) {
                 revisions.add(new RelationshipRevision(input, this));
@@ -284,14 +284,14 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
     }
 
     @Override
-    public void writeToBdb(TupleOutput output, int maxReadOnlyStatusAtPositionNid) {
+    public void writeToBdb(TupleOutput output, int maxReadOnlyStampNid) {
 
         //
         List<RelationshipRevision> partsToWrite = new ArrayList<>();
 
         if (revisions != null) {
             for (RelationshipRevision p : revisions) {
-                if ((p.getStatusAtPositionNid() > maxReadOnlyStatusAtPositionNid)
+                if ((p.getStampNid() > maxReadOnlyStampNid)
                         && (p.getTime() != Long.MIN_VALUE)) {
                     partsToWrite.add(p);
                 }

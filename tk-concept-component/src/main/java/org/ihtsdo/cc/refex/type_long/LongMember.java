@@ -58,7 +58,7 @@ public class LongMember extends RefexMember<LongRevision, LongMember>
       longValue = refsetMember.getLongValue();
 
       if (refsetMember.getRevisionList() != null) {
-         revisions = new RevisionSet<>(primordialSapNid);
+         revisions = new RevisionSet<>(primordialStampNid);
 
          for (TkRefexLongRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new LongRevision(eVersion, this));

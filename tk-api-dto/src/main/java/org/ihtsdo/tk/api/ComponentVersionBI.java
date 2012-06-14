@@ -13,7 +13,7 @@ import org.ihtsdo.tk.api.blueprint.CreateOrAmendBlueprint;
 import org.ihtsdo.tk.api.blueprint.InvalidCAB;
 
 public interface ComponentVersionBI extends ComponentBI, VersionPointBI {
-   boolean sapIsInRange(int min, int max);
+   boolean stampIsInRange(int min, int max);
 
    String toUserString(TerminologySnapshotDI snapshot) throws IOException, ContradictionException;
 
@@ -29,7 +29,7 @@ public interface ComponentVersionBI extends ComponentBI, VersionPointBI {
 
    PositionBI getPosition() throws IOException;
 
-   int getSapNid();
+   int getStampNid();
 
    int getStatusNid();
 

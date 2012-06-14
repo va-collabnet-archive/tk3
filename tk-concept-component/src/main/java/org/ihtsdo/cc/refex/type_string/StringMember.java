@@ -58,7 +58,7 @@ public class StringMember extends RefexMember<StringRevision, StringMember>
       stringValue = refsetMember.getString1();
 
       if (refsetMember.getRevisionList() != null) {
-         revisions = new RevisionSet<>(primordialSapNid);
+         revisions = new RevisionSet<>(primordialStampNid);
 
          for (TkRefexStringRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new StringRevision(eVersion, this));

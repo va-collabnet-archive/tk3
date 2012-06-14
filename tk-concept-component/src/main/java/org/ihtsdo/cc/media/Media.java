@@ -59,10 +59,10 @@ public class Media extends ConceptComponent<MediaRevision, Media>
         format = eMedia.getFormat();
         textDescription = eMedia.getTextDescription();
         typeNid = P.s.getNidForUuids(eMedia.getTypeUuid());
-        primordialSapNid = P.s.getSapNid(eMedia);
+        primordialStampNid = P.s.getSapNid(eMedia);
 
         if (eMedia.getRevisionList() != null) {
-            revisions = new RevisionSet<>(primordialSapNid);
+            revisions = new RevisionSet<>(primordialStampNid);
 
             for (TkMediaRevision eiv : eMedia.getRevisionList()) {
                 revisions.add(new MediaRevision(eiv, this));
@@ -245,7 +245,7 @@ public class Media extends ConceptComponent<MediaRevision, Media>
 
         if (revisions != null) {
             for (MediaRevision p : revisions) {
-                if ((p.getStatusAtPositionNid() > maxReadOnlyStatusAtPositionNid)
+                if ((p.getStampNid() > maxReadOnlyStatusAtPositionNid)
                         && (p.getTime() != Long.MIN_VALUE)) {
                     partsToWrite.add(p);
                 }

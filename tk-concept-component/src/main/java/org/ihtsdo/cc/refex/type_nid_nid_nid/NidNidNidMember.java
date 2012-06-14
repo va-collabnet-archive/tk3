@@ -62,7 +62,7 @@ public class NidNidNidMember extends RefexMember<NidNidNidRevision, NidNidNidMem
         c3Nid = P.s.getNidForUuids(refsetMember.getUuid3());
 
         if (refsetMember.getRevisionList() != null) {
-            revisions = new RevisionSet<>(primordialSapNid);
+            revisions = new RevisionSet<>(primordialStampNid);
 
             for (TkRefexUuidUuidUuidRevision eVersion : refsetMember.getRevisionList()) {
                 revisions.add(new NidNidNidRevision(eVersion, this));

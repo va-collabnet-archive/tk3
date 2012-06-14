@@ -424,7 +424,7 @@ public class BdbCommitManager {
 
                     for (ConceptAttributesRevision r : toRemove) {
                         a.removeRevision(r);
-                        r.sapNid = -1;
+                        r.stampNid = -1;
                     }
                 }
             }
@@ -437,7 +437,7 @@ public class BdbCommitManager {
 
             addUncommittedNoChecks(c);
         } else {
-            a.primordialSapNid = -1;
+            a.primordialStampNid = -1;
 
             return true;
         }
@@ -470,7 +470,7 @@ public class BdbCommitManager {
 
                     for (DescriptionRevision tr : toRemove) {
                         d.removeRevision(tr);
-                        tr.sapNid = -1;
+                        tr.stampNid = -1;
                     }
                 }
             }
@@ -479,7 +479,7 @@ public class BdbCommitManager {
             // have to forget "all" references to component...
             c.getDescriptions().remove(d);
             c.getData().getDescNids().remove(d.getNid());
-            d.primordialSapNid = -1;
+            d.primordialStampNid = -1;
         }
 
         c.modified();
@@ -518,7 +518,7 @@ public class BdbCommitManager {
 
                     for (RefexRevision tr : toRemove) {
                         m.removeRevision(tr);
-                        tr.sapNid = -1;
+                        tr.stampNid = -1;
                     }
                 }
             }
@@ -580,7 +580,7 @@ public class BdbCommitManager {
             // have to forget "all" references to component...
             c.getRelsOutgoing().remove((Relationship) rel);
             c.getData().getSrcRelNids().remove(rel.getNid());
-            r.primordialSapNid = -1;
+            r.primordialStampNid = -1;
         }
 
         c.modified();

@@ -47,7 +47,7 @@ public class BooleanMember extends RefexMember<BooleanRevision, BooleanMember>
         booleanValue = refsetMember.getBooleanValue();
 
         if (refsetMember.getRevisionList() != null) {
-            revisions = new RevisionSet(primordialSapNid);
+            revisions = new RevisionSet(primordialStampNid);
 
             for (TkRefexBooleanRevision eVersion : refsetMember.getRevisionList()) {
                 revisions.add(new BooleanRevision(eVersion, this));

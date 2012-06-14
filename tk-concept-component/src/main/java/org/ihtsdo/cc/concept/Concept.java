@@ -920,28 +920,28 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     @Override
-    public Set<Integer> getAllSapNids() throws IOException {
+    public Set<Integer> getAllStampNids() throws IOException {
         Set<Integer> sapNids = new HashSet<>();
 
         if (getConceptAttributes() != null) {
-            sapNids.addAll(getConceptAttributes().getComponentSapNids());
+            sapNids.addAll(getConceptAttributes().getComponentStampNids());
         }
 
         if (getDescriptions() != null) {
             for (Description d : getDescriptions()) {
-                sapNids.addAll(d.getComponentSapNids());
+                sapNids.addAll(d.getComponentStampNids());
             }
         }
 
         if (getRelsOutgoing() != null) {
             for (Relationship r : getNativeSourceRels()) {
-                sapNids.addAll(r.getComponentSapNids());
+                sapNids.addAll(r.getComponentStampNids());
             }
         }
 
         if (getImages() != null) {
             for (Media i : getImages()) {
-                sapNids.addAll(i.getComponentSapNids());
+                sapNids.addAll(i.getComponentStampNids());
             }
         }
 

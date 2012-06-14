@@ -92,7 +92,7 @@ public class FxMediaVersion extends FxVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" desc:");
-      buff.append("'").append(this.textDescriptionProperty).append("'");
+      buff.append("'").append(this.textDescriptionProperty.get()).append("'");
       buff.append(" type:");
       buff.append(typeRef.getText());
       buff.append(" ");

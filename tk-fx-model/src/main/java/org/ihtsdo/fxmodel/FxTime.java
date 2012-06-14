@@ -13,55 +13,83 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
+
 package org.ihtsdo.fxmodel;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
+//~--- non-JDK imports --------------------------------------------------------
+
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
+
 import org.ihtsdo.helper.time.TimeHelper;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.Serializable;
+
+import java.text.SimpleDateFormat;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author kec
  */
 public class FxTime implements Serializable {
-   public static final long   serialVersionUID = 1;
+   public static final long serialVersionUID = 1;
 
-   private final SimpleLongProperty timeProperty = new SimpleLongProperty(this, "timeProperty", Long.MIN_VALUE);
-   private SimpleObjectProperty<ThreadLocal<SimpleDateFormat>> formatterProperty = 
-           new SimpleObjectProperty<>(this, "formatterProperty", TimeHelper.localDateFormat);
-   
+   //~--- fields --------------------------------------------------------------
+
+   private final SimpleLongProperty timeProperty = new SimpleLongProperty(this, "timeProperty",
+                                                      Long.MIN_VALUE);
+   private SimpleObjectProperty<ThreadLocal<SimpleDateFormat>> formatterProperty =
+      new SimpleObjectProperty<>(this, "formatterProperty", TimeHelper.localDateFormat);
    private final StringBinding timeTextBinding = new StringBinding() {
+      {
+         super.bind(timeProperty, formatterProperty);
+      }
+      @Override
+      protected String computeValue() {
+         return TimeHelper.formatDate(timeProperty.get(), formatterProperty.get());
+      }
+   };
 
-       {
-           super.bind(timeProperty, formatterProperty);
-       }
-        @Override
-        protected String computeValue() {
-            return TimeHelper.formatDate(timeProperty.get(), formatterProperty.get());
-        }
-    };
-   
-   public long getTime() {
-       return timeProperty.get();
-   }
-   
-   public void setTime(long time) {
-       timeProperty.set(time);
-   }
-   
+    public FxTime() {
+    }
+    public FxTime(long time) {
+        timeProperty.set(time);
+    }
+
+   //~--- methods -------------------------------------------------------------
+
    public SimpleLongProperty timeProperty() {
-       return timeProperty();
+      return timeProperty();
    }
-   
-   public String getTimeText() {
-       return timeTextBinding.get();
-   }
-   
+
    public StringBinding timeTextBinding() {
-       return timeTextBinding;
+      return timeTextBinding;
    }
-   
+
+   @Override
+   public String toString() {
+      return timeTextBinding.get() + " ("+ timeProperty.get() + ')';
+   }
+
+   //~--- get methods ---------------------------------------------------------
+
+   public long getTime() {
+      return timeProperty.get();
+   }
+
+   public String getTimeText() {
+      return timeTextBinding.get();
+   }
+
+   //~--- set methods ---------------------------------------------------------
+
+   public void setTime(long time) {
+      timeProperty.set(time);
+   }
 }

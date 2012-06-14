@@ -13,7 +13,6 @@ import org.ihtsdo.tk.api.refex.type_long.RefexLongVersionBI;
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
@@ -61,7 +60,7 @@ public class FxRefexLongVersion extends FxVersion {
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
          // Compare long1Property
-         if (this.long1Property != another.long1Property) {
+         if (this.long1Property.get() != another.long1Property.get()) {
             return false;
          }
 
@@ -85,7 +84,7 @@ public class FxRefexLongVersion extends FxVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" long1: ");
-      buff.append(this.long1Property);
+      buff.append(this.long1Property.get());
       buff.append(" ");
       buff.append(super.toString());
 

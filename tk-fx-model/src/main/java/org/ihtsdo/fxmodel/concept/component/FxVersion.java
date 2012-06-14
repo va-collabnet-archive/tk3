@@ -9,6 +9,8 @@ import org.ihtsdo.fxmodel.FxTime;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentBI;
 import org.ihtsdo.tk.api.ComponentVersionBI;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.id.IdBI;
 
@@ -20,8 +22,6 @@ import java.io.Serializable;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.TerminologySnapshotDI;
 
 public abstract class FxVersion implements Serializable {
    private static final long serialVersionUID    = 1;
@@ -29,15 +29,15 @@ public abstract class FxVersion implements Serializable {
 
    //~--- fields --------------------------------------------------------------
 
-   public final SimpleObjectProperty<FxComponentRef> statusReferenceProperty =
-      new SimpleObjectProperty<>(this, "status", null);
-   public final SimpleObjectProperty<FxComponentRef> pathReferenceProperty =
-      new SimpleObjectProperty<>(this, "path", null);
-   public final SimpleObjectProperty<FxComponentRef> moduleReferenceProperty =
-      new SimpleObjectProperty<>(this, "module", null);
-   public final FxTime                                     fxTime                  = new FxTime();
-   public final SimpleObjectProperty<FxComponentRef> authorReferenceProperty =
-      new SimpleObjectProperty<>(this, "author", null);
+   private final SimpleObjectProperty<FxComponentRef> statusReferenceProperty =
+      new SimpleObjectProperty<>(this, "status");
+   private final SimpleObjectProperty<FxComponentRef> pathReferenceProperty =
+      new SimpleObjectProperty<>(this, "path");
+   private final SimpleObjectProperty<FxComponentRef> moduleReferenceProperty =
+      new SimpleObjectProperty<>(this, "module");
+   private final SimpleObjectProperty<FxTime>         fxTimeProperty          = new SimpleObjectProperty<>(this, "time");
+   private final SimpleObjectProperty<FxComponentRef> authorReferenceProperty =
+      new SimpleObjectProperty<>(this, "author");
 
    //~--- constructors --------------------------------------------------------
 
@@ -45,28 +45,33 @@ public abstract class FxVersion implements Serializable {
       super();
    }
 
-   public FxVersion(TerminologySnapshotDI ss, IdBI id) throws IOException, ContradictionException {
-      super();
-      statusReferenceProperty.set(new FxComponentRef(ss.getConceptVersion(id.getStatusNid())));
-      fxTime.setTime(id.getTime());
-      authorReferenceProperty.set(new FxComponentRef(ss.getConceptVersion(id.getAuthorNid())));
-      moduleReferenceProperty.set(new FxComponentRef(ss.getConceptVersion(id.getPathNid())));
-      pathReferenceProperty.set(new FxComponentRef(ss.getConceptVersion(id.getModuleNid())));
-   }
-
-   public FxVersion(TerminologySnapshotDI ss, ComponentVersionBI another) throws IOException, ContradictionException {
+   public FxVersion(TerminologySnapshotDI ss, ComponentVersionBI another)
+           throws IOException, ContradictionException {
       super();
       statusReferenceProperty.set(new FxComponentRef(ss.getConceptForNid(another.getStatusNid())));
-      fxTime.setTime(another.getTime());
+      fxTimeProperty.set(new FxTime(another.getTime()));
       authorReferenceProperty.set(new FxComponentRef(ss.getConceptForNid(another.getAuthorNid())));
       moduleReferenceProperty.set(new FxComponentRef(ss.getConceptForNid(another.getModuleNid())));
       pathReferenceProperty.set(new FxComponentRef(ss.getConceptForNid(another.getPathNid())));
+   }
+
+   public FxVersion(TerminologySnapshotDI ss, IdBI id) throws IOException, ContradictionException {
+      super();
+      statusReferenceProperty.set(new FxComponentRef(ss.getConceptVersion(id.getStatusNid())));
+      fxTimeProperty.set(new FxTime(id.getTime()));
+      authorReferenceProperty.set(new FxComponentRef(ss.getConceptVersion(id.getAuthorNid())));
+      moduleReferenceProperty.set(new FxComponentRef(ss.getConceptVersion(id.getPathNid())));
+      pathReferenceProperty.set(new FxComponentRef(ss.getConceptVersion(id.getModuleNid())));
    }
 
    //~--- methods -------------------------------------------------------------
 
    public SimpleObjectProperty<FxComponentRef> authorReferenceProperty() {
       return authorReferenceProperty;
+   }
+
+   public SimpleObjectProperty<FxTime> fxTimeProperty() {
+      return fxTimeProperty;
    }
 
    public static CharSequence informAboutUuid(UUID uuid) {
@@ -134,17 +139,15 @@ public abstract class FxVersion implements Serializable {
       StringBuilder buff = new StringBuilder();
 
       buff.append(" s:");
-      buff.append(statusReferenceProperty);
+      buff.append(statusReferenceProperty.get());
       buff.append(" t: ");
-      buff.append(fxTime.getTimeText());
-      buff.append(" ");
-      buff.append(fxTime.getTime());
+      buff.append(fxTimeProperty.get());
       buff.append(" a:");
-      buff.append(authorReferenceProperty);
+      buff.append(authorReferenceProperty.get());
       buff.append(" m:");
-      buff.append(moduleReferenceProperty);
+      buff.append(moduleReferenceProperty.get());
       buff.append(" p:");
-      buff.append(pathReferenceProperty);
+      buff.append(pathReferenceProperty.get());
 
       return buff.toString();
    }
@@ -156,7 +159,7 @@ public abstract class FxVersion implements Serializable {
    }
 
    public FxTime getFxTime() {
-      return fxTime;
+      return fxTimeProperty.get();
    }
 
    public FxComponentRef getModuleReference() {
@@ -181,19 +184,14 @@ public abstract class FxVersion implements Serializable {
       return statusReferenceProperty.get();
    }
 
-   /*
-    * (non-Javadoc)
-    *
-    * @see org.ihtsdo.etypes.I_VersionExternal#getTime()
-    */
-   public long getTime() {
-      return fxTime.getTime();
-   }
-
    //~--- set methods ---------------------------------------------------------
 
    public void setAuthorReference(FxComponentRef authorReference) {
       this.authorReferenceProperty.set(authorReference);
+   }
+
+   public void setFxTime(FxTime fxTime) {
+      fxTimeProperty.set(fxTime);
    }
 
    public void setModuleReference(FxComponentRef moduleReference) {
@@ -206,9 +204,5 @@ public abstract class FxVersion implements Serializable {
 
    public void setStatusReference(FxComponentRef statusReference) {
       this.statusReferenceProperty.set(statusReference);
-   }
-
-   public void setTime(long time) {
-      fxTime.setTime(time);
    }
 }

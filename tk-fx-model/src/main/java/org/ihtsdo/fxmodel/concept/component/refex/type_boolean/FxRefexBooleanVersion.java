@@ -60,7 +60,7 @@ public class FxRefexBooleanVersion extends FxVersion {
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
          // Compare boolean1Property
-         if (this.boolean1Property != another.boolean1Property) {
+         if (this.boolean1Property.get() != another.boolean1Property.get()) {
             return false;
          }
 
@@ -79,7 +79,7 @@ public class FxRefexBooleanVersion extends FxVersion {
       StringBuilder buff = new StringBuilder();
 
       buff.append(this.getClass().getSimpleName()).append(": ");
-      buff.append(this.boolean1Property);
+      buff.append(this.boolean1Property.get());
       buff.append(" ");
       buff.append(super.toString());
 

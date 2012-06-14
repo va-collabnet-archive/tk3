@@ -13,7 +13,6 @@ import org.ihtsdo.tk.api.refex.type_nid_int.RefexNidIntVersionBI;
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
@@ -61,7 +60,7 @@ public class FxRefexCompIntVersion extends FxRefexCompVersion {
          // =========================================================
          // Compare c1Uuid
          // Compare intValue
-         if (this.int1Property != another.int1Property) {
+         if (this.int1Property.get() != another.int1Property.get()) {
             return false;
          }
 
@@ -81,7 +80,7 @@ public class FxRefexCompIntVersion extends FxRefexCompVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" int: ");
-      buff.append(this.int1Property);
+      buff.append(this.int1Property.get());
       buff.append(" ");
       buff.append(super.toString());
 

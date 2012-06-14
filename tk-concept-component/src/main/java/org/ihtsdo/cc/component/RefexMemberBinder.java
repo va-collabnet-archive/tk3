@@ -157,15 +157,15 @@ public class RefexMemberBinder extends TupleBinding<Collection<RefexMember<?, ?>
 
       for (RefexMember<?, ?> refsetMember : list) {
          encountered.incrementAndGet();
-         assert refsetMember.primordialSapNid != Integer.MAX_VALUE;
+         assert refsetMember.primordialStampNid != Integer.MAX_VALUE;
 
-         if ((refsetMember.primordialSapNid > maxReadOnlyStatusAtPositionId)
+         if ((refsetMember.primordialStampNid > maxReadOnlyStatusAtPositionId)
                  && (refsetMember.getTime() != Long.MIN_VALUE)) {
             refsetMembersToWrite.add(refsetMember);
          } else {
             if (refsetMember.revisions != null) {
                for (RefexRevision<?, ?> r : refsetMember.revisions) {
-                  if ((r.getStatusAtPositionNid() > maxReadOnlyStatusAtPositionId)
+                  if ((r.getStampNid() > maxReadOnlyStatusAtPositionId)
                           && (r.getTime() != Long.MIN_VALUE)) {
                      refsetMembersToWrite.add(refsetMember);
 

@@ -96,11 +96,11 @@ public class RelGroupChronicle implements RelGroupChronicleBI {
    }
 
    @Override
-   public Set<Integer> getAllSapNids() throws IOException {
+   public Set<Integer> getAllStampNids() throws IOException {
       HashSet<Integer> sapNids = new HashSet<>();
 
       for (RelationshipChronicleBI r : rels) {
-         sapNids.addAll(r.getAllSapNids());
+         sapNids.addAll(r.getAllStampNids());
       }
 
       return sapNids;

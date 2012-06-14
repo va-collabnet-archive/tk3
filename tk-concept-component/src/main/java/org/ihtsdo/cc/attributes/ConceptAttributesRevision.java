@@ -79,7 +79,7 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
       if (ConceptAttributesRevision.class.isAssignableFrom(obj.getClass())) {
          ConceptAttributesRevision another = (ConceptAttributesRevision) obj;
 
-         if (this.sapNid == another.sapNid) {
+         if (this.stampNid == another.stampNid) {
             return true;
          }
       }

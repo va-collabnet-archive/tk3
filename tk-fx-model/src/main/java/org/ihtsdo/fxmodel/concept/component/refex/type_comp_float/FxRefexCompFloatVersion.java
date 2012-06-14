@@ -68,7 +68,7 @@ public class FxRefexCompFloatVersion extends FxRefexCompVersion {
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
          // Compare floatValue
-         if (this.float1Property != another.float1Property) {
+         if (this.float1Property.get() != another.float1Property.get()) {
             return false;
          }
 
@@ -92,7 +92,7 @@ public class FxRefexCompFloatVersion extends FxRefexCompVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" flt:");
-      buff.append(this.float1Property);
+      buff.append(this.float1Property.get());
       buff.append(" ");
       buff.append(super.toString());
 

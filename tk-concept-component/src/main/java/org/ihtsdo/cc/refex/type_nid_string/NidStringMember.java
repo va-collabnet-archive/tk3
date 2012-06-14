@@ -61,7 +61,7 @@ public class NidStringMember extends RefexMember<NidStringRevision, NidStringMem
       string1 = refsetMember.getString1();
 
       if (refsetMember.getRevisionList() != null) {
-         revisions = new RevisionSet<>(primordialSapNid);
+         revisions = new RevisionSet<>(primordialStampNid);
 
          for (TkRefexUuidStringRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new NidStringRevision(eVersion, this));

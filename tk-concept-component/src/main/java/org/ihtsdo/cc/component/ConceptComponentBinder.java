@@ -124,14 +124,14 @@ public class ConceptComponentBinder<V extends Revision<V, C>, C extends ConceptC
         List<C> componentListToWrite = new ArrayList<>(conceptComponentList.size());
         for (C conceptComponent : conceptComponentList) {
             componentsEncountered.incrementAndGet();
-            if (conceptComponent.sapIsInRange(maxReadOnlyStatusAtPositionId + 1, Integer.MAX_VALUE) 
+            if (conceptComponent.stampIsInRange(maxReadOnlyStatusAtPositionId + 1, Integer.MAX_VALUE) 
                     && conceptComponent.getTime() != Long.MIN_VALUE) {
                 componentListToWrite.add(conceptComponent);
             } else {
                 if (conceptComponent.revisions != null) {
                     for (V part : conceptComponent.revisions) {
-                        assert part.getStatusAtPositionNid() != Integer.MAX_VALUE;
-                        if (part.getStatusAtPositionNid() > maxReadOnlyStatusAtPositionId
+                        assert part.getStampNid() != Integer.MAX_VALUE;
+                        if (part.getStampNid() > maxReadOnlyStatusAtPositionId
                                 && part.getTime() != Long.MIN_VALUE) {
                             componentListToWrite.add(conceptComponent);
                             break;

@@ -2,25 +2,22 @@ package org.ihtsdo.fxmodel.concept.component.identifier;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javafx.beans.property.SimpleStringProperty;
+
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.id.StringIdBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.DataOutput;
 import java.io.IOException;
-
-
-import javax.xml.bind.annotation.XmlAttribute;
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.TerminologySnapshotDI;
 
 public class FxIdentifierString extends FxIdentifier {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   @XmlAttribute
-   public String denotation;
+   private SimpleStringProperty denotationProperty = new SimpleStringProperty(this, "denotation");
 
    //~--- constructors --------------------------------------------------------
 
@@ -28,9 +25,16 @@ public class FxIdentifierString extends FxIdentifier {
       super();
    }
 
-   public FxIdentifierString(TerminologySnapshotDI ss, StringIdBI id) throws IOException, ContradictionException {
+   public FxIdentifierString(TerminologySnapshotDI ss, StringIdBI id)
+           throws IOException, ContradictionException {
       super(ss, id);
-      denotation = id.getDenotation();
+      denotationProperty.set(id.getDenotation());
+   }
+
+   //~--- methods -------------------------------------------------------------
+
+   public SimpleStringProperty denotationProperty() {
+      return denotationProperty;
    }
 
    /**
@@ -42,23 +46,18 @@ public class FxIdentifierString extends FxIdentifier {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" denotation:");
-      buff.append("'").append(this.denotation).append("'");
+      buff.append("'").append(this.denotationProperty.get()).append("'");
       buff.append(" ");
       buff.append(super.toString());
 
       return buff.toString();
    }
 
-   @Override
-   public void writeDenotation(DataOutput out) throws IOException {
-      out.writeUTF(denotation);
-   }
-
    //~--- get methods ---------------------------------------------------------
 
    @Override
    public String getDenotation() {
-      return denotation;
+      return denotationProperty.get();
    }
 
    @Override
@@ -70,6 +69,6 @@ public class FxIdentifierString extends FxIdentifier {
 
    @Override
    public void setDenotation(Object denotation) {
-      this.denotation = (String) denotation;
+      this.denotationProperty.set((String) denotation);
    }
 }

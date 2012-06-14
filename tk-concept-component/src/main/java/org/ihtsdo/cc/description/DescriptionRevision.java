@@ -49,7 +49,7 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
    }
 
    protected DescriptionRevision(Description primoridalMember) {
-      super(primoridalMember.primordialSapNid, primoridalMember);
+      super(primoridalMember.primordialStampNid, primoridalMember);
       this.text                   = primoridalMember.getText();
       this.typeNid                = primoridalMember.typeNid;
       this.lang                   = primoridalMember.getLang();
@@ -57,7 +57,7 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
    }
 
    protected DescriptionRevision(DescriptionRevision another, Description primoridalMember) {
-      super(another.getStatusAtPositionNid(), primoridalMember);
+      super(another.getStampNid(), primoridalMember);
       this.text                   = another.text;
       this.typeNid                = another.typeNid;
       this.lang                   = another.lang;
@@ -76,7 +76,7 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
       lang                   = edv.getLang();
       text                   = edv.getText();
       typeNid                = P.s.getNidForUuids(edv.getTypeUuid());
-      sapNid                 = P.s.getSapNid(edv);
+      stampNid                 = P.s.getSapNid(edv);
    }
 
    protected DescriptionRevision(TupleInput input, Description primoridalMember) {
@@ -141,7 +141,7 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
       if (DescriptionRevision.class.isAssignableFrom(obj.getClass())) {
          DescriptionRevision another = (DescriptionRevision) obj;
 
-         return this.sapNid == another.sapNid;
+         return this.stampNid == another.stampNid;
       }
 
       return false;

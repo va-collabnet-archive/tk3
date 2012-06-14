@@ -171,7 +171,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     }
 
     @Override
-    public boolean sapIsInRange(int min, int max) {
+    public boolean stampIsInRange(int min, int max) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -301,8 +301,8 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     }
 
     @Override
-    public Set<Integer> getAllSapNids() throws IOException {
-        return concept.getAllSapNids();
+    public Set<Integer> getAllStampNids() throws IOException {
+        return concept.getAllStampNids();
     }
 
     @Override
@@ -1001,7 +1001,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
     }
 
     @Override
-    public int getSapNid() {
+    public int getStampNid() {
         throw new UnsupportedOperationException("Not supported.");
     }
 

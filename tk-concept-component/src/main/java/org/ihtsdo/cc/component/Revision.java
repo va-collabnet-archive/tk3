@@ -29,38 +29,38 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
     public static SimpleDateFormat fileDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss");
     //~--- fields --------------------------------------------------------------
     public C primordialComponent;
-    public int sapNid;
+    public int stampNid;
 
     //~--- constructors --------------------------------------------------------
     public Revision() {
         super();
     }
 
-    public Revision(int statusAtPositionNid, C primordialComponent) {
+    public Revision(int stampNid, C primordialComponent) {
         super();
         assert primordialComponent != null;
-        assert statusAtPositionNid != 0;
-        this.sapNid = statusAtPositionNid;
+        assert stampNid != 0;
+        this.stampNid = stampNid;
         this.primordialComponent = primordialComponent;
         primordialComponent.clearVersions();
         assert primordialComponent != null;
-        assert statusAtPositionNid != Integer.MAX_VALUE;
+        assert stampNid != Integer.MAX_VALUE;
         this.primordialComponent.getEnclosingConcept().modified();
     }
 
     public Revision(TupleInput input, C conceptComponent) {
         this(input.readInt(), conceptComponent);
         conceptComponent.clearVersions();
-        assert sapNid != 0;
+        assert stampNid != 0;
     }
 
     public Revision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, C primordialComponent) {
-        this.sapNid = P.s.getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
-        assert sapNid != 0;
+        this.stampNid = P.s.getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
+        assert stampNid != 0;
         this.primordialComponent = primordialComponent;
         primordialComponent.clearVersions();
         assert primordialComponent != null;
-        assert sapNid != Integer.MAX_VALUE;
+        assert stampNid != Integer.MAX_VALUE;
         this.primordialComponent.getEnclosingConcept().modified();
     }
 
@@ -98,7 +98,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
         if (Revision.class.isAssignableFrom(obj.getClass())) {
             Revision<V, C> another = (Revision<V, C>) obj;
 
-            if (this.sapNid == another.sapNid) {
+            if (this.stampNid == another.stampNid) {
                 return true;
             }
         }
@@ -141,8 +141,8 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
     public final boolean readyToWrite() {
         assert primordialComponent != null : assertionString();
-        assert sapNid != Integer.MAX_VALUE : assertionString();
-        assert (sapNid > 0) || (sapNid == -1);
+        assert stampNid != Integer.MAX_VALUE : assertionString();
+        assert (stampNid > 0) || (stampNid == -1);
 
         return true;
     }
@@ -150,8 +150,8 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
     public abstract boolean readyToWriteRevision();
 
     @Override
-    public boolean sapIsInRange(int min, int max) {
-        return (sapNid >= min) && (sapNid <= max);
+    public boolean stampIsInRange(int min, int max) {
+        return (stampNid >= min) && (stampNid <= max);
     }
 
     /*
@@ -163,7 +163,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
         StringBuffer buf = new StringBuffer();
 
         buf.append(" stamp:");
-        buf.append(sapNid);
+        buf.append(stampNid);
 
         try {
             buf.append(" s:");
@@ -209,9 +209,9 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
         StringBuilder buf = new StringBuilder();
 
-        if (this.sapNid != another.sapNid) {
-            buf.append("\t\tRevision.sapNid not equal: \n\t\t\tthis.sapNid = ").append(this.sapNid).append(
-                    "\n\t\t\tanother.sapNid = ").append(another.sapNid).append("\n");
+        if (this.stampNid != another.stampNid) {
+            buf.append("\t\tRevision.sapNid not equal: \n\t\t\tthis.sapNid = ").append(this.stampNid).append(
+                    "\n\t\t\tanother.sapNid = ").append(another.stampNid).append("\n");
         }
 
         if (!this.primordialComponent.equals(another.primordialComponent)) {
@@ -227,7 +227,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
     protected abstract void writeFieldsToBdb(TupleOutput output);
 
     public final void writePartToBdb(TupleOutput output) {
-        output.writeInt(sapNid);
+        output.writeInt(stampNid);
         writeFieldsToBdb(output);
     }
 
@@ -255,8 +255,8 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
         return allNids;
     }
 
-    public Set<Integer> getAllSapNids() throws IOException {
-        return primordialComponent.getAllSapNids();
+    public Set<Integer> getAllStampNids() throws IOException {
+        return primordialComponent.getAllStampNids();
     }
 
     @Override
@@ -266,7 +266,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
     @Override
     public int getAuthorNid() {
-        return P.s.getAuthorNidForSapNid(sapNid);
+        return P.s.getAuthorNidForSapNid(stampNid);
     }
 
     @Override
@@ -328,7 +328,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
     
     @Override
     public int getModuleNid() {
-        return P.s.getModuleNidForSapNid(sapNid);
+        return P.s.getModuleNidForSapNid(stampNid);
     }
 
     @Override
@@ -338,7 +338,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
     @Override
     public int getPathNid() {
-        return P.s.getPathNidForSapNid(sapNid);
+        return P.s.getPathNidForSapNid(stampNid);
     }
 
     @Override
@@ -372,22 +372,22 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
     }
 
     @Override
-    public int getSapNid() {
-        return sapNid;
+    public int getStampNid() {
+        return stampNid;
     }
 
     public final int getStatusAtPositionNid() {
-        return sapNid;
+        return stampNid;
     }
     
     @Override
     public int getStatusNid() {
-        return P.s.getStatusNidForSapNid(sapNid);
+        return P.s.getStatusNidForSapNid(stampNid);
     }
 
     @Override
     public long getTime() {
-        return P.s.getTimeForSapNid(sapNid);
+        return P.s.getTimeForSapNid(stampNid);
     }
 
     @Override
@@ -423,7 +423,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
     @Override
     public boolean isBaselineGeneration() {
-        return sapNid <= P.s.getMaxReadOnlySap();
+        return stampNid <= P.s.getMaxReadOnlySap();
     }
 
     @Override
@@ -440,7 +440,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
         }
 
         if (authorNid != getPathNid()) {
-            this.sapNid = P.s.getSapNid(getStatusNid(),Long.MAX_VALUE, authorNid, getModuleNid(), getPathNid());
+            this.stampNid = P.s.getSapNid(getStatusNid(),Long.MAX_VALUE, authorNid, getModuleNid(), getPathNid());
             modified();
         }
     }
@@ -453,7 +453,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
         }
 
         try {
-            this.sapNid = P.s.getSapNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), 
+            this.stampNid = P.s.getSapNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), 
                     moduleNid, getPathNid());
         } catch (Exception e) {
             throw new RuntimeException();
@@ -474,12 +474,12 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
                     + "Use makeAnalog instead.");
         }
 
-        this.sapNid = P.s.getSapNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), 
+        this.stampNid = P.s.getSapNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), 
                     getModuleNid(), pathId);
     }
 
     public void setStatusAtPosition(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-        this.sapNid = P.s.getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
+        this.stampNid = P.s.getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
         modified();
     }
 
@@ -491,7 +491,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
         }
 
         try {
-            this.sapNid = P.s.getSapNid(statusNid, Long.MAX_VALUE,
+            this.stampNid = P.s.getSapNid(statusNid, Long.MAX_VALUE,
                     getAuthorNid(), getModuleNid(), getPathNid());
         } catch (Exception e) {
             throw new RuntimeException();
@@ -509,7 +509,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
         if (time != getTime()) {
             try {
-                this.sapNid = P.s.getSapNid(getStatusNid(), time, getAuthorNid(), 
+                this.stampNid = P.s.getSapNid(getStatusNid(), time, getAuthorNid(), 
                     getModuleNid(), getPathNid());
             } catch (Exception e) {
                 throw new RuntimeException();

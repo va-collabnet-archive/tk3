@@ -99,11 +99,11 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
         TkConceptAttributes eca = null;
 
         for (ConceptAttributes.Version v : c.getConceptAttributes().getVersions()) {
-            if (v.sapIsInRange(minSapNid, maxSapNid) && (v.getTime() != Long.MIN_VALUE)
+            if (v.stampIsInRange(minSapNid, maxSapNid) && (v.getTime() != Long.MIN_VALUE)
                     && (v.getTime() != Long.MAX_VALUE)) {
                 changed.set(true);
 
-                if ((commitSapNids == null) || commitSapNids.contains(v.getSapNid())) {
+                if ((commitSapNids == null) || commitSapNids.contains(v.getStampNid())) {
                     if (eca == null) {
                         eca = new TkConceptAttributes();
                         eca.setDefined(v.isDefined());
@@ -128,11 +128,11 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
             TkDescription ecd = null;
 
             for (Description.Version v : d.getVersions()) {
-                if (v.sapIsInRange(minSapNid, maxSapNid) && (v.getTime() != Long.MIN_VALUE)
+                if (v.stampIsInRange(minSapNid, maxSapNid) && (v.getTime() != Long.MIN_VALUE)
                         && (v.getTime() != Long.MAX_VALUE)) {
                     changed.set(true);
 
-                    if ((commitSapNids == null) || commitSapNids.contains(v.getSapNid())) {
+                    if ((commitSapNids == null) || commitSapNids.contains(v.getStampNid())) {
                         if (ecd == null) {
                             ecd = new TkDescription();
                             eDescriptions.add(ecd);
@@ -166,9 +166,9 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
             TkMedia eImg = null;
 
             for (Media.Version v : img.getVersions()) {
-                if (v.sapIsInRange(minSapNid, maxSapNid) && (v.getTime() != Long.MIN_VALUE)
+                if (v.stampIsInRange(minSapNid, maxSapNid) && (v.getTime() != Long.MIN_VALUE)
                         && (v.getTime() != Long.MAX_VALUE)) {
-                    if ((commitSapNids == null) || commitSapNids.contains(v.getSapNid())) {
+                    if ((commitSapNids == null) || commitSapNids.contains(v.getStampNid())) {
                         changed.set(true);
 
                         if (eImg == null) {
@@ -206,9 +206,9 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
 
             if ((concept != null) && !concept.isCanceled()) {
                 for (RefexMember<?, ?>.Version v : member.getVersions()) {
-                    if (v.sapIsInRange(minSapNid, maxSapNid) && (v.getTime() != Long.MIN_VALUE)
+                    if (v.stampIsInRange(minSapNid, maxSapNid) && (v.getTime() != Long.MIN_VALUE)
                             && (v.getTime() != Long.MAX_VALUE)) {
-                        if ((commitSapNids == null) || commitSapNids.contains(v.getSapNid())) {
+                        if ((commitSapNids == null) || commitSapNids.contains(v.getStampNid())) {
                             changed.set(true);
 
                             if (eMember == null) {
@@ -231,7 +231,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
                     }
                 }
             } else {
-                member.primordialSapNid = -1;
+                member.primordialStampNid = -1;
                 membersToRemove.add(member);
             }
         }
@@ -250,9 +250,9 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
             TkRelationship ecr = null;
 
             for (Relationship.Version v : r.getVersions()) {
-                if (v.sapIsInRange(minSapNid, maxSapNid) && (v.getTime() != Long.MIN_VALUE)
+                if (v.stampIsInRange(minSapNid, maxSapNid) && (v.getTime() != Long.MIN_VALUE)
                         && (v.getTime() != Long.MAX_VALUE) && (v.getAuthorNid() != classifier)) {
-                    if ((commitSapNids == null) || commitSapNids.contains(v.getSapNid())) {
+                    if ((commitSapNids == null) || commitSapNids.contains(v.getStampNid())) {
                         try {
                             changed.set(true);
 
@@ -301,7 +301,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
             for (IdentifierVersion idv : v.getAdditionalIdentifierParts()) {
                 TkIdentifier eIdv = null;
 
-                if ((idv.getSapNid() >= minSapNid) && (idv.getSapNid() <= maxSapNid)
+                if ((idv.getStampNid() >= minSapNid) && (idv.getStampNid() <= maxSapNid)
                         && (v.getTime() != Long.MIN_VALUE) && (v.getTime() != Long.MAX_VALUE)) {
                     if (IdentifierVersionLong.class.isAssignableFrom(idv.getClass())) {
                         eIdv = new TkIdentifierLong();
@@ -338,9 +338,9 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
 
                 if ((concept != null) && !concept.isCanceled()) {
                     for (RefexMember<?, ?>.Version mv : member.getVersions()) {
-                        if (mv.sapIsInRange(minSapNid, maxSapNid) && (mv.getTime() != Long.MIN_VALUE)
+                        if (mv.stampIsInRange(minSapNid, maxSapNid) && (mv.getTime() != Long.MIN_VALUE)
                                 && (mv.getTime() != Long.MAX_VALUE)) {
-                            if ((commitSapNids == null) || commitSapNids.contains(mv.getSapNid())) {
+                            if ((commitSapNids == null) || commitSapNids.contains(mv.getStampNid())) {
                                 if (eMember == null) {
                                     eMember = mv.getERefsetMember();
 
@@ -366,7 +366,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
 
         if (v.getAdditionalIdentifierParts() != null) {
             for (IdentifierVersion idv : v.getAdditionalIdentifierParts()) {
-                if (idv.sapIsInRange(minSapNid, maxSapNid)) {
+                if (idv.stampIsInRange(minSapNid, maxSapNid)) {
                     if (ec.getAdditionalIdComponents() == null) {
                         ec.setAdditionalIdComponents(new ArrayList<TkIdentifier>());
                     }

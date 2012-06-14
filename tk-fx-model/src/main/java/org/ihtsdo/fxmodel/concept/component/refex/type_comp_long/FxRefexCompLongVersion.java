@@ -60,7 +60,7 @@ public class FxRefexCompLongVersion extends FxRefexCompVersion {
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
          // Compare longValue
-         if (this.long1Property != another.long1Property) {
+         if (this.long1Property.get() != another.long1Property.get()) {
             return false;
          }
 
@@ -84,7 +84,7 @@ public class FxRefexCompLongVersion extends FxRefexCompVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" long: ");
-      buff.append(this.long1Property);
+      buff.append(this.long1Property.get());
       buff.append(" ");
       buff.append(super.toString());
 

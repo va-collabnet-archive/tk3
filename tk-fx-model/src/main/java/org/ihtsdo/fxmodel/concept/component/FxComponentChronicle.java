@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.util.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlTransient;
 
 public abstract class FxComponentChronicle<V extends FxVersion> implements Serializable {
    private static final long serialVersionUID = 1;
@@ -35,6 +36,7 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
    @XmlElementWrapper(name = "annotation-list")
    @XmlElement(name = "fx-annotation")
    public ObservableList<FxRefexChronicle<?>> annotations;
+   @XmlTransient
    public FxConcept                           concept;
    @XmlElement(name = "primordial-uuid")
    public UUID                                primordialUuid;

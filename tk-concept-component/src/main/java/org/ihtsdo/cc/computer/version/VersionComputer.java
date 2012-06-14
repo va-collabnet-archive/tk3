@@ -92,7 +92,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
                                 + " should never happen. "
                                 + "Data is malformed. sap: {1} Part:\n{2} \n  Part to test: \n{3}",
                                 new Object[]{RelativePosition.EQUAL,
-                                    part.getSapNid(),
+                                    part.getStampNid(),
                                     part,
                                     prevPartToTest});
                     }

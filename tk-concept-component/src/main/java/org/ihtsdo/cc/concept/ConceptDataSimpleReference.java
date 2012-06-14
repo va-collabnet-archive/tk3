@@ -409,7 +409,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
          Concept      refsetCon = Concept.get(rc.getRefexNid());
          RefexMember rm        = (RefexMember) rc;
 
-         rm.primordialSapNid = -1;
+         rm.primordialStampNid = -1;
          P.s.addUncommittedNoChecks(refsetCon);
       }
    }
@@ -1174,14 +1174,14 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
       // component
       if (cc.getTime() == Long.MAX_VALUE) {
          cc.setTime(time);
-         sapNids.add(cc.primordialSapNid);
+         sapNids.add(cc.primordialStampNid);
       }
 
       if (cc.revisions != null) {
          for (Revision<?, ?> r : cc.revisions) {
             if (r.getTime() == Long.MAX_VALUE) {
                r.setTime(time);
-               sapNids.add(r.sapNid);
+               sapNids.add(r.stampNid);
             }
          }
       }
@@ -1191,7 +1191,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
          for (IdentifierVersion idv : cc.getAdditionalIdentifierParts()) {
             if (idv.getTime() == Long.MAX_VALUE) {
                idv.setTime(time);
-               sapNids.add(idv.getSapNid());
+               sapNids.add(idv.getStampNid());
             }
          }
       }
@@ -1203,14 +1203,14 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
 
             if (rm.getTime() == Long.MAX_VALUE) {
                rm.setTime(time);
-               sapNids.add(rm.getSapNid());
+               sapNids.add(rm.getStampNid());
             }
 
             if (rm.revisions != null) {
                for (RefexRevision<?, ?> rr : rm.revisions) {
                   if (rr.getTime() == Long.MAX_VALUE) {
                      rr.setTime(time);
-                     sapNids.add(rr.getSapNid());
+                     sapNids.add(rr.getStampNid());
                   }
                }
             }

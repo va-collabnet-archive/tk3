@@ -67,7 +67,7 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
         if (RefexRevision.class.isAssignableFrom(obj.getClass())) {
             RefexRevision<?, ?> another = (RefexRevision<?, ?>) obj;
 
-            if (this.sapNid == another.sapNid) {
+            if (this.stampNid == another.stampNid) {
                 return true;
             }
         }

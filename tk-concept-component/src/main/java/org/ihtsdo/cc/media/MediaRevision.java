@@ -36,13 +36,13 @@ public class MediaRevision extends Revision<MediaRevision, Media>
    }
 
    MediaRevision(Media primoridalMember) {
-      super(primoridalMember.primordialSapNid, primoridalMember);
+      super(primoridalMember.primordialStampNid, primoridalMember);
       this.textDescription = primoridalMember.getTextDescription();
       this.typeNid         = primoridalMember.getTypeNid();
    }
 
    MediaRevision(MediaRevision another, Media primoridalMember) {
-      super(another.sapNid, primoridalMember);
+      super(another.stampNid, primoridalMember);
       this.textDescription = another.textDescription;
       this.typeNid         = another.typeNid;
    }
@@ -83,7 +83,7 @@ public class MediaRevision extends Revision<MediaRevision, Media>
       if (MediaRevision.class.isAssignableFrom(obj.getClass())) {
          MediaRevision another = (MediaRevision) obj;
 
-         if (this.sapNid == another.sapNid) {
+         if (this.stampNid == another.stampNid) {
             return true;
          }
       }

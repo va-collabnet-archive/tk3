@@ -119,13 +119,13 @@ public class CidFloatRevisionTest {
         NidFloatRevision obj = new NidFloatRevision();
         obj.setC1Nid(1);
         obj.setFloatValue((float) 1.1);
-        obj.sapNid = 1; 
+        obj.stampNid = 1; 
         
         NidFloatMember member = new NidFloatMember();
         member.revisions = null;
          
         member.nid = 1;
-        member.primordialSapNid = 1; 
+        member.primordialStampNid = 1; 
         member.setC1Nid(1);
         member.setStatusAtPositionNid(1);
         member.setFloatValue((float) 1.1);
@@ -141,13 +141,13 @@ public class CidFloatRevisionTest {
         NidFloatRevision obj = new NidFloatRevision();
         obj.setC1Nid(2);
         obj.setFloatValue((float) 2.2);
-        obj.sapNid = 2; 
+        obj.stampNid = 2; 
         
         NidFloatMember member = new NidFloatMember();
         member.revisions = null;
          
         member.nid = 2;
-        member.primordialSapNid = 2; 
+        member.primordialStampNid = 2; 
         member.setC1Nid(2);
         member.setFloatValue((float) 2.2);
         member.setStatusAtPositionNid(2);

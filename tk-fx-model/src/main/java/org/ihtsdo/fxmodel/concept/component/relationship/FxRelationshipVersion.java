@@ -59,7 +59,7 @@ public class FxRelationshipVersion extends FxVersion {
       buff.append(" type:");
       buff.append(this.typeRef);
       buff.append(" grp:");
-      buff.append(this.groupProperty);
+      buff.append(this.groupProperty.get());
       buff.append(" char:");
       buff.append(this.characteristicRef);
       buff.append(" ref:");

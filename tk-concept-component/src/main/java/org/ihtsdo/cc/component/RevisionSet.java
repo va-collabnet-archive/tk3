@@ -37,7 +37,7 @@ public class RevisionSet<R extends Revision<R, C>, C extends ConceptComponent<R,
       super(new Comparator<R>() {
          @Override
          public int compare(R r1, R r2) {
-            return r1.sapNid - r2.sapNid;
+            return r1.stampNid - r2.stampNid;
          }
       });
       this.primordialSapt = primordialSapt;
@@ -47,7 +47,7 @@ public class RevisionSet<R extends Revision<R, C>, C extends ConceptComponent<R,
 
    @Override
    public boolean add(R e) {
-      if (e.sapNid == primordialSapt) {
+      if (e.stampNid == primordialSapt) {
          return false;
       }
 

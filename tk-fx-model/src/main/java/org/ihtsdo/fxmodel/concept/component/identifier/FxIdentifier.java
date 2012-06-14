@@ -12,7 +12,6 @@ import org.ihtsdo.tk.api.id.UuidIdBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.DataOutput;
 import java.io.IOException;
 
 
@@ -71,8 +70,6 @@ public abstract class FxIdentifier extends FxVersion {
 
       return buff.toString();
    }
-
-   public abstract void writeDenotation(DataOutput out) throws IOException;
 
    //~--- get methods ---------------------------------------------------------
 

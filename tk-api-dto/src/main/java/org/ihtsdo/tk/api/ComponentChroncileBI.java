@@ -19,7 +19,7 @@ public interface ComponentChroncileBI<T extends ComponentVersionBI>
 
     boolean isUncommitted();
 
-    Set<Integer> getAllSapNids() throws IOException;
+    Set<Integer> getAllStampNids() throws IOException;
     
     Set<PositionBI> getPositions() throws IOException;
     

@@ -60,7 +60,7 @@ public class FxRefexIntVersion extends FxVersion {
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
          // Compare int1Property
-         if (this.int1Property != another.int1Property) {
+         if (this.int1Property.get() != another.int1Property.get()) {
             return false;
          }
 
@@ -84,7 +84,7 @@ public class FxRefexIntVersion extends FxVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" int: ");
-      buff.append(this.int1Property);
+      buff.append(this.int1Property.get());
       buff.append(" ");
       buff.append(super.toString());
 

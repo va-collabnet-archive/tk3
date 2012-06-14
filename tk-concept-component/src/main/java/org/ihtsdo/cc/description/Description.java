@@ -67,10 +67,10 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
         lang = eDesc.getLang();
         text = eDesc.getText();
         typeNid = P.s.getNidForUuids(eDesc.getTypeUuid());
-        primordialSapNid = P.s.getSapNid(eDesc);
+        primordialStampNid = P.s.getSapNid(eDesc);
 
         if (eDesc.getRevisionList() != null) {
-            revisions = new RevisionSet<>(primordialSapNid);
+            revisions = new RevisionSet<>(primordialStampNid);
 
             for (TkDescriptionRevision edv : eDesc.getRevisionList()) {
                 
@@ -182,7 +182,7 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
         int additionalVersionCount = input.readShort();
 
         if (additionalVersionCount > 0) {
-            revisions = new RevisionSet<>(primordialSapNid);
+            revisions = new RevisionSet<>(primordialStampNid);
 
             for (int i = 0; i < additionalVersionCount; i++) {
                 DescriptionRevision dr = new DescriptionRevision(input, this);
@@ -283,7 +283,7 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
 
         if (revisions != null) {
             for (DescriptionRevision p : revisions) {
-                if ((p.getStatusAtPositionNid() > maxReadOnlyStatusAtPositionNid)
+                if ((p.getStampNid() > maxReadOnlyStatusAtPositionNid)
                         && (p.getTime() != Long.MIN_VALUE)) {
                     partsToWrite.add(p);
                 }

@@ -118,12 +118,12 @@ public class CidMemberTest {
         obj.revisions = new RevisionSet(1);
         NidRevision rev = new NidRevision(); 
         rev.primordialComponent = obj; 
-        rev.sapNid = 1;
+        rev.stampNid = 1;
         obj.revisions.add(rev); 
 
          
         obj.nid = 1;
-        obj.primordialSapNid = 1; 
+        obj.primordialStampNid = 1; 
         
         return obj; 
     }
@@ -136,12 +136,12 @@ public class CidMemberTest {
         obj.revisions = new RevisionSet(1);
         NidRevision rev = new NidRevision(); 
         rev.primordialComponent = obj; 
-        rev.sapNid = 1;
+        rev.stampNid = 1;
         obj.revisions.add(rev); 
 
          
         obj.nid = 2;
-        obj.primordialSapNid = 2; 
+        obj.primordialStampNid = 2; 
         
         return obj; 
     }

@@ -2,6 +2,8 @@ package org.ihtsdo.fxmodel.concept.component.attribute;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javafx.beans.property.SimpleBooleanProperty;
+
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
@@ -19,7 +21,7 @@ public class FxConceptAttributesVersion extends FxVersion {
 
    //~--- fields --------------------------------------------------------------
 
-   protected boolean defined;
+   protected SimpleBooleanProperty definedProperty = new SimpleBooleanProperty(this, "defined");
 
    //~--- constructors --------------------------------------------------------
 
@@ -30,10 +32,14 @@ public class FxConceptAttributesVersion extends FxVersion {
    public FxConceptAttributesVersion(TerminologySnapshotDI ss, ConAttrVersionBI another)
            throws IOException, ContradictionException {
       super(ss, another);
-      this.defined = another.isDefined();
+      this.definedProperty.set(another.isDefined());
    }
 
    //~--- methods -------------------------------------------------------------
+
+   public SimpleBooleanProperty definedProperty() {
+      return definedProperty;
+   }
 
    /**
     * Compares this object to the specified object. The result is <tt>true</tt>
@@ -57,8 +63,8 @@ public class FxConceptAttributesVersion extends FxVersion {
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
-         // Compare defined
-         if (this.defined != another.defined) {
+         // Compare definedProperty
+         if (this.definedProperty != another.definedProperty) {
             return false;
          }
 
@@ -78,7 +84,7 @@ public class FxConceptAttributesVersion extends FxVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" defined:");
-      buff.append(this.defined);
+      buff.append(this.definedProperty.get());
       buff.append(" ");
       buff.append(super.toString());
 
@@ -93,12 +99,12 @@ public class FxConceptAttributesVersion extends FxVersion {
     * @see org.ihtsdo.etypes.I_ConceptualizeExternally#isDefined()
     */
    public boolean isDefined() {
-      return defined;
+      return definedProperty.get();
    }
 
    //~--- set methods ---------------------------------------------------------
 
    public void setDefined(boolean defined) {
-      this.defined = defined;
+      this.definedProperty.set(defined);
    }
 }

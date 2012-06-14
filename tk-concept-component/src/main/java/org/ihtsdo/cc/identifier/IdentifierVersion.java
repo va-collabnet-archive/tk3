@@ -5,13 +5,15 @@ package org.ihtsdo.cc.identifier;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-import org.ihtsdo.cern.colt.list.IntArrayList;
-
-
+import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.component.ConceptComponent;
 import org.ihtsdo.cc.component.Revision;
+import org.ihtsdo.cern.colt.list.IntArrayList;
+import org.ihtsdo.tk.api.id.IdBI;
+
 //import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.tk.dto.concept.component.identifier.TkIdentifier;
+import org.ihtsdo.tk.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -20,17 +22,10 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Date;
 import java.util.Set;
-import org.ihtsdo.cc.P;
-import org.ihtsdo.tk.api.id.IdBI;
-import org.ihtsdo.tk.hash.Hashcode;
 
-public abstract class IdentifierVersion
-        implements IdBI {
-
-   //~--- fields --------------------------------------------------------------
-
+public abstract class IdentifierVersion implements IdBI {
    protected int authorityNid;
-   private int statusAtPositionNid;
+   private int   stampNid;
 
    //~--- constructors --------------------------------------------------------
 
@@ -40,21 +35,17 @@ public abstract class IdentifierVersion
 
    protected IdentifierVersion(TkIdentifier idv) throws IOException {
       super();
-      this.statusAtPositionNid = P.s.getSapNid(P.s.getNidForUuids(idv.getStatusUuid()),
-              idv.getTime(), P.s.getNidForUuids(idv.getAuthorUuid()), 
-              P.s.getNidForUuids(idv.getModuleUuid()), P.s.getNidForUuids(idv.getPathUuid()));
+      this.stampNid = P.s.getSapNid(P.s.getNidForUuids(idv.getStatusUuid()), idv.getTime(),
+                                    P.s.getNidForUuids(idv.getAuthorUuid()),
+                                    P.s.getNidForUuids(idv.getModuleUuid()),
+                                    P.s.getNidForUuids(idv.getPathUuid()));
       this.authorityNid = P.s.getNidForUuids(idv.getAuthorityUuid());
    }
 
    protected IdentifierVersion(TupleInput input) {
       super();
-      statusAtPositionNid = input.readInt();
-      authorityNid        = input.readInt();
-   }
-
-   protected IdentifierVersion(int statusNid, long time, int authorNid, int moduleNid, int pathNid, int authorityNid) {
-      this.statusAtPositionNid = P.s.getSapNid(statusNid, time, moduleNid, authorNid, pathNid);
-      this.authorityNid = authorNid;
+      stampNid     = input.readInt();
+      authorityNid = input.readInt();
    }
 
    protected IdentifierVersion(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
@@ -62,8 +53,13 @@ public abstract class IdentifierVersion
       this(statusNid, time, moduleNid, authorNid, pathNid, idVersion.authorityNid);
    }
 
-   //~--- methods -------------------------------------------------------------
+   protected IdentifierVersion(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
+                               int authorityNid) {
+      this.stampNid     = P.s.getSapNid(statusNid, time, moduleNid, authorNid, pathNid);
+      this.authorityNid = authorNid;
+   }
 
+   //~--- methods -------------------------------------------------------------
 
    @Override
    public boolean equals(Object obj) {
@@ -74,8 +70,7 @@ public abstract class IdentifierVersion
       if (IdentifierVersion.class.isAssignableFrom(obj.getClass())) {
          IdentifierVersion another = (IdentifierVersion) obj;
 
-         return (this.statusAtPositionNid == another.statusAtPositionNid)
-                && (this.authorityNid == another.authorityNid);
+         return (this.stampNid == another.stampNid) && (this.authorityNid == another.authorityNid);
       }
 
       return false;
@@ -83,11 +78,11 @@ public abstract class IdentifierVersion
 
    @Override
    public int hashCode() {
-      return Hashcode.compute(new int[] { statusAtPositionNid, authorityNid });
+      return Hashcode.compute(new int[] { stampNid, authorityNid });
    }
 
    public final boolean readyToWrite() {
-      assert statusAtPositionNid != Integer.MAX_VALUE : toString();
+      assert stampNid != Integer.MAX_VALUE : toString();
       assert authorityNid != Integer.MAX_VALUE : toString();
       assert readyToWriteIdentifier() : toString();
 
@@ -96,8 +91,8 @@ public abstract class IdentifierVersion
 
    public abstract boolean readyToWriteIdentifier();
 
-   public boolean sapIsInRange(int min, int max) {
-      return (statusAtPositionNid >= min) && (statusAtPositionNid <= max);
+   public boolean stampIsInRange(int min, int max) {
+      return (stampNid >= min) && (stampNid <= max);
    }
 
    /*
@@ -108,12 +103,12 @@ public abstract class IdentifierVersion
    public String toString() {
       StringBuffer buf = new StringBuffer();
 
-      buf.append("sap:").append(statusAtPositionNid);
-      buf.append(" authority:");
+      buf.append("authority:");
       ConceptComponent.addNidToBuffer(buf, authorityNid);
-      buf.append(" path:");
-      ConceptComponent.addNidToBuffer(buf, getPathNid());
-      buf.append(" tm:");
+      buf.append(" stamp:").append(stampNid);
+      buf.append(" s:");
+      ConceptComponent.addNidToBuffer(buf, getStatusNid());
+      buf.append(" t:");
 
       if (getTime() == Long.MAX_VALUE) {
          buf.append(" uncommitted");
@@ -123,14 +118,18 @@ public abstract class IdentifierVersion
          buf.append(Revision.fileDateFormat.format(new Date(getTime())));
       }
 
-      buf.append(" status:");
-      ConceptComponent.addNidToBuffer(buf, getStatusNid());
+      buf.append(" a:");
+      ConceptComponent.addNidToBuffer(buf, getAuthorNid());
+      buf.append(" m:");
+      ConceptComponent.addNidToBuffer(buf, getModuleNid());
+      buf.append(" p:");
+      ConceptComponent.addNidToBuffer(buf, getPathNid());
 
       return buf.toString();
    }
 
    public final void writeIdPartToBdb(TupleOutput output) {
-      output.writeInt(statusAtPositionNid);
+      output.writeInt(stampNid);
       output.writeInt(authorityNid);
       writeSourceIdToBdb(output);
    }
@@ -146,48 +145,49 @@ public abstract class IdentifierVersion
       allNids.add(authorityNid);
       allNids.add(getStatusNid());
       allNids.add(getAuthorNid());
+      allNids.add(getModuleNid());
       allNids.add(getPathNid());
 
       return allNids;
    }
 
    public int getAuthorId() {
-      return P.s.getAuthorNidForSapNid(statusAtPositionNid);
+      return P.s.getAuthorNidForSapNid(stampNid);
    }
 
    @Override
    public int getAuthorNid() {
-      return P.s.getAuthorNidForSapNid(statusAtPositionNid);
+      return P.s.getAuthorNidForSapNid(stampNid);
    }
 
    @Override
    public int getAuthorityNid() {
       return authorityNid;
    }
-   
+
    @Override
    public int getModuleNid() {
-      return P.s.getModuleNidForSapNid(statusAtPositionNid);
+      return P.s.getModuleNidForSapNid(stampNid);
    }
 
    @Override
    public int getPathNid() {
-      return P.s.getPathNidForSapNid(statusAtPositionNid);
+      return P.s.getPathNidForSapNid(stampNid);
    }
 
-    @Override
-   public int getSapNid() {
-      return statusAtPositionNid;
+   @Override
+   public int getStampNid() {
+      return stampNid;
    }
-    
+
    @Override
    public int getStatusNid() {
-      return P.s.getStatusNidForSapNid(statusAtPositionNid);
+      return P.s.getStatusNidForSapNid(stampNid);
    }
 
    @Override
    public long getTime() {
-      return P.s.getTimeForSapNid(statusAtPositionNid);
+      return P.s.getTimeForSapNid(stampNid);
    }
 
    public abstract ConceptComponent.IDENTIFIER_PART_TYPES getType();
@@ -199,16 +199,18 @@ public abstract class IdentifierVersion
 
       return nids;
    }
-   
+
+   //~--- set methods ---------------------------------------------------------
+
+   public void setStampNid(int stampNid) {
+      this.stampNid = stampNid;
+   }
+
    public void setTime(long time) {
       if (getTime() != Long.MAX_VALUE) {
          throw new UnsupportedOperationException("Time alreay committed.");
       }
 
-      this.statusAtPositionNid = P.s.getSapNid(getStatusNid(), time, getAuthorNid(), getModuleNid(), getPathNid());
-   }
-   
-   public void setSapNid(int sapNid) {
-      statusAtPositionNid = sapNid;
+      this.stampNid = P.s.getSapNid(getStatusNid(), time, getAuthorNid(), getModuleNid(), getPathNid());
    }
 }

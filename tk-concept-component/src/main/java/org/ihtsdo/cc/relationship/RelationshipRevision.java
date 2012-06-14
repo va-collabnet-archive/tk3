@@ -42,7 +42,7 @@ public class RelationshipRevision extends Revision<RelationshipRevision, Relatio
     }
 
     public RelationshipRevision(Relationship primordialRel) {
-        super(primordialRel.primordialSapNid, primordialRel);
+        super(primordialRel.primordialStampNid, primordialRel);
         this.characteristicNid = primordialRel.getCharacteristicNid();
         this.group = primordialRel.getGroup();
         this.refinabilityNid = primordialRel.getRefinabilityNid();
@@ -54,7 +54,7 @@ public class RelationshipRevision extends Revision<RelationshipRevision, Relatio
     }
 
     public RelationshipRevision(RelationshipRevision another, Relationship primordialRel) {
-        super(another.sapNid, primordialRel);
+        super(another.stampNid, primordialRel);
         this.characteristicNid = another.characteristicNid;
         this.group = another.group;
         this.refinabilityNid = another.refinabilityNid;
@@ -68,7 +68,7 @@ public class RelationshipRevision extends Revision<RelationshipRevision, Relatio
         this.group = erv.getGroup();
         this.refinabilityNid = P.s.getNidForUuids(erv.getRefinabilityUuid());
         this.typeNid = P.s.getNidForUuids(erv.getTypeUuid());
-        this.sapNid = P.s.getSapNid(erv);
+        this.stampNid = P.s.getSapNid(erv);
     }
 
     public RelationshipRevision(TupleInput input, Relationship primordialRel) {
@@ -106,7 +106,7 @@ public class RelationshipRevision extends Revision<RelationshipRevision, Relatio
         if (RelationshipRevision.class.isAssignableFrom(obj.getClass())) {
             RelationshipRevision another = (RelationshipRevision) obj;
 
-            return this.sapNid == another.sapNid;
+            return this.stampNid == another.stampNid;
         }
 
         return false;

@@ -61,7 +61,7 @@ public class NidLongMember extends RefexMember<NidLongRevision, NidLongMember>
       longValue = refsetMember.getLong1();
 
       if (refsetMember.getRevisionList() != null) {
-         revisions = new RevisionSet<>(primordialSapNid);
+         revisions = new RevisionSet<>(primordialStampNid);
 
          for (TkRefexUuidLongRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new NidLongRevision(eVersion, this));

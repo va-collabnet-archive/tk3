@@ -58,7 +58,7 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
         defined = eAttr.isDefined();
 
         if (eAttr.getRevisionList() != null) {
-            revisions = new RevisionSet(primordialSapNid);
+            revisions = new RevisionSet(primordialStampNid);
 
             for (TkConceptAttributesRevision ear : eAttr.getRevisionList()) {
                 revisions.add(new ConceptAttributesRevision(ear, this));
@@ -152,7 +152,7 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
 
             if (additionalVersionCount > 0) {
                 if (revisions == null) {
-                    revisions = new RevisionSet(primordialSapNid);
+                    revisions = new RevisionSet(primordialStampNid);
                 }
 
                 for (int i = 0; i < additionalVersionCount; i++) {
@@ -230,12 +230,12 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
     }
 
     @Override
-    public void writeToBdb(TupleOutput output, int maxReadOnlyStatusAtPositionNid) {
+    public void writeToBdb(TupleOutput output, int maxReadOnlyStampNid) {
         List<ConceptAttributesRevision> partsToWrite = new ArrayList<>();
 
         if (revisions != null) {
             for (ConceptAttributesRevision p : revisions) {
-                if ((p.getStatusAtPositionNid() > maxReadOnlyStatusAtPositionNid)
+                if ((p.getStampNid() > maxReadOnlyStampNid)
                         && (p.getTime() != Long.MIN_VALUE)) {
                     partsToWrite.add(p);
                 }

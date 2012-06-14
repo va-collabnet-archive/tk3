@@ -2,25 +2,23 @@ package org.ihtsdo.fxmodel.concept.component.identifier;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javafx.beans.property.SimpleLongProperty;
+
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.id.LongIdBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.DataOutput;
 import java.io.IOException;
 
-
-import javax.xml.bind.annotation.XmlAttribute;
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.TerminologySnapshotDI;
 
 public class FxIdentifierLong extends FxIdentifier {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   @XmlAttribute
-   public long denotation;
+   private SimpleLongProperty denotationProperty = new SimpleLongProperty(this, "denotation");
 
    //~--- constructors --------------------------------------------------------
 
@@ -30,7 +28,13 @@ public class FxIdentifierLong extends FxIdentifier {
 
    public FxIdentifierLong(TerminologySnapshotDI ss, LongIdBI id) throws IOException, ContradictionException {
       super(ss, id);
-      denotation = id.getDenotation();
+      denotationProperty.set(id.getDenotation());
+   }
+
+   //~--- methods -------------------------------------------------------------
+
+   public SimpleLongProperty denotationProperty() {
+      return denotationProperty;
    }
 
    /**
@@ -42,23 +46,18 @@ public class FxIdentifierLong extends FxIdentifier {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" denotation:");
-      buff.append(this.denotation);
+      buff.append(this.denotationProperty.get());
       buff.append(" ");
       buff.append(super.toString());
 
       return buff.toString();
    }
 
-   @Override
-   public void writeDenotation(DataOutput out) throws IOException {
-      out.writeLong(denotation);
-   }
-
    //~--- get methods ---------------------------------------------------------
 
    @Override
    public Long getDenotation() {
-      return denotation;
+      return denotationProperty.get();
    }
 
    @Override
@@ -70,6 +69,6 @@ public class FxIdentifierLong extends FxIdentifier {
 
    @Override
    public void setDenotation(Object denotation) {
-      this.denotation = (Long) denotation;
+      this.denotationProperty.set((Long) denotation);
    }
 }

@@ -53,7 +53,7 @@ public class MembershipMember extends RefexMember<MembershipRevision, Membership
       super(refsetMember, enclosingConceptNid);
 
       if (refsetMember.getRevisionList() != null) {
-         revisions = new RevisionSet<>(primordialSapNid);
+         revisions = new RevisionSet<>(primordialStampNid);
 
          for (TkRefexRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new MembershipRevision(eVersion, this));
