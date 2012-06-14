@@ -2,6 +2,8 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_long;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javafx.beans.property.SimpleLongProperty;
+
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
@@ -12,14 +14,15 @@ import org.ihtsdo.tk.api.refex.type_long.RefexLongVersionBI;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement()
 public class FxRefexLongVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   @XmlAttribute
-   public long longValue;
+   private SimpleLongProperty long1Property = new SimpleLongProperty(this, "long1");
 
    //~--- constructors --------------------------------------------------------
 
@@ -30,7 +33,7 @@ public class FxRefexLongVersion extends FxVersion {
    public FxRefexLongVersion(TerminologySnapshotDI ss, RefexLongVersionBI another)
            throws IOException, ContradictionException {
       super(ss, another);
-      this.longValue = another.getLong1();
+      this.long1Property.set(another.getLong1());
    }
 
    //~--- methods -------------------------------------------------------------
@@ -57,8 +60,8 @@ public class FxRefexLongVersion extends FxVersion {
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
-         // Compare longValue
-         if (this.longValue != another.longValue) {
+         // Compare long1Property
+         if (this.long1Property != another.long1Property) {
             return false;
          }
 
@@ -69,6 +72,10 @@ public class FxRefexLongVersion extends FxVersion {
       return false;
    }
 
+   public SimpleLongProperty long1Property() {
+      return long1Property;
+   }
+
    /**
     * Returns a string representation of the object.
     */
@@ -77,8 +84,8 @@ public class FxRefexLongVersion extends FxVersion {
       StringBuilder buff = new StringBuilder();
 
       buff.append(this.getClass().getSimpleName()).append(": ");
-      buff.append(" long: ");
-      buff.append(this.longValue);
+      buff.append(" long1: ");
+      buff.append(this.long1Property);
       buff.append(" ");
       buff.append(super.toString());
 
@@ -87,13 +94,13 @@ public class FxRefexLongVersion extends FxVersion {
 
    //~--- get methods ---------------------------------------------------------
 
-   public long getLongValue() {
-      return longValue;
+   public long getLong1() {
+      return long1Property.get();
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setLongValue(long longValue) {
-      this.longValue = longValue;
+   public void setLong1(long longValue) {
+      this.long1Property.set(longValue);
    }
 }

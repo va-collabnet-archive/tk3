@@ -15,6 +15,7 @@
  */
 package org.ihtsdo.fxmodel;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleLongProperty;
@@ -25,7 +26,9 @@ import org.ihtsdo.helper.time.TimeHelper;
  *
  * @author kec
  */
-public class FxTime {
+public class FxTime implements Serializable {
+   public static final long   serialVersionUID = 1;
+
    private final SimpleLongProperty timeProperty = new SimpleLongProperty(this, "timeProperty", Long.MIN_VALUE);
    private SimpleObjectProperty<ThreadLocal<SimpleDateFormat>> formatterProperty = 
            new SimpleObjectProperty<>(this, "formatterProperty", TimeHelper.localDateFormat);

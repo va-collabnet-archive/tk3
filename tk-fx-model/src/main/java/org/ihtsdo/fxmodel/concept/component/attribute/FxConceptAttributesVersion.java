@@ -11,17 +11,15 @@ import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "attributes-revision")
+@XmlRootElement()
 public class FxConceptAttributesVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   @XmlAttribute
-   public boolean defined;
+   protected boolean defined;
 
    //~--- constructors --------------------------------------------------------
 

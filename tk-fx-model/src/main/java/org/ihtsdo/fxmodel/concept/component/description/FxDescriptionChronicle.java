@@ -16,7 +16,9 @@ import org.ihtsdo.tk.api.description.DescriptionVersionBI;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement()
 public class FxDescriptionChronicle extends FxComponentChronicle<FxDescriptionVersion> {
    public static final long serialVersionUID = 1;
 

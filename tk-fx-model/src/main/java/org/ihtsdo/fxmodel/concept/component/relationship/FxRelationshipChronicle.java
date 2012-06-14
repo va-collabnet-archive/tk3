@@ -16,7 +16,9 @@ import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement()
 public class FxRelationshipChronicle extends FxComponentChronicle<FxRelationshipVersion> {
    public static final long serialVersionUID = 1;
 

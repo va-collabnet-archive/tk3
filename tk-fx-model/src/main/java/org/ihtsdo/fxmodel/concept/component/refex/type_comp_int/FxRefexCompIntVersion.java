@@ -2,38 +2,38 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp_int;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.concept.component.FxVersion;
-import org.ihtsdo.tk.Ts;
-import org.ihtsdo.tk.api.TerminologyStoreDI;
+import javafx.beans.property.SimpleIntegerProperty;
+
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompVersion;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.type_nid_int.RefexNidIntVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 
-import java.util.UUID;
-
 import javax.xml.bind.annotation.XmlAttribute;
-import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompVersion;
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.TerminologySnapshotDI;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class FxRefexCompIntRevision extends FxRefexCompVersion {
+@XmlRootElement()
+public class FxRefexCompIntVersion extends FxRefexCompVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   public int  int1;
+   private SimpleIntegerProperty int1Property = new SimpleIntegerProperty(this, "int1");
 
    //~--- constructors --------------------------------------------------------
 
-   public FxRefexCompIntRevision() {
+   public FxRefexCompIntVersion() {
       super();
    }
 
-   public FxRefexCompIntRevision(TerminologySnapshotDI ss, RefexNidIntVersionBI another) throws IOException, ContradictionException {
+   public FxRefexCompIntVersion(TerminologySnapshotDI ss, RefexNidIntVersionBI another)
+           throws IOException, ContradictionException {
       super(ss, another);
-      this.int1  = another.getInt1();
+      this.int1Property.set(another.getInt1());
    }
 
    //~--- methods -------------------------------------------------------------
@@ -53,15 +53,15 @@ public class FxRefexCompIntRevision extends FxRefexCompVersion {
          return false;
       }
 
-      if (FxRefexCompIntRevision.class.isAssignableFrom(obj.getClass())) {
-         FxRefexCompIntRevision another = (FxRefexCompIntRevision) obj;
+      if (FxRefexCompIntVersion.class.isAssignableFrom(obj.getClass())) {
+         FxRefexCompIntVersion another = (FxRefexCompIntVersion) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
          // Compare c1Uuid
          // Compare intValue
-         if (this.int1 != another.int1) {
+         if (this.int1Property != another.int1Property) {
             return false;
          }
 
@@ -81,7 +81,7 @@ public class FxRefexCompIntRevision extends FxRefexCompVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" int: ");
-      buff.append(this.int1);
+      buff.append(this.int1Property);
       buff.append(" ");
       buff.append(super.toString());
 
@@ -90,13 +90,17 @@ public class FxRefexCompIntRevision extends FxRefexCompVersion {
 
    //~--- get methods ---------------------------------------------------------
 
+   public SimpleIntegerProperty getInt1Property() {
+      return int1Property;
+   }
+
    public int getIntValue() {
-      return int1;
+      return int1Property.get();
    }
 
    //~--- set methods ---------------------------------------------------------
 
    public void setIntValue(int intValue) {
-      this.int1 = intValue;
+      this.int1Property.set(intValue);
    }
 }

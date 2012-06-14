@@ -18,8 +18,10 @@ import org.ihtsdo.tk.api.refex.type_nid_int.RefexNidIntVersionBI;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class FxRefexCompIntChronicle extends FxRefexChronicle<FxRefexCompIntRevision> {
+@XmlRootElement()
+public class FxRefexCompIntChronicle extends FxRefexChronicle<FxRefexCompIntVersion> {
    public static final long serialVersionUID = 1;
 
    //~--- constructors --------------------------------------------------------
@@ -32,10 +34,10 @@ public class FxRefexCompIntChronicle extends FxRefexChronicle<FxRefexCompIntRevi
            throws IOException, ContradictionException {
       super(ss, concept, (RefexVersionBI) another.getPrimordialVersion());
       this.versions = FXCollections.observableArrayList(
-         new ArrayList<FxRefexCompIntRevision>(another.getVersions().size()));
+         new ArrayList<FxRefexCompIntVersion>(another.getVersions().size()));
 
       for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexCompIntRevision(ss, (RefexNidIntVersionBI) v));
+         this.versions.add(new FxRefexCompIntVersion(ss, (RefexNidIntVersionBI) v));
       }
    }
 

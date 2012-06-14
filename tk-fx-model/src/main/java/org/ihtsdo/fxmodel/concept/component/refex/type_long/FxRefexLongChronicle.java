@@ -17,8 +17,10 @@ import org.ihtsdo.tk.api.refex.type_long.RefexLongVersionBI;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import org.ihtsdo.tk.api.ContradictionException;
 
+@XmlRootElement()
 public class FxRefexLongChronicle extends FxRefexChronicle<FxRefexLongVersion> {
    public static final long serialVersionUID = 1;
 

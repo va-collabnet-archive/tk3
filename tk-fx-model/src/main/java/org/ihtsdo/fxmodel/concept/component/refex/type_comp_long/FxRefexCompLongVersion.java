@@ -2,6 +2,8 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp_long;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javafx.beans.property.SimpleLongProperty;
+
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
@@ -11,12 +13,15 @@ import org.ihtsdo.tk.api.refex.type_nid_long.RefexNidLongVersionBI;
 
 import java.io.IOException;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement()
 public class FxRefexCompLongVersion extends FxRefexCompVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   public long long1;
+   public SimpleLongProperty long1Property = new SimpleLongProperty(this, "long1");
 
    //~--- constructors --------------------------------------------------------
 
@@ -27,7 +32,7 @@ public class FxRefexCompLongVersion extends FxRefexCompVersion {
    public FxRefexCompLongVersion(TerminologySnapshotDI ss, RefexNidLongVersionBI another)
            throws IOException, ContradictionException {
       super(ss, another);
-      this.long1 = another.getLong1();
+      this.long1Property.set(another.getLong1());
    }
 
    //~--- methods -------------------------------------------------------------
@@ -55,7 +60,7 @@ public class FxRefexCompLongVersion extends FxRefexCompVersion {
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
          // Compare longValue
-         if (this.long1 != another.long1) {
+         if (this.long1Property != another.long1Property) {
             return false;
          }
 
@@ -64,6 +69,10 @@ public class FxRefexCompLongVersion extends FxRefexCompVersion {
       }
 
       return false;
+   }
+
+   public SimpleLongProperty long1Property() {
+      return long1Property;
    }
 
    /**
@@ -75,7 +84,7 @@ public class FxRefexCompLongVersion extends FxRefexCompVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" long: ");
-      buff.append(this.long1);
+      buff.append(this.long1Property);
       buff.append(" ");
       buff.append(super.toString());
 
@@ -85,12 +94,12 @@ public class FxRefexCompLongVersion extends FxRefexCompVersion {
    //~--- get methods ---------------------------------------------------------
 
    public long getLong1() {
-      return long1;
+      return long1Property.get();
    }
 
    //~--- set methods ---------------------------------------------------------
 
    public void setLong1(long long1) {
-      this.long1 = long1;
+      this.long1Property.set(long1);
    }
 }

@@ -2,7 +2,9 @@ package org.ihtsdo.fxmodel.concept.component.media;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.FxComponentReference;
+import javafx.beans.property.SimpleStringProperty;
+
+import org.ihtsdo.fxmodel.FxComponentRef;
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
@@ -12,14 +14,16 @@ import org.ihtsdo.tk.api.media.MediaVersionBI;
 
 import java.io.IOException;
 
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement()
 public class FxMediaVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   public String               textDescription;
-   public FxComponentReference typeRef;
+   private SimpleStringProperty textDescriptionProperty = new SimpleStringProperty(this, "textDescription");
+   private FxComponentRef       typeRef;
 
    //~--- constructors --------------------------------------------------------
 
@@ -30,8 +34,8 @@ public class FxMediaVersion extends FxVersion {
    public FxMediaVersion(TerminologySnapshotDI ss, MediaVersionBI another)
            throws IOException, ContradictionException {
       super(ss, another);
-      this.textDescription = another.getTextDescription();
-      this.typeRef         = new FxComponentReference(ss.getConceptVersion(another.getTypeNid()));
+      this.textDescriptionProperty.set(another.getTextDescription());
+      this.typeRef = new FxComponentRef(ss.getConceptVersion(another.getTypeNid()));
    }
 
    //~--- methods -------------------------------------------------------------
@@ -58,8 +62,8 @@ public class FxMediaVersion extends FxVersion {
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
-         // Compare textDescription
-         if (!this.textDescription.equals(another.textDescription)) {
+         // Compare textDescriptionProperty
+         if (!this.textDescriptionProperty.equals(another.textDescriptionProperty)) {
             return false;
          }
 
@@ -75,6 +79,10 @@ public class FxMediaVersion extends FxVersion {
       return false;
    }
 
+   public SimpleStringProperty textDescriptionProperty() {
+      return textDescriptionProperty;
+   }
+
    /**
     * Returns a string representation of the object.
     */
@@ -84,7 +92,7 @@ public class FxMediaVersion extends FxVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" desc:");
-      buff.append("'").append(this.textDescription).append("'");
+      buff.append("'").append(this.textDescriptionProperty).append("'");
       buff.append(" type:");
       buff.append(typeRef.getText());
       buff.append(" ");
@@ -96,20 +104,20 @@ public class FxMediaVersion extends FxVersion {
    //~--- get methods ---------------------------------------------------------
 
    public String getTextDescription() {
-      return textDescription;
+      return textDescriptionProperty.get();
    }
 
-   public FxComponentReference getTypeRef() {
+   public FxComponentRef getTypeRef() {
       return typeRef;
    }
 
    //~--- set methods ---------------------------------------------------------
 
    public void setTextDescription(String textDescription) {
-      this.textDescription = textDescription;
+      this.textDescriptionProperty.set(textDescription);
    }
 
-   public void setTypeUuid(FxComponentReference typeRef) {
+   public void setTypeRef(FxComponentRef typeRef) {
       this.typeRef = typeRef;
    }
 }

@@ -11,18 +11,18 @@ import org.ihtsdo.fxmodel.concept.component.description.FxDescriptionChronicle;
 import org.ihtsdo.fxmodel.concept.component.media.FxMediaChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.type_boolean.FxRefexBooleanChronicle;
-import org.ihtsdo.fxmodel.concept.component.refex.type_int.FxRefexIntChronicle;
-import org.ihtsdo.fxmodel.concept.component.refex.type_long.FxRefexLongChronicle;
-import org.ihtsdo.fxmodel.concept.component.refex.type_member.FxRefexMembershipChronicle;
-import org.ihtsdo.fxmodel.concept.component.refex.type_string.FxRefexStringChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp.FxRefexCompCompChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp_comp.FxRefexCompCompCompChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp_string.FxRefexCompCompStringChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp_float.FxRefexCompFloatChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp_int.FxRefexCompIntChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp_long.FxRefexCompLongChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp_string.FxRefexCompStringChronicle;
-import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp.FxRefexCompCompChronicle;
-import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp_string.FxRefexCompCompStringChronicle;
-import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp_comp.FxRefexCompCompCompChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_int.FxRefexIntChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_long.FxRefexLongChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_member.FxRefexMembershipChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_string.FxRefexStringChronicle;
 import org.ihtsdo.fxmodel.concept.component.relationship.FxRelationshipChronicle;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
@@ -48,22 +48,39 @@ import org.ihtsdo.tk.api.relationship.RelationshipChronicleBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import java.util.*;
 
-public class FxConcept {
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement()
+public class FxConcept implements Serializable {
    public static final String PADDING          = "     ";
-   public static final int    dataVersion      = 7;
    public static final long   serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   protected boolean                                 annotationStyleRefex = false;
+   @XmlElement(name = "fx-attributes-chronicle")
    protected FxConceptAttributesChronicle            conceptAttributes;
+   @XmlElementWrapper(name = "description-list")
+   @XmlElement(name = "fx-description-chronicle")
    protected ObservableList<FxDescriptionChronicle>  descriptions;
+   @XmlElementWrapper(name = "media-list")
+   @XmlElement(name = "fx-media-chronicle")
    protected ObservableList<FxMediaChronicle>        media;
+   @XmlElement(name = "primordial-uuid")
    protected UUID                                    primordialUuid;
+   @XmlElementWrapper(name = "refset-member-list")
+   @XmlElement(name = "fx-refset-member-chronicle")
    protected ObservableList<FxRefexChronicle<?>>     refsetMembers;
+   @XmlElementWrapper(name = "relationship-list")
+   @XmlElement(name = "fx-relationship-chronicle")
    protected ObservableList<FxRelationshipChronicle> relationships;
 
    //~--- constructors --------------------------------------------------------
@@ -349,15 +366,7 @@ public class FxConcept {
       return relationships;
    }
 
-   public boolean isAnnotationStyleRefex() {
-      return annotationStyleRefex;
-   }
-
    //~--- set methods ---------------------------------------------------------
-
-   public void setAnnotationStyleRefex(boolean annotationStyleRefex) {
-      this.annotationStyleRefex = annotationStyleRefex;
-   }
 
    public void setConceptAttributes(FxConceptAttributesChronicle conceptAttributes) {
       this.conceptAttributes = conceptAttributes;

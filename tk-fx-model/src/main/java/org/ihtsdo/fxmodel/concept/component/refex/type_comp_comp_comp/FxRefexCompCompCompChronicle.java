@@ -18,10 +18,11 @@ import org.ihtsdo.tk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement()
 public class FxRefexCompCompCompChronicle extends FxRefexChronicle<FxRefexCompCompCompVersion> {
    public static final long serialVersionUID = 1;
-
    //~--- constructors --------------------------------------------------------
 
    public FxRefexCompCompCompChronicle() {

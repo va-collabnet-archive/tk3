@@ -2,6 +2,8 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_boolean;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javafx.beans.property.SimpleBooleanProperty;
+
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
@@ -11,15 +13,15 @@ import org.ihtsdo.tk.api.refex.type_boolean.RefexBooleanVersionBI;
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement()
 public class FxRefexBooleanVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   @XmlAttribute
-   public boolean booleanValue;
+   private SimpleBooleanProperty boolean1Property = new SimpleBooleanProperty(this, "boolean1");
 
    //~--- constructors --------------------------------------------------------
 
@@ -30,7 +32,7 @@ public class FxRefexBooleanVersion extends FxVersion {
    public FxRefexBooleanVersion(TerminologySnapshotDI ss, RefexBooleanVersionBI another)
            throws IOException, ContradictionException {
       super(ss, another);
-      this.booleanValue = another.getBoolean1();
+      this.boolean1Property.set(another.getBoolean1());
    }
 
    //~--- methods -------------------------------------------------------------
@@ -57,8 +59,8 @@ public class FxRefexBooleanVersion extends FxVersion {
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
-         // Compare booleanValue
-         if (this.booleanValue != another.booleanValue) {
+         // Compare boolean1Property
+         if (this.boolean1Property != another.boolean1Property) {
             return false;
          }
 
@@ -77,7 +79,7 @@ public class FxRefexBooleanVersion extends FxVersion {
       StringBuilder buff = new StringBuilder();
 
       buff.append(this.getClass().getSimpleName()).append(": ");
-      buff.append(this.booleanValue);
+      buff.append(this.boolean1Property);
       buff.append(" ");
       buff.append(super.toString());
 
@@ -86,17 +88,17 @@ public class FxRefexBooleanVersion extends FxVersion {
 
    //~--- get methods ---------------------------------------------------------
 
-   public boolean getBooleanValue() {
-      return booleanValue;
-   }
-
-   public boolean isBooleanValue() {
-      return booleanValue;
+   public boolean getBoolean1() {
+      return boolean1Property.get();
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setBooleanValue(boolean booleanValue) {
-      this.booleanValue = booleanValue;
+   public void setBoolean1(boolean booleanValue) {
+      this.boolean1Property.set(booleanValue);
    }
+
+    public SimpleBooleanProperty boolean1Property() {
+        return boolean1Property;
+    }
 }

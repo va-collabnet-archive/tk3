@@ -10,7 +10,9 @@ import org.ihtsdo.tk.api.refex.RefexVersionBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement()
 public class FxRefexMembershipVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 

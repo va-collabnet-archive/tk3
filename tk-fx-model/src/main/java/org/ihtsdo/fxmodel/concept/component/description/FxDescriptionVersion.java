@@ -2,28 +2,32 @@ package org.ihtsdo.fxmodel.concept.component.description;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import org.ihtsdo.fxmodel.FxComponentRef;
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.description.DescriptionVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 
-import org.ihtsdo.fxmodel.FxComponentReference;
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.TerminologySnapshotDI;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement()
 public class FxDescriptionVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   public boolean              initialCaseSignificant;
-   public SimpleStringProperty langProperty = new SimpleStringProperty();
-   public SimpleStringProperty textProperty = new SimpleStringProperty();
-   public FxComponentReference                 type;
+   protected SimpleBooleanProperty initialCaseSignificantProperty = new SimpleBooleanProperty(this,
+                                                                       "initialCaseSignificant");
+   protected SimpleStringProperty langProperty = new SimpleStringProperty();
+   protected SimpleStringProperty textProperty = new SimpleStringProperty();
+   protected FxComponentRef       type;
 
    //~--- constructors --------------------------------------------------------
 
@@ -31,12 +35,13 @@ public class FxDescriptionVersion extends FxVersion {
       super();
    }
 
-   public FxDescriptionVersion(TerminologySnapshotDI ss, DescriptionVersionBI another) throws IOException, ContradictionException {
+   public FxDescriptionVersion(TerminologySnapshotDI ss, DescriptionVersionBI another)
+           throws IOException, ContradictionException {
       super(ss, another);
-      this.initialCaseSignificant = another.isInitialCaseSignificant();
+      this.initialCaseSignificantProperty.set(another.isInitialCaseSignificant());
       this.langProperty.set(another.getLang());
       this.textProperty.set(another.getText());
-      this.type = new FxComponentReference(ss.getConceptVersion(another.getTypeNid()));
+      this.type = new FxComponentRef(ss.getConceptVersion(another.getTypeNid()));
    }
 
    //~--- methods -------------------------------------------------------------
@@ -63,8 +68,8 @@ public class FxDescriptionVersion extends FxVersion {
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
-         // Compare initialCaseSignificant
-         if (this.initialCaseSignificant != another.initialCaseSignificant) {
+         // Compare initialCaseSignificantProperty
+         if (this.initialCaseSignificantProperty != another.initialCaseSignificantProperty) {
             return false;
          }
 
@@ -90,6 +95,10 @@ public class FxDescriptionVersion extends FxVersion {
       return false;
    }
 
+   public SimpleBooleanProperty initialCaseSignificantProperty() {
+      return initialCaseSignificantProperty;
+   }
+
    /**
     * Returns a string representation of the object.
     */
@@ -99,7 +108,7 @@ public class FxDescriptionVersion extends FxVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" ics:");
-      buff.append(this.initialCaseSignificant);
+      buff.append(this.initialCaseSignificantProperty);
       buff.append(" lang:");
       buff.append("'").append(this.langProperty).append("'");
       buff.append(" text:");
@@ -140,7 +149,7 @@ public class FxDescriptionVersion extends FxVersion {
       return textProperty;
    }
 
-   public FxComponentReference getType() {
+   public FxComponentRef getType() {
       return type;
    }
 
@@ -150,13 +159,13 @@ public class FxDescriptionVersion extends FxVersion {
     * @see org.ihtsdo.etypes.I_DescribeExternally#isInitialCaseSignificant()
     */
    public boolean isInitialCaseSignificant() {
-      return initialCaseSignificant;
+      return initialCaseSignificantProperty.get();
    }
 
    //~--- set methods ---------------------------------------------------------
 
    public void setInitialCaseSignificant(boolean initialCaseSignificant) {
-      this.initialCaseSignificant = initialCaseSignificant;
+      this.initialCaseSignificantProperty.set(initialCaseSignificant);
    }
 
    public void setLang(String lang) {
@@ -167,7 +176,7 @@ public class FxDescriptionVersion extends FxVersion {
       this.textProperty.set(text);
    }
 
-   public void setType(FxComponentReference type) {
+   public void setType(FxComponentRef type) {
       this.type = type;
    }
 }

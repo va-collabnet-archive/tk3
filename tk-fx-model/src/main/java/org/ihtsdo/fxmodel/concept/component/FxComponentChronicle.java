@@ -18,18 +18,28 @@ import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 
-public abstract class FxComponentChronicle<V extends FxVersion> {
+public abstract class FxComponentChronicle<V extends FxVersion> implements Serializable {
    private static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
+   @XmlElementWrapper(name = "extra-id-list")
+   @XmlElement(name = "extra-id")
    public ObservableList<FxIdentifier>        additionalIds;
+   @XmlElementWrapper(name = "annotation-list")
+   @XmlElement(name = "fx-annotation")
    public ObservableList<FxRefexChronicle<?>> annotations;
    public FxConcept                           concept;
+   @XmlElement(name = "primordial-uuid")
    public UUID                                primordialUuid;
+   @XmlElementWrapper(name = "version-list")
+   @XmlElement(name = "version")
    public ObservableList<V>                   versions;
 
    //~--- constructors --------------------------------------------------------

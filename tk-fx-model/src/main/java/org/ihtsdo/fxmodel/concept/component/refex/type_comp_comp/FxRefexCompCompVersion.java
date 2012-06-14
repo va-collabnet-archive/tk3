@@ -2,7 +2,7 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.fxmodel.FxComponentRef;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
@@ -11,14 +11,16 @@ import org.ihtsdo.tk.api.refex.type_nid_nid.RefexNidNidVersionBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
+@XmlRootElement()
 public class FxRefexCompCompVersion extends FxRefexCompVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   public FxComponentReference comp2Ref;
+   private FxComponentRef comp2Ref;
 
    //~--- constructors --------------------------------------------------------
 
@@ -29,7 +31,7 @@ public class FxRefexCompCompVersion extends FxRefexCompVersion {
    public FxRefexCompCompVersion(TerminologySnapshotDI ss, RefexNidNidVersionBI another)
            throws IOException, ContradictionException {
       super(ss, another);
-      this.comp2Ref = new FxComponentReference(ss, another.getNid2());
+      this.comp2Ref = new FxComponentRef(ss, another.getNid2());
    }
 
    //~--- methods -------------------------------------------------------------
@@ -86,13 +88,13 @@ public class FxRefexCompCompVersion extends FxRefexCompVersion {
 
    //~--- get methods ---------------------------------------------------------
 
-   public FxComponentReference getUuid2() {
+   public FxComponentRef getComponent2Ref() {
       return comp2Ref;
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setUuid2(FxComponentReference comp2Ref) {
+   public void setComponent2Ref(FxComponentRef comp2Ref) {
       this.comp2Ref = comp2Ref;
    }
 }

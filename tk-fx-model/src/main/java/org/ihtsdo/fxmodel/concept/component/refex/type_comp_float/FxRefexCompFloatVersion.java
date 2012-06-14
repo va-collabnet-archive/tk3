@@ -2,6 +2,9 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp_float;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javafx.beans.property.SimpleFloatProperty;
+
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompVersion;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
@@ -13,15 +16,17 @@ import org.ihtsdo.tk.api.refex.type_nid_float.RefexNidFloatVersionBI;
 import java.io.IOException;
 
 import java.util.UUID;
-import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompVersion;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement()
 public class FxRefexCompFloatVersion extends FxRefexCompVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   public float float1;
+   private SimpleFloatProperty float1Property = new SimpleFloatProperty(this, "float1");
 
    //~--- constructors --------------------------------------------------------
 
@@ -35,7 +40,7 @@ public class FxRefexCompFloatVersion extends FxRefexCompVersion {
 
       TerminologyStoreDI ts = Ts.get();
 
-      this.float1 = another.getFloat1();
+      this.float1Property.set(another.getFloat1());
    }
 
    //~--- methods -------------------------------------------------------------
@@ -62,9 +67,8 @@ public class FxRefexCompFloatVersion extends FxRefexCompVersion {
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
-
          // Compare floatValue
-         if (this.float1 != another.float1) {
+         if (this.float1Property != another.float1Property) {
             return false;
          }
 
@@ -73,6 +77,10 @@ public class FxRefexCompFloatVersion extends FxRefexCompVersion {
       }
 
       return false;
+   }
+
+   public SimpleFloatProperty float1Property() {
+      return float1Property;
    }
 
    /**
@@ -84,7 +92,7 @@ public class FxRefexCompFloatVersion extends FxRefexCompVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" flt:");
-      buff.append(this.float1);
+      buff.append(this.float1Property);
       buff.append(" ");
       buff.append(super.toString());
 
@@ -94,12 +102,12 @@ public class FxRefexCompFloatVersion extends FxRefexCompVersion {
    //~--- get methods ---------------------------------------------------------
 
    public float getFloat1() {
-      return float1;
+      return float1Property.get();
    }
 
    //~--- set methods ---------------------------------------------------------
 
    public void setFloat1(float float1) {
-      this.float1 = float1;
+      this.float1Property.set(float1);
    }
 }

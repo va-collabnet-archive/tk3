@@ -19,6 +19,9 @@ import java.io.IOException;
 
 import java.util.*;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement()
 public class FxRefexBooleanChronicle extends FxRefexChronicle<FxRefexBooleanVersion> {
    public static final long serialVersionUID = 1;
 

@@ -18,7 +18,9 @@ import org.ihtsdo.tk.api.refex.type_member.RefexMemberVersionBI;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement()
 public class FxRefexMembershipChronicle extends FxRefexChronicle<FxRefexMembershipVersion> {
    public static final long serialVersionUID = 1;
 

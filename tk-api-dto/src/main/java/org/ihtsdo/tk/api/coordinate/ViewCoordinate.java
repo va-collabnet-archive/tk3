@@ -2,8 +2,6 @@ package org.ihtsdo.tk.api.coordinate;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.tk.api.PositionSet;
-import java.io.Externalizable;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.ContradictionManagerBI;
@@ -12,14 +10,17 @@ import org.ihtsdo.tk.api.NidListBI;
 import org.ihtsdo.tk.api.NidSet;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.api.PositionBI;
+import org.ihtsdo.tk.api.PositionSet;
 import org.ihtsdo.tk.api.PositionSetBI;
 import org.ihtsdo.tk.api.Precedence;
 import org.ihtsdo.tk.api.RelAssertionType;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
+import org.ihtsdo.tk.api.TerminologyStoreDI;
 import org.ihtsdo.tk.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
@@ -29,97 +30,29 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import org.ihtsdo.tk.api.TerminologyStoreDI;
 
 public class ViewCoordinate implements Externalizable {
-   private long                     lastModSequence = Long.MIN_VALUE;
-   private NidSetBI                 allowedStatusNids;
-   private int                      classifierNid;
-   private ContradictionManagerBI   contradictionManager;
-   private NidSetBI                 isaTypeNids;
-   private NidListBI                langPrefList;
-   private LANGUAGE_SORT            langSort;
-   private int                      languageNid;
-   private String                   name;
-   private PositionSetBI            positionSet;
-   private Precedence               precedence;
-   private RelAssertionType         relAssertionType;
-   private UUID                     vcUuid;
-   private ViewCoordinate vcWithAllStatusValues; // transient
-
-   
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        TerminologyStoreDI ts = Ts.get();
-        out.writeLong(lastModSequence);
-        if (allowedStatusNids == null) {
-            out.writeObject(null);
-        } else {
-            out.writeObject(ts.getUuidCollection(allowedStatusNids.getAsSet()));
-        }
-        out.writeObject(ts.getUuidPrimordialForNid(classifierNid));
-        out.writeObject(contradictionManager);
-        if (isaTypeNids == null) {
-            out.writeObject(null);
-        } else {
-            out.writeObject(ts.getUuidCollection(isaTypeNids.getAsSet()));
-        }
-        if (langPrefList == null) {
-            out.writeObject(null);
-        } else {
-            out.writeObject(ts.getUuidCollection(langPrefList.getListValues()));
-        }
-        out.writeObject(langSort);
-        out.writeObject(ts.getUuidPrimordialForNid(languageNid));
-        out.writeObject(name);
-        out.writeObject(positionSet);
-        out.writeObject(precedence);
-        out.writeObject(relAssertionType);
-        out.writeObject(vcUuid);
-    }
-
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        TerminologyStoreDI ts = Ts.get();
-        lastModSequence = in.readLong();
-        Object readObject = in.readObject();
-        if (readObject == null) {
-            allowedStatusNids = null;
-        } else {
-            allowedStatusNids = new NidSet();
-            allowedStatusNids.addAll(ts.getNidCollection((Collection<UUID>) readObject));
-        }
-        classifierNid = ts.getNidForUuids((UUID) in.readObject());
-        contradictionManager = (ContradictionManagerBI) in.readObject();
-        readObject = in.readObject();
-        if (readObject == null) {
-            isaTypeNids = null;
-        } else {
-            isaTypeNids = new NidSet();
-            isaTypeNids.addAll(ts.getNidCollection((Collection<UUID>) readObject));
-        }
-        readObject = in.readObject();
-        if (readObject == null) {
-            langPrefList = null;
-        } else {
-            langPrefList = new NidList();
-            langPrefList.addAll(ts.getNidCollection((Collection<UUID>) readObject));
-        }
-        langSort = (LANGUAGE_SORT) in.readObject();
-        languageNid = ts.getNidForUuids((UUID) in.readObject());
-        name = (String) in.readObject();
-        positionSet = (PositionSetBI) in.readObject();
-        precedence = (Precedence) in.readObject();
-        relAssertionType = (RelAssertionType) in.readObject();
-        vcUuid = (UUID) in.readObject();
-    }
+   private long                   lastModSequence = Long.MIN_VALUE;
+   private NidSetBI               allowedStatusNids;
+   private int                    classifierNid;
+   private ContradictionManagerBI contradictionManager;
+   private NidSetBI               isaTypeNids;
+   private NidListBI              langPrefList;
+   private LANGUAGE_SORT          langSort;
+   private int                    languageNid;
+   private String                 name;
+   private PositionSetBI          positionSet;
+   private Precedence             precedence;
+   private RelAssertionType       relAssertionType;
+   private UUID                   vcUuid;
+   private ViewCoordinate         vcWithAllStatusValues;    // transient
 
    //~--- constructors --------------------------------------------------------
 
-    public ViewCoordinate() {
-        super();
-    }
-    
+   public ViewCoordinate() {
+      super();
+   }
+
    protected ViewCoordinate(ViewCoordinate another) {
       super();
       this.vcUuid     = another.vcUuid;
@@ -165,6 +98,7 @@ public class ViewCoordinate implements Externalizable {
       assert precedence != null;
       assert contradictionManager != null;
       this.vcUuid     = vcUuid;
+      this.name       = name;
       this.precedence = precedence;
 
       if (positionSet != null) {
@@ -281,6 +215,50 @@ public class ViewCoordinate implements Externalizable {
       return hashCode;
    }
 
+   @Override
+   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+      TerminologyStoreDI ts = Ts.get();
+
+      lastModSequence = in.readLong();
+
+      Object readObject = in.readObject();
+
+      if (readObject == null) {
+         allowedStatusNids = null;
+      } else {
+         allowedStatusNids = new NidSet();
+         allowedStatusNids.addAll(ts.getNidCollection((Collection<UUID>) readObject));
+      }
+
+      classifierNid        = ts.getNidForUuids((UUID) in.readObject());
+      contradictionManager = (ContradictionManagerBI) in.readObject();
+      readObject           = in.readObject();
+
+      if (readObject == null) {
+         isaTypeNids = null;
+      } else {
+         isaTypeNids = new NidSet();
+         isaTypeNids.addAll(ts.getNidCollection((Collection<UUID>) readObject));
+      }
+
+      readObject = in.readObject();
+
+      if (readObject == null) {
+         langPrefList = null;
+      } else {
+         langPrefList = new NidList();
+         langPrefList.addAll(ts.getNidCollection((Collection<UUID>) readObject));
+      }
+
+      langSort         = (LANGUAGE_SORT) in.readObject();
+      languageNid      = ts.getNidForUuids((UUID) in.readObject());
+      name             = (String) in.readObject();
+      positionSet      = (PositionSetBI) in.readObject();
+      precedence       = (Precedence) in.readObject();
+      relAssertionType = (RelAssertionType) in.readObject();
+      vcUuid           = (UUID) in.readObject();
+   }
+
    private static boolean testEquals(Object o1, Object o2) {
       if ((o1 == null) && (o2 == null)) {
          return true;
@@ -355,6 +333,42 @@ public class ViewCoordinate implements Externalizable {
       sb.append(" \nrelAssertionType: ").append(relAssertionType);
 
       return sb.toString();
+   }
+
+   @Override
+   public void writeExternal(ObjectOutput out) throws IOException {
+      TerminologyStoreDI ts = Ts.get();
+
+      out.writeLong(lastModSequence);
+
+      if (allowedStatusNids == null) {
+         out.writeObject(null);
+      } else {
+         out.writeObject(ts.getUuidCollection(allowedStatusNids.getAsSet()));
+      }
+
+      out.writeObject(ts.getUuidPrimordialForNid(classifierNid));
+      out.writeObject(contradictionManager);
+
+      if (isaTypeNids == null) {
+         out.writeObject(null);
+      } else {
+         out.writeObject(ts.getUuidCollection(isaTypeNids.getAsSet()));
+      }
+
+      if (langPrefList == null) {
+         out.writeObject(null);
+      } else {
+         out.writeObject(ts.getUuidCollection(langPrefList.getListValues()));
+      }
+
+      out.writeObject(langSort);
+      out.writeObject(ts.getUuidPrimordialForNid(languageNid));
+      out.writeObject(name);
+      out.writeObject(positionSet);
+      out.writeObject(precedence);
+      out.writeObject(relAssertionType);
+      out.writeObject(vcUuid);
    }
 
    //~--- get methods ---------------------------------------------------------

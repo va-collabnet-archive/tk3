@@ -2,26 +2,26 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.fxmodel.FxComponentRef;
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
-import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
-import org.ihtsdo.tk.api.TerminologyStoreDI;
 import org.ihtsdo.tk.api.refex.type_nid.RefexNidVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
 
+@XmlRootElement()
 public class FxRefexCompVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   public FxComponentReference comp1Ref;
+   private FxComponentRef comp1Ref;
 
    //~--- constructors --------------------------------------------------------
 
@@ -32,10 +32,7 @@ public class FxRefexCompVersion extends FxVersion {
    public FxRefexCompVersion(TerminologySnapshotDI ss, RefexNidVersionBI another)
            throws IOException, ContradictionException {
       super(ss, another);
-
-      TerminologyStoreDI ts = Ts.get();
-
-      this.comp1Ref = new FxComponentReference(ss.getConceptVersion(another.getNid1()));
+      this.comp1Ref = new FxComponentRef(ss.getConceptVersion(another.getNid1()));
    }
 
    //~--- methods -------------------------------------------------------------
@@ -92,13 +89,13 @@ public class FxRefexCompVersion extends FxVersion {
 
    //~--- get methods ---------------------------------------------------------
 
-   public FxComponentReference getComp1Ref() {
+   public FxComponentRef getComp1Ref() {
       return comp1Ref;
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setComp1Ref(FxComponentReference comp1Ref) {
+   public void setComp1Ref(FxComponentRef comp1Ref) {
       this.comp1Ref = comp1Ref;
    }
 }

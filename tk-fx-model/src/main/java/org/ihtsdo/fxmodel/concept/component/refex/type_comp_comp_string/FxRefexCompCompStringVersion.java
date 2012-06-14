@@ -2,6 +2,8 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp_string;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javafx.beans.property.SimpleStringProperty;
+
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp.FxRefexCompCompVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
@@ -11,12 +13,15 @@ import org.ihtsdo.tk.api.refex.type_nid_nid_string.RefexNidNidStringVersionBI;
 
 import java.io.IOException;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement()
 public class FxRefexCompCompStringVersion extends FxRefexCompCompVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   public String string1;
+   private SimpleStringProperty string1Property = new SimpleStringProperty(this, "string1");
 
    //~--- constructors --------------------------------------------------------
 
@@ -27,7 +32,7 @@ public class FxRefexCompCompStringVersion extends FxRefexCompCompVersion {
    public FxRefexCompCompStringVersion(TerminologySnapshotDI ss, RefexNidNidStringVersionBI another)
            throws IOException, ContradictionException {
       super(ss, another);
-      this.string1 = another.getString1();
+      this.string1Property.set(another.getString1());
    }
 
    //~--- methods -------------------------------------------------------------
@@ -55,7 +60,7 @@ public class FxRefexCompCompStringVersion extends FxRefexCompCompVersion {
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
          // Compare stringValue
-         if (!this.string1.equals(another.string1)) {
+         if (!this.string1Property.equals(another.string1Property)) {
             return false;
          }
 
@@ -75,7 +80,7 @@ public class FxRefexCompCompStringVersion extends FxRefexCompCompVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" str:");
-      buff.append("'").append(this.string1).append("' ");
+      buff.append("'").append(this.string1Property).append("' ");
       buff.append(super.toString());
 
       return buff.toString();
@@ -83,13 +88,17 @@ public class FxRefexCompCompStringVersion extends FxRefexCompCompVersion {
 
    //~--- get methods ---------------------------------------------------------
 
+   public static long getSerialVersionUID() {
+      return serialVersionUID;
+   }
+
    public String getString1() {
-      return string1;
+      return string1Property.get();
    }
 
    //~--- set methods ---------------------------------------------------------
 
    public void setString1(String string1) {
-      this.string1 = string1;
+      this.string1Property.set(string1);
    }
 }

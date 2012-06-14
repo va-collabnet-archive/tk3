@@ -2,22 +2,26 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp_string;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javafx.beans.property.SimpleStringProperty;
+
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompVersion;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.type_nid_string.RefexNidStringVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 
-import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompVersion;
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.TerminologySnapshotDI;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement()
 public class FxRefexCompStringVersion extends FxRefexCompVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   public String string1;
+   public SimpleStringProperty string1Property = new SimpleStringProperty(this, "string1");
 
    //~--- constructors --------------------------------------------------------
 
@@ -25,10 +29,10 @@ public class FxRefexCompStringVersion extends FxRefexCompVersion {
       super();
    }
 
-   public FxRefexCompStringVersion(TerminologySnapshotDI ss, RefexNidStringVersionBI another) throws IOException, ContradictionException {
+   public FxRefexCompStringVersion(TerminologySnapshotDI ss, RefexNidStringVersionBI another)
+           throws IOException, ContradictionException {
       super(ss, another);
-
-       this.string1 = another.getString1();
+      this.string1Property.set(another.getString1());
    }
 
    //~--- methods -------------------------------------------------------------
@@ -55,9 +59,8 @@ public class FxRefexCompStringVersion extends FxRefexCompVersion {
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
-
          // Compare strValue
-         if (!this.string1.equals(another.string1)) {
+         if (!this.string1Property.equals(another.string1Property)) {
             return false;
          }
 
@@ -66,6 +69,10 @@ public class FxRefexCompStringVersion extends FxRefexCompVersion {
       }
 
       return false;
+   }
+
+   public SimpleStringProperty string1Property() {
+      return string1Property;
    }
 
    /**
@@ -77,7 +84,7 @@ public class FxRefexCompStringVersion extends FxRefexCompVersion {
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" str: ");
-      buff.append("'").append(this.string1).append("'");
+      buff.append("'").append(this.string1Property).append("'");
       buff.append(" ");
       buff.append(super.toString());
 
@@ -87,12 +94,12 @@ public class FxRefexCompStringVersion extends FxRefexCompVersion {
    //~--- get methods ---------------------------------------------------------
 
    public String getString1() {
-      return string1;
+      return string1Property.get();
    }
 
    //~--- set methods ---------------------------------------------------------
 
    public void setString1(String string1) {
-      this.string1 = string1;
+      this.string1Property.set(string1);
    }
 }

@@ -2,7 +2,7 @@ package org.ihtsdo.fxmodel.concept.component.refex;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.fxmodel.FxComponentRef;
 import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.FxComponentChronicle;
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
@@ -20,8 +20,8 @@ public abstract class FxRefexChronicle<V extends FxVersion> extends FxComponentC
 
    //~--- fields --------------------------------------------------------------
 
-   public FxComponentReference componentRef;
-   public FxComponentReference refexRef;
+   protected FxComponentRef componentRef;
+   protected FxComponentRef refexRef;
 
    //~--- constructors --------------------------------------------------------
 
@@ -32,17 +32,17 @@ public abstract class FxRefexChronicle<V extends FxVersion> extends FxComponentC
    public FxRefexChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexVersionBI another)
            throws IOException, ContradictionException {
       super(ss, concept, another);
-      this.componentRef = new FxComponentReference(ss, another.getReferencedComponentNid());
-      this.refexRef     = new FxComponentReference(ss.getConceptVersion(another.getRefexNid()));
+      this.componentRef = new FxComponentRef(ss, another.getReferencedComponentNid());
+      this.refexRef     = new FxComponentRef(ss.getConceptVersion(another.getRefexNid()));
    }
 
    //~--- get methods ---------------------------------------------------------
 
-   public FxComponentReference getComponentRef() {
+   public FxComponentRef getComponentRef() {
       return componentRef;
    }
 
-   public FxComponentReference getRefexRef() {
+   public FxComponentRef getRefexRef() {
       return refexRef;
    }
 
@@ -50,11 +50,11 @@ public abstract class FxRefexChronicle<V extends FxVersion> extends FxComponentC
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setComponentRef(FxComponentReference componentRef) {
+   public void setComponentRef(FxComponentRef componentRef) {
       this.componentRef = componentRef;
    }
 
-   public void setRefexUuid(FxComponentReference refexRef) {
+   public void setRefexUuid(FxComponentRef refexRef) {
       this.refexRef = refexRef;
    }
 }

@@ -16,14 +16,14 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 
-import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.fxmodel.FxComponentRef;
 
 public abstract class FxIdentifier extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   public FxComponentReference authorityRef;
+   protected FxComponentRef authorityRef;
 
    //~--- constructors --------------------------------------------------------
 
@@ -33,7 +33,7 @@ public abstract class FxIdentifier extends FxVersion {
 
    public FxIdentifier(TerminologySnapshotDI ss, IdBI id) throws IOException, ContradictionException {
       super(ss, id);
-      this.authorityRef = new FxComponentReference(ss.getConceptVersion(id.getAuthorityNid()));
+      this.authorityRef = new FxComponentRef(ss.getConceptVersion(id.getAuthorityNid()));
    }
 
    //~--- methods -------------------------------------------------------------
@@ -76,7 +76,7 @@ public abstract class FxIdentifier extends FxVersion {
 
    //~--- get methods ---------------------------------------------------------
 
-   public FxComponentReference getAuthorityRef() {
+   public FxComponentRef getAuthorityRef() {
       return authorityRef;
    }
 
@@ -86,7 +86,7 @@ public abstract class FxIdentifier extends FxVersion {
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setAuthorityRef(FxComponentReference authorityRef) {
+   public void setAuthorityRef(FxComponentRef authorityRef) {
       this.authorityRef = authorityRef;
    }
 

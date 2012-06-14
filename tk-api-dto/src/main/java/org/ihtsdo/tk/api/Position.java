@@ -257,8 +257,8 @@ public class Position implements PositionBI, Serializable {
 
     //~--- get methods ---------------------------------------------------------
     @Override
-    public Collection<PositionBI> getAllOrigins() {
-        throw new UnsupportedOperationException();
+    public Collection<? extends PositionBI> getAllOrigins() {
+        return path.getOrigins();
     }
 
     /*

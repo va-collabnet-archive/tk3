@@ -2,30 +2,30 @@ package org.ihtsdo.fxmodel.concept.component.relationship;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javafx.beans.property.SimpleIntegerProperty;
+
+import org.ihtsdo.fxmodel.FxComponentRef;
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
-import org.ihtsdo.tk.Ts;
-import org.ihtsdo.tk.api.TerminologyStoreDI;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 
-import java.util.UUID;
-import org.ihtsdo.fxmodel.FxComponentReference;
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.TerminologySnapshotDI;
+import javax.xml.bind.annotation.XmlRootElement;
 
-
+@XmlRootElement()
 public class FxRelationshipVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   public FxComponentReference characteristicRef;
-   public int  group;
-   public FxComponentReference refinabilityRef;
-   public FxComponentReference typeRef;
+   protected SimpleIntegerProperty groupProperty = new SimpleIntegerProperty(this, "group");
+   protected FxComponentRef  characteristicRef;
+   protected FxComponentRef  refinabilityRef;
+   protected FxComponentRef  typeRef;
 
    //~--- constructors --------------------------------------------------------
 
@@ -33,18 +33,20 @@ public class FxRelationshipVersion extends FxVersion {
       super();
    }
 
-   public FxRelationshipVersion(TerminologySnapshotDI ss, RelationshipVersionBI rv) throws IOException, ContradictionException {
+   public FxRelationshipVersion(TerminologySnapshotDI ss, RelationshipVersionBI rv)
+           throws IOException, ContradictionException {
       super(ss, rv);
-
-      TerminologyStoreDI ts = Ts.get();
-
-      characteristicRef = new FxComponentReference(ss.getConceptVersion(rv.getCharacteristicNid()));
-      refinabilityRef   = new FxComponentReference(ss.getConceptVersion(rv.getRefinabilityNid()));
-      group              = rv.getGroup();
-      typeRef           = new FxComponentReference(ss.getConceptVersion(rv.getTypeNid()));
+      characteristicRef = new FxComponentRef(ss.getConceptVersion(rv.getCharacteristicNid()));
+      refinabilityRef   = new FxComponentRef(ss.getConceptVersion(rv.getRefinabilityNid()));
+      groupProperty.set(rv.getGroup());
+      typeRef = new FxComponentRef(ss.getConceptVersion(rv.getTypeNid()));
    }
 
    //~--- methods -------------------------------------------------------------
+
+   public SimpleIntegerProperty groupProperty() {
+      return groupProperty;
+   }
 
    /**
     * Returns a string representation of the object.
@@ -57,7 +59,7 @@ public class FxRelationshipVersion extends FxVersion {
       buff.append(" type:");
       buff.append(this.typeRef);
       buff.append(" grp:");
-      buff.append(this.group);
+      buff.append(this.groupProperty);
       buff.append(" char:");
       buff.append(this.characteristicRef);
       buff.append(" ref:");
@@ -70,41 +72,37 @@ public class FxRelationshipVersion extends FxVersion {
 
    //~--- get methods ---------------------------------------------------------
 
-   public FxComponentReference getCharacteristicRef() {
+   public FxComponentRef getCharacteristicRef() {
       return characteristicRef;
    }
 
-   public int getGroup() {
-      return group;
-   }
-
-   public FxComponentReference getRefinabilityRef() {
+   public FxComponentRef getRefinabilityRef() {
       return refinabilityRef;
    }
 
    public int getRelGroup() {
-      return group;
+      return groupProperty.get();
    }
 
-   public FxComponentReference getTypeRef() {
+   public FxComponentRef getTypeRef() {
       return typeRef;
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setCharacteristicUuid(FxComponentReference characteristicRef) {
+   public void setCharacteristicRef(FxComponentRef characteristicRef) {
       this.characteristicRef = characteristicRef;
    }
 
-   public void setRefinabilityRef(FxComponentReference refinabilityRef) {
+   public void setRefinabilityRef(FxComponentRef refinabilityRef) {
       this.refinabilityRef = refinabilityRef;
    }
 
    public void setRelGroup(int relGroup) {
-      this.group = relGroup;
+      this.groupProperty.set(relGroup);
    }
 
-   public void setTypeUuid(FxComponentReference typeRef) {
+   public void setTypeRef(FxComponentRef typeRef) {
       this.typeRef = typeRef;
    }
 }

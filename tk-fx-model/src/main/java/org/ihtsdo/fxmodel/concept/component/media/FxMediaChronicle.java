@@ -16,7 +16,9 @@ import org.ihtsdo.tk.api.media.MediaVersionBI;
 import java.io.IOException;
 
 import java.util.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement()
 public class FxMediaChronicle extends FxComponentChronicle<FxMediaVersion> {
    public static final long serialVersionUID = 1;
 

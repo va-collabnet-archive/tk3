@@ -23,8 +23,11 @@ package org.ihtsdo.fxmodel;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import org.ihtsdo.tk.api.ComponentVersionBI;
 import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.concept.ConceptVersionBI;
+import org.ihtsdo.tk.api.description.DescriptionVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -34,50 +37,60 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 import java.util.UUID;
-import org.ihtsdo.tk.api.ComponentVersionBI;
-import org.ihtsdo.tk.api.TerminologySnapshotDI;
-import org.ihtsdo.tk.api.description.DescriptionVersionBI;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author kec
  */
-public class FxComponentReference implements Externalizable {
+@XmlRootElement()
+public class FxComponentRef implements Externalizable {
+   public static final long serialVersionUID = 1;
+
+   //~--- fields --------------------------------------------------------------
+
    private final SimpleObjectProperty<Integer> nidProperty  = new SimpleObjectProperty<>();
    private final SimpleObjectProperty<UUID>    uuidProperty = new SimpleObjectProperty<>();
    private final SimpleStringProperty          textProperty = new SimpleStringProperty();
 
    //~--- constructors --------------------------------------------------------
 
-   public FxComponentReference(ConceptVersionBI concept) throws IOException, ContradictionException {
+   public FxComponentRef() {}
+
+   public FxComponentRef(ConceptVersionBI concept) throws IOException, ContradictionException {
       nidProperty.set(concept.getNid());
       uuidProperty.set(concept.getPrimUuid());
       textProperty.set(concept.getPreferredDescription().getText());
    }
 
-   public FxComponentReference(int nid) throws IOException {
+   public FxComponentRef(int nid) throws IOException {
       nidProperty.set(nid);
    }
 
-   public FxComponentReference(UUID uuid) {
+   public FxComponentRef(UUID uuid) {
       uuidProperty.set(uuid);
    }
 
-   public FxComponentReference(TerminologySnapshotDI ss, int nid) throws IOException, ContradictionException {
-       ComponentVersionBI component = ss.getComponentVersion(nid);
-       nidProperty.set(component.getNid());
-       uuidProperty.set(component.getPrimUuid());
-       if (component instanceof ConceptVersionBI) {
-           textProperty.set(((ConceptVersionBI) component).getPreferredDescription().getText());
-       } else if (component instanceof DescriptionVersionBI) {
-           textProperty.set(((DescriptionVersionBI) component).getText());
-       } else {
-           textProperty.set(component.getClass().getSimpleName());
-       }
-      
+   public FxComponentRef(TerminologySnapshotDI ss, int nid) throws IOException, ContradictionException {
+      nidProperty.set(nid);
+      ComponentVersionBI component = ss.getComponentVersion(nid);
+      if (component != null) {
+         uuidProperty.set(component.getPrimUuid());
+
+         if (component instanceof ConceptVersionBI) {
+            textProperty.set(((ConceptVersionBI) component).getPreferredDescription().getText());
+         } else if (component instanceof DescriptionVersionBI) {
+            textProperty.set(((DescriptionVersionBI) component).getText());
+         } else {
+            textProperty.set(component.getClass().getSimpleName());
+         }
+      } else {
+          textProperty.setValue("null component");
+      }
    }
 
-   public FxComponentReference(UUID primordialUuid, Integer nid, String text) {
+   public FxComponentRef(UUID primordialUuid, Integer nid, String text) {
       nidProperty.set(nid);
       uuidProperty.set(primordialUuid);
       textProperty.set(text);
@@ -87,8 +100,8 @@ public class FxComponentReference implements Externalizable {
 
    @Override
    public boolean equals(Object obj) {
-      if (obj instanceof FxComponentReference) {
-         FxComponentReference another = (FxComponentReference) obj;
+      if (obj instanceof FxComponentRef) {
+         FxComponentRef another = (FxComponentRef) obj;
 
          return nidProperty.equals(another.nidProperty) || uuidProperty.equals(another.uuidProperty);
       }

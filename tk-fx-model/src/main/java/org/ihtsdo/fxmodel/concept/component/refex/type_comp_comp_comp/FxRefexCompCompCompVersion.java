@@ -10,16 +10,19 @@ import org.ihtsdo.tk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
-import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.fxmodel.FxComponentRef;
 
+@XmlRootElement()
 public class FxRefexCompCompCompVersion extends FxVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   public FxComponentReference comp3Ref;
+   private FxComponentRef comp3Ref;
 
    //~--- constructors --------------------------------------------------------
 
@@ -31,7 +34,7 @@ public class FxRefexCompCompCompVersion extends FxVersion {
            throws IOException, ContradictionException {
       super(ss, another);
 
-      this.comp3Ref = new FxComponentReference(ss,another.getNid3());
+      this.comp3Ref = new FxComponentRef(ss,another.getNid3());
    }
 
    //~--- methods -------------------------------------------------------------
@@ -86,14 +89,14 @@ public class FxRefexCompCompCompVersion extends FxVersion {
 
    //~--- get methods ---------------------------------------------------------
 
-   public FxComponentReference getComp3Ref() {
+   public FxComponentRef getComp3Ref() {
       return comp3Ref;
    }
 
    //~--- set methods ---------------------------------------------------------
 
   
-   public void setComp3Ref(FxComponentReference comp3Ref) {
+   public void setComp3Ref(FxComponentRef comp3Ref) {
       this.comp3Ref = comp3Ref;
    }
 }

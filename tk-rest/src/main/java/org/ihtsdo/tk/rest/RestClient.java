@@ -35,6 +35,7 @@ import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.cc.concept.NidDataInMemory;
+import org.ihtsdo.cc.termstore.TerminologySnapshot;
 import org.ihtsdo.cc.termstore.Termstore;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.*;
@@ -331,11 +332,6 @@ public class RestClient extends Termstore {
 
     @Override
     public int[] getPossibleChildren(int cNid, ViewCoordinate vc) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public TerminologySnapshotDI getSnapshot(ViewCoordinate vc) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
