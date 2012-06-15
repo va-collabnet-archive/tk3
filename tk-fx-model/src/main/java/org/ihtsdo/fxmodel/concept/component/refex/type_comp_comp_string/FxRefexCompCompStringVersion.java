@@ -14,9 +14,11 @@ import org.ihtsdo.tk.api.refex.type_nid_nid_string.RefexNidNidStringVersionBI;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
 
 @XmlRootElement()
-public class FxRefexCompCompStringVersion extends FxRefexCompCompVersion {
+public class FxRefexCompCompStringVersion <T extends FxRefexChronicle, V extends FxRefexCompCompStringVersion>
+        extends FxRefexCompCompVersion<T, V> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -29,9 +31,9 @@ public class FxRefexCompCompStringVersion extends FxRefexCompCompVersion {
       super();
    }
 
-   public FxRefexCompCompStringVersion(TerminologySnapshotDI ss, RefexNidNidStringVersionBI another)
+   public FxRefexCompCompStringVersion(T chronicle, TerminologySnapshotDI ss, RefexNidNidStringVersionBI another)
            throws IOException, ContradictionException {
-      super(ss, another);
+      super(chronicle, ss, another);
       this.string1Property.set(another.getString1());
    }
 

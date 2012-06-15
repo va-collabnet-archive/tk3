@@ -4,7 +4,7 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_long;
 
 import javafx.beans.property.SimpleLongProperty;
 
-import org.ihtsdo.fxmodel.concept.component.FxVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.FxRefexVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.type_long.RefexLongVersionBI;
@@ -16,7 +16,7 @@ import java.io.IOException;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
-public class FxRefexLongVersion extends FxVersion {
+public class FxRefexLongVersion extends FxRefexVersion<FxRefexLongChronicle, FxRefexLongVersion> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -29,9 +29,10 @@ public class FxRefexLongVersion extends FxVersion {
       super();
    }
 
-   public FxRefexLongVersion(TerminologySnapshotDI ss, RefexLongVersionBI another)
+   public FxRefexLongVersion(FxRefexLongChronicle chronicle, TerminologySnapshotDI ss,
+                             RefexLongVersionBI another)
            throws IOException, ContradictionException {
-      super(ss, another);
+      super(chronicle, ss, another);
       this.long1Property.set(another.getLong1());
    }
 

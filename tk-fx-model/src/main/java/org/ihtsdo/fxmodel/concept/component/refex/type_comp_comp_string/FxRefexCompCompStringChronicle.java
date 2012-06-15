@@ -40,7 +40,7 @@ public class FxRefexCompCompStringChronicle extends FxRefexChronicle<FxRefexComp
          new ArrayList<FxRefexCompCompStringVersion>(another.getVersions().size()));
 
       for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexCompCompStringVersion(ss, (RefexNidNidStringVersionBI) v));
+         this.versions.add(new FxRefexCompCompStringVersion(this, ss, (RefexNidNidStringVersionBI) v));
       }
    }
 

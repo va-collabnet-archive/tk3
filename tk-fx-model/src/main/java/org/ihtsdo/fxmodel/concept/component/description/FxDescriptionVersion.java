@@ -6,7 +6,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 import org.ihtsdo.fxmodel.FxComponentRef;
-import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.description.DescriptionVersionBI;
@@ -16,9 +15,10 @@ import org.ihtsdo.tk.api.description.DescriptionVersionBI;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.ihtsdo.fxmodel.concept.component.FxComponentVersion;
 
 @XmlRootElement()
-public class FxDescriptionVersion extends FxVersion {
+public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChronicle, FxDescriptionVersion>  {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -35,9 +35,9 @@ public class FxDescriptionVersion extends FxVersion {
       super();
    }
 
-   public FxDescriptionVersion(TerminologySnapshotDI ss, DescriptionVersionBI another)
+   public FxDescriptionVersion(FxDescriptionChronicle chronicle, TerminologySnapshotDI ss, DescriptionVersionBI another)
            throws IOException, ContradictionException {
-      super(ss, another);
+      super(chronicle, ss, another);
       this.initialCaseSignificantProperty.set(another.isInitialCaseSignificant());
       this.langProperty.set(another.getLang());
       this.textProperty.set(another.getText());

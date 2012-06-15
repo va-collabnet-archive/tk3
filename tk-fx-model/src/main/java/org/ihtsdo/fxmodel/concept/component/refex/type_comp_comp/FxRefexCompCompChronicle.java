@@ -29,8 +29,7 @@ public class FxRefexCompCompChronicle extends FxRefexChronicle<FxRefexCompCompVe
 
    public FxRefexCompCompChronicle() {
       super();
-      this.versions = FXCollections.observableArrayList(
-         new ArrayList<FxRefexCompCompVersion>(1));
+      this.versions = FXCollections.observableArrayList(new ArrayList<FxRefexCompCompVersion>(1));
    }
 
    public FxRefexCompCompChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)
@@ -40,7 +39,7 @@ public class FxRefexCompCompChronicle extends FxRefexChronicle<FxRefexCompCompVe
          new ArrayList<FxRefexCompCompVersion>(another.getVersions().size()));
 
       for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexCompCompVersion(ss, (RefexNidNidVersionBI) v));
+         this.versions.add(new FxRefexCompCompVersion(this, ss, (RefexNidNidVersionBI) v));
       }
    }
 

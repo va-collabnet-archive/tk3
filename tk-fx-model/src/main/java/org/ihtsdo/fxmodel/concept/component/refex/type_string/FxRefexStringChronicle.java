@@ -39,7 +39,7 @@ public class FxRefexStringChronicle extends FxRefexChronicle<FxRefexStringVersio
          FXCollections.observableArrayList(new ArrayList<FxRefexStringVersion>(another.getVersions().size()));
 
       for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexStringVersion(ss, (RefexStringVersionBI) v));
+         this.versions.add(new FxRefexStringVersion(this, ss, (RefexStringVersionBI) v));
       }
    }
 

@@ -18,6 +18,7 @@ import org.ihtsdo.tk.api.refex.type_nid_string.RefexNidStringVersionBI;
 import java.io.IOException;
 
 import java.util.*;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
@@ -28,8 +29,7 @@ public class FxRefexCompStringChronicle extends FxRefexChronicle<FxRefexCompStri
 
    public FxRefexCompStringChronicle() {
       super();
-      this.versions = FXCollections.observableArrayList(
-         new ArrayList<FxRefexCompStringVersion>(1));
+      this.versions = FXCollections.observableArrayList(new ArrayList<FxRefexCompStringVersion>(1));
    }
 
    public FxRefexCompStringChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)
@@ -39,7 +39,7 @@ public class FxRefexCompStringChronicle extends FxRefexChronicle<FxRefexCompStri
          new ArrayList<FxRefexCompStringVersion>(another.getVersions().size()));
 
       for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexCompStringVersion(ss, (RefexNidStringVersionBI) v));
+         this.versions.add(new FxRefexCompStringVersion(this, ss, (RefexNidStringVersionBI) v));
       }
    }
 

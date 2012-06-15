@@ -16,10 +16,12 @@ import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
 
 @XmlSeeAlso({ FxRefexCompCompStringVersion.class, FxRefexCompCompCompVersion.class })
 @XmlRootElement()
-public class FxRefexCompCompVersion extends FxRefexCompVersion {
+public class FxRefexCompCompVersion<T extends FxRefexChronicle, V extends FxRefexCompCompVersion>
+        extends FxRefexCompVersion<T, V> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -32,9 +34,9 @@ public class FxRefexCompCompVersion extends FxRefexCompVersion {
       super();
    }
 
-   public FxRefexCompCompVersion(TerminologySnapshotDI ss, RefexNidNidVersionBI another)
+   public FxRefexCompCompVersion(T chronicle, TerminologySnapshotDI ss, RefexNidNidVersionBI another)
            throws IOException, ContradictionException {
-      super(ss, another);
+      super(chronicle, ss, another);
       this.comp2Ref = new FxComponentRef(ss, another.getNid2());
    }
 

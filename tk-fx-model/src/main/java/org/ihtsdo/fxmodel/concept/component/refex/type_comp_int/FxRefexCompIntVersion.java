@@ -14,9 +14,11 @@ import org.ihtsdo.tk.api.refex.type_nid_int.RefexNidIntVersionBI;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
 
 @XmlRootElement()
-public class FxRefexCompIntVersion extends FxRefexCompVersion {
+public class FxRefexCompIntVersion <T extends FxRefexChronicle, V extends FxRefexCompIntVersion>
+        extends FxRefexCompVersion<T, V> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -29,9 +31,9 @@ public class FxRefexCompIntVersion extends FxRefexCompVersion {
       super();
    }
 
-   public FxRefexCompIntVersion(TerminologySnapshotDI ss, RefexNidIntVersionBI another)
+   public FxRefexCompIntVersion(T chronicle, TerminologySnapshotDI ss, RefexNidIntVersionBI another)
            throws IOException, ContradictionException {
-      super(ss, another);
+      super(chronicle, ss, another);
       this.int1Property.set(another.getInt1());
    }
 

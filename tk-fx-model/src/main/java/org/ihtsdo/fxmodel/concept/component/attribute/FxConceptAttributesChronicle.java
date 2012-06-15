@@ -38,7 +38,7 @@ public class FxConceptAttributesChronicle extends FxComponentChronicle<FxConcept
          new ArrayList<FxConceptAttributesVersion>(another.getVersions().size()));
 
       for (ConAttrVersionBI v : another.getVersions()) {
-         this.versions.add(new FxConceptAttributesVersion(ss, v));
+         this.versions.add(new FxConceptAttributesVersion(this, ss, v));
       }
    }
 }

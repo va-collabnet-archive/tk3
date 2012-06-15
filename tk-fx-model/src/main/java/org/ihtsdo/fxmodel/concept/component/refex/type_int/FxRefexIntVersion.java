@@ -4,7 +4,6 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_int;
 
 import javafx.beans.property.SimpleIntegerProperty;
 
-import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.type_int.RefexIntVersionBI;
@@ -14,9 +13,10 @@ import org.ihtsdo.tk.api.refex.type_int.RefexIntVersionBI;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.ihtsdo.fxmodel.concept.component.refex.FxRefexVersion;
 
 @XmlRootElement()
-public class FxRefexIntVersion extends FxVersion {
+public class FxRefexIntVersion extends FxRefexVersion<FxRefexIntChronicle, FxRefexIntVersion> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -29,9 +29,9 @@ public class FxRefexIntVersion extends FxVersion {
       super();
    }
 
-   public FxRefexIntVersion(TerminologySnapshotDI ss, RefexIntVersionBI another)
+   public FxRefexIntVersion(FxRefexIntChronicle chronicle, TerminologySnapshotDI ss, RefexIntVersionBI another)
            throws IOException, ContradictionException {
-      super(ss, another);
+      super(chronicle, ss, another);
       this.int1Property.set(another.getInt1());
    }
 

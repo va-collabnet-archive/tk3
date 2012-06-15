@@ -37,7 +37,7 @@ public class FxDescriptionChronicle extends FxComponentChronicle<FxDescriptionVe
          FXCollections.observableArrayList(new ArrayList<FxDescriptionVersion>(another.getVersions().size()));
 
       for (DescriptionVersionBI v : another.getVersions()) {
-         this.versions.add(new FxDescriptionVersion(ss, v));
+         this.versions.add(new FxDescriptionVersion(this, ss, v));
       }
    }
 }

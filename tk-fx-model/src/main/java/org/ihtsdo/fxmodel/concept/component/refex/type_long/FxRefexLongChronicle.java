@@ -39,7 +39,7 @@ public class FxRefexLongChronicle extends FxRefexChronicle<FxRefexLongVersion> {
          FXCollections.observableArrayList(new ArrayList<FxRefexLongVersion>(another.getVersions().size()));
 
       for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexLongVersion(ss, (RefexLongVersionBI) v));
+         this.versions.add(new FxRefexLongVersion(this, ss, (RefexLongVersionBI) v));
       }
    }
 

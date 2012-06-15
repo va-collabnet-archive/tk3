@@ -4,6 +4,7 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp_float;
 
 import javafx.beans.property.SimpleFloatProperty;
 
+import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompVersion;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ContradictionException;
@@ -15,13 +16,11 @@ import org.ihtsdo.tk.api.refex.type_nid_float.RefexNidFloatVersionBI;
 
 import java.io.IOException;
 
-import java.util.UUID;
-
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
-public class FxRefexCompFloatVersion extends FxRefexCompVersion {
+public class FxRefexCompFloatVersion<T extends FxRefexChronicle, V extends FxRefexCompFloatVersion>
+        extends FxRefexCompVersion<T, V> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -34,12 +33,9 @@ public class FxRefexCompFloatVersion extends FxRefexCompVersion {
       super();
    }
 
-   public FxRefexCompFloatVersion(TerminologySnapshotDI ss, RefexNidFloatVersionBI another)
+   public FxRefexCompFloatVersion(T chronicle, TerminologySnapshotDI ss, RefexNidFloatVersionBI another)
            throws IOException, ContradictionException {
-      super(ss, another);
-
-      TerminologyStoreDI ts = Ts.get();
-
+      super(chronicle, ss, another);
       this.float1Property.set(another.getFloat1());
    }
 

@@ -38,7 +38,7 @@ public class FxRelationshipChronicle extends FxComponentChronicle<FxRelationship
          new ArrayList<FxRelationshipVersion>(another.getVersions().size()));
 
       for (RelationshipVersionBI v : another.getVersions()) {
-         this.versions.add(new FxRelationshipVersion(ss, v));
+         this.versions.add(new FxRelationshipVersion(this, ss, v));
       }
    }
 }

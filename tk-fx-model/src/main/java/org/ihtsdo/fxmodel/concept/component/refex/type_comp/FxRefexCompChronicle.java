@@ -39,7 +39,7 @@ public class FxRefexCompChronicle extends FxRefexChronicle<FxRefexCompVersion> {
          FXCollections.observableArrayList(new ArrayList<FxRefexCompVersion>(another.getVersions().size()));
 
       for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexCompVersion(ss, (RefexNidVersionBI) v));
+         this.versions.add(new FxRefexCompVersion(this, ss, (RefexNidVersionBI) v));
       }
    }
 

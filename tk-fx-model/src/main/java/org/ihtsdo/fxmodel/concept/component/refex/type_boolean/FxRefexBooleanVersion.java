@@ -4,7 +4,7 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_boolean;
 
 import javafx.beans.property.SimpleBooleanProperty;
 
-import org.ihtsdo.fxmodel.concept.component.FxVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.FxRefexVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.type_boolean.RefexBooleanVersionBI;
@@ -16,7 +16,7 @@ import java.io.IOException;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
-public class FxRefexBooleanVersion extends FxVersion {
+public class FxRefexBooleanVersion extends FxRefexVersion<FxRefexBooleanChronicle, FxRefexBooleanVersion> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -29,13 +29,18 @@ public class FxRefexBooleanVersion extends FxVersion {
       super();
    }
 
-   public FxRefexBooleanVersion(TerminologySnapshotDI ss, RefexBooleanVersionBI another)
+   public FxRefexBooleanVersion(FxRefexBooleanChronicle chronicle, TerminologySnapshotDI ss,
+                                RefexBooleanVersionBI another)
            throws IOException, ContradictionException {
-      super(ss, another);
+      super(chronicle, ss, another);
       this.boolean1Property.set(another.getBoolean1());
    }
 
    //~--- methods -------------------------------------------------------------
+
+   public SimpleBooleanProperty boolean1Property() {
+      return boolean1Property;
+   }
 
    /**
     * Compares this object to the specified object. The result is <tt>true</tt>
@@ -97,8 +102,4 @@ public class FxRefexBooleanVersion extends FxVersion {
    public void setBoolean1(boolean booleanValue) {
       this.boolean1Property.set(booleanValue);
    }
-
-    public SimpleBooleanProperty boolean1Property() {
-        return boolean1Property;
-    }
 }

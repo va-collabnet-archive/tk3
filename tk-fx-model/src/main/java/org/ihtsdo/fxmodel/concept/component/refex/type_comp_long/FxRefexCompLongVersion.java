@@ -14,9 +14,11 @@ import org.ihtsdo.tk.api.refex.type_nid_long.RefexNidLongVersionBI;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
 
 @XmlRootElement()
-public class FxRefexCompLongVersion extends FxRefexCompVersion {
+public class FxRefexCompLongVersion <T extends FxRefexChronicle, V extends FxRefexCompLongVersion>
+        extends FxRefexCompVersion<T, V> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -29,9 +31,9 @@ public class FxRefexCompLongVersion extends FxRefexCompVersion {
       super();
    }
 
-   public FxRefexCompLongVersion(TerminologySnapshotDI ss, RefexNidLongVersionBI another)
+   public FxRefexCompLongVersion(T chronicle, TerminologySnapshotDI ss, RefexNidLongVersionBI another)
            throws IOException, ContradictionException {
-      super(ss, another);
+      super(chronicle, ss, another);
       this.long1Property.set(another.getLong1());
    }
 

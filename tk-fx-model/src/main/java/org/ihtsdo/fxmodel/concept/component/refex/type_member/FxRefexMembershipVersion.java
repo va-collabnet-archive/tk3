@@ -2,7 +2,7 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_member;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.concept.component.FxVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.FxRefexVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
@@ -10,10 +10,12 @@ import org.ihtsdo.tk.api.refex.RefexVersionBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
-public class FxRefexMembershipVersion extends FxVersion {
+public class FxRefexMembershipVersion
+        extends FxRefexVersion<FxRefexMembershipChronicle, FxRefexMembershipVersion> {
    public static final long serialVersionUID = 1;
 
    //~--- constructors --------------------------------------------------------
@@ -22,9 +24,10 @@ public class FxRefexMembershipVersion extends FxVersion {
       super();
    }
 
-   public FxRefexMembershipVersion(TerminologySnapshotDI ss, RefexVersionBI another)
+   public FxRefexMembershipVersion(FxRefexMembershipChronicle chronicle, TerminologySnapshotDI ss,
+                                   RefexVersionBI another)
            throws IOException, ContradictionException {
-      super(ss, another);
+      super(chronicle, ss, another);
    }
 
    //~--- methods -------------------------------------------------------------

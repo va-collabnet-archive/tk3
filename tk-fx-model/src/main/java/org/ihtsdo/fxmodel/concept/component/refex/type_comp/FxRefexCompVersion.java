@@ -3,7 +3,7 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.fxmodel.FxComponentRef;
-import org.ihtsdo.fxmodel.concept.component.FxVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.FxRefexVersion;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp.FxRefexCompCompVersion;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp_float.FxRefexCompFloatVersion;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp_int.FxRefexCompIntVersion;
@@ -19,13 +19,15 @@ import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
 
 @XmlSeeAlso( {
    FxRefexCompCompVersion.class, FxRefexCompFloatVersion.class, FxRefexCompLongVersion.class,
    FxRefexCompStringVersion.class, FxRefexCompIntVersion.class
 })
 @XmlRootElement()
-public class FxRefexCompVersion extends FxVersion {
+public class FxRefexCompVersion<T extends FxRefexChronicle, V extends FxRefexCompVersion>
+        extends FxRefexVersion<T, V> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -38,9 +40,10 @@ public class FxRefexCompVersion extends FxVersion {
       super();
    }
 
-   public FxRefexCompVersion(TerminologySnapshotDI ss, RefexNidVersionBI another)
+   public FxRefexCompVersion(T chronicle, TerminologySnapshotDI ss,
+                             RefexNidVersionBI another)
            throws IOException, ContradictionException {
-      super(ss, another);
+      super(chronicle, ss, another);
       this.comp1Ref = new FxComponentRef(ss.getConceptVersion(another.getNid1()));
    }
 

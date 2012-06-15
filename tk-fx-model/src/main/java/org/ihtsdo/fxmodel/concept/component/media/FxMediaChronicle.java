@@ -42,7 +42,7 @@ public class FxMediaChronicle extends FxComponentChronicle<FxMediaVersion> {
          FXCollections.observableArrayList(new ArrayList<FxMediaVersion>(another.getVersions().size()));
 
       for (MediaVersionBI v : another.getVersions()) {
-         this.versions.add(new FxMediaVersion(ss, v));
+         this.versions.add(new FxMediaVersion(this, ss, v));
       }
 
       this.dataBytes = another.getPrimordialVersion().getMedia();

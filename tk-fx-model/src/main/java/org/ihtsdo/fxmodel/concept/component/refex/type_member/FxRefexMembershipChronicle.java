@@ -39,7 +39,7 @@ public class FxRefexMembershipChronicle extends FxRefexChronicle<FxRefexMembersh
          new ArrayList<FxRefexMembershipVersion>(another.getVersions().size()));
 
       for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexMembershipVersion(ss, (RefexMemberVersionBI) v));
+         this.versions.add(new FxRefexMembershipVersion(this, ss, (RefexMemberVersionBI) v));
       }
    }
 

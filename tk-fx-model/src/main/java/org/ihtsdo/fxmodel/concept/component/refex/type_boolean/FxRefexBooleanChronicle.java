@@ -40,7 +40,7 @@ public class FxRefexBooleanChronicle extends FxRefexChronicle<FxRefexBooleanVers
          new ArrayList<FxRefexBooleanVersion>(another.getVersions().size()));
 
       for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexBooleanVersion(ss, (RefexBooleanVersionBI) v));
+         this.versions.add(new FxRefexBooleanVersion(this, ss, (RefexBooleanVersionBI) v));
       }
    }
 

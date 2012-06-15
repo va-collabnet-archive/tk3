@@ -4,7 +4,7 @@ package org.ihtsdo.fxmodel.concept.component.attribute;
 
 import javafx.beans.property.SimpleBooleanProperty;
 
-import org.ihtsdo.fxmodel.concept.component.FxVersion;
+import org.ihtsdo.fxmodel.concept.component.FxComponentVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
@@ -16,7 +16,8 @@ import java.io.IOException;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
-public class FxConceptAttributesVersion extends FxVersion {
+public class FxConceptAttributesVersion
+        extends FxComponentVersion<FxConceptAttributesChronicle, FxConceptAttributesVersion> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -29,9 +30,10 @@ public class FxConceptAttributesVersion extends FxVersion {
       super();
    }
 
-   public FxConceptAttributesVersion(TerminologySnapshotDI ss, ConAttrVersionBI another)
+   public FxConceptAttributesVersion(FxConceptAttributesChronicle chronicle, TerminologySnapshotDI ss,
+                                     ConAttrVersionBI another)
            throws IOException, ContradictionException {
-      super(ss, another);
+      super(chronicle, ss, another);
       this.definedProperty.set(another.isDefined());
    }
 

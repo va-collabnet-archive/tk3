@@ -22,6 +22,7 @@ import java.io.Serializable;
 
 import java.util.*;
 
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
@@ -32,19 +33,19 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
    //~--- fields --------------------------------------------------------------
 
    @XmlElementWrapper(name = "additionalIdList")
-   @XmlElement(name="additionalId")
-   public ObservableList<FxIdentifier>        additionalIds =
-            FXCollections.observableArrayList(new ArrayList<FxIdentifier>(0));
+   @XmlElement(name = "additionalId")
+   public ObservableList<FxIdentifier> additionalIds =
+      FXCollections.observableArrayList(new ArrayList<FxIdentifier>(0));
    @XmlElementWrapper(name = "annotationList")
    @XmlElement(name = "annotation")
-   public ObservableList<FxRefexChronicle<?>> annotations=
-            FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?>>(0));
+   public ObservableList<FxRefexChronicle<?>> annotations =
+      FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?>>(0));
    @XmlTransient
-   protected FxConcept                        concept;
-   private UUID                                primordialComponentUuid;
+   protected FxConcept      concept;
+   private UUID             primordialComponentUuid;
    @XmlElementWrapper(name = "versionList")
    @XmlElement()
-   public ObservableList<V>                   versions;
+   public ObservableList<V> versions;
 
    //~--- constructors --------------------------------------------------------
 
@@ -55,7 +56,7 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
    public FxComponentChronicle(TerminologySnapshotDI ss, FxConcept concept, ComponentVersionBI another)
            throws IOException, ContradictionException {
       super();
-      this.concept        = concept;
+      this.concept                 = concept;
       this.primordialComponentUuid = another.getPrimUuid();
 
       Collection<? extends IdBI> anotherAdditionalIds = another.getAdditionalIds();
@@ -75,6 +76,15 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
    }
 
    //~--- methods -------------------------------------------------------------
+   
+   public void beforeUnmarshal(Unmarshaller u, Object parent) {
+       if (parent instanceof FxConcept) {
+           this.concept = (FxConcept) parent;
+       } else if (parent instanceof FxComponentChronicle) {
+           this.concept = ((FxComponentChronicle) parent).getConcept();
+       }
+       
+   }
 
    /**
     * Compares this object to the specified object. The result is <tt>true</tt>

@@ -2,6 +2,9 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp_comp;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.ihtsdo.fxmodel.FxComponentRef;
+import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp.FxRefexCompCompVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
@@ -9,14 +12,12 @@ import org.ihtsdo.tk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
-
-import org.ihtsdo.fxmodel.FxComponentRef;
-import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp.FxRefexCompCompVersion;
-
 @XmlRootElement()
-public class FxRefexCompCompCompVersion extends FxRefexCompCompVersion {
+public class FxRefexCompCompCompVersion<T extends FxRefexChronicle, V extends FxRefexCompCompCompVersion>
+        extends FxRefexCompCompVersion<T, V> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -29,11 +30,10 @@ public class FxRefexCompCompCompVersion extends FxRefexCompCompVersion {
       super();
    }
 
-   public FxRefexCompCompCompVersion(TerminologySnapshotDI ss, RefexNidNidNidVersionBI another)
+   public FxRefexCompCompCompVersion(T chronicle, TerminologySnapshotDI ss, RefexNidNidNidVersionBI another)
            throws IOException, ContradictionException {
-      super(ss, another);
-
-      this.comp3Ref = new FxComponentRef(ss,another.getNid3());
+      super(chronicle, ss, another);
+      this.comp3Ref = new FxComponentRef(ss, another.getNid3());
    }
 
    //~--- methods -------------------------------------------------------------
@@ -94,7 +94,6 @@ public class FxRefexCompCompCompVersion extends FxRefexCompCompVersion {
 
    //~--- set methods ---------------------------------------------------------
 
-  
    public void setComp3Ref(FxComponentRef comp3Ref) {
       this.comp3Ref = comp3Ref;
    }

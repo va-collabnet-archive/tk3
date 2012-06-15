@@ -39,7 +39,7 @@ public class FxRefexCompFloatChronicle extends FxRefexChronicle<FxRefexCompFloat
          new ArrayList<FxRefexCompFloatVersion>(another.getVersions().size()));
 
       for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexCompFloatVersion(ss, (RefexNidFloatVersionBI) v));
+         this.versions.add(new FxRefexCompFloatVersion(this, ss, (RefexNidFloatVersionBI) v));
       }
    }
 

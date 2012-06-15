@@ -5,7 +5,6 @@ package org.ihtsdo.fxmodel.concept.component.relationship;
 import javafx.beans.property.SimpleIntegerProperty;
 
 import org.ihtsdo.fxmodel.FxComponentRef;
-import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
@@ -15,9 +14,10 @@ import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.ihtsdo.fxmodel.concept.component.FxComponentVersion;
 
 @XmlRootElement()
-public class FxRelationshipVersion extends FxVersion {
+public class FxRelationshipVersion extends FxComponentVersion<FxRelationshipChronicle, FxRelationshipVersion>  {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -33,9 +33,9 @@ public class FxRelationshipVersion extends FxVersion {
       super();
    }
 
-   public FxRelationshipVersion(TerminologySnapshotDI ss, RelationshipVersionBI rv)
+   public FxRelationshipVersion(FxRelationshipChronicle chronicle, TerminologySnapshotDI ss, RelationshipVersionBI rv)
            throws IOException, ContradictionException {
-      super(ss, rv);
+      super(chronicle, ss, rv);
       characteristicRef = new FxComponentRef(ss.getConceptVersion(rv.getCharacteristicNid()));
       refinabilityRef   = new FxComponentRef(ss.getConceptVersion(rv.getRefinabilityNid()));
       groupProperty.set(rv.getGroup());
