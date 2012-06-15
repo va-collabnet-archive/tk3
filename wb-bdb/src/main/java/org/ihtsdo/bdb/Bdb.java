@@ -24,7 +24,7 @@ import org.ihtsdo.bdb.BdbMemoryMonitor.LowMemoryListener;
 import org.ihtsdo.cc.computer.kindof.IsaCache;
 import org.ihtsdo.cc.computer.kindof.KindOfComputer;
 import org.ihtsdo.bdb.id.NidCNidMapBdb;
-import org.ihtsdo.bdb.sap.StatusAtPositionBdb;
+import org.ihtsdo.bdb.stamp.StampBdb;
 import org.ihtsdo.bdb.xref.Xref;
 import org.ihtsdo.cc.NidPair;
 import org.ihtsdo.cc.NidPairForRefset;
@@ -63,7 +63,7 @@ public class Bdb {
     private static Bdb mutable;
     private static UuidToNidMapBdb uuidsToNidMapDb;
     public static NidCNidMapBdb nidCidMapDb;
-    private static StatusAtPositionBdb statusAtPositionDb;
+    private static StampBdb statusAtPositionDb;
     private static ConceptBdb conceptDb;
     private static PropertiesBdb propDb;
     public static Xref xref;
@@ -306,7 +306,7 @@ public class Bdb {
 //            inform(activity, "loading nid->cid database...");
             nidCidMapDb = new NidCNidMapBdb(readOnly, mutable);
 //            inform(activity, "loading status@position database...");
-            statusAtPositionDb = new StatusAtPositionBdb(readOnly, mutable);
+            statusAtPositionDb = new StampBdb(readOnly, mutable);
 //            inform(activity, "loading concept database...");
             conceptDb = new ConceptBdb(readOnly, mutable);
             
@@ -451,7 +451,7 @@ public class Bdb {
         return statusAtPositionDb.getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
     }
 
-    public static StatusAtPositionBdb getSapDb() {
+    public static StampBdb getSapDb() {
         assert statusAtPositionDb != null;
         return statusAtPositionDb;
     }
