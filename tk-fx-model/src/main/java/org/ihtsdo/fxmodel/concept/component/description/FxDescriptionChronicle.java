@@ -26,6 +26,8 @@ public class FxDescriptionChronicle extends FxComponentChronicle<FxDescriptionVe
 
    public FxDescriptionChronicle() {
       super();
+      this.versions =
+         FXCollections.observableArrayList(new ArrayList<FxDescriptionVersion>(1));
    }
 
    public FxDescriptionChronicle(TerminologySnapshotDI ss, FxConcept concept, DescriptionChronicleBI another)

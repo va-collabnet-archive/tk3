@@ -55,7 +55,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
     }
 
     public Revision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, C primordialComponent) {
-        this.stampNid = P.s.getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
+        this.stampNid = P.s.getStampNid(statusNid, time, authorNid, moduleNid, pathNid);
         assert stampNid != 0;
         this.primordialComponent = primordialComponent;
         primordialComponent.clearVersions();
@@ -423,7 +423,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
     @Override
     public boolean isBaselineGeneration() {
-        return stampNid <= P.s.getMaxReadOnlySap();
+        return stampNid <= P.s.getMaxReadOnlyStamp();
     }
 
     @Override
@@ -440,7 +440,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
         }
 
         if (authorNid != getPathNid()) {
-            this.stampNid = P.s.getSapNid(getStatusNid(),Long.MAX_VALUE, authorNid, getModuleNid(), getPathNid());
+            this.stampNid = P.s.getStampNid(getStatusNid(),Long.MAX_VALUE, authorNid, getModuleNid(), getPathNid());
             modified();
         }
     }
@@ -453,7 +453,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
         }
 
         try {
-            this.stampNid = P.s.getSapNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), 
+            this.stampNid = P.s.getStampNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), 
                     moduleNid, getPathNid());
         } catch (Exception e) {
             throw new RuntimeException();
@@ -474,12 +474,12 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
                     + "Use makeAnalog instead.");
         }
 
-        this.stampNid = P.s.getSapNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), 
+        this.stampNid = P.s.getStampNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), 
                     getModuleNid(), pathId);
     }
 
     public void setStatusAtPosition(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-        this.stampNid = P.s.getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
+        this.stampNid = P.s.getStampNid(statusNid, time, authorNid, moduleNid, pathNid);
         modified();
     }
 
@@ -491,7 +491,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
         }
 
         try {
-            this.stampNid = P.s.getSapNid(statusNid, Long.MAX_VALUE,
+            this.stampNid = P.s.getStampNid(statusNid, Long.MAX_VALUE,
                     getAuthorNid(), getModuleNid(), getPathNid());
         } catch (Exception e) {
             throw new RuntimeException();
@@ -509,7 +509,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
         if (time != getTime()) {
             try {
-                this.stampNid = P.s.getSapNid(getStatusNid(), time, getAuthorNid(), 
+                this.stampNid = P.s.getStampNid(getStatusNid(), time, getAuthorNid(), 
                     getModuleNid(), getPathNid());
             } catch (Exception e) {
                 throw new RuntimeException();

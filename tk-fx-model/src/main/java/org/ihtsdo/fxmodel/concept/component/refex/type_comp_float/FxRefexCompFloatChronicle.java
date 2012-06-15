@@ -28,6 +28,8 @@ public class FxRefexCompFloatChronicle extends FxRefexChronicle<FxRefexCompFloat
 
    public FxRefexCompFloatChronicle() {
       super();
+      this.versions = FXCollections.observableArrayList(
+         new ArrayList<FxRefexCompFloatVersion>(1));
    }
 
    public FxRefexCompFloatChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)

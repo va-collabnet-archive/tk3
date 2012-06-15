@@ -2,7 +2,6 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp_comp;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
@@ -10,14 +9,14 @@ import org.ihtsdo.tk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
 import org.ihtsdo.fxmodel.FxComponentRef;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp.FxRefexCompCompVersion;
 
 @XmlRootElement()
-public class FxRefexCompCompCompVersion extends FxVersion {
+public class FxRefexCompCompCompVersion extends FxRefexCompCompVersion {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------

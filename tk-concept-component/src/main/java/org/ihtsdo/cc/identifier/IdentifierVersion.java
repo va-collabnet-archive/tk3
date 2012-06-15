@@ -35,7 +35,7 @@ public abstract class IdentifierVersion implements IdBI {
 
    protected IdentifierVersion(TkIdentifier idv) throws IOException {
       super();
-      this.stampNid = P.s.getSapNid(P.s.getNidForUuids(idv.getStatusUuid()), idv.getTime(),
+      this.stampNid = P.s.getStampNid(P.s.getNidForUuids(idv.getStatusUuid()), idv.getTime(),
                                     P.s.getNidForUuids(idv.getAuthorUuid()),
                                     P.s.getNidForUuids(idv.getModuleUuid()),
                                     P.s.getNidForUuids(idv.getPathUuid()));
@@ -50,13 +50,13 @@ public abstract class IdentifierVersion implements IdBI {
 
    protected IdentifierVersion(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
                                IdentifierVersion idVersion) {
-      this(statusNid, time, moduleNid, authorNid, pathNid, idVersion.authorityNid);
+      this(statusNid, time, authorNid, moduleNid, pathNid, idVersion.authorityNid);
    }
 
    protected IdentifierVersion(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
                                int authorityNid) {
-      this.stampNid     = P.s.getSapNid(statusNid, time, moduleNid, authorNid, pathNid);
-      this.authorityNid = authorNid;
+      this.stampNid     = P.s.getStampNid(statusNid, time, authorNid, moduleNid, pathNid);
+      this.authorityNid = authorityNid;
    }
 
    //~--- methods -------------------------------------------------------------
@@ -211,6 +211,6 @@ public abstract class IdentifierVersion implements IdBI {
          throw new UnsupportedOperationException("Time alreay committed.");
       }
 
-      this.stampNid = P.s.getSapNid(getStatusNid(), time, getAuthorNid(), getModuleNid(), getPathNid());
+      this.stampNid = P.s.getStampNid(getStatusNid(), time, getAuthorNid(), getModuleNid(), getPathNid());
    }
 }

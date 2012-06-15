@@ -814,7 +814,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             throw new UnsupportedOperationException("Cannot resetUncommitted if time != Long.MIN_VALUE");
         }
 
-        this.primordialStampNid = P.s.getSapNid(statusNid, Long.MAX_VALUE, authorNid, moduleNid, pathNid);
+        this.primordialStampNid = P.s.getStampNid(statusNid, Long.MAX_VALUE, authorNid, moduleNid, pathNid);
         assert primordialStampNid != 0 : "Processing nid: " + enclosingConceptNid;
         this.getEnclosingConcept().setIsCanceled(false);
         this.clearVersions();
@@ -1579,7 +1579,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
     @Override
     public boolean isBaselineGeneration() {
-        return primordialStampNid <= P.s.getMaxReadOnlySap();
+        return primordialStampNid <= P.s.getMaxReadOnlyStamp();
     }
 
     public static boolean isCanceled(TupleInput input) {
@@ -1631,7 +1631,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
 
         if (authorNid != getAuthorNid()) {
-            this.primordialStampNid = P.s.getSapNid(getStatusNid(), Long.MAX_VALUE, authorNid, getModuleNid(), getPathNid());
+            this.primordialStampNid = P.s.getStampNid(getStatusNid(), Long.MAX_VALUE, authorNid, getModuleNid(), getPathNid());
             assert primordialStampNid != 0 : "Processing nid: " + enclosingConceptNid;
             modified();
         }
@@ -1645,7 +1645,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
 
         if (moduleId != this.getModuleNid()) {
-            this.primordialStampNid = P.s.getSapNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), 
+            this.primordialStampNid = P.s.getStampNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), 
                     moduleId, getPathNid());
             assert primordialStampNid != 0 : "Processing nid: " + enclosingConceptNid;
         }
@@ -1669,7 +1669,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
 
         if (pathId != getPathNid()) {
-            this.primordialStampNid = P.s.getSapNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(),
+            this.primordialStampNid = P.s.getStampNid(getStatusNid(), Long.MAX_VALUE, getAuthorNid(),
                     getModuleNid(), pathId);
             assert primordialStampNid != 0 : "Processing nid: " + enclosingConceptNid;
             modified();
@@ -1695,7 +1695,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
 
         if (statusId != this.getStatusNid()) {
-            this.primordialStampNid = P.s.getSapNid(statusId, Long.MAX_VALUE, getAuthorNid(),
+            this.primordialStampNid = P.s.getStampNid(statusId, Long.MAX_VALUE, getAuthorNid(),
                     getModuleNid(), getPathNid());
             assert primordialStampNid != 0 : "Processing nid: " + enclosingConceptNid;
         }
@@ -1709,7 +1709,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
 
         if (time != getTime()) {
-            this.primordialStampNid = P.s.getSapNid(getStatusNid(), time, getAuthorNid(),
+            this.primordialStampNid = P.s.getStampNid(getStatusNid(), time, getAuthorNid(),
                     getModuleNid(), getPathNid());
             assert primordialStampNid != 0 : "Processing nid: " + enclosingConceptNid;
         }

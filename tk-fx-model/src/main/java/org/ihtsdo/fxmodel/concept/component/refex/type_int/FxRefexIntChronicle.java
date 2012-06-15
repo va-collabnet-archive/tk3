@@ -28,6 +28,8 @@ public class FxRefexIntChronicle extends FxRefexChronicle<FxRefexIntVersion> {
 
    public FxRefexIntChronicle() {
       super();
+      this.versions =
+         FXCollections.observableArrayList(new ArrayList<FxRefexIntVersion>(1));
    }
 
    public FxRefexIntChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)

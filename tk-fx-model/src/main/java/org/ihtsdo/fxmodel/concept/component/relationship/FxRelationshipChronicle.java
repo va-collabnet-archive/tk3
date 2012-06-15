@@ -26,6 +26,8 @@ public class FxRelationshipChronicle extends FxComponentChronicle<FxRelationship
 
    public FxRelationshipChronicle() {
       super();
+      this.versions = FXCollections.observableArrayList(
+         new ArrayList<FxRelationshipVersion>(1));
    }
 
    public FxRelationshipChronicle(TerminologySnapshotDI ss, FxConcept concept,

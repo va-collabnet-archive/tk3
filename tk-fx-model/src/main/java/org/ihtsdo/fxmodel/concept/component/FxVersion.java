@@ -6,6 +6,17 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import org.ihtsdo.fxmodel.FxComponentRef;
 import org.ihtsdo.fxmodel.FxTime;
+import org.ihtsdo.fxmodel.concept.component.attribute.FxConceptAttributesVersion;
+import org.ihtsdo.fxmodel.concept.component.description.FxDescriptionVersion;
+import org.ihtsdo.fxmodel.concept.component.identifier.FxIdentifier;
+import org.ihtsdo.fxmodel.concept.component.media.FxMediaVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.type_boolean.FxRefexBooleanVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.type_int.FxRefexIntVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.type_long.FxRefexLongVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.type_member.FxRefexMembershipVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.type_string.FxRefexStringVersion;
+import org.ihtsdo.fxmodel.concept.component.relationship.FxRelationshipVersion;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentBI;
 import org.ihtsdo.tk.api.ComponentVersionBI;
@@ -23,6 +34,14 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.xml.bind.annotation.XmlSeeAlso;
+
+@XmlSeeAlso( {
+   FxConceptAttributesVersion.class, FxDescriptionVersion.class, FxIdentifier.class,
+   FxRelationshipVersion.class, FxMediaVersion.class, FxRefexCompVersion.class, FxDescriptionVersion.class,
+   FxRefexLongVersion.class, FxRefexMembershipVersion.class, FxRefexBooleanVersion.class,
+   FxRefexStringVersion.class, FxRefexIntVersion.class
+})
 public abstract class FxVersion implements Serializable {
    private static final long serialVersionUID    = 1;
    public static UUID        unspecifiedUserUuid = UUID.fromString("f7495b58-6630-3499-a44e-2052b5fcf06c");

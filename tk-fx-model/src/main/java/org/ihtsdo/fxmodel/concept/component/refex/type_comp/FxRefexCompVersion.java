@@ -4,6 +4,11 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp;
 
 import org.ihtsdo.fxmodel.FxComponentRef;
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp.FxRefexCompCompVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_float.FxRefexCompFloatVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_int.FxRefexCompIntVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_long.FxRefexCompLongVersion;
+import org.ihtsdo.fxmodel.concept.component.refex.type_comp_string.FxRefexCompStringVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.refex.type_nid.RefexNidVersionBI;
@@ -11,10 +16,14 @@ import org.ihtsdo.tk.api.refex.type_nid.RefexNidVersionBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
-
-
+@XmlSeeAlso( {
+   FxRefexCompCompVersion.class, FxRefexCompFloatVersion.class, FxRefexCompLongVersion.class,
+   FxRefexCompStringVersion.class, FxRefexCompIntVersion.class
+})
 @XmlRootElement()
 public class FxRefexCompVersion extends FxVersion {
    public static final long serialVersionUID = 1;

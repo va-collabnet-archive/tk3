@@ -28,6 +28,8 @@ public class FxRefexMembershipChronicle extends FxRefexChronicle<FxRefexMembersh
 
    public FxRefexMembershipChronicle() {
       super();
+     this.versions = FXCollections.observableArrayList(
+         new ArrayList<FxRefexMembershipVersion>(1));
    }
 
    public FxRefexMembershipChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)

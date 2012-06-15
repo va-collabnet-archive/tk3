@@ -31,6 +31,8 @@ public class FxMediaChronicle extends FxComponentChronicle<FxMediaVersion> {
 
    public FxMediaChronicle() {
       super();
+     this.versions =
+         FXCollections.observableArrayList(new ArrayList<FxMediaVersion>(1));
    }
 
    public FxMediaChronicle(TerminologySnapshotDI ss, FxConcept concept, MediaChronicleBI another)

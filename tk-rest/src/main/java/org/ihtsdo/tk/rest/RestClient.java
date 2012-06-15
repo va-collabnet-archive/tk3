@@ -92,7 +92,7 @@ public class RestClient extends Termstore {
     }
 
     @Override
-    public int getMaxReadOnlySap() {
+    public int getMaxReadOnlyStamp() {
         WebResource r = c.resource(serverUrlStr + "sap/read-only-max");
         String nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
         return Integer.parseInt(nidStr);
@@ -405,7 +405,7 @@ public class RestClient extends Termstore {
     }
 
     @Override
-    public int getSapNid(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+    public int getStampNid(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

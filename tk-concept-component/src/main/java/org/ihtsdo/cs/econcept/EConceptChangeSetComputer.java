@@ -83,7 +83,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
 
             case MUTABLE_ONLY:
                 maxSapNid = Integer.MAX_VALUE;
-                minSapNid = P.s.getMaxReadOnlySap() + 1;
+                minSapNid = P.s.getMaxReadOnlyStamp() + 1;
 
                 break;
 

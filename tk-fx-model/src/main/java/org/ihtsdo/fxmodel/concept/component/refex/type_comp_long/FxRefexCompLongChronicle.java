@@ -28,6 +28,8 @@ public class FxRefexCompLongChronicle extends FxRefexChronicle<FxRefexCompLongVe
 
    public FxRefexCompLongChronicle() {
       super();
+      this.versions = FXCollections.observableArrayList(
+         new ArrayList<FxRefexCompLongVersion>(1));
    }
 
    public FxRefexCompLongChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)

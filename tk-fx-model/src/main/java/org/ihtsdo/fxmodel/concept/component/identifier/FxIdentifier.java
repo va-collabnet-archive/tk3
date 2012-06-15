@@ -2,6 +2,7 @@ package org.ihtsdo.fxmodel.concept.component.identifier;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.ihtsdo.fxmodel.FxComponentRef;
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
@@ -14,9 +15,9 @@ import org.ihtsdo.tk.api.id.UuidIdBI;
 
 import java.io.IOException;
 
+import javax.xml.bind.annotation.XmlSeeAlso;
 
-import org.ihtsdo.fxmodel.FxComponentRef;
-
+@XmlSeeAlso({ FxIdentifierLong.class, FxIdentifierString.class, FxIdentifierUuid.class })
 public abstract class FxIdentifier extends FxVersion {
    public static final long serialVersionUID = 1;
 

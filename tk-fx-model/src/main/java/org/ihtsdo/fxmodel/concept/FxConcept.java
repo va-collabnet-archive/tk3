@@ -66,33 +66,37 @@ public class FxConcept implements Serializable {
 
    //~--- fields --------------------------------------------------------------
 
-   @XmlElement(name = "fx-attributes-chronicle")
+   @XmlElement()
    protected FxConceptAttributesChronicle            conceptAttributes;
-   @XmlElementWrapper(name = "description-list")
-   @XmlElement(name = "fx-description-chronicle")
+   @XmlElementWrapper(name = "descriptionList")
+   @XmlElement(name = "description")
    protected ObservableList<FxDescriptionChronicle>  descriptions;
-   @XmlElementWrapper(name = "media-list")
-   @XmlElement(name = "fx-media-chronicle")
+   @XmlElementWrapper(name = "mediaList")
+   @XmlElement(name = "media")
    protected ObservableList<FxMediaChronicle>        media;
-   @XmlElement(name = "primordial-uuid")
+   @XmlElement()
    protected UUID                                    primordialUuid;
-   @XmlElementWrapper(name = "refset-member-list")
-   @XmlElement(name = "fx-refset-member-chronicle")
+   @XmlElementWrapper(name = "refsetMemberList")
+   @XmlElement(name = "refsetMember")
    protected ObservableList<FxRefexChronicle<?>>     refsetMembers;
-   @XmlElementWrapper(name = "relationship-list")
-   @XmlElement(name = "fx-relationship-chronicle")
+   @XmlElementWrapper(name = "relationshipList")
+   @XmlElement(name = "relationship")
    protected ObservableList<FxRelationshipChronicle> relationships;
 
    //~--- constructors --------------------------------------------------------
 
    public FxConcept() {
       super();
+      relationships = FXCollections.observableArrayList(new ArrayList<FxRelationshipChronicle>(1));
+      descriptions  = FXCollections.observableArrayList(new ArrayList<FxDescriptionChronicle>(1));
+      media         = FXCollections.observableArrayList(new ArrayList<FxMediaChronicle>(1));
+      refsetMembers = FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?>>(0));
    }
 
    public FxConcept(TerminologySnapshotDI ss, ConceptChronicleBI c)
            throws IOException, ContradictionException {
       conceptAttributes = new FxConceptAttributesChronicle(ss, this, c.getConAttrs());
-      primordialUuid    = conceptAttributes.primordialUuid;
+      primordialUuid    = conceptAttributes.getPrimordialComponentUuid();
       relationships     = FXCollections.observableArrayList(
          new ArrayList<FxRelationshipChronicle>(c.getRelsOutgoing().size()));
 

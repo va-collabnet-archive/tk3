@@ -392,7 +392,7 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public int getMaxReadOnlySap() {
+   public int getMaxReadOnlyStamp() {
       return Bdb.getSapDb().getReadOnlyMax();
    }
 
@@ -524,7 +524,7 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public int getSapNid(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+   public int getStampNid(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
       return Bdb.getSapDb().getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
    }
 

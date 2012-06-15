@@ -29,6 +29,8 @@ public class FxRefexBooleanChronicle extends FxRefexChronicle<FxRefexBooleanVers
 
    public FxRefexBooleanChronicle() {
       super();
+      this.versions = FXCollections.observableArrayList(
+         new ArrayList<FxRefexBooleanVersion>(1));
    }
 
    public FxRefexBooleanChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)

@@ -26,6 +26,8 @@ public class FxConceptAttributesChronicle extends FxComponentChronicle<FxConcept
 
    public FxConceptAttributesChronicle() {
       super();
+      this.versions = FXCollections.observableArrayList(
+         new ArrayList<FxConceptAttributesVersion>(1));
    }
 
    public FxConceptAttributesChronicle(TerminologySnapshotDI ss, FxConcept concept,

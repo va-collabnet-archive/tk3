@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import java.util.*;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
@@ -30,18 +31,19 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
 
    //~--- fields --------------------------------------------------------------
 
-   @XmlElementWrapper(name = "extra-id-list")
-   @XmlElement(name = "extra-id")
-   public ObservableList<FxIdentifier>        additionalIds;
-   @XmlElementWrapper(name = "annotation-list")
-   @XmlElement(name = "fx-annotation")
-   public ObservableList<FxRefexChronicle<?>> annotations;
+   @XmlElementWrapper(name = "additionalIdList")
+   @XmlElement(name="additionalId")
+   public ObservableList<FxIdentifier>        additionalIds =
+            FXCollections.observableArrayList(new ArrayList<FxIdentifier>(0));
+   @XmlElementWrapper(name = "annotationList")
+   @XmlElement(name = "annotation")
+   public ObservableList<FxRefexChronicle<?>> annotations=
+            FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?>>(0));
    @XmlTransient
-   public FxConcept                           concept;
-   @XmlElement(name = "primordial-uuid")
-   public UUID                                primordialUuid;
-   @XmlElementWrapper(name = "version-list")
-   @XmlElement(name = "version")
+   protected FxConcept                        concept;
+   private UUID                                primordialComponentUuid;
+   @XmlElementWrapper(name = "versionList")
+   @XmlElement()
    public ObservableList<V>                   versions;
 
    //~--- constructors --------------------------------------------------------
@@ -54,7 +56,7 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
            throws IOException, ContradictionException {
       super();
       this.concept        = concept;
-      this.primordialUuid = another.getPrimUuid();
+      this.primordialComponentUuid = another.getPrimUuid();
 
       Collection<? extends IdBI> anotherAdditionalIds = another.getAdditionalIds();
 
@@ -93,7 +95,7 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
       if (FxComponentChronicle.class.isAssignableFrom(obj.getClass())) {
          FxComponentChronicle<?> another = (FxComponentChronicle<?>) obj;
 
-         return this.primordialUuid.equals(another.primordialUuid);
+         return this.primordialComponentUuid.equals(another.primordialComponentUuid);
       }
 
       return false;
@@ -106,7 +108,7 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
     */
    @Override
    public final int hashCode() {
-      return this.primordialUuid.hashCode();
+      return this.primordialComponentUuid.hashCode();
    }
 
    private void processAnnotations(TerminologySnapshotDI ss,
@@ -137,7 +139,7 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" primordial:");
-      buff.append(this.primordialUuid);
+      buff.append(this.primordialComponentUuid);
       buff.append(" xtraIds:");
       buff.append(this.additionalIds);
       buff.append(super.toString());
@@ -185,7 +187,7 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
 
    //~--- get methods ---------------------------------------------------------
 
-   public List<FxIdentifier> getAdditionalIdComponents() {
+   public List<FxIdentifier> getAdditionalIds() {
       return additionalIds;
    }
 
@@ -197,7 +199,7 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
       return concept;
    }
 
-   public int getIdComponentCount() {
+   public int getIdCount() {
       if (additionalIds == null) {
          return 1;
       }
@@ -206,13 +208,13 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
    }
 
    public UUID getPrimordialComponentUuid() {
-      return primordialUuid;
+      return primordialComponentUuid;
    }
 
    public List<UUID> getUuids() {
       List<UUID> uuids = new ArrayList<>();
 
-      uuids.add(primordialUuid);
+      uuids.add(primordialComponentUuid);
 
       if (additionalIds != null) {
          for (FxIdentifier idv : additionalIds) {
@@ -241,8 +243,8 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setAdditionalIdComponents(ObservableList<FxIdentifier> additionalIdComponents) {
-      this.additionalIds = additionalIdComponents;
+   public void setAdditionalIds(ObservableList<FxIdentifier> additionalIds) {
+      this.additionalIds = additionalIds;
    }
 
    public void setAnnotations(ObservableList<FxRefexChronicle<?>> annotations) {
@@ -250,10 +252,10 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
    }
 
    public void setPrimordialComponentUuid(UUID primordialComponentUuid) {
-      this.primordialUuid = primordialComponentUuid;
+      this.primordialComponentUuid = primordialComponentUuid;
    }
 
-   public void setRevisions(ObservableList<V> revisions) {
-      this.versions = revisions;
+   public void setVersions(ObservableList<V> versions) {
+      this.versions = versions;
    }
 }

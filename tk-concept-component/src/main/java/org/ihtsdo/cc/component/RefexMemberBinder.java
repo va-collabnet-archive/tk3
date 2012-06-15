@@ -29,7 +29,7 @@ public class RefexMemberBinder extends TupleBinding<Collection<RefexMember<?, ?>
         implements I_BindConceptComponents {
    public static AtomicInteger encountered                   = new AtomicInteger();
    public static AtomicInteger written                       = new AtomicInteger();
-   private static int          maxReadOnlyStatusAtPositionId = P.s.getMaxReadOnlySap();
+   private static int          maxReadOnlyStatusAtPositionId = P.s.getMaxReadOnlyStamp();
 
    //~--- fields --------------------------------------------------------------
 

@@ -27,6 +27,8 @@ public class FxRefexCompCompCompChronicle extends FxRefexChronicle<FxRefexCompCo
 
    public FxRefexCompCompCompChronicle() {
       super();
+      this.versions = FXCollections.observableArrayList(
+         new ArrayList<FxRefexCompCompCompVersion>(1));
    }
 
    public FxRefexCompCompCompChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)

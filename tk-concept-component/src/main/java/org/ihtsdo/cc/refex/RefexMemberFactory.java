@@ -61,7 +61,7 @@ public class RefexMemberFactory {
         for (int i = 0; i < ec.getEditPaths().size(); i++) {
             if (i == 0) {
                 member.setStatusAtPositionNid(
-                        P.s.getSapNid(res.getInt(RefexProperty.STATUS_NID),
+                        P.s.getStampNid(res.getInt(RefexProperty.STATUS_NID),
                         Long.MAX_VALUE,
                         ec.getAuthorNid(),
                         ec.getModuleNid(),
