@@ -40,6 +40,7 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
    @XmlElement(name = "annotation")
    public ObservableList<FxRefexChronicle<?>> annotations =
       FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?>>(0));
+   private int              componentNid;
    @XmlTransient
    protected FxConcept      concept;
    private UUID             primordialComponentUuid;
@@ -58,6 +59,7 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
       super();
       this.concept                 = concept;
       this.primordialComponentUuid = another.getPrimUuid();
+      this.componentNid            = another.getNid();
 
       Collection<? extends IdBI> anotherAdditionalIds = another.getAdditionalIds();
 
@@ -76,14 +78,13 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
    }
 
    //~--- methods -------------------------------------------------------------
-   
+
    public void beforeUnmarshal(Unmarshaller u, Object parent) {
-       if (parent instanceof FxConcept) {
-           this.concept = (FxConcept) parent;
-       } else if (parent instanceof FxComponentChronicle) {
-           this.concept = ((FxComponentChronicle) parent).getConcept();
-       }
-       
+      if (parent instanceof FxConcept) {
+         this.concept = (FxConcept) parent;
+      } else if (parent instanceof FxComponentChronicle) {
+         this.concept = ((FxComponentChronicle) parent).getConcept();
+      }
    }
 
    /**
@@ -205,6 +206,10 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
       return annotations;
    }
 
+   public int getComponentNid() {
+      return componentNid;
+   }
+
    public FxConcept getConcept() {
       return concept;
    }
@@ -259,6 +264,10 @@ public abstract class FxComponentChronicle<V extends FxVersion> implements Seria
 
    public void setAnnotations(ObservableList<FxRefexChronicle<?>> annotations) {
       this.annotations = annotations;
+   }
+
+   public void setComponentNid(int componentNid) {
+      this.componentNid = componentNid;
    }
 
    public void setPrimordialComponentUuid(UUID primordialComponentUuid) {

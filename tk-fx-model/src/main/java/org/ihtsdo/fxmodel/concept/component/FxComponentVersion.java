@@ -117,4 +117,9 @@ public class FxComponentVersion<T extends FxComponentChronicle, V extends FxComp
    public final List<V> getVersions() {
       return this.chronicle.getVersions();
    }
+   
+   @XmlTransient
+   public int getComponentNid() {
+       return this.chronicle.getComponentNid();
+   }
 }
