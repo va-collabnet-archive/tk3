@@ -26,7 +26,6 @@ import org.ihtsdo.cc.component.RelationshipBinder;
 import com.sleepycat.bind.tuple.TupleBinding;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
-import org.ihtsdo.bdb.concept.component.*;
 import org.ihtsdo.cc.concept.Concept;
 
 public class ConceptBinder extends TupleBinding<Concept> {

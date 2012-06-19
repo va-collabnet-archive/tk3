@@ -2,8 +2,9 @@ package org.ihtsdo.cc.relationship.group;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-
+import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.concept.Concept;
+import org.ihtsdo.helper.uuid.Type5UuidFactory;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.PositionBI;
 import org.ihtsdo.tk.api.coordinate.EditCoordinate;
@@ -27,8 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import org.ihtsdo.cc.P;
-import org.ihtsdo.helper.uuid.Type5UuidFactory;
 
 public class RelGroupChronicle implements RelGroupChronicleBI {
    private int                                 conceptNid;
@@ -123,6 +122,13 @@ public class RelGroupChronicle implements RelGroupChronicleBI {
    }
 
    @Override
+   public <T extends RefexVersionBI<?>> Collection<T> getCurrentAnnotationMembers(ViewCoordinate xyz,
+           Class<T> cls)
+           throws IOException {
+      throw new UnsupportedOperationException("Not supported yet.");
+   }
+
+   @Override
    public Collection<? extends RefexVersionBI<?>> getCurrentAnnotationMembers(ViewCoordinate xyz,
            int refexNid)
            throws IOException {
@@ -130,13 +136,8 @@ public class RelGroupChronicle implements RelGroupChronicleBI {
    }
 
    @Override
-   public Collection<? extends RefexVersionBI<?>> getCurrentAnnotations(ViewCoordinate xyz)
-           throws IOException {
-      throw new UnsupportedOperationException("Not supported yet.");
-   }
-
-   @Override
-   public Collection<? extends RefexVersionBI<?>> getCurrentAnnotations(ViewCoordinate xyz, int refexNid)
+   public <T extends RefexVersionBI<?>> Collection<T> getCurrentAnnotationMembers(ViewCoordinate xyz,
+           int refexNid, Class<T> cls)
            throws IOException {
       throw new UnsupportedOperationException("Not supported yet.");
    }
@@ -156,6 +157,11 @@ public class RelGroupChronicle implements RelGroupChronicleBI {
    public Collection<? extends RefexVersionBI<?>> getCurrentRefexes(ViewCoordinate xyz, int refsetNid)
            throws IOException {
       throw new UnsupportedOperationException("Not supported yet.");
+   }
+
+   @Override
+   public Concept getEnclosingConcept() {
+      return (Concept) rels.iterator().next().getEnclosingConcept();
    }
 
    @Override
@@ -252,9 +258,4 @@ public class RelGroupChronicle implements RelGroupChronicleBI {
    public boolean isUncommitted() {
       return false;
    }
-
-    @Override
-    public Concept getEnclosingConcept() {
-        return (Concept) rels.iterator().next().getEnclosingConcept();
-    }
 }
