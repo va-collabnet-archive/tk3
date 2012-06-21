@@ -2,9 +2,6 @@ package org.ihtsdo.fxmodel.concept;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.fetchpolicy.VersionPolicy;
-import org.ihtsdo.fxmodel.fetchpolicy.RelationshipPolicy;
-import org.ihtsdo.fxmodel.fetchpolicy.RefexPolicy;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -27,6 +24,9 @@ import org.ihtsdo.fxmodel.concept.component.refex.type_long.FxRefexLongChronicle
 import org.ihtsdo.fxmodel.concept.component.refex.type_member.FxRefexMembershipChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.type_string.FxRefexStringChronicle;
 import org.ihtsdo.fxmodel.concept.component.relationship.FxRelationshipChronicle;
+import org.ihtsdo.fxmodel.fetchpolicy.RefexPolicy;
+import org.ihtsdo.fxmodel.fetchpolicy.RelationshipPolicy;
+import org.ihtsdo.fxmodel.fetchpolicy.VersionPolicy;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
@@ -59,7 +59,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement; 
+import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement()
@@ -88,7 +88,7 @@ public class FxConcept implements Serializable {
    private EnumSet<RefexPolicy>                      refexPolicy;
    @XmlElementWrapper(name = "refsetMemberList")
    @XmlElement(name = "refsetMember")
-   protected ObservableList<FxRefexChronicle<?,?>>     refsetMembers;
+   protected ObservableList<FxRefexChronicle<?, ?>>  refsetMembers;
    private EnumSet<RelationshipPolicy>               relationshipPolicy;
    private EnumSet<VersionPolicy>                    versionPolicy;
 
@@ -100,7 +100,7 @@ public class FxConcept implements Serializable {
       destinationRelationships = FXCollections.observableArrayList(new ArrayList<FxRelationshipChronicle>(1));
       descriptions             = FXCollections.observableArrayList(new ArrayList<FxDescriptionChronicle>(1));
       media                    = FXCollections.observableArrayList(new ArrayList<FxMediaChronicle>(1));
-      refsetMembers            = FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?,?>>(0));
+      refsetMembers            = FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?, ?>>(0));
    }
 
    public FxConcept(TerminologySnapshotDI ss, ConceptChronicleBI c, EnumSet<VersionPolicy> versionPolicy,
@@ -111,11 +111,30 @@ public class FxConcept implements Serializable {
       this.relationshipPolicy = relationshipPolicy;
       conceptAttributes       = new FxConceptAttributesChronicle(ss, this, c.getConAttrs());
       primordialUuid          = conceptAttributes.getPrimordialComponentUuid();
-      originRelationships     = FXCollections.observableArrayList(
-         new ArrayList<FxRelationshipChronicle>(c.getRelsOutgoing().size()));
 
-      for (RelationshipChronicleBI rel : c.getRelsOutgoing()) {
-         originRelationships.add(new FxRelationshipChronicle(ss, this, rel));
+      if (relationshipPolicy.contains(RelationshipPolicy.ORIGINATING_RELATIONSHIPS)) {
+         originRelationships = FXCollections.observableArrayList(
+            new ArrayList<FxRelationshipChronicle>(c.getRelsOutgoing().size()));
+
+         for (RelationshipChronicleBI rel : c.getRelsOutgoing()) {
+            originRelationships.add(new FxRelationshipChronicle(ss, this, rel));
+         }
+      } else {
+         originRelationships = FXCollections.observableArrayList(new ArrayList<FxRelationshipChronicle>(0));
+      }
+
+      if (relationshipPolicy.contains(RelationshipPolicy.DESTINATION_RELATIONSHIPS)) {
+         Collection<? extends RelationshipChronicleBI> relsIncoming = c.getRelsIncoming();
+
+         destinationRelationships =
+            FXCollections.observableArrayList(new ArrayList<FxRelationshipChronicle>(relsIncoming.size()));
+
+         for (RelationshipChronicleBI rel : relsIncoming) {
+            destinationRelationships.add(new FxRelationshipChronicle(ss, this, rel));
+         }
+      } else {
+         destinationRelationships =
+            FXCollections.observableArrayList(new ArrayList<FxRelationshipChronicle>(0));
       }
 
       descriptions =
@@ -138,11 +157,11 @@ public class FxConcept implements Serializable {
          Collection<? extends RefexChronicleBI> members = c.getRefsetMembers();
 
          if (members != null) {
-            refsetMembers =
-               FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?,?>>(members.size()));
+            refsetMembers = FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?,
+                    ?>>(members.size()));
 
             for (RefexChronicleBI m : members) {
-               FxRefexChronicle<?,?> member = convertRefex(ss, m);
+               FxRefexChronicle<?, ?> member = convertRefex(ss, m);
 
                if (member != null) {
                   refsetMembers.add(member);
@@ -156,12 +175,12 @@ public class FxConcept implements Serializable {
 
    //~--- methods -------------------------------------------------------------
 
-   private FxRefexChronicle<?,?> convertRefex(TerminologySnapshotDI ss, RefexChronicleBI<?> m)
+   private FxRefexChronicle<?, ?> convertRefex(TerminologySnapshotDI ss, RefexChronicleBI<?> m)
            throws IOException, ContradictionException {
       return convertRefex(ss, this, m);
    }
 
-   public static FxRefexChronicle<?,?> convertRefex(TerminologySnapshotDI ss, FxConcept concept,
+   public static FxRefexChronicle<?, ?> convertRefex(TerminologySnapshotDI ss, FxConcept concept,
            RefexChronicleBI<?> m)
            throws IOException, ContradictionException {
       if (m.getPrimordialVersion() instanceof RefexNidNidNidVersionBI) {
@@ -337,7 +356,7 @@ public class FxConcept implements Serializable {
       if (this.refsetMembers == null) {
          buff.append(PADDING + "none\n");
       } else {
-         for (FxRefexChronicle<?,?> r : this.refsetMembers) {
+         for (FxRefexChronicle<?, ?> r : this.refsetMembers) {
             buff.append(PADDING);
             buff.append(r);
             buff.append("\n");
@@ -393,7 +412,7 @@ public class FxConcept implements Serializable {
       return refexPolicy;
    }
 
-   public ObservableList<FxRefexChronicle<?,?>> getRefsetMembers() {
+   public ObservableList<FxRefexChronicle<?, ?>> getRefsetMembers() {
       return refsetMembers;
    }
 
@@ -439,7 +458,7 @@ public class FxConcept implements Serializable {
       this.refexPolicy = refexPolicy;
    }
 
-   public void setRefsetMembers(List<FxRefexChronicle<?,?>> refsetMembers) {
+   public void setRefsetMembers(List<FxRefexChronicle<?, ?>> refsetMembers) {
       this.refsetMembers = FXCollections.observableArrayList(refsetMembers);
    }
 

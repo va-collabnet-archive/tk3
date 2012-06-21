@@ -1,6 +1,7 @@
 package org.ihtsdo.fxmodel.concept.component;
 
 //~--- non-JDK imports --------------------------------------------------------
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -8,6 +9,9 @@ import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.identifier.FxIdentifier;
 import org.ihtsdo.fxmodel.concept.component.identifier.FxIdentifierUuid;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
+import org.ihtsdo.fxmodel.fetchpolicy.RefexPolicy;
+import org.ihtsdo.fxmodel.fetchpolicy.VersionPolicy;
+import org.ihtsdo.tk.api.ComponentChroncileBI;
 import org.ihtsdo.tk.api.ComponentVersionBI;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
@@ -25,281 +29,291 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
-import org.ihtsdo.tk.api.ComponentChroncileBI;
-import org.ihtsdo.fxmodel.fetchpolicy.VersionPolicy;
 
-public abstract class FxComponentChronicle<V extends FxComponentVersion, T extends ComponentVersionBI> implements Serializable {
+public abstract class FxComponentChronicle<V extends FxComponentVersion, T extends ComponentVersionBI>
+        implements Serializable {
+   private static final long serialVersionUID = 1;
 
-    private static final long serialVersionUID = 1;
-    //~--- fields --------------------------------------------------------------
-    @XmlElementWrapper(name = "additionalIdList")
-    @XmlElement(name = "additionalId")
-    public ObservableList<FxIdentifier> additionalIds =
-            FXCollections.observableArrayList(new ArrayList<FxIdentifier>(0));
-    @XmlElementWrapper(name = "annotationList")
-    @XmlElement(name = "annotation")
-    public ObservableList<FxRefexChronicle<?,?>> annotations =
-            FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?,?>>(0));
-    private int componentNid;
-    @XmlTransient
-    protected FxConcept concept;
-    private UUID primordialComponentUuid;
-    @XmlElementWrapper(name = "versionList")
-    @XmlElement()
-    private ObservableList<V> versions;
+   //~--- fields --------------------------------------------------------------
 
-    //~--- constructors --------------------------------------------------------
-    public FxComponentChronicle() {
-        super();
-        this.versions = FXCollections.observableArrayList(new ArrayList<V>(1));
-    }
+   @XmlElementWrapper(name = "additionalIdList")
+   @XmlElement(name = "additionalId")
+   public ObservableList<FxIdentifier> additionalIds =
+      FXCollections.observableArrayList(new ArrayList<FxIdentifier>(0));
+   @XmlElementWrapper(name = "annotationList")
+   @XmlElement(name = "annotation")
+   public ObservableList<FxRefexChronicle<?, ?>> refexes =
+      FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?, ?>>(0));
+   private int               componentNid;
+   @XmlTransient
+   protected FxConcept       concept;
+   private UUID              primordialComponentUuid;
+   @XmlElementWrapper(name = "versionList")
+   @XmlElement()
+   private ObservableList<V> versions;
 
-    public FxComponentChronicle(TerminologySnapshotDI ss, FxConcept concept, ComponentChroncileBI<T> another)
-            throws IOException, ContradictionException {
-        super();
-        this.concept = concept;
-        this.primordialComponentUuid = another.getPrimUuid();
-        this.componentNid = another.getNid();
+   //~--- constructors --------------------------------------------------------
 
-        Collection<? extends IdBI> anotherAdditionalIds = another.getAdditionalIds();
+   public FxComponentChronicle() {
+      super();
+      this.versions = FXCollections.observableArrayList(new ArrayList<V>(1));
+   }
 
-        if (anotherAdditionalIds != null) {
-            this.additionalIds =
-                    FXCollections.observableArrayList(new ArrayList<FxIdentifier>(anotherAdditionalIds.size()));
-            nextId:
-            for (IdBI id : anotherAdditionalIds) {
-                this.additionalIds.add((FxIdentifier) FxIdentifier.convertId(ss, id));
+   public FxComponentChronicle(TerminologySnapshotDI ss, FxConcept concept, ComponentChroncileBI<T> another)
+           throws IOException, ContradictionException {
+      super();
+      this.concept                 = concept;
+      this.primordialComponentUuid = another.getPrimUuid();
+      this.componentNid            = another.getNid();
+
+      Collection<? extends IdBI> anotherAdditionalIds = another.getAdditionalIds();
+
+      if (anotherAdditionalIds != null) {
+         this.additionalIds =
+            FXCollections.observableArrayList(new ArrayList<FxIdentifier>(anotherAdditionalIds.size()));
+         nextId:
+         for (IdBI id : anotherAdditionalIds) {
+            this.additionalIds.add((FxIdentifier) FxIdentifier.convertId(ss, id));
+         }
+      }
+
+      processRefexes(ss, another);
+
+      if (!concept.getVersionPolicy().contains(VersionPolicy.INACTIVE_VERSIONS)) {
+         this.versions = FXCollections.observableArrayList(new ArrayList<V>(1));
+
+         for (T v : another.getVersions()) {
+            this.versions.add(makeVersion(ss, v));
+         }
+      } else {
+         this.versions = FXCollections.observableArrayList(new ArrayList<V>(another.getVersions().size()));
+
+         if (concept.getVersionPolicy().contains(VersionPolicy.LAST_VERSIONS)) {
+            for (T v : another.getVersions(ss.getViewCoordinate().getVcWithAllStatusValues())) {
+               this.versions.add(makeVersion(ss, v));
             }
-        }
-
-        Collection<? extends RefexChronicleBI<?>> anotherAnnotations = another.getAnnotations();
-
-        processAnnotations(ss, anotherAnnotations);
-
-        if (!concept.getVersionPolicy().contains(VersionPolicy.INACTIVE_VERSIONS)) {
-            this.versions = FXCollections.observableArrayList(new ArrayList<V>(1));
-
-            for (T v : another.getVersions()) {
-                this.versions.add(makeVersion(ss, v));
+         } else if (concept.getVersionPolicy().contains(VersionPolicy.ACTIVE_VERSIONS)) {
+            for (T v : another.getVersions(ss.getViewCoordinate())) {
+               this.versions.add(makeVersion(ss, v));
             }
-        } else {
-            this.versions = FXCollections.observableArrayList(
-                    new ArrayList<V>(another.getVersions().size()));
+         } else {
+            throw new UnsupportedOperationException("Can't get versions for policy: "
+                    + concept.getVersionPolicy());
+         }
+      }
+   }
 
-            if (concept.getVersionPolicy().contains(VersionPolicy.LAST_VERSIONS)) {
-                for (T v :
-                        another.getVersions(ss.getViewCoordinate().getVcWithAllStatusValues())) {
-                    this.versions.add(makeVersion(ss, v));
-                }
-            } else if (concept.getVersionPolicy().contains(VersionPolicy.ACTIVE_VERSIONS)) {
-                for (T v : another.getVersions(ss.getViewCoordinate())) {
-                    this.versions.add(makeVersion(ss, v));
-                }
-            } else {
-                throw new UnsupportedOperationException("Can't get versions for policy: "
-                        + concept.getVersionPolicy());
-            }
-        }
+   //~--- methods -------------------------------------------------------------
 
-    }
+   public void beforeUnmarshal(Unmarshaller u, Object parent) {
+      if (parent instanceof FxConcept) {
+         this.concept = (FxConcept) parent;
+      } else if (parent instanceof FxComponentChronicle) {
+         this.concept = ((FxComponentChronicle) parent).getConcept();
+      }
+   }
 
-    protected abstract V makeVersion(TerminologySnapshotDI ss, 
-            T version) throws IOException, ContradictionException;
-    //~--- methods -------------------------------------------------------------
+   /**
+    * Compares this object to the specified object. The result is <tt>true</tt> if and only if the argument
+    * is not <tt>null</tt>, is a <tt>EComponent</tt> object, and contains the same values, field by field, as
+    * this <tt>EComponent</tt>.
+    *
+    * @param obj the object to compare with.
+    * @return <code>true</code> if the objects are the same; <code>false</code> otherwise.
+    */
+   @Override
+   public final boolean equals(Object obj) {
+      if (obj == null) {
+         return false;
+      }
 
-    public void beforeUnmarshal(Unmarshaller u, Object parent) {
-        if (parent instanceof FxConcept) {
-            this.concept = (FxConcept) parent;
-        } else if (parent instanceof FxComponentChronicle) {
-            this.concept = ((FxComponentChronicle) parent).getConcept();
-        }
-    }
+      if (FxComponentChronicle.class.isAssignableFrom(obj.getClass())) {
+         FxComponentChronicle<V, T> another = (FxComponentChronicle<V, T>) obj;
 
-    /**
-     * Compares this object to the specified object. The result is <tt>true</tt> if and only if the argument
-     * is not <tt>null</tt>, is a <tt>EComponent</tt> object, and contains the same values, field by field, as
-     * this <tt>EComponent</tt>.
-     *
-     * @param obj the object to compare with.
-     * @return <code>true</code> if the objects are the same; <code>false</code> otherwise.
-     */
-    @Override
-    public final boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
+         return this.primordialComponentUuid.equals(another.primordialComponentUuid);
+      }
 
-        if (FxComponentChronicle.class.isAssignableFrom(obj.getClass())) {
-            FxComponentChronicle<V,T> another = (FxComponentChronicle<V,T>) obj;
+      return false;
+   }
 
-            return this.primordialComponentUuid.equals(another.primordialComponentUuid);
-        }
+   /**
+    * Returns a hash code for this
+    * <code>EComponent</code>.
+    *
+    * @return a hash code value for this <tt>EComponent</tt>.
+    */
+   @Override
+   public final int hashCode() {
+      return this.primordialComponentUuid.hashCode();
+   }
 
-        return false;
-    }
+   protected abstract V makeVersion(TerminologySnapshotDI ss, T version)
+           throws IOException, ContradictionException;
 
-    /**
-     * Returns a hash code for this
-     * <code>EComponent</code>.
-     *
-     * @return a hash code value for this <tt>EComponent</tt>.
-     */
-    @Override
-    public final int hashCode() {
-        return this.primordialComponentUuid.hashCode();
-    }
+   private void processRefexes(TerminologySnapshotDI ss, ComponentChroncileBI<T> another)
+           throws IOException, ContradictionException {
+      HashSet<RefexChronicleBI<?>> refexes = new HashSet<>();
 
-    private void processAnnotations(TerminologySnapshotDI ss,
-            Collection<? extends RefexChronicleBI<?>> annotations)
-            throws IOException, ContradictionException {
-        if ((annotations != null) && !annotations.isEmpty()) {
-            this.annotations =
-                    FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?,?>>(annotations.size()));
+      if (getConcept().getRefexPolicy().contains(RefexPolicy.ANNOTATION_MEMBERS_WITH_REFERENCED_COMPONENT)
+              && getConcept().getRefexPolicy().contains(
+                 RefexPolicy.REFSET_MEMBERS_WITH_REFERENCED_COMPONENT)) {
+         refexes.addAll(another.getRefexes());
+      } else if (getConcept().getRefexPolicy().contains(
+              RefexPolicy.ANNOTATION_MEMBERS_WITH_REFERENCED_COMPONENT)) {
+         refexes.addAll(another.getAnnotations());
+      } else if (getConcept().getRefexPolicy().contains(RefexPolicy.REFSET_MEMBERS_WITH_REFSET_CONCEPT)) {
+         refexes.addAll(another.getRefexes());
+         refexes.removeAll(another.getAnnotations());
+      } else {
+         this.refexes = FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?,
+                 ?>>(refexes.size()));
+      }
 
-            for (RefexChronicleBI<?> r : annotations) {
-                this.annotations.add(FxConcept.convertRefex(ss, concept, r));
-            }
-        }
-    }
+      for (RefexChronicleBI<?> r : refexes) {
+         this.refexes.add(FxConcept.convertRefex(ss, concept, r));
+      }
+   }
 
-    /**
-     * Returns a string representation of the object.
-     */
-    @Override
-    public final String toString() {
-        int depth = 1;
+   /**
+    * Returns a string representation of the object.
+    */
+   @Override
+   public final String toString() {
+      int depth = 1;
 
-        if (this instanceof FxRefexChronicle<?,?>) {
-            depth = 2;
-        }
+      if (this instanceof FxRefexChronicle<?, ?>) {
+         depth = 2;
+      }
 
-        StringBuilder buff = new StringBuilder();
+      StringBuilder buff = new StringBuilder();
 
-        buff.append(this.getClass().getSimpleName()).append(": ");
-        buff.append(" primordial:");
-        buff.append(this.primordialComponentUuid);
-        buff.append(" xtraIds:");
-        buff.append(this.additionalIds);
-        buff.append(super.toString());
+      buff.append(this.getClass().getSimpleName()).append(": ");
+      buff.append(" primordial:");
+      buff.append(this.primordialComponentUuid);
+      buff.append(" xtraIds:");
+      buff.append(this.additionalIds);
+      buff.append(super.toString());
 
-        if ((annotations != null) && (annotations.size() > 0)) {
-            buff.append("\n" + FxConcept.PADDING);
+      if ((refexes != null) && (refexes.size() > 0)) {
+         buff.append("\n" + FxConcept.PADDING);
+
+         for (int i = 0; i < depth; i++) {
+            buff.append(FxConcept.PADDING);
+         }
+
+         buff.append("annotations:\n");
+
+         for (FxRefexChronicle m : this.refexes) {
+            buff.append(FxConcept.PADDING);
+            buff.append(FxConcept.PADDING);
 
             for (int i = 0; i < depth; i++) {
-                buff.append(FxConcept.PADDING);
+               buff.append(FxConcept.PADDING);
             }
 
-            buff.append("annotations:\n");
+            buff.append(m);
+            buff.append("\n");
+         }
+      }
 
-            for (FxRefexChronicle m : this.annotations) {
-                buff.append(FxConcept.PADDING);
-                buff.append(FxConcept.PADDING);
+      if ((versions != null) && (versions.size() > 0)) {
+         buff.append("\n" + FxConcept.PADDING + "revisions:\n");
 
-                for (int i = 0; i < depth; i++) {
-                    buff.append(FxConcept.PADDING);
-                }
+         for (FxVersion r : this.versions) {
+            buff.append(FxConcept.PADDING);
+            buff.append(FxConcept.PADDING);
 
-                buff.append(m);
-                buff.append("\n");
+            for (int i = 0; i < depth; i++) {
+               buff.append(FxConcept.PADDING);
             }
-        }
 
-        if ((versions != null) && (versions.size() > 0)) {
-            buff.append("\n" + FxConcept.PADDING + "revisions:\n");
+            buff.append(r);
+            buff.append("\n");
+         }
+      }
 
-            for (FxVersion r : this.versions) {
-                buff.append(FxConcept.PADDING);
-                buff.append(FxConcept.PADDING);
+      return buff.toString();
+   }
 
-                for (int i = 0; i < depth; i++) {
-                    buff.append(FxConcept.PADDING);
-                }
+   //~--- get methods ---------------------------------------------------------
 
-                buff.append(r);
-                buff.append("\n");
+   public List<FxIdentifier> getAdditionalIds() {
+      return additionalIds;
+   }
+
+   public int getComponentNid() {
+      return componentNid;
+   }
+
+   public FxConcept getConcept() {
+      return concept;
+   }
+
+   public int getIdCount() {
+      if (additionalIds == null) {
+         return 1;
+      }
+
+      return additionalIds.size() + 1;
+   }
+
+   public UUID getPrimordialComponentUuid() {
+      return primordialComponentUuid;
+   }
+
+   public List<FxRefexChronicle<?, ?>> getRefexes() {
+      return refexes;
+   }
+
+   public List<UUID> getUuids() {
+      List<UUID> uuids = new ArrayList<>();
+
+      uuids.add(primordialComponentUuid);
+
+      if (additionalIds != null) {
+         for (FxIdentifier idv : additionalIds) {
+            if (FxIdentifierUuid.class.isAssignableFrom(idv.getClass())) {
+               uuids.add((UUID) idv.getDenotation());
             }
-        }
+         }
+      }
 
-        return buff.toString();
-    }
+      return uuids;
+   }
 
-    //~--- get methods ---------------------------------------------------------
-    public List<FxIdentifier> getAdditionalIds() {
-        return additionalIds;
-    }
+   public int getVersionCount() {
+      List<? extends FxVersion> extraVersions = getVersions();
 
-    public List<FxRefexChronicle<?,?>> getAnnotations() {
-        return annotations;
-    }
+      if (extraVersions == null) {
+         return 1;
+      }
 
-    public int getComponentNid() {
-        return componentNid;
-    }
+      return extraVersions.size() + 1;
+   }
 
-    public FxConcept getConcept() {
-        return concept;
-    }
+   public final List<V> getVersions() {
+      return versions;
+   }
 
-    public int getIdCount() {
-        if (additionalIds == null) {
-            return 1;
-        }
+   //~--- set methods ---------------------------------------------------------
 
-        return additionalIds.size() + 1;
-    }
+   public void setAdditionalIds(ObservableList<FxIdentifier> additionalIds) {
+      this.additionalIds = additionalIds;
+   }
 
-    public UUID getPrimordialComponentUuid() {
-        return primordialComponentUuid;
-    }
+   public void setComponentNid(int componentNid) {
+      this.componentNid = componentNid;
+   }
 
-    public List<UUID> getUuids() {
-        List<UUID> uuids = new ArrayList<>();
+   public void setPrimordialComponentUuid(UUID primordialComponentUuid) {
+      this.primordialComponentUuid = primordialComponentUuid;
+   }
 
-        uuids.add(primordialComponentUuid);
+   public void setRefexes(ObservableList<FxRefexChronicle<?, ?>> annotations) {
+      this.refexes = annotations;
+   }
 
-        if (additionalIds != null) {
-            for (FxIdentifier idv : additionalIds) {
-                if (FxIdentifierUuid.class.isAssignableFrom(idv.getClass())) {
-                    uuids.add((UUID) idv.getDenotation());
-                }
-            }
-        }
-
-        return uuids;
-    }
-
-    public int getVersionCount() {
-        List<? extends FxVersion> extraVersions = getVersions();
-
-        if (extraVersions == null) {
-            return 1;
-        }
-
-        return extraVersions.size() + 1;
-    }
-
-    public final List<V> getVersions() {
-        return versions;
-    }
-
-    //~--- set methods ---------------------------------------------------------
-    public void setAdditionalIds(ObservableList<FxIdentifier> additionalIds) {
-        this.additionalIds = additionalIds;
-    }
-
-    public void setAnnotations(ObservableList<FxRefexChronicle<?,?>> annotations) {
-        this.annotations = annotations;
-    }
-
-    public void setComponentNid(int componentNid) {
-        this.componentNid = componentNid;
-    }
-
-    public void setPrimordialComponentUuid(UUID primordialComponentUuid) {
-        this.primordialComponentUuid = primordialComponentUuid;
-    }
-
-    public void setVersions(ObservableList<V> versions) {
-        this.versions = versions;
-    }
+   public void setVersions(ObservableList<V> versions) {
+      this.versions = versions;
+   }
 }
