@@ -13,9 +13,7 @@ import org.ihtsdo.tk.api.refex.type_boolean.RefexBooleanVersionBI;
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement()
 public class FxRefexBooleanVersion extends FxRefexVersion<FxRefexBooleanChronicle, FxRefexBooleanVersion> {
    public static final long serialVersionUID = 1;
 

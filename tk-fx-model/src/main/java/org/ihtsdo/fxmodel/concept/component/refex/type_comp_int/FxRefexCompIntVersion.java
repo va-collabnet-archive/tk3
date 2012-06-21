@@ -13,10 +13,8 @@ import org.ihtsdo.tk.api.refex.type_nid_int.RefexNidIntVersionBI;
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
 
-@XmlRootElement()
 public class FxRefexCompIntVersion <T extends FxRefexChronicle, V extends FxRefexCompIntVersion>
         extends FxRefexCompVersion<T, V> {
    public static final long serialVersionUID = 1;

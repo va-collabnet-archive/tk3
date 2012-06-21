@@ -2,7 +2,7 @@ package org.ihtsdo.fxmodel.concept.component.identifier;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.FxComponentRef;
+import org.ihtsdo.fxmodel.FxComponentReference;
 import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
@@ -23,7 +23,7 @@ public abstract class FxIdentifier extends FxVersion {
 
    //~--- fields --------------------------------------------------------------
 
-   protected FxComponentRef authorityRef;
+   protected FxComponentReference authorityRef;
 
    //~--- constructors --------------------------------------------------------
 
@@ -33,7 +33,7 @@ public abstract class FxIdentifier extends FxVersion {
 
    public FxIdentifier(TerminologySnapshotDI ss, IdBI id) throws IOException, ContradictionException {
       super(ss, id);
-      this.authorityRef = new FxComponentRef(ss.getConceptVersion(id.getAuthorityNid()));
+      this.authorityRef = new FxComponentReference(ss.getConceptVersion(id.getAuthorityNid()));
    }
 
    //~--- methods -------------------------------------------------------------
@@ -74,7 +74,7 @@ public abstract class FxIdentifier extends FxVersion {
 
    //~--- get methods ---------------------------------------------------------
 
-   public FxComponentRef getAuthorityRef() {
+   public FxComponentReference getAuthorityRef() {
       return authorityRef;
    }
 
@@ -84,7 +84,7 @@ public abstract class FxIdentifier extends FxVersion {
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setAuthorityRef(FxComponentRef authorityRef) {
+   public void setAuthorityRef(FxComponentReference authorityRef) {
       this.authorityRef = authorityRef;
    }
 

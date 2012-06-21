@@ -40,8 +40,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author kec
  */
-@XmlRootElement()
-public class FxComponentRef implements Externalizable {
+public class FxComponentReference implements Externalizable {
 
     public static final long serialVersionUID = 1;
     //~--- fields --------------------------------------------------------------
@@ -50,24 +49,24 @@ public class FxComponentRef implements Externalizable {
     private final SimpleStringProperty textProperty = new SimpleStringProperty();
 
     //~--- constructors --------------------------------------------------------
-    public FxComponentRef() {
+    public FxComponentReference() {
     }
 
-    public FxComponentRef(ConceptVersionBI concept) throws IOException, ContradictionException {
+    public FxComponentReference(ConceptVersionBI concept) throws IOException, ContradictionException {
         nidProperty.set(concept.getNid());
         uuidProperty.set(concept.getPrimUuid());
         textProperty.set(concept.getPreferredDescription().getText());
     }
 
-    public FxComponentRef(int nid) throws IOException {
+    public FxComponentReference(int nid) throws IOException {
         nidProperty.set(nid);
     }
 
-    public FxComponentRef(UUID uuid) {
+    public FxComponentReference(UUID uuid) {
         uuidProperty.set(uuid);
     }
 
-    public FxComponentRef(TerminologySnapshotDI ss, int nid) throws IOException, ContradictionException {
+    public FxComponentReference(TerminologySnapshotDI ss, int nid) throws IOException, ContradictionException {
         nidProperty.set(nid);
         ComponentVersionBI component = ss.getComponentVersion(nid);
         if (component != null) {
@@ -85,7 +84,7 @@ public class FxComponentRef implements Externalizable {
         }
     }
 
-    public FxComponentRef(UUID primordialUuid, Integer nid, String text) {
+    public FxComponentReference(UUID primordialUuid, Integer nid, String text) {
         nidProperty.set(nid);
         uuidProperty.set(primordialUuid);
         textProperty.set(text);
@@ -94,8 +93,8 @@ public class FxComponentRef implements Externalizable {
     //~--- methods -------------------------------------------------------------
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof FxComponentRef) {
-            FxComponentRef another = (FxComponentRef) obj;
+        if (obj instanceof FxComponentReference) {
+            FxComponentReference another = (FxComponentReference) obj;
 
             return nidProperty.equals(another.nidProperty) || uuidProperty.equals(another.uuidProperty);
         }

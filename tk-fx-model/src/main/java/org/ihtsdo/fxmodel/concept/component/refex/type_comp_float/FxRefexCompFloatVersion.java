@@ -6,19 +6,15 @@ import javafx.beans.property.SimpleFloatProperty;
 
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompVersion;
-import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
-import org.ihtsdo.tk.api.TerminologyStoreDI;
 import org.ihtsdo.tk.api.refex.type_nid_float.RefexNidFloatVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement()
 public class FxRefexCompFloatVersion<T extends FxRefexChronicle, V extends FxRefexCompFloatVersion>
         extends FxRefexCompVersion<T, V> {
    public static final long serialVersionUID = 1;

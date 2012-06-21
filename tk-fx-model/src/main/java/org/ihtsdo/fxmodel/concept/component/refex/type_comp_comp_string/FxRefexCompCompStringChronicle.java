@@ -2,8 +2,6 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp_string;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import javafx.collections.FXCollections;
-
 import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.refex.FX_REFEX_TYPE;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
@@ -17,31 +15,32 @@ import org.ihtsdo.tk.api.refex.type_nid_nid_string.RefexNidNidStringVersionBI;
 
 import java.io.IOException;
 
-import java.util.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
-public class FxRefexCompCompStringChronicle extends FxRefexChronicle<FxRefexCompCompStringVersion> {
+public class FxRefexCompCompStringChronicle
+        extends FxRefexChronicle<FxRefexCompCompStringVersion, RefexNidNidStringVersionBI> {
    public static final long serialVersionUID = 1;
 
    //~--- constructors --------------------------------------------------------
 
    public FxRefexCompCompStringChronicle() {
       super();
-      this.versions = FXCollections.observableArrayList(
-         new ArrayList<FxRefexCompCompStringVersion>(1));
    }
 
    public FxRefexCompCompStringChronicle(TerminologySnapshotDI ss, FxConcept concept,
            RefexChronicleBI another)
            throws IOException, ContradictionException {
       super(ss, concept, (RefexVersionBI) another.getPrimordialVersion());
-      this.versions = FXCollections.observableArrayList(
-         new ArrayList<FxRefexCompCompStringVersion>(another.getVersions().size()));
+   }
 
-      for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexCompCompStringVersion(this, ss, (RefexNidNidStringVersionBI) v));
-      }
+   //~--- methods -------------------------------------------------------------
+
+   @Override
+   protected FxRefexCompCompStringVersion makeVersion(TerminologySnapshotDI ss,
+           RefexNidNidStringVersionBI version)
+           throws IOException, ContradictionException {
+      return new FxRefexCompCompStringVersion(this, ss, version);
    }
 
    //~--- get methods ---------------------------------------------------------

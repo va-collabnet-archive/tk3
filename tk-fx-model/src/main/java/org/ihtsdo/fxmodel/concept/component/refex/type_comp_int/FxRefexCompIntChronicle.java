@@ -2,8 +2,6 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp_int;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import javafx.collections.FXCollections;
-
 import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.refex.FX_REFEX_TYPE;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
@@ -17,30 +15,29 @@ import org.ihtsdo.tk.api.refex.type_nid_int.RefexNidIntVersionBI;
 
 import java.io.IOException;
 
-import java.util.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
-public class FxRefexCompIntChronicle extends FxRefexChronicle<FxRefexCompIntVersion> {
+public class FxRefexCompIntChronicle extends FxRefexChronicle<FxRefexCompIntVersion, RefexNidIntVersionBI> {
    public static final long serialVersionUID = 1;
 
    //~--- constructors --------------------------------------------------------
 
    public FxRefexCompIntChronicle() {
       super();
-      this.versions = FXCollections.observableArrayList(
-         new ArrayList<FxRefexCompIntVersion>(1));
    }
 
    public FxRefexCompIntChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)
            throws IOException, ContradictionException {
       super(ss, concept, (RefexVersionBI) another.getPrimordialVersion());
-      this.versions = FXCollections.observableArrayList(
-         new ArrayList<FxRefexCompIntVersion>(another.getVersions().size()));
+   }
 
-      for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexCompIntVersion(this, ss, (RefexNidIntVersionBI) v));
-      }
+   //~--- methods -------------------------------------------------------------
+
+   @Override
+   protected FxRefexCompIntVersion makeVersion(TerminologySnapshotDI ss, RefexNidIntVersionBI version)
+           throws IOException, ContradictionException {
+      return new FxRefexCompIntVersion(this, ss, version);
    }
 
    //~--- get methods ---------------------------------------------------------

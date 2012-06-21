@@ -12,10 +12,8 @@ import org.ihtsdo.tk.api.refex.type_int.RefexIntVersionBI;
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexVersion;
 
-@XmlRootElement()
 public class FxRefexIntVersion extends FxRefexVersion<FxRefexIntChronicle, FxRefexIntVersion> {
    public static final long serialVersionUID = 1;
 

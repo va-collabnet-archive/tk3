@@ -4,7 +4,7 @@ package org.ihtsdo.fxmodel.concept.component.media;
 
 import javafx.beans.property.SimpleStringProperty;
 
-import org.ihtsdo.fxmodel.FxComponentRef;
+import org.ihtsdo.fxmodel.FxComponentReference;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.media.MediaVersionBI;
@@ -13,18 +13,16 @@ import org.ihtsdo.tk.api.media.MediaVersionBI;
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.ihtsdo.fxmodel.concept.component.FxComponentVersion;
 
-@XmlRootElement()
 public class FxMediaVersion extends FxComponentVersion<FxMediaChronicle, FxMediaVersion>  {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
    private SimpleStringProperty textDescriptionProperty = new SimpleStringProperty(this, "textDescription");
-   private FxComponentRef       typeRef;
+   private FxComponentReference       typeRef;
 
    //~--- constructors --------------------------------------------------------
 
@@ -36,7 +34,7 @@ public class FxMediaVersion extends FxComponentVersion<FxMediaChronicle, FxMedia
            throws IOException, ContradictionException {
       super(chronicle, ss, another);
       this.textDescriptionProperty.set(another.getTextDescription());
-      this.typeRef = new FxComponentRef(ss.getConceptVersion(another.getTypeNid()));
+      this.typeRef = new FxComponentReference(ss.getConceptVersion(another.getTypeNid()));
    }
 
    //~--- methods -------------------------------------------------------------
@@ -108,7 +106,7 @@ public class FxMediaVersion extends FxComponentVersion<FxMediaChronicle, FxMedia
       return textDescriptionProperty.get();
    }
 
-   public FxComponentRef getTypeRef() {
+   public FxComponentReference getTypeRef() {
       return typeRef;
    }
 
@@ -118,7 +116,7 @@ public class FxMediaVersion extends FxComponentVersion<FxMediaChronicle, FxMedia
       this.textDescriptionProperty.set(textDescription);
    }
 
-   public void setTypeRef(FxComponentRef typeRef) {
+   public void setTypeRef(FxComponentReference typeRef) {
       this.typeRef = typeRef;
    }
    

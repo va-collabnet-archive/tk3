@@ -3,9 +3,11 @@ package org.ihtsdo.fxmodel.concept.component.description;
 //~--- non-JDK imports --------------------------------------------------------
 
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-import org.ihtsdo.fxmodel.FxComponentRef;
+import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.fxmodel.concept.component.FxComponentVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.description.DescriptionVersionBI;
@@ -14,20 +16,18 @@ import org.ihtsdo.tk.api.description.DescriptionVersionBI;
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import org.ihtsdo.fxmodel.concept.component.FxComponentVersion;
 
-@XmlRootElement()
-public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChronicle, FxDescriptionVersion>  {
+public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChronicle, FxDescriptionVersion> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
    protected SimpleBooleanProperty initialCaseSignificantProperty = new SimpleBooleanProperty(this,
                                                                        "initialCaseSignificant");
-   protected SimpleStringProperty langProperty = new SimpleStringProperty(this, "lang");
-   protected SimpleStringProperty textProperty = new SimpleStringProperty(this, "text");
-   protected FxComponentRef       type;
+   protected SimpleStringProperty                       languageProperty      = new SimpleStringProperty(this, "language");
+   protected SimpleStringProperty                       textProperty          = new SimpleStringProperty(this, "text");
+   protected SimpleObjectProperty<FxComponentReference> typeReferenceProperty =
+      new SimpleObjectProperty<>(this, "type");
 
    //~--- constructors --------------------------------------------------------
 
@@ -35,13 +35,14 @@ public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChroni
       super();
    }
 
-   public FxDescriptionVersion(FxDescriptionChronicle chronicle, TerminologySnapshotDI ss, DescriptionVersionBI another)
+   public FxDescriptionVersion(FxDescriptionChronicle chronicle, TerminologySnapshotDI ss,
+                               DescriptionVersionBI another)
            throws IOException, ContradictionException {
       super(chronicle, ss, another);
       this.initialCaseSignificantProperty.set(another.isInitialCaseSignificant());
-      this.langProperty.set(another.getLang());
+      this.languageProperty.set(another.getLang());
       this.textProperty.set(another.getText());
-      this.type = new FxComponentRef(ss.getConceptVersion(another.getTypeNid()));
+      this.typeReferenceProperty.set(new FxComponentReference(ss.getConceptVersion(another.getTypeNid())));
    }
 
    //~--- methods -------------------------------------------------------------
@@ -73,8 +74,8 @@ public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChroni
             return false;
          }
 
-         // Compare langProperty
-         if (!this.langProperty.equals(another.langProperty)) {
+         // Compare languageProperty
+         if (!this.languageProperty.equals(another.languageProperty)) {
             return false;
          }
 
@@ -84,7 +85,7 @@ public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChroni
          }
 
          // Compare typeUuid
-         if (!this.type.equals(another.type)) {
+         if (!this.typeReferenceProperty.equals(another.typeReferenceProperty)) {
             return false;
          }
 
@@ -99,6 +100,14 @@ public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChroni
       return initialCaseSignificantProperty;
    }
 
+   public SimpleStringProperty languageProperty() {
+      return languageProperty;
+   }
+
+   public SimpleStringProperty textProperty() {
+      return textProperty;
+   }
+
    /**
     * Returns a string representation of the object.
     */
@@ -110,15 +119,19 @@ public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChroni
       buff.append(" ics:");
       buff.append(this.initialCaseSignificantProperty.get());
       buff.append(" lang:");
-      buff.append("'").append(this.langProperty.get()).append("'");
+      buff.append("'").append(this.languageProperty.get()).append("'");
       buff.append(" text:");
       buff.append("'").append(this.textProperty.get()).append("'");
       buff.append(" type:");
-      buff.append(type.getText());
+      buff.append(typeReferenceProperty.get().getText());
       buff.append(" ");
       buff.append(super.toString());
 
       return buff.toString();
+   }
+
+   public SimpleObjectProperty<FxComponentReference> typeReferenceProperty() {
+      return typeReferenceProperty;
    }
 
    //~--- get methods ---------------------------------------------------------
@@ -128,12 +141,8 @@ public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChroni
     *
     * @see org.ihtsdo.etypes.I_DescribeExternally#getLang()
     */
-   public String getLang() {
-      return langProperty.get();
-   }
-
-   public SimpleStringProperty getLangProperty() {
-      return langProperty;
+   public String getLanguage() {
+      return languageProperty.get();
    }
 
    /*
@@ -145,12 +154,8 @@ public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChroni
       return textProperty.get();
    }
 
-   public SimpleStringProperty getTextProperty() {
-      return textProperty;
-   }
-
-   public FxComponentRef getType() {
-      return type;
+   public FxComponentReference getTypeReference() {
+      return typeReferenceProperty.get();
    }
 
    /*
@@ -168,15 +173,15 @@ public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChroni
       this.initialCaseSignificantProperty.set(initialCaseSignificant);
    }
 
-   public void setLang(String lang) {
-      this.langProperty.set(lang);
+   public void setLanguage(String lang) {
+      this.languageProperty.set(lang);
    }
 
    public void setText(String text) {
       this.textProperty.set(text);
    }
 
-   public void setType(FxComponentRef type) {
-      this.type = type;
+   public void setTypeReference(FxComponentReference typeReference) {
+      this.typeReferenceProperty.set(typeReference);
    }
 }

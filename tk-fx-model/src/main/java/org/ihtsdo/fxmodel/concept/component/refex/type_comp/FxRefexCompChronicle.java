@@ -2,8 +2,6 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import javafx.collections.FXCollections;
-
 import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.refex.FX_REFEX_TYPE;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
@@ -17,30 +15,29 @@ import org.ihtsdo.tk.api.refex.type_nid.RefexNidVersionBI;
 
 import java.io.IOException;
 
-import java.util.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
-public class FxRefexCompChronicle extends FxRefexChronicle<FxRefexCompVersion> {
+public class FxRefexCompChronicle extends FxRefexChronicle<FxRefexCompVersion, RefexNidVersionBI> {
    public static final long serialVersionUID = 1;
 
    //~--- constructors --------------------------------------------------------
 
    public FxRefexCompChronicle() {
       super();
-      this.versions =
-         FXCollections.observableArrayList(new ArrayList<FxRefexCompVersion>(1));
    }
 
    public FxRefexCompChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)
            throws IOException, ContradictionException {
       super(ss, concept, (RefexVersionBI) another.getPrimordialVersion());
-      this.versions =
-         FXCollections.observableArrayList(new ArrayList<FxRefexCompVersion>(another.getVersions().size()));
+   }
 
-      for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexCompVersion(this, ss, (RefexNidVersionBI) v));
-      }
+   //~--- methods -------------------------------------------------------------
+
+   @Override
+   protected FxRefexCompVersion makeVersion(TerminologySnapshotDI ss, RefexNidVersionBI version)
+           throws IOException, ContradictionException {
+      return new FxRefexCompVersion(this, ss, version);
    }
 
    //~--- get methods ---------------------------------------------------------

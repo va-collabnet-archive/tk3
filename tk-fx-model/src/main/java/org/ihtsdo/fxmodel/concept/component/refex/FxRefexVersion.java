@@ -20,7 +20,7 @@ package org.ihtsdo.fxmodel.concept.component.refex;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.FxComponentRef;
+import org.ihtsdo.fxmodel.FxComponentReference;
 import org.ihtsdo.fxmodel.concept.component.FxComponentVersion;
 import org.ihtsdo.tk.api.ComponentVersionBI;
 import org.ihtsdo.tk.api.ContradictionException;
@@ -53,13 +53,13 @@ public class FxRefexVersion<T extends FxRefexChronicle, V extends FxRefexVersion
    //~--- get methods ---------------------------------------------------------
 
    @XmlTransient
-   public FxComponentRef getComponentRef() {
-      return chronicle.componentRef;
+   public FxComponentReference getComponentRef() {
+      return chronicle.componentReference;
    }
 
    @XmlTransient
-   public FxComponentRef getRefexRef() {
-      return chronicle.refexRef;
+   public FxComponentReference getRefexRef() {
+      return chronicle.refexReference;
    }
 
    @XmlTransient

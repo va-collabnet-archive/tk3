@@ -13,9 +13,7 @@ import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement()
 public class FxConceptAttributesVersion
         extends FxComponentVersion<FxConceptAttributesChronicle, FxConceptAttributesVersion> {
    public static final long serialVersionUID = 1;

@@ -2,7 +2,7 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.FxComponentRef;
+import org.ihtsdo.fxmodel.FxComponentReference;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexVersion;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp.FxRefexCompCompVersion;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp_float.FxRefexCompFloatVersion;
@@ -17,7 +17,6 @@ import org.ihtsdo.tk.api.refex.type_nid.RefexNidVersionBI;
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
 
@@ -25,14 +24,13 @@ import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
    FxRefexCompCompVersion.class, FxRefexCompFloatVersion.class, FxRefexCompLongVersion.class,
    FxRefexCompStringVersion.class, FxRefexCompIntVersion.class
 })
-@XmlRootElement()
 public class FxRefexCompVersion<T extends FxRefexChronicle, V extends FxRefexCompVersion>
         extends FxRefexVersion<T, V> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   private FxComponentRef comp1Ref;
+   private FxComponentReference comp1Ref;
 
    //~--- constructors --------------------------------------------------------
 
@@ -44,7 +42,7 @@ public class FxRefexCompVersion<T extends FxRefexChronicle, V extends FxRefexCom
                              RefexNidVersionBI another)
            throws IOException, ContradictionException {
       super(chronicle, ss, another);
-      this.comp1Ref = new FxComponentRef(ss.getConceptVersion(another.getNid1()));
+      this.comp1Ref = new FxComponentReference(ss.getConceptVersion(another.getNid1()));
    }
 
    //~--- methods -------------------------------------------------------------
@@ -101,13 +99,13 @@ public class FxRefexCompVersion<T extends FxRefexChronicle, V extends FxRefexCom
 
    //~--- get methods ---------------------------------------------------------
 
-   public FxComponentRef getComp1Ref() {
+   public FxComponentReference getComp1Ref() {
       return comp1Ref;
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setComp1Ref(FxComponentRef comp1Ref) {
+   public void setComp1Ref(FxComponentReference comp1Ref) {
       this.comp1Ref = comp1Ref;
    }
 }

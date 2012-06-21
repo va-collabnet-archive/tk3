@@ -79,7 +79,7 @@ public class FxComponentVersion<T extends FxComponentChronicle, V extends FxComp
    }
 
    @XmlTransient
-   public List<FxRefexChronicle<?>> getAnnotations() {
+   public List<FxRefexChronicle<?,?>> getAnnotations() {
       return this.chronicle.annotations;
    }
 

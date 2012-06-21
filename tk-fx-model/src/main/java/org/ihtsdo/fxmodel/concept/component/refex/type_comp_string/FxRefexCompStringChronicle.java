@@ -22,25 +22,27 @@ import java.util.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
-public class FxRefexCompStringChronicle extends FxRefexChronicle<FxRefexCompStringVersion> {
+public class FxRefexCompStringChronicle
+        extends FxRefexChronicle<FxRefexCompStringVersion, RefexNidStringVersionBI> {
    public static final long serialVersionUID = 1;
 
    //~--- constructors --------------------------------------------------------
 
    public FxRefexCompStringChronicle() {
       super();
-      this.versions = FXCollections.observableArrayList(new ArrayList<FxRefexCompStringVersion>(1));
    }
 
    public FxRefexCompStringChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)
            throws IOException, ContradictionException {
       super(ss, concept, (RefexVersionBI) another.getPrimordialVersion());
-      this.versions = FXCollections.observableArrayList(
-         new ArrayList<FxRefexCompStringVersion>(another.getVersions().size()));
+   }
 
-      for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexCompStringVersion(this, ss, (RefexNidStringVersionBI) v));
-      }
+   //~--- methods -------------------------------------------------------------
+
+   @Override
+   protected FxRefexCompStringVersion makeVersion(TerminologySnapshotDI ss, RefexNidStringVersionBI version)
+           throws IOException, ContradictionException {
+      return new FxRefexCompStringVersion(this, ss, version);
    }
 
    //~--- get methods ---------------------------------------------------------

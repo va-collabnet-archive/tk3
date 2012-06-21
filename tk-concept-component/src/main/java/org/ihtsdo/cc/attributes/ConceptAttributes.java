@@ -353,13 +353,6 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
         return list;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.dwfa.vodb.types.I_ConceptAttributeVersioned#convertIds(org.dwfa.vodb
-     * .jar.I_MapNativeToNative)
-     */
     @Override
     public List<ConceptAttributes.Version> getVersions(ViewCoordinate c) {
         List<Version> returnTuples = new ArrayList<>(2);

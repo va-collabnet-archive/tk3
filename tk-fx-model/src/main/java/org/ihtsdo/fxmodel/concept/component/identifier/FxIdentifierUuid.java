@@ -4,7 +4,7 @@ package org.ihtsdo.fxmodel.concept.component.identifier;
 
 import javafx.beans.property.SimpleObjectProperty;
 
-import org.ihtsdo.fxmodel.FxComponentRef;
+import org.ihtsdo.fxmodel.FxComponentReference;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.id.UuidIdBI;
@@ -34,7 +34,7 @@ public class FxIdentifierUuid extends FxIdentifier {
            throws IOException, ContradictionException {
       super();
       this.denotationProperty.set(denotation);
-      this.authorityRef = new FxComponentRef(ss.getConceptVersion(generatedUuid));
+      this.authorityRef = new FxComponentReference(ss.getConceptVersion(generatedUuid));
    }
 
    public FxIdentifierUuid(TerminologySnapshotDI ss, UuidIdBI id) throws IOException, ContradictionException {

@@ -2,10 +2,9 @@ package org.ihtsdo.fxmodel.concept.component.refex;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.FxComponentRef;
+import org.ihtsdo.fxmodel.FxComponentReference;
 import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.FxComponentChronicle;
-import org.ihtsdo.fxmodel.concept.component.FxVersion;
 import org.ihtsdo.fxmodel.concept.component.refex.type_boolean.FxRefexBooleanChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp.FxRefexCompCompChronicle;
@@ -28,6 +27,7 @@ import org.ihtsdo.tk.api.refex.RefexVersionBI;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlSeeAlso;
+import org.ihtsdo.fxmodel.concept.component.FxComponentVersion;
 
 @XmlSeeAlso( {
    FxRefexBooleanChronicle.class, FxRefexCompChronicle.class, FxRefexCompCompChronicle.class,
@@ -36,13 +36,14 @@ import javax.xml.bind.annotation.XmlSeeAlso;
    FxRefexIntChronicle.class, FxRefexCompCompStringChronicle.class, FxRefexMembershipChronicle.class,
    FxRefexCompLongChronicle.class
 })
-public abstract class FxRefexChronicle<V extends FxVersion> extends FxComponentChronicle<V> {
+public abstract class FxRefexChronicle<V extends FxComponentVersion, T extends RefexVersionBI> 
+    extends FxComponentChronicle<V, T> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   protected FxComponentRef componentRef;
-   protected FxComponentRef refexRef;
+   protected FxComponentReference componentReference;
+   protected FxComponentReference refexReference;
 
    //~--- constructors --------------------------------------------------------
 
@@ -53,29 +54,29 @@ public abstract class FxRefexChronicle<V extends FxVersion> extends FxComponentC
    public FxRefexChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexVersionBI another)
            throws IOException, ContradictionException {
       super(ss, concept, another);
-      this.componentRef = new FxComponentRef(ss, another.getReferencedComponentNid());
-      this.refexRef     = new FxComponentRef(ss.getConceptVersion(another.getRefexNid()));
+      this.componentReference = new FxComponentReference(ss, another.getReferencedComponentNid());
+      this.refexReference     = new FxComponentReference(ss.getConceptVersion(another.getRefexNid()));
    }
 
    //~--- get methods ---------------------------------------------------------
 
-   public FxComponentRef getComponentRef() {
-      return componentRef;
+   public FxComponentReference getComponentReference() {
+      return componentReference;
    }
 
-   public FxComponentRef getRefexRef() {
-      return refexRef;
+   public FxComponentReference getRefexReference() {
+      return refexReference;
    }
 
    public abstract FX_REFEX_TYPE getType();
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setComponentRef(FxComponentRef componentRef) {
-      this.componentRef = componentRef;
+   public void setComponentReference(FxComponentReference componentReference) {
+      this.componentReference = componentReference;
    }
 
-   public void setRefexUuid(FxComponentRef refexRef) {
-      this.refexRef = refexRef;
+   public void setRefexUuid(FxComponentReference refexRef) {
+      this.refexReference = refexRef;
    }
 }

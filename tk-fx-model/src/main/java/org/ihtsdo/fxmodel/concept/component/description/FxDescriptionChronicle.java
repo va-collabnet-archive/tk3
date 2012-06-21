@@ -2,7 +2,6 @@ package org.ihtsdo.fxmodel.concept.component.description;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import javafx.collections.FXCollections;
 
 import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.FxComponentChronicle;
@@ -15,29 +14,25 @@ import org.ihtsdo.tk.api.description.DescriptionVersionBI;
 
 import java.io.IOException;
 
-import java.util.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
-public class FxDescriptionChronicle extends FxComponentChronicle<FxDescriptionVersion> {
+public class FxDescriptionChronicle extends FxComponentChronicle<FxDescriptionVersion, DescriptionVersionBI> {
    public static final long serialVersionUID = 1;
 
    //~--- constructors --------------------------------------------------------
 
    public FxDescriptionChronicle() {
       super();
-      this.versions =
-         FXCollections.observableArrayList(new ArrayList<FxDescriptionVersion>(1));
    }
 
    public FxDescriptionChronicle(TerminologySnapshotDI ss, FxConcept concept, DescriptionChronicleBI another)
            throws IOException, ContradictionException {
       super(ss, concept, another.getPrimordialVersion());
-      this.versions =
-         FXCollections.observableArrayList(new ArrayList<FxDescriptionVersion>(another.getVersions().size()));
-
-      for (DescriptionVersionBI v : another.getVersions()) {
-         this.versions.add(new FxDescriptionVersion(this, ss, v));
-      }
    }
+
+    @Override
+    protected FxDescriptionVersion makeVersion(TerminologySnapshotDI ss, DescriptionVersionBI version) throws IOException, ContradictionException {
+        return new FxDescriptionVersion(this, ss, version);
+    }
 }

@@ -2,7 +2,7 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.fxmodel.FxComponentRef;
+import org.ihtsdo.fxmodel.FxComponentReference;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp.FxRefexCompVersion;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp_comp.FxRefexCompCompCompVersion;
 import org.ihtsdo.fxmodel.concept.component.refex.type_comp_comp_string.FxRefexCompCompStringVersion;
@@ -14,19 +14,17 @@ import org.ihtsdo.tk.api.refex.type_nid_nid.RefexNidNidVersionBI;
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
 
 @XmlSeeAlso({ FxRefexCompCompStringVersion.class, FxRefexCompCompCompVersion.class })
-@XmlRootElement()
 public class FxRefexCompCompVersion<T extends FxRefexChronicle, V extends FxRefexCompCompVersion>
         extends FxRefexCompVersion<T, V> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   private FxComponentRef comp2Ref;
+   private FxComponentReference comp2Ref;
 
    //~--- constructors --------------------------------------------------------
 
@@ -37,7 +35,7 @@ public class FxRefexCompCompVersion<T extends FxRefexChronicle, V extends FxRefe
    public FxRefexCompCompVersion(T chronicle, TerminologySnapshotDI ss, RefexNidNidVersionBI another)
            throws IOException, ContradictionException {
       super(chronicle, ss, another);
-      this.comp2Ref = new FxComponentRef(ss, another.getNid2());
+      this.comp2Ref = new FxComponentReference(ss, another.getNid2());
    }
 
    //~--- methods -------------------------------------------------------------
@@ -94,13 +92,13 @@ public class FxRefexCompCompVersion<T extends FxRefexChronicle, V extends FxRefe
 
    //~--- get methods ---------------------------------------------------------
 
-   public FxComponentRef getComponent2Ref() {
+   public FxComponentReference getComponent2Ref() {
       return comp2Ref;
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setComponent2Ref(FxComponentRef comp2Ref) {
+   public void setComponent2Ref(FxComponentReference comp2Ref) {
       this.comp2Ref = comp2Ref;
    }
 }

@@ -2,7 +2,6 @@ package org.ihtsdo.fxmodel.concept.component.media;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import javafx.collections.FXCollections;
 
 import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.FxComponentChronicle;
@@ -15,11 +14,10 @@ import org.ihtsdo.tk.api.media.MediaVersionBI;
 
 import java.io.IOException;
 
-import java.util.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
-public class FxMediaChronicle extends FxComponentChronicle<FxMediaVersion> {
+public class FxMediaChronicle extends FxComponentChronicle<FxMediaVersion, MediaVersionBI> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -31,19 +29,11 @@ public class FxMediaChronicle extends FxComponentChronicle<FxMediaVersion> {
 
    public FxMediaChronicle() {
       super();
-     this.versions =
-         FXCollections.observableArrayList(new ArrayList<FxMediaVersion>(1));
    }
 
    public FxMediaChronicle(TerminologySnapshotDI ss, FxConcept concept, MediaChronicleBI another)
            throws IOException, ContradictionException {
       super(ss, concept, another.getPrimordialVersion());
-      this.versions =
-         FXCollections.observableArrayList(new ArrayList<FxMediaVersion>(another.getVersions().size()));
-
-      for (MediaVersionBI v : another.getVersions()) {
-         this.versions.add(new FxMediaVersion(this, ss, v));
-      }
 
       this.dataBytes = another.getPrimordialVersion().getMedia();
       this.format    = another.getPrimordialVersion().getFormat();
@@ -58,4 +48,9 @@ public class FxMediaChronicle extends FxComponentChronicle<FxMediaVersion> {
    public String getFormat() {
       return format;
    }
+
+    @Override
+    protected FxMediaVersion makeVersion(TerminologySnapshotDI ss, MediaVersionBI version) throws IOException, ContradictionException {
+        return new FxMediaVersion(this, ss, version);
+    }
 }

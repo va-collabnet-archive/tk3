@@ -2,8 +2,6 @@ package org.ihtsdo.fxmodel.concept.component.refex.type_boolean;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import javafx.collections.FXCollections;
-
 import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.refex.FX_REFEX_TYPE;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
@@ -17,31 +15,29 @@ import org.ihtsdo.tk.api.refex.type_boolean.RefexBooleanVersionBI;
 
 import java.io.IOException;
 
-import java.util.*;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement()
-public class FxRefexBooleanChronicle extends FxRefexChronicle<FxRefexBooleanVersion> {
+public class FxRefexBooleanChronicle extends FxRefexChronicle<FxRefexBooleanVersion, RefexBooleanVersionBI> {
    public static final long serialVersionUID = 1;
 
    //~--- constructors --------------------------------------------------------
 
    public FxRefexBooleanChronicle() {
       super();
-      this.versions = FXCollections.observableArrayList(
-         new ArrayList<FxRefexBooleanVersion>(1));
    }
 
    public FxRefexBooleanChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)
            throws IOException, ContradictionException {
       super(ss, concept, (RefexVersionBI) another.getPrimordialVersion());
-      this.versions = FXCollections.observableArrayList(
-         new ArrayList<FxRefexBooleanVersion>(another.getVersions().size()));
+   }
 
-      for (Object v : another.getVersions()) {
-         this.versions.add(new FxRefexBooleanVersion(this, ss, (RefexBooleanVersionBI) v));
-      }
+   //~--- methods -------------------------------------------------------------
+
+   @Override
+   protected FxRefexBooleanVersion makeVersion(TerminologySnapshotDI ss, RefexBooleanVersionBI version)
+           throws IOException, ContradictionException {
+      return new FxRefexBooleanVersion(this, ss, version);
    }
 
    //~--- get methods ---------------------------------------------------------

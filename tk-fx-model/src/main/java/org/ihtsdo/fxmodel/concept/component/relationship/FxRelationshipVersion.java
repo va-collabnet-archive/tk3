@@ -3,8 +3,10 @@ package org.ihtsdo.fxmodel.concept.component.relationship;
 //~--- non-JDK imports --------------------------------------------------------
 
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
-import org.ihtsdo.fxmodel.FxComponentRef;
+import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.fxmodel.concept.component.FxComponentVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
@@ -13,19 +15,20 @@ import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import org.ihtsdo.fxmodel.concept.component.FxComponentVersion;
 
-@XmlRootElement()
-public class FxRelationshipVersion extends FxComponentVersion<FxRelationshipChronicle, FxRelationshipVersion>  {
+public class FxRelationshipVersion
+        extends FxComponentVersion<FxRelationshipChronicle, FxRelationshipVersion> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   protected SimpleIntegerProperty groupProperty = new SimpleIntegerProperty(this, "group");
-   protected FxComponentRef  characteristicRef;
-   protected FxComponentRef  refinabilityRef;
-   protected FxComponentRef  typeRef;
+   protected SimpleIntegerProperty                      groupProperty                   = new SimpleIntegerProperty(this, "group");
+   protected SimpleObjectProperty<FxComponentReference> characteristicReferenceProperty =
+      new SimpleObjectProperty<>(this, "characteristic");
+   protected SimpleObjectProperty<FxComponentReference> refinabilityReferenceProperty =
+      new SimpleObjectProperty<>(this, "refinability");
+   protected SimpleObjectProperty<FxComponentReference> typeReferenceProperty =
+      new SimpleObjectProperty<>(this, "type");
 
    //~--- constructors --------------------------------------------------------
 
@@ -33,19 +36,30 @@ public class FxRelationshipVersion extends FxComponentVersion<FxRelationshipChro
       super();
    }
 
-   public FxRelationshipVersion(FxRelationshipChronicle chronicle, TerminologySnapshotDI ss, RelationshipVersionBI rv)
+   public FxRelationshipVersion(FxRelationshipChronicle chronicle, TerminologySnapshotDI ss,
+                                RelationshipVersionBI rv)
            throws IOException, ContradictionException {
       super(chronicle, ss, rv);
-      characteristicRef = new FxComponentRef(ss.getConceptVersion(rv.getCharacteristicNid()));
-      refinabilityRef   = new FxComponentRef(ss.getConceptVersion(rv.getRefinabilityNid()));
+      characteristicReferenceProperty.set(
+          new FxComponentReference(ss.getConceptVersion(rv.getCharacteristicNid())));
+      refinabilityReferenceProperty.set(
+          new FxComponentReference(ss.getConceptVersion(rv.getRefinabilityNid())));
       groupProperty.set(rv.getGroup());
-      typeRef = new FxComponentRef(ss.getConceptVersion(rv.getTypeNid()));
+      typeReferenceProperty.set(new FxComponentReference(ss.getConceptVersion(rv.getTypeNid())));
    }
 
    //~--- methods -------------------------------------------------------------
 
+   public SimpleObjectProperty<FxComponentReference> characteristicReferenceProperty() {
+      return characteristicReferenceProperty;
+   }
+
    public SimpleIntegerProperty groupProperty() {
       return groupProperty;
+   }
+
+   public SimpleObjectProperty<FxComponentReference> refinabilityReferenceProperty() {
+      return refinabilityReferenceProperty;
    }
 
    /**
@@ -57,52 +71,64 @@ public class FxRelationshipVersion extends FxComponentVersion<FxRelationshipChro
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" type:");
-      buff.append(this.typeRef);
+      buff.append(this.typeReferenceProperty);
       buff.append(" grp:");
       buff.append(this.groupProperty.get());
       buff.append(" char:");
-      buff.append(this.characteristicRef);
+      buff.append(this.characteristicReferenceProperty);
       buff.append(" ref:");
-      buff.append(this.refinabilityRef);
+      buff.append(this.refinabilityReferenceProperty);
       buff.append(" ");
       buff.append(super.toString());
 
       return buff.toString();
    }
 
-   //~--- get methods ---------------------------------------------------------
-
-   public FxComponentRef getCharacteristicRef() {
-      return characteristicRef;
+   public SimpleObjectProperty<FxComponentReference> typeReferenceProperty() {
+      return typeReferenceProperty;
    }
 
-   public FxComponentRef getRefinabilityRef() {
-      return refinabilityRef;
+   //~--- get methods ---------------------------------------------------------
+
+   public FxComponentReference getCharacteristicReference() {
+      return characteristicReferenceProperty.get();
+   }
+
+   public FxComponentReference getDestinationReference() {
+      return this.chronicle.getDestinationReference();
+   }
+
+   public FxComponentReference getOriginReference() {
+      return this.chronicle.getOriginReference();
+   }
+
+   public FxComponentReference getRefinabilityReference() {
+      return refinabilityReferenceProperty.get();
    }
 
    public int getRelGroup() {
       return groupProperty.get();
    }
 
-   public FxComponentRef getTypeRef() {
-      return typeRef;
+   public FxComponentReference getTypeReference() {
+      return typeReferenceProperty.get();
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setCharacteristicRef(FxComponentRef characteristicRef) {
-      this.characteristicRef = characteristicRef;
+   public void setCharacteristicReference(FxComponentReference characteristicReference) {
+      this.characteristicReferenceProperty.set(characteristicReference);
    }
 
-   public void setRefinabilityRef(FxComponentRef refinabilityRef) {
-      this.refinabilityRef = refinabilityRef;
+   public void setRefinabilityReference(FxComponentReference refinabilityReference) {
+      this.refinabilityReferenceProperty.set(refinabilityReference);
    }
 
    public void setRelGroup(int relGroup) {
       this.groupProperty.set(relGroup);
    }
 
-   public void setTypeRef(FxComponentRef typeRef) {
-      this.typeRef = typeRef;
+   public void setTypeReference(FxComponentReference typeReference) {
+      this.typeReferenceProperty.set(typeReference);
    }
 }
