@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
+
 package org.ihtsdo.fxmodel.fetchpolicy;
 
 /**
  *
  * @author kec
  */
-public enum RelationshipPolicy {
-    ORIGINATING_RELATIONSHIPS, DESTINATION_RELATIONSHIPS
-}
+public enum RelationshipPolicy { ORIGINATING_RELATIONSHIPS, DESTINATION_RELATIONSHIPS,
+                                 ORIGINATING_AND_DESTINATION_RELATIONSHIPS,
+                                 ORIGINATING_AND_DESTINATION_TAXONOMY_RELATIONSHIPS }

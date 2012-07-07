@@ -4,7 +4,6 @@ package org.ihtsdo.fxmodel.concept.component.relationship;
 
 import javafx.beans.property.SimpleObjectProperty;
 
-
 import org.ihtsdo.fxmodel.FxComponentReference;
 import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.FxComponentChronicle;
@@ -16,7 +15,6 @@ import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
-
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -42,7 +40,8 @@ public class FxRelationshipChronicle
                                   RelationshipChronicleBI another)
            throws IOException, ContradictionException {
       super(ss, concept, another.getPrimordialVersion());
-      this.originReferenceProperty.set(new FxComponentReference(ss, another.getOriginNid()));
+      this.originReferenceProperty.set(
+          new FxComponentReference(ss.getConceptVersion(another.getOriginNid())));
       this.destinationReferenceProperty.set(
           new FxComponentReference(ss.getConceptVersion(another.getDestinationNid())));
    }

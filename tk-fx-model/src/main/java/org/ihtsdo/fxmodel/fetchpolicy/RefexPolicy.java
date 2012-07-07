@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
+
 package org.ihtsdo.fxmodel.fetchpolicy;
 
 /**
  *
  * @author kec
  */
-public enum RefexPolicy {
-    ANNOTATION_MEMBERS_WITH_REFERENCED_COMPONENT, REFSET_MEMBERS_WITH_REFERENCED_COMPONENT, 
-    REFSET_MEMBERS_WITH_REFSET_CONCEPT
-}
+public enum RefexPolicy { ANNOTATION_MEMBERS, ANNOTATION_MEMBERS_AND_REFSET_MEMBERS, REFEX_MEMBERS,
+                          REFEX_MEMBERS_AND_REFSET_MEMBERS }

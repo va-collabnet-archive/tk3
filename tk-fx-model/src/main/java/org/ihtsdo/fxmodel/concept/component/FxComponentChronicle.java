@@ -9,8 +9,6 @@ import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.concept.component.identifier.FxIdentifier;
 import org.ihtsdo.fxmodel.concept.component.identifier.FxIdentifierUuid;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
-import org.ihtsdo.fxmodel.fetchpolicy.RefexPolicy;
-import org.ihtsdo.fxmodel.fetchpolicy.VersionPolicy;
 import org.ihtsdo.tk.api.ComponentChroncileBI;
 import org.ihtsdo.tk.api.ComponentVersionBI;
 import org.ihtsdo.tk.api.ContradictionException;
@@ -79,27 +77,37 @@ public abstract class FxComponentChronicle<V extends FxComponentVersion, T exten
 
       processRefexes(ss, another);
 
-      if (!concept.getVersionPolicy().contains(VersionPolicy.INACTIVE_VERSIONS)) {
+      switch (concept.getVersionPolicy()) {
+      case ACTIVE_VERSIONS :
          this.versions = FXCollections.observableArrayList(new ArrayList<V>(1));
+
+         for (T v : another.getVersions(ss.getViewCoordinate())) {
+            this.versions.add(makeVersion(ss, v));
+         }
+
+         break;
+
+      case LAST_VERSIONS :
+         this.versions = FXCollections.observableArrayList(new ArrayList<V>(1));
+
+         for (T v : another.getVersions(ss.getViewCoordinate().getVcWithAllStatusValues())) {
+            this.versions.add(makeVersion(ss, v));
+         }
+
+         break;
+
+      case ALL_VERSIONS :
+         this.versions = FXCollections.observableArrayList(new ArrayList<V>(another.getVersions().size()));
 
          for (T v : another.getVersions()) {
             this.versions.add(makeVersion(ss, v));
          }
-      } else {
-         this.versions = FXCollections.observableArrayList(new ArrayList<V>(another.getVersions().size()));
 
-         if (concept.getVersionPolicy().contains(VersionPolicy.LAST_VERSIONS)) {
-            for (T v : another.getVersions(ss.getViewCoordinate().getVcWithAllStatusValues())) {
-               this.versions.add(makeVersion(ss, v));
-            }
-         } else if (concept.getVersionPolicy().contains(VersionPolicy.ACTIVE_VERSIONS)) {
-            for (T v : another.getVersions(ss.getViewCoordinate())) {
-               this.versions.add(makeVersion(ss, v));
-            }
-         } else {
-            throw new UnsupportedOperationException("Can't get versions for policy: "
-                    + concept.getVersionPolicy());
-         }
+         break;
+
+      default :
+         throw new UnsupportedOperationException("Can't get versions for policy: "
+                 + concept.getVersionPolicy());
       }
    }
 
@@ -152,32 +160,32 @@ public abstract class FxComponentChronicle<V extends FxComponentVersion, T exten
 
    private void processRefexes(TerminologySnapshotDI ss, ComponentChroncileBI<T> another)
            throws IOException, ContradictionException {
-      HashSet<RefexChronicleBI<?>> refexes = new HashSet<>();
+      HashSet<RefexChronicleBI<?>> refexesToProcess = new HashSet<>();
 
-      if (getConcept().getRefexPolicy().contains(RefexPolicy.ANNOTATION_MEMBERS_WITH_REFERENCED_COMPONENT)
-              && getConcept().getRefexPolicy().contains(
-                 RefexPolicy.REFSET_MEMBERS_WITH_REFERENCED_COMPONENT)) {
-         refexes.addAll(another.getRefexes());
-      } else if (getConcept().getRefexPolicy().contains(
-              RefexPolicy.ANNOTATION_MEMBERS_WITH_REFERENCED_COMPONENT)) {
-         refexes.addAll(another.getAnnotations());
-      } else if (getConcept().getRefexPolicy().contains(RefexPolicy.REFSET_MEMBERS_WITH_REFSET_CONCEPT)) {
-         refexes.addAll(another.getRefexes());
-         refexes.removeAll(another.getAnnotations());
-      } else {
-         this.refexes = FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?,
-                 ?>>(refexes.size()));
+      switch (getConcept().getRefexPolicy()) {
+      case REFEX_MEMBERS :
+      case REFEX_MEMBERS_AND_REFSET_MEMBERS :
+         refexesToProcess.addAll(another.getRefexes());
+
+         break;
+
+      case ANNOTATION_MEMBERS :
+      case ANNOTATION_MEMBERS_AND_REFSET_MEMBERS :
+         refexesToProcess.addAll(another.getAnnotations());
       }
 
-      for (RefexChronicleBI<?> r : refexes) {
-         this.refexes.add(FxConcept.convertRefex(ss, concept, r));
+      for (RefexChronicleBI<?> r : refexesToProcess) {
+            FxRefexChronicle<?, ?> fxRefexMember = FxConcept.convertRefex(ss, concept, r);
+            if (!fxRefexMember.getVersions().isEmpty()) {
+                this.refexes.add(fxRefexMember);
+            }
       }
    }
 
    /**
     * Returns a string representation of the object.
     */
-   @Override
+    @Override
    public final String toString() {
       int depth = 1;
 

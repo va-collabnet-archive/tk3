@@ -6,7 +6,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import org.ihtsdo.fxmodel.FxComponentReference;
-import org.ihtsdo.fxmodel.concept.component.FxComponentVersion;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
@@ -14,10 +13,10 @@ import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
-
+import org.ihtsdo.fxmodel.concept.component.FxTypedComponentVersion;
 
 public class FxRelationshipVersion
-        extends FxComponentVersion<FxRelationshipChronicle, FxRelationshipVersion> {
+        extends FxTypedComponentVersion<FxRelationshipChronicle, FxRelationshipVersion> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -27,8 +26,6 @@ public class FxRelationshipVersion
       new SimpleObjectProperty<>(this, "characteristic");
    protected SimpleObjectProperty<FxComponentReference> refinabilityReferenceProperty =
       new SimpleObjectProperty<>(this, "refinability");
-   protected SimpleObjectProperty<FxComponentReference> typeReferenceProperty =
-      new SimpleObjectProperty<>(this, "type");
 
    //~--- constructors --------------------------------------------------------
 
@@ -70,22 +67,22 @@ public class FxRelationshipVersion
       StringBuilder buff = new StringBuilder();
 
       buff.append(this.getClass().getSimpleName()).append(": ");
+      buff.append(" origin:");
+      buff.append(this.getOriginReference());
       buff.append(" type:");
-      buff.append(this.typeReferenceProperty);
+      buff.append(this.typeReferenceProperty.get());
+      buff.append(" destination:");
+      buff.append(this.getDestinationReference());
       buff.append(" grp:");
       buff.append(this.groupProperty.get());
       buff.append(" char:");
-      buff.append(this.characteristicReferenceProperty);
+      buff.append(this.characteristicReferenceProperty.get());
       buff.append(" ref:");
-      buff.append(this.refinabilityReferenceProperty);
+      buff.append(this.refinabilityReferenceProperty.get());
       buff.append(" ");
       buff.append(super.toString());
 
       return buff.toString();
-   }
-
-   public SimpleObjectProperty<FxComponentReference> typeReferenceProperty() {
-      return typeReferenceProperty;
    }
 
    //~--- get methods ---------------------------------------------------------
@@ -110,10 +107,6 @@ public class FxRelationshipVersion
       return groupProperty.get();
    }
 
-   public FxComponentReference getTypeReference() {
-      return typeReferenceProperty.get();
-   }
-
    //~--- set methods ---------------------------------------------------------
 
    public void setCharacteristicReference(FxComponentReference characteristicReference) {
@@ -127,8 +120,4 @@ public class FxRelationshipVersion
    public void setRelGroup(int relGroup) {
       this.groupProperty.set(relGroup);
    }
-
-   public void setTypeReference(FxComponentReference typeReference) {
-      this.typeReferenceProperty.set(typeReference);
-   }
-}
+ }

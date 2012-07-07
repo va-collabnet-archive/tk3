@@ -20,5 +20,5 @@ package org.ihtsdo.fxmodel.fetchpolicy;
  * @author kec
  */
 public enum VersionPolicy {
-    ACTIVE_VERSIONS, LAST_VERSIONS, INACTIVE_VERSIONS
+    ACTIVE_VERSIONS, LAST_VERSIONS, ALL_VERSIONS
 }

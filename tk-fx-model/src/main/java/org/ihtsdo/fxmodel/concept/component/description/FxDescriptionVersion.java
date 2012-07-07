@@ -15,9 +15,10 @@ import org.ihtsdo.tk.api.description.DescriptionVersionBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import org.ihtsdo.fxmodel.concept.component.FxTypedComponentVersion;
 
 
-public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChronicle, FxDescriptionVersion> {
+public class FxDescriptionVersion extends FxTypedComponentVersion<FxDescriptionChronicle, FxDescriptionVersion> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -26,8 +27,6 @@ public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChroni
                                                                        "initialCaseSignificant");
    protected SimpleStringProperty                       languageProperty      = new SimpleStringProperty(this, "language");
    protected SimpleStringProperty                       textProperty          = new SimpleStringProperty(this, "text");
-   protected SimpleObjectProperty<FxComponentReference> typeReferenceProperty =
-      new SimpleObjectProperty<>(this, "type");
 
    //~--- constructors --------------------------------------------------------
 
@@ -130,10 +129,6 @@ public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChroni
       return buff.toString();
    }
 
-   public SimpleObjectProperty<FxComponentReference> typeReferenceProperty() {
-      return typeReferenceProperty;
-   }
-
    //~--- get methods ---------------------------------------------------------
 
    /*
@@ -153,10 +148,7 @@ public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChroni
    public String getText() {
       return textProperty.get();
    }
-
-   public FxComponentReference getTypeReference() {
-      return typeReferenceProperty.get();
-   }
+   
 
    /*
     * (non-Javadoc)
@@ -179,9 +171,5 @@ public class FxDescriptionVersion extends FxComponentVersion<FxDescriptionChroni
 
    public void setText(String text) {
       this.textProperty.set(text);
-   }
-
-   public void setTypeReference(FxComponentReference typeReference) {
-      this.typeReferenceProperty.set(typeReference);
    }
 }

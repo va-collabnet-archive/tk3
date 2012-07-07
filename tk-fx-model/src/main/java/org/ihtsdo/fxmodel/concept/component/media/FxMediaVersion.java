@@ -15,14 +15,14 @@ import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlTransient;
 import org.ihtsdo.fxmodel.concept.component.FxComponentVersion;
+import org.ihtsdo.fxmodel.concept.component.FxTypedComponentVersion;
 
-public class FxMediaVersion extends FxComponentVersion<FxMediaChronicle, FxMediaVersion>  {
+public class FxMediaVersion extends FxTypedComponentVersion<FxMediaChronicle, FxMediaVersion>  {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
    private SimpleStringProperty textDescriptionProperty = new SimpleStringProperty(this, "textDescription");
-   private FxComponentReference       typeRef;
 
    //~--- constructors --------------------------------------------------------
 
@@ -34,7 +34,6 @@ public class FxMediaVersion extends FxComponentVersion<FxMediaChronicle, FxMedia
            throws IOException, ContradictionException {
       super(chronicle, ss, another);
       this.textDescriptionProperty.set(another.getTextDescription());
-      this.typeRef = new FxComponentReference(ss.getConceptVersion(another.getTypeNid()));
    }
 
    //~--- methods -------------------------------------------------------------
@@ -66,11 +65,6 @@ public class FxMediaVersion extends FxComponentVersion<FxMediaChronicle, FxMedia
             return false;
          }
 
-         // Compare typeUuid
-         if (!this.typeRef.equals(another.typeRef)) {
-            return false;
-         }
-
          // Compare their parents
          return super.equals(obj);
       }
@@ -91,10 +85,7 @@ public class FxMediaVersion extends FxComponentVersion<FxMediaChronicle, FxMedia
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" desc:");
-      buff.append("'").append(this.textDescriptionProperty.get()).append("'");
-      buff.append(" type:");
-      buff.append(typeRef.getText());
-      buff.append(" ");
+      buff.append("'").append(this.textDescriptionProperty.get()).append("' ");
       buff.append(super.toString());
 
       return buff.toString();
@@ -106,18 +97,10 @@ public class FxMediaVersion extends FxComponentVersion<FxMediaChronicle, FxMedia
       return textDescriptionProperty.get();
    }
 
-   public FxComponentReference getTypeRef() {
-      return typeRef;
-   }
-
    //~--- set methods ---------------------------------------------------------
 
    public void setTextDescription(String textDescription) {
       this.textDescriptionProperty.set(textDescription);
-   }
-
-   public void setTypeRef(FxComponentReference typeRef) {
-      this.typeRef = typeRef;
    }
    
    @XmlTransient
