@@ -503,4 +503,13 @@ public class ViewCoordinate implements Externalizable {
       this.vcWithAllStatusValues = null;
       this.relAssertionType      = relAssertionType;
    }
+   
+   public TerminologySnapshotDI getSnapshot() {
+       return Ts.get().getSnapshot(this);
+   }
+   
+   public TerminologySnapshotDI getCachedSnapshot() {
+       return Ts.get().cacheSnapshot(vcUuid, this);
+   }
+   
 }

@@ -67,6 +67,7 @@ import java.util.*;
 
 import javax.ws.rs.core.MediaType;
 import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.tk.api.coordinate.StandardViewCoordinates;
 
 /**
  *
@@ -76,13 +77,13 @@ public class RestClient extends Termstore {
    public static final String    defaultLocalHostSvr = "http://localhost:8080/rest/sim/";
    public static final MediaType bdbMediaType        = new MediaType("application", "bdb");
    private static String         serverUrlStr        = defaultLocalHostSvr;
-   private static Client         c;
+   private static Client         restClient;
    private static RestClient     restClientSingleton;
 
    //~--- methods -------------------------------------------------------------
    @Override
    public long incrementAndGetSequence() {
-      WebResource r           = c.resource(serverUrlStr + "sequence/next");
+      WebResource r           = restClient.resource(serverUrlStr + "sequence/next");
       String      sequenceStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Long.parseLong(sequenceStr);
@@ -90,32 +91,34 @@ public class RestClient extends Termstore {
 
    @Override
    public void putViewCoordinate(ViewCoordinate vc) throws IOException {
-      WebResource r = c.resource(serverUrlStr + "coordinate/view/" + vc.getVcUuid());
+      WebResource r = restClient.resource(serverUrlStr + "coordinate/view/" + vc.getVcUuid());
 
       r.type(bdbMediaType).accept(MediaType.TEXT_PLAIN).entity(vc, bdbMediaType).put();
    }
 
-   public static void setup(String serverUrlStr) {
+   public static void setup(String serverUrlStr) throws IOException {
       RestClient.serverUrlStr = serverUrlStr;
 
       ClientConfig cc = new DefaultClientConfig();
 
       cc.getClasses().add(ViewCoordinateSerializationProvider.class);
-      c                   = Client.create(cc);
+      restClient                   = Client.create(cc);
       restClientSingleton = new RestClient();
       P.s                 = restClientSingleton;
       Ts.set(restClientSingleton);
+      P.s.putViewCoordinate(P.s.getMetadataVC());
+      P.s.putViewCoordinate(StandardViewCoordinates.getSnomedLatest());
    }
 
    @Override
    public void waitTillWritesFinished() {
-      WebResource r = c.resource(serverUrlStr + "termstore/wait-for-writes");
+      WebResource r = restClient.resource(serverUrlStr + "termstore/wait-for-writes");
 
       r.accept(MediaType.TEXT_PLAIN).get(String.class);
    }
    @Override
    public int getAuthorNidForSapNid(int sapNid) {
-      WebResource r      = c.resource(serverUrlStr + "sap/author/" + sapNid);
+      WebResource r      = restClient.resource(serverUrlStr + "sap/author/" + sapNid);
       String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Integer.parseInt(nidStr);
@@ -123,7 +126,7 @@ public class RestClient extends Termstore {
 
    @Override
    public ConceptDataFetcherI getConceptDataFetcher(int cNid) throws IOException {
-      WebResource r  = c.resource(serverUrlStr + "concept/" + cNid);
+      WebResource r  = restClient.resource(serverUrlStr + "concept/" + cNid);
       InputStream is = r.accept(bdbMediaType).get(InputStream.class);
 
       try (DataInputStream dis = new DataInputStream(is)) {
@@ -139,7 +142,7 @@ public class RestClient extends Termstore {
 
    @Override
    public int getConceptNidForNid(int nid) {
-      WebResource r      = c.resource(serverUrlStr + "nid/concept/" + nid);
+      WebResource r      = restClient.resource(serverUrlStr + "nid/concept/" + nid);
       String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Integer.parseInt(nidStr);
@@ -147,7 +150,7 @@ public class RestClient extends Termstore {
 
    @Override
    public int[] getDestRelOriginNids(int cNid, NidSetBI relTypes) throws IOException {
-      WebResource r  = c.resource(serverUrlStr + "nidpairs/refex" + cNid);
+      WebResource r  = restClient.resource(serverUrlStr + "nidpairs/refex" + cNid);
       InputStream is =
          r.queryParam("relTypes", relTypes.getAmpersandString()).accept(bdbMediaType).get(InputStream.class);
 
@@ -160,7 +163,7 @@ public class RestClient extends Termstore {
 
    @Override
    public List<NidPairForRel> getDestRelPairs(int cNid) throws IOException {
-      WebResource r  = c.resource(serverUrlStr + "nidpairs/destination/relationship/" + cNid);
+      WebResource r  = restClient.resource(serverUrlStr + "nidpairs/destination/relationship/" + cNid);
       InputStream is = r.accept(bdbMediaType).get(InputStream.class);
 
       try (ObjectInputStream ois = new ObjectInputStream(is)) {
@@ -176,7 +179,7 @@ public class RestClient extends Termstore {
    }
 
    public FxConcept getFxConcept(UUID conceptUUID, UUID vcUuid) {
-      WebResource    r        = c.resource(serverUrlStr + "fx-concept/" + conceptUUID + "/" + vcUuid);
+      WebResource    r        = restClient.resource(serverUrlStr + "fx-concept/" + conceptUUID + "/" + vcUuid);
       ClientResponse response = r.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
 
       return response.getEntity(FxConcept.class);
@@ -191,7 +194,7 @@ public class RestClient extends Termstore {
    public FxConcept getFxConcept(UUID conceptUUID, UUID vcUuid, VersionPolicy versionPolicy,
                                  RefexPolicy refexPolicy,
                                  RelationshipPolicy relationshipPolicy) {
-      WebResource r = c.resource(serverUrlStr + "fx-concept/" + conceptUUID + "/" + vcUuid + "/"
+      WebResource r = restClient.resource(serverUrlStr + "fx-concept/" + conceptUUID + "/" + vcUuid + "/"
                                  + versionPolicy + "/" + refexPolicy + "/" + relationshipPolicy);
       ClientResponse response = r.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
 
@@ -200,7 +203,7 @@ public class RestClient extends Termstore {
 
    @Override
    public long getLastCancel() {
-      WebResource r           = c.resource(serverUrlStr + "sequence/last-cancel");
+      WebResource r           = restClient.resource(serverUrlStr + "sequence/last-cancel");
       String      sequenceStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Long.parseLong(sequenceStr);
@@ -208,7 +211,7 @@ public class RestClient extends Termstore {
 
    @Override
    public long getLastCommit() {
-      WebResource r           = c.resource(serverUrlStr + "sequence/last-commit");
+      WebResource r           = restClient.resource(serverUrlStr + "sequence/last-commit");
       String      sequenceStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Long.parseLong(sequenceStr);
@@ -221,7 +224,7 @@ public class RestClient extends Termstore {
 
    @Override
    public int getMaxReadOnlyStamp() {
-      WebResource r      = c.resource(serverUrlStr + "sap/read-only-max");
+      WebResource r      = restClient.resource(serverUrlStr + "sap/read-only-max");
       String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Integer.parseInt(nidStr);
@@ -234,14 +237,14 @@ public class RestClient extends Termstore {
 
    @Override
    public int getModuleNidForSapNid(int sapNid) {
-      WebResource r      = c.resource(serverUrlStr + "sap/module/" + sapNid);
+      WebResource r      = restClient.resource(serverUrlStr + "sap/module/" + sapNid);
       String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Integer.parseInt(nidStr);
    }
 
    private int getNidForUuidSetString(String uuidSetString) {
-      WebResource r      = c.resource(serverUrlStr + "nid/" + uuidSetString);
+      WebResource r      = restClient.resource(serverUrlStr + "nid/" + uuidSetString);
       String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Integer.parseInt(nidStr);
@@ -279,14 +282,14 @@ public class RestClient extends Termstore {
    }
    @Override
    public int getPathNidForSapNid(int sapNid) {
-      WebResource r      = c.resource(serverUrlStr + "sap/path/" + sapNid);
+      WebResource r      = restClient.resource(serverUrlStr + "sap/path/" + sapNid);
       String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Integer.parseInt(nidStr);
    }
    @Override
    public Map<String, String> getProperties() throws IOException {
-      WebResource r  = c.resource(serverUrlStr + "property/");
+      WebResource r  = restClient.resource(serverUrlStr + "property/");
       InputStream is = r.accept(bdbMediaType).get(InputStream.class);
 
       try (ObjectInputStream ois = new ObjectInputStream(is)) {
@@ -298,14 +301,14 @@ public class RestClient extends Termstore {
 
    @Override
    public String getProperty(String key) throws IOException {
-      WebResource r = c.resource(serverUrlStr + "property/" + key);
+      WebResource r = restClient.resource(serverUrlStr + "property/" + key);
 
       return r.accept(MediaType.TEXT_PLAIN).get(String.class);
    }
 
    @Override
    public List<NidPairForRefset> getRefexPairs(int cNid) throws IOException {
-      WebResource r  = c.resource(serverUrlStr + "nidpairs/refex" + cNid);
+      WebResource r  = restClient.resource(serverUrlStr + "nidpairs/refex" + cNid);
       InputStream is = r.accept(bdbMediaType).get(InputStream.class);
 
       try (ObjectInputStream ois = new ObjectInputStream(is)) {
@@ -321,7 +324,7 @@ public class RestClient extends Termstore {
 
    @Override
    public long getSequence() {
-      WebResource r           = c.resource(serverUrlStr + "sequence");
+      WebResource r           = restClient.resource(serverUrlStr + "sequence");
       String      sequenceStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Long.parseLong(sequenceStr);
@@ -334,7 +337,7 @@ public class RestClient extends Termstore {
 
    @Override
    public int getStatusNidForSapNid(int sapNid) {
-      WebResource r      = c.resource(serverUrlStr + "sap/status/" + sapNid);
+      WebResource r      = restClient.resource(serverUrlStr + "sap/status/" + sapNid);
       String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Integer.parseInt(nidStr);
@@ -347,7 +350,7 @@ public class RestClient extends Termstore {
 
    @Override
    public long getTimeForSapNid(int sapNid) {
-      WebResource r       = c.resource(serverUrlStr + "sap/time/" + sapNid);
+      WebResource r       = restClient.resource(serverUrlStr + "sap/time/" + sapNid);
       String      timeStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Long.parseLong(timeStr);
@@ -360,7 +363,7 @@ public class RestClient extends Termstore {
 
    @Override
    public UUID getUuidPrimordialForNid(int nid) throws IOException {
-      WebResource r = c.resource(serverUrlStr + "uuid/primordial/" + nid);
+      WebResource r = restClient.resource(serverUrlStr + "uuid/primordial/" + nid);
 
       return UUID.fromString(r.accept(MediaType.TEXT_PLAIN).get(String.class));
    }
@@ -372,7 +375,7 @@ public class RestClient extends Termstore {
 
    @Override
    public ViewCoordinate getViewCoordinate(UUID vcUuid) throws IOException {
-      WebResource r  = c.resource(serverUrlStr + "coordinate/view/" + vcUuid.toString());
+      WebResource r  = restClient.resource(serverUrlStr + "coordinate/view/" + vcUuid.toString());
       InputStream is = r.accept(bdbMediaType).get(InputStream.class);
 
       try (ObjectInputStream ois = new ObjectInputStream(is)) {
@@ -384,7 +387,7 @@ public class RestClient extends Termstore {
 
    @Override
    public Collection<ViewCoordinate> getViewCoordinates() throws IOException {
-      WebResource r  = c.resource(serverUrlStr + "coordinate/view");
+      WebResource r  = restClient.resource(serverUrlStr + "coordinate/view");
       InputStream is = r.accept(bdbMediaType).get(InputStream.class);
 
       try (ObjectInputStream ois = new ObjectInputStream(is)) {
@@ -396,7 +399,7 @@ public class RestClient extends Termstore {
 
    @Override
    public PathBI getPath(int pathNid) throws IOException {
-      WebResource r  = c.resource(serverUrlStr + "path/" + pathNid);
+      WebResource r  = restClient.resource(serverUrlStr + "path/" + pathNid);
       InputStream is = r.accept(bdbMediaType).get(InputStream.class);
 
       try (ObjectInputStream ois = new ObjectInputStream(is)) {
@@ -421,7 +424,7 @@ public class RestClient extends Termstore {
 
    @Override
    public boolean hasUuid(UUID memberUUID) {
-      WebResource r = c.resource(serverUrlStr + "uuid/" + memberUUID.toString());
+      WebResource r = restClient.resource(serverUrlStr + "uuid/" + memberUUID.toString());
 
       return Boolean.valueOf(r.accept(MediaType.TEXT_PLAIN).get(String.class));
    }

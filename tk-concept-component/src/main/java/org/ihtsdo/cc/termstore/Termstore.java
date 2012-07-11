@@ -54,6 +54,7 @@ import java.io.File;
 import java.io.IOException;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 /**
@@ -61,6 +62,11 @@ import java.util.logging.Level;
  * @author kec
  */
 public abstract class Termstore implements PersistentStoreI {
+   ConcurrentHashMap<UUID, TerminologySnapshotDI> persistentSnapshots = new ConcurrentHashMap<>();
+   private TerminologySnapshotDI                  globalSnapshot;
+
+   //~--- methods -------------------------------------------------------------
+
    @Override
    public void addChangeSetGenerator(String key, ChangeSetGeneratorBI writer) {
       ChangeSetWriterHandler.addWriter(key, writer);
@@ -79,6 +85,17 @@ public abstract class Termstore implements PersistentStoreI {
    @Override
    public void addUncommittedNoChecks(ConceptVersionBI cv) throws IOException {
       addUncommittedNoChecks(cv.getChronicle());
+   }
+
+   @Override
+   public TerminologySnapshotDI cacheSnapshot(UUID snapshotUuid, ViewCoordinate vc) {
+      if (persistentSnapshots.containsKey(snapshotUuid)) {
+         TerminologySnapshotDI snapshot = getSnapshot(vc);
+
+         persistentSnapshots.put(snapshotUuid, snapshot);
+      }
+
+      return persistentSnapshots.get(snapshotUuid);
    }
 
    @Override
@@ -183,6 +200,15 @@ public abstract class Termstore implements PersistentStoreI {
    }
 
    //~--- get methods ---------------------------------------------------------
+
+   @Override
+   public TerminologySnapshotDI getCachedSnapshot(UUID snapshotUuid) throws NoSuchElementException {
+      if (persistentSnapshots.containsKey(snapshotUuid)) {
+         return persistentSnapshots.get(snapshotUuid);
+      }
+
+      throw new NoSuchElementException("Snapshot uuid: " + snapshotUuid);
+   }
 
    @Override
    public ComponentChroncileBI<?> getComponent(Collection<UUID> uuids) throws IOException {
@@ -336,6 +362,15 @@ public abstract class Termstore implements PersistentStoreI {
    }
 
    @Override
+   public TerminologySnapshotDI getGlobalSnapshot() {
+      if (globalSnapshot == null) {
+         throw new NoSuchElementException("global snapshot not set");
+      }
+
+      return globalSnapshot;
+   }
+
+   @Override
    public Collection<Integer> getNidCollection(Collection<UUID> uuids) throws IOException {
       List<Integer> nids = new ArrayList<>();
 
@@ -348,8 +383,14 @@ public abstract class Termstore implements PersistentStoreI {
 
    @Override
    public int getSapNid(TkRevision version) throws IOException {
-      return getStampNid(getNidForUuids(version.statusUuid), version.time, getNidForUuids(version.authorUuid),
-                       getNidForUuids(version.moduleUuid), getNidForUuids(version.pathUuid));
+      return getStampNid(getNidForUuids(version.statusUuid), version.time,
+                         getNidForUuids(version.authorUuid), getNidForUuids(version.moduleUuid),
+                         getNidForUuids(version.pathUuid));
+   }
+
+   @Override
+   public TerminologySnapshotDI getSnapshot(ViewCoordinate vc) {
+      return new TerminologySnapshot(this, vc);
    }
 
    @Override
@@ -363,8 +404,10 @@ public abstract class Termstore implements PersistentStoreI {
       return uuids;
    }
 
-    @Override
-    public TerminologySnapshotDI getSnapshot(ViewCoordinate vc) {
-        return new TerminologySnapshot(this, vc);
-    }
+   //~--- set methods ---------------------------------------------------------
+
+   @Override
+   public void setGlobalSnapshot(TerminologySnapshotDI globalSnapshot) {
+      this.globalSnapshot = globalSnapshot;
+   }
 }

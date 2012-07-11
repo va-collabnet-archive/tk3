@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.ihtsdo.tk.dto.concept.component.TkRevision;
 
@@ -84,6 +85,10 @@ public interface TerminologyStoreDI extends TerminologyDI {
    int[] getPossibleChildren(int cNid, ViewCoordinate vc) throws IOException;
 
    TerminologySnapshotDI getSnapshot(ViewCoordinate vc);
+   TerminologySnapshotDI cacheSnapshot(UUID snapshotUuid, ViewCoordinate vc);
+   TerminologySnapshotDI getCachedSnapshot(UUID snapshotUuid) throws NoSuchElementException;
+   TerminologySnapshotDI getGlobalSnapshot();
+   void setGlobalSnapshot(TerminologySnapshotDI globalSnapshot);
 
    TerminologyBuilderBI getTerminologyBuilder(EditCoordinate ec, ViewCoordinate vc);
 
