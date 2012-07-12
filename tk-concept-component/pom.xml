@@ -29,13 +29,6 @@
     <dependency>
       <groupId>com.sleepycat</groupId>
       <artifactId>je</artifactId>
-      <version>5.0.34</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>org.ihtsdo.tk</groupId>
-      <artifactId>tk-helpers</artifactId>
-      <version>3.0.1-SNAPSHOT</version>
       <type>jar</type>
     </dependency>
     <dependency>
@@ -47,7 +40,6 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.8.2</version>
       <scope>test</scope>
       <type>jar</type>
     </dependency>

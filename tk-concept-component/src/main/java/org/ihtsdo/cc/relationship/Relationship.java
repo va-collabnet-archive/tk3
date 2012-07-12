@@ -486,15 +486,10 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
     //~--- set methods ---------------------------------------------------------
 
     @Override
-    public void setCharacteristicNid(int characteristicNid) {
+    public final void setCharacteristicNid(int characteristicNid) {
         if (this.characteristicNid != characteristicNid) {
             this.characteristicNid = characteristicNid;
             modified();
-        }
-    }
-    private void setCharacteristicNidFromBdb(int characteristicNid) {
-        if (this.characteristicNid != characteristicNid) {
-            this.characteristicNid = characteristicNid;
         }
     }
 
@@ -512,9 +507,6 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
             modified();
         }
     }
-    public void setDestinationNidFromBdb(int dNid) throws PropertyVetoException {
-        this.c2Nid = dNid;
-    }
 
     @Override
     public void setGroup(int group) {
@@ -523,18 +515,15 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
     }
 
     @Override
-    public void setRefinabilityNid(int refinabilityNid) {
+    public final void setRefinabilityNid(int refinabilityNid) {
         if (this.refinabilityNid != refinabilityNid) {
             this.refinabilityNid = refinabilityNid;
             modified();
         }
     }
-    public void setRefinabilityNidFromBdb(int refinabilityNid) {
-       this.refinabilityNid = refinabilityNid;
-    }
 
     @Override
-    public void setTypeNid(int typeNid) {
+    public final void setTypeNid(int typeNid) {
         if (this.typeNid != typeNid) {
             if ((this.typeNid != 0) && (this.nid != 0)) {
                 NidPairForRel oldNpr = NidPair.getTypeNidRelNidPair(this.typeNid, this.nid);
@@ -546,9 +535,6 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
             this.typeNid = typeNid;
             modified();
         }
-    }
-    public void setTypeNidFromBdb(int typeNid) {
-        this.typeNid = typeNid;
     }
 
     //~--- inner classes -------------------------------------------------------
