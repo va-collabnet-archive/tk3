@@ -3,151 +3,181 @@ package org.ihtsdo.cc;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.hash.Hashcode;
 
 public abstract class NidPair implements Comparable<NidPair>, Serializable {
+   private int   hash;
+   protected int nid1;
+   protected int nid2;
 
-    protected int nid1;
-    protected int nid2;
-    private int hash;
+   //~--- constructors --------------------------------------------------------
 
-    public static NidPair getNidPair(long nids) {
-        int nid1 = (int) nids;
-        int nid2 = (int) (nids >>> 32);
-        if (P.s.getConceptNidForNid(nid2) == nid2) {
-            return getTypeNidRelNidPair(nid2, nid1);
-        }
-        return getRefsetNidMemberNidPair(nid1, nid2);
-    }
+   protected NidPair(long nids) {
+      this((int) nids, (int) (nids >>> 32));
+   }
 
-    
-    public static List<NidPairForRel> getNidPairsForRel(long[] nidPairArray) {
-        List<NidPairForRel> returnValues = new ArrayList<>(nidPairArray.length);
-        for (long nids: nidPairArray) {
-            int nid1 = (int) nids;
-            int nid2 = (int) (nids >>> 32);
-            if (P.s.getConceptNidForNid(nid2) == nid2) {
-                returnValues.add(new NidPairForRel(nid1, nid2));
-            }
-        }
-        return returnValues;
-    }
+   protected NidPair(int nid1, int nid2) {
+      super();
+      assert nid1 != 0;
+      assert nid2 != 0;
+      this.nid1 = nid1;
+      this.nid2 = nid2;
+      this.hash = Hashcode.compute(new int[] { nid1, nid2 });
+   }
 
-    public static List<NidPairForRel> getNidPairsForRel(long[] nidPairArray, 
-            NidSetBI relTypes) {
-        List<NidPairForRel> returnValues = new ArrayList<>(nidPairArray.length);
-        for (long nids: nidPairArray) {
-            int nid1 = (int) nids;
-            int nid2 = (int) (nids >>> 32);
-            if (relTypes.contains(nid2)) {
-                returnValues.add(new NidPairForRel(nid1, nid2));
-            }
-        }
-        return returnValues;
-    }
+   //~--- methods -------------------------------------------------------------
 
-    public static int[] getOriginsForRels(long[] nidPairArray, 
-            NidSetBI relTypes) {
-        IntArrayList returnValues = new IntArrayList(nidPairArray.length);
-        for (long nids: nidPairArray) {
-            int nid1 = (int) nids;
-            int nid2 = (int) (nids >>> 32);
-            if (relTypes.contains(nid2)) {
-                returnValues.add(P.s.getConceptNidForNid(nid1));
-            }
-        }
-        returnValues.trimToSize();
-        return returnValues.elements();
-    }
+   public void addToList(List<Integer> list) {
+      list.add(nid1);
+      list.add(nid2);
+   }
+
+   public long asLong() {
+      long returnValue = nid2;
+
+      // clear any sign bits
+      returnValue = returnValue & 0x00000000FFFFFFFFL;
+
+      // shift to the top 32 bits
+      returnValue = returnValue << 32;
+
+      long nid1Long = nid1;
+
+      // clear any sign bits
+      nid1Long    = nid1Long & 0x00000000FFFFFFFFL;
+      returnValue = returnValue | nid1Long;
+
+      return returnValue;
+   }
+
+   @Override
+   public int compareTo(NidPair o) {
+      long diff = asLong() - o.asLong();
+
+      if (diff > 0) {
+         return 1;
+      }
+
+      if (diff < 0) {
+         return -1;
+      }
+
+      return 0;
+   }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (obj.getClass().isAssignableFrom(NidPair.class)) {
+         NidPair another = (NidPair) obj;
+
+         return (this.nid1 == another.nid1) && (this.nid2 == another.nid2);
+      }
+
+      return false;
+   }
+
+   @Override
+   public int hashCode() {
+      return hash;
+   }
+
+   @Override
+   public String toString() {
+      return "nid1: " + nid1 + " nid2:" + nid2;
+   }
+
+   //~--- get methods ---------------------------------------------------------
+
+   public static NidPair getNidPair(long nids) {
+      int nid1 = (int) nids;
+      int nid2 = (int) (nids >>> 32);
+
+      if (P.s.getConceptNidForNid(nid2) == nid2) {
+         return getTypeNidRelNidPair(nid2, nid1);
+      }
+
+      return getRefsetNidMemberNidPair(nid1, nid2);
+   }
 
    public static List<NidPairForRefset> getNidPairsForRefset(long[] nidPairArray) {
-        List<NidPairForRefset> returnValues = new ArrayList<>(nidPairArray.length);
-        for (long nids: nidPairArray) {
-            int nid1 = (int) nids;
-            int nid2 = (int) (nids >>> 32);
-            if (P.s.getConceptNidForNid(nid2) != nid2) {
-                returnValues.add(new NidPairForRefset(nid1, nid2));
-            }
-        }
-        return returnValues;
-    }
+      List<NidPairForRefset> returnValues = new ArrayList<>(nidPairArray.length);
 
+      for (long nids : nidPairArray) {
+         int nid1 = (int) nids;
+         int nid2 = (int) (nids >>> 32);
 
-    public static NidPairForRel getTypeNidRelNidPair(int typeNid, int rNid) {
-        // the type (nid2) is a concept, the rNid is not. 
-        return new NidPairForRel(rNid, typeNid);
-    }
+         if (P.s.getConceptNidForNid(nid2) != nid2) {
+            returnValues.add(new NidPairForRefset(nid1, nid2));
+         }
+      }
 
-    public static NidPairForRefset getRefsetNidMemberNidPair(int refsetNid, int memberNid) {
-        // the refset (nid1) is a concept, the memberNid is not. 
-        return new NidPairForRefset(refsetNid, memberNid);
-    }
+      return returnValues;
+   }
 
-    public abstract boolean isRelPair();
+   public static List<NidPairForRel> getNidPairsForRel(long[] nidPairArray) {
+      List<NidPairForRel> returnValues = new ArrayList<>(nidPairArray.length);
 
-    protected NidPair(long nids) {
-        this((int) nids, (int) (nids >>> 32));
-    }
+      for (long nids : nidPairArray) {
+         int nid1 = (int) nids;
+         int nid2 = (int) (nids >>> 32);
 
-    protected NidPair(int nid1, int nid2) {
-        super();
-        assert nid1 != 0;
-        assert nid2 != 0;
-        this.nid1 = nid1;
-        this.nid2 = nid2;
-        this.hash = Hashcode.compute(new int[]{nid1, nid2});
-    }
+         if (P.s.getConceptNidForNid(nid2) == nid2) {
+            returnValues.add(new NidPairForRel(nid1, nid2));
+         }
+      }
 
-    public long asLong() {
-        long returnValue = nid2;
-        returnValue = returnValue & 0x00000000FFFFFFFFL;
-        long nid1Long = nid1;
-        nid1Long = nid1Long & 0x00000000FFFFFFFFL;
-        returnValue = returnValue << 32;
-        returnValue = returnValue | nid1Long;
-        return returnValue;
-    }
+      return returnValues;
+   }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj.getClass().isAssignableFrom(NidPair.class)) {
-            NidPair another = (NidPair) obj;
-            return this.nid1 == another.nid1 && this.nid2 == another.nid2;
-        }
-        return false;
-    }
+   public static List<NidPairForRel> getNidPairsForRel(long[] nidPairArray, NidSetBI relTypes) {
+      List<NidPairForRel> returnValues = new ArrayList<>(nidPairArray.length);
 
-    @Override
-    public int hashCode() {
-        return hash;
-    }
+      for (long nids : nidPairArray) {
+         int nid1 = (int) nids;
+         int nid2 = (int) (nids >>> 32);
 
-    @Override
-    public String toString() {
-        return "nid1: " + nid1 + " nid2:" + nid2;
-    }
+         if (relTypes.contains(nid2)) {
+            returnValues.add(new NidPairForRel(nid1, nid2));
+         }
+      }
 
-    public void addToList(List<Integer> list) {
-        list.add(nid1);
-        list.add(nid2);
-    }
+      return returnValues;
+   }
 
-    public boolean isRefsetPair() {
-        return !isRelPair();
-    }
+   public static int[] getOriginsForRels(long[] nidPairArray, NidSetBI relTypes) {
+      IntArrayList returnValues = new IntArrayList(nidPairArray.length);
 
-    @Override
-    public int compareTo(NidPair o) {
-        long diff = asLong() - o.asLong();
-        if (diff > 0) {
-            return 1;
-        }
-        if (diff < 0) {
-            return -1;
-        }
-        return 0;
-    }
+      for (long nids : nidPairArray) {
+         int nid1 = (int) nids;
+         int nid2 = (int) (nids >>> 32);
+
+         if (relTypes.contains(nid2)) {
+            returnValues.add(P.s.getConceptNidForNid(nid1));
+         }
+      }
+
+      returnValues.trimToSize();
+
+      return returnValues.elements();
+   }
+
+   public static NidPairForRefset getRefsetNidMemberNidPair(int refsetNid, int memberNid) {
+
+      // the refset (nid1) is a concept, the memberNid is not.
+      return new NidPairForRefset(refsetNid, memberNid);
+   }
+
+   public static NidPairForRel getTypeNidRelNidPair(int typeNid, int rNid) {
+
+      // the type (nid2) is a concept, the rNid is not.
+      return new NidPairForRel(rNid, typeNid);
+   }
+
+   public boolean isRefsetPair() {
+      return !isRelPair();
+   }
+
+   public abstract boolean isRelPair();
 }

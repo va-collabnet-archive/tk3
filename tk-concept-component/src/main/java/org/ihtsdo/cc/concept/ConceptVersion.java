@@ -176,6 +176,11 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    }
 
    @Override
+   public void processComponentChronicles(ProcessComponentChronicleBI processor) throws Exception {
+      concept.processComponentChronicles(processor);
+   }
+
+   @Override
    public boolean satisfies(ConstraintBI constraint, ConstraintCheckType subjectCheck,
                             ConstraintCheckType propertyCheck, ConstraintCheckType valueCheck)
            throws IOException, ContradictionException {

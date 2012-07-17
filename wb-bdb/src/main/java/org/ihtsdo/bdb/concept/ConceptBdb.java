@@ -99,6 +99,10 @@ public class ConceptBdb extends ComponentBdb {
             assert nid != 0 : "nid is 0: " + nids;
             nidCidMap.setCNidForNid(cNid, nid);
         }
+        for (int nid: concept.getRelationshipNids()) {
+            nidCidMap.getSequence(nid, NidCNidMapBdb.SequenceType.RELATIONSHIP);
+        }
+        
     }
 
     public int getCount() throws IOException {
@@ -132,6 +136,9 @@ public class ConceptBdb extends ComponentBdb {
             InterruptedException, ExecutionException {
     	//AceLog.getAppLog().info("Iterate in parallel. Executors: " + executors);
         IdentifierSet ids = (IdentifierSet) processor.getNidSet();
+        if (ids == null) {
+            ids = getReadOnlyConceptIdSet();
+        }
         int cardinality = ids.cardinality();
         int idsPerParallelConceptIterator = cardinality / executors;
     	//AceLog.getAppLog().info("Iterate in parallel. idsPerParallelConceptIterator: " + idsPerParallelConceptIterator);

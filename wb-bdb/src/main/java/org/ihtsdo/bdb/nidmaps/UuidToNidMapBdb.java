@@ -22,11 +22,12 @@ import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
 
-
-import org.ihtsdo.concurrency.ConcurrencyLocks;
 import org.ihtsdo.bdb.Bdb;
 import org.ihtsdo.bdb.BdbMemoryMonitor.LowMemoryListener;
 import org.ihtsdo.bdb.ComponentBdb;
+import org.ihtsdo.bdb.temp.AceLog;
+import org.ihtsdo.bdb.temp.PrimordialId;
+import org.ihtsdo.concurrency.ConcurrentReentrantReadWriteLocks;
 import org.ihtsdo.tk.api.ComponentBI;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -37,8 +38,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.ihtsdo.bdb.temp.AceLog;
-import org.ihtsdo.bdb.temp.PrimordialId;
 
 /**
  *
@@ -50,24 +49,19 @@ public class UuidToNidMapBdb extends ComponentBdb {
 
    //~--- fields --------------------------------------------------------------
 
-   private ConcurrencyLocks                             locks                     = new ConcurrencyLocks();
+   private ConcurrentReentrantReadWriteLocks            locks                     = new ConcurrentReentrantReadWriteLocks();
    private int                                          maxGenOneSize             = 10000;
    private int                                          maxGenTwoSize             = maxGenOneSize * 10;
-   private ConcurrentSkipListSet<Short>                 loadedDbKeys              =
-      new ConcurrentSkipListSet<>();
-   private ConcurrentHashMap<UUID, Integer>             gen2UuidIntMap            =
-      new ConcurrentHashMap<>();
-   private ConcurrentHashMap<UUID, Integer>             gen1UuidIntMap            =
-      new ConcurrentHashMap<>();
-   private ConcurrentSkipListSet<UUID>                  backingSet                =
-      new ConcurrentSkipListSet<>();
-   private ConcurrentHashMap<Short, Set<UuidIntRecord>> unwrittenUuidIntRecordMap =
-      new ConcurrentHashMap<>();
-   private AtomicInteger unwrittenCount = new AtomicInteger(0);
-   private AtomicInteger newGen2Puts    = new AtomicInteger(0);
-   private AtomicInteger newGen1Puts    = new AtomicInteger(0);
-   private boolean       useBackingSet  = false;
-   private IdSequence    idSequence;
+   private ConcurrentSkipListSet<Short>                 loadedDbKeys              = new ConcurrentSkipListSet<>();
+   private ConcurrentHashMap<UUID, Integer>             gen2UuidIntMap            = new ConcurrentHashMap<>();
+   private ConcurrentHashMap<UUID, Integer>             gen1UuidIntMap            = new ConcurrentHashMap<>();
+   private ConcurrentSkipListSet<UUID>                  backingSet                = new ConcurrentSkipListSet<>();
+   private ConcurrentHashMap<Short, Set<UuidIntRecord>> unwrittenUuidIntRecordMap = new ConcurrentHashMap<>();
+   private AtomicInteger                                unwrittenCount            = new AtomicInteger(0);
+   private AtomicInteger                                newGen2Puts               = new AtomicInteger(0);
+   private AtomicInteger                                newGen1Puts               = new AtomicInteger(0);
+   private boolean                                      useBackingSet             = false;
+   private IdSequence                                   idSequence;
 
    //~--- constructors --------------------------------------------------------
 

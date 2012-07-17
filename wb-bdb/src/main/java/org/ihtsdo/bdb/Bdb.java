@@ -675,6 +675,9 @@ public class Bdb {
     }
 
     public static ComponentBI getComponent(int nid) throws IOException {
+        if (nid == Integer.MAX_VALUE) {
+            return null;
+        }
         int cNid = Bdb.getConceptNid(nid);
         if (cNid == Integer.MAX_VALUE) {
             return null;

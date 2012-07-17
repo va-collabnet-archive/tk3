@@ -625,5 +625,15 @@ public class RestClient extends Termstore {
       throw new UnsupportedOperationException("Not supported yet.");
    }
 
+    @Override
+    public void resumeChangeNotifications() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void suspendChangeNotifications() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
 }

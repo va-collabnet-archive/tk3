@@ -24,50 +24,24 @@ package org.ihtsdo.cc.component;
 import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.util.OpenBitSet;
 
-
+import org.ihtsdo.cc.P;
+import org.ihtsdo.concurrency.ConcurrentReentrantLocks;
 import org.ihtsdo.tk.api.NidBitSetBI;
+import org.ihtsdo.tk.api.NidBitSetItrBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
-
 import java.io.Serializable;
+
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.cc.P;
-import org.ihtsdo.tk.api.NidBitSetItrBI;
 
 public class IdentifierSet implements NidBitSetBI, Serializable {
-
-    protected static final Logger logger = Logger.getLogger(IdentifierSet.class.getName());
-    
-   // TODO Consider using an implementation that uses
-   // AtomicLongArray rather than simply a long[]...
-   // Find power-of-two sizes best matching arguments
-   private static final int       concurrencyLevel = 128;
-   private static int             sshift           = 0;
-   private static int             ssize            = 1;
-   private static int             segmentShift     = 32 - sshift;
-   private static int             segmentMask      = ssize - 1;
-   private static ReentrantLock[] locks            = new ReentrantLock[concurrencyLevel];
-   private static Semaphore expandPermit = new Semaphore(1);
-
-   //~--- static initializers -------------------------------------------------
-
-   static {
-      while (ssize < concurrencyLevel) {
-         ++sshift;
-         ssize <<= 1;
-      }
-   }
-
-   static {
-      for (int i = 0; i < concurrencyLevel; i++) {
-         locks[i] = new ReentrantLock();
-      }
-   }
+   protected static final Logger           logger       = Logger.getLogger(IdentifierSet.class.getName());
+   private static ConcurrentReentrantLocks locks        = new ConcurrentReentrantLocks(128);
+   private static Semaphore                expandPermit = new Semaphore(1);
 
    //~--- fields --------------------------------------------------------------
 
@@ -162,15 +136,14 @@ public class IdentifierSet implements NidBitSetBI, Serializable {
       buff.append(" ");
 
       NidBitSetItrBI idIterator  = iterator();
-      int          count       = 0;
-      int          cardinality = (int) bitSet.cardinality();
+      int            count       = 0;
+      int            cardinality = (int) bitSet.cardinality();
 
       try {
          buff.append("[");
 
          while ((count < toStringMax) && idIterator.next()) {
-                buff.append(P.s.getComponent(idIterator.nid()).toString());
-
+            buff.append(P.s.getComponent(idIterator.nid()).toString());
             count++;
 
             if ((count == 10) && (count < cardinality)) {
@@ -182,7 +155,7 @@ public class IdentifierSet implements NidBitSetBI, Serializable {
 
          buff.append("]");
       } catch (IOException e) {
-             logger.log(Level.SEVERE, "Exception converting IdentifierSet to String.", e);
+         logger.log(Level.SEVERE, "Exception converting IdentifierSet to String.", e);
       }
 
       return buff.toString();
@@ -247,11 +220,12 @@ public class IdentifierSet implements NidBitSetBI, Serializable {
    @Override
    public boolean isMember(int nid) {
       int index = nid + offset;
-      if (index < bitSet.size()) {
-        return bitSet.get(index);
-      }
-       return false;
 
+      if (index < bitSet.size()) {
+         return bitSet.get(index);
+      }
+
+      return false;
    }
 
    //~--- set methods ---------------------------------------------------------
@@ -263,22 +237,22 @@ public class IdentifierSet implements NidBitSetBI, Serializable {
     */
    @Override
    public void setMember(int nid) {
-      int word = (nid >>> segmentShift) & segmentMask;
-
-      locks[word].lock();
+      locks.lock(nid);
 
       try {
          int index = nid + offset;
 
          expandPermit.acquireUninterruptibly();
+
          try {
             bitSet.ensureCapacity(index);
          } finally {
-             expandPermit.release();
+            expandPermit.release();
          }
+
          bitSet.set(index);
       } finally {
-         locks[word].unlock();
+         locks.unlock(nid);
       }
    }
 
@@ -289,21 +263,22 @@ public class IdentifierSet implements NidBitSetBI, Serializable {
     */
    @Override
    public void setNotMember(int nid) {
-      int word = (nid >>> segmentShift) & segmentMask;
-
-      locks[word].lock();
+      locks.lock(nid);
 
       try {
          int index = nid + offset;
+
          expandPermit.acquireUninterruptibly();
+
          try {
             bitSet.ensureCapacity(index);
          } finally {
-             expandPermit.release();
+            expandPermit.release();
          }
+
          bitSet.clear(index);
       } finally {
-         locks[word].unlock();
+         locks.unlock(nid);
       }
    }
 
@@ -361,7 +336,7 @@ public class IdentifierSet implements NidBitSetBI, Serializable {
                buff.append(nid());
             }
          } catch (IOException e) {
-             logger.log(Level.SEVERE, "Exception converting NidIterator to String.", e);
+            logger.log(Level.SEVERE, "Exception converting NidIterator to String.", e);
          }
 
          return buff.toString();

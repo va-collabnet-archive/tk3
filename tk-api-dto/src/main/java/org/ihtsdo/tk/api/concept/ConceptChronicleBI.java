@@ -21,6 +21,7 @@ import org.ihtsdo.tk.contradiction.FoundContradictionVersions;
 import java.io.IOException;
 
 import java.util.Collection;
+import org.ihtsdo.tk.api.ProcessComponentChronicleBI;
 
 public interface ConceptChronicleBI extends ComponentChroncileBI<ConceptVersionBI> {
    void cancel() throws IOException;
@@ -86,4 +87,6 @@ public interface ConceptChronicleBI extends ComponentChroncileBI<ConceptVersionB
    //~--- set methods ---------------------------------------------------------
 
    void setAnnotationStyleRefex(boolean annotationSyleRefex);
+   
+   void processComponentChronicles(ProcessComponentChronicleBI processor) throws Exception;
 }

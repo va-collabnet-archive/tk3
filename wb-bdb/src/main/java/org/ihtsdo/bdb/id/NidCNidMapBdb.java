@@ -1,6 +1,5 @@
 package org.ihtsdo.bdb.id;
 
-//~--- non-JDK imports --------------------------------------------------------
 import com.sleepycat.bind.tuple.IntegerBinding;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
@@ -10,413 +9,484 @@ import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
-
-
-import org.ihtsdo.cern.colt.map.OpenIntIntHashMap;
-import org.ihtsdo.bdb.Bdb;
-import org.ihtsdo.bdb.ComponentBdb;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.IOException;
-import java.util.ArrayList;
-
 import java.util.Arrays;
-import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
+import org.ihtsdo.bdb.Bdb;
+import org.ihtsdo.bdb.ComponentBdb;
 import org.ihtsdo.bdb.temp.AceLog;
+import org.ihtsdo.cern.colt.map.OpenIntIntHashMap;
+import org.ihtsdo.concurrency.ConcurrentReentrantLocks;
 
 /**
+ * <h2>Implementation Details</h2>
+ * The <code>nid</code> is the <code>(nid - Integer.MIN_VALUE)</code> index into an <code>int[]</code>
+ * which stores the cNid and the sequence  of a component. The sequence is contiguous, starts at 0,
+ * and can be used as an index for that component into an array containing data for just that component type).
+ * <br/>
+ * <br/>The array is twice the size of the number if nids in the array, and the cNid is stored in first
+ * integer and the sequence is stored in the second. So for any given nid index, the cNid is stored at location
+ * <code>index * 2</code>, and the sequence is stored at <code>index * 2 + 1</code>.
+ *
+ * <br>
+ * <br>This single array approach is taken because Java stores multidimensional arrays as arrays of arrays,
+ * rather than a contiguous block of arrays. Each array has an overhead of 96 bits (above and beyond its
+ * data), which doubles the memory size, and also increases the burden on the garbage collector.
+ *
  *
  * @author kec
  *
  */
 public class NidCNidMapBdb extends ComponentBdb {
+   private static final int NID_CNID_MAP_SIZE = 50000;
 
-    private static final int NID_CNID_MAP_SIZE = 50000;
-    //~--- fields --------------------------------------------------------------
-    private ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
-    private boolean[] mapChanged;
-    private AtomicReference<int[][]> nidCNidMaps;
-    private int readOnlyRecords;
-    
-    static TreeSet<Integer> maxValueEntries = new TreeSet<>();
+   //~--- fields --------------------------------------------------------------
 
+   private ReentrantReadWriteLock   rwl           = new ReentrantReadWriteLock();
+   private ConcurrentReentrantLocks sequenceLocks = new ConcurrentReentrantLocks(128);
+   private AtomicInteger            conceptSequence;
+   private boolean[]                mapChanged;
+   private AtomicReference<int[][]> nidCNidMaps;
+   private int                      readOnlyRecords;
+   private AtomicInteger            relationshipSequence;
 
-    //~--- constructors --------------------------------------------------------
-    public NidCNidMapBdb(Bdb readOnlyBdbEnv, Bdb mutableBdbEnv) throws IOException {
-        super(readOnlyBdbEnv, mutableBdbEnv);
-    }
+   //~--- constructors --------------------------------------------------------
 
-    //~--- methods -------------------------------------------------------------
-    @Override
-    public void close() {
-        try {
-            sync();
-        } catch (IOException e) {
-            AceLog.getAppLog().severe(e.getLocalizedMessage(), e);
-        }
+   public NidCNidMapBdb(Bdb readOnlyBdbEnv, Bdb mutableBdbEnv) throws IOException {
+      super(readOnlyBdbEnv, mutableBdbEnv);
+   }
 
-        super.close();
-    }
+   //~--- enums ---------------------------------------------------------------
 
-    private void ensureCapacity(int nextId) throws IOException {
-        long next = nextId;
-        long numIds = (next - Integer.MIN_VALUE);
-        long maps = numIds / NID_CNID_MAP_SIZE;
-        int nidCidMapCount = (int) maps + 1;
+   public enum SequenceType {
+      RELATIONSHIP, CONCEPT;
 
-        rwl.readLock().lock();
+      public String getPropertyName() {
+         return SequenceType.class.getName().concat(this.name());
+      }
 
-        try {
-            if (nidCidMapCount > nidCNidMaps.get().length) {
-                rwl.readLock().unlock();
-                rwl.writeLock().lock();
+      public AtomicInteger getSequenceValue() throws IOException {
+         String propertyValue = Bdb.getProperty(this.getPropertyName());
 
-                if (nidCidMapCount > nidCNidMaps.get().length) {
-                    try {
-                        expandCapacity(nidCidMapCount);
-                    } finally {
-                        rwl.readLock().lock();
-                        rwl.writeLock().unlock();
-                    }
-                } else {
-                    rwl.readLock().lock();
-                    rwl.writeLock().unlock();
-                }
-            }
-        } finally {
+         if (propertyValue == null) {
+            return new AtomicInteger(0);
+         }
+
+         return new AtomicInteger(Integer.parseInt(propertyValue));
+      }
+
+      //~--- set methods ------------------------------------------------------
+
+      public void setSequenceValue(AtomicInteger sequence) throws IOException {
+         Bdb.setProperty(this.getPropertyName(), sequence.toString());
+      }
+   }
+
+   ;
+
+   //~--- methods -------------------------------------------------------------
+
+   @Override
+   public void close() {
+      try {
+         sync();
+      } catch (IOException e) {
+         AceLog.getAppLog().severe(e.getLocalizedMessage(), e);
+      }
+
+      super.close();
+   }
+
+   private void ensureCapacity(int nextId) throws IOException {
+      long next           = nextId;
+      long numIds         = (next - Integer.MIN_VALUE);
+      long maps           = numIds / NID_CNID_MAP_SIZE;
+      int  nidCidMapCount = (int) maps + 1;
+
+      rwl.readLock().lock();
+
+      try {
+         if (nidCidMapCount > nidCNidMaps.get().length) {
             rwl.readLock().unlock();
-        }
-    }
+            rwl.writeLock().lock();
 
-    private void expandCapacity(int nidCidMapCount) throws IOException {
-        int oldCount = nidCNidMaps.get().length;
-        int[][] newNidCidMaps = new int[nidCidMapCount][];
-        boolean[] newMapChanged = new boolean[nidCidMapCount];
-
-        for (int i = 0; i < oldCount; i++) {
-            newNidCidMaps[i] = nidCNidMaps.get()[i];
-            newMapChanged[i] = mapChanged[i];
-        }
-
-        for (int i = oldCount; i < nidCidMapCount; i++) {
-            if (AceLog.getAppLog().isLoggable(Level.FINE)) {
-                AceLog.getAppLog().fine("Expanding NidCidMaps to: " + (i + 1));
+            if (nidCidMapCount > nidCNidMaps.get().length) {
+               try {
+                  expandCapacity(nidCidMapCount);
+               } finally {
+                  rwl.readLock().lock();
+                  rwl.writeLock().unlock();
+               }
+            } else {
+               rwl.readLock().lock();
+               rwl.writeLock().unlock();
             }
+         }
+      } finally {
+         rwl.readLock().unlock();
+      }
+   }
 
-            newNidCidMaps[i] = new int[NID_CNID_MAP_SIZE];
-            newMapChanged[i] = true;
-            Arrays.fill(newNidCidMaps[i], Integer.MAX_VALUE);
-        }
+   private void expandCapacity(int nidCidMapCount) throws IOException {
+      int       oldCount      = nidCNidMaps.get().length;
+      int[][]   newNidCidMaps = new int[nidCidMapCount][];
+      boolean[] newMapChanged = new boolean[nidCidMapCount];
 
-        nidCNidMaps.set(newNidCidMaps);
-        mapChanged = newMapChanged;
-    }
+      for (int i = 0; i < oldCount; i++) {
+         newNidCidMaps[i] = nidCNidMaps.get()[i];
+         newMapChanged[i] = mapChanged[i];
+      }
 
-    @Override
-    protected void init() throws IOException {
-        preloadBoth();
+      for (int i = oldCount; i < nidCidMapCount; i++) {
+         if (AceLog.getAppLog().isLoggable(Level.FINE)) {
+            AceLog.getAppLog().fine("Expanding NidCidMaps to: " + (i + 1));
+         }
 
-        int maxId = Bdb.getUuidsToNidMap().getCurrentMaxNid();
+         newNidCidMaps[i] = new int[NID_CNID_MAP_SIZE * 2];
+         newMapChanged[i] = true;
+         Arrays.fill(newNidCidMaps[i], Integer.MAX_VALUE);
+      }
 
-        readOnlyRecords = (int) readOnly.count();
+      nidCNidMaps.set(newNidCidMaps);
+      mapChanged = newMapChanged;
+   }
 
-        int mutableRecords = (int) mutable.count();
+   @Override
+   protected void init() throws IOException {
+      relationshipSequence = SequenceType.RELATIONSHIP.getSequenceValue();
+      conceptSequence      = SequenceType.CONCEPT.getSequenceValue();
+      preloadBoth();
 
-        AceLog.getAppLog().info("NidCidMap readOnlyRecords: " + readOnlyRecords);
-        AceLog.getAppLog().info("NidCidMap mutableRecords: " + mutableRecords);
+      int maxId = Bdb.getUuidsToNidMap().getCurrentMaxNid();
 
-        int nidCidMapCount = ((maxId - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE) + 1;
+      readOnlyRecords = (int) readOnly.count();
 
-        nidCNidMaps = new AtomicReference<>(new int[nidCidMapCount][]);
-        mapChanged = new boolean[nidCidMapCount];
-        Arrays.fill(mapChanged, false);
+      int mutableRecords = (int) mutable.count();
 
-        for (int index = 0; index < nidCidMapCount; index++) {
-            nidCNidMaps.get()[index] = new int[NID_CNID_MAP_SIZE];
-            Arrays.fill(nidCNidMaps.get()[index], Integer.MAX_VALUE);
-        }
+      AceLog.getAppLog().info("NidCidMap readOnlyRecords: " + readOnlyRecords);
+      AceLog.getAppLog().info("NidCidMap mutableRecords: " + mutableRecords);
 
-        readMaps(readOnly, true);
-        closeReadOnly();
-        readMaps(mutable, false);
+      int nidCidMapCount = ((maxId - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE) + 1;
 
-        if (AceLog.getAppLog().isLoggable(Level.FINE)) {
-            printKeys("Read only keys: ", readOnly);
-            printKeys("Mutable keys: ", mutable);
-        }
+      nidCNidMaps = new AtomicReference<>(new int[nidCidMapCount][]);
+      mapChanged  = new boolean[nidCidMapCount];
+      Arrays.fill(mapChanged, false);
 
-        rwl = new ReentrantReadWriteLock();
-    }
+      for (int index = 0; index < nidCidMapCount; index++) {
+         nidCNidMaps.get()[index] = new int[NID_CNID_MAP_SIZE * 2];
+         Arrays.fill(nidCNidMaps.get()[index], Integer.MAX_VALUE);
+      }
 
-    private void printKeys(String prefix, Database db) {
-        int size = (int) db.count();
-        OpenIntIntHashMap nidMap = new OpenIntIntHashMap(size + 2);
-        CursorConfig cursorConfig = new CursorConfig();
+      readMaps(readOnly, true);
+      closeReadOnly();
+      readMaps(mutable, false);
 
-        cursorConfig.setReadUncommitted(true);
+      if (AceLog.getAppLog().isLoggable(Level.FINE)) {
+         printKeys("Read only keys: ", readOnly);
+         printKeys("Mutable keys: ", mutable);
+      }
 
-        try (Cursor cursor = db.openCursor(null, cursorConfig)) {
-            DatabaseEntry foundKey = new DatabaseEntry();
-            DatabaseEntry foundData = new DatabaseEntry();
+      rwl = new ReentrantReadWriteLock();
+   }
 
-            foundData.setPartial(true);
-            foundData.setPartial(0, 0, true);
+   private void printKeys(String prefix, Database db) {
+      int               size         = (int) db.count();
+      OpenIntIntHashMap nidMap       = new OpenIntIntHashMap(size + 2);
+      CursorConfig      cursorConfig = new CursorConfig();
 
-            int max = Integer.MIN_VALUE;
+      cursorConfig.setReadUncommitted(true);
 
-            while (cursor.getNext(foundKey, foundData, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
-                int cNid = IntegerBinding.entryToInt(foundKey);
+      try (Cursor cursor = db.openCursor(null, cursorConfig)) {
+         DatabaseEntry foundKey  = new DatabaseEntry();
+         DatabaseEntry foundData = new DatabaseEntry();
 
-                nidMap.put(cNid, cNid);
-                max = Math.max(max, cNid);
+         foundData.setPartial(true);
+         foundData.setPartial(0, 0, true);
+
+         int max = Integer.MIN_VALUE;
+
+         while (cursor.getNext(foundKey, foundData, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
+            int cNid = IntegerBinding.entryToInt(foundKey);
+
+            nidMap.put(cNid, cNid);
+            max = Math.max(max, cNid);
+         }
+
+         cursor.close();
+         AceLog.getAppLog().fine(prefix + nidMap.keys().toList().toString());
+      }
+   }
+
+   private void readMaps(Database db, boolean readOnly) {
+      CursorConfig cursorConfig = new CursorConfig();
+
+      cursorConfig.setReadUncommitted(true);
+
+      try (Cursor cursor = db.openCursor(null, cursorConfig)) {
+         DatabaseEntry foundKey  = new DatabaseEntry();
+         DatabaseEntry foundData = new DatabaseEntry();
+
+         while (cursor.getNext(foundKey, foundData, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
+            int        index = IntegerBinding.entryToInt(foundKey);
+            TupleInput ti    = new TupleInput(foundData.getData());
+            int        j     = 0;
+
+            while (ti.available() > 0) {
+               nidCNidMaps.get()[index][j++] = ti.readInt();
             }
+         }
+      }
+   }
 
-            cursor.close();
-            AceLog.getAppLog().fine(prefix + nidMap.keys().toList().toString());
-        }
-    }
+   public void resetCidForNid(int cNid, int nid) throws IOException {
+      assert cNid != Integer.MAX_VALUE;
 
-    private void readMaps(Database db, boolean readOnly) {
-        CursorConfig cursorConfig = new CursorConfig();
+      int mapIndex = (nid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
 
-        cursorConfig.setReadUncommitted(true);
+      assert mapIndex >= 0 : "cNid: " + cNid + " nid: " + nid + " mapIndex: " + mapIndex;
 
-        Cursor cursor = db.openCursor(null, cursorConfig);
+      int cNidIndexInMap = (nid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE * 2;
 
-        maxValueEntries.clear();
-        try {
-            DatabaseEntry foundKey = new DatabaseEntry();
-            DatabaseEntry foundData = new DatabaseEntry();
+      assert cNidIndexInMap < NID_CNID_MAP_SIZE * 2 :
+             "cNid: " + cNid + " nid: " + nid + " mapIndex: " + mapIndex + " cNidIndexInMap: "
+             + cNidIndexInMap;
+      ensureCapacity(nid);
 
-            while (cursor.getNext(foundKey, foundData, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
-                int index = IntegerBinding.entryToInt(foundKey);
-                TupleInput ti = new TupleInput(foundData.getData());
-                int j = 0;
+      if ((nidCNidMaps.get() != null) && (nidCNidMaps.get()[mapIndex] != null)) {
+         if (nidCNidMaps.get()[mapIndex][cNidIndexInMap] != cNid) {
+            nidCNidMaps.get()[mapIndex][cNidIndexInMap] = cNid;
+            mapChanged[mapIndex]                        = true;
+         }
+      } else {
+         if (nidCNidMaps.get() == null) {
+            throw new IOException("Null nidCidMap: ");
+         }
 
-                while (ti.available() > 0) {
-                    nidCNidMaps.get()[index][j++] = ti.readInt();
+         throw new IOException("nidCidMap[" + mapIndex + "] " + "is null. cNid: " + cNid + " nid: " + nid);
+      }
+   }
 
-                    if (nidCNidMaps.get()[index][j - 1] == Integer.MAX_VALUE) {
-                        int nid = Integer.MIN_VALUE + (index + 1) * (j - 1);
-                        maxValueEntries.add(nid);
-                    }
-                }
+   @Override
+   public void sync() throws IOException {
+      writeChangedMaps();
+      super.sync();
+   }
 
-                if (AceLog.getAppLog().isLoggable(Level.FINE)) {
-                    maxValueEntries.remove(-2147483648);
-                    maxValueEntries.remove(-2147483647);
-                    if (readOnly) {
-                        AceLog.getAppLog().info("\n\nmax value entry count for read only index[" + index + "]: "
-                                + maxValueEntries.size());
-                    } else {
-                        AceLog.getAppLog().info("\n\nmax value entry count for mutable index[" + index + "]: "
-                                + maxValueEntries.size());
+   private void writeChangedMaps() throws IOException {
+      rwl.writeLock().lock();
 
-                        if ((maxValueEntries.size() > 0) && (index < (nidCNidMaps.get().length - 1))) {
-                            AceLog.getAppLog().info("\n\n\nmax value entries: " + maxValueEntries);
-                        }
-                    }
-                }
+      try {
+         SequenceType.RELATIONSHIP.setSequenceValue(relationshipSequence);
+         SequenceType.CONCEPT.setSequenceValue(conceptSequence);
+
+         DatabaseEntry keyEntry = new DatabaseEntry();
+         int           mapCount = nidCNidMaps.get().length;
+
+         found:
+         for (int key = 0; key < mapCount; key++) {
+            if (mapChanged[key]) {
+               IntegerBinding.intToEntry(key, keyEntry);
+
+               // NID_CNID_MAP_SIZE * 4 * 2 = 4 bytes per integer, 2 integers per nid
+               TupleOutput output = new TupleOutput(new byte[NID_CNID_MAP_SIZE * 4 * 2]);
+
+               for (int value : nidCNidMaps.get()[key]) {
+                  output.writeInt(value);
+               }
+
+               DatabaseEntry   valueEntry = new DatabaseEntry(output.toByteArray());
+               OperationStatus status     = mutable.put(null, keyEntry, valueEntry);
+
+               if (status != OperationStatus.SUCCESS) {
+                  throw new IOException("Unsuccessful operation: " + status);
+               }
+
+               mapChanged[key] = false;
             }
-        } finally {
-            cursor.close();
-        }
-    }
+         }
+      } finally {
+         rwl.writeLock().unlock();
+      }
+   }
 
-    public void resetCidForNid(int cNid, int nid) throws IOException {
-        assert cNid != Integer.MAX_VALUE;
+   //~--- get methods ---------------------------------------------------------
 
-        int mapIndex = (nid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
+   public int getCNid(int nid) {
+      assert nid != Integer.MAX_VALUE;
 
-        assert mapIndex >= 0 : "cNid: " + cNid + " nid: " + nid + " mapIndex: " + mapIndex;
+      int mapIndex      = (nid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
+      int nidIndexInMap = ((nid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE) * 2;
 
-        int indexInMap = (nid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE;
+      assert(mapIndex >= 0) && (nidIndexInMap >= 0) :
+            "mapIndex: " + mapIndex + " indexInMap: " + nidIndexInMap + " nid: " + nid;
 
-        assert indexInMap < NID_CNID_MAP_SIZE :
-                "cNid: " + cNid + " nid: " + nid + " mapIndex: " + mapIndex + " indexInMap: " + indexInMap;
-        ensureCapacity(nid);
+      if (mapIndex >= nidCNidMaps.get().length) {
+         return Integer.MAX_VALUE;
+      }
 
-        if ((nidCNidMaps.get() != null) && (nidCNidMaps.get()[mapIndex] != null)) {
-            if (nidCNidMaps.get()[mapIndex][indexInMap] != cNid) {
-                nidCNidMaps.get()[mapIndex][indexInMap] = cNid;
-                mapChanged[mapIndex] = true;
-            }
-        } else {
-            if (nidCNidMaps.get() == null) {
-                throw new IOException("Null nidCidMap: ");
-            }
+      return nidCNidMaps.get()[mapIndex][nidIndexInMap];
+   }
 
-            throw new IOException("nidCidMap[" + mapIndex + "] " + "is null. cNid: " + cNid + " nid: " + nid);
-        }
-    }
+   @Override
+   protected String getDbName() {
+      return "NidCidMap";
+   }
 
-    @Override
-    public void sync() throws IOException {
-        writeChangedMaps();
-        super.sync();
-    }
+   public int getSequence(int nid, SequenceType sequenceType) throws IOException {
+      assert nid != Integer.MAX_VALUE;
 
-    private void writeChangedMaps() throws IOException {
-        rwl.writeLock().lock();
+      int mapIndex           = (nid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
+      int nidIndexInMap      = ((nid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE) * 2;
+      int sequenceIndexInMap = nidIndexInMap + 1;
 
-        try {
-            DatabaseEntry keyEntry = new DatabaseEntry();
-            int mapCount = nidCNidMaps.get().length;
-            int[] lastRow = nidCNidMaps.get()[mapCount - 1];
-            int maxIndex = NID_CNID_MAP_SIZE - 1;
-            for (int i = NID_CNID_MAP_SIZE - 1; i >= 0; i--) {
-                if (lastRow[i] != Integer.MAX_VALUE) {
-                    maxIndex = i;
-                    break;
-                }
+      assert(mapIndex >= 0) && (nidIndexInMap >= 0) :
+            "mapIndex: " + mapIndex + " nidIndexInMap: " + nidIndexInMap + " nid: " + nid;
 
-            }
-            found:
-            for (int key = 0; key < mapCount; key++) {
-                if (mapChanged[key]) {
-                    IntegerBinding.intToEntry(key, keyEntry);
-                    TupleOutput output = new TupleOutput(new byte[NID_CNID_MAP_SIZE * 4]);
+      if (mapIndex >= nidCNidMaps.get().length) {
+         return Integer.MAX_VALUE;
+      }
 
-                    for (int i = 0; i < NID_CNID_MAP_SIZE; i++) {
-                        output.writeInt(nidCNidMaps.get()[key][i]);
+      int sequence = nidCNidMaps.get()[mapIndex][sequenceIndexInMap];
 
-                        if (nidCNidMaps.get()[key][i] == Integer.MAX_VALUE) {
-                            int nid = Integer.MIN_VALUE + (key + 1) * i;
-                            if (key < mapCount - 1) {
-                                maxValueEntries.add(nid);
-                            } else if (i < maxIndex) {
-                                maxValueEntries.add(nid);
-                            }
-                        }
-                    }
+      if (sequence != Integer.MAX_VALUE) {
+         return sequence;
+      }
 
-                    maxValueEntries.remove(-2147483648);
-                    maxValueEntries.remove(-2147483647);
-                    if ((maxValueEntries.size() > 0) && (key < nidCNidMaps.get().length - 1)) {
-                        ArrayList<Integer> toRemove = new ArrayList<>(maxValueEntries.size());
-                        for (int nid: maxValueEntries) {
-                            if (getCNid(nid) != Integer.MAX_VALUE) {
-                                toRemove.add(nid);
-                            } 
-                        }
-                        maxValueEntries.removeAll(toRemove);
-                        if (maxValueEntries.size() > 0) {
-                            AceLog.getAppLog().info("writing max value entry count: " + maxValueEntries.size() + 
-                                "\nvalues: " + maxValueEntries);
-                        }
-                    }
+      return setSequenceForNid(nid, sequenceType);
+   }
 
-                    DatabaseEntry valueEntry = new DatabaseEntry(output.toByteArray());
+   public boolean hasConcept(int cNid) {
+      assert cNid > Integer.MIN_VALUE : "Invalid cNid == Integer.MIN_VALUE: " + cNid;
+      assert cNid <= Bdb.getUuidsToNidMap().getCurrentMaxNid() :
+             "Invalid cNid: " + cNid + " currentMax: " + Bdb.getUuidsToNidMap().getCurrentMaxNid();
 
-                    OperationStatus status = mutable.put(null, keyEntry, valueEntry);
+      int mapIndex      = (cNid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
+      int cNidIndexInMap = ((cNid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE) * 2;
 
-                    if (status != OperationStatus.SUCCESS) {
-                        throw new IOException("Unsuccessful operation: " + status);
-                    }
+      if ((mapIndex < 0) || (mapIndex >= nidCNidMaps.get().length)) {
+         return false;
+      }
 
-                    mapChanged[key] = false;
-                }
-            }
-        } finally {
-            rwl.writeLock().unlock();
-        }
-    }
+      if ((cNidIndexInMap < 0) || (cNidIndexInMap >= NID_CNID_MAP_SIZE * 2)) {
+         return false;
+      }
 
-    //~--- get methods ---------------------------------------------------------
-    public int getCNid(int nid) {
-        assert nid != Integer.MAX_VALUE;
+      if (nidCNidMaps.get()[mapIndex][cNidIndexInMap] == cNid) {
+         return true;
+      }
 
-        int mapIndex = (nid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
-        int indexInMap = (nid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE;
+      return false;
+   }
 
-        assert (mapIndex >= 0) && (indexInMap >= 0) :
-                "mapIndex: " + mapIndex + " indexInMap: " + indexInMap + " nid: " + nid;
+   public boolean hasMap(int nid) {
+      int mapIndex           = (nid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
+      int nidIndexInMap      = ((nid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE) * 2;
+      int sequenceIndexInMap = nidIndexInMap + 1;
 
-        if (mapIndex >= nidCNidMaps.get().length) {
-            return Integer.MAX_VALUE;
-        }
-
-        return nidCNidMaps.get()[mapIndex][indexInMap];
-    }
-
-    @Override
-    protected String getDbName() {
-        return "NidCidMap";
-    }
-
-    public boolean hasConcept(int cNid) {
-        assert cNid > Integer.MIN_VALUE : "Invalid cNid == Integer.MIN_VALUE: " + cNid;
-        assert cNid <= Bdb.getUuidsToNidMap().getCurrentMaxNid() :
-                "Invalid cNid: " + cNid + " currentMax: " + Bdb.getUuidsToNidMap().getCurrentMaxNid();
-
-        int mapIndex = (cNid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
-        int indexInMap = (cNid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE;
-
-        if ((mapIndex < 0) || (mapIndex >= nidCNidMaps.get().length)) {
-            return false;
-        }
-
-        if ((indexInMap < 0) || (indexInMap >= NID_CNID_MAP_SIZE)) {
-            return false;
-        }
-
-        if (nidCNidMaps.get()[mapIndex][indexInMap] == cNid) {
+      if ((mapIndex < nidCNidMaps.get().length) && (nidIndexInMap < NID_CNID_MAP_SIZE * 2)) {
+         if (nidCNidMaps.get()[mapIndex][sequenceIndexInMap] < Integer.MAX_VALUE) {
             return true;
-        }
+         }
+      }
 
-        return false;
-    }
+      return false;
+   }
 
-    public boolean hasMap(int nid) {
-        int mapIndex = (nid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
-        int indexInMap = (nid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE;
+   //~--- set methods ---------------------------------------------------------
 
-        if ((mapIndex < nidCNidMaps.get().length) && (indexInMap < NID_CNID_MAP_SIZE)) {
-            if (nidCNidMaps.get()[mapIndex][indexInMap] < Integer.MAX_VALUE) {
-                return true;
+   public void setCNidForNid(int cNid, int nid) throws IOException {
+      assert cNid != Integer.MAX_VALUE;
+
+      int mapIndex = (nid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
+
+      assert mapIndex >= 0 : "cNid: " + cNid + " nid: " + nid + " mapIndex: " + mapIndex;
+
+      int nidIndexInMap = ((nid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE) * 2;
+
+      assert nidIndexInMap < NID_CNID_MAP_SIZE * 2 :
+             "cNid: " + cNid + " nid: " + nid + " mapIndex: " + mapIndex + " nidIndexInMap: " + nidIndexInMap;
+      assert(cNid == nid) || hasConcept(cNid) : cNid + " is not a concept nid. nid: " + nid;
+      ensureCapacity(nid);
+      int[][] nidCNidMapArrays = nidCNidMaps.get();
+      assert(nidCNidMapArrays[mapIndex][nidIndexInMap] == Integer.MAX_VALUE)
+            || ((int) (nidCNidMapArrays[mapIndex][nidIndexInMap]) == cNid) :
+            "processing cNid: " + cNid + " " + Bdb.getUuidsToNidMap().getUuidsForNid(cNid) + " nid: " + nid
+            + " found existing cNid: " + ((int) nidCNidMapArrays[mapIndex][nidIndexInMap]) + " "
+            + Bdb.getUuidsToNidMap().getUuidsForNid((int) nidCNidMapArrays[mapIndex][nidIndexInMap])
+            + "\n    " + cNid + " maps to: " + getCNid(cNid) + "\n    "
+            + ((int) nidCNidMapArrays[mapIndex][nidIndexInMap]) + " maps to: "
+            + getCNid((int) nidCNidMapArrays[mapIndex][nidIndexInMap]);
+
+      if ((nidCNidMapArrays != null) && (nidCNidMapArrays[mapIndex] != null)) {
+         if (nidCNidMapArrays[mapIndex][nidIndexInMap] != cNid) {
+            nidCNidMapArrays[mapIndex][nidIndexInMap] = cNid;
+            if (cNid == nid) {
+                setSequenceForNid(nid, SequenceType.CONCEPT);
             }
-        }
+            mapChanged[mapIndex]                       = true;
+         }
+      } else {
+         if (nidCNidMapArrays == null) {
+            throw new IOException("Null nidCidMap: ");
+         }
 
-        return false;
-    }
+         throw new IOException("nidCidMap[" + mapIndex + "] " + "is null. cNid: " + cNid + " nid: " + nid);
+      }
+   }
 
-    //~--- set methods ---------------------------------------------------------
-    public void setCNidForNid(int cNid, int nid) throws IOException {
-        assert cNid != Integer.MAX_VALUE;
+   private int setSequenceForNid(int sequence, int nid) throws IOException {
+      assert sequence != Integer.MAX_VALUE;
 
-        int mapIndex = (nid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
+      int mapIndex = (nid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
 
-        assert mapIndex >= 0 : "cNid: " + cNid + " nid: " + nid + " mapIndex: " + mapIndex;
+      assert mapIndex >= 0 : "sequence: " + sequence + " nid: " + nid + " mapIndex: " + mapIndex;
 
-        int indexInMap = (nid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE;
+      int nidIndexInMap      = ((nid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE) * 2;
+      int sequenceIndexInMap = nidIndexInMap + 1;
 
-        assert indexInMap < NID_CNID_MAP_SIZE :
-                "cNid: " + cNid + " nid: " + nid + " mapIndex: " + mapIndex + " indexInMap: " + indexInMap;
-        assert (cNid == nid) || hasConcept(cNid) : cNid + " is not a concept nid. nid: " + nid;
-        ensureCapacity(nid);
-        assert (nidCNidMaps.get()[mapIndex][indexInMap] == Integer.MAX_VALUE)
-                || (nidCNidMaps.get()[mapIndex][indexInMap] == cNid) :
-                "processing cNid: " + cNid + " " + Bdb.getUuidsToNidMap().getUuidsForNid(cNid) + " nid: " + nid
-                + " found existing cNid: " + nidCNidMaps.get()[mapIndex][indexInMap] + " "
-                + Bdb.getUuidsToNidMap().getUuidsForNid(nidCNidMaps.get()[mapIndex][indexInMap]) + "\n    "
-                + cNid + " maps to: " + getCNid(cNid) + "\n    " + nidCNidMaps.get()[mapIndex][indexInMap]
-                + " maps to: " + getCNid(nidCNidMaps.get()[mapIndex][indexInMap]);
+      assert sequenceIndexInMap < NID_CNID_MAP_SIZE * 2 :
+             "sequence: " + sequence + " nid: " + nid + " mapIndex: " + mapIndex + " sequenceIndexInMap: "
+             + sequenceIndexInMap;
 
-        if ((nidCNidMaps.get() != null) && (nidCNidMaps.get()[mapIndex] != null)) {
-            if (nidCNidMaps.get()[mapIndex][indexInMap] != cNid) {
-                nidCNidMaps.get()[mapIndex][indexInMap] = cNid;
-                mapChanged[mapIndex] = true;
-            }
-        } else {
-            if (nidCNidMaps.get() == null) {
-                throw new IOException("Null nidCidMap: ");
+      if ((nidCNidMaps.get() != null) && (nidCNidMaps.get()[mapIndex] != null)) {
+         if (nidCNidMaps.get()[mapIndex][sequenceIndexInMap] != sequence) {
+            if (nidCNidMaps.get()[mapIndex][sequenceIndexInMap] != Integer.MAX_VALUE) {
+               throw new RuntimeException("Resetting sequence from "
+                                          + nidCNidMaps.get()[mapIndex][sequenceIndexInMap] + " to: "
+                                          + sequence + " for " + nid);
             }
 
-            throw new IOException("nidCidMap[" + mapIndex + "] " + "is null. cNid: " + cNid + " nid: " + nid);
-        }
-    }
+            nidCNidMaps.get()[mapIndex][sequenceIndexInMap] = sequence;
+            mapChanged[mapIndex]                            = true;
+         }
+      } else {
+         if (nidCNidMaps.get() == null) {
+            throw new IOException("Null nidCidMap: ");
+         }
+
+         throw new IOException("nidCidMap[" + mapIndex + "] " + "is null. sequence: " + sequence + " nid: "
+                               + nid);
+      }
+      return sequence;
+   }
+
+   private int setSequenceForNid(int nid, SequenceType sequenceType) throws IOException {
+      sequenceLocks.lock(nid);
+
+      try {
+         switch (sequenceType) {
+         case RELATIONSHIP :
+            return setSequenceForNid(relationshipSequence.getAndIncrement(), nid);
+         case CONCEPT:
+             return setSequenceForNid(relationshipSequence.getAndIncrement(), nid);
+         default :
+            throw new UnsupportedOperationException("No support for sequence: " + sequenceType);
+         }
+      } finally {
+         sequenceLocks.unlock(nid);
+      }
+   }
 }

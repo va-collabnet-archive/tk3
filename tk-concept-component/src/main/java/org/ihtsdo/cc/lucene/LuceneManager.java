@@ -78,7 +78,7 @@ public abstract class LuceneManager {
 
         IdentifierSet descNidsToCommit = new IdentifierSet();
 
-        for (int dnid : c.getDescNids()) {
+        for (int dnid : c.getDescriptionNids()) {
             descNidsToCommit.setMember(dnid);
             uncommittedDescNids.setNotMember(dnid);
         }

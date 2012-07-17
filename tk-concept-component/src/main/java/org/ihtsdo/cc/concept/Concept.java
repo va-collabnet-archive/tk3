@@ -528,6 +528,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
       return c;
    }
 
+   @Override
    public void processComponentChronicles(ProcessComponentChronicleBI processor) throws Exception {
       if (getConceptAttributes() != null) {
          processor.process(getConceptAttributes());
@@ -770,6 +771,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
       try {
          return mergeWithEConcept(eConcept, c, false);
       } catch (Throwable t) {
+          System.out.println(t.getLocalizedMessage());
          logger.log(Level.SEVERE, "Cannot merge with eConcept: \n" + eConcept, t);
       }
 
@@ -1103,8 +1105,12 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
       }
    }
 
-   public Set<Integer> getDescNids() throws IOException {
+   public Set<Integer> getDescriptionNids() throws IOException {
       return data.getDescNids();
+   }
+
+   public Set<Integer> getRelationshipNids() throws IOException {
+      return data.getSrcRelNidsReadOnly();
    }
 
    public Description getDescription(int nid) throws IOException {

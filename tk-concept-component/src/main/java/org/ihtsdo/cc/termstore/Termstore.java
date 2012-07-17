@@ -18,15 +18,17 @@
 
 package org.ihtsdo.cc.termstore;
 
-//~--- non-JDK imports --------------------------------------------------------
-
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
-
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.PositionSetReadOnly;
 import org.ihtsdo.cc.ReferenceConcepts;
@@ -47,15 +49,6 @@ import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.binding.SnomedMetadataRfx;
 import org.ihtsdo.tk.binding.TermAux;
 import org.ihtsdo.tk.dto.concept.component.TkRevision;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.File;
-import java.io.IOException;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 
 /**
  *
@@ -102,6 +95,19 @@ public abstract class Termstore implements PersistentStoreI {
    public ChangeSetGeneratorBI createDtoChangeSetGenerator(File changeSetFileName,
            File changeSetTempFileName, ChangeSetGenerationPolicy policy) {
       return new EConceptChangeSetWriter(changeSetFileName, changeSetTempFileName, policy, true);
+   }
+
+   @Override
+   public void loadEconFiles(String[] econFileStrings) throws Exception {
+      List<File> econFiles = new ArrayList<>(econFileStrings.length);
+
+      for (String fileString : econFileStrings) {
+         econFiles.add(new File(fileString));
+      }
+
+      LastChange.suspendChangeNotifications();
+      loadEconFiles(econFiles.toArray(new File[econFiles.size()]));
+      LastChange.resumeChangeNotifications();
    }
 
    protected ViewCoordinate makeMetaVc() throws IOException {

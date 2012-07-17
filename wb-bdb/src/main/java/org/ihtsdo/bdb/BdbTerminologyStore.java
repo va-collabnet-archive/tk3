@@ -45,6 +45,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.cc.change.LastChange;
 
 public class BdbTerminologyStore extends Termstore {
    private static ViewCoordinate metadataVC = null;
@@ -624,6 +625,16 @@ public class BdbTerminologyStore extends Termstore {
    public void setProperty(String key, String value) throws IOException {
       Bdb.setProperty(key, value);
    }
+
+    @Override
+    public void resumeChangeNotifications() {
+        LastChange.resumeChangeNotifications();
+    }
+
+    @Override
+    public void suspendChangeNotifications() {
+        LastChange.suspendChangeNotifications();
+    }
 
    //~--- inner classes -------------------------------------------------------
 

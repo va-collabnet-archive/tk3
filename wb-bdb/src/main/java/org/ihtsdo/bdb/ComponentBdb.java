@@ -46,7 +46,7 @@ public abstract class ComponentBdb {
         preload(readOnly);
         preload(mutable);
     }
-
+    
     protected void preloadReadOnly() {
         preload(readOnly);
     }
@@ -59,7 +59,6 @@ public abstract class ComponentBdb {
         PreloadConfig plConfig = new PreloadConfig();
         plConfig.setLoadLNs(true);
         db.preload(plConfig);
-
     }
 
     public void close() {

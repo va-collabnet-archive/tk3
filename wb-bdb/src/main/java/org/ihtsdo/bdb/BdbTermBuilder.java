@@ -4,6 +4,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import org.ihtsdo.bdb.id.NidCNidMapBdb;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.component.RevisionSet;
 import org.ihtsdo.cc.attributes.ConceptAttributes;
@@ -188,6 +189,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             r.enclosingConceptNid = c.getNid();
             r.nid = Bdb.uuidToNid(blueprint.getComponentUuid());
             Bdb.getNidCNidMap().setCNidForNid(c.getNid(), r.nid);
+            Bdb.getNidCNidMap().getSequence(r.nid, NidCNidMapBdb.SequenceType.RELATIONSHIP);
             r.setPrimordialUuid(blueprint.getComponentUuid());
             try {
                 r.setDestinationNid(blueprint.getDestNid());

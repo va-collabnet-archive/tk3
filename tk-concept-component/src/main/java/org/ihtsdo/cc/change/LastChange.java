@@ -18,15 +18,7 @@
 
 package org.ihtsdo.cc.change;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import org.ihtsdo.cc.concept.Concept;
-import org.ihtsdo.tk.api.TermChangeListener;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.lang.ref.WeakReference;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,30 +27,24 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.ihtsdo.cc.P;
+import org.ihtsdo.cc.concept.Concept;
+import org.ihtsdo.concurrency.ConcurrentReentrantLocks;
+import org.ihtsdo.tk.api.TermChangeListener;
 
 /**
  *
  * @author kec
  */
 public class LastChange {
-   private static final int                                       MAP_SIZE         = 50000;
-   private static int                                             concurrencyLevel = 128;
-   private static int                                             sshift           = 0;
-   private static int                                             ssize            = 1;
-   private static int                                             segmentShift     = 32 - sshift;
-   private static int                                             segmentMask      = ssize - 1;
-   private static ReentrantLock[]                                 locks            =
-      new ReentrantLock[concurrencyLevel];
-   private static Timer                                           timer            = new Timer("LastChange",
-                                                                                        true);
-   private static ReentrantReadWriteLock                          rwl              =
-      new ReentrantReadWriteLock();
-   private static AtomicReference<int[][]>                        lastChangeMap    =
-      new AtomicReference<>(new int[0][]);
-   private static AtomicReference<ConcurrentSkipListSet<Integer>> changedXrefs     =
+   private static final int                                       MAP_SIZE      = 50000;
+   private static boolean                                         suspended     = false;
+   private static ConcurrentReentrantLocks                        locks         = new ConcurrentReentrantLocks(128);
+   private static final Timer                                     timer         = new Timer("LastChange", true);
+   private static ReentrantReadWriteLock                          rwl           = new ReentrantReadWriteLock();
+   private static AtomicReference<int[][]>                        lastChangeMap = new AtomicReference<>(new int[0][]);
+   private static AtomicReference<ConcurrentSkipListSet<Integer>> changedXrefs  =
       new AtomicReference<>(new ConcurrentSkipListSet<Integer>());
    private static AtomicReference<ConcurrentSkipListSet<Integer>> changedComponents =
       new AtomicReference<>(new ConcurrentSkipListSet<Integer>());
@@ -68,15 +54,6 @@ public class LastChange {
    //~--- static initializers -------------------------------------------------
 
    static {
-      while (ssize < concurrencyLevel) {
-         ++sshift;
-         ssize <<= 1;
-      }
-
-      for (int i = 0; i < concurrencyLevel; i++) {
-         locks[i] = new ReentrantLock();
-      }
-
       timer.schedule(new Notifier(), 5000, 2000);
    }
 
@@ -151,7 +128,19 @@ public class LastChange {
       changeListenerRefs.remove(new ComparableWeakRef(cl));
    }
 
+   public static void resumeChangeNotifications() {
+      suspended = false;
+   }
+
+   public static void suspendChangeNotifications() {
+      suspended = true;
+   }
+
    public static void touch(Concept c) {
+      if (suspended) {
+         return;
+      }
+
       for (int nid : c.getUncommittedNids().getListArray()) {
          touch(nid, Change.COMPONENT);
       }
@@ -160,15 +149,16 @@ public class LastChange {
    }
 
    public static void touch(int nid, Change changeType) {
+      if (suspended) {
+         return;
+      }
+
       if (nid == Integer.MAX_VALUE) {
          return;
       }
 
       ensureCapacity(nid);
-
-      int word = (nid >>> segmentShift) & segmentMask;
-
-      locks[word].lock();
+      locks.lock(nid);
 
       try {
          int mapIndex   = (nid - Integer.MIN_VALUE) / MAP_SIZE;
@@ -197,7 +187,7 @@ public class LastChange {
             break;
          }
       } finally {
-         locks[word].unlock();
+         locks.unlock(nid);
       }
 
       if (changeType == Change.XREF) {
@@ -210,24 +200,40 @@ public class LastChange {
    }
 
    public static void touchComponent(int nid) {
+      if (suspended) {
+         return;
+      }
+
       touch(nid, Change.COMPONENT);
    }
 
    public static void touchComponents(Collection<Integer> cNidSet) {
+      if (suspended) {
+         return;
+      }
+
       for (Integer cNid : cNidSet) {
          touch(cNid, Change.COMPONENT);
       }
    }
 
    public static void touchXref(int nid) {
+      if (suspended) {
+         return;
+      }
+
       touch(nid, Change.XREF);
    }
+
    public static void touchXrefs(Collection<Integer> cNidSet) {
+      if (suspended) {
+         return;
+      }
+
       for (Integer cNid : cNidSet) {
          touch(cNid, Change.XREF);
       }
    }
-
 
    //~--- get methods ---------------------------------------------------------
 
@@ -286,9 +292,10 @@ public class LastChange {
    private static class Notifier extends TimerTask {
       @Override
       public void run() {
-          if (LastChange.changedXrefs == null || LastChange.changedComponents == null) {
-              return;
-          }
+         if ((LastChange.changedXrefs == null) || (LastChange.changedComponents == null)) {
+            return;
+         }
+
          ConcurrentSkipListSet<Integer> changedXrefs =
             LastChange.changedXrefs.getAndSet(new ConcurrentSkipListSet<Integer>());
          ConcurrentSkipListSet<Integer> changedComponents =
@@ -296,8 +303,7 @@ public class LastChange {
          long sequence = BdbCommitSequence.nextSequence();
 
          if (!changedXrefs.isEmpty() ||!changedComponents.isEmpty()) {
-            List<WeakReference<TermChangeListener>> toRemove =
-               new ArrayList<>();
+            List<WeakReference<TermChangeListener>> toRemove = new ArrayList<>();
 
             for (WeakReference<TermChangeListener> clr : changeListenerRefs) {
                TermChangeListener cl = clr.get();

@@ -20,34 +20,30 @@ package org.ihtsdo.concurrency;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 /**
  *
  * @author kec
  */
-public class ConcurrencyLocks {
-   private int                      concurrencyLevel = 128;
-
-   private int                      sshift           = 0;
-   private int                      ssize            = 1;
-   private ReentrantReadWriteLock[] locks            = new ReentrantReadWriteLock[concurrencyLevel];
-   private int                      segmentMask;
-   private int                      segmentShift;
+public abstract class ConcurrencyLocks {
+   protected final int   concurrencyLevel;
+   private int   sshift           = 0;
+   private int   ssize            = 1;
+   protected int segmentMask;
+   protected int segmentShift;
 
    //~--- constructors --------------------------------------------------------
 
    public ConcurrencyLocks() {
+       concurrencyLevel = 128;
+      setup();
+   }
+
+   public ConcurrencyLocks(int concurrencyLevel) {
+      this.concurrencyLevel = concurrencyLevel;
       setup();
    }
 
    //~--- methods -------------------------------------------------------------
-
-   public void readLock(int dbKey) {
-      int word = (dbKey >>> segmentShift) & segmentMask;
-
-      locks[word].readLock().lock();
-   }
 
    private void setup() {
       while (ssize < concurrencyLevel) {
@@ -57,44 +53,12 @@ public class ConcurrencyLocks {
 
       segmentShift = 32 - sshift;
       segmentMask  = ssize - 1;
-
-      for (int i = 0; i < concurrencyLevel; i++) {
-         locks[i] = new ReentrantReadWriteLock();
-      }
+      
    }
 
-   public void unlockRead(int dbKey) {
-      int word = (dbKey >>> segmentShift) & segmentMask;
+   //~--- get methods ---------------------------------------------------------
 
-      locks[word].readLock().unlock();
+   public int getConcurrencyLevel() {
+      return concurrencyLevel;
    }
-
-   public void unlockWrite(int dbKey) {
-      int word = (dbKey >>> segmentShift) & segmentMask;
-
-      locks[word].writeLock().unlock();
-   }
-
-   public void unlockWriteAll() {
-      for (int i = 0; i < locks.length; i++) {
-         locks[i].writeLock().unlock();
-      }
-   }
-
-   public void writeLock(int dbKey) {
-      int word = (dbKey >>> segmentShift) & segmentMask;
-
-      locks[word].writeLock().lock();
-   }
-
-   public void writeLockAll() {
-     for (int i = 0; i < locks.length; i++) {
-         locks[i].writeLock().lock();
-      }
-   }
-   
-    public int getConcurrencyLevel() {
-        return concurrencyLevel;
-    }
-
 }

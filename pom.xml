@@ -291,5 +291,14 @@ the specific language governing permissions and limitations under the License. -
         <module>wb-bdb</module>
         <module>tk-rest</module>
         <module>tk-fx-model</module>
+        <module>tk-mojo</module>
     </modules>
+    <profiles>
+        <profile>
+            <id>metrics</id>
+            <modules>
+                <module>tk-metrics</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>

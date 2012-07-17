@@ -27,6 +27,12 @@ public interface ProcessUnfetchedConceptDataBI extends ContinuationTrackerBI {
     public void processUnfetchedConceptData(int cNid,
             ConceptFetcherBI fetcher) throws Exception;
 
+    /**
+     * 
+     * @return a <code>NidBitSetBI</code> of concept nids to iterate over. A null value is allowed
+     * and will cause all concepts to be iterated over. 
+     * @throws IOException 
+     */
     public NidBitSetBI getNidSet() throws IOException;
 
 }
