@@ -5,7 +5,7 @@ package org.ihtsdo.cc.component;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-import org.ihtsdo.cc.NidPairForRefset;
+import org.ihtsdo.cc.NidPairForRefex;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.identifier.IdentifierVersion;
@@ -1136,7 +1136,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
    @Override
    public int getAuthorNid() {
-      return P.s.getAuthorNidForSapNid(primordialStampNid);
+      return P.s.getAuthorNidForStamp(primordialStampNid);
    }
 
    @Override
@@ -1364,7 +1364,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
    @Override
    public int getModuleNid() {
-      return P.s.getModuleNidForSapNid(primordialStampNid);
+      return P.s.getModuleNidForStamp(primordialStampNid);
    }
 
    public final int getMutablePartCount() {
@@ -1378,7 +1378,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
    @Override
    public final int getPathNid() {
-      return P.s.getPathNidForSapNid(primordialStampNid);
+      return P.s.getPathNidForStamp(primordialStampNid);
    }
 
    @Override
@@ -1422,12 +1422,12 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
    @Override
    public Collection<? extends RefexChronicleBI<?>> getRefexes() throws IOException {
-      List<NidPairForRefset>    pairs        = P.s.getRefexPairs(nid);
+      List<NidPairForRefex>    pairs        = P.s.getRefexPairs(nid);
       List<RefexChronicleBI<?>> returnValues = new ArrayList<>(pairs.size());
       HashSet<Integer>          addedMembers = new HashSet<>();
 
       if ((pairs != null) &&!pairs.isEmpty()) {
-         for (NidPairForRefset pair : pairs) {
+         for (NidPairForRefex pair : pairs) {
             RefexChronicleBI<?> ext = (RefexChronicleBI<?>) P.s.getComponent(pair.getMemberNid());
 
             if ((ext != null) &&!addedMembers.contains(ext.getNid())) {
@@ -1465,7 +1465,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
    }
 
    public Set<Integer> getRefsetMemberSapNids() throws IOException {
-      List<NidPairForRefset> pairs = P.s.getRefexPairs(nid);
+      List<NidPairForRefex> pairs = P.s.getRefexPairs(nid);
 
       if ((pairs == null) || pairs.isEmpty()) {
          return new HashSet<>(0);
@@ -1473,7 +1473,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
       HashSet<Integer> returnValues = new HashSet<>(pairs.size());
 
-      for (NidPairForRefset pair : pairs) {
+      for (NidPairForRefex pair : pairs) {
          RefexChronicleBI<?> ext = (RefexChronicleBI<?>) P.s.getComponent(pair.getMemberNid());
 
          if (ext != null) {
@@ -1489,7 +1489,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
    }
 
    public Collection<? extends RefexChronicleBI<?>> getRefsetMembers() throws IOException {
-      List<NidPairForRefset> pairs = P.s.getRefexPairs(nid);
+      List<NidPairForRefex> pairs = P.s.getRefexPairs(nid);
 
       if ((pairs == null) || pairs.isEmpty()) {
          return new ArrayList<>(0);
@@ -1498,7 +1498,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       List<RefexChronicleBI<?>> returnValues = new ArrayList<>(pairs.size());
       HashSet<Integer>          addedMembers = new HashSet<>();
 
-      for (NidPairForRefset pair : pairs) {
+      for (NidPairForRefex pair : pairs) {
          RefexChronicleBI<?> ext = (RefexChronicleBI<?>) P.s.getComponent(pair.getMemberNid());
 
          if ((ext != null) &&!addedMembers.contains(ext.getNid())) {
@@ -1517,12 +1517,12 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
    @Override
    public final int getStatusNid() {
-      return P.s.getStatusNidForSapNid(primordialStampNid);
+      return P.s.getStatusNidForStamp(primordialStampNid);
    }
 
    @Override
    public final long getTime() {
-      return P.s.getTimeForSapNid(primordialStampNid);
+      return P.s.getTimeForStamp(primordialStampNid);
    }
 
    @Override

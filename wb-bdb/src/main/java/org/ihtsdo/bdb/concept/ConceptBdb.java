@@ -23,11 +23,11 @@ import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
+import org.ihtsdo.bdb.id.RelationshipIndexRecordFactory;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.component.IdentifierSet;
 import org.ihtsdo.cc.component.IdentifierSetReadOnly;
 import org.ihtsdo.helper.thread.NamedThreadFactory;
-import org.ihtsdo.bdb.temp.AceLog;
 import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.NidBitSetItrBI;
 import org.ihtsdo.tk.api.ProcessUnfetchedConceptDataBI;
@@ -92,6 +92,8 @@ public class ConceptBdb extends ComponentBdb {
             concept.resetNidData();
             mutable.put(null, key, value);
             concept.setLastWrite(writeVersion);
+            int[] indexCacheRecord = RelationshipIndexRecordFactory.make(concept);
+            Bdb.getNidCNidMap().putIndexCacheRecord(cNid, indexCacheRecord);
         }
         Collection<Integer> nids = concept.getAllNids();
         NidCNidMapBdb nidCidMap = Bdb.getNidCNidMap();
@@ -210,7 +212,7 @@ public class ConceptBdb extends ComponentBdb {
      * @return a read-only bit set, with all concept identifiers set to true.
      * @throws IOException
      */
-    public IdentifierSetReadOnly getReadOnlyConceptIdSet() throws IOException {
+    public final IdentifierSetReadOnly getReadOnlyConceptIdSet() throws IOException {
         if (conceptIdSet == null) {
 
             GetCNids readOnlyGetter = new GetCNids(readOnly);

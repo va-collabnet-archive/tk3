@@ -195,8 +195,8 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
    }
 
    @Override
-   public int getAuthorNidForSapNid(int sapNid) {
-      return store.getAuthorNidForSapNid(sapNid);
+   public int getAuthorNidForStamp(int sapNid) {
+      return store.getAuthorNidForStamp(sapNid);
    }
 
    @Override
@@ -289,8 +289,8 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
    }
 
    @Override
-   public int getModuleNidForSapNid(int sapNid) {
-      return store.getModuleNidForSapNid(sapNid);
+   public int getModuleNidForStamp(int sapNid) {
+      return store.getModuleNidForStamp(sapNid);
    }
 
    @Override
@@ -299,8 +299,8 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
    }
 
    @Override
-   public int getPathNidForSapNid(int sapNid) {
-      return store.getPathNidForSapNid(sapNid);
+   public int getPathNidForStamp(int sapNid) {
+      return store.getPathNidForStamp(sapNid);
    }
 
    @Override
@@ -324,13 +324,13 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
    }
 
    @Override
-   public int getStatusNidForSapNid(int sapNid) {
-      return store.getStatusNidForSapNid(sapNid);
+   public int getStatusNidForStamp(int sapNid) {
+      return store.getStatusNidForStamp(sapNid);
    }
 
    @Override
-   public long getTimeForSapNid(int sapNid) {
-      return store.getTimeForSapNid(sapNid);
+   public long getTimeForStamp(int sapNid) {
+      return store.getTimeForStamp(sapNid);
    }
 
    @Override

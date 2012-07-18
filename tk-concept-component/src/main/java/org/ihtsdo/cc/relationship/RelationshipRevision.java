@@ -266,16 +266,15 @@ public class RelationshipRevision extends Revision<RelationshipRevision, Relatio
     public Collection<Relationship.Version> getVersions(ViewCoordinate c) {
         return primordialComponent.getVersions(c);
     }
+   @Override
+   public boolean isInferred() {
+      return getCharacteristicNid() == Relationship.INFERRED_NID;
+   }
 
-    @Override
-    public boolean isInferred() {
-        return getAuthorNid() == Relationship.getClassifierAuthorNid();
-    }
-
-    @Override
-    public boolean isStated() {
-        return !isInferred();
-    }
+   @Override
+   public boolean isStated() {
+      return getCharacteristicNid() == Relationship.STATED_NID;
+   }
 
     //~--- set methods ---------------------------------------------------------
 

@@ -18,11 +18,21 @@
 
 package org.ihtsdo.bdb.id;
 
+import java.util.Arrays;
+import org.ihtsdo.cc.NidPairForRefex;
+
 /**
- *
+ * Stores cross-reference information for origin relationships, destination relationship origins, and 
+ * refex referenced components in a integer array, minimizing the object allocation burden that would
+ * otherwise be associated with this information. This class interprets and manages the contents of that array.
+ * <br>
+ * <h2>Implementation notes</h2>
+ * See the class <code>RelationshipIndexRecord</code> for documentation of the structure of the
+ * relationship index data.
+ * @see RelationshipIndexRecord
  * @author kec
  */
-public class CrossReferenceRecord {
+public class IndexCacheRecord {
    private static final int DESTINATION_OFFSET_INDEX = 0;
    private static final int REFEX_OFFSET_INDEX       = 1;
    private static final int RELATIONSHIP_OFFSET      = 2;
@@ -33,11 +43,48 @@ public class CrossReferenceRecord {
 
    //~--- constructors --------------------------------------------------------
 
-   public CrossReferenceRecord(int[] data) {
+   public IndexCacheRecord(int[] data) {
       this.data = data;
    }
 
    //~--- methods -------------------------------------------------------------
+
+   public void addDestinationOriginNid(int originNid) {
+      int arrayLength = data[REFEX_OFFSET_INDEX] - data[DESTINATION_OFFSET_INDEX];
+      int index       = Arrays.binarySearch(data, data[DESTINATION_OFFSET_INDEX],
+                                      data[DESTINATION_OFFSET_INDEX] + arrayLength, originNid);
+
+      if (index >= 0) {
+         return;    // origin already there...
+      }
+
+      int[] destinationOriginNids = new int[arrayLength + 1];
+
+      destinationOriginNids[arrayLength] = originNid;
+      System.arraycopy(data, data[DESTINATION_OFFSET_INDEX], destinationOriginNids, 0,
+                       destinationOriginNids.length - 1);
+      Arrays.sort(destinationOriginNids);
+      updateData(getRelationshipOutgoingArray(), destinationOriginNids, getRefexIndexArray());
+   }
+
+   public void addNidPairForRefex(int refexNid, int memberNid) {
+      int arrayLength = data.length - data[REFEX_OFFSET_INDEX];
+      int start       = data.length - arrayLength;
+
+      for (int i = start; i < data.length; i++) {
+         if (data[i] == memberNid) {
+            return;    // already there...
+         }
+      }
+
+      int[] nidPairForRefexArray = new int[arrayLength + 2];
+
+      nidPairForRefexArray[arrayLength] = refexNid;
+      nidPairForRefexArray[arrayLength+1]     = memberNid;
+      System.arraycopy(data, data[REFEX_OFFSET_INDEX], nidPairForRefexArray, 0,
+                       nidPairForRefexArray.length - 2);
+      updateData(getRelationshipOutgoingArray(), getDestinationOriginNids(), nidPairForRefexArray);
+   }
 
    public int[] updateData(int[] relationshipOutgoingData, int[] destinationOriginData, int[] refexData) {
       int length = relationshipOutgoingData.length + destinationOriginData.length + refexData.length
@@ -64,6 +111,26 @@ public class CrossReferenceRecord {
       System.arraycopy(data, data[DESTINATION_OFFSET_INDEX], destinationOriginNids, 0, arrayLength);
 
       return destinationOriginNids;
+   }
+
+   public NidPairForRefex[] getNidPairsForRefsets() {
+      int arrayLength = data.length - data[REFEX_OFFSET_INDEX];
+
+      assert arrayLength % 2 == 0;
+
+      if (arrayLength < 2) {
+         return new NidPairForRefex[0];
+      }
+
+      NidPairForRefex[] returnValues = new NidPairForRefex[arrayLength / 2];
+      int                start        = data[REFEX_OFFSET_INDEX];
+      int                returnIndex  = 0;
+
+      for (int i = start; i < data.length; i = i + 2) {
+         returnValues[returnIndex++] = NidPairForRefex.getRefexNidMemberNidPair(data[i], data[i + 1]);
+      }
+
+      return returnValues;
    }
 
    public int[] getRefexIndexArray() {

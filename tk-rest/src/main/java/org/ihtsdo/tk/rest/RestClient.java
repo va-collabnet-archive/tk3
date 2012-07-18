@@ -21,7 +21,7 @@ package org.ihtsdo.tk.rest;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.cc.NidPair;
-import org.ihtsdo.cc.NidPairForRefset;
+import org.ihtsdo.cc.NidPairForRefex;
 import org.ihtsdo.cc.NidPairForRel;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.concept.Concept;
@@ -117,7 +117,7 @@ public class RestClient extends Termstore {
       r.accept(MediaType.TEXT_PLAIN).get(String.class);
    }
    @Override
-   public int getAuthorNidForSapNid(int sapNid) {
+   public int getAuthorNidForStamp(int sapNid) {
       WebResource r      = restClient.resource(serverUrlStr + "sap/author/" + sapNid);
       String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
@@ -236,7 +236,7 @@ public class RestClient extends Termstore {
    }
 
    @Override
-   public int getModuleNidForSapNid(int sapNid) {
+   public int getModuleNidForStamp(int sapNid) {
       WebResource r      = restClient.resource(serverUrlStr + "sap/module/" + sapNid);
       String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
@@ -281,7 +281,7 @@ public class RestClient extends Termstore {
       return getNidForUuidSetString(uuidSetStringBuilder.toString());
    }
    @Override
-   public int getPathNidForSapNid(int sapNid) {
+   public int getPathNidForStamp(int sapNid) {
       WebResource r      = restClient.resource(serverUrlStr + "sap/path/" + sapNid);
       String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
@@ -307,12 +307,12 @@ public class RestClient extends Termstore {
    }
 
    @Override
-   public List<NidPairForRefset> getRefexPairs(int cNid) throws IOException {
+   public List<NidPairForRefex> getRefexPairs(int cNid) throws IOException {
       WebResource r  = restClient.resource(serverUrlStr + "nidpairs/refex" + cNid);
       InputStream is = r.accept(bdbMediaType).get(InputStream.class);
 
       try (ObjectInputStream ois = new ObjectInputStream(is)) {
-         return (List<NidPairForRefset>) ois.readObject();
+         return (List<NidPairForRefex>) ois.readObject();
       } catch (ClassNotFoundException ex) {
          throw new IOException(ex);
       }
@@ -336,7 +336,7 @@ public class RestClient extends Termstore {
    }
 
    @Override
-   public int getStatusNidForSapNid(int sapNid) {
+   public int getStatusNidForStamp(int sapNid) {
       WebResource r      = restClient.resource(serverUrlStr + "sap/status/" + sapNid);
       String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
@@ -349,7 +349,7 @@ public class RestClient extends Termstore {
    }
 
    @Override
-   public long getTimeForSapNid(int sapNid) {
+   public long getTimeForStamp(int sapNid) {
       WebResource r       = restClient.resource(serverUrlStr + "sap/time/" + sapNid);
       String      timeStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 

@@ -13,7 +13,7 @@ import org.ihtsdo.cc.component.RevisionSet;
 import org.ihtsdo.cc.attributes.ConceptAttributes;
 import org.ihtsdo.cc.computer.version.VersionComputer;
 import org.ihtsdo.cc.NidPair;
-import org.ihtsdo.cc.NidPairForRefset;
+import org.ihtsdo.cc.NidPairForRefex;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.ComponentVersionBI;
 import org.ihtsdo.tk.api.ContradictionException;
@@ -256,7 +256,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
         writeMember(output);
         output.writeShort(additionalVersionsToWrite.size());
 
-        NidPairForRefset npr = NidPair.getRefsetNidMemberNidPair(refsetNid, nid);
+        NidPairForRefex npr = NidPair.getRefexNidMemberNidPair(refsetNid, nid);
 
         P.s.addXrefPair(referencedComponentNid, npr);
 
@@ -375,7 +375,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
                 || (getTime() == Long.MAX_VALUE)) {
             if (this.refsetNid != collectionNid) {
                 if ((this.refsetNid != 0) && (this.nid != 0)) {
-                    NidPairForRefset oldNpr = NidPair.getRefsetNidMemberNidPair(this.refsetNid, this.nid);
+                    NidPairForRefex oldNpr = NidPair.getRefexNidMemberNidPair(this.refsetNid, this.nid);
 
                     P.s.forgetXrefPair(this.referencedComponentNid, oldNpr);
                 }
@@ -393,7 +393,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
     public void setReferencedComponentNid(int referencedComponentNid) {
         if (this.referencedComponentNid != referencedComponentNid) {
             if ((this.refsetNid != 0) && (this.nid != 0)) {
-                NidPairForRefset oldNpr = NidPair.getRefsetNidMemberNidPair(this.refsetNid, this.nid);
+                NidPairForRefex oldNpr = NidPair.getRefexNidMemberNidPair(this.refsetNid, this.nid);
 
                 P.s.forgetXrefPair(this.referencedComponentNid, oldNpr);
             }

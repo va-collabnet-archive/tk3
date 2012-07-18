@@ -45,13 +45,14 @@ public class NidCNidMapBdb extends ComponentBdb {
 
    //~--- fields --------------------------------------------------------------
 
-   private ReentrantReadWriteLock   rwl           = new ReentrantReadWriteLock();
-   private ConcurrentReentrantLocks sequenceLocks = new ConcurrentReentrantLocks(128);
-   private AtomicInteger            conceptSequence;
-   private boolean[]                mapChanged;
-   private AtomicReference<int[][]> nidCNidMaps;
-   private int                      readOnlyRecords;
-   private AtomicInteger            relationshipSequence;
+   private ReentrantReadWriteLock     rwl           = new ReentrantReadWriteLock();
+   private ConcurrentReentrantLocks   sequenceLocks = new ConcurrentReentrantLocks(128);
+   private AtomicInteger              conceptSequence;
+   private AtomicReference<int[][][]> indexCacheRecords;
+   private boolean[]                  mapChanged;
+   private AtomicReference<int[][]>   nidCNidMaps;
+   private int                        readOnlyRecords;
+   private AtomicInteger              relationshipSequence;
 
    //~--- constructors --------------------------------------------------------
 
@@ -131,13 +132,15 @@ public class NidCNidMapBdb extends ComponentBdb {
    }
 
    private void expandCapacity(int nidCidMapCount) throws IOException {
-      int       oldCount      = nidCNidMaps.get().length;
-      int[][]   newNidCidMaps = new int[nidCidMapCount][];
-      boolean[] newMapChanged = new boolean[nidCidMapCount];
+      int       oldCount             = nidCNidMaps.get().length;
+      int[][]   newNidCidMaps        = new int[nidCidMapCount][];
+      int[][][] newIndexCacheRecords = new int[nidCidMapCount][][];
+      boolean[] newMapChanged        = new boolean[nidCidMapCount];
 
       for (int i = 0; i < oldCount; i++) {
-         newNidCidMaps[i] = nidCNidMaps.get()[i];
-         newMapChanged[i] = mapChanged[i];
+         newIndexCacheRecords[i] = indexCacheRecords.get()[i];
+         newNidCidMaps[i]        = nidCNidMaps.get()[i];
+         newMapChanged[i]        = mapChanged[i];
       }
 
       for (int i = oldCount; i < nidCidMapCount; i++) {
@@ -145,11 +148,13 @@ public class NidCNidMapBdb extends ComponentBdb {
             AceLog.getAppLog().fine("Expanding NidCidMaps to: " + (i + 1));
          }
 
-         newNidCidMaps[i] = new int[NID_CNID_MAP_SIZE * 2];
-         newMapChanged[i] = true;
+         newIndexCacheRecords[i] = new int[NID_CNID_MAP_SIZE][];
+         newNidCidMaps[i]        = new int[NID_CNID_MAP_SIZE * 2];
+         newMapChanged[i]        = true;
          Arrays.fill(newNidCidMaps[i], Integer.MAX_VALUE);
       }
 
+      indexCacheRecords.set(newIndexCacheRecords);
       nidCNidMaps.set(newNidCidMaps);
       mapChanged = newMapChanged;
    }
@@ -172,11 +177,13 @@ public class NidCNidMapBdb extends ComponentBdb {
       int nidCidMapCount = ((maxId - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE) + 1;
 
       nidCNidMaps = new AtomicReference<>(new int[nidCidMapCount][]);
+      indexCacheRecords = new AtomicReference<>(new int[nidCidMapCount][][]);
       mapChanged  = new boolean[nidCidMapCount];
       Arrays.fill(mapChanged, false);
 
       for (int index = 0; index < nidCidMapCount; index++) {
          nidCNidMaps.get()[index] = new int[NID_CNID_MAP_SIZE * 2];
+         indexCacheRecords.get()[index] = new int[NID_CNID_MAP_SIZE][];
          Arrays.fill(nidCNidMaps.get()[index], Integer.MAX_VALUE);
       }
 
@@ -220,6 +227,16 @@ public class NidCNidMapBdb extends ComponentBdb {
       }
    }
 
+   public void putIndexCacheRecord(int cNid, int[] indexCacheRecord) {
+      assert cNid != Integer.MAX_VALUE;
+
+      int mapIndex       = (cNid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
+      int cNidIndexInMap = (cNid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE;
+
+      indexCacheRecords.get()[mapIndex][cNidIndexInMap] = indexCacheRecord;
+      mapChanged[mapIndex]                              = true;
+   }
+
    private void readMaps(Database db, boolean readOnly) {
       CursorConfig cursorConfig = new CursorConfig();
 
@@ -233,9 +250,23 @@ public class NidCNidMapBdb extends ComponentBdb {
             int        index = IntegerBinding.entryToInt(foundKey);
             TupleInput ti    = new TupleInput(foundData.getData());
             int        j     = 0;
+            int        k     = 0;
 
             while (ti.available() > 0) {
                nidCNidMaps.get()[index][j++] = ti.readInt();
+               nidCNidMaps.get()[index][j++] = ti.readSortedPackedInt();
+
+               int length = ti.readSortedPackedInt();
+
+               if (length != 0) {
+                  int[] cacheData = new int[length];
+
+                  for (int i = 0; i < length; i++) {
+                     cacheData[i] = ti.readInt();
+                  }
+
+                  indexCacheRecords.get()[index][k++] = cacheData;
+               }
             }
          }
       }
@@ -293,8 +324,21 @@ public class NidCNidMapBdb extends ComponentBdb {
                // NID_CNID_MAP_SIZE * 4 * 2 = 4 bytes per integer, 2 integers per nid
                TupleOutput output = new TupleOutput(new byte[NID_CNID_MAP_SIZE * 4 * 2]);
 
-               for (int value : nidCNidMaps.get()[key]) {
-                  output.writeInt(value);
+               for (int i = 0; i < NID_CNID_MAP_SIZE; ) {
+                  output.writeInt(nidCNidMaps.get()[key][i * 2]);
+                  output.writeSortedPackedInt(nidCNidMaps.get()[key][i * 2 + 1]);
+
+                  int[] cacheRecord = indexCacheRecords.get()[key][i];
+
+                  if (cacheRecord == null) {
+                     output.writeSortedPackedInt(0);
+                  } else {
+                     output.writeSortedPackedInt(cacheRecord.length);
+
+                     for (int j = 0; j < cacheRecord.length; j++) {
+                        output.writeInt(cacheRecord[j]);
+                     }
+                  }
                }
 
                DatabaseEntry   valueEntry = new DatabaseEntry(output.toByteArray());
@@ -363,7 +407,7 @@ public class NidCNidMapBdb extends ComponentBdb {
       assert cNid <= Bdb.getUuidsToNidMap().getCurrentMaxNid() :
              "Invalid cNid: " + cNid + " currentMax: " + Bdb.getUuidsToNidMap().getCurrentMaxNid();
 
-      int mapIndex      = (cNid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
+      int mapIndex       = (cNid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
       int cNidIndexInMap = ((cNid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE) * 2;
 
       if ((mapIndex < 0) || (mapIndex >= nidCNidMaps.get().length)) {
@@ -410,7 +454,9 @@ public class NidCNidMapBdb extends ComponentBdb {
              "cNid: " + cNid + " nid: " + nid + " mapIndex: " + mapIndex + " nidIndexInMap: " + nidIndexInMap;
       assert(cNid == nid) || hasConcept(cNid) : cNid + " is not a concept nid. nid: " + nid;
       ensureCapacity(nid);
+
       int[][] nidCNidMapArrays = nidCNidMaps.get();
+
       assert(nidCNidMapArrays[mapIndex][nidIndexInMap] == Integer.MAX_VALUE)
             || ((int) (nidCNidMapArrays[mapIndex][nidIndexInMap]) == cNid) :
             "processing cNid: " + cNid + " " + Bdb.getUuidsToNidMap().getUuidsForNid(cNid) + " nid: " + nid
@@ -423,10 +469,12 @@ public class NidCNidMapBdb extends ComponentBdb {
       if ((nidCNidMapArrays != null) && (nidCNidMapArrays[mapIndex] != null)) {
          if (nidCNidMapArrays[mapIndex][nidIndexInMap] != cNid) {
             nidCNidMapArrays[mapIndex][nidIndexInMap] = cNid;
+
             if (cNid == nid) {
-                setSequenceForNid(nid, SequenceType.CONCEPT);
+               setSequenceForNid(nid, SequenceType.CONCEPT);
             }
-            mapChanged[mapIndex]                       = true;
+
+            mapChanged[mapIndex] = true;
          }
       } else {
          if (nidCNidMapArrays == null) {
@@ -470,6 +518,7 @@ public class NidCNidMapBdb extends ComponentBdb {
          throw new IOException("nidCidMap[" + mapIndex + "] " + "is null. sequence: " + sequence + " nid: "
                                + nid);
       }
+
       return sequence;
    }
 
@@ -480,8 +529,10 @@ public class NidCNidMapBdb extends ComponentBdb {
          switch (sequenceType) {
          case RELATIONSHIP :
             return setSequenceForNid(relationshipSequence.getAndIncrement(), nid);
-         case CONCEPT:
-             return setSequenceForNid(relationshipSequence.getAndIncrement(), nid);
+
+         case CONCEPT :
+            return setSequenceForNid(relationshipSequence.getAndIncrement(), nid);
+
          default :
             throw new UnsupportedOperationException("No support for sequence: " + sequenceType);
          }

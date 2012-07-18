@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import org.ihtsdo.cc.NidPair;
-import org.ihtsdo.cc.NidPairForRefset;
+import org.ihtsdo.cc.NidPairForRefex;
 import org.ihtsdo.cc.NidPairForRel;
 import org.ihtsdo.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.tk.api.NidSetBI;
@@ -67,7 +67,7 @@ public interface PersistentStoreI extends TerminologyStoreDI {
     * Possibly remove identifiers from Lucene?
     */
     List<NidPairForRel> getDestRelPairs(int cNid) throws IOException;
-    List<NidPairForRefset> getRefexPairs(int nid) throws IOException;
+    List<NidPairForRefex> getRefexPairs(int nid) throws IOException;
     int[] getDestRelOriginNids(int cNid, NidSetBI relTypes) throws IOException;
    // For a lower level interface? 
    void setConceptNidForNid(int cNid, int nid) throws IOException;

@@ -6,7 +6,7 @@ import jsr166y.ConcurrentReferenceHashMap;
 
 import org.ihtsdo.cc.LanguageSortPrefs.LANGUAGE_SORT_PREF;
 import org.ihtsdo.cc.NidPair;
-import org.ihtsdo.cc.NidPairForRefset;
+import org.ihtsdo.cc.NidPairForRefex;
 import org.ihtsdo.cc.NidPairForRel;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.ReferenceConcepts;
@@ -707,7 +707,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
       }
 
       for (RefexMember<?, ?> m : getRefsetMembers()) {
-         NidPairForRefset npr = NidPair.getRefsetNidMemberNidPair(m.getRefexNid(), m.getNid());
+         NidPairForRefex npr = NidPair.getRefexNidMemberNidPair(m.getRefexNid(), m.getNid());
 
          P.s.addXrefPair(m.referencedComponentNid, npr);
       }
@@ -1721,7 +1721,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
    }
 
    public boolean hasExtensionsForComponent(int nid) throws IOException {
-      List<NidPairForRefset> refsetPairs = P.s.getRefexPairs(nid);
+      List<NidPairForRefex> refsetPairs = P.s.getRefexPairs(nid);
 
       if ((refsetPairs != null) && (refsetPairs.size() > 0)) {
          return true;

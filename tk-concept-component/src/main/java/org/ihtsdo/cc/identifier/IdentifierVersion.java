@@ -152,12 +152,12 @@ public abstract class IdentifierVersion implements IdBI {
    }
 
    public int getAuthorId() {
-      return P.s.getAuthorNidForSapNid(stampNid);
+      return P.s.getAuthorNidForStamp(stampNid);
    }
 
    @Override
    public int getAuthorNid() {
-      return P.s.getAuthorNidForSapNid(stampNid);
+      return P.s.getAuthorNidForStamp(stampNid);
    }
 
    @Override
@@ -167,12 +167,12 @@ public abstract class IdentifierVersion implements IdBI {
 
    @Override
    public int getModuleNid() {
-      return P.s.getModuleNidForSapNid(stampNid);
+      return P.s.getModuleNidForStamp(stampNid);
    }
 
    @Override
    public int getPathNid() {
-      return P.s.getPathNidForSapNid(stampNid);
+      return P.s.getPathNidForStamp(stampNid);
    }
 
    @Override
@@ -182,12 +182,12 @@ public abstract class IdentifierVersion implements IdBI {
 
    @Override
    public int getStatusNid() {
-      return P.s.getStatusNidForSapNid(stampNid);
+      return P.s.getStatusNidForStamp(stampNid);
    }
 
    @Override
    public long getTime() {
-      return P.s.getTimeForSapNid(stampNid);
+      return P.s.getTimeForStamp(stampNid);
    }
 
    public abstract ConceptComponent.IDENTIFIER_PART_TYPES getType();

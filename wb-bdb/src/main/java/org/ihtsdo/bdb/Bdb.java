@@ -27,7 +27,7 @@ import org.ihtsdo.bdb.id.NidCNidMapBdb;
 import org.ihtsdo.bdb.stamp.StampBdb;
 import org.ihtsdo.bdb.xref.Xref;
 import org.ihtsdo.cc.NidPair;
-import org.ihtsdo.cc.NidPairForRefset;
+import org.ihtsdo.cc.NidPairForRefex;
 import org.ihtsdo.cc.NidPairForRel;
 import org.ihtsdo.cc.lucene.LuceneManager;
 import org.ihtsdo.tk.Ts;
@@ -801,7 +801,7 @@ public class Bdb {
         return xref.getDestRelPairs(cNid);
     }
 
-    public static List<NidPairForRefset> getRefsetPairs(int nid) {
+    public static List<NidPairForRefex> getRefsetPairs(int nid) {
         return xref.getRefsetPairs(nid);
     }
 }

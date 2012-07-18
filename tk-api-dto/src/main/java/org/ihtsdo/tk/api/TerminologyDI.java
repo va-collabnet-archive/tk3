@@ -92,17 +92,17 @@ public interface TerminologyDI {
 
    NidBitSetBI getAllConceptNids() throws IOException;
 
-   int getAuthorNidForSapNid(int sapNid);
+   int getAuthorNidForStamp(int sapNid);
 
    NidBitSetBI getEmptyNidSet() throws IOException;
 
    ViewCoordinate getMetadataVC() throws IOException;
 
-   int getModuleNidForSapNid(int sapNid);
+   int getModuleNidForStamp(int sapNid);
 
    PathBI getPath(int pathNid) throws IOException;
 
-   int getPathNidForSapNid(int sapNid);
+   int getPathNidForStamp(int sapNid);
 
    Set<PathBI> getPathSetFromPositionSet(Set<PositionBI> positions) throws IOException;
 
@@ -110,7 +110,7 @@ public interface TerminologyDI {
 
    Set<PositionBI> getPositionSet(Set<Integer> sapNids) throws IOException;
 
-   int getStatusNidForSapNid(int sapNid);
+   int getStatusNidForStamp(int sapNid);
 
-   long getTimeForSapNid(int sapNid);
+   long getTimeForStamp(int sapNid);
 }

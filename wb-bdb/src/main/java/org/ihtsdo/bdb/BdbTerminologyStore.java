@@ -319,7 +319,7 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public int getAuthorNidForSapNid(int sapNid) {
+   public int getAuthorNidForStamp(int sapNid) {
       return Bdb.getAuthorNidForSapNid(sapNid);
    }
 
@@ -408,7 +408,7 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public int getModuleNidForSapNid(int sapNid) {
+   public int getModuleNidForStamp(int sapNid) {
       return Bdb.getModuleNidForSapNid(sapNid);
    }
 
@@ -433,7 +433,7 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public int getPathNidForSapNid(int sapNid) {
+   public int getPathNidForStamp(int sapNid) {
       return Bdb.getPathNidForSapNid(sapNid);
    }
 
@@ -515,7 +515,7 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public List<NidPairForRefset> getRefexPairs(int nid) {
+   public List<NidPairForRefex> getRefexPairs(int nid) {
       return Bdb.getRefsetPairs(nid);
    }
 
@@ -540,7 +540,7 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public int getStatusNidForSapNid(int sapNid) {
+   public int getStatusNidForStamp(int sapNid) {
       return Bdb.getStatusNidForSapNid(sapNid);
    }
 
@@ -550,7 +550,7 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public long getTimeForSapNid(int sapNid) {
+   public long getTimeForStamp(int sapNid) {
       return Bdb.getTimeForSapNid(sapNid);
    }
 

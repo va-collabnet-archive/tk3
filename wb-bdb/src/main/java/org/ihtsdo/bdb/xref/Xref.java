@@ -25,7 +25,7 @@ import org.ihtsdo.bdb.ComponentBdb;
 import org.ihtsdo.bdb.concept.I_ProcessUnfetchedConceptData;
 import org.ihtsdo.bdb.concept.ParallelConceptIterator;
 import org.ihtsdo.cc.NidPair;
-import org.ihtsdo.cc.NidPairForRefset;
+import org.ihtsdo.cc.NidPairForRefex;
 import org.ihtsdo.cc.NidPairForRel;
 import org.ihtsdo.cc.change.LastChange;
 import org.ihtsdo.cc.concept.Concept;
@@ -401,14 +401,14 @@ public class Xref extends ComponentBdb implements I_ProcessUnfetchedConceptData 
       return Bdb.getConceptDb().getConceptNidSet();
    }
 
-   public List<NidPairForRefset> getRefsetPairs(int nid) {
+   public List<NidPairForRefex> getRefsetPairs(int nid) {
 
       // only need a read lock for sync,
       // since underlying structure is concurrent...
       rwl.readLock().lock();
 
       try {
-         HashSet<NidPairForRefset> result   = new HashSet<>();
+         HashSet<NidPairForRefex> result   = new HashSet<>();
          long[]                    allPairs = mutableXref.get().get(nid);
 
          if (allPairs == null) {

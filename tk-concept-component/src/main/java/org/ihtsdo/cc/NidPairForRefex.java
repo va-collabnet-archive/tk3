@@ -1,12 +1,12 @@
 package org.ihtsdo.cc;
 
-public class NidPairForRefset extends NidPair {
+public class NidPairForRefex extends NidPair {
 
-    protected NidPairForRefset(int rNid, int typeNid) {
-        super(rNid, typeNid);
+    protected NidPairForRefex(int refexNid, int memberNid) {
+        super(refexNid, memberNid);
     }
 
-    protected NidPairForRefset(long nids) {
+    protected NidPairForRefex(long nids) {
         super(nids);
     }
 
@@ -25,6 +25,6 @@ public class NidPairForRefset extends NidPair {
 
     @Override
     public String toString() {
-        return "refsetNid: " + nid1 + " memberNid:" + nid2;
+        return "refexNid: " + nid1 + " memberNid:" + nid2;
     }
 }
