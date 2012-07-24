@@ -5,8 +5,6 @@ import com.sleepycat.bind.tuple.TupleOutput;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.*;
-import org.ihtsdo.cc.NidPair;
-import org.ihtsdo.cc.NidPairForRel;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.ReferenceConcepts;
 import org.ihtsdo.cc.component.ConceptComponent;
@@ -31,15 +29,21 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
         implements RelationshipAnalogBI<RelationshipRevision> {
    private static int                                   classifierAuthorNid = Integer.MIN_VALUE;
    private static VersionComputer<Relationship.Version> computer            = new VersionComputer<>();
-   public static final int                              INFERRED_NID;
-   public static final int                              STATED_NID;
+   public static final int                              INFERRED_NID_RF1;
+   public static final int                              INFERRED_NID_RF2;
+   public static final int                              STATED_NID_RF1;
+   public static final int                              STATED_NID_RF2;
 
    //~--- static initializers -------------------------------------------------
 
    static {
       try {
-         INFERRED_NID = Ts.get().getNidForUuids(SnomedMetadataRf2.INFERRED_RELATIONSHIP_RF2.getUuids());
-         STATED_NID   = Ts.get().getNidForUuids(SnomedMetadataRf2.STATED_RELATIONSHIP_RF2.getUuids());
+         INFERRED_NID_RF1 =
+            Ts.get().getNidForUuids(SnomedMetadataRf1.INFERRED_DEFINING_CHARACTERISTIC_TYPE_RF1.getUuids());
+         STATED_NID_RF1 =
+            Ts.get().getNidForUuids(SnomedMetadataRf1.STATED_DEFINING_CHARACTERISTIC_TYPE_RF1.getUuids());
+         INFERRED_NID_RF2 = Ts.get().getNidForUuids(SnomedMetadataRf2.INFERRED_RELATIONSHIP_RF2.getUuids());
+         STATED_NID_RF2   = Ts.get().getNidForUuids(SnomedMetadataRf2.STATED_RELATIONSHIP_RF2.getUuids());
       } catch (Exception ex) {
          throw new RuntimeException(ex);
       }
@@ -210,11 +214,11 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
       // nid, list size, and conceptNid are read already by the binder...
       c2Nid             = input.readInt();
       characteristicNid = input.readInt();
-      group             = input.readInt();
+      group             = input.readSortedPackedInt();
       refinabilityNid   = input.readInt();
       typeNid           = input.readInt();
 
-      int additionalVersionCount = input.readShort();
+      int additionalVersionCount = input.readSortedPackedInt();
 
       if (additionalVersionCount > 0) {
          revisions = new RevisionSet<>(primordialStampNid);
@@ -326,12 +330,12 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
    public void writeToBdb(TupleOutput output, int maxReadOnlyStampNid) {
 
       //
-      List<RelationshipRevision> partsToWrite = new ArrayList<>();
+      List<RelationshipRevision> revisionsToWrite = new ArrayList<>();
 
       if (revisions != null) {
          for (RelationshipRevision p : revisions) {
             if ((p.getStampNid() > maxReadOnlyStampNid) && (p.getTime() != Long.MIN_VALUE)) {
-               partsToWrite.add(p);
+               revisionsToWrite.add(p);
             }
          }
       }
@@ -340,23 +344,15 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
       // c1Nid is the enclosing concept, does not need to be written.
       output.writeInt(c2Nid);
       output.writeInt(getCharacteristicNid());
-      output.writeInt(group);
+      output.writeSortedPackedInt(group);
       output.writeInt(getRefinabilityNid());
       output.writeInt(getTypeNid());
-      output.writeShort(partsToWrite.size());
+      output.writeSortedPackedInt(revisionsToWrite.size());
 
-      NidPairForRel npr = NidPair.getTypeNidRelNidPair(typeNid, nid);
-
-      P.s.addXrefPair(c2Nid, npr);
-
-      for (RelationshipRevision p : partsToWrite) {
-         if (p.getTypeNid() != typeNid) {
-            npr = NidPair.getTypeNidRelNidPair(p.getTypeNid(), nid);
-            P.s.addXrefPair(c2Nid, npr);
-         }
-
-         p.writePartToBdb(output);
+      for (RelationshipRevision p : revisionsToWrite) {
+         p.writeRevisionBdb(output);
       }
+      
    }
 
    //~--- get methods ---------------------------------------------------------
@@ -490,12 +486,12 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
 
    @Override
    public boolean isInferred() {
-      return getCharacteristicNid() == INFERRED_NID;
+      return (getCharacteristicNid() == INFERRED_NID_RF2) || (getCharacteristicNid() == INFERRED_NID_RF1);
    }
 
    @Override
    public boolean isStated() {
-      return getCharacteristicNid() == STATED_NID;
+      return (getCharacteristicNid() == STATED_NID_RF2) || (getCharacteristicNid() == STATED_NID_RF1);
    }
 
    //~--- set methods ---------------------------------------------------------
@@ -511,11 +507,6 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
    @Override
    public void setDestinationNid(int dNid) throws PropertyVetoException {
       if (this.c2Nid != dNid) {
-         if ((this.typeNid != 0) && (this.nid != 0)) {
-            NidPairForRel oldNpr = NidPair.getTypeNidRelNidPair(this.typeNid, this.nid);
-
-            P.s.forgetXrefPair(this.c2Nid, oldNpr);
-         }
 
          // new xref is added on the dbWrite.
          this.c2Nid = dNid;
@@ -540,13 +531,6 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
    @Override
    public final void setTypeNid(int typeNid) {
       if (this.typeNid != typeNid) {
-         if ((this.typeNid != 0) && (this.nid != 0)) {
-            NidPairForRel oldNpr = NidPair.getTypeNidRelNidPair(this.typeNid, this.nid);
-
-            P.s.forgetXrefPair(this.c2Nid, oldNpr);
-         }
-
-         // new xref is added on the dbWrite.
          this.typeNid = typeNid;
          modified();
       }

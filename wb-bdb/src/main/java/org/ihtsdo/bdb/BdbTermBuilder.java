@@ -189,7 +189,6 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             r.enclosingConceptNid = c.getNid();
             r.nid = Bdb.uuidToNid(blueprint.getComponentUuid());
             Bdb.getNidCNidMap().setCNidForNid(c.getNid(), r.nid);
-            Bdb.getNidCNidMap().getSequence(r.nid, NidCNidMapBdb.SequenceType.RELATIONSHIP);
             r.setPrimordialUuid(blueprint.getComponentUuid());
             try {
                 r.setDestinationNid(blueprint.getDestNid());

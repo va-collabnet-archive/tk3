@@ -1,16 +1,21 @@
 package org.ihtsdo.bdb;
 
-//~--- non-JDK imports --------------------------------------------------------
-
+import java.beans.PropertyChangeListener;
+import java.beans.VetoableChangeListener;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.ihtsdo.bdb.id.NidCNidMapBdb;
 import org.ihtsdo.bdb.temp.AceLog;
 import org.ihtsdo.cc.*;
-import org.ihtsdo.cc.computer.kindof.IsaCache;
-import org.ihtsdo.cc.computer.kindof.KindOfComputer;
-import org.ihtsdo.cc.computer.kindof.TypeCache;
+import org.ihtsdo.cc.change.LastChange;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.cc.lucene.LuceneManager;
+import org.ihtsdo.cc.relationship.Relationship;
 import org.ihtsdo.cc.termstore.TerminologySnapshot;
 import org.ihtsdo.cc.termstore.Termstore;
 import org.ihtsdo.cs.CsProperty;
@@ -21,7 +26,6 @@ import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.concept.ConceptVersionBI;
 import org.ihtsdo.tk.api.coordinate.EditCoordinate;
-import org.ihtsdo.tk.api.coordinate.IsaCoordinate;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.cs.ChangeSetPolicy;
 import org.ihtsdo.tk.api.cs.ChangeSetWriterThreading;
@@ -32,20 +36,6 @@ import org.ihtsdo.tk.db.DbDependency;
 import org.ihtsdo.tk.db.EccsDependency;
 import org.ihtsdo.tk.dto.concept.TkConcept;
 import org.ihtsdo.tk.dto.concept.component.TkRevision;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.beans.PropertyChangeListener;
-import java.beans.VetoableChangeListener;
-
-import java.io.*;
-
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.ihtsdo.cc.change.LastChange;
 
 public class BdbTerminologyStore extends Termstore {
    private static ViewCoordinate metadataVC = null;
@@ -84,9 +74,14 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public void addXrefPair(int nid, NidPair pair) {
+   public void addXrefPair(int nid, NidPairForRefex pair) throws IOException {
       Bdb.addXrefPair(nid, pair);
    }
+
+    @Override
+    public void addRelOrigin(int destinationCNid, int originCNid) throws IOException {
+        Bdb.addRelOrigin(destinationCNid, originCNid);
+    }
 
    @Override
    public void cancel() {
@@ -163,7 +158,7 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public void forgetXrefPair(int nid, NidPair pair) {
+   public void forgetXrefPair(int nid, NidPairForRefex pair) {
       Bdb.forgetXrefPair(nid, pair);
    }
 
@@ -268,8 +263,18 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
+   public void putViewCoordinate(ViewCoordinate vc) throws IOException {
+      Bdb.putViewCoordinate(vc);
+   }
+
+   @Override
    public void resetConceptNidForNid(int cNid, int nid) throws IOException {
-      Bdb.getNidCNidMap().resetCidForNid(cNid, nid);
+      Bdb.getNidCNidMap().resetCNidForNid(cNid, nid);
+   }
+
+   @Override
+   public void resumeChangeNotifications() {
+      LastChange.resumeChangeNotifications();
    }
 
    @Override
@@ -291,6 +296,11 @@ public class BdbTerminologyStore extends Termstore {
       }
 
       return true;
+   }
+
+   @Override
+   public void suspendChangeNotifications() {
+      LastChange.suspendChangeNotifications();
    }
 
    public int uuidsToNid(Collection<UUID> uuids) throws IOException {
@@ -323,15 +333,6 @@ public class BdbTerminologyStore extends Termstore {
       return Bdb.getAuthorNidForSapNid(sapNid);
    }
 
-   public KindOfCacheBI getCache(ViewCoordinate coordinate) throws Exception {
-      TypeCache c = new IsaCache(Bdb.getConceptDb().getConceptNidSet());
-
-      c.setup(coordinate);
-      c.getLatch().await();
-
-      return c;
-   }
-
    @Override
    public int getConceptCount() throws IOException {
       return Bdb.getConceptDb().getCount();
@@ -348,13 +349,17 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public int[] getDestRelOriginNids(int cNid, NidSetBI relTypes) {
-      return Bdb.xref.getDestRelOrigins(cNid, relTypes);
+   public int[] getDestRelOriginNids(int cNid, NidSetBI relTypes) throws IOException {
+      return Bdb.getNidCNidMap().getDestRelNids(cNid, relTypes);
+   }
+   @Override
+   public int[] getDestRelOriginNids(int cNid) throws IOException {
+      return Bdb.getNidCNidMap().getDestRelNids(cNid);
    }
 
    @Override
-   public List<NidPairForRel> getDestRelPairs(int cNid) {
-      return Bdb.getDestRelPairs(cNid);
+   public Collection<Relationship> getDestRels(int cNid) throws IOException {
+      return Bdb.getNidCNidMap().getDestRels(cNid);
    }
 
    @Override
@@ -400,8 +405,8 @@ public class BdbTerminologyStore extends Termstore {
    @Override
    public ViewCoordinate getMetadataVC() throws IOException {
       if (metadataVC == null) {
-            metadataVC = makeMetaVc();
-            Bdb.putViewCoordinate(metadataVC);
+         metadataVC = makeMetaVc();
+         Bdb.putViewCoordinate(metadataVC);
       }
 
       return metadataVC;
@@ -479,29 +484,7 @@ public class BdbTerminologyStore extends Termstore {
 
    @Override
    public int[] getPossibleChildren(int parentNid, ViewCoordinate vc) throws IOException {
-      if (vc.getIsaCoordinates().size() == 1) {
-         IsaCoordinate isaCoordinate = vc.getIsaCoordinates().iterator().next();
-         IsaCache      cache         = KindOfComputer.getIsaCacheMap().get(isaCoordinate);
-
-         if ((cache != null) && cache.isReady()) {
-            int[]     allPossibleNids  = Bdb.xref.getDestRelOrigins(parentNid, vc.getIsaTypeNids());
-            NidListBI viewPossibleNids = new NidList();
-
-            for (int childNid : allPossibleNids) {
-               try {
-                  if (cache.isKindOf(childNid, parentNid)) {
-                     viewPossibleNids.add(childNid);
-                  }
-               } catch (Exception ex) {
-                  throw new IOException(ex);
-               }
-            }
-
-            return viewPossibleNids.getListArray();
-         }
-      }
-
-      return Bdb.xref.getDestRelOrigins(parentNid, vc.getIsaTypeNids());
+      return Bdb.getNidCNidMap().getDestRelNids(parentNid, vc);
    }
 
    @Override
@@ -525,11 +508,6 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public int getStampNid(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-      return Bdb.getSapDb().getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
-   }
-
-   @Override
    public long getSequence() {
       return Bdb.gVersion.incrementAndGet();
    }
@@ -537,6 +515,11 @@ public class BdbTerminologyStore extends Termstore {
    @Override
    public TerminologySnapshotDI getSnapshot(ViewCoordinate c) {
       return new TerminologySnapshot(this, c);
+   }
+
+   @Override
+   public int getStampNid(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+      return Bdb.getSapDb().getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
    }
 
    @Override
@@ -573,6 +556,16 @@ public class BdbTerminologyStore extends Termstore {
    @Override
    public List<UUID> getUuidsForNid(int nid) throws IOException {
       return Bdb.getUuidsToNidMap().getUuidsForNid(nid);
+   }
+
+   @Override
+   public ViewCoordinate getViewCoordinate(UUID vcUuid) throws IOException {
+      return Bdb.getViewCoordinate(vcUuid);
+   }
+
+   @Override
+   public Collection<ViewCoordinate> getViewCoordinates() throws IOException {
+      return Bdb.getViewCoordinates();
    }
 
    @Override
@@ -627,13 +620,8 @@ public class BdbTerminologyStore extends Termstore {
    }
 
     @Override
-    public void resumeChangeNotifications() {
-        LastChange.resumeChangeNotifications();
-    }
-
-    @Override
-    public void suspendChangeNotifications() {
-        LastChange.suspendChangeNotifications();
+    public boolean isKindOf(int childNid, int parentNid, ViewCoordinate vc) throws IOException, ContradictionException {
+        return Bdb.getNidCNidMap().isKindOf(childNid, parentNid, vc);
     }
 
    //~--- inner classes -------------------------------------------------------
@@ -700,21 +688,4 @@ public class BdbTerminologyStore extends Termstore {
          this.eConcept = eConcept;
       }
    }
-
-    @Override
-    public ViewCoordinate getViewCoordinate(UUID vcUuid) throws IOException {
-        return Bdb.getViewCoordinate(vcUuid);
-    }
-
-    @Override
-    public Collection<ViewCoordinate> getViewCoordinates() throws IOException {
-        return Bdb.getViewCoordinates();
-    }
-
-    @Override
-    public void putViewCoordinate(ViewCoordinate vc) throws IOException {
-        Bdb.putViewCoordinate(vc);
-    }
-   
-   
 }

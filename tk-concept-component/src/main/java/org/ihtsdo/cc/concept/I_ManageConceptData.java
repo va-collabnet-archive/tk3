@@ -71,13 +71,6 @@ public interface I_ManageConceptData {
 
    Collection<Description> getDescriptionsIfChanged() throws IOException;
 
-   /**
-    * Destination rels are stored as a relid and a type id in
-    * an array.
-    *
-    * @return
-    * @throws IOException
-    */
    List<Relationship> getDestRels() throws IOException;
 
    List<Relationship> getDestRels(NidSetBI allowedTypes) throws IOException;

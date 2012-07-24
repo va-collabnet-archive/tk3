@@ -308,9 +308,9 @@ public class ViewCoordinate implements Externalizable {
       StringBuilder         sb   = new StringBuilder();
 
       sb.append("name: ").append(name);
-      sb.append("vcUuid: ").append(vcUuid);
-      sb.append("\nprecedence: ").append(precedence);
-      sb.append(" \npositions: ").append(positionSet);
+      sb.append("\n     vcUuid: ").append(vcUuid);
+      sb.append("\n precedence: ").append(precedence);
+      sb.append("\n  positions: ").append(positionSet);
 
       String statusStr = "all";
 
@@ -408,17 +408,6 @@ public class ViewCoordinate implements Externalizable {
 
    public ContradictionManagerBI getContradictionManager() {
       return contradictionManager;
-   }
-
-   public Collection<IsaCoordinate> getIsaCoordinates() {
-      List<IsaCoordinate> isaCoordinates = new ArrayList<>(positionSet.size());
-
-      for (PositionBI p : positionSet) {
-         isaCoordinates.add(new IsaCoordinate(p, allowedStatusNids, isaTypeNids, precedence,
-                 contradictionManager, classifierNid, relAssertionType));
-      }
-
-      return isaCoordinates;
    }
 
    public NidSetBI getIsaTypeNids() {

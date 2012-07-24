@@ -247,7 +247,7 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
         output.writeShort(partsToWrite.size());
 
         for (ConceptAttributesRevision p : partsToWrite) {
-            p.writePartToBdb(output);
+            p.writeRevisionBdb(output);
         }
     }
 

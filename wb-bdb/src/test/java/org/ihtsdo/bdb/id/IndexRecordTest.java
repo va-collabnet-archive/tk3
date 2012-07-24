@@ -249,7 +249,16 @@ public class IndexRecordTest {
       result                   = instance.updateData(relationshipOutgoingData, destinationOriginData, refexData);
       assertArrayEquals(test3, result);
    }
+   @Test
+   public void testEmptyConstructor() {
+      System.out.println("getDestinationOriginNids");
+      IndexCacheRecord instance = new IndexCacheRecord();
+      int[] empty = new int[0];
+      assertArrayEquals(empty, instance.getDestinationOriginNids());
+      assertArrayEquals(empty, instance.getRelationshipOutgoingArray());
+      assertArrayEquals(empty, instance.getRefexIndexArray());
 
+   }
    //~--- set methods ---------------------------------------------------------
 
    @Before

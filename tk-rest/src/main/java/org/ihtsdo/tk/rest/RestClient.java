@@ -20,9 +20,7 @@ package org.ihtsdo.tk.rest;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.cc.NidPair;
 import org.ihtsdo.cc.NidPairForRefex;
-import org.ihtsdo.cc.NidPairForRel;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.concept.ConceptDataFetcherI;
@@ -66,6 +64,7 @@ import java.io.ObjectInputStream;
 import java.util.*;
 
 import javax.ws.rs.core.MediaType;
+import org.ihtsdo.cc.relationship.Relationship;
 import org.ihtsdo.fxmodel.FxComponentReference;
 import org.ihtsdo.tk.api.coordinate.StandardViewCoordinates;
 
@@ -150,7 +149,7 @@ public class RestClient extends Termstore {
 
    @Override
    public int[] getDestRelOriginNids(int cNid, NidSetBI relTypes) throws IOException {
-      WebResource r  = restClient.resource(serverUrlStr + "nidpairs/refex" + cNid);
+      WebResource r  = restClient.resource(serverUrlStr + "relationship/origin/" + cNid + "/typed");
       InputStream is =
          r.queryParam("relTypes", relTypes.getAmpersandString()).accept(bdbMediaType).get(InputStream.class);
 
@@ -161,13 +160,14 @@ public class RestClient extends Termstore {
       }
    }
 
+
    @Override
-   public List<NidPairForRel> getDestRelPairs(int cNid) throws IOException {
-      WebResource r  = restClient.resource(serverUrlStr + "nidpairs/destination/relationship/" + cNid);
+   public int[] getDestRelOriginNids(int cNid) throws IOException {
+      WebResource r  = restClient.resource(serverUrlStr + "relationship/origin/" + cNid);
       InputStream is = r.accept(bdbMediaType).get(InputStream.class);
 
       try (ObjectInputStream ois = new ObjectInputStream(is)) {
-         return (List<NidPairForRel>) ois.readObject();
+         return (int[]) ois.readObject();
       } catch (ClassNotFoundException ex) {
          throw new IOException(ex);
       }
@@ -464,9 +464,14 @@ public class RestClient extends Termstore {
    }
 
    @Override
-   public void addXrefPair(int nid, NidPair pair) {
+   public void addXrefPair(int nid, NidPairForRefex pair) {
       throw new UnsupportedOperationException("Not supported yet.");
    }
+
+    @Override
+    public void addRelOrigin(int destinationCNid, int originCNid) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
    @Override
    public void cancel() throws IOException {
@@ -536,7 +541,7 @@ public class RestClient extends Termstore {
    }
 
    @Override
-   public void forgetXrefPair(int nid, NidPair pair) {
+   public void forgetXrefPair(int nid, NidPairForRefex pair) {
       throw new UnsupportedOperationException("Not supported yet.");
    }
 
@@ -632,6 +637,16 @@ public class RestClient extends Termstore {
 
     @Override
     public void suspendChangeNotifications() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Collection<Relationship> getDestRels(int cNid) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean isKindOf(int childNid, int parentNid, ViewCoordinate vc) throws IOException, ContradictionException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

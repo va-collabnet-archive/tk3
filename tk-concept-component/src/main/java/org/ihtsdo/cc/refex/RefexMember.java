@@ -35,6 +35,8 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.tk.api.blueprint.InvalidCAB;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
@@ -257,11 +259,14 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
         output.writeShort(additionalVersionsToWrite.size());
 
         NidPairForRefex npr = NidPair.getRefexNidMemberNidPair(refsetNid, nid);
-
-        P.s.addXrefPair(referencedComponentNid, npr);
+        try {
+            P.s.addXrefPair(referencedComponentNid, npr);
+        } catch (IOException ex) {
+           throw new RuntimeException(ex);
+        }
 
         for (RefexRevision<R, C> p : additionalVersionsToWrite) {
-            p.writePartToBdb(output);
+            p.writeRevisionBdb(output);
         }
     }
 
@@ -370,7 +375,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
 
     //~--- set methods ---------------------------------------------------------
     @Override
-    public void setRefexNid(int collectionNid) throws PropertyVetoException {
+    public void setRefexNid(int collectionNid) throws PropertyVetoException, IOException {
         if ((this.refsetNid == Integer.MAX_VALUE) || (this.refsetNid == collectionNid)
                 || (getTime() == Long.MAX_VALUE)) {
             if (this.refsetNid != collectionNid) {
@@ -390,7 +395,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
     }
 
     @Override
-    public void setReferencedComponentNid(int referencedComponentNid) {
+    public void setReferencedComponentNid(int referencedComponentNid) throws IOException {
         if (this.referencedComponentNid != referencedComponentNid) {
             if ((this.refsetNid != 0) && (this.nid != 0)) {
                 NidPairForRefex oldNpr = NidPair.getRefexNidMemberNidPair(this.refsetNid, this.nid);
@@ -526,12 +531,12 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
 
         //~--- set methods ------------------------------------------------------
         @Override
-        public void setRefexNid(int collectionNid) throws PropertyVetoException {
+        public void setRefexNid(int collectionNid) throws PropertyVetoException, IOException {
             RefexMember.this.setRefexNid(collectionNid);
         }
 
         @Override
-        public void setReferencedComponentNid(int componentNid) throws PropertyVetoException {
+        public void setReferencedComponentNid(int componentNid) throws PropertyVetoException, IOException {
             RefexMember.this.setReferencedComponentNid(componentNid);
         }
 

@@ -142,12 +142,12 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
 
     //~--- set methods ---------------------------------------------------------
     @Override
-    public void setRefexNid(int collectionNid) throws PropertyVetoException {
+    public void setRefexNid(int collectionNid) throws PropertyVetoException, IOException {
         primordialComponent.setRefexNid(collectionNid);
     }
 
     @Override
-    public void setReferencedComponentNid(int componentNid) throws PropertyVetoException {
+    public void setReferencedComponentNid(int componentNid) throws PropertyVetoException, IOException {
         primordialComponent.setReferencedComponentNid(componentNid);
     }
 }

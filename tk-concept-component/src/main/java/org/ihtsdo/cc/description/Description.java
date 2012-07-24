@@ -298,7 +298,7 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
 
         // conceptNid is the enclosing concept, does not need to be written.
         for (DescriptionRevision p : partsToWrite) {
-            p.writePartToBdb(output);
+            p.writeRevisionBdb(output);
         }
     }
 

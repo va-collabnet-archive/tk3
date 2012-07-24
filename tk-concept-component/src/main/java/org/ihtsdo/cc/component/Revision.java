@@ -235,7 +235,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
    protected abstract void writeFieldsToBdb(TupleOutput output);
 
-   public final void writePartToBdb(TupleOutput output) {
+   public final void writeRevisionBdb(TupleOutput output) {
       output.writeInt(stampNid);
       writeFieldsToBdb(output);
    }

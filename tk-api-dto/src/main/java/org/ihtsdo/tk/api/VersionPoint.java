@@ -13,16 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.bdb.xref;
+package org.ihtsdo.tk.api;
+
+import org.ihtsdo.tk.Ts;
 
 /**
  *
  * @author kec
  */
-public class ReferenceStampMap {
-    
-    
-    
-    private static int[] nidReferenceMap;
-    
+public class VersionPoint implements VersionPointBI {
+    private int stamp;
+
+    public VersionPoint(int stamp) {
+        this.stamp = stamp;
+    }
+
+    @Override
+    public long getTime() {
+        return Ts.get().getTimeForStamp(stamp);
+    }
+
+    @Override
+    public int getPathNid() {
+        return Ts.get().getPathNidForStamp(stamp);
+    }
+
+    public int getStatusNid() {
+        return Ts.get().getStatusNidForStamp(stamp);
+    }
 }

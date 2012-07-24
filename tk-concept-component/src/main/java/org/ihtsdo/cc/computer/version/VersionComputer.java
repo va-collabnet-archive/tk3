@@ -1,5 +1,7 @@
 package org.ihtsdo.cc.computer.version;
 
+import org.ihtsdo.helper.version.RelativePositionComputer;
+import org.ihtsdo.helper.version.RelativePositionComputerBI;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,14 +10,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ihtsdo.cc.PositionSetReadOnly;
 
 import org.ihtsdo.cc.component.ConceptComponent;
 import org.ihtsdo.cc.ReferenceConcepts;
-import org.ihtsdo.cc.computer.version.PositionMapperBI.RelativePosition;
+import org.ihtsdo.helper.version.RelativePositionComputerBI.RelativePosition;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.PositionSet;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
@@ -27,29 +28,9 @@ import org.ihtsdo.tk.spec.ValidationException;
 public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
 
     protected static final Logger logger = Logger.getLogger(VersionComputer.class.getName());
-    private static ConcurrentHashMap<PositionBI, PositionMapperBI> mapperCache =
-            new ConcurrentHashMap<>();
-
-    public static PositionMapperBI getMapper(PositionBI position) {
-        PositionMapperBI pm = mapperCache.get(position);
-
-        if (pm != null) {
-            return pm;
-        }
-
-        pm = new RelativePositionComputer(position);
-
-        PositionMapperBI existing = mapperCache.putIfAbsent(position, pm);
-
-        if (existing != null) {
-            pm = existing;
-        }
-
-        return pm;
-    }
 
     private void handlePart(HashSet<V> partsForPosition,
-            PositionMapperBI mapper, V part,
+            RelativePositionComputerBI mapper, V part,
             Precedence precedencePolicy,
             ContradictionManagerBI contradictionManager,
             NidSetBI allowedStatus) throws RuntimeException {
@@ -168,7 +149,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
 
         if (positions != null && !positions.isEmpty()) {
             for (PositionBI position : positions) {
-                PositionMapperBI mapper = getMapper(position);
+                RelativePositionComputerBI mapper = RelativePositionComputer.getComputer(position);
                 for (IdBI part : versions) {
                     if (part.getTime() > Long.MIN_VALUE
                             && (authorityNidsFilterList.isEmpty()
@@ -372,7 +353,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
         HashSet<V> partsToAdd = new HashSet<>();
         for (PositionBI p : positions) {
             HashSet<V> partsForPosition = new HashSet<>();
-            PositionMapperBI mapper = getMapper(p);
+            RelativePositionComputerBI mapper = RelativePositionComputer.getComputer(p);
             nextpart:
             for (V part : versions) {
                 if (part.getTime() == Long.MIN_VALUE) {
@@ -432,7 +413,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
         HashSet<V> partsToAdd = new HashSet<>();
         for (PositionBI p : positions) {
             HashSet<V> partsForPosition = new HashSet<>();
-            PositionMapperBI mapper = getMapper(p);
+            RelativePositionComputerBI mapper = RelativePositionComputer.getComputer(p);
             nextpart:
             for (V part : versions) {
                 if (part.getTime() == Long.MIN_VALUE) {

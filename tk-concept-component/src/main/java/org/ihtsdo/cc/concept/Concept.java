@@ -1,19 +1,22 @@
 package org.ihtsdo.cc.concept;
 
-//~--- non-JDK imports --------------------------------------------------------
-
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jsr166y.ConcurrentReferenceHashMap;
-
 import org.ihtsdo.cc.LanguageSortPrefs.LANGUAGE_SORT_PREF;
 import org.ihtsdo.cc.NidPair;
 import org.ihtsdo.cc.NidPairForRefex;
-import org.ihtsdo.cc.NidPairForRel;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.ReferenceConcepts;
 import org.ihtsdo.cc.attributes.ConceptAttributes;
 import org.ihtsdo.cc.change.LastChange;
 import org.ihtsdo.cc.component.ConceptComponent;
-import org.ihtsdo.cc.computer.kindof.KindOfComputer;
 import org.ihtsdo.cc.concept.processor.AdjudicationAnalogCreator;
 import org.ihtsdo.cc.concept.processor.VersionFlusher;
 import org.ihtsdo.cc.description.Description;
@@ -23,9 +26,9 @@ import org.ihtsdo.cc.media.Media;
 import org.ihtsdo.cc.refex.RefexMember;
 import org.ihtsdo.cc.refex.RefexMemberFactory;
 import org.ihtsdo.cc.relationship.Relationship;
-import org.ihtsdo.cc.relationship.RelationshipRevision;
 import org.ihtsdo.cc.relationship.group.RelGroupChronicle;
 import org.ihtsdo.cc.relationship.group.RelGroupVersion;
+import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.blueprint.ConceptCB;
 import org.ihtsdo.tk.api.blueprint.InvalidCAB;
@@ -36,7 +39,6 @@ import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.concept.ConceptVersionBI;
 import org.ihtsdo.tk.api.conflict.IdentifyAllConflictStrategy;
 import org.ihtsdo.tk.api.coordinate.EditCoordinate;
-import org.ihtsdo.tk.api.coordinate.KindOfSpec;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate.LANGUAGE_SORT;
 import org.ihtsdo.tk.api.cs.ChangeSetPolicy;
@@ -58,18 +60,6 @@ import org.ihtsdo.tk.dto.concept.component.media.TkMedia;
 import org.ihtsdo.tk.dto.concept.component.refex.TkRefexAbstractMember;
 import org.ihtsdo.tk.dto.concept.component.relationship.TkRelationship;
 import org.ihtsdo.tk.hash.Hashcode;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Concept implements ConceptChronicleBI, Comparable<Concept> {
    protected static final Logger                              logger       = Logger.getLogger(Concept.class.getName());
@@ -186,12 +176,6 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
       if (P.s.forget(getConceptAttributes())) {
          canceled = true;
-      }
-
-      try {
-         KindOfComputer.updateIsaCache(this.getNid());
-      } catch (Exception e) {
-         logger.log(Level.SEVERE, "", e);
       }
    }
 
@@ -487,12 +471,6 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
          }
       }
 
-      try {
-         KindOfComputer.updateIsaCache(c.getNid());
-      } catch (Exception ex) {
-         logger.log(Level.SEVERE, "is-a cache error", ex);
-      }
-
       return c;
    }
 
@@ -691,21 +669,6 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
    }
 
    public void updateXrefs() throws IOException {
-      for (Relationship r : getNativeSourceRels()) {
-         NidPairForRel npr = NidPair.getTypeNidRelNidPair(r.getTypeNid(), r.getNid());
-
-         P.s.addXrefPair(r.getDestinationNid(), npr);
-
-         if (r.revisions != null) {
-            for (RelationshipRevision p : r.revisions) {
-               if (p.getTypeNid() != r.getTypeNid()) {
-                  npr = NidPair.getTypeNidRelNidPair(p.getTypeNid(), r.getNid());
-                  P.s.addXrefPair(r.getDestinationNid(), npr);
-               }
-            }
-         }
-      }
-
       for (RefexMember<?, ?> m : getRefsetMembers()) {
          NidPairForRefex npr = NidPair.getRefexNidMemberNidPair(m.getRefexNid(), m.getNid());
 
@@ -771,7 +734,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
       try {
          return mergeWithEConcept(eConcept, c, false);
       } catch (Throwable t) {
-          System.out.println(t.getLocalizedMessage());
+         System.out.println(t.getLocalizedMessage());
          logger.log(Level.SEVERE, "Cannot merge with eConcept: \n" + eConcept, t);
       }
 
@@ -1105,14 +1068,6 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
       }
    }
 
-   public Set<Integer> getDescriptionNids() throws IOException {
-      return data.getDescNids();
-   }
-
-   public Set<Integer> getRelationshipNids() throws IOException {
-      return data.getSrcRelNidsReadOnly();
-   }
-
    public Description getDescription(int nid) throws IOException {
       if (isCanceled()) {
          return null;
@@ -1126,6 +1081,10 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
       throw new IOException("No description: " + nid + " " + P.s.getUuidsForNid(nid) + " found in\n"
                             + toLongString());
+   }
+
+   public Set<Integer> getDescriptionNids() throws IOException {
+      return data.getDescNids();
    }
 
    public Collection<Description.Version> getDescriptionVersions(NidSetBI allowedStatus,
@@ -1447,6 +1406,10 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
       return null;
    }
 
+   public Set<Integer> getRelationshipNids() throws IOException {
+      return data.getSrcRelNidsReadOnly();
+   }
+
    @Override
    public Collection<Relationship> getRelsIncoming() throws IOException {
       if (isCanceled()) {
@@ -1600,7 +1563,6 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
    /*
     * (non-Javadoc) @see java.lang.Object#toString()
     */
-
    private Description.Version getTypePreferredDesc(Collection<Description.Version> descriptions,
            NidListBI typePrefOrder, NidListBI langPrefOrder, NidSetBI allowedStatus,
            PositionSetBI positionSet, boolean tryLang)
@@ -1763,33 +1725,17 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
       return canceled;
    }
 
-   public boolean isParentOf(Concept child, NidSetBI allowedStatus, NidSetBI allowedTypes,
-                             PositionSetBI positions, Precedence precedencePolicy,
-                             ContradictionManagerBI contradictionManager)
-           throws IOException {
-      for (PositionBI p : positions) {
-         KindOfSpec kindOfSpec = new KindOfSpec(p, allowedStatus, allowedTypes, getNid(), precedencePolicy,
-                                    contradictionManager, ReferenceConcepts.SNOROCKET.getNid(),
-                                    RelAssertionType.INFERRED_THEN_STATED);
-
-         if (KindOfComputer.isKindOf((Concept) child, kindOfSpec)) {
-            return true;
-         }
-      }
-
-      return false;
+   public boolean isParentOf(Concept child, ViewCoordinate vc) throws IOException, ContradictionException {
+      return Ts.get().isKindOf(child.nid, nid, vc);
    }
 
-   public boolean isParentOfOrEqualTo(Concept child, NidSetBI allowedStatus, NidSetBI allowedTypes,
-                                      PositionSetBI positions, Precedence precedencePolicy,
-                                      ContradictionManagerBI contradictionManager)
-           throws IOException {
+   public boolean isParentOfOrEqualTo(Concept child, ViewCoordinate vc)
+           throws IOException, ContradictionException {
       if (child == this) {
          return true;
       }
 
-      return isParentOf(child, allowedStatus, allowedTypes, positions, precedencePolicy,
-                        contradictionManager);
+      return isParentOf(child, vc);
    }
 
    @Override
@@ -1866,7 +1812,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
       for (TkRelationship eRel : eConcept.getRelationships()) {
          Relationship rel = new Relationship(eRel, c);
 
-         c.data.add(rel);
+         c.data.getSourceRels().add(rel);
       }
    }
 

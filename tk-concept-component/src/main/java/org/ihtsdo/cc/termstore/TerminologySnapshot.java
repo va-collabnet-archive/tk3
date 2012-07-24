@@ -337,4 +337,9 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
    public ViewCoordinate getViewCoordinate() {
       return vc;
    }
+
+    @Override
+    public boolean isKindOf(int childNid, int parentNid) throws IOException, ContradictionException {
+        return store.isKindOf(childNid, parentNid, vc);
+    }
 }

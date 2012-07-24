@@ -129,36 +129,6 @@ public class RelationshipIndexRecordTest {
    }
 
    /**
-    * Test of next method, of class RelationshipIndexRecord.
-    */
-   @Test
-   public void testNext() {
-      System.out.println("next");
-
-      RelationshipIndexRecord instance = new RelationshipIndexRecord(data, 2, data.length);
-
-      try {
-         instance.next();
-         fail("should have thrown an UnsupportedOperationException");
-      } catch (NoSuchElementException e) {}
-   }
-
-   /**
-    * Test of remove method, of class RelationshipIndexRecord.
-    */
-   @Test
-   public void testRemove() {
-      System.out.println("remove");
-
-      RelationshipIndexRecord instance = new RelationshipIndexRecord(data, 2, data.length);
-
-      try {
-         instance.remove();
-         fail("should have thrown an UnsupportedOperationException");
-      } catch (UnsupportedOperationException e) {}
-   }
-
-   /**
     * Test of setGroupFlag method, of class RelationshipIndexRecord.
     */
    @Test

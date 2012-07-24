@@ -4,35 +4,28 @@
  */
 package org.ihtsdo.cc.concept;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import com.sleepycat.bind.tuple.TupleInput;
-
-
-import org.ihtsdo.cc.component.AnnotationIndexBinder;
-import org.ihtsdo.cc.component.AnnotationStyleBinder;
-import org.ihtsdo.cc.component.DataVersionBinder;
-import org.ihtsdo.cc.description.Description;
-import org.ihtsdo.cc.refex.RefexMember;
-import org.ihtsdo.cc.relationship.Relationship;
-import org.ihtsdo.cc.NidPair;
-import org.ihtsdo.cc.NidPairForRel;
-import org.ihtsdo.tk.api.NidSetBI;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
+import org.ihtsdo.cc.NidPair;
 import org.ihtsdo.cc.P;
-import org.ihtsdo.cc.media.Media;
+import org.ihtsdo.cc.component.AnnotationIndexBinder;
+import org.ihtsdo.cc.component.AnnotationStyleBinder;
+import org.ihtsdo.cc.component.DataVersionBinder;
+import org.ihtsdo.cc.description.Description;
 import org.ihtsdo.cc.lucene.LuceneManager;
+import org.ihtsdo.cc.media.Media;
+import org.ihtsdo.cc.refex.RefexMember;
+import org.ihtsdo.cc.relationship.Relationship;
+import org.ihtsdo.tk.api.ComponentChroncileBI;
+import org.ihtsdo.tk.api.NidSetBI;
+import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 
 /**
  * File format:<br>
@@ -50,19 +43,19 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
 
    //~--- fields --------------------------------------------------------------
 
-   protected long         lastChange         = Long.MIN_VALUE;
-   protected long         lastWrite          = Long.MIN_VALUE;
-   protected long         lastExtinctRemoval = Long.MIN_VALUE;
-   protected Concept      enclosingConcept;
+   protected long                lastChange         = Long.MIN_VALUE;
+   protected long                lastWrite          = Long.MIN_VALUE;
+   protected long                lastExtinctRemoval = Long.MIN_VALUE;
+   protected Concept             enclosingConcept;
    protected ConceptDataFetcherI nidData;
 
    //~--- constructors --------------------------------------------------------
 
    public ConceptDataManager(ConceptDataFetcherI nidData) throws IOException {
       super();
-      this.nidData    = nidData;
-      this.lastChange = getDataVersion();
-      this.lastWrite  = this.lastChange;
+      this.nidData            = nidData;
+      this.lastChange         = getDataVersion();
+      this.lastWrite          = this.lastChange;
       this.lastExtinctRemoval = P.s.getSequence();
    }
 
@@ -161,8 +154,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
          addToMemberMap(refsetMember);
          modified();
          P.s.addXrefPair(refsetMember.getReferencedComponentNid(),
-                         NidPair.getRefexNidMemberNidPair(refsetMember.getRefexNid(),
-                            refsetMember.getNid()));
+                         NidPair.getRefexNidMemberNidPair(refsetMember.getRefexNid(), refsetMember.getNid()));
       }
    }
 
@@ -174,7 +166,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
              "No concept for component: " + rel.nid + "\nsourceConcept: "
              + this.enclosingConcept.toLongString() + "\ndestConcept: "
              + Concept.get(rel.getDestinationNid()).toLongString();
-      P.s.addXrefPair(rel.getDestinationNid(), NidPair.getTypeNidRelNidPair(rel.getTypeNid(), rel.getNid()));
+      P.s.addRelOrigin(rel.getDestinationNid(), rel.getOriginNid());
       getSrcRelNids().add(rel.nid);
       modified();
    }
@@ -207,8 +199,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
          memberNids = getMemberNids();
       }
 
-      int                size             = 1 + descNids.size() + srcRelNids.size() + imgNids.size()
-                                            + memberNids.size();
+      int                size             = 1 + descNids.size() + srcRelNids.size() + imgNids.size() + memberNids.size();
       ArrayList<Integer> allContainedNids = new ArrayList<>(size);
 
       allContainedNids.add(enclosingConcept.getNid());
@@ -252,24 +243,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
 
       // Need to make sure there are no pending db writes prior calling this method.
       P.s.waitTillWritesFinished();
-
-      List<Relationship> destRels = new ArrayList<>();
-
-      for (NidPairForRel pair : P.s.getDestRelPairs(enclosingConcept.getNid())) {
-         int     relNid     = pair.getRelNid();
-         int     conceptNid = P.s.getConceptNidForNid(relNid);
-         Concept c          = (Concept) P.s.getConceptForNid(conceptNid);
-
-         if (c != null) {
-            Relationship r = c.getRelationship(relNid);
-
-            if (r != null) {
-               destRels.add(r);
-            }
-         }
-      }
-
-      return destRels;
+      return new ArrayList(P.s.getDestRels(enclosingConcept.getNid()));
    }
 
    /*
@@ -285,17 +259,23 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
 
       List<Relationship> destRels = new ArrayList<>();
 
-      for (NidPairForRel pair : P.s.getDestRelPairs(enclosingConcept.getNid())) {
-         if (allowedTypes.contains(pair.getTypeNid())) {
-            int     relNid     = pair.getRelNid();
-            int     conceptNid = P.s.getConceptNidForNid(relNid);
-            Concept c          = (Concept) P.s.getConceptForNid(conceptNid);
+      for (int originNid : P.s.getDestRelOriginNids(enclosingConcept.getNid(), allowedTypes)) {
+         Concept c = (Concept) P.s.getConceptForNid(originNid);
 
-            if (c != null) {
-               Relationship r = c.getRelationship(relNid);
-
-               if (r != null) {
-                  destRels.add(r);
+         if (c != null) {
+            for (Relationship r : c.getRelsOutgoing()) {
+               if (r != null && r.getDestinationNid() == enclosingConcept.getNid()) {
+                   if (allowedTypes.contains(r.getTypeNid())) {
+                       destRels.add(r);
+                   } else {
+                       for (RelationshipVersionBI rv: r.getVersions()) {
+                           if (allowedTypes.contains(rv.getTypeNid())) {
+                               destRels.add(r);
+                               break;
+                           }
+                       }
+                   }
+                  
                }
             }
          }

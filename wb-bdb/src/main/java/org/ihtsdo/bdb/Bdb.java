@@ -21,14 +21,9 @@ import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.bdb.concept.ConceptBdb;
 import org.ihtsdo.cc.concept.OFFSETS;
 import org.ihtsdo.bdb.BdbMemoryMonitor.LowMemoryListener;
-import org.ihtsdo.cc.computer.kindof.IsaCache;
-import org.ihtsdo.cc.computer.kindof.KindOfComputer;
 import org.ihtsdo.bdb.id.NidCNidMapBdb;
 import org.ihtsdo.bdb.stamp.StampBdb;
-import org.ihtsdo.bdb.xref.Xref;
-import org.ihtsdo.cc.NidPair;
 import org.ihtsdo.cc.NidPairForRefex;
-import org.ihtsdo.cc.NidPairForRel;
 import org.ihtsdo.cc.lucene.LuceneManager;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentBI;
@@ -40,6 +35,7 @@ import org.ihtsdo.tk.dto.concept.component.refex.TkRefexAbstractMember;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,7 +62,6 @@ public class Bdb {
     private static StampBdb statusAtPositionDb;
     private static ConceptBdb conceptDb;
     private static PropertiesBdb propDb;
-    public static Xref xref;
     public static ThreadGroup dbdThreadGroup =
             new ThreadGroup("db threads");
     private static ExecutorService syncService;
@@ -174,6 +169,10 @@ public class Bdb {
 
     static void putViewCoordinate(ViewCoordinate vc) {
         viewCoordinates.put(vc.getVcUuid(), vc);
+    }
+
+    static void addRelOrigin(int destinationCNid, int originCNid) throws IOException {
+        nidCidMapDb.addRelOrigin(destinationCNid, originCNid);
     }
 
     private enum HeapSize {
@@ -335,8 +334,6 @@ public class Bdb {
 //            }
 
 
-//             inform(activity, "loading cross references...");
-            xref = new Xref(readOnly, mutable);
             //watchList.put(ReferenceConcepts.REFSET_PATH_ORIGINS.getNid(), ReferenceConcepts.REFSET_PATH_ORIGINS.getNid());
 
 //            inform(activity, "Loading paths...");
@@ -531,8 +528,6 @@ public class Bdb {
                 activity.setProgressInfoLower("Writing conceptDb... ");
                 conceptDb.sync();
                 activity.setValue(5);
-                activity.setProgressInfoLower("Writing xref... ");
-                xref.sync();
                 activity.setValue(6);
                 activity.setProgressInfoLower("Writing propDb... ");
                 propDb.sync();
@@ -592,15 +587,6 @@ public class Bdb {
                     oos.writeObject(viewCoordinates);
                 }
 
-                for (IsaCache loopCache : KindOfComputer.getIsaCacheMap().values()) {
-                    loopCache.getLatch().await();
-                }
-                
-                if (KindOfComputer.persistIsaCache) {
-                	activity.setProgressInfoLower("1-b/11: Persisting Isa Cache.");
-                    KindOfComputer.persistIsaCache();
-                }
-
                 activity.setProgressInfoLower("2/11: Starting sync using service.");
                 assert conceptDb != null : "conceptDb is null...";
                 new Sync().run();
@@ -628,7 +614,6 @@ public class Bdb {
                 statusAtPositionDb.close();
                 conceptDb.close();
                 propDb.close();
-                xref.close();
                 mutable.bdbEnv.sync();
                 mutable.bdbEnv.close();
                 sapNidCache.clear();
@@ -652,7 +637,6 @@ public class Bdb {
         sapNidCache = null;
         statusAtPositionDb = null;
         uuidsToNidMapDb = null;
-        xref = null;
        
         Concept.reset();
         AceLog.getAppLog().info("bdb close finished.");
@@ -789,19 +773,15 @@ public class Bdb {
         return statBuff.toString().replace("\n", "<br>");
     }
 
-    public static void addXrefPair(int nid, NidPair pair) {
-        xref.addPair(nid, pair);
+    public static void addXrefPair(int nid, NidPairForRefex pair) throws IOException {
+        Bdb.getNidCNidMap().addNidPairForRefex(nid, pair);
     }
 
-    public static void forgetXrefPair(int nid, NidPair pair) {
-        xref.forgetPair(nid, pair);
-    }
-
-    public static List<NidPairForRel> getDestRelPairs(int cNid) {
-        return xref.getDestRelPairs(cNid);
+    public static void forgetXrefPair(int nid, NidPairForRefex pair) {
+        Bdb.getNidCNidMap().forgetNidPairForRefex(nid, pair);
     }
 
     public static List<NidPairForRefex> getRefsetPairs(int nid) {
-        return xref.getRefsetPairs(nid);
+        return Arrays.asList(Bdb.getNidCNidMap().getRefsetPairs(nid));
     }
 }

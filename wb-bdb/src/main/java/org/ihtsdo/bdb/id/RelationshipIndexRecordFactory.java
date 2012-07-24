@@ -70,9 +70,9 @@ public class RelationshipIndexRecordFactory {
       IntArrayList returnValue = new IntArrayList();
 
       for (IntArrayList record : records.values()) {
-         returnValue.addAllOf(record);
+          returnValue.addAllOf(record);
       }
-
+      returnValue.trimToSize();
       return returnValue.elements();
    }
 

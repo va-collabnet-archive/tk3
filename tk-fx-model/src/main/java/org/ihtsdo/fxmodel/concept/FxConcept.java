@@ -1,13 +1,19 @@
 package org.ihtsdo.fxmodel.concept;
 
-//~--- non-JDK imports --------------------------------------------------------
-
+import java.beans.Transient;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.ihtsdo.fxmodel.FxComponentReference;
 import org.ihtsdo.fxmodel.concept.component.attribute.FxConceptAttributesChronicle;
 import org.ihtsdo.fxmodel.concept.component.description.FxDescriptionChronicle;
@@ -33,6 +39,7 @@ import org.ihtsdo.fxmodel.fetchpolicy.RelationshipPolicy;
 import org.ihtsdo.fxmodel.fetchpolicy.VersionPolicy;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.NidSetBI;
+import org.ihtsdo.tk.api.RelAssertionType;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.description.DescriptionChronicleBI;
@@ -52,22 +59,7 @@ import org.ihtsdo.tk.api.refex.type_nid_nid_string.RefexNidNidStringVersionBI;
 import org.ihtsdo.tk.api.refex.type_nid_string.RefexNidStringVersionBI;
 import org.ihtsdo.tk.api.refex.type_string.RefexStringVersionBI;
 import org.ihtsdo.tk.api.relationship.RelationshipChronicleBI;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.beans.Transient;
-
-import java.io.IOException;
-import java.io.Serializable;
-
-import java.util.*;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 
 /**
  * Property definition pattern from
@@ -241,38 +233,74 @@ public class FxConcept implements Serializable {
 
       NidSetBI taxonomyTypes = ss.getViewCoordinate().getIsaTypeNids();
 
+      NEXT_REL:
       for (RelationshipChronicleBI rel : relsIncoming) {
-         FxRelationshipChronicle          fxc      = new FxRelationshipChronicle(ss, this, rel);
-         ArrayList<FxRelationshipVersion> toRemove = new ArrayList<>();
+         RelationshipVersionBI relVersion = rel.getPrimordialVersion();
 
-         for (FxRelationshipVersion fxv : fxc.getVersions()) {
-            if (!taxonomyTypes.contains(fxv.getTypeReference().getNid())) {
-               toRemove.add(fxv);
-
-               break;
+         switch (ss.getViewCoordinate().getRelAssertionType()) {
+         case INFERRED :
+            if (!relVersion.isInferred()) {
+               continue NEXT_REL;
             }
 
-            switch (ss.getViewCoordinate().getRelAssertionType()) {
-            case INFERRED :
-               if (!(fxv.getAuthorReference().getNid() == ss.getViewCoordinate().getClassifierNid())) {
-                  toRemove.add(fxv);
-               }
+            break;
 
-               break;
+         case STATED :
+            if (!relVersion.isStated()) {
+               continue NEXT_REL;
+            }
 
-            case STATED :
-               if (fxv.getAuthorReference().getNid() == ss.getViewCoordinate().getClassifierNid()) {
-                  toRemove.add(fxv);
-               }
+            break;
+
+         case INFERRED_THEN_STATED :
+            if (!relVersion.isInferred()) {
+               continue NEXT_REL;
+            }
+
+            break;
+         }
+
+         boolean foundType = false;
+
+         for (RelationshipVersionBI rv : rel.getVersions(ss.getViewCoordinate())) {
+            if (taxonomyTypes.contains(rv.getTypeNid())) {
+               foundType = true;
 
                break;
             }
          }
 
-         fxc.getVersions().removeAll(toRemove);
+         if (!foundType) {
+            continue NEXT_REL;
+         }
 
-         if (!fxc.getVersions().isEmpty()) {
-            _destinationRelationships.add(fxc);
+         FxRelationshipChronicle fxc = new FxRelationshipChronicle(ss, this, rel);
+
+         _destinationRelationships.add(fxc);
+      }
+
+      if (_destinationRelationships.isEmpty()
+              && (ss.getViewCoordinate().getRelAssertionType() == RelAssertionType.INFERRED_THEN_STATED)) {
+         for (RelationshipChronicleBI rel : relsIncoming) {
+            RelationshipVersionBI relVersion = rel.getPrimordialVersion();
+
+            if (relVersion.isStated()) {
+               boolean foundType = false;
+
+               for (RelationshipVersionBI rv : rel.getVersions(ss.getViewCoordinate())) {
+                  if (!taxonomyTypes.contains(rv.getTypeNid())) {
+                     foundType = true;
+
+                     break;
+                  }
+               }
+
+               if (foundType) {
+                  FxRelationshipChronicle fxc = new FxRelationshipChronicle(ss, this, rel);
+
+                  _destinationRelationships.add(fxc);
+               }
+            }
          }
       }
    }

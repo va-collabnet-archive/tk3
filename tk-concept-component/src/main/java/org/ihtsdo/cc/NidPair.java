@@ -67,23 +67,28 @@ public abstract class NidPair implements Comparable<NidPair>, Serializable {
       return 0;
    }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final NidPair other = (NidPair) obj;
-        if (this.nid1 != other.nid1) {
-            return false;
-        }
-        if (this.nid2 != other.nid2) {
-            return false;
-        }
-        return true;
-    }
+   @Override
+   public boolean equals(Object obj) {
+      if (obj == null) {
+         return false;
+      }
+
+      if (getClass() != obj.getClass()) {
+         return false;
+      }
+
+      final NidPair other = (NidPair) obj;
+
+      if (this.nid1 != other.nid1) {
+         return false;
+      }
+
+      if (this.nid2 != other.nid2) {
+         return false;
+      }
+
+      return true;
+   }
 
    @Override
    public int hashCode() {
@@ -101,10 +106,6 @@ public abstract class NidPair implements Comparable<NidPair>, Serializable {
       int nid1 = (int) nids;
       int nid2 = (int) (nids >>> 32);
 
-      if (P.s.getConceptNidForNid(nid2) == nid2) {
-         return getTypeNidRelNidPair(nid2, nid1);
-      }
-
       return getRefexNidMemberNidPair(nid1, nid2);
    }
 
@@ -117,36 +118,6 @@ public abstract class NidPair implements Comparable<NidPair>, Serializable {
 
          if (P.s.getConceptNidForNid(nid2) != nid2) {
             returnValues.add(new NidPairForRefex(nid1, nid2));
-         }
-      }
-
-      return returnValues;
-   }
-
-   public static List<NidPairForRel> getNidPairsForRel(long[] nidPairArray) {
-      List<NidPairForRel> returnValues = new ArrayList<>(nidPairArray.length);
-
-      for (long nids : nidPairArray) {
-         int nid1 = (int) nids;
-         int nid2 = (int) (nids >>> 32);
-
-         if (P.s.getConceptNidForNid(nid2) == nid2) {
-            returnValues.add(new NidPairForRel(nid1, nid2));
-         }
-      }
-
-      return returnValues;
-   }
-
-   public static List<NidPairForRel> getNidPairsForRel(long[] nidPairArray, NidSetBI relTypes) {
-      List<NidPairForRel> returnValues = new ArrayList<>(nidPairArray.length);
-
-      for (long nids : nidPairArray) {
-         int nid1 = (int) nids;
-         int nid2 = (int) (nids >>> 32);
-
-         if (relTypes.contains(nid2)) {
-            returnValues.add(new NidPairForRel(nid1, nid2));
          }
       }
 
@@ -174,12 +145,6 @@ public abstract class NidPair implements Comparable<NidPair>, Serializable {
 
       // the refset (nid1) is a concept, the memberNid is not.
       return new NidPairForRefex(refexNid, memberNid);
-   }
-
-   public static NidPairForRel getTypeNidRelNidPair(int typeNid, int rNid) {
-
-      // the type (nid2) is a concept, the rNid is not.
-      return new NidPairForRel(rNid, typeNid);
    }
 
    public boolean isRefexPair() {

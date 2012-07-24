@@ -18,13 +18,30 @@
 
 package org.ihtsdo.bdb.id;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import org.ihtsdo.bdb.Bdb;
 import org.ihtsdo.cc.NidPairForRefex;
+import org.ihtsdo.cc.concept.Concept;
+import org.ihtsdo.cc.relationship.Relationship;
+import org.ihtsdo.cern.colt.list.IntArrayList;
+import org.ihtsdo.helper.version.RelativePositionComputerBI;
+import org.ihtsdo.tk.Ts;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.NidList;
+import org.ihtsdo.tk.api.NidSetBI;
+import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.tk.api.relationship.RelationshipChronicleBI;
+import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 
 /**
- * Stores cross-reference information for origin relationships, destination relationship origins, and 
+ * Stores cross-reference information for origin relationships, destination relationship origins, and
  * refex referenced components in a integer array, minimizing the object allocation burden that would
- * otherwise be associated with this information. This class interprets and manages the contents of that array.
+ * otherwise be associated with this information. This class interprets and manages the contents of that
+ * array.
  * <br>
  * <h2>Implementation notes</h2>
  * See the class <code>RelationshipIndexRecord</code> for documentation of the structure of the
@@ -43,8 +60,16 @@ public class IndexCacheRecord {
 
    //~--- constructors --------------------------------------------------------
 
+   public IndexCacheRecord() {
+      this.data = new int[] { 2, 2 };
+   }
+
    public IndexCacheRecord(int[] data) {
       this.data = data;
+
+      if (data == null) {
+         this.data = new int[] { 2, 2 };
+      }
    }
 
    //~--- methods -------------------------------------------------------------
@@ -79,11 +104,28 @@ public class IndexCacheRecord {
 
       int[] nidPairForRefexArray = new int[arrayLength + 2];
 
-      nidPairForRefexArray[arrayLength] = refexNid;
-      nidPairForRefexArray[arrayLength+1]     = memberNid;
+      nidPairForRefexArray[arrayLength]     = refexNid;
+      nidPairForRefexArray[arrayLength + 1] = memberNid;
       System.arraycopy(data, data[REFEX_OFFSET_INDEX], nidPairForRefexArray, 0,
                        nidPairForRefexArray.length - 2);
       updateData(getRelationshipOutgoingArray(), getDestinationOriginNids(), nidPairForRefexArray);
+   }
+
+   public void forgetNidPairForRefex(int refexNid, int memberNid) {
+      int arrayLength = data.length - data[REFEX_OFFSET_INDEX];
+      int start       = data.length - arrayLength;
+
+      for (int i = start; i < data.length; i++) {
+         if (data[i] == memberNid) {
+            int[] nidPairForRefexArray = new int[arrayLength - 2];
+
+            System.arraycopy(data, data[REFEX_OFFSET_INDEX], nidPairForRefexArray, 0, i);
+            System.arraycopy(data, i + 2, nidPairForRefexArray, 0, arrayLength - i);
+            updateData(getRelationshipOutgoingArray(), getDestinationOriginNids(), nidPairForRefexArray);
+
+            return;
+         }
+      }
    }
 
    public int[] updateData(int[] relationshipOutgoingData, int[] destinationOriginData, int[] refexData) {
@@ -104,6 +146,107 @@ public class IndexCacheRecord {
 
    //~--- get methods ---------------------------------------------------------
 
+   public int[] getData() {
+      if (data.length == 2) {
+         return null;
+      }
+
+      return data;
+   }
+
+   /**
+    *
+    * @return int[] of relationship nids that point to this component
+    */
+   public int[] getDestRelNids(int cNid) throws IOException {
+      HashSet<Integer> returnValues = new HashSet<>();
+      int[]            originCNids  = getDestinationOriginNids();
+
+      for (int originCNid : originCNids) {
+         ConceptChronicleBI c = Ts.get().getConcept(originCNid);
+
+         for (RelationshipChronicleBI r : c.getRelsOutgoing()) {
+            if (r.getDestinationNid() == cNid) {
+               returnValues.add(r.getNid());
+            }
+         }
+      }
+
+      int[] returnValueArray = new int[returnValues.size()];
+      int   i                = 0;
+
+      for (Integer nid : returnValues) {
+         returnValueArray[i++] = nid;
+      }
+
+      return returnValueArray;
+   }
+
+   /**
+    *
+    * @param relTypes
+    * @return int[] of relationship nids that point to this component
+    */
+   public int[] getDestRelNids(int cNid, NidSetBI relTypes) throws IOException {
+      HashSet<Integer> returnValues = new HashSet<>();
+      int[]            originCNids  = getDestinationOriginNids();
+
+      for (int originCNid : originCNids) {
+         ConceptChronicleBI c = Ts.get().getConcept(originCNid);
+
+         for (RelationshipChronicleBI r : c.getRelsOutgoing()) {
+            if (r.getDestinationNid() == cNid) {
+               for (RelationshipVersionBI rv : r.getVersions()) {
+                  if (relTypes.contains(rv.getTypeNid())) {
+                     returnValues.add(r.getNid());
+
+                     break;
+                  }
+               }
+            }
+         }
+      }
+
+      int[] returnValueArray = new int[returnValues.size()];
+      int   i                = 0;
+
+      for (Integer nid : returnValues) {
+         returnValueArray[i++] = nid;
+      }
+
+      return returnValueArray;
+   }
+
+   /**
+    *
+    * @param vc
+    * @return int[] of relationship nids that point to this component
+    */
+   public int[] getDestRelNids(int cNid, ViewCoordinate vc) {
+      throw new UnsupportedOperationException("Not yet implemented");
+   }
+
+   public Collection<Relationship> getDestRels(int cNid) throws IOException {
+      HashSet<Relationship> returnValues = new HashSet<>();
+      int[]                 originCNids  = getDestinationOriginNids();
+
+      for (int originCNid : originCNids) {
+         Concept c = Concept.get(originCNid);
+
+         for (Relationship r : c.getRelsOutgoing()) {
+            if (r.getDestinationNid() == cNid) {
+               returnValues.add(r);
+            }
+         }
+      }
+
+      return returnValues;
+   }
+
+   /**
+    *
+    * @return int[] of concept nids with relationships that point to this component
+    */
    public int[] getDestinationOriginNids() {
       int   arrayLength           = data[REFEX_OFFSET_INDEX] - data[DESTINATION_OFFSET_INDEX];
       int[] destinationOriginNids = new int[arrayLength];
@@ -123,8 +266,8 @@ public class IndexCacheRecord {
       }
 
       NidPairForRefex[] returnValues = new NidPairForRefex[arrayLength / 2];
-      int                start        = data[REFEX_OFFSET_INDEX];
-      int                returnIndex  = 0;
+      int               start        = data[REFEX_OFFSET_INDEX];
+      int               returnIndex  = 0;
 
       for (int i = start; i < data.length; i = i + 2) {
          returnValues[returnIndex++] = NidPairForRefex.getRefexNidMemberNidPair(data[i], data[i + 1]);
@@ -153,5 +296,47 @@ public class IndexCacheRecord {
       }
 
       return relationshipOutgoingArray;
+   }
+
+   /**
+    *
+    * @return a <code>RelationshipIndexRecord</code> backed by the data in this array.
+    */
+   public RelationshipIndexRecord getRelationshipsRecord() {
+      return new RelationshipIndexRecord(data, RELATIONSHIP_OFFSET, data[DESTINATION_OFFSET_INDEX]);
+   }
+
+   boolean isKindOf(int parentNid, ViewCoordinate vc, RelativePositionComputerBI computer)
+           throws IOException, ContradictionException {
+      HashSet<Integer> visitedSet = new HashSet<>();
+
+      return isKindOfWithVisitedSet(parentNid, vc, computer, visitedSet);
+   }
+
+   boolean isKindOfWithVisitedSet(int parentNid, ViewCoordinate vc, RelativePositionComputerBI computer,
+                                  HashSet<Integer> visitedSet)
+           throws IOException, ContradictionException {
+      if (data[DESTINATION_OFFSET_INDEX] > RELATIONSHIP_OFFSET) {
+         for (RelationshipIndexRecord record : getRelationshipsRecord()) {
+            if (!visitedSet.contains(record.getDestinationNid())) {
+               if (record.isActiveTaxonomyRelationship(vc, computer)) {
+                  visitedSet.add(record.getDestinationNid());
+
+                  if (record.getDestinationNid() == parentNid) {
+                     return true;
+                  } else {
+                     IndexCacheRecord possibleParentRecord =
+                        Bdb.getNidCNidMap().getIndexCacheRecord(record.getDestinationNid());
+
+                     if (possibleParentRecord.isKindOfWithVisitedSet(parentNid, vc, computer, visitedSet)) {
+                        return true;
+                     }
+                  }
+               }
+            }
+         }
+      }
+
+      return false;
    }
 }

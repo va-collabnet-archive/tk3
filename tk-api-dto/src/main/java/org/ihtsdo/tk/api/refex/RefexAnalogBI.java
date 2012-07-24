@@ -17,6 +17,7 @@
 package org.ihtsdo.tk.api.refex;
 
 import java.beans.PropertyVetoException;
+import java.io.IOException;
 
 import org.ihtsdo.tk.api.AnalogBI;
 
@@ -27,7 +28,7 @@ import org.ihtsdo.tk.api.AnalogBI;
 public interface RefexAnalogBI <A extends RefexAnalogBI<A>>
         extends RefexVersionBI<A>, AnalogBI {
 	
-	void setRefexNid(int refexNid) throws PropertyVetoException;
-        void setReferencedComponentNid(int componentNid) throws PropertyVetoException;
+	void setRefexNid(int refexNid) throws IOException, PropertyVetoException;
+        void setReferencedComponentNid(int componentNid) throws IOException, PropertyVetoException;
 
 }

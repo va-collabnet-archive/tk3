@@ -15,7 +15,7 @@ public class NidPairForRefex extends NidPair {
         return false;
     }
 
-    public int getRefsetNid() {
+    public int getRefexNid() {
         return nid1;
     }
 

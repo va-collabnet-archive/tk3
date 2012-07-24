@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.cc.computer.version;
+package org.ihtsdo.helper.version;
 
+import org.ihtsdo.helper.version.RelativePositionComputerBI;
 import java.io.IOException;
 import java.util.BitSet;
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.ihtsdo.cern.colt.map.OpenIntObjectHashMap;
 import org.ihtsdo.tk.api.PositionBI;
 import org.ihtsdo.tk.api.Precedence;
 import org.ihtsdo.tk.api.VersionPointBI;
@@ -31,10 +33,30 @@ import org.ihtsdo.tk.api.VersionPointBI;
  *
  * @author kec
  */
-public class RelativePositionComputer implements PositionMapperBI {
+public class RelativePositionComputer implements RelativePositionComputerBI {
 
+    private static ConcurrentHashMap<PositionBI, RelativePositionComputerBI> mapperCache =
+            new ConcurrentHashMap<>();
+
+    public static RelativePositionComputerBI getComputer(PositionBI position) {
+        RelativePositionComputerBI pm = mapperCache.get(position);
+
+        if (pm != null) {
+            return pm;
+        }
+
+        pm = new RelativePositionComputer(position);
+
+        RelativePositionComputerBI existing = mapperCache.putIfAbsent(position, pm);
+
+        if (existing != null) {
+            pm = existing;
+        }
+
+        return pm;
+    }
     PositionBI destination;
-    OpenIntObjectHashMap pathNidSegmentMap;
+    HashMap<Integer, Segment> pathNidSegmentMap;
 
     public RelativePositionComputer(PositionBI destination) {
         this.destination = destination;
@@ -64,8 +86,8 @@ public class RelativePositionComputer implements PositionMapperBI {
         }
     }
 
-    private static OpenIntObjectHashMap setupPathNidSegmentMap(PositionBI destination) {
-        OpenIntObjectHashMap pathNidSegmentMap = new OpenIntObjectHashMap();
+    private static HashMap<Integer, Segment>  setupPathNidSegmentMap(PositionBI destination) {
+        HashMap<Integer, Segment> pathNidSegmentMap = new HashMap<>();
         AtomicInteger segmentNidSequence = new AtomicInteger(0);
         BitSet precedingSegments = new BitSet();
         addOriginsToPathNidSegmentMap(destination, pathNidSegmentMap, segmentNidSequence, precedingSegments);
@@ -75,7 +97,7 @@ public class RelativePositionComputer implements PositionMapperBI {
     }
 
     private static void addOriginsToPathNidSegmentMap(PositionBI destination,
-            OpenIntObjectHashMap pathNidRpcNidMap, AtomicInteger segmentNidSequence, BitSet precedingSegments) {
+            HashMap<Integer, Segment> pathNidRpcNidMap, AtomicInteger segmentNidSequence, BitSet precedingSegments) {
         Segment segment = new Segment(segmentNidSequence.getAndIncrement(), destination.getPath().getConceptNid(),
                 destination.getTime(), precedingSegments);
         precedingSegments.set(segment.segmentNid);

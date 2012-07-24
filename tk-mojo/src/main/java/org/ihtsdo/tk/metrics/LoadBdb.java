@@ -18,8 +18,12 @@ package org.ihtsdo.tk.metrics;
 import java.io.File;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.ihtdo.tk.metrics.IsKindOfMetrics;
 import org.ihtsdo.helper.io.FileIO;
+import org.ihtsdo.helper.time.TimeHelper;
 import org.ihtsdo.tk.Ts;
+import org.ihtsdo.tk.api.coordinate.StandardViewCoordinates;
+import org.ihtsdo.tk.binding.Taxonomies;
 
 /**
  * Goal which touches a timestamp file.
@@ -31,11 +35,12 @@ import org.ihtsdo.tk.Ts;
 public class LoadBdb extends AbstractMojo {
 
    /**
-    * <code>eConcept format</code> files to import.
-    * @parameter
+    * true if the mutable database should replace the read-only database after
+    * load is complete.
+    * @parameter default-value=true
     * @required
     */
-   private String[] econFileStrings;
+   private boolean moveToReadOnly = true;
 
    /**
     * Location of the file.
@@ -45,26 +50,84 @@ public class LoadBdb extends AbstractMojo {
    private String bdbFolderLocation;
 
    /**
-    * true if the mutable database should replace the read-only database after
-    * load is complete. 
-    * @parameter default-value=true
+    * <code>eConcept format</code> files to import.
+    * @parameter
     * @required
     */
-   private boolean moveToReadOnly = true;
+   private String[] econFileStrings;
+
    //~--- methods -------------------------------------------------------------
 
    @Override
    public void execute() throws MojoExecutionException {
       try {
+         File    bdbFolderFile = new File(bdbFolderLocation);
+         boolean dbExists      = bdbFolderFile.exists();
+
          Ts.setup(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS, bdbFolderLocation);
-         Ts.get().loadEconFiles(econFileStrings);
+
+         if (!dbExists) {
+            Ts.get().loadEconFiles(econFileStrings);
+         }
+
+
+         getLog().info("Starting metrics");
+
+         long start = System.currentTimeMillis();
+         IsKindOfMetrics metrics = new IsKindOfMetrics(Taxonomies.SNOMED.getLenient().getNid(),
+                                      StandardViewCoordinates.getSnomedLatest());
+
+         Ts.get().iterateConceptDataInParallel(metrics);
+
+         long end = System.currentTimeMillis();
+
+         getLog().info("\n\nParallel: " + metrics.getReport());
+         getLog().info("Finished parallel metrics. Elapsed time: "
+                       + TimeHelper.getElapsedTimeString(end - start) + 
+                 " (" + (end - start) + " ms)");
+         start   = System.currentTimeMillis();
+         metrics = new IsKindOfMetrics(Taxonomies.SNOMED.getLenient().getNid(),
+                                       StandardViewCoordinates.getSnomedLatest());
+         Ts.get().iterateConceptDataInSequence(metrics);
+         end = System.currentTimeMillis();
+         getLog().info("\nSequential: " + metrics.getReport());
+         getLog().info("Finished sequential metrics. Elapsed time: "
+                       + TimeHelper.getElapsedTimeString(end - start) + 
+                 " (" + (end - start) + " ms)");
+         start   = System.currentTimeMillis();
+         metrics = new IsKindOfMetrics(Taxonomies.SNOMED.getLenient().getNid(),
+                                      StandardViewCoordinates.getSnomedLatest());
+
+         Ts.get().iterateConceptDataInParallel(metrics);
+
+         end = System.currentTimeMillis();
+
+         getLog().info("\n\nParallel: " + metrics.getReport());
+         getLog().info("Finished parallel metrics. Elapsed time: "
+                       + TimeHelper.getElapsedTimeString(end - start) + 
+                 " (" + (end - start) + " ms)");
+         start   = System.currentTimeMillis();
+         metrics = new IsKindOfMetrics(Taxonomies.SNOMED.getLenient().getNid(),
+                                       StandardViewCoordinates.getSnomedLatest());
+         Ts.get().iterateConceptDataInSequence(metrics);
+         end = System.currentTimeMillis();
+         getLog().info("\nSequential: " + metrics.getReport());
+         getLog().info("Finished sequential metrics. Elapsed time: "
+                       + TimeHelper.getElapsedTimeString(end - start) + 
+                 " (" + (end - start) + " ms)");
+         getLog().info("\n\n");
          Ts.close();
-         if (moveToReadOnly) {
-             getLog().info("moving mutable to read-only");
-             File readOnlyDir = new File(bdbFolderLocation, "read-only");
-             FileIO.recursiveDelete(readOnlyDir);
-             File mutableDir = new File(bdbFolderLocation, "mutable");
-             mutableDir.renameTo(readOnlyDir);
+
+         if (!dbExists && moveToReadOnly) {
+            getLog().info("moving mutable to read-only");
+
+            File readOnlyDir = new File(bdbFolderLocation, "read-only");
+
+            FileIO.recursiveDelete(readOnlyDir);
+
+            File mutableDir = new File(bdbFolderLocation, "mutable");
+
+            mutableDir.renameTo(readOnlyDir);
          }
       } catch (Exception ex) {
          throw new MojoExecutionException(ex.getLocalizedMessage(), ex);

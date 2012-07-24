@@ -23,8 +23,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import org.ihtsdo.cc.ReferenceConcepts;
+import org.ihtsdo.helper.version.RelativePositionComputerBI;
 import org.ihtsdo.tk.Ts;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.VersionPoint;
+import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.binding.SnomedMetadataRf2;
 
 /**
@@ -49,7 +52,7 @@ import org.ihtsdo.tk.binding.SnomedMetadataRf2;
  * for each revision (96 bits + 64 bits per revision).
  * @author kec
  */
-public class RelationshipIndexRecord implements Iterator<RelationshipIndexRecord> {
+public class RelationshipIndexRecord implements Iterable<RelationshipIndexRecord> {
    private static final int   DESTINATION_NID_OFFSET          = 2;
    protected static final int GROUP_BITMASK                   = (1 << 30);
    protected static final int INFERRED_BITMASK                = (1 << 31);
@@ -92,18 +95,8 @@ public class RelationshipIndexRecord implements Iterator<RelationshipIndexRecord
    }
 
    @Override
-   public RelationshipIndexRecord next() {
-      if (hasNext()) {
-         return new RelationshipIndexRecord(data, offset + data[offset + RECORD_LENGTH_OFFSET],
-                                            relationshipDataEnd);
-      }
-
-      throw new NoSuchElementException();
-   }
-
-   @Override
-   public void remove() {
-      throw new UnsupportedOperationException("Not supported.");
+   public Iterator<RelationshipIndexRecord> iterator() {
+      return new RelationshipIndexIterator(offset);
    }
 
    //~--- get methods ---------------------------------------------------------
@@ -122,14 +115,17 @@ public class RelationshipIndexRecord implements Iterator<RelationshipIndexRecord
             inferredNid = SnomedMetadataRf2.INFERRED_RELATIONSHIP_RF2.getLenient().getNid();
             statedNid   = SnomedMetadataRf2.STATED_RELATIONSHIP_RF2.getLenient().getNid();
          } else {
+
+            // support for unit tests where Ts.get() may not be set.
             inferredNid = 99;
             statedNid   = 100;
          }
       }
 
-      List<RelationshipIndexVersion> versions = new ArrayList<>();
-      int                            end      = offset + data[offset + RECORD_LENGTH_OFFSET];
-      int firstStamp = offset + STAMP_INFERRED_HAS_GROUP_OFFSET;
+      List<RelationshipIndexVersion> versions   = new ArrayList<>();
+      int                            end        = offset + data[offset + RECORD_LENGTH_OFFSET];
+      int                            firstStamp = offset + STAMP_INFERRED_HAS_GROUP_OFFSET;
+
       for (int i = firstStamp; i < end; i++) {
          int stamp = data[i];
 
@@ -155,10 +151,102 @@ public class RelationshipIndexRecord implements Iterator<RelationshipIndexRecord
       return versions;
    }
 
-   @Override
    public boolean hasNext() {
       if (offset + data[offset + RECORD_LENGTH_OFFSET] < relationshipDataEnd) {
          return true;
+      }
+
+      return false;
+   }
+
+   boolean isActiveTaxonomyRelationship(ViewCoordinate vc, RelativePositionComputerBI computer)
+           throws IOException, ContradictionException {
+      if (vc.getIsaTypeNids().contains(getTypeNid())) {
+         int           stampIndex = offset + DESTINATION_NID_OFFSET + 1;
+         int           recordEnd  = offset + data[offset + RECORD_LENGTH_OFFSET];
+         List<Integer> stamps     = new ArrayList<>();
+
+         while (stampIndex < recordEnd) {
+            if ((data[stampIndex] & GROUP_BITMASK) != 0) {
+
+               // skip examination of this stamp, and skip the group.
+               // taxonomy rels are never grouped.
+               stampIndex++;
+            } else {
+               int stamp = data[stampIndex];
+
+               stamp &= ~INFERRED_BITMASK;
+
+               switch (vc.getRelAssertionType()) {
+               case INFERRED :
+                  if ((data[stampIndex] & INFERRED_BITMASK) != 0) {
+                     stamps.add(stamp);
+                  }
+
+                  break;
+
+               case STATED :
+                  if ((data[stampIndex] & INFERRED_BITMASK) == 0) {
+                     stamps.add(stamp);
+                  }
+
+                  break;
+
+               case INFERRED_THEN_STATED :
+                  stamps.add(stamp);
+
+                  break;
+
+               default :
+                  throw new UnsupportedOperationException();
+               }
+            }
+
+            // next stampIndex
+            stampIndex++;
+         }
+
+         // see if latest stamp is active;
+         if (!stamps.isEmpty()) {
+            VersionPoint latestStamp = null;
+
+            for (Integer stamp : stamps) {
+               VersionPoint stampPoint = new VersionPoint(stamp);
+
+               if (computer.onRoute(stampPoint)) {
+                  if (latestStamp == null) {
+                     latestStamp = stampPoint;
+                  } else {
+                     switch (computer.relativePosition(latestStamp, stampPoint)) {
+                     case AFTER :
+                        latestStamp = stampPoint;
+
+                        break;
+
+                     case BEFORE :
+                        break;
+
+                     case CONTRADICTION :
+                        throw new ContradictionException("latestStamp: " + latestStamp + " stampPoint: "
+                                                         + stampPoint);
+
+                     case UNREACHABLE :
+                        break;
+
+                     default :
+                        throw new UnsupportedOperationException(computer.relativePosition(latestStamp,
+                                latestStamp).toString());
+                     }
+                  }
+               }
+            }
+
+            if (latestStamp != null) {
+               if (vc.getAllowedStatusNids().contains(latestStamp.getStatusNid())) {
+                  return true;
+               }
+            }
+         }
       }
 
       return false;
@@ -180,5 +268,57 @@ public class RelationshipIndexRecord implements Iterator<RelationshipIndexRecord
       }
 
       return stamp;
+   }
+
+   //~--- inner classes -------------------------------------------------------
+
+   private class RelationshipIndexIterator implements Iterator<RelationshipIndexRecord> {
+      private boolean first = true;
+      private int     iteratorOffset;
+
+      //~--- constructors -----------------------------------------------------
+
+      public RelationshipIndexIterator(int iteratorOffset) {
+         this.iteratorOffset = iteratorOffset;
+      }
+
+      //~--- methods ----------------------------------------------------------
+
+      @Override
+      public RelationshipIndexRecord next() {
+         if (!first) {
+            iteratorOffset = iteratorOffset + data[iteratorOffset + RECORD_LENGTH_OFFSET];
+         }
+
+         first = false;
+
+         if (iteratorOffset < relationshipDataEnd) {
+            return new RelationshipIndexRecord(data, iteratorOffset, relationshipDataEnd);
+         }
+
+         throw new NoSuchElementException();
+      }
+
+      @Override
+      public void remove() {
+         throw new UnsupportedOperationException("Not supported yet.");
+      }
+
+      //~--- get methods ------------------------------------------------------
+
+      @Override
+      public boolean hasNext() {
+         if (first) {
+            if (iteratorOffset < relationshipDataEnd) {
+               return true;
+            }
+         }
+
+         if (iteratorOffset + data[iteratorOffset + RECORD_LENGTH_OFFSET] < relationshipDataEnd) {
+            return true;
+         }
+
+         return false;
+      }
    }
 }

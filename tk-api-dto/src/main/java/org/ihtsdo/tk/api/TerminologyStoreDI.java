@@ -121,4 +121,6 @@ public interface TerminologyStoreDI extends TerminologyDI {
    
    void putViewCoordinate(ViewCoordinate vc) throws IOException;
 
+   boolean isKindOf(int childNid, int parentNid, ViewCoordinate vc)
+           throws IOException, ContradictionException;
 }

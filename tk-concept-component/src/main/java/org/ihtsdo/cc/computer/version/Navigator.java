@@ -1,5 +1,6 @@
 package org.ihtsdo.cc.computer.version;
 
+import org.ihtsdo.helper.version.RelativePositionComputerBI;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,13 +8,14 @@ import java.util.List;
 import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.util.OpenBitSet;
 import org.ihtsdo.cc.component.ConceptComponent;
+import org.ihtsdo.helper.version.RelativePositionComputer;
 import org.ihtsdo.tk.api.PositionBI;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 
 /**
  * The Navigation class can take multiple positions and determine where they are in the bundle's "path space"
  *
- * Maybe the navigator class can implement the conflict resolution policy?
+ * TODO: Maybe the navigator class can implement the conflict resolution policy?
  *
  * @author kec
  *
@@ -25,7 +27,7 @@ public abstract class Navigator {
         V latest = null;
         OpenBitSet resultsPartSet = new OpenBitSet(parts.size());
         for (PositionBI pos : vc.getPositionSet()) {
-            PositionMapperBI mapper = VersionComputer.getMapper(pos);
+            RelativePositionComputerBI mapper = RelativePositionComputer.getComputer(pos);
             OpenBitSet iteratorPartSet = new OpenBitSet(parts.size());
             for (int i = 0; i < parts.size(); i++) {
                 V part = parts.get(i);

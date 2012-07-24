@@ -23,7 +23,6 @@ import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
-import org.ihtsdo.bdb.id.RelationshipIndexRecordFactory;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.component.IdentifierSet;
 import org.ihtsdo.cc.component.IdentifierSetReadOnly;
@@ -92,8 +91,8 @@ public class ConceptBdb extends ComponentBdb {
             concept.resetNidData();
             mutable.put(null, key, value);
             concept.setLastWrite(writeVersion);
-            int[] indexCacheRecord = RelationshipIndexRecordFactory.make(concept);
-            Bdb.getNidCNidMap().putIndexCacheRecord(cNid, indexCacheRecord);
+            
+            Bdb.getNidCNidMap().updateOutgoingRelationshipData(concept);
         }
         Collection<Integer> nids = concept.getAllNids();
         NidCNidMapBdb nidCidMap = Bdb.getNidCNidMap();
@@ -101,10 +100,6 @@ public class ConceptBdb extends ComponentBdb {
             assert nid != 0 : "nid is 0: " + nids;
             nidCidMap.setCNidForNid(cNid, nid);
         }
-        for (int nid: concept.getRelationshipNids()) {
-            nidCidMap.getSequence(nid, NidCNidMapBdb.SequenceType.RELATIONSHIP);
-        }
-        
     }
 
     public int getCount() throws IOException {
@@ -122,7 +117,7 @@ public class ConceptBdb extends ComponentBdb {
     }
 
     public void iterateConceptDataInParallel(I_ProcessConceptData processor) throws Exception {
-        iterateConceptData(new FetchConceptAdaptor(processor), processors * 2);
+        iterateConceptData(new FetchConceptAdaptor(processor), processors);
     }
 
     public void iterateConceptDataInSequence(ProcessUnfetchedConceptDataBI processor) throws Exception {
@@ -130,7 +125,7 @@ public class ConceptBdb extends ComponentBdb {
     }
 
     public void iterateConceptDataInParallel(ProcessUnfetchedConceptDataBI processor) throws Exception {
-        iterateConceptData(processor, processors * 2);
+        iterateConceptData(processor, processors);
     }
 
 

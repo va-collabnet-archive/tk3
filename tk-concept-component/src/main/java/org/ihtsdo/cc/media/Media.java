@@ -262,7 +262,7 @@ public class Media extends ConceptComponent<MediaRevision, Media>
         output.writeShort(partsToWrite.size());
 
         for (MediaRevision p : partsToWrite) {
-            p.writePartToBdb(output);
+            p.writeRevisionBdb(output);
         }
     }
 

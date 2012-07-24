@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.cc.computer.version;
+package org.ihtsdo.helper.version;
 
 import java.io.IOException;
 import org.ihtsdo.tk.api.PositionBI;
@@ -24,7 +24,7 @@ import org.ihtsdo.tk.api.VersionPointBI;
  *
  * @author kec
  */
-public interface PositionMapperBI {
+public interface RelativePositionComputerBI {
 
         /**
      * Possible results when comparing two positions with respect to a
@@ -68,7 +68,7 @@ public interface PositionMapperBI {
      *
      * @param v1 the first part of the comparison.
      * @param v2 the second part of the comparison.
-     * @return the <code>RelativePosition</code> of part1 compared to part2
+     * @return the <code>RelativePosition</code> of v1 compared to v2
      * with respect to the destination position of the class's instance.
      * @throws IOException
      * @throws InterruptedException

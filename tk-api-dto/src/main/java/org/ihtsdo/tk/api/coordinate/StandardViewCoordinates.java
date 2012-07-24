@@ -18,19 +18,13 @@
 
 package org.ihtsdo.tk.api.coordinate;
 
-//~--- non-JDK imports --------------------------------------------------------
-
+import java.io.IOException;
+import java.util.UUID;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.PositionBI;
 import org.ihtsdo.tk.api.PositionSet;
 import org.ihtsdo.tk.api.RelAssertionType;
 import org.ihtsdo.tk.binding.Snomed;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.IOException;
-
-import java.util.UUID;
 
 /**
  *
