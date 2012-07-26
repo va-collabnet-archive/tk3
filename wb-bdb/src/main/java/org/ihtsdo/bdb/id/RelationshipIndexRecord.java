@@ -31,7 +31,7 @@ import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.binding.SnomedMetadataRf2;
 
 /**
- * Origin relationship data is stores the following data for each entry:
+ * Origin relationship data stores the following data for each entry:
  * <br>
  * <br><code>[record length]</code>
  * <br><code>[typeNid]</code>
@@ -39,12 +39,12 @@ import org.ihtsdo.tk.binding.SnomedMetadataRf2;
  * <br><code>[inferredBit + groupGtZeroBit + STAMP]</code>
  * <br><code>[groupId]</code> Only if indicated by groupGtZeroBit
  * <br><code>[inferredBit + groupGtZeroBit + STAMP]</code> addition record only if > 1 STAMP
- * <br><code>[group if indicated by groupGtZeroBit]</code> Only if indicated by groupGtZeroBit
+ * <br><code>[groupId]</code> Only if indicated by groupGtZeroBit
  * <br><code>[inferredBit + groupGtZeroBit + STAMP]</code> addition record only if > 2 STAMP
- * <br><code>[group if indicated by groupGtZeroBit]</code> Only if indicated by groupGtZeroBit
+ * <br><code>[groupId]</code> Only if indicated by groupGtZeroBit
  * <br>...
  * <br> Note this record has no member id. If inferred and stated relationships have the
- * same type, the STAMPs and groups are merged into a single integer. This combination of stated and inferred
+ * same type, the STAMPs and groups are merged into a single record. This combination of stated and inferred
  * saves 96 bits/inferred relationship, and makes search more efficient, since there is less data to
  * search over. In addition, the compression of STAMP, Group, and Inferred values for relationships in group 0
  * saves an additional 64 bits, for ~196 bit savings per relationship. Further savings are also realized by
