@@ -766,7 +766,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
    @Override
    public Collection<? extends IdBI> getAllIds() throws IOException {
-      return getConAttrs().getAdditionalIds();
+      return getConAttrs().getAllIds();
    }
 
    public Collection<Integer> getAllNids() throws IOException {
