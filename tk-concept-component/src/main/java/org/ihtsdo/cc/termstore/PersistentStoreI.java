@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import org.ihtsdo.cc.NidPairForRefex;
 import org.ihtsdo.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.cc.relationship.Relationship;
@@ -84,4 +85,6 @@ public interface PersistentStoreI extends TerminologyStoreDI {
     void resetConceptNidForNid(int cNid, int nid) throws IOException;
 
     public void addRelOrigin(int destinationCNid, int originCNid) throws IOException;
+
+    public void put(UUID uuid, int nid);
 }

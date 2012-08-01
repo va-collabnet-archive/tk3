@@ -624,6 +624,11 @@ public class BdbTerminologyStore extends Termstore {
         return Bdb.getNidCNidMap().isKindOf(childNid, parentNid, vc);
     }
 
+    @Override
+    public void put(UUID uuid, int nid) {
+        Bdb.getUuidsToNidMap().put(uuid, nid);
+    }
+
    //~--- inner classes -------------------------------------------------------
 
    private static class ConceptConverter implements Runnable {

@@ -1,16 +1,24 @@
 package org.ihtsdo.cc.lucene;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
+import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.concept.Concept;
+import org.ihtsdo.helper.uuid.Type5UuidFactory;
 import org.ihtsdo.tk.api.ComponentBI;
 import org.ihtsdo.tk.api.ConceptFetcherBI;
 import org.ihtsdo.tk.api.description.DescriptionChronicleBI;
 import org.ihtsdo.tk.api.description.DescriptionVersionBI;
 import org.ihtsdo.tk.api.id.IdBI;
+import org.ihtsdo.tk.api.id.UuidIdBI;
 
 public class DescriptionIndexGenerator extends IndexGenerator {
 
@@ -48,8 +56,8 @@ public class DescriptionIndexGenerator extends IndexGenerator {
 		Document doc = new Document();
 		doc.add(new Field("dnid", Integer.toString(desc.getNid()), Field.Store.YES, Field.Index.NOT_ANALYZED));
 		doc.add(new Field("cnid", Integer.toString(desc.getConceptNid()), Field.Store.YES, Field.Index.NOT_ANALYZED));
-		addIdsToIndex(doc, desc);
-		addIdsToIndex(doc, Concept.get(desc.getConceptNid()).getConceptAttributes());
+		addIdsToIndex(desc);
+		addIdsToIndex(Concept.get(desc.getConceptNid()).getConceptAttributes());
 		
 		String lastDesc = null;
 		for (DescriptionVersionBI tuple : desc.getVersions()) {
@@ -60,11 +68,22 @@ public class DescriptionIndexGenerator extends IndexGenerator {
 		return doc;
     }
 
-    private static void addIdsToIndex(Document doc, ComponentBI c) throws IOException {
+    private static void addIdsToIndex(ComponentBI c) throws IOException {
         if (c != null) {
+            int nid = c.getNid();
             for (IdBI p : c.getAllIds()) {
-                doc.add(new Field("desc", p.getDenotation().toString(), Field.Store.NO,
-                        Field.Index.ANALYZED));
+                UUID uuid;
+                if (p instanceof UuidIdBI) {
+                    UuidIdBI uuidId = (UuidIdBI) p;
+                    uuid = uuidId.getDenotation();
+                } else {
+                    try {
+                        uuid = Type5UuidFactory.get(P.s.getUuidPrimordialForNid(p.getAuthorityNid()), p.getDenotation().toString());
+                    } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+                        throw new RuntimeException(ex);
+                    } 
+                }
+                P.s.put(uuid, nid);
             }
         }
     }

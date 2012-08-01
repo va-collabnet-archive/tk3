@@ -25,6 +25,13 @@ import org.ihtsdo.tk.db.DbDependency;
 
 public class TerminologySnapshot implements TerminologySnapshotDI {
    private PersistentStoreI store;
+
+
+
+    @Override
+    public ConceptVersionBI getConceptVersionFromAlternateId(UUID authorityUuid, String altId) throws IOException {
+        return store.getConceptVersionFromAlternateId(vc, authorityUuid, altId);
+    }
    private ViewCoordinate   vc;
 
    //~--- constructors --------------------------------------------------------
@@ -153,6 +160,7 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
       store.loadEconFiles(econFiles);
    }
 
+    @Override
    public void loadEconFiles(String[] econFileStrings) throws Exception {
       store.loadEconFiles(econFileStrings);
    }
@@ -227,9 +235,9 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
    }
 
    @Override
-   public ComponentVersionBI getComponentVersionFromAlternateId(String alternateId)
+   public ComponentVersionBI getComponentVersionFromAlternateId(int authorityNid, String alternateId)
            throws IOException, ContradictionException {
-      return store.getComponentVersionFromAlternateId(vc, alternateId);
+      return store.getComponentVersionFromAlternateId(vc, authorityNid, alternateId);
    }
 
    @Override
@@ -263,8 +271,8 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
    }
 
    @Override
-   public ConceptVersionBI getConceptVersionFromAlternateId(String alternateId) throws IOException {
-      Concept c = (Concept) store.getConceptFromAlternateId(alternateId);
+   public ConceptVersionBI getConceptVersionFromAlternateId(int authorityNid, String alternateId) throws IOException {
+      Concept c = (Concept) store.getConceptFromAlternateId(authorityNid, alternateId);
 
       if (c != null) {
          return new ConceptVersion(c, vc);
@@ -341,5 +349,10 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
     @Override
     public boolean isKindOf(int childNid, int parentNid) throws IOException, ContradictionException {
         return store.isKindOf(childNid, parentNid, vc);
+    }
+
+    @Override
+    public ComponentVersionBI getComponentVersionFromAlternateId(UUID authorityUuid, String alternateId) throws IOException, ContradictionException {
+        return store.getComponentVersionFromAlternateId(vc, authorityUuid, alternateId);
     }
 }

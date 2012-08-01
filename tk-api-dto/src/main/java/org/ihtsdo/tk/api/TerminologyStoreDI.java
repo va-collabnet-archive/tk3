@@ -31,7 +31,8 @@ public interface TerminologyStoreDI extends TerminologyDI {
 
    ComponentChroncileBI<?> getComponent(UUID... uuids) throws IOException;
    
-   ComponentChroncileBI<?> getComponentFromAlternateId(String altId) throws IOException;
+   ComponentChroncileBI<?> getComponentFromAlternateId(int authorityNid, String altId) throws IOException;
+   ComponentChroncileBI<?> getComponentFromAlternateId(UUID authorityUuid, String altId) throws IOException;
 
    ComponentVersionBI getComponentVersion(ViewCoordinate vc, Collection<UUID> uuids)
            throws IOException, ContradictionException;
@@ -42,7 +43,9 @@ public interface TerminologyStoreDI extends TerminologyDI {
    ComponentVersionBI getComponentVersion(ViewCoordinate vc, UUID... uuids)
            throws IOException, ContradictionException;
 
-   ComponentVersionBI getComponentVersionFromAlternateId(ViewCoordinate vc, String altId)
+   ComponentVersionBI getComponentVersionFromAlternateId(ViewCoordinate vc, int authorityNid, String altId)
+           throws IOException, ContradictionException;
+   ComponentVersionBI getComponentVersionFromAlternateId(ViewCoordinate vc, UUID authorityUuid, String altId)
            throws IOException, ContradictionException;
 
    ConceptChronicleBI getConcept(Collection<UUID> uuids) throws IOException;
@@ -53,7 +56,8 @@ public interface TerminologyStoreDI extends TerminologyDI {
 
    ConceptChronicleBI getConcept(UUID... uuids) throws IOException;
 
-   ConceptChronicleBI getConceptFromAlternateId(String altId) throws IOException;
+   ConceptChronicleBI getConceptFromAlternateId(int authorityNid, String altId) throws IOException;
+   ConceptChronicleBI getConceptFromAlternateId(UUID authorityUuid, String altId) throws IOException;
 
    ConceptChronicleBI getConceptForNid(int nid) throws IOException;
 
@@ -65,7 +69,8 @@ public interface TerminologyStoreDI extends TerminologyDI {
 
    ConceptVersionBI getConceptVersion(ViewCoordinate vc, UUID... uuids) throws IOException;
 
-   ConceptVersionBI getConceptVersionFromAlternateId(ViewCoordinate vc, String altId) throws IOException;
+   ConceptVersionBI getConceptVersionFromAlternateId(ViewCoordinate vc, int authorityNid, String altId) throws IOException;
+   ConceptVersionBI getConceptVersionFromAlternateId(ViewCoordinate vc, UUID authorityUuid, String altId) throws IOException;
 
    Map<Integer, ConceptVersionBI> getConceptVersions(ViewCoordinate vc, NidBitSetBI cNids) throws IOException;
 

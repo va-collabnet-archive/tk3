@@ -20,9 +20,12 @@ package org.ihtsdo.cc.termstore;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -39,6 +42,7 @@ import org.ihtsdo.cc.lucene.LuceneManager;
 import org.ihtsdo.cc.lucene.SearchResult;
 import org.ihtsdo.cs.ChangeSetWriterHandler;
 import org.ihtsdo.cs.econcept.EConceptChangeSetWriter;
+import org.ihtsdo.helper.uuid.Type5UuidFactory;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.tk.api.changeset.ChangeSetGeneratorBI;
@@ -237,8 +241,20 @@ public abstract class Termstore implements PersistentStoreI {
    }
 
    @Override
-   public ComponentChroncileBI<?> getComponentFromAlternateId(String altId) throws IOException {
-      throw new UnsupportedOperationException("Not supported yet.");
+   public ComponentChroncileBI<?> getComponentFromAlternateId(int authorityNid, String altId) throws IOException {
+        try {
+            return getComponent(P.s.getNidForUuids(Type5UuidFactory.get(P.s.getUuidPrimordialForNid(authorityNid), altId)));
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+            throw new RuntimeException(ex);
+        }
+   }
+   @Override
+   public ComponentChroncileBI<?> getComponentFromAlternateId(UUID authorityUuid, String altId) throws IOException {
+        try {
+            return getComponent(P.s.getNidForUuids(Type5UuidFactory.get(authorityUuid, altId)));
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+            throw new RuntimeException(ex);
+        }
    }
 
    @Override
@@ -266,9 +282,22 @@ public abstract class Termstore implements PersistentStoreI {
    }
 
    @Override
-   public ComponentVersionBI getComponentVersionFromAlternateId(ViewCoordinate vc, String altId)
+   public ComponentVersionBI getComponentVersionFromAlternateId(ViewCoordinate vc, int authorityNid, String altId)
            throws IOException, ContradictionException {
-      throw new UnsupportedOperationException("Not supported yet.");
+       try {
+            return getComponentVersion(vc, P.s.getNidForUuids(Type5UuidFactory.get(P.s.getUuidPrimordialForNid(authorityNid), altId)));
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+            throw new RuntimeException(ex);
+        }
+   }
+   @Override
+   public ComponentVersionBI getComponentVersionFromAlternateId(ViewCoordinate vc, UUID authorityUUID, String altId)
+           throws IOException, ContradictionException {
+       try {
+            return getComponentVersion(vc, P.s.getNidForUuids(Type5UuidFactory.get(authorityUUID, altId)));
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+            throw new RuntimeException(ex);
+        }
    }
 
    @Override
@@ -297,24 +326,12 @@ public abstract class Termstore implements PersistentStoreI {
    }
 
    @Override
-   public Concept getConceptFromAlternateId(String altId) throws IOException {
-      Collection<Integer> cnids = searchLucene(altId, SearchType.CONCEPT);
-
-      if (cnids.size() > 1) {
-         NidSet ns = new NidSet();
-
-         for (int nid : cnids) {
-            ns.add(nid);
-         }
-
-         throw new IOException("Non-unique match for: " + altId + " " + cnids);
-      }
-
-      if (cnids.isEmpty()) {
-         return null;
-      }
-
-      return Concept.get(cnids.iterator().next());
+   public Concept getConceptFromAlternateId(int authorityNid, String altId) throws IOException {
+        try {
+            return Concept.get(P.s.getNidForUuids(Type5UuidFactory.get(P.s.getUuidPrimordialForNid(authorityNid), altId)));
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+            throw new RuntimeException(ex);
+        }
    }
 
    @Override
@@ -333,12 +350,29 @@ public abstract class Termstore implements PersistentStoreI {
    }
 
    @Override
-   public ConceptVersion getConceptVersionFromAlternateId(ViewCoordinate vc, String altId)
+   public ConceptVersion getConceptVersionFromAlternateId(ViewCoordinate vc, int authorityNid, String altId)
            throws IOException {
-      Concept c = getConceptFromAlternateId(altId);
+      Concept c = getConceptFromAlternateId(authorityNid, altId);
 
       return new ConceptVersion(c, vc);
    }
+
+   @Override
+   public ConceptVersion getConceptVersionFromAlternateId(ViewCoordinate vc, UUID authorityUuid, String altId)
+           throws IOException {
+      Concept c = (Concept) getConceptFromAlternateId(authorityUuid, altId);
+
+      return new ConceptVersion(c, vc);
+   }
+
+    @Override
+    public ConceptChronicleBI getConceptFromAlternateId(UUID authorityUuid, String altId) throws IOException {
+       try {
+            return Concept.get(P.s.getNidForUuids(Type5UuidFactory.get(authorityUuid, altId)));
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
    @Override
    public Map<Integer, ConceptVersionBI> getConceptVersions(ViewCoordinate c, NidBitSetBI cNids)

@@ -2,7 +2,6 @@ package org.ihtsdo.tk.api;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.concept.ConceptVersionBI;
 import org.ihtsdo.tk.api.coordinate.EditCoordinate;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
@@ -16,8 +15,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface TerminologySnapshotDI extends TerminologyDI {
-    
-   PositionBI newPosition(PathBI path, long time) throws IOException;
 
    TerminologyBuilderBI getBuilder(EditCoordinate ec);
 
@@ -29,7 +26,8 @@ public interface TerminologySnapshotDI extends TerminologyDI {
 
    ComponentVersionBI getComponentVersion(UUID... uuids) throws IOException, ContradictionException;
 
-   ComponentVersionBI getComponentVersionFromAlternateId(String alternateId) throws IOException, ContradictionException;
+   ComponentVersionBI getComponentVersionFromAlternateId(int authorityNid, String alternateId) throws IOException, ContradictionException;
+   ComponentVersionBI getComponentVersionFromAlternateId(UUID authorityUuid, String alternateId) throws IOException, ContradictionException;
 
    ConceptVersionBI getConceptForNid(int nid) throws IOException;
 
@@ -41,7 +39,8 @@ public interface TerminologySnapshotDI extends TerminologyDI {
 
    ConceptVersionBI getConceptVersion(UUID... uuids) throws IOException;
 
-   ConceptVersionBI getConceptVersionFromAlternateId(String alternateId) throws IOException;
+   ConceptVersionBI getConceptVersionFromAlternateId(int authorityNid, String alternateId) throws IOException;
+   ConceptVersionBI getConceptVersionFromAlternateId(UUID authorityUuid, String alternateId) throws IOException;
 
    Map<Integer, ConceptVersionBI> getConceptVersions(NidBitSetBI cNids) throws IOException;
 

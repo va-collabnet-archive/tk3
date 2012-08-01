@@ -650,5 +650,35 @@ public class RestClient extends Termstore {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public void put(UUID uuid, int nid) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ComponentChroncileBI<?> getComponentFromAlternateId(int authorityNid, String altId) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Concept getConceptFromAlternateId(int authorityNid, String altId) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ComponentChroncileBI<?> getComponentFromAlternateId(UUID authorityUuid, String altId) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ComponentVersionBI getComponentVersionFromAlternateId(ViewCoordinate vc, UUID authorityUuid, String altId) throws IOException, ContradictionException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ConceptChronicleBI getConceptFromAlternateId(UUID authorityUuid, String altId) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
 }
