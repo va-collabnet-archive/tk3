@@ -26,11 +26,9 @@ import org.ihtsdo.bdb.Bdb;
 import org.ihtsdo.cc.NidPairForRefex;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.relationship.Relationship;
-import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.helper.version.RelativePositionComputerBI;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.NidList;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
@@ -339,4 +337,20 @@ public class IndexCacheRecord {
 
       return false;
    }
+   
+   
+    boolean isChildOf(int parentNid, ViewCoordinate vc, RelativePositionComputerBI computer)
+            throws IOException, ContradictionException {
+        if (data[DESTINATION_OFFSET_INDEX] > RELATIONSHIP_OFFSET) {
+            for (RelationshipIndexRecord record : getRelationshipsRecord()) {
+                if (record.isActiveTaxonomyRelationship(vc, computer)) {
+                    if (record.getDestinationNid() == parentNid) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 }

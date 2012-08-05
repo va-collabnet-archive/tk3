@@ -12,8 +12,10 @@ import com.sleepycat.je.OperationStatus;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
@@ -28,6 +30,7 @@ import org.ihtsdo.concurrency.ConcurrentReentrantLocks;
 import org.ihtsdo.helper.version.RelativePositionComputer;
 import org.ihtsdo.helper.version.RelativePositionComputerBI;
 import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.api.PositionBI;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
@@ -562,4 +565,95 @@ public class NidCNidMapBdb extends ComponentBdb {
          throw new IOException("nidCidMap[" + mapIndex + "] " + "is null. cNid: " + cNid + " nid: " + nid);
       }
    }
+
+    public NidBitSetBI getKindOfNids(int conceptNid, ViewCoordinate vc) throws IOException, ContradictionException {
+        NidBitSetBI kindOfSet = Bdb.getConceptDb().getEmptyIdSet();
+        NidBitSetBI testedSet = Bdb.getConceptDb().getEmptyIdSet();
+        kindOfSet.setMember(conceptNid);
+        getKindOfNids(conceptNid, vc, kindOfSet, testedSet);
+
+        return kindOfSet;
+    }
+
+    public boolean isChildOf(int childNid, int parentNid, ViewCoordinate vc)
+            throws IOException, ContradictionException {
+        if (childNid == parentNid) {
+            return false;
+        }
+        IndexCacheRecord indexCacheRecord = getIndexCacheRecord(childNid);
+        Iterator<PositionBI> viewPositionItr = vc.getPositionSet().iterator();
+        PositionBI position = viewPositionItr.next();
+
+        if (viewPositionItr.hasNext()) {
+            throw new UnsupportedOperationException(
+                    "Can only determine is kind of with a single view position. " + vc);
+        }
+
+        RelativePositionComputerBI computer = RelativePositionComputer.getComputer(position);
+
+        return indexCacheRecord.isChildOf(parentNid, vc, computer);
+    }
+
+    private void getKindOfNids(int conceptNid, ViewCoordinate vc, NidBitSetBI kindOfSet, NidBitSetBI testedSet) throws IOException, ContradictionException {
+        for (int cNid : getIndexCacheRecord(conceptNid).getDestinationOriginNids()) {
+            if (!testedSet.isMember(cNid)) {
+                testedSet.setMember(cNid);
+                if (isChildOf(cNid, conceptNid, vc)) {
+                    kindOfSet.setMember(cNid);
+                    getKindOfNids(cNid, vc, kindOfSet, testedSet);
+                }
+            }
+        }
+    }
+
+    public Set<Integer> getAncestorNids(int childNid, ViewCoordinate vc) throws IOException, ContradictionException {
+        Set<Integer> ancestorSet = new HashSet<>();
+        Set<Long> testedSet = new HashSet<>();
+        Iterator<PositionBI> viewPositionItr = vc.getPositionSet().iterator();
+        PositionBI position = viewPositionItr.next();
+
+        if (viewPositionItr.hasNext()) {
+            throw new UnsupportedOperationException(
+                    "Can only determine is kind of with a single view position. " + vc);
+        }
+
+        RelativePositionComputerBI computer = RelativePositionComputer.getComputer(position);
+        getAncestorNids(childNid, vc, ancestorSet, testedSet, computer);
+
+        return ancestorSet;
+    }
+
+    private void getAncestorNids(int childNid, ViewCoordinate vc, Set<Integer> ancestorSet,
+            Set<Long> testedSet, RelativePositionComputerBI computer) throws IOException, ContradictionException {
+        for (RelationshipIndexRecord r : getIndexCacheRecord(childNid).getRelationshipsRecord()) {
+            if (!ancestorSet.contains(r.getDestinationNid())) {
+                long testedKey = childNid;
+
+                testedKey = testedKey & 0x00000000FFFFFFFFL;
+
+                long nid1Long = r.getDestinationNid();
+
+                nid1Long = nid1Long & 0x00000000FFFFFFFFL;
+                testedKey = testedKey << 32;
+                testedKey = testedKey | nid1Long;
+
+                if (!testedSet.contains(testedKey)) {
+                    testedSet.add(testedKey);
+                    if (r.isActiveTaxonomyRelationship(vc, computer)) {
+                        ancestorSet.add(r.getDestinationNid());
+                        getAncestorNids(r.getDestinationNid(), vc);
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean hasExtension(int refsetNid, int componentNid) {
+       for (NidPairForRefex npr: getRefsetPairs(componentNid)) {
+           if (npr.getRefexNid() == refsetNid) {
+               return true;
+           }
+       }
+       return false;
+    }
 }
