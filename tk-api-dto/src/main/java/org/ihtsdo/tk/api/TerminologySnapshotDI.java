@@ -26,9 +26,6 @@ public interface TerminologySnapshotDI extends TerminologyDI {
 
    ComponentVersionBI getComponentVersion(UUID... uuids) throws IOException, ContradictionException;
 
-   ComponentVersionBI getComponentVersionFromAlternateId(int authorityNid, String alternateId) throws IOException, ContradictionException;
-   ComponentVersionBI getComponentVersionFromAlternateId(UUID authorityUuid, String alternateId) throws IOException, ContradictionException;
-
    ConceptVersionBI getConceptForNid(int nid) throws IOException;
 
    ConceptVersionBI getConceptVersion(Collection<UUID> uuids) throws IOException;
@@ -38,9 +35,6 @@ public interface TerminologySnapshotDI extends TerminologyDI {
    ConceptVersionBI getConceptVersion(int cNid) throws IOException;
 
    ConceptVersionBI getConceptVersion(UUID... uuids) throws IOException;
-
-   ConceptVersionBI getConceptVersionFromAlternateId(int authorityNid, String alternateId) throws IOException;
-   ConceptVersionBI getConceptVersionFromAlternateId(UUID authorityUuid, String alternateId) throws IOException;
 
    Map<Integer, ConceptVersionBI> getConceptVersions(NidBitSetBI cNids) throws IOException;
 

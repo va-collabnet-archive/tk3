@@ -25,7 +25,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -42,7 +41,9 @@ import org.ihtsdo.cc.lucene.LuceneManager;
 import org.ihtsdo.cc.lucene.SearchResult;
 import org.ihtsdo.cs.ChangeSetWriterHandler;
 import org.ihtsdo.cs.econcept.EConceptChangeSetWriter;
+import org.ihtsdo.helper.uuid.Type3UuidFactory;
 import org.ihtsdo.helper.uuid.Type5UuidFactory;
+import org.ihtsdo.helper.uuid.UuidFactory;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.tk.api.changeset.ChangeSetGeneratorBI;
@@ -249,12 +250,8 @@ public abstract class Termstore implements PersistentStoreI {
         }
    }
    @Override
-   public ComponentChroncileBI<?> getComponentFromAlternateId(UUID authorityUuid, String altId) throws IOException {
-        try {
-            return getComponent(P.s.getNidForUuids(Type5UuidFactory.get(authorityUuid, altId)));
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-            throw new RuntimeException(ex);
-        }
+   public int getNidFromAlternateId(UUID authorityUuid, String altId) throws IOException {
+       return P.s.getNidForUuids(UuidFactory.getUuidFromAlternateId(authorityUuid, altId));
    }
 
    @Override

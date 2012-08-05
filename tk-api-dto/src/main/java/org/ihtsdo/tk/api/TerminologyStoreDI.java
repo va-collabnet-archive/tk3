@@ -32,7 +32,6 @@ public interface TerminologyStoreDI extends TerminologyDI {
    ComponentChroncileBI<?> getComponent(UUID... uuids) throws IOException;
    
    ComponentChroncileBI<?> getComponentFromAlternateId(int authorityNid, String altId) throws IOException;
-   ComponentChroncileBI<?> getComponentFromAlternateId(UUID authorityUuid, String altId) throws IOException;
 
    ComponentVersionBI getComponentVersion(ViewCoordinate vc, Collection<UUID> uuids)
            throws IOException, ContradictionException;
@@ -61,8 +60,6 @@ public interface TerminologyStoreDI extends TerminologyDI {
 
    ConceptChronicleBI getConceptForNid(int nid) throws IOException;
 
-   int getConceptNidForNid(int nid);
-
    ConceptVersionBI getConceptVersion(ViewCoordinate vc, Collection<UUID> uuids) throws IOException;
 
    ConceptVersionBI getConceptVersion(ViewCoordinate vc, int cNid) throws IOException;
@@ -77,13 +74,6 @@ public interface TerminologyStoreDI extends TerminologyDI {
    Map<Integer, ConceptChronicleBI> getConcepts(NidBitSetBI cNids) throws IOException;
 
    Collection<DbDependency> getLatestChangeSetDependencies() throws IOException;
-
-   int getNidForUuids(Collection<UUID> uuids) throws IOException;
-
-   Collection<UUID> getUuidCollection(Collection<Integer> nids) throws IOException;
-   Collection<Integer> getNidCollection(Collection<UUID> uuids) throws IOException;
-
-   int getNidForUuids(UUID... uuids) throws IOException;
 
    List<? extends PathBI> getPathChildren(int nid);
 

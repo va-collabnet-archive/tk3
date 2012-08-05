@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Set;
+import java.util.UUID;
 import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.tk.api.changeset.ChangeSetGeneratorBI;
 import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
@@ -113,4 +114,18 @@ public interface TerminologyDI {
    int getStatusNidForStamp(int sapNid);
 
    long getTimeForStamp(int sapNid);
+   
+   
+   int getNidForUuids(Collection<UUID> uuids) throws IOException;
+
+   Collection<UUID> getUuidCollection(Collection<Integer> nids) throws IOException;
+   
+   Collection<Integer> getNidCollection(Collection<UUID> uuids) throws IOException;
+
+   int getNidForUuids(UUID... uuids) throws IOException;
+   
+   int getConceptNidForNid(int nid);
+   
+   int getNidFromAlternateId(UUID authorityUuid, String altId) throws IOException;
+
 }

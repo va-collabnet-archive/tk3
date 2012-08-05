@@ -22,8 +22,10 @@ import org.ihtdo.tk.metrics.IsKindOfMetrics;
 import org.ihtsdo.helper.io.FileIO;
 import org.ihtsdo.helper.time.TimeHelper;
 import org.ihtsdo.tk.Ts;
+import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.tk.binding.Taxonomies;
+import org.ihtsdo.tk.binding.TermAux;
 
 /**
  * Goal which touches a timestamp file.
@@ -116,6 +118,12 @@ public class LoadBdb extends AbstractMojo {
                        + TimeHelper.getElapsedTimeString(end - start) + 
                  " (" + (end - start) + " ms)");
          getLog().info("\n\n");
+         
+         
+         int nid = Ts.get().getNidFromAlternateId(TermAux.SNOMED_IDENTIFIER.getUuids()[0], "138875005");
+         ConceptChronicleBI snomedConcept = Ts.get().getConceptForNid(nid);
+         System.out.println("Found concept from alt id: " + snomedConcept);
+         
          Ts.close();
 
          if (!dbExists && moveToReadOnly) {

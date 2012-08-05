@@ -8,8 +8,10 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.concept.ConceptVersion;
+import org.ihtsdo.helper.uuid.UuidFactory;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.tk.api.changeset.ChangeSetGeneratorBI;
@@ -27,11 +29,10 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
    private PersistentStoreI store;
 
 
-
-    @Override
-    public ConceptVersionBI getConceptVersionFromAlternateId(UUID authorityUuid, String altId) throws IOException {
-        return store.getConceptVersionFromAlternateId(vc, authorityUuid, altId);
-    }
+   @Override
+   public int getNidFromAlternateId(UUID authorityUuid, String altId) throws IOException {
+       return P.s.getNidForUuids(UuidFactory.getUuidFromAlternateId(authorityUuid, altId));
+   }
    private ViewCoordinate   vc;
 
    //~--- constructors --------------------------------------------------------
@@ -235,12 +236,6 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
    }
 
    @Override
-   public ComponentVersionBI getComponentVersionFromAlternateId(int authorityNid, String alternateId)
-           throws IOException, ContradictionException {
-      return store.getComponentVersionFromAlternateId(vc, authorityNid, alternateId);
-   }
-
-   @Override
    public ConceptVersionBI getConceptForNid(int nid) throws IOException {
       return new ConceptVersion((Concept) store.getConceptForNid(nid), vc);
    }
@@ -268,17 +263,6 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
    @Override
    public ConceptVersionBI getConceptVersion(UUID... uuids) throws IOException {
       return new ConceptVersion((Concept) store.getConcept(store.getNidForUuids(uuids)), vc);
-   }
-
-   @Override
-   public ConceptVersionBI getConceptVersionFromAlternateId(int authorityNid, String alternateId) throws IOException {
-      Concept c = (Concept) store.getConceptFromAlternateId(authorityNid, alternateId);
-
-      if (c != null) {
-         return new ConceptVersion(c, vc);
-      }
-
-      return null;
    }
 
    @Override
@@ -352,7 +336,27 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
     }
 
     @Override
-    public ComponentVersionBI getComponentVersionFromAlternateId(UUID authorityUuid, String alternateId) throws IOException, ContradictionException {
-        return store.getComponentVersionFromAlternateId(vc, authorityUuid, alternateId);
+    public int getNidForUuids(Collection<UUID> uuids) throws IOException {
+        return P.s.getNidForUuids(uuids);
+    }
+
+    @Override
+    public Collection<UUID> getUuidCollection(Collection<Integer> nids) throws IOException {
+        return P.s.getUuidCollection(nids);
+    }
+
+    @Override
+    public Collection<Integer> getNidCollection(Collection<UUID> uuids) throws IOException {
+        return P.s.getNidCollection(uuids);
+    }
+
+    @Override
+    public int getNidForUuids(UUID... uuids) throws IOException {
+        return P.s.getNidForUuids(uuids);
+    }
+
+    @Override
+    public int getConceptNidForNid(int nid) {
+        return P.s.getConceptNidForNid(nid);
     }
 }

@@ -37,12 +37,16 @@ import org.ihtsdo.tk.hash.Hashcode;
 import java.beans.PropertyVetoException;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.helper.uuid.Type3UuidFactory;
+import org.ihtsdo.helper.uuid.Type5UuidFactory;
 
 public abstract class ConceptComponent<R extends Revision<R, C>, C extends ConceptComponent<R, C>>
         implements ComponentBI, ComponentVersionBI, IdBI, AnalogBI, AnalogGeneratorBI<R>,
@@ -474,14 +478,14 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return true;
    }
 
-   public boolean containsSapt(int sapt) {
-      if (primordialStampNid == sapt) {
+   public boolean containsStamp(int stamp) {
+      if (primordialStampNid == stamp) {
          return true;
       }
 
       if (revisions != null) {
          for (Revision r : revisions) {
-            if (r.stampNid == sapt) {
+            if (r.stampNid == stamp) {
                return true;
             }
          }
@@ -489,7 +493,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
       return false;
    }
-
+   private static final UUID snomedAuthorityUuid = TermAux.SNOMED_IDENTIFIER.getUuids()[0];;
    public final void convertId(List<TkIdentifier> list) throws IOException {
       if ((list == null) || list.isEmpty()) {
          return;
@@ -498,27 +502,38 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       additionalIdVersions = new ArrayList<>(list.size());
 
       for (TkIdentifier idv : list) {
-         Object denotation = idv.getDenotation();
+           try {
+               Object denotation = idv.getDenotation();
 
-         switch (IDENTIFIER_PART_TYPES.getType(denotation.getClass())) {
-         case LONG :
-            additionalIdVersions.add(new IdentifierVersionLong((TkIdentifierLong) idv));
+               switch (IDENTIFIER_PART_TYPES.getType(denotation.getClass())) {
+               case LONG :
+                  additionalIdVersions.add(new IdentifierVersionLong((TkIdentifierLong) idv));
+                  if (idv.authorityUuid.equals(snomedAuthorityUuid)) {
+                      P.s.put(Type3UuidFactory.fromSNOMED(idv.getDenotation().toString()), nid);
+                  } else {
+                      P.s.put(Type5UuidFactory.get(idv.getAuthorityUuid(), idv.getDenotation().toString()), nid);
+                      
+                  }
+                  break;
 
-            break;
+               case STRING :
+                  additionalIdVersions.add(new IdentifierVersionString((TkIdentifierString) idv));
+                  P.s.put(Type5UuidFactory.get(idv.getAuthorityUuid(), idv.getDenotation().toString()), nid);
 
-         case STRING :
-            additionalIdVersions.add(new IdentifierVersionString((TkIdentifierString) idv));
+                  break;
 
-            break;
+               case UUID :
+                  additionalIdVersions.add(new IdentifierVersionUuid((TkIdentifierUuid) idv));
+                  P.s.put(Type5UuidFactory.get(idv.getAuthorityUuid(), idv.getDenotation().toString()), nid);
 
-         case UUID :
-            additionalIdVersions.add(new IdentifierVersionUuid((TkIdentifierUuid) idv));
+                  break;
 
-            break;
-
-         default :
-            throw new UnsupportedOperationException();
-         }
+               default :
+                  throw new UnsupportedOperationException();
+               }
+           } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+               throw new IOException(ex);
+           }
       }
    }
 

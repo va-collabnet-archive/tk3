@@ -23,7 +23,6 @@ import org.ihtsdo.cc.lucene.LuceneManager;
 import org.ihtsdo.cc.media.Media;
 import org.ihtsdo.cc.refex.RefexMember;
 import org.ihtsdo.cc.relationship.Relationship;
-import org.ihtsdo.tk.api.ComponentChroncileBI;
 import org.ihtsdo.tk.api.NidSetBI;
 import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 
@@ -98,7 +97,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
     */
    @Override
    public void add(Relationship rel) throws IOException {
-      getSourceRels().addDirect(rel);
+      getSourceRels().add(rel);
       getSrcRelNids().add(rel.nid);
       modified();
    }
@@ -513,7 +512,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
          super(new ComponentComparator());
 
          for (Relationship r : c) {
-            addDirect(r);
+            add(r);
          }
       }
 
@@ -532,10 +531,6 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
          } catch (IOException e1) {
             throw new RuntimeException(e1);
          }
-      }
-
-      public final boolean addDirect(Relationship e) {
-         return super.add(e);
       }
    }
 

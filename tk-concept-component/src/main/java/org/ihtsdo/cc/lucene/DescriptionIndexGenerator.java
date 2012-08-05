@@ -56,8 +56,6 @@ public class DescriptionIndexGenerator extends IndexGenerator {
 		Document doc = new Document();
 		doc.add(new Field("dnid", Integer.toString(desc.getNid()), Field.Store.YES, Field.Index.NOT_ANALYZED));
 		doc.add(new Field("cnid", Integer.toString(desc.getConceptNid()), Field.Store.YES, Field.Index.NOT_ANALYZED));
-		addIdsToIndex(desc);
-		addIdsToIndex(Concept.get(desc.getConceptNid()).getConceptAttributes());
 		
 		String lastDesc = null;
 		for (DescriptionVersionBI tuple : desc.getVersions()) {
