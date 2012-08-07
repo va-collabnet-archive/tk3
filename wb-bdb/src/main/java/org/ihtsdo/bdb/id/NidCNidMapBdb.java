@@ -200,6 +200,7 @@ public class NidCNidMapBdb extends ComponentBdb {
 
          record.forgetNidPairForRefex(pair.getRefexNid(), pair.getMemberNid());
          indexCacheRecords.get()[mapIndex][nidIndexInMap] = record.getData();
+         mapChanged[mapIndex]                      = true;
       } finally {
          locks.unlock(nid);
       }
