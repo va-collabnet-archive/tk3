@@ -86,6 +86,7 @@ public class NidCNidMapBdb extends ComponentBdb {
 
          record.addNidPairForRefex(pair.getRefexNid(), pair.getMemberNid());
          indexCacheRecords.get()[mapIndex][nidIndexInMap] = record.getData();
+         mapChanged[mapIndex]                      = true;
       } finally {
          locks.unlock(nid);
       }
@@ -110,6 +111,7 @@ public class NidCNidMapBdb extends ComponentBdb {
 
          record.addDestinationOriginNid(originCNid);
          indexCacheRecords.get()[mapIndex][nidIndexInMap] = record.getData();
+         mapChanged[mapIndex]                      = true;
       } finally {
          locks.unlock(destinationCNid);
       }
@@ -359,6 +361,7 @@ public class NidCNidMapBdb extends ComponentBdb {
          record.updateData(indexCacheRecordRelationshipArray, record.getDestinationOriginNids(),
                            record.getRefexIndexArray());
          indexCacheRecords.get()[mapIndex][nidIndexInMap] = record.getData();
+         mapChanged[mapIndex]                      = true;
       } finally {
          locks.unlock(concept.getNid());
       }
