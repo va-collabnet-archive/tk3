@@ -499,10 +499,9 @@ public class NidCNidMapBdb extends ComponentBdb {
    public boolean hasMap(int nid) {
       int mapIndex           = (nid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
       int nidIndexInMap      = ((nid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE);
-      int sequenceIndexInMap = nidIndexInMap + 1;
 
       if ((mapIndex < nidCNidMaps.get().length) && (nidIndexInMap < NID_CNID_MAP_SIZE)) {
-         if (nidCNidMaps.get()[mapIndex][sequenceIndexInMap] < Integer.MAX_VALUE) {
+         if (nidCNidMaps.get()[mapIndex][nidIndexInMap] < Integer.MAX_VALUE) {
             return true;
          }
       }
@@ -570,15 +569,6 @@ public class NidCNidMapBdb extends ComponentBdb {
       }
    }
 
-    public NidBitSetBI getKindOfNids(int conceptNid, ViewCoordinate vc) throws IOException, ContradictionException {
-        NidBitSetBI kindOfSet = Bdb.getConceptDb().getEmptyIdSet();
-        NidBitSetBI testedSet = Bdb.getConceptDb().getEmptyIdSet();
-        kindOfSet.setMember(conceptNid);
-        getKindOfNids(conceptNid, vc, kindOfSet, testedSet);
-
-        return kindOfSet;
-    }
-
     public boolean isChildOf(int childNid, int parentNid, ViewCoordinate vc)
             throws IOException, ContradictionException {
         if (childNid == parentNid) {
@@ -598,10 +588,28 @@ public class NidCNidMapBdb extends ComponentBdb {
         return indexCacheRecord.isChildOf(parentNid, vc, computer);
     }
 
-    private void getKindOfNids(int conceptNid, ViewCoordinate vc, NidBitSetBI kindOfSet, NidBitSetBI testedSet) throws IOException, ContradictionException {
+    public NidBitSetBI getKindOfNids(int conceptNid, ViewCoordinate vc) throws IOException, ContradictionException {
+        NidBitSetBI kindOfSet = Bdb.getConceptDb().getEmptyIdSet();
+        HashSet<Long> testedSet = new HashSet<>();
+        kindOfSet.setMember(conceptNid);
+        getKindOfNids(conceptNid, vc, kindOfSet, testedSet);
+
+        return kindOfSet;
+    }
+
+    private void getKindOfNids(int conceptNid, ViewCoordinate vc, NidBitSetBI kindOfSet, HashSet<Long> testedSet) throws IOException, ContradictionException {
         for (int cNid : getIndexCacheRecord(conceptNid).getDestinationOriginNids()) {
-            if (!testedSet.isMember(cNid)) {
-                testedSet.setMember(cNid);
+            long testedKey = conceptNid;
+
+            testedKey = testedKey & 0x00000000FFFFFFFFL;
+
+            long nid1Long = cNid;
+
+            nid1Long = nid1Long & 0x00000000FFFFFFFFL;
+            testedKey = testedKey << 32;
+            testedKey = testedKey | nid1Long;
+            if (!testedSet.contains(testedKey)) {
+                testedSet.add(testedKey);
                 if (isChildOf(cNid, conceptNid, vc)) {
                     kindOfSet.setMember(cNid);
                     getKindOfNids(cNid, vc, kindOfSet, testedSet);
