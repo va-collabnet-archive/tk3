@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.ihtsdo.bdb.Bdb;
 import org.ihtsdo.cc.NidPairForRefex;
 import org.ihtsdo.cc.concept.Concept;
@@ -351,6 +353,45 @@ public class IndexCacheRecord {
             }
         }
         return false;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Relationships:\n");
+        if (data[DESTINATION_OFFSET_INDEX] > RELATIONSHIP_OFFSET) {
+            for (RelationshipIndexRecord record : getRelationshipsRecord()) {
+                try {
+                    sb.append("  ").append(Concept.get(record.getTypeNid()).toString()).append(" [").
+                            append(record.getDestinationNid()).append("]: ").
+                            append(Concept.get(record.getDestinationNid()).toString()).append(" [").
+                            append(record.getDestinationNid()).append("]\n");
+                } catch (IOException ex) {
+                    Logger.getLogger(IndexCacheRecord.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        sb.append("\nRelationship origins:\n");
+        for (int destinationOrigin : getDestinationOriginNids()) {
+            try {
+                sb.append("  ").append(Concept.get(destinationOrigin).toString()).append(" [").
+                            append(destinationOrigin).append("]\n");;
+            } catch (IOException ex) {
+                Logger.getLogger(IndexCacheRecord.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        sb.append("\nRefsets:\n");
+        for (NidPairForRefex pair : getNidPairsForRefsets()) {
+            try {
+                sb.append("  ").append(Concept.get(pair.getRefexNid()).toString()).append(" [").
+                            append(pair.getRefexNid()).append("], memberNid: ").
+                        append(pair.getMemberNid()).append("\n");
+            } catch (IOException ex) {
+                Logger.getLogger(IndexCacheRecord.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return sb.toString();
     }
 
 }
