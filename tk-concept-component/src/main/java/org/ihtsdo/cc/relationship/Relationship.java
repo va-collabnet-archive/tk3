@@ -71,10 +71,10 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
    public Relationship(TkRelationship eRel, Concept enclosingConcept) throws IOException {
       super(eRel, enclosingConcept.getNid());
       c2Nid = P.s.getNidForUuids(eRel.getC2Uuid());
-      setCharacteristicNid(P.s.getNidForUuids(eRel.getCharacteristicUuid()));
+      characteristicNid = P.s.getNidForUuids(eRel.getCharacteristicUuid());
       group = eRel.getRelGroup();
-      setRefinabilityNid(P.s.getNidForUuids(eRel.getRefinabilityUuid()));
-      setTypeNid(P.s.getNidForUuids(eRel.getTypeUuid()));
+      refinabilityNid = P.s.getNidForUuids(eRel.getRefinabilityUuid());
+      typeNid = P.s.getNidForUuids(eRel.getTypeUuid());
       primordialStampNid = P.s.getSapNid(eRel);
 
       if (eRel.getRevisionList() != null) {
