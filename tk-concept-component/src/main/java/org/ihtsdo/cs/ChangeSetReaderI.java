@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Set;
+import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 
 /**
  * Provides an interface to read change sets. Provides methods to allow reading
@@ -48,7 +50,7 @@ public interface ChangeSetReaderI extends Serializable {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public void readUntil(long time) throws IOException, ClassNotFoundException;
+    public void readUntil(long time, Set<ConceptChronicleBI> indexedAnnotationConcepts) throws IOException, ClassNotFoundException;
 
     /**
      * Read this file until the end.
@@ -56,7 +58,7 @@ public interface ChangeSetReaderI extends Serializable {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public void read() throws IOException, ClassNotFoundException;
+    public void read(Set<ConceptChronicleBI> indexedAnnotationConcepts) throws IOException, ClassNotFoundException;
 
     /**
      * 

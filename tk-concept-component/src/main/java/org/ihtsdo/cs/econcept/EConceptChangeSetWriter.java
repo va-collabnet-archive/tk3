@@ -28,7 +28,6 @@ import org.ihtsdo.tk.dto.concept.TkConcept;
 public class EConceptChangeSetWriter implements ChangeSetGeneratorBI {
 
     public static boolean writeDebugFiles = false;
-    public static boolean validateAfterWrite = false;
     /**
      *
      */
@@ -132,24 +131,6 @@ public class EConceptChangeSetWriter implements ChangeSetGeneratorBI {
                     if (tempFile.renameTo(changeSetFile) == false) {
                         ChangeSetLogger.logger.warning("tempFile.renameTo failed. Attempting FileIO.copyFile...");
                         FileIO.copyFile(tempFile.getCanonicalPath(), changeSetFile.getCanonicalPath());
-                    }
-                    if (validateAfterWrite) {
-                        try {
-                            ChangeSetLogger.logger.log(Level.INFO, "validating {0} after write.", changeSetFile);
-                            EConceptChangeSetReader reader = new EConceptChangeSetReader();
-                            reader.setChangeSetFile(changeSetFile);
-                            reader.setNoCommit(true);
-                            reader.read();
-                            // if no exception is thrown...
-                            if (writeDebugFiles) {
-                                cswcFile.delete();
-                                csweFile.delete();
-                            }
-                        } catch (IOException ex) {
-                            ChangeSetLogger.logger.log(Level.SEVERE, ex.getLocalizedMessage(), new Exception("Change set write did not validate " + changeSetFile, ex));
-                        } catch (ClassNotFoundException ex) {
-                            ChangeSetLogger.logger.log(Level.SEVERE, ex.getLocalizedMessage(), new Exception("Change set write did not validate" + changeSetFile, ex));
-                        }
                     }
                     tempFile = new File(canonicalFileString);
                 }

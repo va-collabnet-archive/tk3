@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Set;
 import java.util.logging.Level;
 
 import org.ihtsdo.cc.concept.Concept;
@@ -16,9 +17,9 @@ import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.helper.time.TimeHelper;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cs.ChangeSetLogger;
-import org.ihtsdo.cs.ChangeSetWriterHandler;
 import org.ihtsdo.cs.CsProperty;
 import org.ihtsdo.cs.ChangeSetReaderI;
+import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.dto.concept.TkConcept;
 
 public class EConceptChangeSetReader implements ChangeSetReaderI {
@@ -72,7 +73,7 @@ public class EConceptChangeSetReader implements ChangeSetReaderI {
     }
 
     @Override
-    public void readUntil(long endTime) throws IOException, ClassNotFoundException {
+    public void readUntil(long endTime, Set<ConceptChronicleBI> indexedAnnotationConcepts) throws IOException, ClassNotFoundException {
         if (ChangeSetLogger.logger.isLoggable(Level.INFO)) {
             ChangeSetLogger.logger.log(
                     Level.INFO, "Reading from log {0} until {1}", new Object[]{changeSetFile.getName(), TimeHelper.getFileDateFormat().format(new Date(endTime))});
@@ -95,7 +96,7 @@ public class EConceptChangeSetReader implements ChangeSetReaderI {
                     ChangeSetLogger.logger.log(Level.FINE, "Read eConcept... {0}", eConcept);
                 }
                 if (!noCommit) {
-                    commitEConcept(eConcept, nextCommit);
+                    commitEConcept(eConcept, nextCommit, indexedAnnotationConcepts);
                 }
                 nextCommit = dataStream.readLong();
             } catch (EOFException ex) {
@@ -124,18 +125,18 @@ public class EConceptChangeSetReader implements ChangeSetReaderI {
                 throw new IOException(e);
             }
         }
-        Concept.resolveUnresolvedAnnotations();
+        Concept.resolveUnresolvedAnnotations(indexedAnnotationConcepts);
         ChangeSetLogger.logger.log(
                 Level.INFO, "Change set {0} contains {1}" + " change objects. " + "\n unvalidated objects: {2}\n imported concepts: {3}", new Object[]{changeSetFile.getName(), count, unvalidated, conceptCount});
 
     }
 
     @Override
-    public void read() throws IOException, ClassNotFoundException {
-        readUntil(Long.MAX_VALUE);
+    public void read(Set<ConceptChronicleBI> indexedAnnotationConcepts) throws IOException, ClassNotFoundException {
+        readUntil(Long.MAX_VALUE, indexedAnnotationConcepts);
     }
 
-    private Concept commitEConcept(TkConcept eConcept, long time) throws IOException,
+    private Concept commitEConcept(TkConcept eConcept, long time, Set<ConceptChronicleBI> indexedAnnotationConcepts) throws IOException,
             ClassNotFoundException {
         if (noCommit) {
             return null;
@@ -150,7 +151,7 @@ public class EConceptChangeSetReader implements ChangeSetReaderI {
                 Concept before = Concept.get(P.s.getNidForUuids(eConcept.getPrimordialUuid()));
                 csrcOut.append(before.toLongString());
                 csrcOut.flush();
-                Concept after = Concept.mergeAndWrite(eConcept);
+                Concept after = Concept.mergeAndWrite(eConcept, indexedAnnotationConcepts);
                 csrcOut.append("\n----------- after  -----------\n");
                 csrcOut.append(after.toLongString());
                 return after;
@@ -159,7 +160,7 @@ public class EConceptChangeSetReader implements ChangeSetReaderI {
                     int conceptNid = P.s.getNidForUuids(eConcept.getPrimordialUuid());
                     long lastChange = Concept.get(conceptNid).getData().getLastChange();
 
-                    Concept mergedConcept = Concept.mergeAndWrite(eConcept);
+                    Concept mergedConcept = Concept.mergeAndWrite(eConcept, indexedAnnotationConcepts);
 
                     if (mergedConcept.getData().getLastChange() != lastChange) {
                         fileContentMerged = true;
@@ -167,7 +168,7 @@ public class EConceptChangeSetReader implements ChangeSetReaderI {
 
                     return mergedConcept;
                 } else {
-                    return Concept.mergeAndWrite(eConcept);
+                    return Concept.mergeAndWrite(eConcept, indexedAnnotationConcepts);
                 }
             }
         } catch (Exception e) {

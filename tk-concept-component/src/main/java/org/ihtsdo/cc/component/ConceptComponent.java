@@ -47,6 +47,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ihtsdo.helper.uuid.Type3UuidFactory;
 import org.ihtsdo.helper.uuid.Type5UuidFactory;
+import org.ihtsdo.tk.Ts;
+import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 
 public abstract class ConceptComponent<R extends Revision<R, C>, C extends ConceptComponent<R, C>>
         implements ComponentBI, ComponentVersionBI, IdBI, AnalogBI, AnalogGeneratorBI<R>,
@@ -604,7 +606,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return changed;
    }
 
-   public ConceptComponent<R, C> merge(C another) throws IOException {
+   public ConceptComponent<R, C> merge(C another, Set<ConceptChronicleBI> indexedAnnotationConcepts) throws IOException {
       Set<Integer> versionSapNids = getVersionStampNids();
 
       // merge versions
@@ -656,6 +658,14 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             }
 
             this.annotations.addAll(anotherAnnotationMap.values());
+                
+                for(RefexMember refsetMember : anotherAnnotationMap.values()){
+                    Concept refsetConcept = (Concept)Ts.get().getConceptForNid(refsetMember.getRefexNid());
+                    if(refsetConcept.isAnnotationIndex()){
+                        refsetConcept.getData().getMemberNids().add(refsetMember.getNid());
+                        indexedAnnotationConcepts.add(refsetConcept);
+                    }
+                }
          }
       }
 

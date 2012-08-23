@@ -515,11 +515,21 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
             add(r);
          }
       }
+      public AddSrcRelSet(Collection<? extends Relationship> c, boolean addDirect) {
+         super(new ComponentComparator());
+         for (Relationship r : c) {
+             if (addDirect) {
+                 super.add(r);
+             } else {
+                add(r);
+             }
+         }
+      }
 
       //~--- methods ----------------------------------------------------------
 
       @Override
-      public boolean add(Relationship e) {
+      public final boolean add(Relationship e) {
          try {
             assert e != null : "Relationship is null processing:\n" + this;
 

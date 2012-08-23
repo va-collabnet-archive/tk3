@@ -18,12 +18,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.refex.RefexMember;
 import org.ihtsdo.cc.refex.RefexRevision;
+import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 
 public class RefexMemberBinder extends TupleBinding<Collection<RefexMember<?, ?>>>
         implements I_BindConceptComponents {
@@ -120,7 +122,8 @@ public class RefexMemberBinder extends TupleBinding<Collection<RefexMember<?, ?>
                         }
                      }
                   } else {
-                     refsetMember.merge(factory.create(nid, typeNid, enclosingConcept.getNid(), input));
+                     refsetMember.merge(factory.create(nid, typeNid, enclosingConcept.getNid(), input), 
+                             new HashSet<ConceptChronicleBI>());
                   }
                } catch (IOException e) {
                   throw new RuntimeException(e);

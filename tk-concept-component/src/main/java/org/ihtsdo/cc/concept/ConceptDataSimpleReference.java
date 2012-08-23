@@ -549,12 +549,6 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
          return getRefsetMember(nid);
       }
 
-      for (RelGroupChronicleBI group : enclosingConcept.getAllRelGroups()) {
-         if (group.getNid() == nid) {
-            return group;
-         }
-      }
-
       return getAnnotation(nid);
    }
 
@@ -938,7 +932,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
             if (srcRels.get() == null) {
                srcRels.compareAndSet(null,
                                      new AddSrcRelSet(getList(new RelationshipBinder(), OFFSETS.SOURCE_RELS,
-                                        enclosingConcept)));
+                                        enclosingConcept), true));
             }
          } finally {
             sourceRelLock.unlock();

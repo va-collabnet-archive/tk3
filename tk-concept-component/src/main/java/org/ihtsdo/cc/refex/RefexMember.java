@@ -39,6 +39,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.tk.api.blueprint.InvalidCAB;
+import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 
 public abstract class RefexMember<R extends RefexRevision<R, C>, C extends RefexMember<R, C>>
@@ -132,8 +133,8 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
     protected abstract boolean refexFieldsEqual(ConceptComponent<R, C> obj);
 
     @SuppressWarnings("unchecked")
-    public RefexMember<R, C> merge(RefexMember<R, C> component) throws IOException {
-        return (RefexMember<R, C>) super.merge((C) component);
+    public RefexMember<R, C> merge(RefexMember<R, C> component, Set<ConceptChronicleBI> indexedAnnotationConcepts) throws IOException {
+        return (RefexMember<R, C>) super.merge((C) component, indexedAnnotationConcepts);
     }
 
     @Override

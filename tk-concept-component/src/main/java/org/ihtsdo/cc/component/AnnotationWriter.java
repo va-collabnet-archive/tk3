@@ -22,12 +22,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.refex.RefexMember;
 import org.ihtsdo.cc.refex.RefexRevision;
+import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 
 /**
@@ -81,7 +83,8 @@ public class AnnotationWriter {
                 }
             } else {
                 try {
-                    refsetMember.merge(factory.create(nid, typeNid, enclosingConceptNid, input));
+                    refsetMember.merge(factory.create(nid, typeNid, enclosingConceptNid, input), 
+                            new HashSet<ConceptChronicleBI>());
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
