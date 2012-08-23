@@ -548,8 +548,20 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
       if (getMemberNids().contains(nid)) {
          return getRefsetMember(nid);
       }
+      
+      ComponentChroncileBI<?> component = getAnnotation(nid);
+      
+      if (component != null) {
+          return component;
+      }
 
-      return getAnnotation(nid);
+      for (RelGroupChronicleBI group : enclosingConcept.getAllRelGroups()) {
+         if (group.getNid() == nid) {
+            return group;
+         }
+      }
+
+      return null;
    }
 
    @Override
