@@ -20,6 +20,7 @@ import org.ihtsdo.cc.termstore.TerminologySnapshot;
 import org.ihtsdo.cc.termstore.Termstore;
 import org.ihtsdo.cs.CsProperty;
 import org.ihtsdo.helper.thread.NamedThreadFactory;
+import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.TerminologyDI.CONCEPT_EVENT;
 import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
@@ -190,9 +191,9 @@ public class BdbTerminologyStore extends Termstore {
          int                                   converterSize        = runtimeConverterSize;
          AtomicInteger                         conceptsRead         = new AtomicInteger();
          AtomicInteger                         conceptsProcessed    = new AtomicInteger();
-
+         ConcurrentSkipListSet<ConceptChronicleBI> indexedAnnotationConcepts = new ConcurrentSkipListSet<>();
          for (int i = 0; i < converterSize; i++) {
-            converters.add(new ConceptConverter(converters, conceptsProcessed));
+            converters.add(new ConceptConverter(converters, conceptsProcessed, indexedAnnotationConcepts));
          }
 
          for (File conceptsFile : econFiles) {
@@ -246,7 +247,9 @@ public class BdbTerminologyStore extends Termstore {
             while (conceptsProcessed.get() < conceptsRead.get()) {
                Thread.sleep(1000);
             }
-
+            for (ConceptChronicleBI indexedAnnotationConcept: indexedAnnotationConcepts) {
+                Ts.get().addUncommittedNoChecks(indexedAnnotationConcept);
+            }
             System.out.println("\nFinished load of " + conceptsRead + " concepts from: "
                                + conceptsFile.getAbsolutePath());
          }
@@ -484,7 +487,8 @@ public class BdbTerminologyStore extends Termstore {
 
    @Override
    public int[] getPossibleChildren(int parentNid, ViewCoordinate vc) throws IOException {
-      return Bdb.getNidCNidMap().getDestRelNids(parentNid, vc);
+       throw new UnsupportedOperationException("needs to get concept nids, not rel nids");
+      //return Bdb.getNidCNidMap().getDestRelNids(parentNid, vc);
    }
 
    @Override
@@ -638,12 +642,15 @@ public class BdbTerminologyStore extends Termstore {
       AtomicInteger                         conceptsProcessed;
       LinkedBlockingQueue<ConceptConverter> converters;
       NidCNidMapBdb                         nidCnidMap;
+       ConcurrentSkipListSet<ConceptChronicleBI> indexedAnnotationConcepts;
 
       //~--- constructors -----------------------------------------------------
 
-      public ConceptConverter(LinkedBlockingQueue<ConceptConverter> converters, AtomicInteger conceptsRead) {
+      public ConceptConverter(LinkedBlockingQueue<ConceptConverter> converters, AtomicInteger conceptsRead, 
+              ConcurrentSkipListSet<ConceptChronicleBI> indexedAnnotationConcepts) {
          this.converters        = converters;
          this.conceptsProcessed = conceptsRead;
+         this.indexedAnnotationConcepts = indexedAnnotationConcepts;
       }
 
       //~--- methods ----------------------------------------------------------
@@ -655,7 +662,7 @@ public class BdbTerminologyStore extends Termstore {
          }
 
          try {
-            newConcept = Concept.get(eConcept);
+            newConcept = Concept.get(eConcept, indexedAnnotationConcepts);
 
             if (newConcept != null) {
                assert newConcept.readyToWrite();
