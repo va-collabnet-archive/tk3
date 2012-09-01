@@ -8,7 +8,7 @@
     </parent>
     <artifactId>tk-cern-prim</artifactId>
     <packaging>jar</packaging>
-    <name>${branch}: Toolkit primitive libraries from CERN</name>
+    <name>${branch}: Primitive libraries from CERN</name>
 
     <url>http://acs.lbl.gov/software/colt/index.html</url>
 
