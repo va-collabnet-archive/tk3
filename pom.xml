@@ -297,7 +297,7 @@ the specific language governing permissions and limitations under the License. -
         <module>tk-concept-component</module>
         <module>tk-cern-prim</module>
         <module>tk-bdb</module>
-        <module>tk-rest</module>
+        <module>tk-rest-client</module>
         <module>tk-fx-model</module>
         <module>tk-mojo</module>
         <module>tk-uuid-maps</module>
