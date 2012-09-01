@@ -27,9 +27,9 @@ the specific language governing permissions and limitations under the License. -
         needs of their end users.
     </description>
     <scm>
-        <connection>scm:svn:https://csfe.aceworkspace.net/svn/repos/workbench/branches/wb-toolkit_trek</connection>
-        <developerConnection>scm:svn:https://csfe.aceworkspace.net/svn/repos/workbench/branches/wb-toolkit_trek</developerConnection>
-        <url>https://csfe.aceworkspace.net/integration/viewvc/viewvc.cgi/branches/wb-toolkit_trek/?root=workbench&amp;system=exsy1002</url>
+        <connection>scm:svn:https://csfe.aceworkspace.net/svn/repos/tk3/trunk/tk3</connection>
+        <developerConnection>scm:svn:https://csfe.aceworkspace.net/svn/repos/tk3/trunk/tk3</developerConnection>
+        <url>https://csfe.aceworkspace.net/integration/viewvc/viewvc.cgi/trunk/?root=tk3&amp;system=exsy1002</url>
     </scm>
     <properties>
         <branch>tk3</branch>
