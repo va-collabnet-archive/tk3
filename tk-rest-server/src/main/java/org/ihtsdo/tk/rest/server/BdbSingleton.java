@@ -3,7 +3,7 @@
 * To change this template, choose Tools | Templates
 * and open the template in the editor.
  */
-package gov.va.oia.bdb;
+package org.ihtsdo.tk.rest.server;
 
 import com.sun.jersey.spi.inject.SingletonTypeInjectableProvider;
 import java.io.File;
