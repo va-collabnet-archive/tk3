@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.ihtsdo.tk</groupId>
   <artifactId>tk-concept-component</artifactId>
-  <name>${branch}: Toolkit Concept and Components</name>
+  <name>${branch}: Toolkit concept and component model</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

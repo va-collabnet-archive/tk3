@@ -7,7 +7,7 @@
 	<version>3.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>tk-bdb</artifactId>
-    <name>${branch}: Toolkit Berkeley Database</name>
+    <name>tk3: Toolkit Berkeley database</name>
     <dependencies>
         <dependency>
             <groupId>com.sleepycat</groupId>

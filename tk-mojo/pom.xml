@@ -10,7 +10,7 @@
     <groupId>org.ihtsdo.tk</groupId>
     <artifactId>tk-mojo</artifactId>
     <packaging>maven-plugin</packaging>
-    <name>${branch}: Toolkit Mojo</name>
+    <name>${branch}: Toolkit mojo</name>
     <url>http://maven.apache.org</url>
     <dependencies>
         <dependency>

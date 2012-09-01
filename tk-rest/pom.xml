@@ -9,7 +9,7 @@
     <version>3.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>tk-rest</artifactId>
-  <name>${branch}: Toolkit RESTful Client</name>
+  <name>${branch}: Toolkit REST client</name>
   <url>http://maven.apache.org</url>
     <dependencies>
         <dependency>

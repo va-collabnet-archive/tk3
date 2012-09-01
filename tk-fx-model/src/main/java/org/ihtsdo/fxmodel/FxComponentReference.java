@@ -18,26 +18,19 @@
 
 package org.ihtsdo.fxmodel;
 
-//~--- non-JDK imports --------------------------------------------------------
-
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.UUID;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-
 import org.ihtsdo.tk.api.ComponentVersionBI;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.concept.ConceptVersionBI;
 import org.ihtsdo.tk.api.description.DescriptionVersionBI;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-
-import java.util.UUID;
-import javafx.beans.property.SimpleIntegerProperty;
 
 /**
  *
@@ -48,52 +41,55 @@ public class FxComponentReference implements Externalizable {
 
    //~--- fields --------------------------------------------------------------
 
-   private final SimpleIntegerProperty nidProperty  = new SimpleIntegerProperty();
-   private final SimpleObjectProperty<UUID>    uuidProperty = new SimpleObjectProperty<>();
-   private final SimpleStringProperty          textProperty = new SimpleStringProperty();
+   private int                        nid;
+   private SimpleIntegerProperty      nidProperty;
+   private String                     text;
+   private SimpleStringProperty       textProperty;
+   private UUID                       uuid;
+   private SimpleObjectProperty<UUID> uuidProperty;
 
    //~--- constructors --------------------------------------------------------
 
    public FxComponentReference() {}
 
    public FxComponentReference(ConceptVersionBI concept) throws IOException, ContradictionException {
-      nidProperty.set(concept.getNid());
-      uuidProperty.set(concept.getPrimUuid());
-      textProperty.set(concept.getPreferredDescription().getText());
+      nid  = concept.getNid();
+      uuid = concept.getPrimUuid();
+      text = concept.getPreferredDescription().getText();
    }
 
    public FxComponentReference(int nid) throws IOException {
-      nidProperty.set(nid);
+      this.nid = nid;
    }
 
    public FxComponentReference(UUID uuid) {
-      uuidProperty.set(uuid);
+      this.uuid = uuid;
    }
 
    public FxComponentReference(TerminologySnapshotDI ss, int nid) throws IOException, ContradictionException {
-      nidProperty.set(nid);
+      this.nid = nid;
 
       ComponentVersionBI component = ss.getComponentVersion(nid);
 
       if (component != null) {
-         uuidProperty.set(component.getPrimUuid());
+         uuid = component.getPrimUuid();
 
          if (component instanceof ConceptVersionBI) {
-            textProperty.set(((ConceptVersionBI) component).getPreferredDescription().getText());
+            text = ((ConceptVersionBI) component).getPreferredDescription().getText();
          } else if (component instanceof DescriptionVersionBI) {
-            textProperty.set(((DescriptionVersionBI) component).getText());
+            text = ((DescriptionVersionBI) component).getText();
          } else {
-            textProperty.set(component.getClass().getSimpleName());
+            text = component.getClass().getSimpleName();
          }
       } else {
-         textProperty.setValue("null component");
+         text = "null component";
       }
    }
 
-   public FxComponentReference(UUID primordialUuid, Integer nid, String text) {
-      nidProperty.set(nid);
-      uuidProperty.set(primordialUuid);
-      textProperty.set(text);
+   public FxComponentReference(UUID uuid, int nid, String text) {
+      this.nid  = nid;
+      this.uuid = uuid;
+      this.text = text;
    }
 
    //~--- methods -------------------------------------------------------------
@@ -103,7 +99,7 @@ public class FxComponentReference implements Externalizable {
       if (obj instanceof FxComponentReference) {
          FxComponentReference another = (FxComponentReference) obj;
 
-         return nidProperty.equals(another.nidProperty) || uuidProperty.equals(another.uuidProperty);
+         return (getNid() == another.getNid()) || getUuid().equals(another.getUuid());
       }
 
       return false;
@@ -115,35 +111,47 @@ public class FxComponentReference implements Externalizable {
    }
 
    public SimpleIntegerProperty nidProperty() {
+      if (nidProperty == null) {
+         nidProperty = new SimpleIntegerProperty(this, "nid", Integer.valueOf(nid));
+      }
+
       return nidProperty;
    }
 
    @Override
    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-      textProperty.set(in.readUTF());
-      uuidProperty.set((UUID) in.readObject());
-      nidProperty.set((Integer) in.readObject());
+      text = in.readUTF();
+      uuid = new UUID(in.readLong(), in.readLong());
+      nid  = in.readInt();
    }
 
    public SimpleStringProperty textProperty() {
+      if (textProperty == null) {
+         textProperty = new SimpleStringProperty(this, "text", text);
+      }
+
       return textProperty;
    }
 
    @Override
    public String toString() {
-      return "Ref{text=" + textProperty.get() + ", nid=" + nidProperty.get() + ", uuid="
-             + uuidProperty.get() + '}';
+      return "Ref{text=" + getText() + ", nid=" + getNid() + ", uuid=" + getUuid() + '}';
    }
 
    public SimpleObjectProperty<UUID> uuidProperty() {
+      if (uuidProperty == null) {
+         uuidProperty = new SimpleObjectProperty<>(this, "uuid", uuid);
+      }
+
       return uuidProperty;
    }
 
    @Override
    public void writeExternal(ObjectOutput out) throws IOException {
-      out.writeUTF(textProperty.get());
-      out.writeObject(uuidProperty.get());
-      out.writeObject(nidProperty.get());
+      out.writeUTF(getText());
+      out.writeLong(getUuid().getMostSignificantBits());
+      out.writeLong(getUuid().getLeastSignificantBits());
+      out.writeInt(getNid());
    }
 
    //~--- get methods ---------------------------------------------------------
@@ -153,8 +161,10 @@ public class FxComponentReference implements Externalizable {
     *
     * @return the value of nid
     */
-   public Integer getNid() {
-      return nidProperty.get();
+   public int getNid() {
+      return (nidProperty == null)
+             ? nid
+             : nidProperty.get();
    }
 
    /**
@@ -163,7 +173,9 @@ public class FxComponentReference implements Externalizable {
     * @return the value of text
     */
    public String getText() {
-      return textProperty.get();
+      return (textProperty == null)
+             ? text
+             : textProperty.get();
    }
 
    /**
@@ -172,7 +184,9 @@ public class FxComponentReference implements Externalizable {
     * @return the value of uuid
     */
    public UUID getUuid() {
-      return uuidProperty.get();
+      return (uuidProperty == null)
+             ? uuid
+             : uuidProperty.get();
    }
 
    //~--- set methods ---------------------------------------------------------
@@ -182,8 +196,12 @@ public class FxComponentReference implements Externalizable {
     *
     * @param nid new value of nid
     */
-   public void setNid(Integer nid) {
-      nidProperty.set(nid);
+   public void setNid(int nid) {
+      if (nidProperty == null) {
+         this.nid = nid;
+      } else {
+         nidProperty.set(nid);
+      }
    }
 
    /**
@@ -192,7 +210,11 @@ public class FxComponentReference implements Externalizable {
     * @param text new value of text
     */
    public void setText(String text) {
-      textProperty.set(text);
+      if (textProperty == null) {
+         this.text = text;
+      } else {
+         textProperty.set(text);
+      }
    }
 
    /**
@@ -201,6 +223,10 @@ public class FxComponentReference implements Externalizable {
     * @param uuid new value of uuid
     */
    public void setUuid(UUID uuid) {
-      uuidProperty.set(uuid);
+      if (uuidProperty == null) {
+         this.uuid = uuid;
+      } else {
+         uuidProperty.set(uuid);
+      }
    }
 }

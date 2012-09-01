@@ -18,78 +18,137 @@
 
 package org.ihtsdo.fxmodel;
 
-//~--- non-JDK imports --------------------------------------------------------
-
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.text.SimpleDateFormat;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
-
 import org.ihtsdo.helper.time.TimeHelper;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.Serializable;
-
-import java.text.SimpleDateFormat;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author kec
  */
-public class FxTime implements Serializable {
+public class FxTime implements Externalizable {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
-   private final SimpleLongProperty timeProperty = new SimpleLongProperty(this, "timeProperty",
-                                                      Long.MIN_VALUE);
-   private SimpleObjectProperty<ThreadLocal<SimpleDateFormat>> formatterProperty =
-      new SimpleObjectProperty<>(this, "formatterProperty", TimeHelper.localDateFormat);
-   private final StringBinding timeTextBinding = new StringBinding() {
-      {
-         super.bind(timeProperty, formatterProperty);
-      }
-      @Override
-      protected String computeValue() {
-         return TimeHelper.formatDate(timeProperty.get(), formatterProperty.get());
-      }
-   };
+   private ThreadLocal<SimpleDateFormat>                       formatter;
+   private SimpleObjectProperty<ThreadLocal<SimpleDateFormat>> formatterProperty;
+   private long                                                time;
+   private SimpleLongProperty                                  timeProperty;
+   private StringBinding                                       timeTextBinding;
 
-    public FxTime() {
-    }
-    public FxTime(long time) {
-        timeProperty.set(time);
-    }
+   //~--- constructors --------------------------------------------------------
+
+   public FxTime() {}
+
+   public FxTime(long time) {
+      this.time = time;
+   }
 
    //~--- methods -------------------------------------------------------------
 
-   public SimpleLongProperty timeProperty() {
-      return timeProperty();
+   public SimpleObjectProperty<ThreadLocal<SimpleDateFormat>> formatterProperty() {
+      if (formatterProperty == null) {
+         formatterProperty = new SimpleObjectProperty<>(this, "formatterProperty", getFormatter());
+         timeTextBinding   = new StringBinding() {
+            {
+               super.bind(timeProperty(), formatterProperty);
+            }
+            @Override
+            protected String computeValue() {
+               return TimeHelper.formatDate(timeProperty.get(), formatterProperty.get());
+            }
+         };
+      }
+
+      return formatterProperty;
    }
 
-   public StringBinding timeTextBinding() {
-      return timeTextBinding;
+   @Override
+   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+      time = in.readLong();
+
+      if (in.readBoolean()) {
+         String formatPattern = in.readUTF();
+
+         formatter = TimeHelper.getFormatter(formatPattern);
+      }
+   }
+
+   public SimpleLongProperty timeProperty() {
+      if (timeProperty == null) {
+         timeProperty = new SimpleLongProperty(this, "timeInMs", time);
+      }
+
+      return timeProperty;
    }
 
    @Override
    public String toString() {
-      return timeTextBinding.get() + " ("+ timeProperty.get() + ')';
+      return getTimeText() + " (" + getTime() + ')';
+   }
+
+   @Override
+   public void writeExternal(ObjectOutput out) throws IOException {
+      out.writeLong(getTime());
+
+      if ((formatterProperty != null) || (formatter != null)) {
+         out.writeBoolean(true);
+         out.writeUTF(getFormatter().get().toPattern());
+      } else {
+         out.writeBoolean(false);
+      }
    }
 
    //~--- get methods ---------------------------------------------------------
 
+   private ThreadLocal<SimpleDateFormat> getFormatter() {
+      if (formatterProperty == null) {
+         if (formatter == null) {
+            return TimeHelper.localShortFileFormat;
+         }
+
+         return formatter;
+      }
+
+      return formatterProperty.get();
+   }
+
    public long getTime() {
-      return timeProperty.get();
+      return (timeProperty == null)
+             ? time
+             : timeProperty.get();
    }
 
    public String getTimeText() {
-      return timeTextBinding.get();
+      if (timeTextBinding != null) {
+         return timeTextBinding.get();
+      }
+
+      return TimeHelper.formatDate(getTime(), getFormatter());
    }
 
    //~--- set methods ---------------------------------------------------------
 
+   public void setFormatter(ThreadLocal<SimpleDateFormat> formatter) {
+      if (formatterProperty == null) {
+         this.formatter = formatter;
+      } else {
+         formatterProperty.set(formatter);
+      }
+   }
+
    public void setTime(long time) {
-      timeProperty.set(time);
+      if (timeProperty == null) {
+         this.time = time;
+      } else {
+         timeProperty.set(time);
+      }
    }
 }
