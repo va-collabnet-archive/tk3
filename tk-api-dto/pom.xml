@@ -20,7 +20,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tk-api-dto</artifactId>
-    <name>${branch}: Toolkit API and DTOs</name>
+    <name>${branch}: API and DTOs</name>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
