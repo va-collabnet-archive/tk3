@@ -23,7 +23,7 @@
     <dependency>
       <groupId>org.ihtsdo.tk</groupId>
       <artifactId>tk-cern-prim</artifactId>
-      <version>3.0.1-SNAPSHOT</version>
+      <version>${project.version}</version>
       <type>jar</type>
     </dependency>
     <dependency>

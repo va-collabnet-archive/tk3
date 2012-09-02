@@ -8,7 +8,7 @@
     <version>3.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>tk-uuid-maps</artifactId>
-  <name>tk3: UUID nid maps</name>
+  <name>${branch}: UUID nid maps</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>

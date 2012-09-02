@@ -18,14 +18,28 @@
 
 package org.ihtsdo.tk.rest.client;
 
-//~--- non-JDK imports --------------------------------------------------------
-
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import java.beans.PropertyChangeListener;
+import java.beans.VetoableChangeListener;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.util.*;
+import javax.ws.rs.core.MediaType;
 import org.ihtsdo.cc.NidPairForRefex;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.cc.concept.NidDataInMemory;
+import org.ihtsdo.cc.relationship.Relationship;
 import org.ihtsdo.cc.termstore.Termstore;
+import org.ihtsdo.fxmodel.FxComponentReference;
 import org.ihtsdo.fxmodel.concept.FxConcept;
 import org.ihtsdo.fxmodel.fetchpolicy.RefexPolicy;
 import org.ihtsdo.fxmodel.fetchpolicy.RelationshipPolicy;
@@ -36,6 +50,7 @@ import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.concept.ConceptVersionBI;
 import org.ihtsdo.tk.api.coordinate.EditCoordinate;
+import org.ihtsdo.tk.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.cs.ChangeSetPolicy;
 import org.ihtsdo.tk.api.cs.ChangeSetWriterThreading;
@@ -44,42 +59,19 @@ import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.tk.db.DbDependency;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-
-import java.beans.PropertyChangeListener;
-import java.beans.VetoableChangeListener;
-
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-
-import java.util.*;
-
-import javax.ws.rs.core.MediaType;
-import org.ihtsdo.cc.relationship.Relationship;
-import org.ihtsdo.fxmodel.FxComponentReference;
-import org.ihtsdo.tk.api.coordinate.StandardViewCoordinates;
-
 /**
  *
  * @author kec
  */
 public class RestClient extends Termstore {
-   public static final String    defaultLocalHostSvr = "http://localhost:8080/rest/sim/";
+   public static final String    defaultLocalHostSvr = "http://localhost:8080/terminology/rest/";
    public static final MediaType bdbMediaType        = new MediaType("application", "bdb");
    private static String         serverUrlStr        = defaultLocalHostSvr;
    private static Client         restClient;
    private static RestClient     restClientSingleton;
 
    //~--- methods -------------------------------------------------------------
+
    @Override
    public long incrementAndGetSequence() {
       WebResource r           = restClient.resource(serverUrlStr + "sequence/next");
@@ -101,7 +93,7 @@ public class RestClient extends Termstore {
       ClientConfig cc = new DefaultClientConfig();
 
       cc.getClasses().add(ViewCoordinateSerializationProvider.class);
-      restClient                   = Client.create(cc);
+      restClient          = Client.create(cc);
       restClientSingleton = new RestClient();
       P.s                 = restClientSingleton;
       Ts.set(restClientSingleton);
@@ -115,6 +107,9 @@ public class RestClient extends Termstore {
 
       r.accept(MediaType.TEXT_PLAIN).get(String.class);
    }
+
+   //~--- get methods ---------------------------------------------------------
+
    @Override
    public int getAuthorNidForStamp(int sapNid) {
       WebResource r      = restClient.resource(serverUrlStr + "sap/author/" + sapNid);
@@ -148,10 +143,9 @@ public class RestClient extends Termstore {
    }
 
    @Override
-   public int[] getDestRelOriginNids(int cNid, NidSetBI relTypes) throws IOException {
-      WebResource r  = restClient.resource(serverUrlStr + "relationship/origin/" + cNid + "/typed");
-      InputStream is =
-         r.queryParam("relTypes", relTypes.getAmpersandString()).accept(bdbMediaType).get(InputStream.class);
+   public int[] getDestRelOriginNids(int cNid) throws IOException {
+      WebResource r  = restClient.resource(serverUrlStr + "relationship/origin/" + cNid);
+      InputStream is = r.accept(bdbMediaType).get(InputStream.class);
 
       try (ObjectInputStream ois = new ObjectInputStream(is)) {
          return (int[]) ois.readObject();
@@ -160,11 +154,11 @@ public class RestClient extends Termstore {
       }
    }
 
-
    @Override
-   public int[] getDestRelOriginNids(int cNid) throws IOException {
-      WebResource r  = restClient.resource(serverUrlStr + "relationship/origin/" + cNid);
-      InputStream is = r.accept(bdbMediaType).get(InputStream.class);
+   public int[] getDestRelOriginNids(int cNid, NidSetBI relTypes) throws IOException {
+      WebResource r  = restClient.resource(serverUrlStr + "relationship/origin/" + cNid + "/typed");
+      InputStream is =
+         r.queryParam("relTypes", relTypes.getAmpersandString()).accept(bdbMediaType).get(InputStream.class);
 
       try (ObjectInputStream ois = new ObjectInputStream(is)) {
          return (int[]) ois.readObject();
@@ -179,23 +173,22 @@ public class RestClient extends Termstore {
    }
 
    public FxConcept getFxConcept(UUID conceptUUID, UUID vcUuid) {
-      WebResource    r        = restClient.resource(serverUrlStr + "fx-concept/" + conceptUUID + "/" + vcUuid);
+      WebResource    r        = restClient.resource(serverUrlStr + "fx-concept/" + conceptUUID + "/"
+                                   + vcUuid);
       ClientResponse response = r.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
 
       return response.getEntity(FxConcept.class);
    }
 
    public FxConcept getFxConcept(FxComponentReference ref, UUID vcUuid, VersionPolicy versionPolicy,
-                                 RefexPolicy refexPolicy,
-                                 RelationshipPolicy relationshipPolicy) {
-       return getFxConcept(ref.getUuid(), vcUuid, versionPolicy, refexPolicy, relationshipPolicy);
+                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
+      return getFxConcept(ref.getUuid(), vcUuid, versionPolicy, refexPolicy, relationshipPolicy);
    }
 
    public FxConcept getFxConcept(UUID conceptUUID, UUID vcUuid, VersionPolicy versionPolicy,
-                                 RefexPolicy refexPolicy,
-                                 RelationshipPolicy relationshipPolicy) {
+                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
       WebResource r = restClient.resource(serverUrlStr + "fx-concept/" + conceptUUID + "/" + vcUuid + "/"
-                                 + versionPolicy + "/" + refexPolicy + "/" + relationshipPolicy);
+                         + versionPolicy + "/" + refexPolicy + "/" + relationshipPolicy);
       ClientResponse response = r.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
 
       return response.getEntity(FxConcept.class);
@@ -215,11 +208,6 @@ public class RestClient extends Termstore {
       String      sequenceStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Long.parseLong(sequenceStr);
-   }
-
-   @Override
-   public Collection<DbDependency> getLatestChangeSetDependencies() throws IOException {
-      throw new UnsupportedOperationException("Not supported yet.");
    }
 
    @Override
@@ -280,6 +268,19 @@ public class RestClient extends Termstore {
 
       return getNidForUuidSetString(uuidSetStringBuilder.toString());
    }
+
+   @Override
+   public PathBI getPath(int pathNid) throws IOException {
+      WebResource r  = restClient.resource(serverUrlStr + "path/" + pathNid);
+      InputStream is = r.accept(bdbMediaType).get(InputStream.class);
+
+      try (ObjectInputStream ois = new ObjectInputStream(is)) {
+         return (PathBI) ois.readObject();
+      } catch (ClassNotFoundException ex) {
+         throw new IOException(ex);
+      }
+   }
+
    @Override
    public int getPathNidForStamp(int sapNid) {
       WebResource r      = restClient.resource(serverUrlStr + "sap/path/" + sapNid);
@@ -287,6 +288,7 @@ public class RestClient extends Termstore {
 
       return Integer.parseInt(nidStr);
    }
+
    @Override
    public Map<String, String> getProperties() throws IOException {
       WebResource r  = restClient.resource(serverUrlStr + "property/");
@@ -357,20 +359,10 @@ public class RestClient extends Termstore {
    }
 
    @Override
-   public Collection<? extends ConceptChronicleBI> getUncommittedConcepts() {
-      throw new UnsupportedOperationException("Not supported yet.");
-   }
-
-   @Override
    public UUID getUuidPrimordialForNid(int nid) throws IOException {
       WebResource r = restClient.resource(serverUrlStr + "uuid/primordial/" + nid);
 
       return UUID.fromString(r.accept(MediaType.TEXT_PLAIN).get(String.class));
-   }
-
-   @Override
-   public List<UUID> getUuidsForNid(int nid) throws IOException {
-      throw new UnsupportedOperationException("Not supported yet.");
    }
 
    @Override
@@ -398,18 +390,6 @@ public class RestClient extends Termstore {
    }
 
    @Override
-   public PathBI getPath(int pathNid) throws IOException {
-      WebResource r  = restClient.resource(serverUrlStr + "path/" + pathNid);
-      InputStream is = r.accept(bdbMediaType).get(InputStream.class);
-
-      try (ObjectInputStream ois = new ObjectInputStream(is)) {
-         return (PathBI) ois.readObject();
-      } catch (ClassNotFoundException ex) {
-         throw new IOException(ex);
-      }
-   }
-
-   @Override
    public boolean hasConcept(int cNid) throws IOException {
       if (Concept.getIfInMap(cNid) != null) {
          return true;
@@ -431,12 +411,29 @@ public class RestClient extends Termstore {
 
    //~--- set methods ---------------------------------------------------------
 
+   //J-
+
+   @Override
+   public Collection<DbDependency> getLatestChangeSetDependencies() throws IOException {
+      throw new UnsupportedOperationException("Not supported yet.");
+   }
+
+   @Override
+   public Collection<? extends ConceptChronicleBI> getUncommittedConcepts() {
+      throw new UnsupportedOperationException("Not supported yet.");
+   }
+   
+   
+   @Override
+   public List<UUID> getUuidsForNid(int nid) throws IOException {
+      throw new UnsupportedOperationException("Not supported yet.");
+   }
+
    @Override
    public void setConceptNidForNid(int cNid, int nid) throws IOException {
       throw new UnsupportedOperationException("Not supported yet.");
    }
 
-   // --------------------------------------------
    @Override
    public void setProperty(String key, String value) throws IOException {
       throw new UnsupportedOperationException("Not supported yet.");
@@ -575,8 +572,6 @@ public class RestClient extends Termstore {
       throw new UnsupportedOperationException("Not supported yet.");
    }
 
-   //~--- get methods ---------------------------------------------------------
-
    @Override
    public NidBitSetBI getAllConceptNids() throws IOException {
       throw new UnsupportedOperationException("Not supported yet.");
@@ -654,4 +649,6 @@ public class RestClient extends Termstore {
     public void put(UUID uuid, int nid) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    //J+
 }
