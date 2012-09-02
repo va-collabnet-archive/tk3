@@ -18,7 +18,7 @@ the specific language governing permissions and limitations under the License. -
     <artifactId>tk-mmb</artifactId>
     <version>3.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>${branch}: (MMP) Toolkit</name>
+    <name>${branch}: (MMP) Terminology Toolkit</name>
     <description>The IHTSDO toolkit provides two software frameworks for
         terminology-focused applications: one for build-process
         automation, and another for interactive development environments.
@@ -32,7 +32,7 @@ the specific language governing permissions and limitations under the License. -
         <url>https://csfe.aceworkspace.net/integration/viewvc/viewvc.cgi/trunk/?root=tk3&amp;system=exsy1002</url>
     </scm>
     <properties>
-        <branch>tk3</branch>
+        <branch>ttk</branch>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <drools.version>5.3.0.Final</drools.version>
         <jbpm.version>5.1.0.Final</jbpm.version>
@@ -46,13 +46,14 @@ the specific language governing permissions and limitations under the License. -
         <juint.version>4.8.2</juint.version>
         <maven-release-plugin.version>2.0</maven-release-plugin.version>
         <maven-jxr-plugin.version>2.2</maven-jxr-plugin.version>
-        <maven-compiler-plugin.version>2.0.2</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>2.4</maven-compiler-plugin.version>
         <maven-project-info-reports-plugin.version>2.2</maven-project-info-reports-plugin.version>
         <maven-javadoc-plugin.version>2.7</maven-javadoc-plugin.version>
         <maven-plugin-plugin.version>2.6</maven-plugin-plugin.version>
         <maven-surefire-report-plugin.version>2.6</maven-surefire-report-plugin.version>
         <java.home>/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home</java.home>
         <javafx.version>2.2</javafx.version>
+        <jersey-version>1.13</jersey-version>
     </properties>
     <dependencyManagement>
         <dependencies>
