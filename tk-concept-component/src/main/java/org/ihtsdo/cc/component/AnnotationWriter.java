@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
+
 package org.ihtsdo.cc.component;
 
-import org.ihtsdo.cc.refex.RefexMemberFactory;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 import java.io.IOException;
@@ -28,6 +30,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.refex.RefexMember;
+import org.ihtsdo.cc.refex.RefexMemberFactory;
 import org.ihtsdo.cc.refex.RefexRevision;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
@@ -37,97 +40,116 @@ import org.ihtsdo.tk.api.refex.RefexChronicleBI;
  * @author kec
  */
 public class AnnotationWriter {
+   public static AtomicInteger encountered = new AtomicInteger();
+   public static AtomicInteger written     = new AtomicInteger();
 
-    public static AtomicInteger encountered = new AtomicInteger();
-    public static AtomicInteger written = new AtomicInteger();
-    RefexMemberFactory factory = new RefexMemberFactory();
+   //~--- fields --------------------------------------------------------------
 
-    public AnnotationWriter() {
-    }
+   RefexMemberFactory factory = new RefexMemberFactory();
 
-	@SuppressWarnings("unchecked")
-	public ConcurrentSkipListSet<RefexMember<?,?>> entryToObject(TupleInput input, 
-            int enclosingConceptNid) {
-        int listSize = input.readShort();
-        if (listSize == 0) {
-            return null;
-        }
-        ConcurrentSkipListSet<RefexMember<?,?>> newRefsetMemberList = 
-                new ConcurrentSkipListSet<>(
-                    new Comparator<RefexChronicleBI<?>>() {
+   //~--- constructors --------------------------------------------------------
 
-                @Override
-                public int compare(RefexChronicleBI<?> t, RefexChronicleBI<?> t1) {
-                    return t.getNid() - t1.getNid();
-                }
-                
-            });
+   public AnnotationWriter() {}
 
-        for (int index = 0; index < listSize; index++) {
-            int typeNid = input.readInt();
-            input.mark(8);
-            int nid = input.readInt();
-            input.reset();
-            RefexMember<?, ?> refsetMember = (RefexMember<?, ?>) Concept.componentsCRHM.get(nid);
-            if (refsetMember == null) {
-                try {
-                    refsetMember = factory.create(nid, typeNid, enclosingConceptNid, input);
-                    if (refsetMember.getTime() != Long.MIN_VALUE) {
-                        RefexMember<?, ?> oldMember = (RefexMember<?, ?>) Concept.componentsCRHM.putIfAbsent(nid, refsetMember);
-                        if (oldMember != null) {
-                            refsetMember = oldMember;
-                        }
-                    }
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            } else {
-                try {
-                    refsetMember.merge(factory.create(nid, typeNid, enclosingConceptNid, input), 
-                            new HashSet<ConceptChronicleBI>());
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+   //~--- methods -------------------------------------------------------------
+
+   @SuppressWarnings("unchecked")
+   public ConcurrentSkipListSet<RefexMember<?, ?>> entryToObject(TupleInput input, int enclosingConceptNid) {
+      int listSize = input.readShort();
+
+      if (listSize == 0) {
+         return null;
+      }
+
+      ConcurrentSkipListSet<RefexMember<?, ?>> newRefsetMemberList =
+         new ConcurrentSkipListSet<>(new Comparator<RefexChronicleBI<?>>() {
+         @Override
+         public int compare(RefexChronicleBI<?> t, RefexChronicleBI<?> t1) {
+            return t.getNid() - t1.getNid();
+         }
+      });
+
+      for (int index = 0; index < listSize; index++) {
+         int typeNid = input.readInt();
+
+         input.mark(8);
+
+         int nid = input.readInt();
+
+         input.reset();
+
+         RefexMember<?, ?> refsetMember = (RefexMember<?, ?>) Concept.componentsCRHM.get(nid);
+
+         if (refsetMember == null) {
+            try {
+               refsetMember = factory.create(nid, typeNid, enclosingConceptNid, input);
+
+               if (refsetMember.getTime() != Long.MIN_VALUE) {
+                  RefexMember<?, ?> oldMember = (RefexMember<?,
+                                                   ?>) Concept.componentsCRHM.putIfAbsent(nid, refsetMember);
+
+                  if (oldMember != null) {
+                     refsetMember = oldMember;
+                  }
+               }
+            } catch (IOException ex) {
+               throw new RuntimeException(ex);
             }
-            if (refsetMember.getTime() != Long.MIN_VALUE) {
-                newRefsetMemberList.add(refsetMember);
+         } else {
+            try {
+               refsetMember.merge(factory.create(nid, typeNid, enclosingConceptNid, input),
+                                  new HashSet<ConceptChronicleBI>());
+            } catch (IOException ex) {
+               throw new RuntimeException(ex);
             }
+         }
 
-        }
-        return newRefsetMemberList;
-    }
+         if (refsetMember.getTime() != Long.MIN_VALUE) {
+            newRefsetMemberList.add(refsetMember);
+         }
+      }
 
-    public void objectToEntry(Collection<RefexMember<?,?>> list,
-            TupleOutput output, int maxReadOnlyStatusAtPositionId) {
-        if (list == null) {
-            output.writeShort(0); // List size
-            return;
-        }
-        List<RefexMember<?,?>> refsetMembersToWrite = new ArrayList<>(list.size());
-        for (RefexChronicleBI<?> refsetChronicle : list) {
-            RefexMember<?,?> refsetMember = (RefexMember<?, ?>) refsetChronicle;
-            encountered.incrementAndGet();
-            assert refsetMember.getStampNid() != Integer.MAX_VALUE;
-            if (refsetMember.primordialStampNid > maxReadOnlyStatusAtPositionId
-                    && refsetMember.getTime() != Long.MIN_VALUE) {
-                refsetMembersToWrite.add(refsetMember);
-            } else {
-                if (refsetMember.revisions != null) {
-                    for (RefexRevision<?, ?> r : refsetMember.revisions) {
-                        if (r.getStampNid() > maxReadOnlyStatusAtPositionId
-                                && r.getTime() != Long.MIN_VALUE) {
-                            refsetMembersToWrite.add(refsetMember);
-                            break;
-                        }
-                    }
-                }
+      return newRefsetMemberList;
+   }
+
+   public void objectToEntry(Collection<RefexMember<?, ?>> list, TupleOutput output,
+                             int maxReadOnlyStatusAtPositionId) {
+      if (list == null) {
+         output.writeShort(0);    // List size
+
+         return;
+      }
+
+      List<RefexMember<?, ?>> refsetMembersToWrite = new ArrayList<>(list.size());
+
+      for (RefexChronicleBI<?> refsetChronicle : list) {
+         RefexMember<?, ?> refsetMember = (RefexMember<?, ?>) refsetChronicle;
+
+         encountered.incrementAndGet();
+         assert refsetMember.getStampNid() != Integer.MAX_VALUE;
+
+         if ((refsetMember.primordialStampNid > maxReadOnlyStatusAtPositionId)
+                 && (refsetMember.getTime() != Long.MIN_VALUE)) {
+            refsetMembersToWrite.add(refsetMember);
+         } else {
+            if (refsetMember.revisions != null) {
+               for (RefexRevision<?, ?> r : refsetMember.revisions) {
+                  if ((r.getStampNid() > maxReadOnlyStatusAtPositionId) && (r.getTime() != Long.MIN_VALUE)) {
+                     refsetMembersToWrite.add(refsetMember);
+
+                     break;
+                  }
+               }
             }
-        }
-        output.writeShort(refsetMembersToWrite.size()); // List size
-        for (RefexMember<?, ?> refsetMember : refsetMembersToWrite) {
-            written.incrementAndGet();
-            output.writeInt(refsetMember.getTypeNid());
-            refsetMember.writeComponentToBdb(output, maxReadOnlyStatusAtPositionId);
-        }
-    }
+         }
+      }
+
+      output.writeShort(refsetMembersToWrite.size());    // List size
+
+      for (RefexMember<?, ?> refsetMember : refsetMembersToWrite) {
+         written.incrementAndGet();
+         output.writeInt(refsetMember.getTypeNid());
+         refsetMember.writeComponentToBdb(output, maxReadOnlyStatusAtPositionId);
+      }
+   }
 }

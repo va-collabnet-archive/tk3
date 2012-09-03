@@ -16,10 +16,6 @@
  */
 package org.ihtsdo.helper.io;
 
-import java.awt.FileDialog;
-import java.awt.Frame;
-import java.beans.ExceptionListener;
-import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -29,26 +25,18 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 /**
  * From the book "Java Cookbook, 2nd Edition. Some simple file IO primitives
@@ -214,8 +202,9 @@ public class FileIO {
             os.write(b);
         }
         is.close();
-        if (close)
+        if (close) {
             os.close();
+        }
     }
 
     /** Copy a file from a filename to a PrintWriter.
@@ -239,7 +228,6 @@ public class FileIO {
     public static String readLine(String inName) throws FileNotFoundException, IOException {
         String line;
         try (BufferedReader is = new BufferedReader(new FileReader(inName))) {
-            line = null;
             line = is.readLine();
         }
         return line;
@@ -261,7 +249,7 @@ public class FileIO {
         OutputStream os;
         try (InputStream is = new FileInputStream(inName)) {
             os = new FileOutputStream(outName);
-            int count = 0;
+            int count;
             byte[] b = new byte[BLKSIZ];
             while ((count = is.read(b)) != -1) {
                 os.write(b, 0, count);
@@ -276,7 +264,7 @@ public class FileIO {
      * @throws IOException  
      */
     public static String readerToString(Reader is) throws IOException {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         char[] b = new char[BLKSIZ];
         int n;
 
@@ -338,114 +326,6 @@ public class FileIO {
         }
     }
 
-    /**
-     * 
-     * @param parent
-     * @param title
-     * @param startDir
-     * @param fileFilter
-     * @return
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    public static FileAndObject getObjFromFilesystem(final Frame parent, final String title, final String startDir,
-            final FilenameFilter fileFilter) throws IOException, ClassNotFoundException {
-        final FileAndObjectResult returnValue = new FileAndObjectResult();
-        if (SwingUtilities.isEventDispatchThread()) {
-            returnValue.setReturnValue(getObjFromFilesystemCore(parent, title, startDir, fileFilter));
-        } else {
-            try {
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            returnValue.setReturnValue(getObjFromFilesystemCore(parent, title, startDir, fileFilter));
-                        } catch (FileNotFoundException e) {
-                            returnValue.setEx(e);
-                        } catch (                IOException | ClassNotFoundException e) {
-                            returnValue.setEx(e);
-                        }
-                    }
-
-                });
-            } catch (    InterruptedException | InvocationTargetException e) {
-                throw new IOException(returnValue.getEx().getMessage(), e);
-            }
-        }
-        if (returnValue.getEx() != null) {
-            throw new IOException(returnValue.getEx());
-        }
-        return returnValue.getReturnValue();
-    }
-
-    /**
-     * 
-     * @param parent
-     * @param title
-     * @param startDir
-     * @param fileFilter
-     * @return
-     */
-    public static File getFile(Frame parent, String title, String startDir,
-            FilenameFilter fileFilter) {
-        if (parent == null) {
-            parent = new JFrame();
-        }
-        FileDialog fd = new FileDialog(parent, title, FileDialog.LOAD);
-        fd.setFilenameFilter(fileFilter);
-        if (startDir.startsWith("/")) {
-
-            startDir = startDir.replace('/', File.separatorChar);
-            fd.setDirectory(startDir);
-        } else {
-            startDir = startDir.replace('/', File.separatorChar);
-            fd.setDirectory(System.getProperty("user.dir") + System.getProperty("file.separator") + startDir);
-        }
-        fd.setVisible(true); // Display dialog and wait for response
-        if (fd.getFile() != null) {
-            File f = new File(fd.getDirectory(), fd.getFile());
-            if (f.exists()) {
-                return f;                
-            }
-            File d = new File(fd.getDirectory());
-            for (File child: d.listFiles()) {
-                if (child.getName().startsWith(fd.getFile())) {
-                    return child;
-                }
-            }
-        }
-        return null;
-    }
-
-    
-    private static FileAndObject getObjFromFilesystemCore(Frame parent, String title, String startDir,
-            FilenameFilter fileFilter) throws FileNotFoundException, IOException, ClassNotFoundException {
-        if (parent == null) {
-            parent = new JFrame();
-        }
-        FileDialog fd = new FileDialog(parent, title, FileDialog.LOAD);
-        fd.setFilenameFilter(fileFilter);
-        if (startDir.startsWith("/")) {
-
-            startDir = startDir.replace('/', File.separatorChar);
-            fd.setDirectory(startDir);
-        } else {
-            startDir = startDir.replace('/', File.separatorChar);
-            fd.setDirectory(System.getProperty("user.dir") + System.getProperty("file.separator") + startDir);
-        }
-        fd.setVisible(true); // Display dialog and wait for response
-        if (fd.getFile() != null) {
-            File objFile = new File(fd.getDirectory(), fd.getFile());
-            FileInputStream fis = new FileInputStream(objFile);
-            BufferedInputStream bis = new BufferedInputStream(fis);
-            Object obj;
-            try (ObjectInputStream ois = new ObjectInputStream(bis)) {
-                obj = ois.readObject();
-            }
-            return new FileAndObject(obj, objFile);
-        }
-        throw new IOException("User did not select a file");
-    }
 
     /**
      * 
@@ -484,152 +364,6 @@ public class FileIO {
          */
         public void setEx(Exception ex) {
             this.ex = ex;
-        }
-    }
-
-    /**
-     * 
-     * @param parent
-     * @param title
-     * @param startDir
-     * @param defaultFile
-     * @param obj
-     * @return
-     * @throws IOException
-     */
-    public static File writeObjToFilesystem(final Frame parent, final String title, final String startDir,
-            final String defaultFile, final Object obj) throws IOException {
-        final FileResult returnValue = new FileResult();
-        if (SwingUtilities.isEventDispatchThread()) {
-            returnValue.setReturnValue(writeObjeToFilesystemCore(parent, title, startDir, defaultFile, obj));
-        } else {
-            try {
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            returnValue.setReturnValue(writeObjeToFilesystemCore(parent, title, startDir, defaultFile,
-                                obj));
-                        } catch (FileNotFoundException e) {
-                            returnValue.setEx(e);
-                        } catch (IOException e) {
-                            returnValue.setEx(e);
-                        }
-                    }
-
-                });
-            } catch (    InterruptedException | InvocationTargetException e) {
-                throw new IOException(returnValue.getEx().getMessage(), e);
-            }
-        }
-        if (returnValue.getEx() != null) {
-            throw new IOException(returnValue.getEx());
-        }
-        return returnValue.getReturnValue();
-    }
-
-    private static File writeObjeToFilesystemCore(Frame parent, String title, String startDir, String defaultFile,
-            Object obj) throws FileNotFoundException, IOException {
-        if (parent == null) {
-            parent = new JFrame();
-        }
-        FileDialog fd = new FileDialog(parent, title, FileDialog.SAVE);
-        fd.setDirectory(startDir);
-        fd.setFile(defaultFile);
-        fd.setVisible(true); // Display dialog and wait for response
-        if (fd.getFile() != null) {
-            File objFile = new File(fd.getDirectory(), fd.getFile());
-            FileOutputStream fos = new FileOutputStream(objFile);
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
-            try (ObjectOutputStream oos = new ObjectOutputStream(bos)) {
-                oos.writeObject(obj);
-            }
-            return objFile;
-        } else {
-            throw new IOException("User canceled save operation");
-        }
-    }
-
-    /**
-     * 
-     * @param parent
-     * @param title
-     * @param startDir
-     * @param defaultFile
-     * @param obj
-     * @param delegates
-     * @param owner
-     * @return
-     * @throws IOException
-     */
-    public static File writeObjXmlToFilesystem(final Frame parent, final String title, final String startDir,
-            final String defaultFile, final Object obj, final Collection<PersistenceDelegateSpec> delegates,
-            final Object owner) throws IOException {
-        final FileResult returnValue = new FileResult();
-        if (SwingUtilities.isEventDispatchThread()) {
-            returnValue.setReturnValue(writeObjXmlToFilesystemCore(parent, title, startDir, defaultFile, obj,
-                delegates, owner));
-        } else {
-            try {
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            returnValue.setReturnValue(writeObjXmlToFilesystemCore(parent, title, startDir,
-                                defaultFile, obj, delegates, owner));
-                        } catch (FileNotFoundException e) {
-                            returnValue.setEx(e);
-                        } catch (IOException e) {
-                            returnValue.setEx(e);
-                        }
-                    }
-
-                });
-            } catch (    InterruptedException | InvocationTargetException e) {
-                throw new IOException(returnValue.getEx().getMessage(), e);
-            }
-        }
-        if (returnValue.getEx() != null) {
-            throw new IOException(returnValue.getEx());
-        }
-        return returnValue.getReturnValue();
-
-    }
-
-    private static File writeObjXmlToFilesystemCore(Frame parent, String title, String startDir, String defaultFile,
-            Object obj, Collection<PersistenceDelegateSpec> delegates, Object owner) throws FileNotFoundException,
-            IOException {
-        if (parent == null) {
-            parent = new JFrame();
-        }
-        FileDialog fd = new FileDialog(parent, title, FileDialog.SAVE);
-        fd.setDirectory(startDir);
-        fd.setFile(defaultFile);
-        fd.setVisible(true); // Display dialog and wait for response
-        if (fd.getFile() != null) {
-            File objFile = new File(fd.getDirectory(), fd.getFile());
-            FileOutputStream fos = new FileOutputStream(objFile);
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
-            try (XMLEncoder encoder = new XMLEncoder(bos)) {
-                encoder.setExceptionListener(new ExceptionListener() {
-                    @Override
-                    public void exceptionThrown(Exception exception) {
-                        exception.printStackTrace();
-                    }
-                });
-                if (delegates != null) {
-                    for (PersistenceDelegateSpec spec : delegates) {
-                        encoder.setPersistenceDelegate(spec.getType(), spec.getPersistenceDelegate());
-                    }
-                }
-                if (owner != null) {
-                    encoder.setOwner(owner);
-                }
-                encoder.writeObject(obj);
-            }
-            return objFile;
-        } else {
-            throw new IOException("User canceled save operation");
         }
     }
 

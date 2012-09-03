@@ -63,12 +63,12 @@ import org.ihtsdo.tk.db.DbDependency;
  *
  * @author kec
  */
-public class RestClient extends Termstore {
-   public static final String    defaultLocalHostSvr = "http://localhost:8080/terminology/rest/";
-   public static final MediaType bdbMediaType        = new MediaType("application", "bdb");
-   private static String         serverUrlStr        = defaultLocalHostSvr;
+public class TtkRestClient extends Termstore {
+   public static final String    defaultLocalHostServer = "http://localhost:8080/terminology/rest/";
+   public static final MediaType bdbMediaType           = new MediaType("application", "bdb");
+   private static String         serverUrlStr           = defaultLocalHostServer;
    private static Client         restClient;
-   private static RestClient     restClientSingleton;
+   private static TtkRestClient  restClientSingleton;
 
    //~--- methods -------------------------------------------------------------
 
@@ -88,17 +88,18 @@ public class RestClient extends Termstore {
    }
 
    public static void setup(String serverUrlStr) throws IOException {
-      RestClient.serverUrlStr = serverUrlStr;
+      TtkRestClient.serverUrlStr = serverUrlStr;
 
       ClientConfig cc = new DefaultClientConfig();
 
       cc.getClasses().add(ViewCoordinateSerializationProvider.class);
       restClient          = Client.create(cc);
-      restClientSingleton = new RestClient();
+      restClientSingleton = new TtkRestClient();
       P.s                 = restClientSingleton;
       Ts.set(restClientSingleton);
       P.s.putViewCoordinate(P.s.getMetadataVC());
       P.s.putViewCoordinate(StandardViewCoordinates.getSnomedLatest());
+      Ts.get().setGlobalSnapshot(Ts.get().getSnapshot(StandardViewCoordinates.getSnomedLatest()));
    }
 
    @Override
@@ -320,7 +321,10 @@ public class RestClient extends Termstore {
       }
    }
 
-   public static RestClient getRestClient() {
+   public static TtkRestClient getRestClient() throws IOException {
+       if (restClientSingleton == null) {
+           setup(TtkRestClient.defaultLocalHostServer);
+       }
       return restClientSingleton;
    }
 
@@ -408,8 +412,6 @@ public class RestClient extends Termstore {
 
       return Boolean.valueOf(r.accept(MediaType.TEXT_PLAIN).get(String.class));
    }
-
-   //~--- set methods ---------------------------------------------------------
 
    //J-
 
