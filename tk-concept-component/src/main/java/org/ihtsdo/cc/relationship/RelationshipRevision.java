@@ -111,6 +111,7 @@ public class RelationshipRevision extends Revision<RelationshipRevision, Relatio
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatusNid(statusNid);
          this.setAuthorNid(authorNid);
+         this.setModuleNid(moduleNid);
 
          return this;
       }

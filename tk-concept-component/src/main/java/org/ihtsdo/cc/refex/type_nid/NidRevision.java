@@ -96,8 +96,9 @@ public class NidRevision extends RefexRevision<NidRevision, NidMember>
     @Override
     public NidRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
         if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
-            this.setStatusNid(statusNid);
-
+         this.setStatusNid(statusNid);
+         this.setAuthorNid(authorNid);
+         this.setModuleNid(moduleNid);
             return this;
         }
 
@@ -122,7 +123,7 @@ public class NidRevision extends RefexRevision<NidRevision, NidMember>
     public String toString() {
         StringBuffer buf = new StringBuffer();
 
-        buf.append(this.getClass().getSimpleName() + ":{");
+        buf.append(this.getClass().getSimpleName()).append(":{");
         buf.append(" c1Nid: ");
         ConceptComponent.addNidToBuffer(buf, this.nid1);
         buf.append(super.toString());

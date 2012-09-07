@@ -105,6 +105,8 @@ public class BooleanRevision extends RefexRevision<BooleanRevision, BooleanMembe
            int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatusNid(statusNid);
+         this.setAuthorNid(authorNid);
+         this.setModuleNid(moduleNid);
 
          return this;
       }

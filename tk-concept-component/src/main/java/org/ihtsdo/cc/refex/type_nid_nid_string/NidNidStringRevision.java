@@ -119,6 +119,8 @@ public class NidNidStringRevision extends RefexRevision<NidNidStringRevision, Ni
    public NidNidStringRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatusNid(statusNid);
+         this.setAuthorNid(authorNid);
+         this.setModuleNid(moduleNid);
 
          return this;
       }

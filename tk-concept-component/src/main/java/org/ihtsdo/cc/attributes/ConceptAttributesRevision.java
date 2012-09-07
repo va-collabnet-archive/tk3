@@ -92,7 +92,7 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatusNid(statusNid);
          this.setAuthorNid(authorNid);
-
+         this.setModuleNid(moduleNid);
          return this;
       }
 
