@@ -203,7 +203,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             for (int p : ec.getEditPaths().getSetValues()) {
                 if (r.primordialStampNid == Integer.MIN_VALUE) {
                     r.primordialStampNid =
-                            Bdb.getSapDb().getSapNid(blueprint.getStatusNid(), Long.MAX_VALUE,
+                            Bdb.getStampDb().getSapNid(blueprint.getStatusNid(), Long.MAX_VALUE,
                             ec.getAuthorNid(), ec.getModuleNid(), p);
                 } else {
                     if (r.revisions == null) {
@@ -318,7 +318,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             for (int p : ec.getEditPaths().getSetValues()) {
                 if (d.primordialStampNid == Integer.MIN_VALUE) {
                     d.primordialStampNid =
-                            Bdb.getSapDb().getSapNid(blueprint.getStatusNid(), Long.MAX_VALUE, ec.getAuthorNid(),
+                            Bdb.getStampDb().getSapNid(blueprint.getStatusNid(), Long.MAX_VALUE, ec.getAuthorNid(),
                             ec.getModuleNid(), p);
                 } else {
                     if (d.revisions == null) {
@@ -413,7 +413,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             for (int p : ec.getEditPaths().getSetValues()) {
                 if (img.primordialStampNid == Integer.MIN_VALUE) {
                     img.primordialStampNid =
-                            Bdb.getSapDb().getSapNid(blueprint.getStatusNid(), Long.MAX_VALUE, ec.getAuthorNid(),
+                            Bdb.getStampDb().getSapNid(blueprint.getStatusNid(), Long.MAX_VALUE, ec.getAuthorNid(),
                             ec.getModuleNid(), p);
                 } else {
                     if (img.revisions == null) {
@@ -522,7 +522,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             if (primoridal) {
                 primoridal = false;
                 a.primordialStampNid =
-                        Bdb.getSapDb().getSapNid(blueprint.getStatusNid(), Long.MAX_VALUE, ec.getAuthorNid(),
+                        Bdb.getStampDb().getSapNid(blueprint.getStatusNid(), Long.MAX_VALUE, ec.getAuthorNid(),
                             ec.getModuleNid(), p);
             } else {
                 if (a.revisions == null) {

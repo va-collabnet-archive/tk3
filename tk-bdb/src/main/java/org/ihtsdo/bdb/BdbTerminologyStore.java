@@ -101,7 +101,7 @@ public class BdbTerminologyStore extends Termstore {
 
    @Override
    public void cancelAfterCommit(NidSetBI commitSapNids) throws IOException {
-      Bdb.getSapDb().cancelAfterCommit(commitSapNids);
+      Bdb.getStampDb().cancelAfterCommit(commitSapNids);
    }
 
    @Override
@@ -402,7 +402,7 @@ public class BdbTerminologyStore extends Termstore {
 
    @Override
    public int getMaxReadOnlyStamp() {
-      return Bdb.getSapDb().getReadOnlyMax();
+      return Bdb.getStampDb().getReadOnlyMax();
    }
 
    @Override
@@ -463,7 +463,7 @@ public class BdbTerminologyStore extends Termstore {
       HashSet<PathBI> paths = new HashSet<>(sapNids.size());
 
       for (int sap : sapNids) {
-         PathBI path = Bdb.getSapDb().getPosition(sap).getPath();
+         PathBI path = Bdb.getStampDb().getPosition(sap).getPath();
 
          paths.add(path);
          addOrigins(paths, path.getOrigins());
@@ -478,7 +478,7 @@ public class BdbTerminologyStore extends Termstore {
 
       for (int sap : sapNids) {
          if (sap >= 0) {
-            positions.add(Bdb.getSapDb().getPosition(sap));
+            positions.add(Bdb.getStampDb().getPosition(sap));
          }
       }
 
@@ -508,7 +508,7 @@ public class BdbTerminologyStore extends Termstore {
 
    @Override
    public int getSapNid(TkRevision version) {
-      return Bdb.getSapNid(version);
+      return Bdb.getStamp(version);
    }
 
    @Override
@@ -523,7 +523,7 @@ public class BdbTerminologyStore extends Termstore {
 
    @Override
    public int getStampNid(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-      return Bdb.getSapDb().getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
+      return Bdb.getStampDb().getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
    }
 
    @Override

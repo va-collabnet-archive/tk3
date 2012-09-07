@@ -59,7 +59,7 @@ public class Bdb {
     private static Bdb mutable;
     private static UuidToNidMapBdb uuidsToNidMapDb;
     public static NidCNidMapBdb nidCidMapDb;
-    private static StampBdb statusAtPositionDb;
+    private static StampBdb stampDb;
     private static ConceptBdb conceptDb;
     private static PropertiesBdb propDb;
     public static ThreadGroup dbdThreadGroup =
@@ -91,7 +91,7 @@ public class Bdb {
 
     public static void commit() throws IOException {
         long commitTime = System.currentTimeMillis();
-        statusAtPositionDb.commit(commitTime);
+        stampDb.commit(commitTime);
     }
 
     public static void setup() {
@@ -143,20 +143,20 @@ public class Bdb {
     }
 
     static int getAuthorNidForSapNid(int sapNid) {
-        return statusAtPositionDb.getAuthorNid(sapNid);
+        return stampDb.getAuthorNid(sapNid);
     }
     static int getPathNidForSapNid(int sapNid) {
-        return statusAtPositionDb.getPathNid(sapNid);
+        return stampDb.getPathNid(sapNid);
     }
     static int getStatusNidForSapNid(int sapNid) {
-        return statusAtPositionDb.getStatusNid(sapNid);
+        return stampDb.getStatusNid(sapNid);
     }
     
     static int getModuleNidForSapNid(int sapNid) {
-        return statusAtPositionDb.getModuleNid(sapNid);
+        return stampDb.getModuleNid(sapNid);
     }
     static long getTimeForSapNid(int sapNid) {
-        return statusAtPositionDb.getTime(sapNid);
+        return stampDb.getTime(sapNid);
     }
     
     static ViewCoordinate getViewCoordinate(UUID vcUuid) {
@@ -270,7 +270,7 @@ public class Bdb {
 
     public static void setup(String dbRoot) {
         System.out.println("setup dbRoot: " + dbRoot);
-        sapNidCache = new ConcurrentHashMap<>();
+        stampCache = new ConcurrentHashMap<>();
         try {
             closed = false;
             syncService = Executors.newFixedThreadPool(1,
@@ -305,7 +305,7 @@ public class Bdb {
 //            inform(activity, "loading nid->cid database...");
             nidCidMapDb = new NidCNidMapBdb(readOnly, mutable);
 //            inform(activity, "loading status@position database...");
-            statusAtPositionDb = new StampBdb(readOnly, mutable);
+            stampDb = new StampBdb(readOnly, mutable);
 //            inform(activity, "loading concept database...");
             conceptDb = new ConceptBdb(readOnly, mutable);
             
@@ -408,49 +408,54 @@ public class Bdb {
             throw new IOException(e);
         }
     }
-    private static ConcurrentHashMap<String, Integer> sapNidCache = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, Integer> stampCache = new ConcurrentHashMap<>();
 
-    public static int getSapNid(TkRevision version) {
-        assert version.getTime() != 0 : "Time is 0; was it initialized?";
+    public static int getStamp(TkRevision version) {
         assert version.getStatusUuid() != null : "Status is null; was it initialized?";
-        assert version.getPathUuid() != null : "Path is null; was it initialized?";
+        assert version.getTime() != 0 : "Time is 0; was it initialized?";
         assert version.getAuthorUuid() != null : "Author is null; was it initialized?";
+        assert version.getModuleUuid() != null : "Module is null; was it initialized?";
+        assert version.getPathUuid() != null : "Path is null; was it initialized?";
 
         if (version.getTime() == Long.MIN_VALUE) {
             return -1;
         }
-        String sapNidKey = version.getStatusUuid().toString() + version.getAuthorUuid() + version.getPathUuid() + version.getTime();
-        Integer sapNid = sapNidCache.get(sapNidKey);
-        if (sapNid != null) {
-            return sapNid;
+        String stampKey = "" + version.getStatusUuid() + 
+                version.getTime() +
+                version.getAuthorUuid() + 
+                version.getModuleUuid() +
+                version.getPathUuid();
+        Integer stamp = stampCache.get(stampKey);
+        if (stamp != null) {
+            return stamp;
         }
-        sapNid = statusAtPositionDb.getSapNid(
+        stamp = stampDb.getSapNid(
                 uuidToNid(version.getStatusUuid()),
                 version.getTime(),
                 uuidToNid(version.getAuthorUuid()),
                 uuidToNid(version.getModuleUuid()),
                 uuidToNid(version.getPathUuid()));
 
-        if (sapNidCache.size() > 500) {
-            sapNidCache = new ConcurrentHashMap<>();
+        if (stampCache.size() > 500) {
+            stampCache = new ConcurrentHashMap<>();
         }
-        sapNidCache.put(sapNidKey, sapNid);
-        return sapNid;
+        stampCache.put(stampKey, stamp);
+        return stamp;
     }
 
-    public static int getSapNid(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+    public static int getStamp(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
         assert time != 0 : "Time is 0; was it initialized?";
         assert statusNid != Integer.MIN_VALUE : "Status is Integer.MIN_VALUE; was it initialized?";
         assert pathNid != Integer.MIN_VALUE : "Path is Integer.MIN_VALUE; was it initialized?";
         if (time == Long.MIN_VALUE) {
             return -1;
         }
-        return statusAtPositionDb.getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
+        return stampDb.getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
     }
 
-    public static StampBdb getSapDb() {
-        assert statusAtPositionDb != null;
-        return statusAtPositionDb;
+    public static StampBdb getStampDb() {
+        assert stampDb != null;
+        return stampDb;
     }
 
     public static ConceptBdb getConceptDb() {
@@ -523,7 +528,7 @@ public class Bdb {
                 nidCidMapDb.sync();
                 activity.setValue(3);
                 activity.setProgressInfoLower("Writing statusAtPositionDb... ");
-                statusAtPositionDb.sync();
+                stampDb.sync();
                 activity.setValue(4);
                 activity.setProgressInfoLower("Writing conceptDb... ");
                 conceptDb.sync();
@@ -611,12 +616,12 @@ public class Bdb {
                 activity.setProgressInfoLower("10/11: mutable.bdbEnv.sync() finished.");
                 uuidsToNidMapDb.close();
                 nidCidMapDb.close();
-                statusAtPositionDb.close();
+                stampDb.close();
                 conceptDb.close();
                 propDb.close();
                 mutable.bdbEnv.sync();
                 mutable.bdbEnv.close();
-                sapNidCache.clear();
+                stampCache.clear();
                 activity.setProgressInfoLower("11/11: Shutdown complete");
             } catch (DatabaseException e) {
                 AceLog.getAppLog().alertAndLogException(e);
@@ -634,8 +639,8 @@ public class Bdb {
         pathManager = null;
         propDb = null;
         readOnly = null;
-        sapNidCache = null;
-        statusAtPositionDb = null;
+        stampCache = null;
+        stampDb = null;
         uuidsToNidMapDb = null;
        
         Concept.reset();

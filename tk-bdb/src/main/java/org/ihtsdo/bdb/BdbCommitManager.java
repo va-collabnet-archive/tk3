@@ -166,8 +166,8 @@ public class BdbCommitManager {
                         }
 
                         LastChange.touchComponents(cNidSet);
-                        Bdb.getSapDb().commit(Long.MIN_VALUE);
-                        Bdb.getSapDb().commit(Long.MIN_VALUE);
+                        Bdb.getStampDb().commit(Long.MIN_VALUE);
+                        Bdb.getStampDb().commit(Long.MIN_VALUE);
                         handleCanceledConcepts(uncommittedCNids);
                         handleCanceledConcepts(uncommittedCNidsNoChecks);
                         uncommittedCNidsNoChecks.clear();
@@ -222,7 +222,7 @@ public class BdbCommitManager {
                             NidBitSetItrBI uncommittedCNidItrNoChecks = uncommittedCNidsNoChecks.iterator();
 
                             long commitTime = System.currentTimeMillis();
-                            NidSetBI sapNidsFromCommit = Bdb.getSapDb().commit(commitTime);
+                            NidSetBI sapNidsFromCommit = Bdb.getStampDb().commit(commitTime);
 
                             if (writeChangeSets && (sapNidsFromCommit.size() > 0)) {
                                 if (changeSetPolicy == null) {
