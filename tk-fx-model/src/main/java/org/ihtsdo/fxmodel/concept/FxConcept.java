@@ -114,7 +114,8 @@ public class FxConcept implements Serializable {
 
    public FxConcept() {
       super();
-      _originRelationships      = FXCollections.observableArrayList(new ArrayList<FxRelationshipChronicle>(1));
+      _originRelationships      =
+         FXCollections.observableArrayList(new ArrayList<FxRelationshipChronicle>(1));
       _destinationRelationships =
          FXCollections.observableArrayList(new ArrayList<FxRelationshipChronicle>(1));
       _descriptions  = FXCollections.observableArrayList(new ArrayList<FxDescriptionChronicle>(1));
