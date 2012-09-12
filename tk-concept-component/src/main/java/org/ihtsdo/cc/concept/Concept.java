@@ -1357,7 +1357,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
    public Collection<? extends RelGroupVersionBI> getRelGroups(ViewCoordinate vc) throws IOException {
       ArrayList<RelGroupVersionBI> results = new ArrayList<>();
 
-      if (vc.getRelAssertionType() == RelAssertionType.INFERRED_THEN_STATED) {
+      if (vc.getRelationshipAssertionType() == RelAssertionType.INFERRED_THEN_STATED) {
          ViewCoordinate tempVc = new ViewCoordinate(UUID.randomUUID(), "getRelGroups", vc);
 
          tempVc.setRelAssertionType(RelAssertionType.STATED);

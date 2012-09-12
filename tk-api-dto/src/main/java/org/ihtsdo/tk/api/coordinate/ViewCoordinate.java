@@ -442,7 +442,7 @@ public class ViewCoordinate implements Externalizable {
       return precedence;
    }
 
-   public RelAssertionType getRelAssertionType() {
+   public RelAssertionType getRelationshipAssertionType() {
       return relAssertionType;
    }
 

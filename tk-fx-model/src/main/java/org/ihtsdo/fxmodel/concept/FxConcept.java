@@ -238,7 +238,7 @@ public class FxConcept implements Serializable {
       for (RelationshipChronicleBI rel : relsIncoming) {
          RelationshipVersionBI relVersion = rel.getPrimordialVersion();
 
-         switch (ss.getViewCoordinate().getRelAssertionType()) {
+         switch (ss.getViewCoordinate().getRelationshipAssertionType()) {
          case INFERRED :
             if (!relVersion.isInferred()) {
                continue NEXT_REL;
@@ -281,7 +281,7 @@ public class FxConcept implements Serializable {
       }
 
       if (_destinationRelationships.isEmpty()
-              && (ss.getViewCoordinate().getRelAssertionType() == RelAssertionType.INFERRED_THEN_STATED)) {
+              && (ss.getViewCoordinate().getRelationshipAssertionType() == RelAssertionType.INFERRED_THEN_STATED)) {
          for (RelationshipChronicleBI rel : relsIncoming) {
             RelationshipVersionBI relVersion = rel.getPrimordialVersion();
 
@@ -338,7 +338,7 @@ public class FxConcept implements Serializable {
                break;
             }
 
-            switch (ss.getViewCoordinate().getRelAssertionType()) {
+            switch (ss.getViewCoordinate().getRelationshipAssertionType()) {
             case INFERRED :
                if (!(fxv.getAuthorReference().getNid() == ss.getViewCoordinate().getClassifierNid())) {
                   toRemove.add(fxv);

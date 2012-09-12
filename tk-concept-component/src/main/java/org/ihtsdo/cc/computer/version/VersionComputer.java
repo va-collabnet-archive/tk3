@@ -196,15 +196,15 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
                     matchingVersions, versions, c.getPrecedence(),
                     c.getContradictionManager(), null);
         } else {
-            if (c.getRelAssertionType() == RelAssertionType.INFERRED) {
+            if (c.getRelationshipAssertionType() == RelAssertionType.INFERRED) {
                 addSpecifiedVersionsWithPositions(c.getAllowedStatusNids(), null,
                         c.getPositionSet(), matchingVersions, versions, c.getPrecedence(),
                         c.getContradictionManager(), new InferredFilter(c.getClassifierNid()));
-            } else if (c.getRelAssertionType() == RelAssertionType.STATED) {
+            } else if (c.getRelationshipAssertionType() == RelAssertionType.STATED) {
                 addSpecifiedVersionsWithPositions(c.getAllowedStatusNids(), null,
                         c.getPositionSet(), matchingVersions, versions, c.getPrecedence(),
                         c.getContradictionManager(), new StatedFilter(c.getClassifierNid()));
-            } else if (c.getRelAssertionType() == RelAssertionType.INFERRED_THEN_STATED) {
+            } else if (c.getRelationshipAssertionType() == RelAssertionType.INFERRED_THEN_STATED) {
                 List<V> possibleValues = new ArrayList<>();
                 addSpecifiedVersionsWithPositions(c.getAllowedStatusNids(), null,
                         c.getPositionSet(), possibleValues, versions, c.getPrecedence(),
@@ -217,7 +217,7 @@ public class VersionComputer<V extends ConceptComponent<?, ?>.Version> {
                 matchingVersions.addAll(possibleValues);
             } else {
                 throw new RuntimeException("Can't handle: "
-                        + c.getRelAssertionType());
+                        + c.getRelationshipAssertionType());
             }
         }
     }

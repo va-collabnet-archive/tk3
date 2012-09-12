@@ -836,7 +836,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
       Collection<? extends RelationshipChronicleBI> allRels = concept.getRelsOutgoing();
       Collection<RelationshipChronicleBI>           results = new ArrayList<>(allRels.size());
 
-      switch (vc.getRelAssertionType()) {
+      switch (vc.getRelationshipAssertionType()) {
       case INFERRED :
          for (RelationshipChronicleBI rc : allRels) {
             for (RelationshipVersionBI<?> rv : rc.getVersions()) {
@@ -867,7 +867,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
          return results;
 
       default :
-         throw new RuntimeException("Can't handle: " + vc.getRelAssertionType());
+         throw new RuntimeException("Can't handle: " + vc.getRelationshipAssertionType());
       }
    }
 
