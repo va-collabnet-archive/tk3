@@ -19,6 +19,11 @@ import org.ihtsdo.cc.relationship.Relationship;
 import org.ihtsdo.cc.termstore.TerminologySnapshot;
 import org.ihtsdo.cc.termstore.Termstore;
 import org.ihtsdo.cs.CsProperty;
+import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.fxmodel.concept.FxConcept;
+import org.ihtsdo.fxmodel.fetchpolicy.RefexPolicy;
+import org.ihtsdo.fxmodel.fetchpolicy.RelationshipPolicy;
+import org.ihtsdo.fxmodel.fetchpolicy.VersionPolicy;
 import org.ihtsdo.helper.thread.NamedThreadFactory;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.*;
@@ -60,6 +65,11 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
+   public void addRelOrigin(int destinationCNid, int originCNid) throws IOException {
+      Bdb.addRelOrigin(destinationCNid, originCNid);
+   }
+
+   @Override
    public void addUncommitted(ConceptChronicleBI concept) throws IOException {
       BdbCommitManager.addUncommitted(concept);
    }
@@ -78,11 +88,6 @@ public class BdbTerminologyStore extends Termstore {
    public void addXrefPair(int nid, NidPairForRefex pair) throws IOException {
       Bdb.addXrefPair(nid, pair);
    }
-
-    @Override
-    public void addRelOrigin(int destinationCNid, int originCNid) throws IOException {
-        Bdb.addRelOrigin(destinationCNid, originCNid);
-    }
 
    @Override
    public void cancel() {
@@ -186,12 +191,14 @@ public class BdbTerminologyStore extends Termstore {
          Executors.newCachedThreadPool(new NamedThreadFactory(loadBdbMultiDbThreadGroup, "converter "));
 
       try {
-         LinkedBlockingQueue<ConceptConverter> converters           = new LinkedBlockingQueue<>();
-         int                                   runtimeConverterSize = Runtime.getRuntime().availableProcessors() * 2;
-         int                                   converterSize        = runtimeConverterSize;
-         AtomicInteger                         conceptsRead         = new AtomicInteger();
-         AtomicInteger                         conceptsProcessed    = new AtomicInteger();
+         LinkedBlockingQueue<ConceptConverter>     converters                = new LinkedBlockingQueue<>();
+         int                                       runtimeConverterSize      =
+            Runtime.getRuntime().availableProcessors() * 2;
+         int                                       converterSize             = runtimeConverterSize;
+         AtomicInteger                             conceptsRead              = new AtomicInteger();
+         AtomicInteger                             conceptsProcessed         = new AtomicInteger();
          ConcurrentSkipListSet<ConceptChronicleBI> indexedAnnotationConcepts = new ConcurrentSkipListSet<>();
+
          for (int i = 0; i < converterSize; i++) {
             converters.add(new ConceptConverter(converters, conceptsProcessed, indexedAnnotationConcepts));
          }
@@ -247,9 +254,11 @@ public class BdbTerminologyStore extends Termstore {
             while (conceptsProcessed.get() < conceptsRead.get()) {
                Thread.sleep(1000);
             }
-            for (ConceptChronicleBI indexedAnnotationConcept: indexedAnnotationConcepts) {
-                Ts.get().addUncommittedNoChecks(indexedAnnotationConcept);
+
+            for (ConceptChronicleBI indexedAnnotationConcept : indexedAnnotationConcepts) {
+               Ts.get().addUncommittedNoChecks(indexedAnnotationConcept);
             }
+
             System.out.println("\nFinished load of " + conceptsRead + " concepts from: "
                                + conceptsFile.getAbsolutePath());
          }
@@ -263,6 +272,11 @@ public class BdbTerminologyStore extends Termstore {
       LuceneManager.createLuceneIndex();
       Bdb.commit();
       System.out.println("Finished create lucene index.");
+   }
+
+   @Override
+   public void put(UUID uuid, int nid) {
+      Bdb.getUuidsToNidMap().put(uuid, nid);
    }
 
    @Override
@@ -352,12 +366,13 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public int[] getDestRelOriginNids(int cNid, NidSetBI relTypes) throws IOException {
-      return Bdb.getNidCNidMap().getDestRelNids(cNid, relTypes);
-   }
-   @Override
    public int[] getDestRelOriginNids(int cNid) throws IOException {
       return Bdb.getNidCNidMap().getDestRelNids(cNid);
+   }
+
+   @Override
+   public int[] getDestRelOriginNids(int cNid, NidSetBI relTypes) throws IOException {
+      return Bdb.getNidCNidMap().getDestRelNids(cNid, relTypes);
    }
 
    @Override
@@ -368,6 +383,42 @@ public class BdbTerminologyStore extends Termstore {
    @Override
    public NidBitSetBI getEmptyNidSet() throws IOException {
       return Bdb.getConceptDb().getEmptyIdSet();
+   }
+
+   @Override
+   public FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc)
+           throws IOException, ContradictionException {
+      TerminologySnapshotDI ts = getSnapshot(vc);
+      ConceptVersionBI      c  = ts.getConceptVersion(conceptUUID);
+
+      return new FxConcept(ts, c, VersionPolicy.ALL_VERSIONS, RefexPolicy.REFEX_MEMBERS,
+                           RelationshipPolicy.ORIGINATING_RELATIONSHIPS);
+   }
+
+   @Override
+   public FxConcept getFxConcept(FxComponentReference ref, ViewCoordinate vc, VersionPolicy versionPolicy,
+                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
+           throws IOException, ContradictionException {
+      TerminologySnapshotDI ts = getSnapshot(vc);
+      ConceptVersionBI      c;
+
+      if (ref.getNid() != Integer.MAX_VALUE) {
+         c = ts.getConceptVersion(ref.getNid());
+      } else {
+         c = ts.getConceptVersion(ref.getUuid());
+      }
+
+      return new FxConcept(ts, c, versionPolicy, refexPolicy, relationshipPolicy);
+   }
+
+   @Override
+   public FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc, VersionPolicy versionPolicy,
+                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
+           throws IOException, ContradictionException {
+      TerminologySnapshotDI ts = getSnapshot(vc);
+      ConceptVersionBI      c  = ts.getConceptVersion(conceptUUID);
+
+      return new FxConcept(ts, c, versionPolicy, refexPolicy, relationshipPolicy);
    }
 
    @Override
@@ -487,8 +538,9 @@ public class BdbTerminologyStore extends Termstore {
 
    @Override
    public int[] getPossibleChildren(int parentNid, ViewCoordinate vc) throws IOException {
-       throw new UnsupportedOperationException("needs to get concept nids, not rel nids");
-      //return Bdb.getNidCNidMap().getDestRelNids(parentNid, vc);
+      throw new UnsupportedOperationException("needs to get concept nids, not rel nids");
+
+      // return Bdb.getNidCNidMap().getDestRelNids(parentNid, vc);
    }
 
    @Override
@@ -611,6 +663,12 @@ public class BdbTerminologyStore extends Termstore {
       return Bdb.hasUuid(memberUUID);
    }
 
+   @Override
+   public boolean isKindOf(int childNid, int parentNid, ViewCoordinate vc)
+           throws IOException, ContradictionException {
+      return Bdb.getNidCNidMap().isKindOf(childNid, parentNid, vc);
+   }
+
    //~--- set methods ---------------------------------------------------------
 
    @Override
@@ -623,33 +681,23 @@ public class BdbTerminologyStore extends Termstore {
       Bdb.setProperty(key, value);
    }
 
-    @Override
-    public boolean isKindOf(int childNid, int parentNid, ViewCoordinate vc) throws IOException, ContradictionException {
-        return Bdb.getNidCNidMap().isKindOf(childNid, parentNid, vc);
-    }
-
-    @Override
-    public void put(UUID uuid, int nid) {
-        Bdb.getUuidsToNidMap().put(uuid, nid);
-    }
-
    //~--- inner classes -------------------------------------------------------
 
    private static class ConceptConverter implements Runnable {
-      TkConcept                             eConcept   = null;
-      Throwable                             exception  = null;
-      Concept                               newConcept = null;
-      AtomicInteger                         conceptsProcessed;
-      LinkedBlockingQueue<ConceptConverter> converters;
-      NidCNidMapBdb                         nidCnidMap;
-       ConcurrentSkipListSet<ConceptChronicleBI> indexedAnnotationConcepts;
+      TkConcept                                 eConcept   = null;
+      Throwable                                 exception  = null;
+      Concept                                   newConcept = null;
+      AtomicInteger                             conceptsProcessed;
+      LinkedBlockingQueue<ConceptConverter>     converters;
+      ConcurrentSkipListSet<ConceptChronicleBI> indexedAnnotationConcepts;
+      NidCNidMapBdb                             nidCnidMap;
 
       //~--- constructors -----------------------------------------------------
 
-      public ConceptConverter(LinkedBlockingQueue<ConceptConverter> converters, AtomicInteger conceptsRead, 
-              ConcurrentSkipListSet<ConceptChronicleBI> indexedAnnotationConcepts) {
-         this.converters        = converters;
-         this.conceptsProcessed = conceptsRead;
+      public ConceptConverter(LinkedBlockingQueue<ConceptConverter> converters, AtomicInteger conceptsRead,
+                              ConcurrentSkipListSet<ConceptChronicleBI> indexedAnnotationConcepts) {
+         this.converters                = converters;
+         this.conceptsProcessed         = conceptsRead;
          this.indexedAnnotationConcepts = indexedAnnotationConcepts;
       }
 

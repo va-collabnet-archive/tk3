@@ -17,6 +17,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.fxmodel.concept.FxConcept;
+import org.ihtsdo.fxmodel.fetchpolicy.RefexPolicy;
+import org.ihtsdo.fxmodel.fetchpolicy.RelationshipPolicy;
+import org.ihtsdo.fxmodel.fetchpolicy.VersionPolicy;
 import org.ihtsdo.tk.dto.concept.component.TkRevision;
 
 public interface TerminologyStoreDI extends TerminologyDI {
@@ -118,4 +123,15 @@ public interface TerminologyStoreDI extends TerminologyDI {
 
    boolean isKindOf(int childNid, int parentNid, ViewCoordinate vc)
            throws IOException, ContradictionException;
+   
+   FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc) throws IOException, ContradictionException;
+
+   FxConcept getFxConcept(FxComponentReference ref, ViewCoordinate vc, VersionPolicy versionPolicy,
+                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
+           throws IOException, ContradictionException;
+
+   FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc, VersionPolicy versionPolicy,
+                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
+           throws IOException, ContradictionException;
+
 }

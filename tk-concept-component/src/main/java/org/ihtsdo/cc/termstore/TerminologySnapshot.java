@@ -11,6 +11,11 @@ import java.util.UUID;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.concept.ConceptVersion;
+import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.fxmodel.concept.FxConcept;
+import org.ihtsdo.fxmodel.fetchpolicy.RefexPolicy;
+import org.ihtsdo.fxmodel.fetchpolicy.RelationshipPolicy;
+import org.ihtsdo.fxmodel.fetchpolicy.VersionPolicy;
 import org.ihtsdo.helper.uuid.UuidFactory;
 import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
@@ -359,4 +364,39 @@ public class TerminologySnapshot implements TerminologySnapshotDI {
     public int getConceptNidForNid(int nid) {
         return P.s.getConceptNidForNid(nid);
     }
+    
+    
+   @Override
+   public FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc)
+           throws IOException, ContradictionException {
+      ConceptVersionBI      c  = getConceptVersion(conceptUUID);
+
+      return new FxConcept(this, c, VersionPolicy.ACTIVE_VERSIONS, RefexPolicy.REFEX_MEMBERS,
+                           RelationshipPolicy.ORIGINATING_RELATIONSHIPS);
+   }
+
+   @Override
+   public FxConcept getFxConcept(FxComponentReference ref,
+                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
+           throws IOException, ContradictionException {
+      ConceptVersionBI      c;
+
+      if (ref.getNid() != Integer.MAX_VALUE) {
+         c = getConceptVersion(ref.getNid());
+      } else {
+         c = getConceptVersion(ref.getUuid());
+      }
+
+      return new FxConcept(this, c, VersionPolicy.ACTIVE_VERSIONS, refexPolicy, relationshipPolicy);
+   }
+
+   @Override
+   public FxConcept getFxConcept(UUID conceptUUID,
+                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
+           throws IOException, ContradictionException {
+      ConceptVersionBI      c  = getConceptVersion(conceptUUID);
+
+      return new FxConcept(this, c, VersionPolicy.ACTIVE_VERSIONS, refexPolicy, relationshipPolicy);
+   }
+
 }

@@ -25,31 +25,5 @@
             <version>${project.version}</version>
             <type>jar</type>
         </dependency>
-        <dependency> 
-            <groupId>com.oracle</groupId>
-            <artifactId>javafx</artifactId>
-        </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.sun.tools.jxc.maven2</groupId>
-                <artifactId>maven-jaxb-schemagen-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <project>${project}</project>
-                    <destdir>${project.build.directory}/schemas</destdir>
-                    <srcdir>${project.build.sourceDirectory}/org/ihtsdo/fxmodel</srcdir>
-                    <verbose>true</verbose>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

@@ -172,8 +172,27 @@ public class TtkRestClient extends Termstore {
    public NidBitSetBI getEmptyNidSet() throws IOException {
       throw new UnsupportedOperationException("Not supported yet.");
    }
+   @Override
+   public FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc) throws IOException, ContradictionException {
+       return getFxConcept(conceptUUID, vc.getVcUuid());
+   }
 
-   public FxConcept getFxConcept(UUID conceptUUID, UUID vcUuid) {
+   @Override
+   public FxConcept getFxConcept(FxComponentReference ref, ViewCoordinate vc, VersionPolicy versionPolicy,
+                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
+       return getFxConcept(ref, vc.getVcUuid(), versionPolicy,
+                                 refexPolicy, relationshipPolicy);
+   }
+
+   @Override
+   public FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc, VersionPolicy versionPolicy,
+                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
+       return getFxConcept(conceptUUID, vc.getVcUuid(), versionPolicy,
+                                 refexPolicy, relationshipPolicy);
+   }
+
+
+   private FxConcept getFxConcept(UUID conceptUUID, UUID vcUuid) {
       WebResource    r        = restClient.resource(serverUrlStr + "fx-concept/" + conceptUUID + "/"
                                    + vcUuid);
       ClientResponse response = r.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
@@ -181,12 +200,12 @@ public class TtkRestClient extends Termstore {
       return response.getEntity(FxConcept.class);
    }
 
-   public FxConcept getFxConcept(FxComponentReference ref, UUID vcUuid, VersionPolicy versionPolicy,
+   private FxConcept getFxConcept(FxComponentReference ref, UUID vcUuid, VersionPolicy versionPolicy,
                                  RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
       return getFxConcept(ref.getUuid(), vcUuid, versionPolicy, refexPolicy, relationshipPolicy);
    }
 
-   public FxConcept getFxConcept(UUID conceptUUID, UUID vcUuid, VersionPolicy versionPolicy,
+   private FxConcept getFxConcept(UUID conceptUUID, UUID vcUuid, VersionPolicy versionPolicy,
                                  RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
       WebResource r = restClient.resource(serverUrlStr + "fx-concept/" + conceptUUID + "/" + vcUuid + "/"
                          + versionPolicy + "/" + refexPolicy + "/" + relationshipPolicy);

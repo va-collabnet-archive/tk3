@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.ihtsdo.tk</groupId>
@@ -24,15 +24,14 @@
     <dependencies>
         <dependency>
             <groupId>com.oracle</groupId>
-            <artifactId>javafx</artifactId>
-            <scope>compile</scope>
-        </dependency>
-       <dependency>
-           <groupId>${project.groupId}</groupId>
-           <version>${project.version}</version>
-           <artifactId>tk-bdb</artifactId>
+            <artifactId>jfxrt</artifactId>
         </dependency>
          <dependency>
+            <groupId>${project.groupId}</groupId>
+            <version>${project.version}</version>
+            <artifactId>tk-bdb</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
             <version>${jersey-version}</version>
@@ -65,14 +64,8 @@
             <version>1.0-alpha-4</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <version>${project.version}</version>
-            <artifactId>tk-fx-model</artifactId>
-            <type>jar</type>
-        </dependency>
     </dependencies>
-     <repositories>
+    <repositories>
         <repository>
             <id>glassfish.java.net</id>
             <name>GlassFish Maven Repository</name>

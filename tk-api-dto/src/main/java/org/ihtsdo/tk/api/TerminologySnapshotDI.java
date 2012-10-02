@@ -13,6 +13,11 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
+import org.ihtsdo.fxmodel.FxComponentReference;
+import org.ihtsdo.fxmodel.concept.FxConcept;
+import org.ihtsdo.fxmodel.fetchpolicy.RefexPolicy;
+import org.ihtsdo.fxmodel.fetchpolicy.RelationshipPolicy;
+import org.ihtsdo.fxmodel.fetchpolicy.VersionPolicy;
 
 public interface TerminologySnapshotDI extends TerminologyDI {
 
@@ -45,4 +50,13 @@ public interface TerminologySnapshotDI extends TerminologyDI {
    int getConceptNidForNid(Integer nid);
    
    boolean isKindOf(int childNid, int parentNid) throws IOException, ContradictionException;
+   
+   FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc) throws IOException, ContradictionException;
+
+   FxConcept getFxConcept(FxComponentReference ref, RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
+           throws IOException, ContradictionException;
+
+   FxConcept getFxConcept(UUID conceptUUID, RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
+           throws IOException, ContradictionException;
+
 }
