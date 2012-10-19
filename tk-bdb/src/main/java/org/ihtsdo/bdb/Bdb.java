@@ -284,6 +284,7 @@ public class Bdb {
                 // ensure all OFFSETS are initialized prior to multi-threading. 
             }
             bdbDirectory = new File(dbRoot);
+            System.out.println("absolute dbRoot: " + bdbDirectory.getAbsolutePath());
             viewCoordinateMapFile = new File(bdbDirectory, "viewCoordinates.oos");
             bdbDirectory.mkdirs();
             LuceneManager.setLuceneRootDir(bdbDirectory);

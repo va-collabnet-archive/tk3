@@ -5,7 +5,6 @@
 package org.ihtsdo.tk.rest.server;
 
 import java.io.IOException;
-import java.util.UUID;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;

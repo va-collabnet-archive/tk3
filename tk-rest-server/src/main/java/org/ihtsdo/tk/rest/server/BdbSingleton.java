@@ -1,7 +1,7 @@
 
 /*
-* To change this template, choose Tools | Templates
-* and open the template in the editor.
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 package org.ihtsdo.tk.rest.server;
 
@@ -23,37 +23,41 @@ import org.ihtsdo.tk.api.coordinate.StandardViewCoordinates;
  */
 @Provider
 public class BdbSingleton extends SingletonTypeInjectableProvider<Context, PersistentStoreI> {
-   static {
-      try {
-         String directory = "berkeley-db";
 
-         if (new File(directory).exists()) {
-            Ts.setup(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS, directory);
-         } else {
-            Ts.setup(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS, directory);
-            System.out.println("Start load of eConcept.jbin");
+    static {
+        try {
+            String directory = "berkeley-db";
 
-            File[] econFiles = new File[] { new File("/Users/kec/NetBeansProjects/eConcept.jbin") };
 
-            Ts.get().loadEconFiles(econFiles);
-            System.out.println("Finished load of eConcept.jbin");
-         }
-         Ts.get().setGlobalSnapshot(Ts.get().getSnapshot(StandardViewCoordinates.getSnomedLatest()));
-      } catch (Exception ex) {
-         Logger.getLogger(BdbSingleton.class.getName()).log(Level.SEVERE, null, ex);
-      }
-   }
+            if (System.getProperty("BdbSingleton.BDB_LOCATION") != null) {
+                directory = System.getProperty("BdbSingleton.BDB_LOCATION");
+            }
 
-   //~--- constructors --------------------------------------------------------
+            if (new File(directory).exists()) {
+                Ts.setup(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS, directory);
+            } else {
+                Ts.setup(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS, directory);
+                System.out.println("Start load of eConcept.jbin");
 
-   public BdbSingleton() {
-      super(PersistentStoreI.class, P.s);
-   }
+                File[] econFiles = new File[]{new File("/Users/kec/NetBeansProjects/eConcept.jbin")};
 
-   //~--- methods -------------------------------------------------------------
+                Ts.get().loadEconFiles(econFiles);
+                System.out.println("Finished load of eConcept.jbin");
+            }
+            Ts.get().setGlobalSnapshot(Ts.get().getSnapshot(StandardViewCoordinates.getSnomedLatest()));
+        } catch (Exception ex) {
+            Logger.getLogger(BdbSingleton.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
-   @PreDestroy
-   public void close() throws Exception {
-      Ts.close(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS);
-   }
+    //~--- constructors --------------------------------------------------------
+    public BdbSingleton() {
+        super(PersistentStoreI.class, P.s);
+    }
+
+    //~--- methods -------------------------------------------------------------
+    @PreDestroy
+    public void close() throws Exception {
+        Ts.close(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS);
+    }
 }
