@@ -327,6 +327,7 @@ the specific language governing permissions and limitations under the License. -
         <module>tk-mojo</module>
         <module>tk-uuid-maps</module>
         <module>tk-rest-server</module>
+        <module>tk-fx-model</module>
     </modules>
     <profiles>
         <profile>
