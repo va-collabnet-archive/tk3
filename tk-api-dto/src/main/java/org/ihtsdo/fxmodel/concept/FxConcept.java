@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.ihtsdo.fxmodel.FxComponentReference;
 import org.ihtsdo.fxmodel.concept.component.attribute.FxConceptAttributesChronicle;
 import org.ihtsdo.fxmodel.concept.component.description.FxDescriptionChronicle;
+import org.ihtsdo.fxmodel.concept.component.description.FxDescriptionVersion;
 import org.ihtsdo.fxmodel.concept.component.media.FxMediaChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.FxRefexChronicle;
 import org.ihtsdo.fxmodel.concept.component.refex.type_boolean.FxRefexBooleanChronicle;
@@ -542,6 +543,33 @@ public class FxConcept implements Serializable {
    public String toString() {
       return this.conceptReference.getText();
    }
+   
+   public String toHtml() {
+       StringBuilder sb = new StringBuilder();
+       sb.append("<html>");
+       sb.append("<head>");
+       sb.append("<title>");
+       sb.append(primordialUuid.toString());
+       sb.append(" ");
+       if (!getDescriptions().isEmpty() && !getDescriptions().get(0).getVersions().isEmpty()) {
+           sb.append(getDescriptions().get(0).getVersions().get(0).getText());
+       }
+       sb.append("</title>");
+       sb.append("</head>");
+       sb.append("<body>");
+       sb.append(getHtmlFragment());
+       sb.append("</body>");
+       sb.append("</html>");
+       return sb.toString();
+   }
+   
+   public String getHtmlFragment() {
+       StringBuilder sb = new StringBuilder();
+        getDescriptionTable(sb);
+        getOriginRelationshipTable(sb);
+        getDestinationRelationshipTable(sb);       
+       return sb.toString();
+   }
 
    //~--- get methods ---------------------------------------------------------
 
@@ -554,18 +582,42 @@ public class FxConcept implements Serializable {
    }
 
    public ObservableList<FxDescriptionChronicle> getDescriptions() {
+       if (descriptions != null) {
+           return descriptions.getValue();
+       }
+       if (_descriptions == null) {
+           _descriptions = FXCollections.emptyObservableList();
+       }
       return _descriptions;
    }
 
    public ObservableList<FxRelationshipChronicle> getDestinationRelationships() {
+       if (destinationRelationships != null) {
+           return destinationRelationships.get();
+       }
+       if (_destinationRelationships == null) {
+           _destinationRelationships = FXCollections.emptyObservableList();
+       }
       return _destinationRelationships;
    }
 
    public ObservableList<FxMediaChronicle> getMedia() {
+       if (media != null) {
+           return media.get();
+       }
+       if (_media == null) {
+           _media = FXCollections.emptyObservableList();
+       }
       return _media;
    }
 
    public ObservableList<FxRelationshipChronicle> getOriginRelationships() {
+       if (originRelationships != null) {
+           return originRelationships.get();
+       }
+       if (_originRelationships == null) {
+           _originRelationships = FXCollections.emptyObservableList();
+       }
       return _originRelationships;
    }
 
@@ -578,6 +630,12 @@ public class FxConcept implements Serializable {
    }
 
    public ObservableList<FxRefexChronicle<?, ?>> getRefsetMembers() {
+       if (refsetMembers != null) {
+           return refsetMembers.get();
+       }
+       if (_refsetMembers == null) {
+           _refsetMembers = FXCollections.emptyObservableList();
+       }
       return _refsetMembers;
    }
 
@@ -600,23 +658,35 @@ public class FxConcept implements Serializable {
    }
 
    public void setDescriptions(List<FxDescriptionChronicle> descriptions) {
-      this._descriptions = FXCollections.observableArrayList(descriptions);
+       if (this.descriptions != null) {
+           this.descriptions.setValue(FXCollections.observableArrayList(descriptions));
+       } else {
+           this._descriptions = FXCollections.observableArrayList(descriptions);
+       }
    }
 
    public void setDestinationRelationships(ObservableList<FxRelationshipChronicle> destinationRelationships) {
-      this._destinationRelationships = destinationRelationships;
-   }
-
-   public void setImages(List<FxMediaChronicle> images) {
-      this._media = FXCollections.observableArrayList(images);
+       if (this.destinationRelationships != null) {
+           this.destinationRelationships.setValue(FXCollections.observableArrayList(destinationRelationships));
+       } else {
+           this._destinationRelationships = FXCollections.observableArrayList(destinationRelationships);
+       }
    }
 
    public void setMedia(ObservableList<FxMediaChronicle> media) {
-      this._media = media;
+       if (this.media != null) {
+           this.media.setValue(FXCollections.observableArrayList(media));
+       } else {
+           this._media = FXCollections.observableArrayList(media);
+       }
    }
 
    public void setOriginRelationships(List<FxRelationshipChronicle> relationships) {
-      this._originRelationships = FXCollections.observableArrayList(relationships);
+       if (this.originRelationships != null) {
+           this.originRelationships.setValue(FXCollections.observableArrayList(relationships));
+       } else {
+           this._originRelationships = FXCollections.observableArrayList(relationships);
+       }
    }
 
    public void setPrimordialUuid(UUID primordialUuid) {
@@ -628,7 +698,11 @@ public class FxConcept implements Serializable {
    }
 
    public void setRefsetMembers(List<FxRefexChronicle<?, ?>> refsetMembers) {
-      this._refsetMembers = FXCollections.observableArrayList(refsetMembers);
+       if (this.refsetMembers != null) {
+           this.refsetMembers.setValue(FXCollections.observableArrayList(refsetMembers));
+       } else {
+           this._refsetMembers = FXCollections.observableArrayList(refsetMembers);
+       }
    }
 
    public void setRelationshipPolicy(RelationshipPolicy relationshipPolicy) {
@@ -638,4 +712,80 @@ public class FxConcept implements Serializable {
    public void setVersionPolicy(VersionPolicy versionPolicy) {
       this.versionPolicy = versionPolicy;
    }
+
+   private void getOriginRelationshipTable(StringBuilder sb) {
+        sb.append("<table>");
+        sb.append("<tr>");
+               sb.append("<th colspan=2 align=left>origin relationships:</th>");
+        sb.append("</tr>");
+        sb.append("<tr>");
+        sb.append("<th align=left>type:</th>");
+        sb.append("<th align=left>concept:</th>");
+        sb.append("</tr>");
+        for (FxRelationshipChronicle fxrc: getOriginRelationships()) {
+            for (FxRelationshipVersion fxrv: fxrc.getVersions()) {
+             sb.append("<tr>");
+             sb.append("<td>");
+             sb.append(fxrv.getTypeReference().getHtmlFragment());
+             sb.append("</td>");
+             sb.append("<td>");
+             sb.append(fxrv.getDestinationReference().getHtmlFragment());
+             sb.append("</td>");
+             sb.append("</tr>");
+            }
+            
+        }
+        sb.append("</table>");
+   }
+
+      private void getDestinationRelationshipTable(StringBuilder sb) {
+        sb.append("<table>");
+        sb.append("<tr>");
+               sb.append("<th colspan=2 align=left>destination relationships:</th>");
+        sb.append("</tr>");
+        sb.append("<tr>");
+        sb.append("<th align=left>concept:</th>");
+        sb.append("<th align=left>type:</th>");
+        sb.append("</tr>");
+        for (FxRelationshipChronicle fxrc: getDestinationRelationships()) {
+            for (FxRelationshipVersion fxrv: fxrc.getVersions()) {
+             sb.append("<tr>");
+             sb.append("<td>");
+             sb.append(fxrv.getOriginReference().getHtmlFragment());
+             sb.append("</td>");
+             sb.append("<td>");
+             sb.append(fxrv.getTypeReference().getHtmlFragment());
+             sb.append("</td>");
+             sb.append("</tr>");
+            }
+            
+        }
+        sb.append("</table>");
+   }
+
+
+    private void getDescriptionTable(StringBuilder sb) {
+        sb.append("<table>");
+        sb.append("<tr>");
+        sb.append("<th colspan=2 align=left>descriptions:</th>");
+        sb.append("</tr>");
+        sb.append("<tr>");
+        sb.append("<th align=left>text:</th>");
+        sb.append("<th align=left>type:</th>");
+        sb.append("</tr>");
+        for (FxDescriptionChronicle fxdc: getDescriptions()) {
+            for (FxDescriptionVersion fxdv: fxdc.getVersions()) {
+             sb.append("<tr>");
+             sb.append("<td>");
+             sb.append(fxdv.getText());
+             sb.append("</td>");
+             sb.append("<td>");
+             sb.append(fxdv.getTypeReference().getHtmlFragment());
+             sb.append("</td>");
+             sb.append("</tr>");
+            }
+            
+        }
+        sb.append("</table>");
+    }
 }

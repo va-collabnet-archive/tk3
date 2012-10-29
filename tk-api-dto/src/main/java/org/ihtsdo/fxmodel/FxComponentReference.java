@@ -26,6 +26,7 @@ import java.util.UUID;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentVersionBI;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.TerminologySnapshotDI;
@@ -177,6 +178,24 @@ public class FxComponentReference implements Externalizable {
              ? text
              : textProperty.get();
    }
+   
+      
+   public String getHtmlFragment() {
+       StringBuilder sb = new StringBuilder();
+       if (Ts.get().getConceptNidForNid(getNid()) == getNid()) {
+        sb.append("<a href=\"../concept/");
+       } else {
+        sb.append("<a href=\"../component/");
+       }
+       sb.append(getUuid());
+       sb.append("\">");
+       sb.append(getText());
+       sb.append("</a>");
+       
+       
+       return sb.toString();
+   }
+
 
    /**
     * Get the value of uuid

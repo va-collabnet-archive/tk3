@@ -6,16 +6,15 @@ import com.sleepycat.bind.tuple.TupleInput;
 
 public interface ConceptDataFetcherI {
 
-	public byte[] getReadOnlyBytes() throws IOException;
+    byte[] getReadOnlyBytes() throws IOException;
 
-	public byte[] getReadWriteBytes() throws IOException;
+    byte[] getReadWriteBytes() throws IOException;
 
-	public TupleInput getReadOnlyTupleInput() throws IOException;
+    TupleInput getReadOnlyTupleInput() throws IOException;
 
-	public TupleInput getMutableTupleInput() throws IOException;
+    TupleInput getMutableTupleInput() throws IOException;
 
-	public boolean isPrimordial() throws IOException;
-	
-	public void reset();
+    boolean isPrimordial() throws IOException;
 
+    void reset();
 }

@@ -13,7 +13,14 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.StreamingOutput;
 import org.ihtsdo.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.cc.termstore.PersistentStoreI;
+import org.ihtsdo.fxmodel.concept.FxConcept;
+import org.ihtsdo.fxmodel.fetchpolicy.RefexPolicy;
+import org.ihtsdo.fxmodel.fetchpolicy.RelationshipPolicy;
+import org.ihtsdo.fxmodel.fetchpolicy.VersionPolicy;
+import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.tk.api.coordinate.StandardViewCoordinates;
+import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.dto.concept.TkConcept;
 
 /**
@@ -37,21 +44,27 @@ public class ConceptResource {
         } else {
             c = ts.getConcept(Integer.parseInt(id));
         }
-        return "Concept plain: " + id + " " + c.toLongString();
+        return c.toLongString();
     }
 
     @GET
     @Path("{id}")
     @Produces("text/html")
-    public String getConceptHtml(@PathParam("id") String id) throws IOException {
-        ConceptChronicleBI c;
     
+    public String getConceptHtml(@PathParam("id") String id) throws IOException, ContradictionException {
+         UUID uuid;
+        
         if (id.length() == 36) {
-            c = ts.getConcept(UUID.fromString(id));
+            uuid = UUID.fromString(id);
         } else {
-            c = ts.getConcept(Integer.parseInt(id));
+            uuid = ts.getUuidPrimordialForNid(Integer.parseInt(id));
         }
-        return "Concept html: " + id + " " + c.toLongString();
+        ViewCoordinate vc = StandardViewCoordinates.getSnomedLatest();
+        FxConcept fxc = ts.getFxConcept(uuid, vc,
+                    VersionPolicy.ACTIVE_VERSIONS,
+                    RefexPolicy.ANNOTATION_MEMBERS,
+                    RelationshipPolicy.ORIGINATING_AND_DESTINATION_RELATIONSHIPS);
+        return fxc.toHtml();
     }
 
     @GET
