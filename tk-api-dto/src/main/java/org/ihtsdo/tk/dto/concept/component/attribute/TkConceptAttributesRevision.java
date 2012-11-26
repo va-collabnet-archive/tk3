@@ -12,10 +12,10 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import java.util.Map;
-import java.util.UUID;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 @XmlRootElement(name="attributes-revision")
 public class TkConceptAttributesRevision extends TkRevision implements I_ConceptualizeExternally {
@@ -43,10 +43,9 @@ public class TkConceptAttributesRevision extends TkRevision implements I_Concept
       readExternal(in, dataVersion);
    }
 
-   public TkConceptAttributesRevision(TkConceptAttributesRevision another, Map<UUID, UUID> conversionMap,
-                                      long offset, boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-      this.defined = another.defined;
+   public TkConceptAttributesRevision(TkConceptAttributesRevision another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.defined = transformer.transform(another.defined, another, ComponentFields.ATTRIBUTE_DEFINED);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -86,9 +85,8 @@ public class TkConceptAttributesRevision extends TkRevision implements I_Concept
    }
 
    @Override
-   public TkConceptAttributesRevision makeConversion(Map<UUID, UUID> conversionMap, long offset,
-           boolean mapAll) {
-      return new TkConceptAttributesRevision(this, conversionMap, offset, mapAll);
+   public TkConceptAttributesRevision makeTransform(ComponentTransformerBI transformer) {
+      return new TkConceptAttributesRevision(this, transformer);
    }
 
    @Override

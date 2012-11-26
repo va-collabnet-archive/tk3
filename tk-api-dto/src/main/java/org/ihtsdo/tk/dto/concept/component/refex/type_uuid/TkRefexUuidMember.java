@@ -3,9 +3,6 @@ package org.ihtsdo.tk.dto.concept.component.refex.type_uuid;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.tk.Ts;
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.NidBitSetBI;
-import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.refex.type_nid.RefexNidVersionBI;
 import org.ihtsdo.tk.dto.concept.component.refex.TK_REFEX_TYPE;
 import org.ihtsdo.tk.dto.concept.component.refex.TkRefexAbstractMember;
@@ -21,6 +18,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import org.ihtsdo.tk.api.TerminologyStoreDI;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkRefexUuidMember extends TkRefexAbstractMember<TkRefexUuidRevision> {
    public static final long serialVersionUID = 1;
@@ -61,27 +60,10 @@ public class TkRefexUuidMember extends TkRefexAbstractMember<TkRefexUuidRevision
       readExternal(in, dataVersion);
    }
 
-   public TkRefexUuidMember(TkRefexUuidMember another, Map<UUID, UUID> conversionMap, long offset,
-                            boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
+   public TkRefexUuidMember(TkRefexUuidMember another, ComponentTransformerBI transformer) {
+      super(another, transformer);
 
-      if (mapAll) {
-         this.uuid1 = conversionMap.get(another.uuid1);
-      } else {
-         this.uuid1 = another.uuid1;
-      }
-   }
-
-   public TkRefexUuidMember(RefexNidVersionBI another, NidBitSetBI exclusions,
-                            Map<UUID, UUID> conversionMap, long offset, boolean mapAll, ViewCoordinate vc)
-           throws IOException, ContradictionException {
-      super(another, exclusions, conversionMap, offset, mapAll, vc);
-
-      if (mapAll) {
-         this.uuid1 = conversionMap.get(Ts.get().getComponent(another.getNid1()).getPrimUuid());
-      } else {
-         this.uuid1 = Ts.get().getComponent(another.getNid1()).getPrimUuid();
-      }
+      this.uuid1 = transformer.transform(another.uuid1, another, ComponentFields.REFEX_COMPONENT_1_UUID);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -131,8 +113,8 @@ public class TkRefexUuidMember extends TkRefexAbstractMember<TkRefexUuidRevision
    }
 
    @Override
-   public TkRefexUuidMember makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkRefexUuidMember(this, conversionMap, offset, mapAll);
+   public TkRefexUuidMember makeTransform(ComponentTransformerBI transformer) {
+      return new TkRefexUuidMember(this, transformer);
    }
 
    @Override

@@ -10,9 +10,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import java.util.Map;
-import java.util.UUID;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkRefexRevision extends TkRevision {
    public static final long serialVersionUID = 1;
@@ -32,9 +31,8 @@ public class TkRefexRevision extends TkRevision {
       readExternal(in, dataVersion);
    }
 
-   public TkRefexRevision(TkRefexRevision another, Map<UUID, UUID> conversionMap, long offset,
-                           boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
+   public TkRefexRevision(TkRefexRevision another, ComponentTransformerBI transformer) {
+      super(another, transformer);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -63,8 +61,8 @@ public class TkRefexRevision extends TkRevision {
    }
 
    @Override
-   public TkRevision makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkRefexRevision(this, conversionMap, offset, mapAll);
+   public TkRevision makeTransform(ComponentTransformerBI transformer) {
+      return new TkRefexRevision(this, transformer);
    }
 
    @Override

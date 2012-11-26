@@ -1,12 +1,15 @@
 package org.ihtsdo.tk.dto.concept.component;
 
 //~--- non-JDK imports --------------------------------------------------------
+
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentBI;
 import org.ihtsdo.tk.api.ComponentVersionBI;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.ext.I_VersionExternally;
 import org.ihtsdo.tk.api.id.IdBI;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -16,62 +19,58 @@ import java.io.IOException;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class TkRevision implements I_VersionExternally {
-
-    private static final long serialVersionUID = 1;
-    public static UUID unspecifiedUserUuid = UUID.fromString("f7495b58-6630-3499-a44e-2052b5fcf06c");
+    private static final long serialVersionUID      = 1;
+    public static UUID        unspecifiedUserUuid   = UUID.fromString("f7495b58-6630-3499-a44e-2052b5fcf06c");
     public static UUID        unspecifiedModuleUuid = UUID.fromString("40d1c869-b509-32f8-b735-836eac577a67");
+    @XmlAttribute
+    public long               time                  = Long.MIN_VALUE;
+    @XmlAttribute
+    public UUID               authorUuid;
+    @XmlAttribute
+    public UUID               pathUuid;
+    @XmlAttribute
+    public UUID               statusUuid;
+    @XmlAttribute
+    public UUID               moduleUuid;
 
-    //~--- fields --------------------------------------------------------------
-    @XmlAttribute
-    public long time = Long.MIN_VALUE;
-    @XmlAttribute
-    public UUID authorUuid;
-    @XmlAttribute
-    public UUID pathUuid;
-    @XmlAttribute
-    public UUID statusUuid;
-    @XmlAttribute
-    public UUID moduleUuid;
-
-    //~--- constructors --------------------------------------------------------
     public TkRevision() {
         super();
     }
 
     public TkRevision(ComponentVersionBI another) throws IOException {
         super();
-             this.statusUuid = Ts.get().getComponent(another.getStatusNid()).getPrimUuid();
-            this.authorUuid = Ts.get().getComponent(another.getAuthorNid()).getPrimUuid();
-            this.pathUuid = Ts.get().getComponent(another.getPathNid()).getPrimUuid();
-            this.moduleUuid   = Ts.get().getComponent(another.getModuleNid()).getPrimUuid();
-            assert pathUuid != null : another;
-            assert authorUuid != null : another;
-            assert statusUuid != null : another;
-            assert moduleUuid != null : another;
-            this.time = another.getTime();
+        this.statusUuid = Ts.get().getComponent(another.getStatusNid()).getPrimUuid();
+        this.authorUuid = Ts.get().getComponent(another.getAuthorNid()).getPrimUuid();
+        this.pathUuid   = Ts.get().getComponent(another.getPathNid()).getPrimUuid();
+        this.moduleUuid = Ts.get().getComponent(another.getModuleNid()).getPrimUuid();
+        assert pathUuid != null : another;
+        assert authorUuid != null : another;
+        assert statusUuid != null : another;
+        assert moduleUuid != null : another;
+        this.time = another.getTime();
     }
 
     public TkRevision(IdBI id) throws IOException {
         super();
-            this.authorUuid = Ts.get().getComponent(id.getAuthorNid()).getPrimUuid();
-            this.pathUuid = Ts.get().getComponent(id.getPathNid()).getPrimUuid();
-            this.statusUuid = Ts.get().getComponent(id.getStatusNid()).getPrimUuid();
-            this.moduleUuid   = Ts.get().getComponent(id.getModuleNid()).getPrimUuid();
-            this.time       = id.getTime();
-            assert pathUuid != null : id;
-            assert authorUuid != null : id;
-            assert statusUuid != null : id;
-            assert moduleUuid != null : id;
+        this.authorUuid = Ts.get().getComponent(id.getAuthorNid()).getPrimUuid();
+        this.pathUuid   = Ts.get().getComponent(id.getPathNid()).getPrimUuid();
+        this.statusUuid = Ts.get().getComponent(id.getStatusNid()).getPrimUuid();
+        this.moduleUuid = Ts.get().getComponent(id.getModuleNid()).getPrimUuid();
+        this.time       = id.getTime();
+        assert pathUuid != null : id;
+        assert authorUuid != null : id;
+        assert statusUuid != null : id;
+        assert moduleUuid != null : id;
     }
 
     public TkRevision(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
@@ -83,52 +82,19 @@ public abstract class TkRevision implements I_VersionExternally {
         assert moduleUuid != null : this;
     }
 
-    public TkRevision(ComponentVersionBI another, Map<UUID, UUID> conversionMap, long offset, boolean mapAll)
-            throws IOException {
+    public TkRevision(TkRevision another, ComponentTransformerBI transformer) {
         super();
-
-        if (mapAll) {
-            this.statusUuid = conversionMap.get(Ts.get().getComponent(another.getStatusNid()).getPrimUuid());
-            this.authorUuid = conversionMap.get(Ts.get().getComponent(another.getAuthorNid()).getPrimUuid());
-            this.pathUuid = conversionMap.get(Ts.get().getComponent(another.getPathNid()).getPrimUuid());
-            this.moduleUuid   = conversionMap.get(Ts.get().getComponent(another.getModuleNid()).getPrimUuid());
-        } else {
-            this.statusUuid = Ts.get().getComponent(another.getStatusNid()).getPrimUuid();
-            this.authorUuid = Ts.get().getComponent(another.getAuthorNid()).getPrimUuid();
-            this.pathUuid = Ts.get().getComponent(another.getPathNid()).getPrimUuid();
-            this.moduleUuid   = Ts.get().getComponent(another.getModuleNid()).getPrimUuid();
-        }
-
+        this.statusUuid = transformer.transform(another.statusUuid, another, ComponentFields.STATUS_UUID);
+        this.authorUuid = transformer.transform(another.authorUuid, another, ComponentFields.AUTHOR_UUID);
+        this.pathUuid   = transformer.transform(another.pathUuid, another, ComponentFields.PATH_UUID);
+        this.moduleUuid = transformer.transform(another.moduleUuid, another, ComponentFields.MODULE_UUID);
         assert pathUuid != null : another;
         assert authorUuid != null : another;
         assert statusUuid != null : another;
         assert moduleUuid != null : another;
-        this.time = another.getTime() + offset;
+        this.time = transformer.transform(another.time, another, ComponentFields.TIME);
     }
 
-    public TkRevision(TkRevision another, Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-        super();
-
-        if (mapAll) {
-            this.statusUuid = conversionMap.get(another.statusUuid);
-            this.authorUuid = conversionMap.get(another.authorUuid);
-            this.pathUuid = conversionMap.get(another.pathUuid);
-            this.moduleUuid   = conversionMap.get(another.moduleUuid);
-        } else {
-            this.statusUuid = another.statusUuid;
-            this.authorUuid = another.authorUuid;
-            this.pathUuid = another.pathUuid;
-            this.moduleUuid   = another.moduleUuid;
-        }
-
-        assert pathUuid != null : another;
-        assert authorUuid != null : another;
-        assert statusUuid != null : another;
-        assert moduleUuid != null : another;
-        this.time = another.time + offset;
-    }
-
-    //~--- methods -------------------------------------------------------------
     /**
      * Compares this object to the specified object. The result is <tt>true</tt> if and only if the argument
      * is not <tt>null</tt>, is a <tt>EVersion</tt> object, and contains the same values, field by field, as
@@ -166,11 +132,11 @@ public abstract class TkRevision implements I_VersionExternally {
             if (!this.pathUuid.equals(another.pathUuid)) {
                 return false;
             }
-            
+
             if ((this.moduleUuid != null) && (another.moduleUuid != null)) {
-            if (!this.moduleUuid.equals(another.moduleUuid)) {
-               return false;
-            }
+                if (!this.moduleUuid.equals(another.moduleUuid)) {
+                    return false;
+                }
             } else if (!((this.moduleUuid == null) && (another.moduleUuid == null))) {
                 return false;
             }
@@ -194,8 +160,8 @@ public abstract class TkRevision implements I_VersionExternally {
      */
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{statusUuid.hashCode(), pathUuid.hashCode(), (int) time,
-                    (int) (time >>> 32)});
+        return Arrays.hashCode(new int[] { statusUuid.hashCode(), pathUuid.hashCode(), (int) time,
+                                           (int) (time >>> 32) });
     }
 
     public static CharSequence informAboutUuid(UUID uuid) {
@@ -207,7 +173,7 @@ public abstract class TkRevision implements I_VersionExternally {
 
         if (Ts.get().hasUuid(uuid)) {
             try {
-                int nid = Ts.get().getNidForUuids(uuid);
+                int nid  = Ts.get().getNidForUuids(uuid);
                 int cNid = Ts.get().getConceptNidForNid(nid);
 
                 if (cNid == nid) {
@@ -243,10 +209,10 @@ public abstract class TkRevision implements I_VersionExternally {
         return sb;
     }
 
-    public abstract TkRevision makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll);
+    public abstract TkRevision makeTransform(ComponentTransformerBI transformer);
 
     public void readExternal(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
-        pathUuid = new UUID(in.readLong(), in.readLong());
+        pathUuid   = new UUID(in.readLong(), in.readLong());
         statusUuid = new UUID(in.readLong(), in.readLong());
 
         if (dataVersion >= 3) {
@@ -254,8 +220,9 @@ public abstract class TkRevision implements I_VersionExternally {
         } else {
             authorUuid = unspecifiedUserUuid;
         }
+
         if (dataVersion >= 8) {
-         moduleUuid = new UUID(in.readLong(), in.readLong());
+            moduleUuid = new UUID(in.readLong(), in.readLong());
         } else {
             moduleUuid = unspecifiedModuleUuid;
         }
@@ -292,11 +259,11 @@ public abstract class TkRevision implements I_VersionExternally {
         if (time == Long.MAX_VALUE) {
             time = Long.MIN_VALUE;
         }
+
         assert pathUuid != null : this;
         assert authorUuid != null : this;
         assert statusUuid != null : this;
         assert moduleUuid != null : this;
-
         out.writeLong(pathUuid.getMostSignificantBits());
         out.writeLong(pathUuid.getLeastSignificantBits());
         out.writeLong(statusUuid.getMostSignificantBits());
@@ -308,7 +275,7 @@ public abstract class TkRevision implements I_VersionExternally {
 
         out.writeLong(authorUuid.getMostSignificantBits());
         out.writeLong(authorUuid.getLeastSignificantBits());
-        
+
         if (moduleUuid == null) {
             moduleUuid = unspecifiedModuleUuid;
         }
@@ -318,7 +285,6 @@ public abstract class TkRevision implements I_VersionExternally {
         out.writeLong(time);
     }
 
-    //~--- get methods ---------------------------------------------------------
     @Override
     public UUID getAuthorUuid() {
         return authorUuid;
@@ -343,10 +309,10 @@ public abstract class TkRevision implements I_VersionExternally {
     public UUID getStatusUuid() {
         return statusUuid;
     }
-    
+
     public UUID getModuleUuid() {
-      return moduleUuid;
-   }
+        return moduleUuid;
+    }
 
     /*
      * (non-Javadoc)
@@ -358,7 +324,6 @@ public abstract class TkRevision implements I_VersionExternally {
         return time;
     }
 
-    //~--- set methods ---------------------------------------------------------
     public void setAuthorUuid(UUID authorUuid) {
         this.authorUuid = authorUuid;
     }
@@ -370,9 +335,9 @@ public abstract class TkRevision implements I_VersionExternally {
     public void setStatusUuid(UUID statusUuid) {
         this.statusUuid = statusUuid;
     }
-    
+
     public void setModuleUuid(UUID moduleUuid) {
-      this.moduleUuid = moduleUuid;
+        this.moduleUuid = moduleUuid;
     }
 
     public void setTime(long time) {

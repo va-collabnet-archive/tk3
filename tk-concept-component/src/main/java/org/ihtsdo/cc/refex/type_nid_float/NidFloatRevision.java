@@ -174,13 +174,6 @@ public class NidFloatRevision extends RefexRevision<NidFloatRevision, NidFloatMe
       return floatValue;
    }
 
-   @Override
-   public TkRefexAbstractMember<?> getTkRefexMemberActiveOnly(ViewCoordinate vc, NidBitSetBI exclusionSet,
-           Map<UUID, UUID> conversionMap)
-           throws ContradictionException, IOException {
-      return new TkRefexUuidFloatMember(this, exclusionSet, conversionMap, 0, true, vc);
-   }
-
     @Override
    protected TK_REFEX_TYPE getTkRefsetType() {
       return TK_REFEX_TYPE.CID_FLOAT;

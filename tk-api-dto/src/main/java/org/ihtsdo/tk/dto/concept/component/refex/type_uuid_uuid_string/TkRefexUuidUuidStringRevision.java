@@ -14,9 +14,10 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import java.util.Map;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkRefexUuidUuidStringRevision extends TkRevision {
    public static final long serialVersionUID = 1;
@@ -52,19 +53,11 @@ public class TkRefexUuidUuidStringRevision extends TkRevision {
       readExternal(in, dataVersion);
    }
 
-   public TkRefexUuidUuidStringRevision(TkRefexUuidUuidStringRevision another, Map<UUID, UUID> conversionMap,
-                                    long offset, boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-
-      if (mapAll) {
-         this.uuid1      = conversionMap.get(another.uuid1);
-         this.uuid2      = conversionMap.get(another.uuid2);
-         this.string1 = another.string1;
-      } else {
-         this.uuid1      = another.uuid1;
-         this.uuid2      = another.uuid2;
-         this.string1 = another.string1;
-      }
+   public TkRefexUuidUuidStringRevision(TkRefexUuidUuidStringRevision another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.uuid1 = transformer.transform(another.uuid1, another, ComponentFields.REFEX_COMPONENT_1_UUID);
+      this.uuid2 = transformer.transform(another.uuid2, another, ComponentFields.REFEX_COMPONENT_2_UUID);
+      this.string1 = transformer.transform(another.string1, another, ComponentFields.REFEX_STRING1);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -114,9 +107,8 @@ public class TkRefexUuidUuidStringRevision extends TkRevision {
    }
 
    @Override
-   public TkRefexUuidUuidStringRevision makeConversion(Map<UUID, UUID> conversionMap, long offset,
-           boolean mapAll) {
-      return new TkRefexUuidUuidStringRevision(this, conversionMap, offset, mapAll);
+   public TkRefexUuidUuidStringRevision makeTransform(ComponentTransformerBI transformer) {
+      return new TkRefexUuidUuidStringRevision(this, transformer);
    }
 
    @Override

@@ -12,9 +12,9 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import java.util.Map;
-import java.util.UUID;
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkRefexStringRevision extends TkRevision {
    public static final long serialVersionUID = 1;
@@ -40,10 +40,9 @@ public class TkRefexStringRevision extends TkRevision {
       readExternal(in, dataVersion);
    }
 
-   public TkRefexStringRevision(TkRefexStringRevision another, Map<UUID, UUID> conversionMap, long offset,
-                              boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-      this.string1 = another.string1;
+   public TkRefexStringRevision(TkRefexStringRevision another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.string1 = transformer.transform(another.string1, another, ComponentFields.REFEX_STRING1);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -83,8 +82,8 @@ public class TkRefexStringRevision extends TkRevision {
    }
 
    @Override
-   public TkRefexStringRevision makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkRefexStringRevision(this, conversionMap, offset, mapAll);
+   public TkRefexStringRevision makeTransform(ComponentTransformerBI transformer) {
+      return new TkRefexStringRevision(this, transformer);
    }
 
    @Override

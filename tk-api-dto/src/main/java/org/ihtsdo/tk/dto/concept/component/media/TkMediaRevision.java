@@ -14,6 +14,8 @@ import java.io.IOException;
 
 import java.util.Map;
 import java.util.UUID;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkMediaRevision extends TkRevision {
    public static final long serialVersionUID = 1;
@@ -40,16 +42,10 @@ public class TkMediaRevision extends TkRevision {
       readExternal(in, dataVersion);
    }
 
-   public TkMediaRevision(TkMediaRevision another, Map<UUID, UUID> conversionMap, long offset,
-                          boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-      this.textDescription = another.textDescription;
-
-      if (mapAll) {
-         this.typeUuid = conversionMap.get(another.typeUuid);
-      } else {
-         this.typeUuid = another.typeUuid;
-      }
+   public TkMediaRevision(TkMediaRevision another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.textDescription = transformer.transform(another.textDescription, another, ComponentFields.MEDIA_TEXT_DESCRIPTION);
+      this.typeUuid = transformer.transform(another.typeUuid, another, ComponentFields.MEDIA_TYPE_UUID);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -94,8 +90,8 @@ public class TkMediaRevision extends TkRevision {
    }
 
    @Override
-   public TkRevision makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkMediaRevision(this, conversionMap, offset, mapAll);
+   public TkRevision makeTransform(ComponentTransformerBI transformer) {
+      return new TkMediaRevision(this, transformer);
    }
 
    @Override

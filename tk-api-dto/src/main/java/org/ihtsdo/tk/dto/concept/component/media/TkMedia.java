@@ -18,6 +18,8 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.*;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkMedia extends TkComponent<TkMediaRevision> {
    public static final long serialVersionUID = 1;
@@ -66,40 +68,14 @@ public class TkMedia extends TkComponent<TkMediaRevision> {
       readExternal(in, dataVersion);
    }
 
-   public TkMedia(TkMedia another, Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
+   public TkMedia(TkMedia another, ComponentTransformerBI transformer) {
+      super(another, transformer);
 
-      if (mapAll) {
-         this.conceptUuid     = conversionMap.get(another.conceptUuid);
-         this.dataBytes       = another.dataBytes;
-         this.format          = another.format;
-         this.textDescription = another.textDescription;
-         this.typeUuid        = conversionMap.get(another.typeUuid);
-      } else {
-         this.conceptUuid     = another.conceptUuid;
-         this.dataBytes       = another.dataBytes;
-         this.format          = another.format;
-         this.textDescription = another.textDescription;
-         this.typeUuid        = another.typeUuid;
-      }
-   }
-
-   public TkMedia(MediaVersionBI another, NidBitSetBI exclusions, Map<UUID, UUID> conversionMap, long offset,
-                  boolean mapAll, ViewCoordinate vc)
-           throws IOException, ContradictionException {
-      super(another, exclusions, conversionMap, offset, mapAll, vc);
-
-      if (mapAll) {
-         this.conceptUuid = conversionMap.get(Ts.get().getComponent(another.getConceptNid()).getPrimUuid());
-         this.typeUuid    = conversionMap.get(Ts.get().getComponent(another.getTypeNid()).getPrimUuid());
-      } else {
-         this.conceptUuid = Ts.get().getComponent(another.getConceptNid()).getPrimUuid();
-         this.typeUuid    = Ts.get().getComponent(another.getTypeNid()).getPrimUuid();
-      }
-
-      this.dataBytes       = another.getMedia();
-      this.format          = another.getFormat();
-      this.textDescription = another.getTextDescription();
+         this.conceptUuid     = transformer.transform(another.conceptUuid, another, ComponentFields.MEDIA_ENCLOSING_CONCEPT_UUID);
+         this.dataBytes       = transformer.transform(another.dataBytes, another, ComponentFields.MEDIA_DATA);
+         this.format          = transformer.transform(another.format, another, ComponentFields.MEDIA_FORMAT);
+         this.textDescription = transformer.transform(another.textDescription, another, ComponentFields.MEDIA_TEXT_DESCRIPTION);
+         this.typeUuid        = transformer.transform(another.typeUuid, another, ComponentFields.MEDIA_TYPE_UUID);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -171,8 +147,8 @@ public class TkMedia extends TkComponent<TkMediaRevision> {
    }
 
    @Override
-   public TkMedia makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkMedia(this, conversionMap, offset, mapAll);
+   public TkMedia makeTransform(ComponentTransformerBI transformer) {
+      return new TkMedia(this, transformer);
    }
 
    @Override

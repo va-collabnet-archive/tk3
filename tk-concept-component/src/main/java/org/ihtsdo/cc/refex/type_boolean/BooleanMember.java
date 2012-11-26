@@ -167,13 +167,6 @@ public class BooleanMember extends RefexMember<BooleanRevision, BooleanMember>
     }
 
     @Override
-    public TkRefexAbstractMember<?> getTkRefexMemberActiveOnly(ViewCoordinate vc, NidBitSetBI exclusionSet,
-            Map<UUID, UUID> conversionMap)
-            throws ContradictionException, IOException {
-        return new TkRefexBooleanMember(this, exclusionSet, conversionMap, 0, true, vc);
-    }
-
-    @Override
     protected TK_REFEX_TYPE getTkRefsetType() {
         return TK_REFEX_TYPE.BOOLEAN;
     }

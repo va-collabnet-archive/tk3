@@ -2,9 +2,6 @@ package org.ihtsdo.tk.dto.concept.component.refex.type_long;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.NidBitSetBI;
-import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 import org.ihtsdo.tk.api.refex.type_long.RefexLongVersionBI;
@@ -20,6 +17,8 @@ import java.io.IOException;
 
 import java.util.*;
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision> {
    public static final long serialVersionUID = 1;
@@ -60,17 +59,9 @@ public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision
       readExternal(in, dataVersion);
    }
 
-   public TkRefexLongMember(TkRefexLongMember another, Map<UUID, UUID> conversionMap, long offset,
-                             boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-      this.longValue = another.longValue;
-   }
-
-   public TkRefexLongMember(RefexLongVersionBI another, NidBitSetBI exclusions,
-                             Map<UUID, UUID> conversionMap, long offset, boolean mapAll, ViewCoordinate vc)
-           throws IOException, ContradictionException {
-      super(another, exclusions, conversionMap, offset, mapAll, vc);
-      this.longValue = another.getLong1();
+   public TkRefexLongMember(TkRefexLongMember another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.longValue = transformer.transform(another.longValue, another, ComponentFields.REFEX_LONG1);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -120,8 +111,8 @@ public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision
    }
 
    @Override
-   public TkRevision makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkRefexLongMember(this, conversionMap, offset, mapAll);
+   public TkRevision makeTransform(ComponentTransformerBI transformer) {
+      return new TkRefexLongMember(this, transformer);
    }
 
    @Override

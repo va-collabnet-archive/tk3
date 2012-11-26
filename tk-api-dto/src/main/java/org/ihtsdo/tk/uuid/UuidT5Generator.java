@@ -18,6 +18,7 @@
 package org.ihtsdo.tk.uuid;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
@@ -105,4 +106,22 @@ public class UuidT5Generator {
         }
         return rawBytes;
     }
+    
+    
+    /**
+     * Generates a uuid from the given <code>byteArray</code>.
+     *
+     * @param byteArray the bytes to use for generating the uuid
+     * @return the generated uuid
+     */
+    public static UUID getUuidFromRawBytes(byte[] byteArray) {
+        if (byteArray.length != 16) {
+            throw new NumberFormatException("UUID must be 16 bytes");
+        }
+
+        ByteBuffer raw = ByteBuffer.wrap(byteArray);
+
+        return new UUID(raw.getLong(raw.position()), raw.getLong(raw.position() + 8));
+    }
+
 }

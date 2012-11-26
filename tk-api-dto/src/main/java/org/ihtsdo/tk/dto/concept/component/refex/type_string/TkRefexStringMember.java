@@ -2,9 +2,6 @@ package org.ihtsdo.tk.dto.concept.component.refex.type_string;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.NidBitSetBI;
-import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 import org.ihtsdo.tk.api.refex.type_string.RefexStringVersionBI;
@@ -20,6 +17,8 @@ import java.io.IOException;
 
 import java.util.*;
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkRefexStringMember extends TkRefexAbstractMember<TkRefexStringRevision> {
    public static final long serialVersionUID = 1;
@@ -60,17 +59,9 @@ public class TkRefexStringMember extends TkRefexAbstractMember<TkRefexStringRevi
       readExternal(in, dataVersion);
    }
 
-   public TkRefexStringMember(TkRefexStringMember another, Map<UUID, UUID> conversionMap, long offset,
-                            boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-      this.string1 = another.string1;
-   }
-
-   public TkRefexStringMember(RefexStringVersionBI another, NidBitSetBI exclusions, Map<UUID, UUID> conversionMap,
-                            long offset, boolean mapAll, ViewCoordinate vc)
-           throws IOException, ContradictionException {
-      super(another, exclusions, conversionMap, offset, mapAll, vc);
-      this.string1 = another.getString1();
+   public TkRefexStringMember(TkRefexStringMember another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.string1 = transformer.transform(another.string1, another, ComponentFields.REFEX_STRING1);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -120,8 +111,8 @@ public class TkRefexStringMember extends TkRefexAbstractMember<TkRefexStringRevi
    }
 
    @Override
-   public TkRefexStringMember makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkRefexStringMember(this, conversionMap, offset, mapAll);
+   public TkRefexStringMember makeTransform(ComponentTransformerBI transformer) {
+      return new TkRefexStringMember(this, transformer);
    }
 
    @Override

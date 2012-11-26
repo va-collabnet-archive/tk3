@@ -3,10 +3,7 @@ package org.ihtsdo.tk.dto.concept.component.relationship;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.tk.Ts;
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.TerminologyStoreDI;
-import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.ext.I_RelateExternally;
 import org.ihtsdo.tk.api.relationship.RelationshipChronicleBI;
 import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
@@ -21,6 +18,8 @@ import java.io.IOException;
 import java.util.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 @XmlRootElement(name="relationship")
 public class TkRelationship extends TkComponent<TkRelationshipRevision> implements I_RelateExternally {
@@ -37,7 +36,7 @@ public class TkRelationship extends TkComponent<TkRelationshipRevision> implemen
    @XmlAttribute
    public UUID refinabilityUuid;
    @XmlAttribute
-   public int  relGroup;
+   public int  group;
    @XmlAttribute
    public UUID typeUuid;
 
@@ -60,7 +59,7 @@ public class TkRelationship extends TkComponent<TkRelationshipRevision> implemen
       c2Uuid             = ts.getUuidPrimordialForNid(rv.getDestinationNid());
       characteristicUuid = ts.getUuidPrimordialForNid(rv.getCharacteristicNid());
       refinabilityUuid   = ts.getUuidPrimordialForNid(rv.getRefinabilityNid());
-      relGroup           = rv.getGroup();
+      group           = rv.getGroup();
       typeUuid           = ts.getUuidPrimordialForNid(rv.getTypeNid());
       pathUuid           = ts.getUuidPrimordialForNid(rv.getPathNid());
       statusUuid         = ts.getUuidPrimordialForNid(rv.getStatusNid());
@@ -81,50 +80,15 @@ public class TkRelationship extends TkComponent<TkRelationshipRevision> implemen
       readExternal(in, dataVersion);
    }
 
-   public TkRelationship(TkRelationship another, Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
+   public TkRelationship(TkRelationship another, ComponentTransformerBI transformer) {
+      super(another, transformer); 
 
-      if (mapAll) {
-         this.c1Uuid             = conversionMap.get(another.c1Uuid);
-         this.c2Uuid             = conversionMap.get(another.c2Uuid);
-         this.characteristicUuid = conversionMap.get(another.characteristicUuid);
-         this.refinabilityUuid   = conversionMap.get(another.refinabilityUuid);
-         this.relGroup           = another.relGroup;
-         this.typeUuid           = conversionMap.get(another.typeUuid);
-      } else {
-         this.c1Uuid             = another.c1Uuid;
-         this.c2Uuid             = another.c2Uuid;
-         this.characteristicUuid = another.characteristicUuid;
-         this.refinabilityUuid   = another.refinabilityUuid;
-         this.relGroup           = another.relGroup;
-         this.typeUuid           = another.typeUuid;
-      }
-   }
-
-   public TkRelationship(RelationshipVersionBI another, NidBitSetBI exclusions,
-                         Map<UUID, UUID> conversionMap, long offset, boolean mapAll, ViewCoordinate vc)
-           throws IOException, ContradictionException {
-      super(another, exclusions, conversionMap, offset, mapAll, vc);
-
-      if (mapAll) {
-         this.c1Uuid             =
-            conversionMap.get(Ts.get().getComponent(another.getOriginNid()).getPrimUuid());
-         this.c2Uuid             =
-            conversionMap.get(Ts.get().getComponent(another.getDestinationNid()).getPrimUuid());
-         this.characteristicUuid =
-            conversionMap.get(Ts.get().getComponent(another.getCharacteristicNid()).getPrimUuid());
-         this.refinabilityUuid =
-            conversionMap.get(Ts.get().getComponent(another.getRefinabilityNid()).getPrimUuid());
-         this.typeUuid = conversionMap.get(Ts.get().getComponent(another.getTypeNid()).getPrimUuid());
-      } else {
-         this.c1Uuid             = Ts.get().getComponent(another.getOriginNid()).getPrimUuid();
-         this.c2Uuid             = Ts.get().getComponent(another.getDestinationNid()).getPrimUuid();
-         this.characteristicUuid = Ts.get().getComponent(another.getCharacteristicNid()).getPrimUuid();
-         this.refinabilityUuid   = Ts.get().getComponent(another.getRefinabilityNid()).getPrimUuid();
-         this.typeUuid           = Ts.get().getComponent(another.getTypeNid()).getPrimUuid();
-      }
-
-      this.relGroup = another.getGroup();
+         this.c1Uuid             = transformer.transform(another.c1Uuid, another, ComponentFields.RELATIONSHIP_ORIGIN_UUID);
+         this.c2Uuid             = transformer.transform(another.c2Uuid, another, ComponentFields.RELATIONSHIP_DESTINATION_UUID);
+         this.characteristicUuid = transformer.transform(another.characteristicUuid, another, ComponentFields.RELATIONSHIP_CHARACTERISTIC_UUID);
+         this.refinabilityUuid   = transformer.transform(another.refinabilityUuid, another, ComponentFields.RELATIONSHIP_REFINABILITY_UUID);
+         this.group           = transformer.transform(another.group, another, ComponentFields.RELATIONSHIP_GROUP);
+         this.typeUuid           = transformer.transform(another.typeUuid, another, ComponentFields.RELATIONSHIP_TYPE_UUID);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -172,7 +136,7 @@ public class TkRelationship extends TkComponent<TkRelationshipRevision> implemen
          }
 
          // Compare relGroup
-         if (this.relGroup != another.relGroup) {
+         if (this.group != another.group) {
             return false;
          }
 
@@ -199,8 +163,8 @@ public class TkRelationship extends TkComponent<TkRelationshipRevision> implemen
    }
 
    @Override
-   public TkRelationship makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkRelationship(this, conversionMap, offset, mapAll);
+   public TkRelationship makeTransform(ComponentTransformerBI transformer) {
+      return new TkRelationship(this, transformer);
    }
 
    @Override
@@ -210,7 +174,7 @@ public class TkRelationship extends TkComponent<TkRelationshipRevision> implemen
       c2Uuid             = new UUID(in.readLong(), in.readLong());
       characteristicUuid = new UUID(in.readLong(), in.readLong());
       refinabilityUuid   = new UUID(in.readLong(), in.readLong());
-      relGroup           = in.readInt();
+      group           = in.readInt();
       typeUuid           = new UUID(in.readLong(), in.readLong());
 
       int versionSize = in.readInt();
@@ -239,7 +203,7 @@ public class TkRelationship extends TkComponent<TkRelationshipRevision> implemen
       buff.append(" c2: ");
       buff.append(informAboutUuid(this.c2Uuid));
       buff.append(" grp:");
-      buff.append(this.relGroup);
+      buff.append(this.group);
       buff.append(" char: ");
       buff.append(informAboutUuid(this.characteristicUuid));
       buff.append(" ref: ");
@@ -261,7 +225,7 @@ public class TkRelationship extends TkComponent<TkRelationshipRevision> implemen
       out.writeLong(characteristicUuid.getLeastSignificantBits());
       out.writeLong(refinabilityUuid.getMostSignificantBits());
       out.writeLong(refinabilityUuid.getLeastSignificantBits());
-      out.writeInt(relGroup);
+      out.writeInt(group);
       out.writeLong(typeUuid.getMostSignificantBits());
       out.writeLong(typeUuid.getLeastSignificantBits());
 
@@ -320,7 +284,7 @@ public class TkRelationship extends TkComponent<TkRelationshipRevision> implemen
     */
    @Override
    public int getRelGroup() {
-      return relGroup;
+      return group;
    }
 
    @Override
@@ -356,7 +320,7 @@ public class TkRelationship extends TkComponent<TkRelationshipRevision> implemen
    }
 
    public void setRelGroup(int relGroup) {
-      this.relGroup = relGroup;
+      this.group = relGroup;
    }
 
    public void setTypeUuid(UUID typeUuid) {

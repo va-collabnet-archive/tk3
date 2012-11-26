@@ -14,7 +14,6 @@ import org.ihtsdo.cc.attributes.ConceptAttributes;
 import org.ihtsdo.cc.computer.version.VersionComputer;
 import org.ihtsdo.cc.NidPair;
 import org.ihtsdo.cc.NidPairForRefex;
-import org.ihtsdo.tk.api.*;
 import org.ihtsdo.tk.api.ComponentVersionBI;
 import org.ihtsdo.tk.api.ContradictionException;
 import org.ihtsdo.tk.api.NidSetBI;
@@ -35,8 +34,6 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.tk.api.blueprint.InvalidCAB;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
@@ -493,14 +490,6 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
         public RefexCAB makeBlueprint(ViewCoordinate vc) throws IOException, InvalidCAB, ContradictionException {
             return getCv().makeBlueprint(vc);
         }
-
-        @Override
-        public TkRefexAbstractMember<?> getTkRefexMemberActiveOnly(ViewCoordinate vc,
-                NidBitSetBI exclusionSet, Map<UUID, UUID> conversionMap)
-                throws ContradictionException, IOException {
-            return getCv().getTkRefexMemberActiveOnly(vc, exclusionSet, conversionMap);
-        }
-
     
         public int getTypeNid() {
             return RefexMember.this.getTypeNid();

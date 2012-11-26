@@ -7,23 +7,18 @@ import com.sleepycat.bind.tuple.TupleOutput;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.cc.refex.RefexRevision;
 import org.ihtsdo.cc.refex.type_long.LongMember.Version;
 import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.blueprint.RefexCAB;
 import org.ihtsdo.tk.api.blueprint.RefexCAB.RefexProperty;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 import org.ihtsdo.tk.api.refex.type_long.RefexLongAnalogBI;
-import org.ihtsdo.tk.dto.concept.component.refex.type_long.TkRefexLongMember;
 import org.ihtsdo.tk.dto.concept.component.refex.type_long.TkRefexLongRevision;
 import org.ihtsdo.tk.dto.concept.component.refex.TK_REFEX_TYPE;
-import org.ihtsdo.tk.dto.concept.component.refex.TkRefexAbstractMember;
 
 public class LongRevision extends RefexRevision<LongRevision, LongMember>
         implements RefexLongAnalogBI<LongRevision> {
@@ -140,13 +135,6 @@ public class LongRevision extends RefexRevision<LongRevision, LongMember>
    @Override
    public long getLong1() {
       return longValue;
-   }
-
-   @Override
-   public TkRefexAbstractMember<?> getTkRefexMemberActiveOnly(ViewCoordinate vc, NidBitSetBI exclusionSet,
-           Map<UUID, UUID> conversionMap)
-           throws ContradictionException, IOException {
-      return new TkRefexLongMember(this, exclusionSet, conversionMap, 0, true, vc);
    }
 
    @Override

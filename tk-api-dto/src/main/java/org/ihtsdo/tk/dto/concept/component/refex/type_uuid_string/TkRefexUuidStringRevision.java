@@ -11,12 +11,13 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import java.util.Map;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAttribute;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.TerminologyStoreDI;
 import org.ihtsdo.tk.api.refex.type_nid_string.RefexNidStringVersionBI;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkRefexUuidStringRevision extends TkRevision {
    public static final long serialVersionUID = 1;
@@ -48,19 +49,11 @@ public class TkRefexUuidStringRevision extends TkRevision {
       readExternal(in, dataVersion);
    }
 
-   public TkRefexUuidStringRevision(TkRefexUuidStringRevision another, Map<UUID, UUID> conversionMap, long offset,
-                               boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-
-      if (mapAll) {
-         this.uuid1   = conversionMap.get(another.uuid1);
-         this.string1 = another.string1;
-      } else {
-         this.uuid1   = another.uuid1;
-         this.string1 = another.string1;
-      }
+   public TkRefexUuidStringRevision(TkRefexUuidStringRevision another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.uuid1 = transformer.transform(another.uuid1, another, ComponentFields.REFEX_COMPONENT_1_UUID);
+      this.string1 = transformer.transform(another.string1, another, ComponentFields.REFEX_STRING1);
    }
-
    //~--- methods -------------------------------------------------------------
 
    /**
@@ -103,8 +96,8 @@ public class TkRefexUuidStringRevision extends TkRevision {
    }
 
    @Override
-   public TkRefexUuidStringRevision makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkRefexUuidStringRevision(this, conversionMap, offset, mapAll);
+   public TkRefexUuidStringRevision makeTransform(ComponentTransformerBI transformer) {
+      return new TkRefexUuidStringRevision(this, transformer);
    }
 
    @Override

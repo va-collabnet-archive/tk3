@@ -16,11 +16,12 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.Arrays;
-import java.util.Map;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class TkIdentifier extends TkRevision {
@@ -46,14 +47,9 @@ public abstract class TkIdentifier extends TkRevision {
       readExternal(in, dataVersion);
    }
 
-   public TkIdentifier(TkIdentifier another, Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-
-      if (mapAll) {
-         this.authorityUuid = conversionMap.get(another.authorityUuid);
-      } else {
-         this.authorUuid = another.authorUuid;
-      }
+   public TkIdentifier(TkIdentifier another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.authorityUuid = transformer.transform(another.authorityUuid, another, ComponentFields.ID_AUTHORITY_UUID);
    }
 
    //~--- methods -------------------------------------------------------------

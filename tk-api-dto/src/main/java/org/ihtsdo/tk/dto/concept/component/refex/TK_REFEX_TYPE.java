@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
+import org.ihtsdo.tk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayVersionBI;
 import org.ihtsdo.tk.api.refex.type_boolean.RefexBooleanVersionBI;
 import org.ihtsdo.tk.api.refex.type_nid.RefexNidVersionBI;
 import org.ihtsdo.tk.api.refex.type_nid_nid.RefexNidNidVersionBI;
@@ -41,6 +42,7 @@ public enum TK_REFEX_TYPE {
     CID_FLOAT(11, RefexNidFloatVersionBI.class),
     CID_LONG(12, RefexNidLongVersionBI.class),
     LONG(13, RefexLongVersionBI.class),
+    ARRAY_BYTEARRAY(14, RefexArrayOfBytearrayVersionBI.class),
     UNKNOWN(Byte.MAX_VALUE, null);
 
     public static TK_REFEX_TYPE getFromToken(int type) throws UnsupportedOperationException {
@@ -71,6 +73,8 @@ public enum TK_REFEX_TYPE {
                 return CID_LONG;
             case 13:
                 return LONG;
+            case 14:
+                return ARRAY_BYTEARRAY;
         }
         try {
             throw new UnsupportedOperationException("Can't handle type: " + type + " " +
@@ -139,6 +143,9 @@ public enum TK_REFEX_TYPE {
         }
         if (RefexVersionBI.class.isAssignableFrom(c)) {
             return MEMBER;
+        }
+        if (RefexArrayOfBytearrayVersionBI.class.isAssignableFrom(c)) {
+            return ARRAY_BYTEARRAY;
         }
         return UNKNOWN;
     }

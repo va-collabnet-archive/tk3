@@ -3,10 +3,7 @@ package org.ihtsdo.tk.dto.concept.component.refex.type_int;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.tk.Ts;
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.TerminologyStoreDI;
-import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 import org.ihtsdo.tk.api.refex.type_int.RefexIntVersionBI;
@@ -21,6 +18,8 @@ import java.io.IOException;
 
 import java.util.*;
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkRefexIntMember extends TkRefexAbstractMember<TkRefexIntRevision> {
    public static final long serialVersionUID = 1;
@@ -62,17 +61,9 @@ public class TkRefexIntMember extends TkRefexAbstractMember<TkRefexIntRevision> 
       readExternal(in, dataVersion);
    }
 
-   public TkRefexIntMember(TkRefexIntMember another, Map<UUID, UUID> conversionMap, long offset,
-                            boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-      this.intValue = another.intValue;
-   }
-
-   public TkRefexIntMember(RefexIntVersionBI another, NidBitSetBI exclusions, Map<UUID, UUID> conversionMap,
-                            long offset, boolean mapAll, ViewCoordinate vc)
-           throws IOException, ContradictionException {
-      super(another, exclusions, conversionMap, offset, mapAll, vc);
-      this.intValue = another.getInt1();
+   public TkRefexIntMember(TkRefexIntMember another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.intValue = transformer.transform(another.intValue, another, ComponentFields.REFEX_INTEGER1);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -133,8 +124,8 @@ public class TkRefexIntMember extends TkRefexAbstractMember<TkRefexIntRevision> 
    }
 
    @Override
-   public TkRefexIntMember makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkRefexIntMember(this, conversionMap, offset, mapAll);
+   public TkRefexIntMember makeTransform(ComponentTransformerBI transformer) {
+      return new TkRefexIntMember(this, transformer);
    }
 
    @Override

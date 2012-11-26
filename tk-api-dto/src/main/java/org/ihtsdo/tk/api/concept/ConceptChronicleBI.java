@@ -14,7 +14,6 @@ import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 import org.ihtsdo.tk.api.relationship.RelationshipChronicleBI;
 import org.ihtsdo.tk.api.relationship.group.RelGroupVersionBI;
-import org.ihtsdo.tk.contradiction.FoundContradictionVersions;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -89,4 +88,6 @@ public interface ConceptChronicleBI extends ComponentChroncileBI<ConceptVersionB
    void setAnnotationStyleRefex(boolean annotationSyleRefex);
    
    void processComponentChronicles(ProcessComponentChronicleBI processor) throws Exception;
+
+   boolean isAnnotationIndex() throws IOException;
 }

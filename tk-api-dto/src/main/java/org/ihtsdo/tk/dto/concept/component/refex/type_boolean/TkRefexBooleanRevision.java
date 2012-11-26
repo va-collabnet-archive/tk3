@@ -11,9 +11,9 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import java.util.Map;
-import java.util.UUID;
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkRefexBooleanRevision extends TkRevision {
    public static final long serialVersionUID = 1;
@@ -39,12 +39,10 @@ public class TkRefexBooleanRevision extends TkRevision {
       readExternal(in, dataVersion);
    }
 
-   public TkRefexBooleanRevision(TkRefexBooleanRevision another, Map<UUID, UUID> conversionMap,
-                                  long offset, boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-      this.booleanValue = another.booleanValue;
+   public TkRefexBooleanRevision(TkRefexBooleanRevision another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.booleanValue = transformer.transform(another.booleanValue, another, ComponentFields.REFEX_BOOLEAN1);
    }
-
    //~--- methods -------------------------------------------------------------
 
    /**
@@ -82,8 +80,8 @@ public class TkRefexBooleanRevision extends TkRevision {
    }
 
    @Override
-   public TkRefexBooleanRevision makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkRefexBooleanRevision(this, conversionMap, offset, mapAll);
+   public TkRefexBooleanRevision makeTransform(ComponentTransformerBI transformer) {
+      return new TkRefexBooleanRevision(this, transformer);
    }
 
    @Override

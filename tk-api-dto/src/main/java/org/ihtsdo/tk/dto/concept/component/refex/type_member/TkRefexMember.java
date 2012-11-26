@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.*;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkRefexMember extends TkRefexAbstractMember<TkRefexRevision> {
    public static final long serialVersionUID = 1;
@@ -51,14 +52,8 @@ public class TkRefexMember extends TkRefexAbstractMember<TkRefexRevision> {
       }
    }
 
-   public TkRefexMember(TkRefexMember another, Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-   }
-
-   public TkRefexMember(RefexVersionBI another, NidBitSetBI exclusions, Map<UUID, UUID> conversionMap,
-                         long offset, boolean mapAll, ViewCoordinate vc)
-           throws IOException, ContradictionException {
-      super(another, exclusions, conversionMap, offset, mapAll, vc);
+   public TkRefexMember(TkRefexMember another, ComponentTransformerBI transformer) {
+      super(another, transformer);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -102,8 +97,8 @@ public class TkRefexMember extends TkRefexAbstractMember<TkRefexRevision> {
    }
 
    @Override
-   public TkRevision makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkRefexMember(this, conversionMap, offset, mapAll);
+   public TkRevision makeTransform(ComponentTransformerBI transformer) {
+      return new TkRefexMember(this, transformer);
    }
 
    @Override

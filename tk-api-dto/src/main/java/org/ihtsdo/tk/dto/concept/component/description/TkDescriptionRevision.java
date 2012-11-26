@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 @XmlRootElement(name="description-revision")
 public class TkDescriptionRevision extends TkRevision implements I_DescribeExternally {
@@ -52,18 +54,12 @@ public class TkDescriptionRevision extends TkRevision implements I_DescribeExter
       readExternal(in, dataVersion);
    }
 
-   public TkDescriptionRevision(TkDescriptionRevision another, Map<UUID, UUID> conversionMap, long offset,
-                                boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-      this.initialCaseSignificant = another.initialCaseSignificant;
-      this.lang                   = another.lang;
-      this.text                   = another.text;
-
-      if (mapAll) {
-         this.typeUuid = conversionMap.get(another.typeUuid);
-      } else {
-         this.typeUuid = another.typeUuid;
-      }
+   public TkDescriptionRevision(TkDescriptionRevision another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.initialCaseSignificant = transformer.transform(another.initialCaseSignificant, another, ComponentFields.DESCRIPTION_INITIAL_CASE_SIGNIFICANT);
+      this.lang                   = transformer.transform(another.lang, another, ComponentFields.DESCRIPTION_LANGUAGE);
+      this.text                   = transformer.transform(another.text, another, ComponentFields.DESCRIPTION_TEXT);
+      this.typeUuid = transformer.transform(another.typeUuid, another, ComponentFields.DESCRIPTION_TYPE_UUID);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -118,8 +114,8 @@ public class TkDescriptionRevision extends TkRevision implements I_DescribeExter
    }
 
    @Override
-   public TkDescriptionRevision makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkDescriptionRevision(this, conversionMap, offset, mapAll);
+   public TkDescriptionRevision makeTransform(ComponentTransformerBI transformer) {
+      return new TkDescriptionRevision(this, transformer);
    }
 
    @Override

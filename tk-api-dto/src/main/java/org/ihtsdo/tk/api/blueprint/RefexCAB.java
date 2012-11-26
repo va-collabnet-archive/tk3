@@ -29,9 +29,12 @@ import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.AnalogBI;
 import org.ihtsdo.tk.api.ComponentBI;
 import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.amend.InvalidAmendmentSpec;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.refex.RefexAnalogBI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
+import org.ihtsdo.tk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayAnalogBI;
+import org.ihtsdo.tk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayVersionBI;
 import org.ihtsdo.tk.api.refex.type_boolean.RefexBooleanAnalogBI;
 import org.ihtsdo.tk.api.refex.type_boolean.RefexBooleanVersionBI;
 import org.ihtsdo.tk.api.refex.type_nid.RefexNidAnalogBI;
@@ -259,6 +262,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
         STRING1,
         LONG1,
         FLOAT1,
+        ARRAY_OF_BYTEARRAY,
     }
 
     public UUID getMemberUuid() {
@@ -286,6 +290,10 @@ public class RefexCAB extends CreateOrAmendBlueprint {
         return properties.put(key, value);
     }
 
+    public Object put(RefexProperty key, byte[][] value) {
+        return properties.put(key, value);
+    }
+
     public Object put(RefexProperty key, String value) {
         assert key == RefexProperty.STRING1;
         return properties.put(key, value);
@@ -309,6 +317,11 @@ public class RefexCAB extends CreateOrAmendBlueprint {
     }
 
     public RefexCAB with(RefexProperty key, Number value) {
+        put(key, value);
+        return this;
+    }
+
+    public RefexCAB with(RefexProperty key, byte[][] value) {
         put(key, value);
         return this;
     }
@@ -377,6 +390,10 @@ public class RefexCAB extends CreateOrAmendBlueprint {
                     RefexStringAnalogBI<?> strPart = (RefexStringAnalogBI<?>) version;
                     strPart.setString1((String) entry.getValue());
                     break;
+                case ARRAY_OF_BYTEARRAY:
+                    RefexArrayOfBytearrayAnalogBI<?> arrayPart = (RefexArrayOfBytearrayAnalogBI<?>) version;
+                    arrayPart.setArrayOfByteArray((byte[][]) entry.getValue());
+                    break;
 
                 default:
                     throw new RuntimeException("Can't handle: " + entry.getKey());
@@ -433,6 +450,10 @@ public class RefexCAB extends CreateOrAmendBlueprint {
                 case STRING1:
                     RefexStringAnalogBI<?> strPart = (RefexStringAnalogBI<?>) version;
                     strPart.setString1((String) entry.getValue());
+                    break;
+                case ARRAY_OF_BYTEARRAY:
+                    RefexArrayOfBytearrayAnalogBI<?> arrayPart = (RefexArrayOfBytearrayAnalogBI<?>) version;
+                    arrayPart.setArrayOfByteArray((byte[][]) entry.getValue());
                     break;
                 default:
                     throw new RuntimeException("Can't handle: " + entry.getKey());
@@ -535,6 +556,15 @@ public class RefexCAB extends CreateOrAmendBlueprint {
                         return false;
                     }
                     break;
+                case ARRAY_OF_BYTEARRAY:
+                    if (!RefexArrayOfBytearrayVersionBI.class.isAssignableFrom(version.getClass())) {
+                        return false;
+                    }
+                    RefexArrayOfBytearrayVersionBI<?> arrayPart = (RefexArrayOfBytearrayVersionBI<?>) version;
+                    if (!entry.getValue().equals(arrayPart.getArrayOfByteArray())) {
+                        return false;
+                    }
+                    break;
                 default:
                     throw new RuntimeException("Can't handle: " + entry.getKey());
             }
@@ -574,6 +604,10 @@ public class RefexCAB extends CreateOrAmendBlueprint {
             return this.getComponentUuid();
         }
         return (UUID) properties.get(RefexProperty.MEMBER_UUID);
+    }
+
+   public byte[][] getArrayOfByteArray() {
+        return (byte[][]) properties.get(RefexProperty.ARRAY_OF_BYTEARRAY);
     }
 
     public TK_REFEX_TYPE getMemberType() {

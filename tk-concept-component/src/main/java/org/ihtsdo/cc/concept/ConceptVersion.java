@@ -1267,6 +1267,11 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
       return concept.isUncommitted();
    }
 
+    @Override
+    public boolean isAnnotationIndex() throws IOException {
+        return concept.isAnnotationIndex();
+    }
+
    //~--- set methods ---------------------------------------------------------
 
    @Override

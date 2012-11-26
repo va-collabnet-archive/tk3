@@ -11,15 +11,12 @@ import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.cc.component.ConceptComponent;
 import org.ihtsdo.cc.refex.RefexRevision;
 import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.blueprint.RefexCAB;
 import org.ihtsdo.tk.api.blueprint.RefexCAB.RefexProperty;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 import org.ihtsdo.tk.api.refex.type_nid_string.RefexNidStringAnalogBI;
 import org.ihtsdo.tk.dto.concept.component.refex.TK_REFEX_TYPE;
-import org.ihtsdo.tk.dto.concept.component.refex.TkRefexAbstractMember;
-import org.ihtsdo.tk.dto.concept.component.refex.type_uuid_string.TkRefexUuidStringMember;
 import org.ihtsdo.tk.dto.concept.component.refex.type_uuid_string.TkRefexUuidStringRevision;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -168,13 +165,6 @@ public class NidStringRevision extends RefexRevision<NidStringRevision, NidStrin
    @Override
    public String getString1() {
       return strValue;
-   }
-
-   @Override
-   public TkRefexAbstractMember<?> getTkRefexMemberActiveOnly(ViewCoordinate vc, NidBitSetBI exclusionSet,
-           Map<UUID, UUID> conversionMap)
-           throws ContradictionException, IOException {
-      return new TkRefexUuidStringMember(this, exclusionSet, conversionMap, 0, true, vc);
    }
 
    @Override

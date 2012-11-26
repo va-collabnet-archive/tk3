@@ -13,9 +13,10 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import java.util.Map;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkRefexUuidFloatRevision extends TkRevision {
    public static final long serialVersionUID = 1;
@@ -47,17 +48,11 @@ public class TkRefexUuidFloatRevision extends TkRevision {
       readExternal(in, dataVersion);
    }
 
-   public TkRefexUuidFloatRevision(TkRefexUuidFloatRevision another, Map<UUID, UUID> conversionMap,
-                                   long offset, boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
+   public TkRefexUuidFloatRevision(TkRefexUuidFloatRevision another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.uuid1 = transformer.transform(another.uuid1, another, ComponentFields.REFEX_COMPONENT_1_UUID);
+      this.float1 = transformer.transform(another.float1, another, ComponentFields.REFEX_FLOAT1);
 
-      if (mapAll) {
-         this.uuid1     = conversionMap.get(another.uuid1);
-         this.float1 = another.float1;
-      } else {
-         this.uuid1     = another.uuid1;
-         this.float1 = another.float1;
-      }
    }
 
    //~--- methods -------------------------------------------------------------
@@ -102,9 +97,8 @@ public class TkRefexUuidFloatRevision extends TkRevision {
    }
 
    @Override
-   public TkRefexUuidFloatRevision makeConversion(Map<UUID, UUID> conversionMap, long offset,
-           boolean mapAll) {
-      return new TkRefexUuidFloatRevision(this, conversionMap, offset, mapAll);
+   public TkRefexUuidFloatRevision makeTransform(ComponentTransformerBI transformer) {
+      return new TkRefexUuidFloatRevision(this, transformer);
    }
 
    @Override

@@ -13,10 +13,11 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import java.util.Map;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 @XmlRootElement(name="relationship-revision")
 public class TkRelationshipRevision extends TkRevision {
@@ -56,21 +57,13 @@ public class TkRelationshipRevision extends TkRevision {
       readExternal(in, dataVersion);
    }
 
-   public TkRelationshipRevision(TkRelationshipRevision another, Map<UUID, UUID> conversionMap, long offset,
-                                 boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
+   public TkRelationshipRevision(TkRelationshipRevision another, ComponentTransformerBI transformer) {
+      super(another, transformer); 
 
-      if (mapAll) {
-         this.characteristicUuid = conversionMap.get(another.characteristicUuid);
-         this.refinabilityUuid   = conversionMap.get(another.refinabilityUuid);
-         this.group              = another.group;
-         this.typeUuid           = conversionMap.get(another.typeUuid);
-      } else {
-         this.characteristicUuid = another.characteristicUuid;
-         this.refinabilityUuid   = another.refinabilityUuid;
-         this.group              = another.group;
-         this.typeUuid           = another.typeUuid;
-      }
+         this.characteristicUuid = transformer.transform(another.characteristicUuid, another, ComponentFields.RELATIONSHIP_CHARACTERISTIC_UUID);
+         this.refinabilityUuid   = transformer.transform(another.refinabilityUuid, another, ComponentFields.RELATIONSHIP_REFINABILITY_UUID);
+         this.group           = transformer.transform(another.group, another, ComponentFields.RELATIONSHIP_GROUP);
+         this.typeUuid           = transformer.transform(another.typeUuid, another, ComponentFields.RELATIONSHIP_TYPE_UUID);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -124,8 +117,8 @@ public class TkRelationshipRevision extends TkRevision {
    }
 
    @Override
-   public TkRelationshipRevision makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkRelationshipRevision(this, conversionMap, offset, mapAll);
+   public TkRelationshipRevision makeTransform(ComponentTransformerBI transformer) {
+      return new TkRelationshipRevision(this, transformer);
    }
 
    @Override

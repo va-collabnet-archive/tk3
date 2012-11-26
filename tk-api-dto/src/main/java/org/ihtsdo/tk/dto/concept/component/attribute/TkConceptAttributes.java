@@ -2,8 +2,6 @@ package org.ihtsdo.tk.dto.concept.component.attribute;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.conattr.ConAttrChronicleBI;
 import org.ihtsdo.tk.api.conattr.ConAttrVersionBI;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
@@ -19,6 +17,8 @@ import java.io.IOException;
 import java.util.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 @XmlRootElement(name="attributes")
 public class TkConceptAttributes extends TkComponent<TkConceptAttributesRevision>
@@ -64,17 +64,9 @@ public class TkConceptAttributes extends TkComponent<TkConceptAttributesRevision
       readExternal(in, dataVersion);
    }
 
-   public TkConceptAttributes(TkConceptAttributes another, Map<UUID, UUID> conversionMap, long offset,
-                              boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-      this.defined = another.defined;
-   }
-
-   public TkConceptAttributes(ConAttrVersionBI another, NidBitSetBI exclusions,
-                              Map<UUID, UUID> conversionMap, long offset, boolean mapAll, ViewCoordinate vc)
-           throws IOException, ContradictionException {
-      super(another, exclusions, conversionMap, offset, mapAll, vc);
-      this.defined = another.isDefined();
+   public TkConceptAttributes(TkConceptAttributes another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.defined = transformer.transform(another.defined, another, ComponentFields.ATTRIBUTE_DEFINED);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -124,8 +116,8 @@ public class TkConceptAttributes extends TkComponent<TkConceptAttributesRevision
    }
 
    @Override
-   public TkConceptAttributes makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkConceptAttributes(this, conversionMap, offset, mapAll);
+   public TkConceptAttributes makeTransform(ComponentTransformerBI transformer) {
+      return new TkConceptAttributes(this, transformer);
    }
 
    @Override

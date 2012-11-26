@@ -3,10 +3,7 @@ package org.ihtsdo.tk.dto.concept.component.refex.type_uuid_float;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.tk.Ts;
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.TerminologyStoreDI;
-import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 import org.ihtsdo.tk.api.refex.type_nid_float.RefexNidFloatVersionBI;
@@ -21,6 +18,8 @@ import java.io.IOException;
 
 import java.util.*;
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkRefexUuidFloatMember extends TkRefexAbstractMember<TkRefexUuidFloatRevision> {
    public static final long serialVersionUID = 1;
@@ -30,7 +29,7 @@ public class TkRefexUuidFloatMember extends TkRefexAbstractMember<TkRefexUuidFlo
    @XmlAttribute
    public UUID  uuid1;
    @XmlAttribute
-   public float floatValue;
+   public float float1;
 
    //~--- constructors --------------------------------------------------------
 
@@ -48,7 +47,7 @@ public class TkRefexUuidFloatMember extends TkRefexAbstractMember<TkRefexUuidFlo
       RefexNidFloatVersionBI                       rv        = itr.next();
 
       this.uuid1     = ts.getUuidPrimordialForNid(rv.getNid1());
-      this.floatValue = rv.getFloat1();
+      this.float1 = rv.getFloat1();
 
       if (partCount > 1) {
          revisions = new ArrayList<>(partCount - 1);
@@ -65,32 +64,11 @@ public class TkRefexUuidFloatMember extends TkRefexAbstractMember<TkRefexUuidFlo
       readExternal(in, dataVersion);
    }
 
-   public TkRefexUuidFloatMember(TkRefexUuidFloatMember another, Map<UUID, UUID> conversionMap, long offset,
-                                 boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
+   public TkRefexUuidFloatMember(TkRefexUuidFloatMember another, ComponentTransformerBI transformer) {
+      super(another, transformer);
 
-      if (mapAll) {
-         this.uuid1     = conversionMap.get(another.uuid1);
-         this.floatValue = another.floatValue;
-      } else {
-         this.uuid1     = another.uuid1;
-         this.floatValue = another.floatValue;
-      }
-   }
-
-   public TkRefexUuidFloatMember(RefexNidFloatVersionBI another, NidBitSetBI exclusions,
-                                 Map<UUID, UUID> conversionMap, long offset, boolean mapAll,
-                                 ViewCoordinate vc)
-           throws IOException, ContradictionException {
-      super(another, exclusions, conversionMap, offset, mapAll, vc);
-
-      if (mapAll) {
-         this.uuid1 = conversionMap.get(Ts.get().getComponent(another.getNid1()).getPrimUuid());
-      } else {
-         this.uuid1 = Ts.get().getComponent(another.getNid1()).getPrimUuid();
-      }
-
-      this.floatValue = another.getFloat1();
+      this.uuid1 = transformer.transform(another.uuid1, another, ComponentFields.REFEX_COMPONENT_1_UUID);
+      this.float1 = transformer.transform(another.float1, another, ComponentFields.REFEX_FLOAT1);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -123,7 +101,7 @@ public class TkRefexUuidFloatMember extends TkRefexAbstractMember<TkRefexUuidFlo
          }
 
          // Compare floatValue
-         if (this.floatValue != another.floatValue) {
+         if (this.float1 != another.float1) {
             return false;
          }
 
@@ -145,15 +123,15 @@ public class TkRefexUuidFloatMember extends TkRefexAbstractMember<TkRefexUuidFlo
    }
 
    @Override
-   public TkRefexUuidFloatMember makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkRefexUuidFloatMember(this, conversionMap, offset, mapAll);
+   public TkRefexUuidFloatMember makeTransform(ComponentTransformerBI transformer) {
+      return new TkRefexUuidFloatMember(this, transformer);
    }
 
    @Override
    public void readExternal(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super.readExternal(in, dataVersion);
       uuid1     = new UUID(in.readLong(), in.readLong());
-      floatValue = in.readFloat();
+      float1 = in.readFloat();
 
       int versionSize = in.readInt();
 
@@ -177,7 +155,7 @@ public class TkRefexUuidFloatMember extends TkRefexAbstractMember<TkRefexUuidFlo
       buff.append(" c1:");
       buff.append(informAboutUuid(this.uuid1));
       buff.append(" flt:");
-      buff.append(this.floatValue);
+      buff.append(this.float1);
       buff.append(" ");
       buff.append(super.toString());
 
@@ -189,7 +167,7 @@ public class TkRefexUuidFloatMember extends TkRefexAbstractMember<TkRefexUuidFlo
       super.writeExternal(out);
       out.writeLong(uuid1.getMostSignificantBits());
       out.writeLong(uuid1.getLeastSignificantBits());
-      out.writeFloat(floatValue);
+      out.writeFloat(float1);
 
       if (revisions == null) {
          out.writeInt(0);
@@ -209,7 +187,7 @@ public class TkRefexUuidFloatMember extends TkRefexAbstractMember<TkRefexUuidFlo
    }
 
    public float getFloatValue() {
-      return floatValue;
+      return float1;
    }
 
    @Override
@@ -234,6 +212,6 @@ public class TkRefexUuidFloatMember extends TkRefexAbstractMember<TkRefexUuidFlo
    }
 
    public void setFloatValue(float floatValue) {
-      this.floatValue = floatValue;
+      this.float1 = floatValue;
    }
 }

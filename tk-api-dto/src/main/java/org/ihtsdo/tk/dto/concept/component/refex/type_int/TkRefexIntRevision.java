@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkRefexIntRevision extends TkRevision {
    public static final long serialVersionUID = 1;
@@ -39,10 +41,9 @@ public class TkRefexIntRevision extends TkRevision {
       readExternal(in, dataVersion);
    }
 
-   public TkRefexIntRevision(TkRefexIntRevision another, Map<UUID, UUID> conversionMap, long offset,
-                              boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-      this.intValue = another.intValue;
+   public TkRefexIntRevision(TkRefexIntRevision another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.intValue = transformer.transform(another.intValue, another, ComponentFields.REFEX_INTEGER1);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -82,8 +83,8 @@ public class TkRefexIntRevision extends TkRevision {
    }
 
    @Override
-   public TkRefexIntRevision makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkRefexIntRevision(this, conversionMap, offset, mapAll);
+   public TkRefexIntRevision makeTransform(ComponentTransformerBI transformer) {
+      return new TkRefexIntRevision(this, transformer);
    }
 
    @Override

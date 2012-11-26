@@ -11,15 +11,12 @@ import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.cc.component.ConceptComponent;
 import org.ihtsdo.cc.refex.RefexRevision;
 import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.blueprint.RefexCAB;
 import org.ihtsdo.tk.api.blueprint.RefexCAB.RefexProperty;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 import org.ihtsdo.tk.api.refex.type_nid_long.RefexNidLongAnalogBI;
 import org.ihtsdo.tk.dto.concept.component.refex.TK_REFEX_TYPE;
-import org.ihtsdo.tk.dto.concept.component.refex.TkRefexAbstractMember;
-import org.ihtsdo.tk.dto.concept.component.refex.type_uuid_long.TkRefexUuidLongMember;
 import org.ihtsdo.tk.dto.concept.component.refex.type_uuid_long.TkRefexUuidLongRevision;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -162,13 +159,6 @@ public class NidLongRevision extends RefexRevision<NidLongRevision, NidLongMembe
    @Override
    public long getLong1() {
       return this.longValue;
-   }
-
-   @Override
-   public TkRefexAbstractMember<?> getTkRefexMemberActiveOnly(ViewCoordinate vc, NidBitSetBI exclusionSet,
-           Map<UUID, UUID> conversionMap)
-           throws ContradictionException, IOException {
-      return new TkRefexUuidLongMember(this, exclusionSet, conversionMap, 0, true, vc);
    }
 
    @Override

@@ -34,6 +34,7 @@ import org.ihtsdo.tk.dto.concept.component.refex.type_string.TkRefexStringMember
 import com.sleepycat.bind.tuple.TupleInput;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.concept.Concept;
+import org.ihtsdo.cc.refex.type_array_of_bytearray.ArrayOfByteArrayMember;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentChroncileBI;
 import org.ihtsdo.tk.api.blueprint.InvalidCAB;
@@ -41,6 +42,7 @@ import org.ihtsdo.tk.api.blueprint.RefexCAB;
 import org.ihtsdo.tk.api.blueprint.RefexCAB.RefexProperty;
 import org.ihtsdo.tk.api.coordinate.EditCoordinate;
 import org.ihtsdo.tk.dto.concept.component.refex.TK_REFEX_TYPE;
+import org.ihtsdo.tk.dto.concept.component.refex.type_array_of_bytearray.TkRefexArrayOfByteArrayMember;
 
 public class RefexMemberFactory {
 
@@ -116,6 +118,8 @@ public class RefexMemberFactory {
                 return new NidLongMember(enclosingConceptNid, input);
             case LONG:
                 return new LongMember(enclosingConceptNid, input);
+            case ARRAY_BYTEARRAY:
+                return new ArrayOfByteArrayMember(enclosingConceptNid, input);
 
             default:
                 throw new UnsupportedOperationException(
@@ -152,6 +156,9 @@ public class RefexMemberFactory {
                 return new NidLongMember((TkRefexUuidLongMember) refsetMember, enclosingConceptNid);
             case LONG:
                 return new LongMember((TkRefexLongMember) refsetMember, enclosingConceptNid);
+
+            case ARRAY_BYTEARRAY:
+                return new ArrayOfByteArrayMember((TkRefexArrayOfByteArrayMember) refsetMember, enclosingConceptNid);
 
             default:
                 throw new UnsupportedOperationException(
@@ -194,6 +201,8 @@ public class RefexMemberFactory {
                 return new NidLongMember();
             case LONG:
                 return new LongMember();
+            case ARRAY_BYTEARRAY:
+                return new ArrayOfByteArrayMember();
 
             default:
                 throw new UnsupportedOperationException(

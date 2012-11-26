@@ -3,9 +3,6 @@ package org.ihtsdo.tk.dto.concept.component.refex;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.tk.Ts;
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.NidBitSetBI;
-import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 import org.ihtsdo.tk.dto.concept.component.TkComponent;
 import org.ihtsdo.tk.dto.concept.component.TkRevision;
@@ -16,9 +13,10 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import java.util.Map;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public abstract class TkRefexAbstractMember<V extends TkRevision> extends TkComponent<V> {
    public static final long serialVersionUID = 1;
@@ -47,33 +45,11 @@ public abstract class TkRefexAbstractMember<V extends TkRevision> extends TkComp
       readExternal(in, dataVersion);
    }
 
-   public TkRefexAbstractMember(TkRefexAbstractMember another, Map<UUID, UUID> conversionMap, long offset,
-                                 boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
+   public TkRefexAbstractMember(TkRefexAbstractMember another, ComponentTransformerBI transformer) {
+      super(another, transformer);
 
-      if (mapAll) {
-         this.componentUuid = conversionMap.get(another.componentUuid);
-         this.refexUuid    = conversionMap.get(another.refexUuid);
-      } else {
-         this.componentUuid = another.componentUuid;
-         this.refexUuid    = another.refexUuid;
-      }
-   }
-
-   public TkRefexAbstractMember(RefexVersionBI another, NidBitSetBI exclusions,
-                                 Map<UUID, UUID> conversionMap, long offset, boolean mapAll,
-                                 ViewCoordinate vc)
-           throws IOException, ContradictionException {
-      super(another, exclusions, conversionMap, offset, mapAll, vc);
-
-      if (mapAll) {
-         this.componentUuid =
-            conversionMap.get(Ts.get().getComponent(another.getReferencedComponentNid()).getPrimUuid());
-         this.refexUuid = conversionMap.get(Ts.get().getComponent(another.getRefexNid()).getPrimUuid());
-      } else {
-         this.componentUuid = Ts.get().getComponent(another.getReferencedComponentNid()).getPrimUuid();
-         this.refexUuid    = Ts.get().getComponent(another.getRefexNid()).getPrimUuid();
-      }
+         this.componentUuid = transformer.transform(another.componentUuid, another, ComponentFields.REFEX_REFERENCED_COMPONENT_UUID);
+         this.refexUuid    = transformer.transform(another.refexUuid, another, ComponentFields.REFEX_COLLECTION_UUID);
    }
 
    //~--- methods -------------------------------------------------------------

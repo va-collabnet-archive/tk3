@@ -53,7 +53,7 @@ the specific language governing permissions and limitations under the License. -
         <maven-javadoc-plugin.version>2.7</maven-javadoc-plugin.version>
         <maven-plugin-plugin.version>2.6</maven-plugin-plugin.version>
         <maven-surefire-report-plugin.version>2.6</maven-surefire-report-plugin.version>
-        <jersey-version>1.14</jersey-version>
+        <jersey-version>1.15</jersey-version>
     </properties>
     <dependencyManagement>
         <dependencies>

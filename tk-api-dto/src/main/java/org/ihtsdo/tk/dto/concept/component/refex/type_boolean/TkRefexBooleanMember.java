@@ -2,9 +2,6 @@ package org.ihtsdo.tk.dto.concept.component.refex.type_boolean;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.NidBitSetBI;
-import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.refex.RefexChronicleBI;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 import org.ihtsdo.tk.api.refex.type_boolean.RefexBooleanVersionBI;
@@ -19,6 +16,8 @@ import java.io.IOException;
 
 import java.util.*;
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkRefexBooleanMember extends TkRefexAbstractMember<TkRefexBooleanRevision> {
    public static final long serialVersionUID = 1;
@@ -59,17 +58,9 @@ public class TkRefexBooleanMember extends TkRefexAbstractMember<TkRefexBooleanRe
       readExternal(in, dataVersion);
    }
 
-   public TkRefexBooleanMember(TkRefexBooleanMember another, Map<UUID, UUID> conversionMap, long offset,
-                                boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-      this.booleanValue = another.booleanValue;
-   }
-
-   public TkRefexBooleanMember(RefexBooleanVersionBI another, NidBitSetBI exclusions,
-                                Map<UUID, UUID> conversionMap, long offset, boolean mapAll, ViewCoordinate vc)
-           throws IOException, ContradictionException {
-      super(another, exclusions, conversionMap, offset, mapAll, vc);
-      this.booleanValue = another.getBoolean1();
+   public TkRefexBooleanMember(TkRefexBooleanMember another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.booleanValue = transformer.transform(another.booleanValue, another, ComponentFields.REFEX_BOOLEAN1);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -119,8 +110,8 @@ public class TkRefexBooleanMember extends TkRefexAbstractMember<TkRefexBooleanRe
    }
 
    @Override
-   public TkRefexBooleanMember makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkRefexBooleanMember(this, conversionMap, offset, mapAll);
+   public TkRefexBooleanMember makeTransform(ComponentTransformerBI transformer) {
+      return new TkRefexBooleanMember(this, transformer);
    }
 
    @Override

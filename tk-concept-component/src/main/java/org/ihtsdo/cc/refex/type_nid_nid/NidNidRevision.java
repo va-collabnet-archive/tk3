@@ -7,24 +7,19 @@ import com.sleepycat.bind.tuple.TupleOutput;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.cc.component.ConceptComponent;
 import org.ihtsdo.cc.refex.RefexRevision;
 import org.ihtsdo.cc.refex.type_nid_nid.NidNidMember.Version;
 import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.blueprint.RefexCAB;
 import org.ihtsdo.tk.api.blueprint.RefexCAB.RefexProperty;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.refex.RefexVersionBI;
 import org.ihtsdo.tk.api.refex.type_nid_nid.RefexNidNidAnalogBI;
 import org.ihtsdo.tk.dto.concept.component.refex.TK_REFEX_TYPE;
-import org.ihtsdo.tk.dto.concept.component.refex.TkRefexAbstractMember;
-import org.ihtsdo.tk.dto.concept.component.refex.type_uuid_uuid.TkRefexUuidUuidMember;
 import org.ihtsdo.tk.dto.concept.component.refex.type_uuid_uuid.TkRefexUuidUuidRevision;
 
 public class NidNidRevision extends RefexRevision<NidNidRevision, NidNidMember>
@@ -174,13 +169,6 @@ public class NidNidRevision extends RefexRevision<NidNidRevision, NidNidMember>
     @Override
    public int getNid2() {
       return c2Nid;
-   }
-
-   @Override
-   public TkRefexAbstractMember<?> getTkRefexMemberActiveOnly(ViewCoordinate vc, NidBitSetBI exclusionSet,
-           Map<UUID, UUID> conversionMap)
-           throws ContradictionException, IOException {
-      return new TkRefexUuidUuidMember(this, exclusionSet, conversionMap, 0, true, vc);
    }
 
     @Override

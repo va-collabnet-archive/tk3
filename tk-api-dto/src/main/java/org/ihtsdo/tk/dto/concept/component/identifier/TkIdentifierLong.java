@@ -12,9 +12,9 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.Arrays;
-import java.util.Map;
-import java.util.UUID;
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentFields;
+import org.ihtsdo.tk.dto.concept.component.transformer.ComponentTransformerBI;
 
 public class TkIdentifierLong extends TkIdentifier {
    public static final long serialVersionUID = 1;
@@ -40,10 +40,9 @@ public class TkIdentifierLong extends TkIdentifier {
       denotation = in.readLong();
    }
 
-   public TkIdentifierLong(TkIdentifierLong another, Map<UUID, UUID> conversionMap, long offset,
-                           boolean mapAll) {
-      super(another, conversionMap, offset, mapAll);
-      this.denotation = another.denotation;
+   public TkIdentifierLong(TkIdentifierLong another, ComponentTransformerBI transformer) {
+      super(another, transformer);
+      this.denotation = transformer.transform(another.denotation, another, ComponentFields.ID_LONG_DENOTATION);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -96,8 +95,8 @@ public class TkIdentifierLong extends TkIdentifier {
    }
 
    @Override
-   public TkRevision makeConversion(Map<UUID, UUID> conversionMap, long offset, boolean mapAll) {
-      return new TkIdentifierLong(this, conversionMap, offset, mapAll);
+   public TkRevision makeTransform(ComponentTransformerBI transformer) {
+      return new TkIdentifierLong(this, transformer);
    }
 
    /**

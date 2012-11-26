@@ -1710,6 +1710,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
       return false;
    }
 
+    @Override
    public boolean isAnnotationIndex() throws IOException {
       return data.isAnnotationIndex();
    }

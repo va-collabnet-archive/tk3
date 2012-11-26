@@ -12,14 +12,10 @@ import org.ihtsdo.cc.component.ConceptComponent;
 import org.ihtsdo.cc.component.RevisionSet;
 import org.ihtsdo.cc.refex.RefexMember;
 import org.ihtsdo.cc.computer.version.VersionComputer;
-import org.ihtsdo.tk.api.ContradictionException;
-import org.ihtsdo.tk.api.NidBitSetBI;
 import org.ihtsdo.tk.api.blueprint.RefexCAB;
-import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.refex.RefexAnalogBI;
 import org.ihtsdo.tk.api.refex.type_long.RefexLongAnalogBI;
 import org.ihtsdo.tk.dto.concept.component.refex.TK_REFEX_TYPE;
-import org.ihtsdo.tk.dto.concept.component.refex.TkRefexAbstractMember;
 import org.ihtsdo.tk.dto.concept.component.refex.type_member.TkRefexMember;
 import org.ihtsdo.tk.dto.concept.component.refex.type_member.TkRefexRevision;
 import org.ihtsdo.tk.hash.Hashcode;
@@ -166,13 +162,6 @@ public class MembershipMember extends RefexMember<MembershipRevision, Membership
    }
 
    //~--- get methods ---------------------------------------------------------
-
-   @Override
-   public TkRefexAbstractMember<?> getTkRefexMemberActiveOnly(ViewCoordinate vc, NidBitSetBI exclusionSet,
-           Map<UUID, UUID> conversionMap)
-           throws ContradictionException, IOException {
-      return new TkRefexMember(this, exclusionSet, conversionMap, 0, true, vc);
-   }
 
    @Override
    protected TK_REFEX_TYPE getTkRefsetType() {

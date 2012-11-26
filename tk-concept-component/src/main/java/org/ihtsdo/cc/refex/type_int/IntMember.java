@@ -178,14 +178,6 @@ public class IntMember extends RefexMember<IntRevision, IntMember>
       return int1;
    }
 
-   
-   @Override
-   public TkRefexAbstractMember<?> getTkRefexMemberActiveOnly(ViewCoordinate vc, NidBitSetBI exclusionSet,
-           Map<UUID, UUID> conversionMap)
-           throws ContradictionException, IOException {
-      return new TkRefexIntMember(this, exclusionSet, conversionMap, 0, true, vc);
-   }
-
    @Override
    protected TK_REFEX_TYPE getTkRefsetType() {
       return TK_REFEX_TYPE.INT;
