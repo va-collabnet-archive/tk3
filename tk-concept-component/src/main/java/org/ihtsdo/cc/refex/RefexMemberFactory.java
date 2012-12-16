@@ -34,7 +34,7 @@ import org.ihtsdo.tk.dto.concept.component.refex.type_string.TkRefexStringMember
 import com.sleepycat.bind.tuple.TupleInput;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.concept.Concept;
-import org.ihtsdo.cc.refex.type_array_of_bytearray.ArrayOfByteArrayMemberX;
+import org.ihtsdo.cc.refex.type_array_of_bytearray.ArrayOfByteArrayMember;
 import org.ihtsdo.tk.Ts;
 import org.ihtsdo.tk.api.ComponentChroncileBI;
 import org.ihtsdo.tk.api.blueprint.InvalidCAB;
@@ -119,7 +119,7 @@ public class RefexMemberFactory {
             case LONG:
                 return new LongMember(enclosingConceptNid, input);
             case ARRAY_BYTEARRAY:
-                return new ArrayOfByteArrayMemberX(enclosingConceptNid, input);
+                return new ArrayOfByteArrayMember(enclosingConceptNid, input);
 
             default:
                 throw new UnsupportedOperationException(
@@ -158,7 +158,7 @@ public class RefexMemberFactory {
                 return new LongMember((TkRefexLongMember) refsetMember, enclosingConceptNid);
 
             case ARRAY_BYTEARRAY:
-                return new ArrayOfByteArrayMemberX((TkRefexArrayOfByteArrayMember) refsetMember, enclosingConceptNid);
+                return new ArrayOfByteArrayMember((TkRefexArrayOfByteArrayMember) refsetMember, enclosingConceptNid);
 
             default:
                 throw new UnsupportedOperationException(
@@ -202,7 +202,7 @@ public class RefexMemberFactory {
             case LONG:
                 return new LongMember();
             case ARRAY_BYTEARRAY:
-                return new ArrayOfByteArrayMemberX();
+                return new ArrayOfByteArrayMember();
 
             default:
                 throw new UnsupportedOperationException(

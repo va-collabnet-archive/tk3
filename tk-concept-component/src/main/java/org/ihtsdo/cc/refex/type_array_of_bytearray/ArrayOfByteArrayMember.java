@@ -40,10 +40,10 @@ import org.ihtsdo.tk.uuid.UuidT5Generator;
  *
  * @author kec
  */
-public class ArrayOfByteArrayMemberX extends RefexMember<ArrayOfByteArrayRevisionX, ArrayOfByteArrayMemberX>
-        implements RefexArrayOfBytearrayAnalogBI<ArrayOfByteArrayRevisionX> {
+public class ArrayOfByteArrayMember extends RefexMember<ArrayOfByteArrayRevision, ArrayOfByteArrayMember>
+        implements RefexArrayOfBytearrayAnalogBI<ArrayOfByteArrayRevision> {
 
-    private static VersionComputer<RefexMember<ArrayOfByteArrayRevisionX, ArrayOfByteArrayMemberX>.Version> computer =
+    private static VersionComputer<RefexMember<ArrayOfByteArrayRevision, ArrayOfByteArrayMember>.Version> computer =
             new VersionComputer<>();
     //~--- fields --------------------------------------------------------------
     private byte[][] arrayOfByteArray;
@@ -61,15 +61,15 @@ public class ArrayOfByteArrayMemberX extends RefexMember<ArrayOfByteArrayRevisio
 
 
     //~--- constructors --------------------------------------------------------
-    public ArrayOfByteArrayMemberX() {
+    public ArrayOfByteArrayMember() {
         super();
     }
 
-    public ArrayOfByteArrayMemberX(int enclosingConceptNid, TupleInput input) throws IOException {
+    public ArrayOfByteArrayMember(int enclosingConceptNid, TupleInput input) throws IOException {
         super(enclosingConceptNid, input);
     }
 
-    public ArrayOfByteArrayMemberX(TkRefexArrayOfByteArrayMember refsetMember, int enclosingConceptNid) throws IOException {
+    public ArrayOfByteArrayMember(TkRefexArrayOfByteArrayMember refsetMember, int enclosingConceptNid) throws IOException {
         super(refsetMember, enclosingConceptNid);
         arrayOfByteArray = refsetMember.getArrayOfByteArray1();
 
@@ -77,7 +77,7 @@ public class ArrayOfByteArrayMemberX extends RefexMember<ArrayOfByteArrayRevisio
             revisions = new RevisionSet(primordialStampNid);
 
             for (TkRefexArrayOfByteArrayRevision eVersion : refsetMember.getRevisionList()) {
-                revisions.add(new ArrayOfByteArrayRevisionX(eVersion, this));
+                revisions.add(new ArrayOfByteArrayRevision(eVersion, this));
             }
         }
     }
@@ -119,16 +119,16 @@ public class ArrayOfByteArrayMemberX extends RefexMember<ArrayOfByteArrayRevisio
     }
 
     @Override
-    public ArrayOfByteArrayRevisionX makeAnalog() {
-        ArrayOfByteArrayRevisionX newR = new ArrayOfByteArrayRevisionX(getStatusNid(), getTime(),
+    public ArrayOfByteArrayRevision makeAnalog() {
+        ArrayOfByteArrayRevision newR = new ArrayOfByteArrayRevision(getStatusNid(), getTime(),
                 getAuthorNid(), getModuleNid(), getPathNid(), this);
 
         return newR;
     }
     
     @Override
-    public ArrayOfByteArrayRevisionX makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-        ArrayOfByteArrayRevisionX newR = new ArrayOfByteArrayRevisionX(statusNid, time,
+    public ArrayOfByteArrayRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+        ArrayOfByteArrayRevision newR = new ArrayOfByteArrayRevision(statusNid, time,
                 authorNid, moduleNid, pathNid, this);
 
         addRevision(newR);
@@ -137,9 +137,9 @@ public class ArrayOfByteArrayMemberX extends RefexMember<ArrayOfByteArrayRevisio
     }
 
     @Override
-    protected boolean refexFieldsEqual(ConceptComponent<ArrayOfByteArrayRevisionX, ArrayOfByteArrayMemberX> obj) {
-        if (ArrayOfByteArrayMemberX.class.isAssignableFrom(obj.getClass())) {
-            ArrayOfByteArrayMemberX another = (ArrayOfByteArrayMemberX) obj;
+    protected boolean refexFieldsEqual(ConceptComponent<ArrayOfByteArrayRevision, ArrayOfByteArrayMember> obj) {
+        if (ArrayOfByteArrayMember.class.isAssignableFrom(obj.getClass())) {
+            ArrayOfByteArrayMember another = (ArrayOfByteArrayMember) obj;
 
             return Arrays.deepEquals(this.arrayOfByteArray, another.arrayOfByteArray);
         }
@@ -168,8 +168,8 @@ public class ArrayOfByteArrayMemberX extends RefexMember<ArrayOfByteArrayRevisio
     }
 
     @Override
-    protected final ArrayOfByteArrayRevisionX readMemberRevision(TupleInput input) {
-        return new ArrayOfByteArrayRevisionX(input, this);
+    protected final ArrayOfByteArrayRevision readMemberRevision(TupleInput input) {
+        return new ArrayOfByteArrayRevision(input, this);
     }
 
     @Override
@@ -224,12 +224,12 @@ public class ArrayOfByteArrayMemberX extends RefexMember<ArrayOfByteArrayRevisio
     }
 
     @Override
-    protected VersionComputer<RefexMember<ArrayOfByteArrayRevisionX, ArrayOfByteArrayMemberX>.Version> getVersionComputer() {
+    protected VersionComputer<RefexMember<ArrayOfByteArrayRevision, ArrayOfByteArrayMember>.Version> getVersionComputer() {
         return computer;
     }
 
     @Override
-    public List<ArrayOfByteArrayMemberX.Version> getVersions() {
+    public List<ArrayOfByteArrayMember.Version> getVersions() {
         if (versions == null) {
             int count = 1;
 
@@ -237,16 +237,16 @@ public class ArrayOfByteArrayMemberX extends RefexMember<ArrayOfByteArrayRevisio
                 count = count + revisions.size();
             }
 
-            ArrayList<ArrayOfByteArrayMemberX.Version> list = new ArrayList<>(count);
+            ArrayList<ArrayOfByteArrayMember.Version> list = new ArrayList<>(count);
 
             if (getTime() != Long.MIN_VALUE) {
-                list.add(new ArrayOfByteArrayMemberX.Version(this));
+                list.add(new ArrayOfByteArrayMember.Version(this));
             }
 
             if (revisions != null) {
-                for (ArrayOfByteArrayRevisionX br : revisions) {
+                for (ArrayOfByteArrayRevision br : revisions) {
                     if (br.getTime() != Long.MIN_VALUE) {
-                        list.add(new ArrayOfByteArrayMemberX.Version(br));
+                        list.add(new ArrayOfByteArrayMember.Version(br));
                     }
                 }
             }
@@ -254,16 +254,16 @@ public class ArrayOfByteArrayMemberX extends RefexMember<ArrayOfByteArrayRevisio
             versions = list;
         }
 
-        return (List<ArrayOfByteArrayMemberX.Version>) versions;
+        return (List<ArrayOfByteArrayMember.Version>) versions;
     }
 
     //~--- set methods ---------------------------------------------------------
 
     //~--- inner classes -------------------------------------------------------
-    public class Version extends RefexMember<ArrayOfByteArrayRevisionX, ArrayOfByteArrayMemberX>.Version
-            implements RefexArrayOfBytearrayAnalogBI<ArrayOfByteArrayRevisionX> {
+    public class Version extends RefexMember<ArrayOfByteArrayRevision, ArrayOfByteArrayMember>.Version
+            implements RefexArrayOfBytearrayAnalogBI<ArrayOfByteArrayRevision> {
 
-        private Version(RefexArrayOfBytearrayAnalogBI<ArrayOfByteArrayRevisionX> cv) {
+        private Version(RefexArrayOfBytearrayAnalogBI<ArrayOfByteArrayRevision> cv) {
             super(cv);
         }
 
@@ -275,8 +275,8 @@ public class ArrayOfByteArrayMemberX extends RefexMember<ArrayOfByteArrayRevisio
             return getCv().getArrayOfByteArray();
         }
 
-        RefexArrayOfBytearrayAnalogBI<ArrayOfByteArrayRevisionX> getCv() {
-            return (RefexArrayOfBytearrayAnalogBI<ArrayOfByteArrayRevisionX>) cv;
+        RefexArrayOfBytearrayAnalogBI<ArrayOfByteArrayRevision> getCv() {
+            return (RefexArrayOfBytearrayAnalogBI<ArrayOfByteArrayRevision>) cv;
         }
 
         @Override
