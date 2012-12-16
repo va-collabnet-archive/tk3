@@ -36,8 +36,8 @@ import org.ihtsdo.tk.uuid.UuidT5Generator;
  *
  * @author kec
  */
-public class ArrayOfByteArrayRevision extends RefexRevision<ArrayOfByteArrayRevision, ArrayOfByteArrayMember>
-        implements RefexArrayOfBytearrayAnalogBI<ArrayOfByteArrayRevision>  {
+public class ArrayOfByteArrayRevisionX extends RefexRevision<ArrayOfByteArrayRevisionX, ArrayOfByteArrayMemberX>
+        implements RefexArrayOfBytearrayAnalogBI<ArrayOfByteArrayRevisionX>  {
 
    private byte[][] arrayOfByteArray;
 
@@ -55,21 +55,21 @@ public class ArrayOfByteArrayRevision extends RefexRevision<ArrayOfByteArrayRevi
     
    //~--- constructors --------------------------------------------------------
 
-   public ArrayOfByteArrayRevision() {
+   public ArrayOfByteArrayRevisionX() {
       super();
    }
 
-   protected ArrayOfByteArrayRevision(int statusAtPositionNid, ArrayOfByteArrayMember another) {
+   protected ArrayOfByteArrayRevisionX(int statusAtPositionNid, ArrayOfByteArrayMemberX another) {
       super(statusAtPositionNid, another);
       this.arrayOfByteArray = another.getArrayOfByteArray();
    }
 
-   public ArrayOfByteArrayRevision(TkRefexArrayOfByteArrayRevision eVersion, ArrayOfByteArrayMember another) throws IOException {
+   public ArrayOfByteArrayRevisionX(TkRefexArrayOfByteArrayRevision eVersion, ArrayOfByteArrayMemberX another) throws IOException {
       super(eVersion, another);
       this.arrayOfByteArray = eVersion.getArrayOfByteArray1();
    }
 
-   public ArrayOfByteArrayRevision(TupleInput in, ArrayOfByteArrayMember primoridalMember) {
+   public ArrayOfByteArrayRevisionX(TupleInput in, ArrayOfByteArrayMemberX primoridalMember) {
       super(in, primoridalMember);
       int arrayLength = in.readShort();
       this.arrayOfByteArray = new byte[arrayLength][];
@@ -80,14 +80,14 @@ public class ArrayOfByteArrayRevision extends RefexRevision<ArrayOfByteArrayRevi
       }
    }
 
-   protected ArrayOfByteArrayRevision(int statusNid, long time, int authorNid,
-           int moduleNid, int pathNid, ArrayOfByteArrayMember primoridalMember) {
+   protected ArrayOfByteArrayRevisionX(int statusNid, long time, int authorNid,
+           int moduleNid, int pathNid, ArrayOfByteArrayMemberX primoridalMember) {
       super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
       this.arrayOfByteArray = primoridalMember.getArrayOfByteArray();
    }
 
-   protected ArrayOfByteArrayRevision(int statusNid, long time, int authorNid,
-           int moduleNid, int pathNid, ArrayOfByteArrayRevision another) {
+   protected ArrayOfByteArrayRevisionX(int statusNid, long time, int authorNid,
+           int moduleNid, int pathNid, ArrayOfByteArrayRevisionX another) {
       super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       this.arrayOfByteArray = another.getArrayOfByteArray();
    }
@@ -111,8 +111,8 @@ public class ArrayOfByteArrayRevision extends RefexRevision<ArrayOfByteArrayRevi
          return false;
       }
 
-      if (ArrayOfByteArrayRevision.class.isAssignableFrom(obj.getClass())) {
-         ArrayOfByteArrayRevision another = (ArrayOfByteArrayRevision) obj;
+      if (ArrayOfByteArrayRevisionX.class.isAssignableFrom(obj.getClass())) {
+         ArrayOfByteArrayRevisionX another = (ArrayOfByteArrayRevisionX) obj;
 
          return (Arrays.deepEquals(arrayOfByteArray, another.getArrayOfByteArray())) && super.equals(obj);
       }
@@ -121,13 +121,13 @@ public class ArrayOfByteArrayRevision extends RefexRevision<ArrayOfByteArrayRevi
    }
 
    @Override
-   public ArrayOfByteArrayRevision makeAnalog() {
-      return new ArrayOfByteArrayRevision(getStatusNid(), getTime(), getAuthorNid(),
+   public ArrayOfByteArrayRevisionX makeAnalog() {
+      return new ArrayOfByteArrayRevisionX(getStatusNid(), getTime(), getAuthorNid(),
               getModuleNid(), getPathNid(),  this);
    }
    
    @Override
-   public ArrayOfByteArrayRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+   public ArrayOfByteArrayRevisionX makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatusNid(statusNid);
          this.setAuthorNid(authorNid);
@@ -136,7 +136,7 @@ public class ArrayOfByteArrayRevision extends RefexRevision<ArrayOfByteArrayRevi
          return this;
       }
 
-      ArrayOfByteArrayRevision newR = new ArrayOfByteArrayRevision(statusNid, time,
+      ArrayOfByteArrayRevisionX newR = new ArrayOfByteArrayRevisionX(statusNid, time,
               authorNid, moduleNid, pathNid,this);
 
       primordialComponent.addRevision(newR);
@@ -191,18 +191,18 @@ public class ArrayOfByteArrayRevision extends RefexRevision<ArrayOfByteArrayRevi
    }
 
    @Override
-   public ArrayOfByteArrayMember.Version getVersion(ViewCoordinate c) throws ContradictionException {
-      return (ArrayOfByteArrayMember.Version) ((ArrayOfByteArrayMember) primordialComponent).getVersion(c);
+   public ArrayOfByteArrayMemberX.Version getVersion(ViewCoordinate c) throws ContradictionException {
+      return (ArrayOfByteArrayMemberX.Version) ((ArrayOfByteArrayMemberX) primordialComponent).getVersion(c);
    }
 
    @Override
-   public Collection<ArrayOfByteArrayMember.Version> getVersions() {
-      return ((ArrayOfByteArrayMember) primordialComponent).getVersions();
+   public Collection<ArrayOfByteArrayMemberX.Version> getVersions() {
+      return ((ArrayOfByteArrayMemberX) primordialComponent).getVersions();
    }
 
    @Override
-   public Collection<? extends RefexVersionBI<ArrayOfByteArrayRevision>> getVersions(ViewCoordinate c) {
-      return ((ArrayOfByteArrayMember) primordialComponent).getVersions(c);
+   public Collection<? extends RefexVersionBI<ArrayOfByteArrayRevisionX>> getVersions(ViewCoordinate c) {
+      return ((ArrayOfByteArrayMemberX) primordialComponent).getVersions(c);
    }
 
    //~--- set methods ---------------------------------------------------------
