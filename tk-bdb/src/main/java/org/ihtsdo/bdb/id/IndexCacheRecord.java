@@ -18,12 +18,8 @@
 
 package org.ihtsdo.bdb.id;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.ihtsdo.bdb.Bdb;
 import org.ihtsdo.cc.NidPairForRefex;
 import org.ihtsdo.cc.concept.Concept;
@@ -36,6 +32,16 @@ import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.tk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.tk.api.relationship.RelationshipChronicleBI;
 import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Stores cross-reference information for origin relationships, destination relationship origins, and
@@ -50,297 +56,298 @@ import org.ihtsdo.tk.api.relationship.RelationshipVersionBI;
  * @author kec
  */
 public class IndexCacheRecord {
-   private static final int DESTINATION_OFFSET_INDEX = 0;
-   private static final int REFEX_OFFSET_INDEX       = 1;
-   private static final int RELATIONSHIP_OFFSET      = 2;
+    private static final int DESTINATION_OFFSET_INDEX = 0;
+    private static final int REFEX_OFFSET_INDEX       = 1;
+    private static final int RELATIONSHIP_OFFSET      = 2;
+    private int[]            data;
 
-   //~--- fields --------------------------------------------------------------
+    public IndexCacheRecord() {
+        this.data = new int[] { 2, 2 };
+    }
 
-   private int[] data;
+    public IndexCacheRecord(int[] data) {
+        this.data = data;
 
-   //~--- constructors --------------------------------------------------------
+        if (data == null) {
+            this.data = new int[] { 2, 2 };
+        }
+    }
 
-   public IndexCacheRecord() {
-      this.data = new int[] { 2, 2 };
-   }
+    public boolean isRefexMemberAlreadyThere(int memberNid) {
+        int arrayLength = data.length - data[REFEX_OFFSET_INDEX];
+        int start       = data.length - arrayLength;
 
-   public IndexCacheRecord(int[] data) {
-      this.data = data;
+        for (int i = start; i < data.length; i++) {
+            if (data[i] == memberNid) {
+                return true;
+            }
+        }
 
-      if (data == null) {
-         this.data = new int[] { 2, 2 };
-      }
-   }
+        return false;
+    }
 
-   //~--- methods -------------------------------------------------------------
+    public boolean isDestinationRelOriginAlreadyThere(int originNid) {
+        int arrayLength = data[REFEX_OFFSET_INDEX] - data[DESTINATION_OFFSET_INDEX];
+        int index       = Arrays.binarySearch(data, data[DESTINATION_OFFSET_INDEX],
+                              data[DESTINATION_OFFSET_INDEX] + arrayLength, originNid);
 
-   public void addDestinationOriginNid(int originNid) {
-      int arrayLength = data[REFEX_OFFSET_INDEX] - data[DESTINATION_OFFSET_INDEX];
-      int index       = Arrays.binarySearch(data, data[DESTINATION_OFFSET_INDEX],
-                                      data[DESTINATION_OFFSET_INDEX] + arrayLength, originNid);
+        if (index >= 0) {
+            return true;    // origin already there...
+        }
 
-      if (index >= 0) {
-         return;    // origin already there...
-      }
+        return false;
+    }
 
-      int[] destinationOriginNids = new int[arrayLength + 1];
+    public void addDestinationOriginNid(int originNid) {
+        if (!isDestinationRelOriginAlreadyThere(originNid)) {
+            int   arrayLength           = data[REFEX_OFFSET_INDEX] - data[DESTINATION_OFFSET_INDEX];
+            int[] destinationOriginNids = new int[arrayLength + 1];
 
-      destinationOriginNids[arrayLength] = originNid;
-      System.arraycopy(data, data[DESTINATION_OFFSET_INDEX], destinationOriginNids, 0,
-                       destinationOriginNids.length - 1);
-      Arrays.sort(destinationOriginNids);
-      updateData(getRelationshipOutgoingArray(), destinationOriginNids, getRefexIndexArray());
-   }
+            destinationOriginNids[arrayLength] = originNid;
+            System.arraycopy(data, data[DESTINATION_OFFSET_INDEX], destinationOriginNids, 0,
+                             destinationOriginNids.length - 1);
+            Arrays.sort(destinationOriginNids);
+            updateData(getRelationshipOutgoingArray(), destinationOriginNids, getRefexIndexArray());
+        }
+    }
 
-   public void addNidPairForRefex(int refexNid, int memberNid) {
-      int arrayLength = data.length - data[REFEX_OFFSET_INDEX];
-      int start       = data.length - arrayLength;
+    public void addNidPairForRefex(int refexNid, int memberNid) {
+        if (!isRefexMemberAlreadyThere(memberNid)) {
+            int   arrayLength          = data.length - data[REFEX_OFFSET_INDEX];
+            int[] nidPairForRefexArray = new int[arrayLength + 2];
 
-      for (int i = start; i < data.length; i++) {
-         if (data[i] == memberNid) {
-            return;    // already there...
-         }
-      }
-
-      int[] nidPairForRefexArray = new int[arrayLength + 2];
-
-      nidPairForRefexArray[arrayLength]     = refexNid;
-      nidPairForRefexArray[arrayLength + 1] = memberNid;
-      System.arraycopy(data, data[REFEX_OFFSET_INDEX], nidPairForRefexArray, 0,
-                       nidPairForRefexArray.length - 2);
-      updateData(getRelationshipOutgoingArray(), getDestinationOriginNids(), nidPairForRefexArray);
-   }
-
-   public void forgetNidPairForRefex(int refexNid, int memberNid) {
-      int arrayLength = data.length - data[REFEX_OFFSET_INDEX];
-      int start       = data.length - arrayLength;
-
-      for (int i = start; i < data.length; i++) {
-         if (data[i] == memberNid) {
-            int[] nidPairForRefexArray = new int[arrayLength - 2];
-
-            System.arraycopy(data, data[REFEX_OFFSET_INDEX], nidPairForRefexArray, 0, i);
-            System.arraycopy(data, i + 2, nidPairForRefexArray, 0, arrayLength - i);
+            nidPairForRefexArray[arrayLength]     = refexNid;
+            nidPairForRefexArray[arrayLength + 1] = memberNid;
+            System.arraycopy(data, data[REFEX_OFFSET_INDEX], nidPairForRefexArray, 0, nidPairForRefexArray.length - 2);
             updateData(getRelationshipOutgoingArray(), getDestinationOriginNids(), nidPairForRefexArray);
+        }
+    }
 
-            return;
-         }
-      }
-   }
+    public void forgetNidPairForRefex(int refexNid, int memberNid) {
+        int arrayLength = data.length - data[REFEX_OFFSET_INDEX];
+        int start       = data.length - arrayLength;
 
-   public int[] updateData(int[] relationshipOutgoingData, int[] destinationOriginData, int[] refexData) {
-      int length = relationshipOutgoingData.length + destinationOriginData.length + refexData.length
-                   + RELATIONSHIP_OFFSET;
+        for (int i = start; i < data.length; i++) {
+            if (data[i] == memberNid) {
+                int[] nidPairForRefexArray = new int[arrayLength - 2];
 
-      data                           = new int[length];
-      data[DESTINATION_OFFSET_INDEX] = relationshipOutgoingData.length + RELATIONSHIP_OFFSET;
-      data[REFEX_OFFSET_INDEX]       = data[DESTINATION_OFFSET_INDEX] + destinationOriginData.length;
-      System.arraycopy(relationshipOutgoingData, 0, data, RELATIONSHIP_OFFSET,
-                       relationshipOutgoingData.length);
-      System.arraycopy(destinationOriginData, 0, data, data[DESTINATION_OFFSET_INDEX],
-                       destinationOriginData.length);
-      System.arraycopy(refexData, 0, data, data[REFEX_OFFSET_INDEX], refexData.length);
+                System.arraycopy(data, data[REFEX_OFFSET_INDEX], nidPairForRefexArray, 0, i);
+                System.arraycopy(data, i + 2, nidPairForRefexArray, 0, arrayLength - i);
+                updateData(getRelationshipOutgoingArray(), getDestinationOriginNids(), nidPairForRefexArray);
 
-      return data;
-   }
-
-   //~--- get methods ---------------------------------------------------------
-
-   public int[] getData() {
-      if (data.length == 2) {
-         return null;
-      }
-
-      return data;
-   }
-
-   /**
-    *
-    * @return int[] of relationship nids that point to this component
-    */
-   public int[] getDestRelNids(int cNid) throws IOException {
-      HashSet<Integer> returnValues = new HashSet<>();
-      int[]            originCNids  = getDestinationOriginNids();
-
-      for (int originCNid : originCNids) {
-         ConceptChronicleBI c = Ts.get().getConcept(originCNid);
-
-         for (RelationshipChronicleBI r : c.getRelsOutgoing()) {
-            if (r.getDestinationNid() == cNid) {
-               returnValues.add(r.getNid());
+                return;
             }
-         }
-      }
+        }
+    }
 
-      int[] returnValueArray = new int[returnValues.size()];
-      int   i                = 0;
+    public int[] updateData(int[] relationshipOutgoingData, int[] destinationOriginData, int[] refexData) {
+        int length = relationshipOutgoingData.length + destinationOriginData.length + refexData.length
+                     + RELATIONSHIP_OFFSET;
 
-      for (Integer nid : returnValues) {
-         returnValueArray[i++] = nid;
-      }
+        data                           = new int[length];
+        data[DESTINATION_OFFSET_INDEX] = relationshipOutgoingData.length + RELATIONSHIP_OFFSET;
+        data[REFEX_OFFSET_INDEX]       = data[DESTINATION_OFFSET_INDEX] + destinationOriginData.length;
+        System.arraycopy(relationshipOutgoingData, 0, data, RELATIONSHIP_OFFSET, relationshipOutgoingData.length);
+        System.arraycopy(destinationOriginData, 0, data, data[DESTINATION_OFFSET_INDEX], destinationOriginData.length);
+        System.arraycopy(refexData, 0, data, data[REFEX_OFFSET_INDEX], refexData.length);
 
-      return returnValueArray;
-   }
+        return data;
+    }
 
-   /**
-    *
-    * @param relTypes
-    * @return int[] of relationship nids that point to this component
-    */
-   public int[] getDestRelNids(int cNid, NidSetBI relTypes) throws IOException {
-      HashSet<Integer> returnValues = new HashSet<>();
-      int[]            originCNids  = getDestinationOriginNids();
+    public int[] getData() {
+        if (data.length == 2) {
+            return null;
+        }
 
-      for (int originCNid : originCNids) {
-         ConceptChronicleBI c = Ts.get().getConcept(originCNid);
+        return data;
+    }
 
-         for (RelationshipChronicleBI r : c.getRelsOutgoing()) {
-            if (r.getDestinationNid() == cNid) {
-               for (RelationshipVersionBI rv : r.getVersions()) {
-                  if (relTypes.contains(rv.getTypeNid())) {
-                     returnValues.add(r.getNid());
+    /**
+     *
+     * @return int[] of relationship nids that point to this component
+     */
+    public int[] getDestRelNids(int cNid) throws IOException {
+        HashSet<Integer> returnValues = new HashSet<>();
+        int[]            originCNids  = getDestinationOriginNids();
 
-                     break;
-                  }
-               }
+        for (int originCNid : originCNids) {
+            ConceptChronicleBI c = Ts.get().getConcept(originCNid);
+
+            for (RelationshipChronicleBI r : c.getRelsOutgoing()) {
+                if (r.getDestinationNid() == cNid) {
+                    returnValues.add(r.getNid());
+                }
             }
-         }
-      }
+        }
 
-      int[] returnValueArray = new int[returnValues.size()];
-      int   i                = 0;
+        int[] returnValueArray = new int[returnValues.size()];
+        int   i                = 0;
 
-      for (Integer nid : returnValues) {
-         returnValueArray[i++] = nid;
-      }
+        for (Integer nid : returnValues) {
+            returnValueArray[i++] = nid;
+        }
 
-      return returnValueArray;
-   }
+        return returnValueArray;
+    }
 
-   /**
-    *
-    * @param vc
-    * @return int[] of relationship nids that point to this component
-    */
-   public int[] getDestRelNids(int cNid, ViewCoordinate vc) {
-      throw new UnsupportedOperationException("Not yet implemented");
-   }
+    /**
+     *
+     * @param relTypes
+     * @return int[] of relationship nids that point to this component
+     */
+    public int[] getDestRelNids(int cNid, NidSetBI relTypes) throws IOException {
+        HashSet<Integer> returnValues = new HashSet<>();
+        int[]            originCNids  = getDestinationOriginNids();
 
-   public Collection<Relationship> getDestRels(int cNid) throws IOException {
-      HashSet<Relationship> returnValues = new HashSet<>();
-      int[]                 originCNids  = getDestinationOriginNids();
+        for (int originCNid : originCNids) {
+            ConceptChronicleBI c = Ts.get().getConcept(originCNid);
 
-      for (int originCNid : originCNids) {
-         Concept c = Concept.get(originCNid);
+            for (RelationshipChronicleBI r : c.getRelsOutgoing()) {
+                if (r.getDestinationNid() == cNid) {
+                    for (RelationshipVersionBI rv : r.getVersions()) {
+                        if (relTypes.contains(rv.getTypeNid())) {
+                            returnValues.add(r.getNid());
 
-         for (Relationship r : c.getRelsOutgoing()) {
-            if (r.getDestinationNid() == cNid) {
-               returnValues.add(r);
+                            break;
+                        }
+                    }
+                }
             }
-         }
-      }
+        }
 
-      return returnValues;
-   }
+        int[] returnValueArray = new int[returnValues.size()];
+        int   i                = 0;
 
-   /**
-    *
-    * @return int[] of concept nids with relationships that point to this component
-    */
-   public int[] getDestinationOriginNids() {
-      int   arrayLength           = data[REFEX_OFFSET_INDEX] - data[DESTINATION_OFFSET_INDEX];
-      int[] destinationOriginNids = new int[arrayLength];
+        for (Integer nid : returnValues) {
+            returnValueArray[i++] = nid;
+        }
 
-      System.arraycopy(data, data[DESTINATION_OFFSET_INDEX], destinationOriginNids, 0, arrayLength);
+        return returnValueArray;
+    }
 
-      return destinationOriginNids;
-   }
+    /**
+     *
+     * @param vc
+     * @return int[] of relationship nids that point to this component
+     */
+    public int[] getDestRelNids(int cNid, ViewCoordinate vc) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 
-   public NidPairForRefex[] getNidPairsForRefsets() {
-      int arrayLength = data.length - data[REFEX_OFFSET_INDEX];
+    public Collection<Relationship> getDestRels(int cNid) throws IOException {
+        HashSet<Relationship> returnValues = new HashSet<>();
+        int[]                 originCNids  = getDestinationOriginNids();
 
-      assert arrayLength % 2 == 0;
+        for (int originCNid : originCNids) {
+            Concept c = Concept.get(originCNid);
 
-      if (arrayLength < 2) {
-         return new NidPairForRefex[0];
-      }
-
-      NidPairForRefex[] returnValues = new NidPairForRefex[arrayLength / 2];
-      int               start        = data[REFEX_OFFSET_INDEX];
-      int               returnIndex  = 0;
-
-      for (int i = start; i < data.length; i = i + 2) {
-         returnValues[returnIndex++] = NidPairForRefex.getRefexNidMemberNidPair(data[i], data[i + 1]);
-      }
-
-      return returnValues;
-   }
-
-   public int[] getRefexIndexArray() {
-      int   arrayLength               = data.length - data[REFEX_OFFSET_INDEX];
-      int[] relationshipOutgoingArray = new int[arrayLength];
-
-      if (arrayLength > 0) {
-         System.arraycopy(data, data[REFEX_OFFSET_INDEX], relationshipOutgoingArray, 0, arrayLength);
-      }
-
-      return relationshipOutgoingArray;
-   }
-
-   public int[] getRelationshipOutgoingArray() {
-      int   arrayLength               = data[DESTINATION_OFFSET_INDEX] - RELATIONSHIP_OFFSET;
-      int[] relationshipOutgoingArray = new int[arrayLength];
-
-      if (arrayLength > 0) {
-         System.arraycopy(data, RELATIONSHIP_OFFSET, relationshipOutgoingArray, 0, arrayLength);
-      }
-
-      return relationshipOutgoingArray;
-   }
-
-   /**
-    *
-    * @return a <code>RelationshipIndexRecord</code> backed by the data in this array.
-    */
-   public RelationshipIndexRecord getRelationshipsRecord() {
-      return new RelationshipIndexRecord(data, RELATIONSHIP_OFFSET, data[DESTINATION_OFFSET_INDEX]);
-   }
-
-   boolean isKindOf(int parentNid, ViewCoordinate vc, RelativePositionComputerBI computer)
-           throws IOException, ContradictionException {
-      HashSet<Integer> visitedSet = new HashSet<>();
-
-      return isKindOfWithVisitedSet(parentNid, vc, computer, visitedSet);
-   }
-
-   boolean isKindOfWithVisitedSet(int parentNid, ViewCoordinate vc, RelativePositionComputerBI computer,
-                                  HashSet<Integer> visitedSet)
-           throws IOException, ContradictionException {
-      if (data[DESTINATION_OFFSET_INDEX] > RELATIONSHIP_OFFSET) {
-         for (RelationshipIndexRecord record : getRelationshipsRecord()) {
-            if (!visitedSet.contains(record.getDestinationNid())) {
-               if (record.isActiveTaxonomyRelationship(vc, computer)) {
-                  visitedSet.add(record.getDestinationNid());
-
-                  if (record.getDestinationNid() == parentNid) {
-                     return true;
-                  } else {
-                     IndexCacheRecord possibleParentRecord =
-                        Bdb.getNidCNidMap().getIndexCacheRecord(record.getDestinationNid());
-
-                     if (possibleParentRecord.isKindOfWithVisitedSet(parentNid, vc, computer, visitedSet)) {
-                        return true;
-                     }
-                  }
-               }
+            for (Relationship r : c.getRelsOutgoing()) {
+                if (r.getDestinationNid() == cNid) {
+                    returnValues.add(r);
+                }
             }
-         }
-      }
+        }
 
-      return false;
-   }
-   
-   
+        return returnValues;
+    }
+
+    /**
+     *
+     * @return int[] of concept nids with relationships that point to this component
+     */
+    public int[] getDestinationOriginNids() {
+        int   arrayLength           = data[REFEX_OFFSET_INDEX] - data[DESTINATION_OFFSET_INDEX];
+        int[] destinationOriginNids = new int[arrayLength];
+
+        System.arraycopy(data, data[DESTINATION_OFFSET_INDEX], destinationOriginNids, 0, arrayLength);
+
+        return destinationOriginNids;
+    }
+
+    public NidPairForRefex[] getNidPairsForRefsets() {
+        int arrayLength = data.length - data[REFEX_OFFSET_INDEX];
+
+        assert arrayLength % 2 == 0;
+
+        if (arrayLength < 2) {
+            return new NidPairForRefex[0];
+        }
+
+        NidPairForRefex[] returnValues = new NidPairForRefex[arrayLength / 2];
+        int               start        = data[REFEX_OFFSET_INDEX];
+        int               returnIndex  = 0;
+
+        for (int i = start; i < data.length; i = i + 2) {
+            returnValues[returnIndex++] = NidPairForRefex.getRefexNidMemberNidPair(data[i], data[i + 1]);
+        }
+
+        return returnValues;
+    }
+
+    public int[] getRefexIndexArray() {
+        int   arrayLength               = data.length - data[REFEX_OFFSET_INDEX];
+        int[] relationshipOutgoingArray = new int[arrayLength];
+
+        if (arrayLength > 0) {
+            System.arraycopy(data, data[REFEX_OFFSET_INDEX], relationshipOutgoingArray, 0, arrayLength);
+        }
+
+        return relationshipOutgoingArray;
+    }
+
+    public int[] getRelationshipOutgoingArray() {
+        int   arrayLength               = data[DESTINATION_OFFSET_INDEX] - RELATIONSHIP_OFFSET;
+        int[] relationshipOutgoingArray = new int[arrayLength];
+
+        if (arrayLength > 0) {
+            System.arraycopy(data, RELATIONSHIP_OFFSET, relationshipOutgoingArray, 0, arrayLength);
+        }
+
+        return relationshipOutgoingArray;
+    }
+
+    /**
+     *
+     * @return a <code>RelationshipIndexRecord</code> backed by the data in this array.
+     */
+    public RelationshipIndexRecord getRelationshipsRecord() {
+        return new RelationshipIndexRecord(data, RELATIONSHIP_OFFSET, data[DESTINATION_OFFSET_INDEX]);
+    }
+
+    boolean isKindOf(int parentNid, ViewCoordinate vc, RelativePositionComputerBI computer)
+            throws IOException, ContradictionException {
+        HashSet<Integer> visitedSet = new HashSet<>();
+
+        return isKindOfWithVisitedSet(parentNid, vc, computer, visitedSet);
+    }
+
+    boolean isKindOfWithVisitedSet(int parentNid, ViewCoordinate vc, RelativePositionComputerBI computer,
+                                   HashSet<Integer> visitedSet)
+            throws IOException, ContradictionException {
+        if (data[DESTINATION_OFFSET_INDEX] > RELATIONSHIP_OFFSET) {
+            for (RelationshipIndexRecord record : getRelationshipsRecord()) {
+                if (!visitedSet.contains(record.getDestinationNid())) {
+                    if (record.isActiveTaxonomyRelationship(vc, computer)) {
+                        visitedSet.add(record.getDestinationNid());
+
+                        if (record.getDestinationNid() == parentNid) {
+                            return true;
+                        } else {
+                            IndexCacheRecord possibleParentRecord =
+                                Bdb.getNidCNidMap().getIndexCacheRecord(record.getDestinationNid());
+
+                            if (possibleParentRecord.isKindOfWithVisitedSet(parentNid, vc, computer, visitedSet)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     boolean isChildOf(int parentNid, ViewCoordinate vc, RelativePositionComputerBI computer)
             throws IOException, ContradictionException {
         if (data[DESTINATION_OFFSET_INDEX] > RELATIONSHIP_OFFSET) {
@@ -352,46 +359,51 @@ public class IndexCacheRecord {
                 }
             }
         }
+
         return false;
     }
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+
         sb.append("Relationships:\n");
+
         if (data[DESTINATION_OFFSET_INDEX] > RELATIONSHIP_OFFSET) {
             for (RelationshipIndexRecord record : getRelationshipsRecord()) {
                 try {
-                    sb.append("  ").append(Concept.get(record.getTypeNid()).toString()).append(" [").
-                            append(record.getDestinationNid()).append("]: ").
-                            append(Concept.get(record.getDestinationNid()).toString()).append(" [").
-                            append(record.getDestinationNid()).append("]\n");
+                    sb.append("  ").append(Concept.get(record.getTypeNid()).toString()).append(" [").append(
+                        record.getDestinationNid()).append("]: ").append(
+                        Concept.get(record.getDestinationNid()).toString()).append(" [").append(
+                        record.getDestinationNid()).append("]\n");
                 } catch (IOException ex) {
                     Logger.getLogger(IndexCacheRecord.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
+
         sb.append("\nRelationship origins:\n");
+
         for (int destinationOrigin : getDestinationOriginNids()) {
             try {
-                sb.append("  ").append(Concept.get(destinationOrigin).toString()).append(" [").
-                            append(destinationOrigin).append("]\n");;
+                sb.append("  ").append(Concept.get(destinationOrigin).toString()).append(" [").append(
+                    destinationOrigin).append("]\n");;
             } catch (IOException ex) {
                 Logger.getLogger(IndexCacheRecord.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+
         sb.append("\nRefsets:\n");
+
         for (NidPairForRefex pair : getNidPairsForRefsets()) {
             try {
-                sb.append("  ").append(Concept.get(pair.getRefexNid()).toString()).append(" [").
-                            append(pair.getRefexNid()).append("], memberNid: ").
-                        append(pair.getMemberNid()).append("\n");
+                sb.append("  ").append(Concept.get(pair.getRefexNid()).toString()).append(" [").append(
+                    pair.getRefexNid()).append("], memberNid: ").append(pair.getMemberNid()).append("\n");
             } catch (IOException ex) {
                 Logger.getLogger(IndexCacheRecord.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         return sb.toString();
     }
-
 }
