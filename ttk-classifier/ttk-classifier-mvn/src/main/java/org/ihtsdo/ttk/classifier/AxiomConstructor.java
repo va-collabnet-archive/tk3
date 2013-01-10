@@ -90,18 +90,20 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
     public void processUnfetchedConceptData(int cNid, ConceptFetcherBI fetcher) throws Exception {
         ConceptVersionBI                      cv         = fetcher.fetch(vc);
         IConcept                              c          = getConcept(cNid);
+        ArrayList<IConcept>                   defn       = new ArrayList<>();
         HashMap<Integer, ArrayList<IConcept>> roleGroups = new HashMap<>();
 
+        // Aggregate the conjuncts of the necessary condition into defn
         for (RelationshipVersionBI rv : cv.getRelsOutgoingActiveIsa()) {
-            axioms.add(f.createConceptInclusion(c, getConcept(rv.getDestinationNid())));
+            defn.add(getConcept(rv.getDestinationNid()));
         }
 
         for (RelationshipVersionBI rv : cv.getRelsOutgoingActive()) {
             if (roleConcepts.isMember(rv.getTypeNid())) {
                 if (rv.getGroup() == 0) {
-                    axioms.add(f.createConceptInclusion(c,
+                    defn.add(
                             f.createExistential(getRole(rv.getTypeNid()),
-                                                getConcept(rv.getDestinationNid()))));
+                                                getConcept(rv.getDestinationNid())));
                 } else {
                     if (!roleGroups.containsKey(rv.getGroup())) {
                         roleGroups.put(rv.getGroup(), new ArrayList<IConcept>());
@@ -114,24 +116,15 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
         }
 
         for (ArrayList<IConcept> group : roleGroups.values()) {
-            axioms.add(f.createConceptInclusion(c, f.createConjunction(group.toArray(new IConcept[group.size()]))));
+            defn.add(f.createConjunction(group.toArray(new IConcept[group.size()])));
         }
 
+        IConcept expr = f.createConjunction(defn.toArray(new IConcept[defn.size()]));
+        axioms.add(f.createConceptInclusion(c, expr));
+
+        // check if concept is fully defined and add the sufficient condition axiom
         if (cv.getConAttrsActive() != null && cv.getConAttrsActive().isDefined()) {
-            for (RelationshipVersionBI rv : cv.getRelsOutgoingActiveIsa()) {
-                axioms.add(f.createConceptInclusion(getConcept(rv.getDestinationNid()), c));
-            }
-
-            for (RelationshipVersionBI rv : cv.getRelsOutgoingActive()) {
-                if (roleConcepts.isMember(rv.getTypeNid()) && (rv.getGroup() == 0)) {
-                    axioms.add(f.createConceptInclusion(f.createExistential(getRole(rv.getTypeNid()),
-                            getConcept(rv.getDestinationNid())), c));
-                }
-            }
-
-            for (ArrayList<IConcept> group : roleGroups.values()) {
-                axioms.add(f.createConceptInclusion(f.createConjunction(group.toArray(new IConcept[group.size()])), c));
-            }
+            axioms.add(f.createConceptInclusion(expr, c));
         }
     }
 
