@@ -17,6 +17,7 @@ package org.ihtsdo.ttk.classifier;
 
 import au.csiro.ontology.Factory;
 import au.csiro.ontology.axioms.IAxiom;
+import au.csiro.ontology.axioms.RoleInclusion;
 import au.csiro.ontology.model.IConcept;
 import au.csiro.ontology.model.INamedRole;
 
@@ -93,6 +94,16 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
         ArrayList<IConcept>                   defn       = new ArrayList<>();
         HashMap<Integer, ArrayList<IConcept>> roleGroups = new HashMap<>();
 
+        // Special handling to support role 
+        // RoleInclusion axiom of the form new RoleInclusion(new Role<>(childRole), new Role<>(parentRole)).
+        if (roleConcepts.isMember(cNid)) {
+            for (RelationshipVersionBI rv : cv.getRelsOutgoingActiveIsa()) {
+                if (roleConcepts.isMember(rv.getDestinationNid())) {
+                    axioms.add(new RoleInclusion(getRole(cNid), getRole(rv.getDestinationNid())));
+                }
+            }
+        }
+        
         // Aggregate the conjuncts of the necessary condition into defn
         for (RelationshipVersionBI rv : cv.getRelsOutgoingActiveIsa()) {
             defn.add(getConcept(rv.getDestinationNid()));
