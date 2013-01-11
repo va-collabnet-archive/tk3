@@ -78,7 +78,7 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
         }
     }
 
-    IConcept getConcept(int nid) {
+    public final IConcept getConcept(int nid) {
         if (concepts.containsKey(nid)) {
             return concepts.get(nid);
         }
@@ -93,7 +93,7 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
         return newC;
     }
 
-    final INamedRole getRole(int nid) {
+    public final INamedRole getRole(int nid) {
         if (roles.containsKey(nid)) {
             return roles.get(nid);
         }
@@ -138,7 +138,7 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
                     if (!roleGroups.containsKey(rv.getGroup())) {
                         roleGroups.put(rv.getGroup(), new ArrayList<IConcept>());
                     }
-
+ 
                     roleGroups.get(rv.getGroup()).add(f.createExistential(getRole(rv.getTypeNid()),
                             getConcept(rv.getDestinationNid())));
                 }
