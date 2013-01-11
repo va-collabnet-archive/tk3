@@ -125,7 +125,7 @@ public class LoadBdb extends AbstractMojo {
          ConceptChronicleBI snomedConcept = Ts.get().getConceptForNid(nid);
          System.out.println("Found concept from alt id: " + snomedConcept);
          
-         System.out.println("Start classify");
+         System.out.println("\nStart classify");
          Classifier.classify();
          System.out.println("End classify");
          
