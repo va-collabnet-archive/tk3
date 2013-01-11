@@ -13,7 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
+
 package org.ihtsdo.ttk.classifier;
+
+//~--- non-JDK imports --------------------------------------------------------
 
 import au.csiro.ontology.Factory;
 import au.csiro.ontology.axioms.IAxiom;
@@ -26,7 +31,10 @@ import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.ttk.api.metadata.binding.Snomed;
+import org.ihtsdo.ttk.api.metadata.binding.Taxonomies;
 import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
+import org.ihtsdo.ttk.api.spec.ValidationException;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -42,48 +50,61 @@ import java.util.concurrent.ConcurrentSkipListSet;
  * @author kec
  */
 public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
-    NidBitSetBI                   kindOfConcepts;
-    NidBitSetBI                   roleConcepts;
-    Factory<Integer>              f;
-    ConcurrentSkipListSet<IAxiom> axioms;
-    ViewCoordinate                vc;
-    INamedRole<Integer>           roleGroup;
-    ConcurrentHashMap<Integer, IConcept> concepts;
+    NidBitSetBI                            kindOfConcepts;
+    NidBitSetBI                            roleConcepts;
+    Factory<Integer>                       f;
+    ConcurrentSkipListSet<IAxiom>          axioms;
+    ViewCoordinate                         vc;
+    INamedRole<Integer>                    roleGroup;
+    ConcurrentHashMap<Integer, IConcept>   concepts;
     ConcurrentHashMap<Integer, INamedRole> roles;
 
-    public AxiomConstructor(NidBitSetBI kindOfConcepts, NidBitSetBI roleConcepts, Factory<Integer> f,
-                            ViewCoordinate vc) {
+    public AxiomConstructor(NidBitSetBI kindOfConcepts, NidBitSetBI roleConcepts, Factory<Integer> f, ViewCoordinate vc)
+            throws IOException, ValidationException {
         this.kindOfConcepts = kindOfConcepts;
         this.roleConcepts   = roleConcepts;
         this.f              = f;
         this.vc             = vc;
         axioms              = new ConcurrentSkipListSet<>();
-        concepts = new ConcurrentHashMap<>(kindOfConcepts.cardinality());
-        roles = new ConcurrentHashMap<>(roleConcepts.cardinality());
+        concepts            = new ConcurrentHashMap<>(kindOfConcepts.cardinality());
+        roles               = new ConcurrentHashMap<>(roleConcepts.cardinality());
         roleGroup           = f.createRole(Integer.MIN_VALUE);
+
+        // Add right identity for SNOMED.
+        if (kindOfConcepts.isMember(Taxonomies.SNOMED.getStrict(vc).getNid())) {
+            axioms.add(new RoleInclusion(new INamedRole[] { getRole(Snomed.DIRECT_SUBSTANCE.getStrict(vc).getNid()),
+                    getRole(Snomed.HAS_ACTIVE_INGREDIENT.getStrict(vc).getNid()) }, getRole(
+                        Snomed.DIRECT_SUBSTANCE.getStrict(vc).getNid())));
+        }
     }
-    
+
     IConcept getConcept(int nid) {
         if (concepts.containsKey(nid)) {
             return concepts.get(nid);
         }
+
         IConcept newC = f.createConcept(nid);
         IConcept oldC = concepts.putIfAbsent(nid, newC);
+
         if (oldC != null) {
             return oldC;
         }
+
         return newC;
     }
 
-    INamedRole getRole(int nid) {
+    final INamedRole getRole(int nid) {
         if (roles.containsKey(nid)) {
             return roles.get(nid);
         }
+
         INamedRole newR = f.createRole(nid);
         INamedRole oldR = roles.putIfAbsent(nid, newR);
+
         if (oldR != null) {
             return oldR;
         }
+
         return newR;
     }
 
@@ -94,7 +115,7 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
         ArrayList<IConcept>                   defn       = new ArrayList<>();
         HashMap<Integer, ArrayList<IConcept>> roleGroups = new HashMap<>();
 
-        // Special handling to support role 
+        // Special handling to support role groups...
         // RoleInclusion axiom of the form new RoleInclusion(new Role<>(childRole), new Role<>(parentRole)).
         if (roleConcepts.isMember(cNid)) {
             for (RelationshipVersionBI rv : cv.getRelsOutgoingActiveIsa()) {
@@ -103,7 +124,7 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
                 }
             }
         }
-        
+
         // Aggregate the conjuncts of the necessary condition into defn
         for (RelationshipVersionBI rv : cv.getRelsOutgoingActiveIsa()) {
             defn.add(getConcept(rv.getDestinationNid()));
@@ -112,9 +133,7 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
         for (RelationshipVersionBI rv : cv.getRelsOutgoingActive()) {
             if (roleConcepts.isMember(rv.getTypeNid())) {
                 if (rv.getGroup() == 0) {
-                    defn.add(
-                            f.createExistential(getRole(rv.getTypeNid()),
-                                                getConcept(rv.getDestinationNid())));
+                    defn.add(f.createExistential(getRole(rv.getTypeNid()), getConcept(rv.getDestinationNid())));
                 } else {
                     if (!roleGroups.containsKey(rv.getGroup())) {
                         roleGroups.put(rv.getGroup(), new ArrayList<IConcept>());
@@ -131,10 +150,11 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
         }
 
         IConcept expr = f.createConjunction(defn.toArray(new IConcept[defn.size()]));
+
         axioms.add(f.createConceptInclusion(c, expr));
 
         // check if concept is fully defined and add the sufficient condition axiom
-        if (cv.getConAttrsActive() != null && cv.getConAttrsActive().isDefined()) {
+        if ((cv.getConAttrsActive() != null) && cv.getConAttrsActive().isDefined()) {
             axioms.add(f.createConceptInclusion(expr, c));
         }
     }
@@ -149,4 +169,3 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
         return true;
     }
 }
-
