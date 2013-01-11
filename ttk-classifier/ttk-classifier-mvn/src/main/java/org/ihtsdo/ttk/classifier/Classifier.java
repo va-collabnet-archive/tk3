@@ -22,12 +22,14 @@ package org.ihtsdo.ttk.classifier;
 
 import au.csiro.ontology.Factory;
 import au.csiro.ontology.IOntology;
+import au.csiro.ontology.axioms.IAxiom;
 import au.csiro.ontology.classification.IReasoner;
 import au.csiro.ontology.model.IConcept;
 import au.csiro.snorocket.core.SnorocketReasoner;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.RelAssertionType;
@@ -116,28 +118,23 @@ public class Classifier {
         FileInputStream fis = new FileInputStream("classifier.state");
         reasoner = SnorocketReasoner.load(fis);
         f        = new Factory<>();
-        ac       = new AxiomConstructor(kindOfConcepts, roleConcepts, f, vc);
         System.out.println("Read time: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
         time = System.currentTimeMillis();
 
         
-        Ts.get().iterateConceptDataInParallel(ac);
-        System.out.println("Axiom constructor: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
-        time = System.currentTimeMillis();
-        System.out.println(TimeHelper.formatDate(time));
         
         System.out.println("Adding new concept");
         // Add new concept
-        IConcept newConcept = ac.getConcept(Integer.MAX_VALUE);
+        IConcept newConcept = f.createConcept(Integer.MAX_VALUE);
         // Add new is-a
         ArrayList<IConcept>                   defn       = new ArrayList<>();
-        defn.add(ac.getConcept(Taxonomies.SNOMED.getStrict(vc).getNid()));
+        defn.add(f.createConcept(Taxonomies.SNOMED.getStrict(vc).getNid()));
         IConcept expr = f.createConjunction(defn.toArray(new IConcept[defn.size()]));
-
-        ac.axioms.add(f.createConceptInclusion(newConcept, expr));
+        HashSet<IAxiom> newAxioms = new HashSet();
+        newAxioms.add(f.createConceptInclusion(newConcept, expr));
         System.out.println("Start classify");
  
-        reasoner.classify(ac.axioms);
+        reasoner.classify(newAxioms);
         System.out.println("Classify: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
         time = System.currentTimeMillis();
         System.out.println(TimeHelper.formatDate(time));
