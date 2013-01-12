@@ -84,8 +84,8 @@ public class NidCNidMapBdb extends ComponentBdb {
 
         if (!record.isRefexMemberAlreadyThere(pair.getMemberNid())) {
             locks.lock(nid);
-
             try {
+                record = new IndexCacheRecord(indexCacheRecords.get()[mapIndex][nidIndexInMap]);
                 record.addNidPairForRefex(pair.getRefexNid(), pair.getMemberNid());
                 indexCacheRecords.get()[mapIndex][nidIndexInMap] = record.getData();
                 mapChanged[mapIndex]                             = true;
@@ -113,6 +113,7 @@ public class NidCNidMapBdb extends ComponentBdb {
             locks.lock(destinationCNid);
 
             try {
+                record = new IndexCacheRecord(indexCacheRecords.get()[mapIndex][nidIndexInMap]);
                 record.addDestinationOriginNid(originCNid);
                 indexCacheRecords.get()[mapIndex][nidIndexInMap] = record.getData();
                 mapChanged[mapIndex]                             = true;
