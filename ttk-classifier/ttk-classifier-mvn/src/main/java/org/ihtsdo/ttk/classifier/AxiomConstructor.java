@@ -20,46 +20,52 @@ package org.ihtsdo.ttk.classifier;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import au.csiro.ontology.Factory;
-import au.csiro.ontology.axioms.IAxiom;
-import au.csiro.ontology.axioms.RoleInclusion;
-import au.csiro.ontology.model.IConcept;
-import au.csiro.ontology.model.INamedRole;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
+import org.ihtsdo.ttk.api.ComponentBI;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
 import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.ttk.api.id.IdBI;
 import org.ihtsdo.ttk.api.metadata.binding.Snomed;
 import org.ihtsdo.ttk.api.metadata.binding.Taxonomies;
 import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.ttk.api.spec.ValidationException;
 
+import au.csiro.ontology.Factory;
+import au.csiro.ontology.axioms.IAxiom;
+import au.csiro.ontology.axioms.RoleInclusion;
+import au.csiro.ontology.model.IConcept;
+import au.csiro.ontology.model.INamedRole;
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.IOException;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  *
  * @author kec
  */
 public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
-    NidBitSetBI                            kindOfConcepts;
-    NidBitSetBI                            roleConcepts;
-    Factory<Integer>                       f;
-    ConcurrentSkipListSet<IAxiom>          axioms;
-    ViewCoordinate                         vc;
-    INamedRole<Integer>                    roleGroup;
-    ConcurrentHashMap<Integer, IConcept>   concepts;
-    ConcurrentHashMap<Integer, INamedRole> roles;
+    NidBitSetBI                         kindOfConcepts;
+    NidBitSetBI                         roleConcepts;
+    Factory<String>                       f;
+    ConcurrentSkipListSet<IAxiom>       axioms;
+    ViewCoordinate                      vc;
+    INamedRole<String>                    roleGroup;
+    ConcurrentHashMap<String, IConcept>   concepts;
+    @SuppressWarnings("rawtypes")
+	ConcurrentHashMap<String, INamedRole> roles;
+    Set<String>                           neverGroupedUuids;
 
-    public AxiomConstructor(NidBitSetBI kindOfConcepts, NidBitSetBI roleConcepts, Factory<Integer> f, ViewCoordinate vc)
+    public AxiomConstructor(NidBitSetBI kindOfConcepts, NidBitSetBI roleConcepts, Factory<String> f, ViewCoordinate vc)
             throws IOException, ValidationException {
         this.kindOfConcepts = kindOfConcepts;
         this.roleConcepts   = roleConcepts;
@@ -68,17 +74,43 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
         axioms              = new ConcurrentSkipListSet<>();
         concepts            = new ConcurrentHashMap<>(kindOfConcepts.cardinality());
         roles               = new ConcurrentHashMap<>(roleConcepts.cardinality());
-        roleGroup           = f.createRole(Integer.MIN_VALUE);
+        roleGroup           = f.createRole("RoleGroup");
 
         // Add right identity for SNOMED.
         if (kindOfConcepts.isMember(Taxonomies.SNOMED.getStrict(vc).getNid())) {
-            axioms.add(new RoleInclusion(new INamedRole[] { getRole(Snomed.DIRECT_SUBSTANCE.getStrict(vc).getNid()),
-                    getRole(Snomed.HAS_ACTIVE_INGREDIENT.getStrict(vc).getNid()) }, getRole(
-                        Snomed.DIRECT_SUBSTANCE.getStrict(vc).getNid())));
+            axioms.add(new RoleInclusion(new INamedRole[] { getRole(getUUID(Snomed.DIRECT_SUBSTANCE.getStrict(vc).getNid())),
+                    getRole(getUUID(Snomed.HAS_ACTIVE_INGREDIENT.getStrict(vc).getNid())) }, getRole(
+                    		getUUID(Snomed.DIRECT_SUBSTANCE.getStrict(vc).getNid()))));
         }
+        
+        neverGroupedUuids = new HashSet<>();
+        neverGroupedUuids.add("b4c3f6f9-6937-30fd-8412-d0c77f8a7f73");
+        neverGroupedUuids.add("65bf3b7f-c854-36b5-81c3-4915461020a8");
+        neverGroupedUuids.add("26ca4590-bbe5-327c-a40a-ba56dc86996b");
+        neverGroupedUuids.add("072e7737-e22e-36b5-89d2-4815f0529c63");
+    }
+    
+    public static String getUUID(int nid) throws IOException {
+    	ComponentBI cbi = Ts.get().getComponent(nid);
+    	UUID uuid = cbi.getPrimUuid();
+    	if(uuid == null) {
+    		throw new RuntimeException("Unable to find UUID for nid "+nid);
+    	}
+    	return uuid.toString();
+    }
+    
+    public static Long getSctId(int nid) throws IOException {
+    	for(IdBI id : Ts.get().getComponent(nid).getAllIds()) {
+    		Object denotation = id.getDenotation();
+    		if(denotation instanceof Long) {
+    			return (Long) denotation;
+    		}
+    	}
+    	System.err.println("Unable to find SCT_ID for nid "+nid);
+    	return null;
     }
 
-    public final IConcept getConcept(int nid) {
+    public final IConcept getConcept(String nid) {
         if (concepts.containsKey(nid)) {
             return concepts.get(nid);
         }
@@ -93,7 +125,8 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
         return newC;
     }
 
-    public final INamedRole getRole(int nid) {
+    @SuppressWarnings("rawtypes")
+	public final INamedRole getRole(String nid) {
         if (roles.containsKey(nid)) {
             return roles.get(nid);
         }
@@ -108,10 +141,11 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
         return newR;
     }
 
-    @Override
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
     public void processUnfetchedConceptData(int cNid, ConceptFetcherBI fetcher) throws Exception {
         ConceptVersionBI                      cv         = fetcher.fetch(vc);
-        IConcept                              c          = getConcept(cNid);
+        IConcept                              c          = getConcept(getUUID(cNid));
         ArrayList<IConcept>                   defn       = new ArrayList<>();
         HashMap<Integer, ArrayList<IConcept>> roleGroups = new HashMap<>();
 
@@ -120,42 +154,56 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
         if (roleConcepts.isMember(cNid)) {
             for (RelationshipVersionBI rv : cv.getRelsOutgoingActiveIsa()) {
                 if (roleConcepts.isMember(rv.getDestinationNid())) {
-                    axioms.add(new RoleInclusion(getRole(cNid), getRole(rv.getDestinationNid())));
+                    axioms.add(new RoleInclusion(getRole(getUUID(cNid)), getRole(getUUID(rv.getDestinationNid()))));
                 }
             }
         }
 
         // Aggregate the conjuncts of the necessary condition into defn
         for (RelationshipVersionBI rv : cv.getRelsOutgoingActiveIsa()) {
-            defn.add(getConcept(rv.getDestinationNid()));
+            defn.add(getConcept(getUUID(rv.getDestinationNid())));
         }
 
         for (RelationshipVersionBI rv : cv.getRelsOutgoingActive()) {
             if (roleConcepts.isMember(rv.getTypeNid())) {
                 if (rv.getGroup() == 0) {
-                    defn.add(f.createExistential(getRole(rv.getTypeNid()), getConcept(rv.getDestinationNid())));
+                	// TODO: add role group unless never grouped
+                	String roleUuid = getUUID(rv.getTypeNid());
+                	if(neverGroupedUuids.contains(roleUuid)) {
+                		defn.add(f.createExistential(getRole(roleUuid), 
+                				getConcept(getUUID(rv.getDestinationNid()))));
+                	} else {
+                		defn.add(f.createExistential(roleGroup, 
+                				f.createExistential(getRole(roleUuid), 
+                				getConcept(getUUID(rv.getDestinationNid())))));
+                	}
                 } else {
                     if (!roleGroups.containsKey(rv.getGroup())) {
                         roleGroups.put(rv.getGroup(), new ArrayList<IConcept>());
                     }
  
-                    roleGroups.get(rv.getGroup()).add(f.createExistential(getRole(rv.getTypeNid()),
-                            getConcept(rv.getDestinationNid())));
+                    roleGroups.get(rv.getGroup()).add(f.createExistential(getRole(getUUID(rv.getTypeNid())),
+                            getConcept(getUUID(rv.getDestinationNid()))));
                 }
             }
         }
 
         for (ArrayList<IConcept> group : roleGroups.values()) {
-            defn.add(f.createConjunction(group.toArray(new IConcept[group.size()])));
+        	if(!group.isEmpty()) {
+        		IConcept filler = f.createConjunction(group.toArray(new IConcept[group.size()]));
+        		defn.add(f.createExistential(roleGroup, filler));
+        	}
         }
+        
+        if(!defn.isEmpty()) {
+        	IConcept expr = f.createConjunction(defn.toArray(new IConcept[defn.size()]));
 
-        IConcept expr = f.createConjunction(defn.toArray(new IConcept[defn.size()]));
+        	axioms.add(f.createConceptInclusion(c, expr));
 
-        axioms.add(f.createConceptInclusion(c, expr));
-
-        // check if concept is fully defined and add the sufficient condition axiom
-        if ((cv.getConAttrsActive() != null) && cv.getConAttrsActive().isDefined()) {
-            axioms.add(f.createConceptInclusion(expr, c));
+        	// check if concept is fully defined and add the sufficient condition axiom
+        	if ((cv.getConAttrsActive() != null) && cv.getConAttrsActive().isDefined()) {
+        		axioms.add(f.createConceptInclusion(expr, c));
+        	}
         }
     }
 
