@@ -38,9 +38,9 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
-import org.ihtsdo.ttk.cacco.cc.NidPairForRefex;
-import org.ihtsdo.ttk.cacco.cc.concept.Concept;
-import org.ihtsdo.ttk.cacco.cc.relationship.Relationship;
+import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
+import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 
 /**
  * <h2>Implementation Details</h2> The

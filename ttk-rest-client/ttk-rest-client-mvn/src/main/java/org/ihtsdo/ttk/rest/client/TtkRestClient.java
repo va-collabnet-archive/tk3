@@ -58,13 +58,13 @@ import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.ttk.api.db.DbDependency;
-import org.ihtsdo.ttk.cacco.cc.NidPairForRefex;
-import org.ihtsdo.ttk.cacco.cc.P;
-import org.ihtsdo.ttk.cacco.cc.concept.Concept;
-import org.ihtsdo.ttk.cacco.cc.concept.ConceptDataFetcherI;
-import org.ihtsdo.ttk.cacco.cc.concept.NidDataInMemory;
-import org.ihtsdo.ttk.cacco.cc.relationship.Relationship;
-import org.ihtsdo.ttk.cacco.cc.termstore.Termstore;
+import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
+import org.ihtsdo.ttk.concept.cc.P;
+import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptDataFetcherI;
+import org.ihtsdo.ttk.concept.cc.concept.NidDataInMemory;
+import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
+import org.ihtsdo.ttk.concept.cc.termstore.Termstore;
 
 /**
  *

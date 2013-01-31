@@ -27,9 +27,9 @@ import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
 import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.NidBitSetItrBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
-import org.ihtsdo.ttk.cacco.cc.component.IdentifierSet;
-import org.ihtsdo.ttk.cacco.cc.component.IdentifierSetReadOnly;
-import org.ihtsdo.ttk.cacco.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.component.IdentifierSet;
+import org.ihtsdo.ttk.concept.cc.component.IdentifierSetReadOnly;
+import org.ihtsdo.ttk.concept.cc.concept.Concept;
 
 public class ConceptBdb extends ComponentBdb {
 

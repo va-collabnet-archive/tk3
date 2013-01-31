@@ -12,21 +12,21 @@ import java.util.concurrent.ExecutionException;
 import com.sleepycat.bind.tuple.TupleBinding;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
-import org.ihtsdo.ttk.cacco.cc.attributes.ConceptAttributes;
-import org.ihtsdo.ttk.cacco.cc.attributes.ConceptAttributesRevision;
-import org.ihtsdo.ttk.cacco.cc.component.ConceptAttributesBinder;
-import org.ihtsdo.ttk.cacco.cc.component.ConceptComponent;
-import org.ihtsdo.ttk.cacco.cc.component.ConceptComponentBinder;
-import org.ihtsdo.ttk.cacco.cc.component.DescriptionBinder;
-import org.ihtsdo.ttk.cacco.cc.component.MediaBinder;
-import org.ihtsdo.ttk.cacco.cc.component.RefexMemberBinder;
-import org.ihtsdo.ttk.cacco.cc.component.RelationshipBinder;
-import org.ihtsdo.ttk.cacco.cc.component.Revision;
-import org.ihtsdo.ttk.cacco.cc.concept.Concept;
-import org.ihtsdo.ttk.cacco.cc.concept.I_ManageConceptData;
-import org.ihtsdo.ttk.cacco.cc.concept.IntSetBinder;
-import org.ihtsdo.ttk.cacco.cc.concept.OFFSETS;
-import org.ihtsdo.ttk.cacco.cc.refex.RefexMember;
+import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
+import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributesRevision;
+import org.ihtsdo.ttk.concept.cc.component.ConceptAttributesBinder;
+import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
+import org.ihtsdo.ttk.concept.cc.component.ConceptComponentBinder;
+import org.ihtsdo.ttk.concept.cc.component.DescriptionBinder;
+import org.ihtsdo.ttk.concept.cc.component.MediaBinder;
+import org.ihtsdo.ttk.concept.cc.component.RefexMemberBinder;
+import org.ihtsdo.ttk.concept.cc.component.RelationshipBinder;
+import org.ihtsdo.ttk.concept.cc.component.Revision;
+import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.I_ManageConceptData;
+import org.ihtsdo.ttk.concept.cc.concept.IntSetBinder;
+import org.ihtsdo.ttk.concept.cc.concept.OFFSETS;
+import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 
 public class ConceptBinder extends TupleBinding<Concept> {
 

@@ -360,7 +360,7 @@ the specific language governing permissions and limitations under the License. -
     <modules>
         <module>ttk-api</module>
         <module>ttk-bdb</module>
-        <module>ttk-cacco</module>
+        <module>ttk-concept</module>
         <module>ttk-cern-prim</module>
         <module>ttk-dto</module>
         <module>ttk-fx</module>

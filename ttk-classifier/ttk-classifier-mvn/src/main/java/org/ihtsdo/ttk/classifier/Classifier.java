@@ -110,7 +110,7 @@ public class Classifier {
         System.out.println(TimeHelper.formatDate(time));
         
         System.out.println("Writing state to disk...");
-        try (FileOutputStream fos = new FileOutputStream("c:/temp/classifier_uuid.state", false)) {
+        try (FileOutputStream fos = new FileOutputStream("target/classifier_uuid.state", false)) {
             reasoner.save(fos);
         }
         System.out.println("Write time: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
@@ -119,7 +119,7 @@ public class Classifier {
         
         System.out.println("Reading state from disk...");
 
-        FileInputStream fis = new FileInputStream("classifier.state");
+        FileInputStream fis = new FileInputStream("target/classifier_uuid.state");
         reasoner = SnorocketReasoner.load(fis);
         f        = new Factory<>();
         System.out.println("Read time: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));

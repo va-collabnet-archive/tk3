@@ -30,20 +30,20 @@ import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipChronicleBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
-import org.ihtsdo.ttk.cacco.cc.P;
-import org.ihtsdo.ttk.cacco.cc.attributes.ConceptAttributes;
-import org.ihtsdo.ttk.cacco.cc.attributes.ConceptAttributesRevision;
-import org.ihtsdo.ttk.cacco.cc.component.RevisionSet;
-import org.ihtsdo.ttk.cacco.cc.concept.Concept;
-import org.ihtsdo.ttk.cacco.cc.description.Description;
-import org.ihtsdo.ttk.cacco.cc.description.DescriptionRevision;
-import org.ihtsdo.ttk.cacco.cc.media.Media;
-import org.ihtsdo.ttk.cacco.cc.media.MediaRevision;
-import org.ihtsdo.ttk.cacco.cc.refex.RefexMember;
-import org.ihtsdo.ttk.cacco.cc.refex.RefexMemberFactory;
-import org.ihtsdo.ttk.cacco.cc.refex.RefexRevision;
-import org.ihtsdo.ttk.cacco.cc.relationship.Relationship;
-import org.ihtsdo.ttk.cacco.cc.relationship.RelationshipRevision;
+import org.ihtsdo.ttk.concept.cc.P;
+import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
+import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributesRevision;
+import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
+import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.description.Description;
+import org.ihtsdo.ttk.concept.cc.description.DescriptionRevision;
+import org.ihtsdo.ttk.concept.cc.media.Media;
+import org.ihtsdo.ttk.concept.cc.media.MediaRevision;
+import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
+import org.ihtsdo.ttk.concept.cc.refex.RefexMemberFactory;
+import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
+import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
+import org.ihtsdo.ttk.concept.cc.relationship.RelationshipRevision;
 
 public class BdbTermBuilder implements TerminologyBuilderBI {
 

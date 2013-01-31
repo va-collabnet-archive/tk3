@@ -44,12 +44,12 @@ import org.ihtsdo.ttk.bdb.temp.ConsoleActivityViewer;
 import org.ihtsdo.ttk.bdb.temp.I_ShowActivity;
 import org.ihtsdo.ttk.api.ExternalStampBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.cacco.cc.NidPairForRefex;
-import org.ihtsdo.ttk.cacco.cc.P;
-import org.ihtsdo.ttk.cacco.cc.ReferenceConcepts;
-import org.ihtsdo.ttk.cacco.cc.concept.Concept;
-import org.ihtsdo.ttk.cacco.cc.concept.OFFSETS;
-import org.ihtsdo.ttk.cacco.cc.lucene.LuceneManager;
+import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
+import org.ihtsdo.ttk.concept.cc.P;
+import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
+import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.OFFSETS;
+import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
 
 public class Bdb {
 

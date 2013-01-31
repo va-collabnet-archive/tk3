@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ttk-cacco-mvn</artifactId>
+            <artifactId>ttk-concept-mvn</artifactId>
             <version>${project.version}</version>
             <type>jar</type>
         </dependency>

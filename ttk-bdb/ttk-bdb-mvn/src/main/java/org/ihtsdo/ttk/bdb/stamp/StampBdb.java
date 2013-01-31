@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.ihtsdo.ttk.bdb.Bdb;
 import org.ihtsdo.ttk.bdb.ComponentBdb;
 import org.ihtsdo.ttk.bdb.temp.AceLog;
-import org.ihtsdo.ttk.cacco.cc.Position;
+import org.ihtsdo.ttk.concept.cc.Position;
 
 /**
  * @author kec

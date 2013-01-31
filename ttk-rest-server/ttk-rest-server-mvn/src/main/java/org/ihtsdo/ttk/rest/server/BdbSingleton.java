@@ -14,8 +14,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
-import org.ihtsdo.ttk.cacco.cc.P;
-import org.ihtsdo.ttk.cacco.cc.termstore.PersistentStoreI;
+import org.ihtsdo.ttk.concept.cc.P;
+import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 
 /**
  *

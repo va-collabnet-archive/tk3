@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.ihtsdo.ttk.bdb.temp.I_TrackContinuation;
 import org.ihtsdo.ttk.api.NidBitSetBI;
-import org.ihtsdo.ttk.cacco.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.Concept;
 
 public interface I_ProcessConceptData extends I_TrackContinuation {
 

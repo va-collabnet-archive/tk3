@@ -11,7 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import org.ihtsdo.ttk.cacco.cc.termstore.PersistentStoreI;
+import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 
 /**
  *

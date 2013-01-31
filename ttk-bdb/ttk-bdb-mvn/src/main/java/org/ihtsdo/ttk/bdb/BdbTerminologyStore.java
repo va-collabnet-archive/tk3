@@ -41,16 +41,16 @@ import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.ttk.api.db.DbDependency;
 import org.ihtsdo.ttk.api.db.EccsDependency;
 import org.ihtsdo.ttk.dto.TkConcept;
-import org.ihtsdo.ttk.cacco.cc.NidPairForRefex;
-import org.ihtsdo.ttk.cacco.cc.P;
-import org.ihtsdo.ttk.cacco.cc.change.LastChange;
-import org.ihtsdo.ttk.cacco.cc.concept.Concept;
-import org.ihtsdo.ttk.cacco.cc.concept.ConceptDataFetcherI;
-import org.ihtsdo.ttk.cacco.cc.lucene.LuceneManager;
-import org.ihtsdo.ttk.cacco.cc.relationship.Relationship;
-import org.ihtsdo.ttk.cacco.cc.termstore.TerminologySnapshot;
-import org.ihtsdo.ttk.cacco.cc.termstore.Termstore;
-import org.ihtsdo.ttk.cacco.jsr166y.cs.CsProperty;
+import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
+import org.ihtsdo.ttk.concept.cc.P;
+import org.ihtsdo.ttk.concept.cc.change.LastChange;
+import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptDataFetcherI;
+import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
+import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
+import org.ihtsdo.ttk.concept.cc.termstore.TerminologySnapshot;
+import org.ihtsdo.ttk.concept.cc.termstore.Termstore;
+import org.ihtsdo.ttk.concept.jsr166y.cs.CsProperty;
 
 public class BdbTerminologyStore extends Termstore {
    private static ViewCoordinate metadataVC = null;

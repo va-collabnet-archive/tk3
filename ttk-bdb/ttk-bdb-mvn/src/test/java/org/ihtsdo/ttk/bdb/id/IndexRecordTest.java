@@ -18,7 +18,7 @@
 
 package org.ihtsdo.ttk.bdb.id;
 
-import org.ihtsdo.ttk.cacco.cc.NidPairForRefex;
+import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
 import org.junit.After;
 import org.junit.AfterClass;
 

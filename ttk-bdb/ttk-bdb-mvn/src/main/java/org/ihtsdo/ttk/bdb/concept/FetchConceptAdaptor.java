@@ -5,7 +5,7 @@ import java.util.List;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
 
 import org.ihtsdo.ttk.api.NidBitSetBI;
-import org.ihtsdo.ttk.cacco.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.Concept;
 
 
 public class FetchConceptAdaptor implements I_ProcessUnfetchedConceptData {

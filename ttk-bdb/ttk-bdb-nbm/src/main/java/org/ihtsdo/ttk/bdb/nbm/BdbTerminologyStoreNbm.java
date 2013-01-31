@@ -17,7 +17,7 @@ package org.ihtsdo.ttk.bdb.nbm;
 
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.bdb.BdbTerminologyStore;
-import org.ihtsdo.ttk.cacco.cc.termstore.PersistentStoreI;
+import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 

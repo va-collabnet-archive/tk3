@@ -27,22 +27,22 @@ import org.ihtsdo.ttk.api.cs.ChangeSetWriterThreading;
 import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
-import org.ihtsdo.ttk.cacco.cc.P;
-import org.ihtsdo.ttk.cacco.cc.attributes.ConceptAttributes;
-import org.ihtsdo.ttk.cacco.cc.attributes.ConceptAttributesRevision;
-import org.ihtsdo.ttk.cacco.cc.change.BdbCommitSequence;
-import org.ihtsdo.ttk.cacco.cc.change.LastChange;
-import org.ihtsdo.ttk.cacco.cc.component.ConceptComponent;
-import org.ihtsdo.ttk.cacco.cc.component.IdentifierSet;
-import org.ihtsdo.ttk.cacco.cc.concept.Concept;
-import org.ihtsdo.ttk.cacco.cc.description.Description;
-import org.ihtsdo.ttk.cacco.cc.description.DescriptionRevision;
-import org.ihtsdo.ttk.cacco.cc.lucene.LuceneManager;
-import org.ihtsdo.ttk.cacco.cc.refex.RefexMember;
-import org.ihtsdo.ttk.cacco.cc.refex.RefexRevision;
-import org.ihtsdo.ttk.cacco.cc.relationship.Relationship;
-import org.ihtsdo.ttk.cacco.cc.relationship.RelationshipRevision;
-import org.ihtsdo.ttk.cacco.jsr166y.cs.ChangeSetWriterHandler;
+import org.ihtsdo.ttk.concept.cc.P;
+import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
+import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributesRevision;
+import org.ihtsdo.ttk.concept.cc.change.BdbCommitSequence;
+import org.ihtsdo.ttk.concept.cc.change.LastChange;
+import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
+import org.ihtsdo.ttk.concept.cc.component.IdentifierSet;
+import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.description.Description;
+import org.ihtsdo.ttk.concept.cc.description.DescriptionRevision;
+import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
+import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
+import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
+import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
+import org.ihtsdo.ttk.concept.cc.relationship.RelationshipRevision;
+import org.ihtsdo.ttk.concept.jsr166y.cs.ChangeSetWriterHandler;
 
 public class BdbCommitManager {
 

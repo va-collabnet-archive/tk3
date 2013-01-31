@@ -18,8 +18,8 @@ package org.ihtsdo.ttk.bdb.nbm;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.bdb.Bdb;
-import org.ihtsdo.ttk.cacco.cc.P;
-import org.ihtsdo.ttk.cacco.cc.termstore.PersistentStoreI;
+import org.ihtsdo.ttk.concept.cc.P;
+import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Lookup;
 

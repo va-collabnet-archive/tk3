@@ -26,9 +26,9 @@ import org.ihtsdo.ttk.api.ComponentChroncileBI;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
 import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
-import org.ihtsdo.ttk.cacco.cc.component.IdentifierSet;
-import org.ihtsdo.ttk.cacco.cc.concept.Concept;
-import org.ihtsdo.ttk.cacco.cc.refex.RefexMemberFactory;
+import org.ihtsdo.ttk.concept.cc.component.IdentifierSet;
+import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.refex.RefexMemberFactory;
 
 /**
  *

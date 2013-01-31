@@ -39,9 +39,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.ttk.cacco.cc.NidPairForRefex;
-import org.ihtsdo.ttk.cacco.cc.concept.Concept;
-import org.ihtsdo.ttk.cacco.cc.relationship.Relationship;
+import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
+import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 
 /**
  * Stores cross-reference information for origin relationships, destination relationship origins, and

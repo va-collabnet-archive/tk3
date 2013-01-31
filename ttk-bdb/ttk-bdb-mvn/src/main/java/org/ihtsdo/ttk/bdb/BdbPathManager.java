@@ -24,14 +24,14 @@ import org.ihtsdo.ttk.api.PathBI;
 import org.ihtsdo.ttk.api.PositionBI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.type_nid_long.RefexNidLongVersionBI;
-import org.ihtsdo.ttk.cacco.cc.Path;
-import org.ihtsdo.ttk.cacco.cc.Position;
-import org.ihtsdo.ttk.cacco.cc.ReferenceConcepts;
-import org.ihtsdo.ttk.cacco.cc.concept.Concept;
-import org.ihtsdo.ttk.cacco.cc.refex.RefexMember;
-import org.ihtsdo.ttk.cacco.cc.refex.type_nid.NidMember;
-import org.ihtsdo.ttk.cacco.cc.refex.type_nid_int.NidIntMember;
-import org.ihtsdo.ttk.cacco.cc.refex.type_nid_long.NidLongMember;
+import org.ihtsdo.ttk.concept.cc.Path;
+import org.ihtsdo.ttk.concept.cc.Position;
+import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
+import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
+import org.ihtsdo.ttk.concept.cc.refex.type_nid.NidMember;
+import org.ihtsdo.ttk.concept.cc.refex.type_nid_int.NidIntMember;
+import org.ihtsdo.ttk.concept.cc.refex.type_nid_long.NidLongMember;
 
 /**
  * Path management.

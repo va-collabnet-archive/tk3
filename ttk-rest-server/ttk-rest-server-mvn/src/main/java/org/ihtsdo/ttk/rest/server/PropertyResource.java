@@ -14,7 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.StreamingOutput;
-import org.ihtsdo.ttk.cacco.cc.termstore.PersistentStoreI;
+import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 
 /**
  *

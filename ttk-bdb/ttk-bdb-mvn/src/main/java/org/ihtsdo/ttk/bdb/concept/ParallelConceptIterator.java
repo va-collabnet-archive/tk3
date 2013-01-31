@@ -18,8 +18,8 @@ import com.sleepycat.je.OperationStatus;
 import org.ihtsdo.ttk.bdb.temp.AceLog;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.cacco.cc.concept.Concept;
-import org.ihtsdo.ttk.cacco.cc.concept.ConceptVersion;
+import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptVersion;
 
 public class ParallelConceptIterator implements Callable<Boolean>, I_FetchConceptFromCursor {
 

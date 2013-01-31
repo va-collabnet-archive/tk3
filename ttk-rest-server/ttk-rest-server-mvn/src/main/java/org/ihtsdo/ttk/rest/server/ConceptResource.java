@@ -20,8 +20,8 @@ import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.dto.TkConcept;
-import org.ihtsdo.ttk.cacco.cc.concept.ConceptDataFetcherI;
-import org.ihtsdo.ttk.cacco.cc.termstore.PersistentStoreI;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptDataFetcherI;
+import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 
 /**
  *
