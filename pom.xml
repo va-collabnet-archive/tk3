@@ -26,9 +26,9 @@ the specific language governing permissions and limitations under the License. -
         needs of their end users.
     </description>
     <scm>
-        <connection>scm:svn:https://csfe.aceworkspace.net/svn/repos/tk3/trunk/tk3</connection>
-        <developerConnection>scm:svn:https://csfe.aceworkspace.net/svn/repos/tk3/trunk/tk3</developerConnection>
-        <url>https://csfe.aceworkspace.net/integration/viewvc/viewvc.cgi/trunk/?root=tk3&amp;system=exsy1002</url>
+        <connection>scm:svn:https://csfe.aceworkspace.net/svn/repos/tk3/branches/ttk</connection>
+        <developerConnection>scm:svn:https://csfe.aceworkspace.net/svn/repos/tk3/branches/ttk</developerConnection>
+        <url>https://csfe.aceworkspace.net/integration/viewvc/viewvc.cgi/branches/ttk/?root=tk3&amp;system=exsy1002</url>
     </scm>
     <properties>
         <branch>ttk</branch>
