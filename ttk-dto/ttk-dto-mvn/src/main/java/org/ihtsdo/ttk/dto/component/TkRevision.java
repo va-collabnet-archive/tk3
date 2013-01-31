@@ -29,7 +29,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class TkRevision implements ExternalStampBI {
-    private static final long serialVersionUID      = 1;
+    @SuppressWarnings("unused")
+	private static final long serialVersionUID      = 1;
     public static UUID        unspecifiedUserUuid   = UUID.fromString("f7495b58-6630-3499-a44e-2052b5fcf06c");
     public static UUID        unspecifiedModuleUuid = UUID.fromString("40d1c869-b509-32f8-b735-836eac577a67");
     @XmlAttribute
@@ -187,7 +188,7 @@ public abstract class TkRevision implements ExternalStampBI {
                 } else {
                     ComponentBI component = Ts.get().getComponent(nid);
 
-                    sb.append("comp: '");
+                    sb.append("' ");
 
                     if (component != null) {
                         sb.append(component.toUserString());

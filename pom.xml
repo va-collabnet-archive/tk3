@@ -373,7 +373,9 @@ the specific language governing permissions and limitations under the License. -
         <module>ttk-services</module>
         <module>ttk-uuid-maps</module>
         <module>ttk-classifier</module>
-   </modules>
+    <module>ttk-lookup</module>
+    <module>ttk-preferences</module>
+  </modules>
     <profiles>
         <profile>
             <id>metrics</id>

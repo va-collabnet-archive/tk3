@@ -230,17 +230,19 @@ public class UuidToNidMapBdb extends ComponentBdb {
    }
 
    public int uuidsToNid(Collection<UUID> uuids) {
+      Collection<UUID> uuidsToAdd = new ArrayList<>(uuids.size());
+      int nid = Integer.MIN_VALUE;
       for (UUID uuid : uuids) {
-         int nid = getNoGen(uuid, false);
+         int tempNid = getNoGen(uuid, false);
 
-         if (nid != Integer.MIN_VALUE) {
-            return nid;
+         if (tempNid == Integer.MIN_VALUE) {
+            uuidsToAdd.add(uuid);
+         } else {
+            nid = tempNid;
          }
       }
 
-      int nid = Integer.MIN_VALUE;
-
-      for (UUID uuid : uuids) {
+      for (UUID uuid : uuidsToAdd) {
          if (nid == Integer.MIN_VALUE) {
             nid = generate(uuid);
          } else {
@@ -548,12 +550,6 @@ public class UuidToNidMapBdb extends ComponentBdb {
          } else {
             sequence = new AtomicInteger(Integer.decode(nextIdStr));
          }
-      }
-
-      public IdSequence(int nextId) throws IOException {
-         super();
-         sequence = new AtomicInteger(nextId);
-         Bdb.setProperty(ID_NEXT, Integer.toString(sequence.get()));
       }
 
       //~--- get methods ------------------------------------------------------

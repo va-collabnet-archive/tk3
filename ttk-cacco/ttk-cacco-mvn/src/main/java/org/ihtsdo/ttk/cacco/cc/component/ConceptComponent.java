@@ -124,7 +124,11 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
    protected ConceptComponent(TkComponent<?> eComponent, int enclosingConceptNid) throws IOException {
       super();
       assert eComponent != null;
-      this.nid = P.s.getNidForUuids(eComponent.primordialUuid);
+        if (P.s.hasUuid(eComponent.primordialUuid)) {
+            this.nid = P.s.getNidForUuids(eComponent.primordialUuid);
+        } else {
+            this.nid = P.s.getNidForUuids(eComponent.getUuids());
+        }
       assert this.nid != Integer.MAX_VALUE : "Processing nid: " + enclosingConceptNid;
       this.enclosingConceptNid = enclosingConceptNid;
 
