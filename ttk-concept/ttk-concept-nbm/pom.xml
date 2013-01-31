@@ -9,7 +9,7 @@
     <artifactId>ttk-concept-nbm</artifactId>
     <packaging>nbm</packaging>
 
-    <name>${branch}: concept: Netbeans Module</name>
+    <name>${branch}: Concept: Netbeans Module</name>
 
     <dependencies>
         <dependency>
