@@ -41,6 +41,7 @@ import au.csiro.ontology.axioms.IAxiom;
 import au.csiro.ontology.classification.IReasoner;
 import au.csiro.ontology.model.IConcept;
 import au.csiro.snorocket.core.SnorocketReasoner;
+import java.io.File;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -109,8 +110,12 @@ public class Classifier {
         time = System.currentTimeMillis();
         System.out.println(TimeHelper.formatDate(time));
         
+        
+        File stateDirectory = new File("target");
+        stateDirectory.mkdirs();
+        File stateFile = new File(stateDirectory, "classifier_uuid.state");
         System.out.println("Writing state to disk...");
-        try (FileOutputStream fos = new FileOutputStream("target/classifier_uuid.state", false)) {
+        try (FileOutputStream fos = new FileOutputStream(stateFile, false)) {
             reasoner.save(fos);
         }
         System.out.println("Write time: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
@@ -119,7 +124,7 @@ public class Classifier {
         
         System.out.println("Reading state from disk...");
 
-        FileInputStream fis = new FileInputStream("target/classifier_uuid.state");
+        FileInputStream fis = new FileInputStream(stateFile);
         reasoner = SnorocketReasoner.load(fis);
         f        = new Factory<>();
         System.out.println("Read time: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
