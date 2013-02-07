@@ -34,7 +34,7 @@ the specific language governing permissions and limitations under the License. -
         <url>https://csfe.aceworkspace.net/integration/viewvc/viewvc.cgi/trunk/?root=tk3&amp;system=exsy1002</url>
     </scm>
     <properties>
-        <branch>ttk</branch>
+        <branch>trunk</branch>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <drools.version>5.3.0.Final</drools.version>
         <jbpm.version>5.1.0.Final</jbpm.version>
