@@ -15,7 +15,7 @@ the specific language governing permissions and limitations under the License. -
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.ihtsdo.ttk</groupId>
     <artifactId>ttk-mmb</artifactId>
-    <version>3.1.0-SNAPSHOT</version>
+    <version>3.1.0</version>
     <packaging>pom</packaging>
     <name>${branch}: (MMP) Terminology Toolkit</name>
     <description>The IHTSDO toolkit provides two software frameworks for
@@ -26,9 +26,9 @@ the specific language governing permissions and limitations under the License. -
         needs of their end users.
     </description>
     <scm>
-        <connection>scm:svn:https://csfe.aceworkspace.net/svn/repos/tk3/branches/ttk</connection>
-        <developerConnection>scm:svn:https://csfe.aceworkspace.net/svn/repos/tk3/branches/ttk</developerConnection>
-        <url>https://csfe.aceworkspace.net/integration/viewvc/viewvc.cgi/branches/ttk/?root=tk3&amp;system=exsy1002</url>
+        <connection>scm:svn:https://csfe.aceworkspace.net/svn/repos/workbench/tags/ttk-mmb-3.1.0</connection>
+        <developerConnection>scm:svn:https://csfe.aceworkspace.net/svn/repos/workbench/tags/ttk-mmb-3.1.0</developerConnection>
+        <url>scm:svn:https://csfe.aceworkspace.net/svn/repos/workbench/tags/ttk-mmb-3.1.0</url>
     </scm>
     
     <!-- Not sure if Brett wants to set up a new repo for this or not -->
