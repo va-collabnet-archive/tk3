@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.ihtsdo.ttk</groupId>
         <artifactId>ttk-concept</artifactId>
-        <version>3.1.0</version>
+        <version>3.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-concept-nbm</artifactId>
     <packaging>nbm</packaging>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.ihtsdo.ttk</groupId>
             <artifactId>ttk-api-nbm</artifactId>
-            <version>3.1.0</version>
+            <version>3.1.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

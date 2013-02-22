@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.ihtsdo.ttk</groupId>
         <artifactId>ttk-mmb</artifactId>
-        <version>3.1.0</version>
+        <version>3.1.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ttk-api</artifactId>

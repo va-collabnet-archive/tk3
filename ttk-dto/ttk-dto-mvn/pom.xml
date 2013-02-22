@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.ihtsdo.ttk</groupId>
     <artifactId>ttk-dto</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.1-SNAPSHOT</version>
   </parent>
   <artifactId>ttk-dto-mvn</artifactId>
   <name>${branch}: DTO: Maven Module</name>

@@ -4,7 +4,7 @@
     <parent>
         <artifactId>ttk-fx</artifactId>
         <groupId>org.ihtsdo.ttk</groupId>
-        <version>3.1.0</version>
+        <version>3.1.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>ttk-fx-osgi</artifactId>

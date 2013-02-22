@@ -4,10 +4,10 @@
   <parent>
     <artifactId>ttk-mmb</artifactId>
     <groupId>org.ihtsdo.ttk</groupId>
-    <version>3.1.0</version>
+    <version>3.1.1-SNAPSHOT</version>
   </parent>
   <artifactId>ttk-classifier</artifactId>
-  <version>3.1.0</version>
+  <version>3.1.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>${branch}: Classifier:</name>
   <modules>
