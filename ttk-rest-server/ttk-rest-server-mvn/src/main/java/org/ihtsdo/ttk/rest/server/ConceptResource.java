@@ -59,7 +59,7 @@ public class ConceptResource {
         } else {
             uuid = ts.getUuidPrimordialForNid(Integer.parseInt(id));
         }
-        ViewCoordinate vc = StandardViewCoordinates.getSnomedLatest();
+        ViewCoordinate vc = StandardViewCoordinates.getSnomedInferredLatest();
         FxConcept fxc = ts.getFxConcept(uuid, vc,
                     VersionPolicy.ACTIVE_VERSIONS,
                     RefexPolicy.ANNOTATION_MEMBERS,

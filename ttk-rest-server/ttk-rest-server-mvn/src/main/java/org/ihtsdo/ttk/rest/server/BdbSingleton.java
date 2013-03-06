@@ -44,7 +44,9 @@ public class BdbSingleton extends SingletonTypeInjectableProvider<Context, Persi
                 Ts.get().loadEconFiles(econFiles);
                 System.out.println("Finished load of eConcept.jbin");
             }
-            Ts.get().setGlobalSnapshot(Ts.get().getSnapshot(StandardViewCoordinates.getSnomedLatest()));
+            Ts.get().setGlobalSnapshot(Ts.get().getSnapshot(StandardViewCoordinates.getSnomedInferredLatest()));
+            Ts.get().putViewCoordinate(StandardViewCoordinates.getSnomedInferredThenStatedLatest());
+            Ts.get().putViewCoordinate(StandardViewCoordinates.getSnomedStatedLatest());
         } catch (Exception ex) {
             Logger.getLogger(BdbSingleton.class.getName()).log(Level.SEVERE, null, ex);
         }
