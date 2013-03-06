@@ -18,32 +18,15 @@
 
 package org.ihtsdo.ttk.rest.client;
 
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.PositionBI;
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologyBuilderBI;
 import org.ihtsdo.ttk.api.NidBitSetBI;
-import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.PathBI;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import java.beans.PropertyChangeListener;
-import java.beans.VetoableChangeListener;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.util.*;
-import javax.ws.rs.core.MediaType;
-import org.ihtsdo.ttk.fx.FxComponentReference;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
-import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
-import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
-import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
+import org.ihtsdo.ttk.api.PositionBI;
+import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.ttk.api.TerminologyBuilderBI;
 import org.ihtsdo.ttk.api.TerminologyDI.CONCEPT_EVENT;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.conattr.ConAttrVersionBI;
@@ -54,10 +37,10 @@ import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.cs.ChangeSetPolicy;
 import org.ihtsdo.ttk.api.cs.ChangeSetWriterThreading;
+import org.ihtsdo.ttk.api.db.DbDependency;
 import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
-import org.ihtsdo.ttk.api.db.DbDependency;
 import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.concept.Concept;
@@ -65,6 +48,32 @@ import org.ihtsdo.ttk.concept.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.ttk.concept.cc.concept.NidDataInMemory;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 import org.ihtsdo.ttk.concept.cc.termstore.Termstore;
+import org.ihtsdo.ttk.fx.FxComponentReference;
+import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
+import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
+import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+
+import java.beans.PropertyChangeListener;
+import java.beans.VetoableChangeListener;
+
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+
+import java.util.*;
+
+import javax.ws.rs.core.MediaType;
 
 /**
  *
@@ -76,8 +85,6 @@ public class TtkRestClient extends Termstore {
    private static String         serverUrlStr           = defaultLocalHostServer;
    private static Client         restClient;
    private static TtkRestClient  restClientSingleton;
-
-   //~--- methods -------------------------------------------------------------
 
    @Override
    public long incrementAndGetSequence() {
@@ -105,8 +112,8 @@ public class TtkRestClient extends Termstore {
       P.s                 = restClientSingleton;
       Ts.set(restClientSingleton);
       P.s.putViewCoordinate(P.s.getMetadataVC());
-      P.s.putViewCoordinate(StandardViewCoordinates.getSnomedLatest());
-      Ts.get().setGlobalSnapshot(Ts.get().getSnapshot(StandardViewCoordinates.getSnomedLatest()));
+      P.s.putViewCoordinate(StandardViewCoordinates.getSnomedInferredLatest());
+      Ts.get().setGlobalSnapshot(Ts.get().getSnapshot(StandardViewCoordinates.getSnomedInferredLatest()));
    }
 
    @Override
@@ -115,8 +122,6 @@ public class TtkRestClient extends Termstore {
 
       r.accept(MediaType.TEXT_PLAIN).get(String.class);
    }
-
-   //~--- get methods ---------------------------------------------------------
 
    @Override
    public int getAuthorNidForStamp(int sapNid) {
@@ -179,25 +184,6 @@ public class TtkRestClient extends Termstore {
    public NidBitSetBI getEmptyNidSet() throws IOException {
       throw new UnsupportedOperationException("Not supported yet.");
    }
-   @Override
-   public FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc) throws IOException, ContradictionException {
-       return getFxConcept(conceptUUID, vc.getVcUuid());
-   }
-
-   @Override
-   public FxConcept getFxConcept(FxComponentReference ref, ViewCoordinate vc, VersionPolicy versionPolicy,
-                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
-       return getFxConcept(ref, vc.getVcUuid(), versionPolicy,
-                                 refexPolicy, relationshipPolicy);
-   }
-
-   @Override
-   public FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc, VersionPolicy versionPolicy,
-                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
-       return getFxConcept(conceptUUID, vc.getVcUuid(), versionPolicy,
-                                 refexPolicy, relationshipPolicy);
-   }
-
 
    private FxConcept getFxConcept(UUID conceptUUID, UUID vcUuid) {
       WebResource    r        = restClient.resource(serverUrlStr + "fx-concept/" + conceptUUID + "/"
@@ -207,18 +193,38 @@ public class TtkRestClient extends Termstore {
       return response.getEntity(FxConcept.class);
    }
 
-   private FxConcept getFxConcept(FxComponentReference ref, UUID vcUuid, VersionPolicy versionPolicy,
+   @Override
+   public FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc)
+           throws IOException, ContradictionException {
+      return getFxConcept(conceptUUID, vc.getVcUuid());
+   }
+
+   @Override
+   public FxConcept getFxConcept(FxComponentReference ref, UUID vcUuid, VersionPolicy versionPolicy,
                                  RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
       return getFxConcept(ref.getUuid(), vcUuid, versionPolicy, refexPolicy, relationshipPolicy);
    }
 
-   private FxConcept getFxConcept(UUID conceptUUID, UUID vcUuid, VersionPolicy versionPolicy,
+   @Override
+   public FxConcept getFxConcept(FxComponentReference ref, ViewCoordinate vc, VersionPolicy versionPolicy,
+                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
+      return getFxConcept(ref, vc.getVcUuid(), versionPolicy, refexPolicy, relationshipPolicy);
+   }
+
+   @Override
+   public FxConcept getFxConcept(UUID conceptUUID, UUID vcUuid, VersionPolicy versionPolicy,
                                  RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
       WebResource r = restClient.resource(serverUrlStr + "fx-concept/" + conceptUUID + "/" + vcUuid + "/"
                          + versionPolicy + "/" + refexPolicy + "/" + relationshipPolicy);
       ClientResponse response = r.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
 
       return response.getEntity(FxConcept.class);
+   }
+
+   @Override
+   public FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc, VersionPolicy versionPolicy,
+                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
+      return getFxConcept(conceptUUID, vc.getVcUuid(), versionPolicy, refexPolicy, relationshipPolicy);
    }
 
    @Override
@@ -348,9 +354,10 @@ public class TtkRestClient extends Termstore {
    }
 
    public static TtkRestClient getRestClient() throws IOException {
-       if (restClientSingleton == null) {
-           setup(TtkRestClient.defaultLocalHostServer);
-       }
+      if (restClientSingleton == null) {
+         setup(TtkRestClient.defaultLocalHostServer);
+      }
+
       return restClientSingleton;
    }
 
