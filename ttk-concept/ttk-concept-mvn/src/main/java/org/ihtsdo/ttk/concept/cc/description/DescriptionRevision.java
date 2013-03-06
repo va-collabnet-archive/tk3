@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.lang.LANG_CODE;
 import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
@@ -272,7 +273,7 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
     public DescCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidCAB {
         DescCAB descBp = new DescCAB(getConceptNid(), getTypeNid(),
                 LANG_CODE.getLangCode(lang), getText(), initialCaseSignificant,
-                getVersion(vc), vc);
+                getVersion(vc), vc, Ts.get().getUuidPrimordialForNid(getModuleNid()));
         return descBp;
     }
 

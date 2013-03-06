@@ -29,6 +29,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.MediaCAB;
@@ -291,7 +292,7 @@ public class Media extends ConceptComponent<MediaRevision, Media>
                 getTextDescription(),
                 getMedia(),
                 getVersion(vc),
-                vc);
+                vc, Ts.get().getUuidPrimordialForNid(getModuleNid()));
         return mediaBp;
     }
 

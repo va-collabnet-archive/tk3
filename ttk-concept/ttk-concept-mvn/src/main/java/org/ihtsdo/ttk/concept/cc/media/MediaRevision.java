@@ -20,6 +20,7 @@ import org.ihtsdo.ttk.dto.component.media.TkMediaRevision;
 
 import java.util.Collection;
 import java.util.Set;
+import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.MediaCAB;
@@ -117,7 +118,7 @@ public class MediaRevision extends Revision<MediaRevision, Media>
                 getTextDescription(),
                 getMedia(),
                 getVersion(vc),
-                vc);
+                vc, Ts.get().getUuidPrimordialForNid(getModuleNid()));
         return mediaBp;
     }
 

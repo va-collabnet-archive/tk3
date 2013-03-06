@@ -208,7 +208,7 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
       }
 
       RelCAB relBp = new RelCAB(getOriginNid(), getTypeNid(), getDestinationNid(), getGroup(), relType,
-                                getVersion(vc), vc);
+                                getVersion(vc), vc, Ts.get().getUuidPrimordialForNid(getModuleNid()));
 
       return relBp;
    }

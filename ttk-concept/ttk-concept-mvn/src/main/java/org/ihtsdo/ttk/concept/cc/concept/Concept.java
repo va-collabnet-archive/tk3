@@ -417,13 +417,13 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             }
         }
 
-        if ((eConcept.getImages() != null) && !eConcept.getImages().isEmpty()) {
+        if ((eConcept.getMedia() != null) && !eConcept.getMedia().isEmpty()) {
             if ((c.getImages() == null) || c.getImages().isEmpty()) {
                 setImagesFromEConcept(eConcept, c);
             } else {
                 Set<Integer> currentImageNids = c.data.getImageNids();
 
-                for (TkMedia eImg : eConcept.getImages()) {
+                for (TkMedia eImg : eConcept.getMedia()) {
                     int iNid = P.s.getNidForUuids(eImg.primordialUuid);
 
                     if (currentImageNids.contains(iNid)) {
@@ -506,7 +506,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             setRelationshipsFromEConcept(eConcept, c);
         }
 
-        if (eConcept.getImages() != null) {
+        if (eConcept.getMedia() != null) {
             setImagesFromEConcept(eConcept, c);
         }
 
@@ -1804,7 +1804,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     private static void setImagesFromEConcept(TkConcept eConcept, Concept c) throws IOException {
-        for (TkMedia eImage : eConcept.getImages()) {
+        for (TkMedia eImage : eConcept.getMedia()) {
             Media img = new Media(eImage, c);
 
             c.data.add(img);

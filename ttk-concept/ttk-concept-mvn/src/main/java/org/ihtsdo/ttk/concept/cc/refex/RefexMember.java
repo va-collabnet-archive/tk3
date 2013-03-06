@@ -34,6 +34,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
@@ -289,8 +290,8 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
         InvalidCAB, ContradictionException {
         RefexCAB rcs = new RefexCAB(getTkRefsetType(), 
                 P.s.getUuidPrimordialForNid(getReferencedComponentNid()),
-                getRefexNid(),
-                getVersion(vc), vc);
+                Ts.get().getUuidPrimordialForNid(getRefexNid()),
+                getVersion(vc), vc, Ts.get().getUuidPrimordialForNid(getModuleNid()));
 
         addSpecProperties(rcs);
 

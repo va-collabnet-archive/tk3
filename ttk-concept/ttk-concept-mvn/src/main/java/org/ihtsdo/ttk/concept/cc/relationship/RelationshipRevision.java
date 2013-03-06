@@ -18,6 +18,7 @@ import org.ihtsdo.ttk.api.relationship.RelationshipAnalogBI;
 import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf1;
 import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
 import org.ihtsdo.ttk.api.TkRelType;
+import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.dto.component.relationship.TkRelationshipRevision;
 
 public class RelationshipRevision extends Revision<RelationshipRevision, Relationship>
@@ -141,7 +142,7 @@ public class RelationshipRevision extends Revision<RelationshipRevision, Relatio
       }
 
       RelCAB relBp = new RelCAB(getOriginNid(), getTypeNid(), getDestinationNid(), getGroup(), relType,
-                                getVersion(vc), vc);
+                                getVersion(vc), vc, Ts.get().getUuidPrimordialForNid(getModuleNid()));
 
       return relBp;
    }

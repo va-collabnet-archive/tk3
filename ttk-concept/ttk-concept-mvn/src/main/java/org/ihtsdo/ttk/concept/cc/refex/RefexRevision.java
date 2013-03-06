@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.Set;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
@@ -130,8 +131,8 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
             InvalidCAB, ContradictionException {
         RefexCAB rcs = new RefexCAB(getTkRefsetType(),
                 P.s.getUuidPrimordialForNid(getReferencedComponentNid()),
-                getRefexNid(),
-                getVersion(vc), vc);
+                Ts.get().getUuidPrimordialForNid(getRefexNid()),
+                getVersion(vc), vc, Ts.get().getUuidPrimordialForNid(getModuleNid()));
 
         addSpecProperties(rcs);
 
