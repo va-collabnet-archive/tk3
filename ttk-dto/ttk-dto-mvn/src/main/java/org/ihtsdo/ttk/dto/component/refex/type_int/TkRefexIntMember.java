@@ -27,7 +27,7 @@ public class TkRefexIntMember extends TkRefexAbstractMember<TkRefexIntRevision> 
    //~--- fields --------------------------------------------------------------
 
    @XmlAttribute
-   public int intValue;
+   public int int1;
 
    //~--- constructors --------------------------------------------------------
 
@@ -44,7 +44,7 @@ public class TkRefexIntMember extends TkRefexAbstractMember<TkRefexIntRevision> 
       Iterator<? extends RefexIntVersionBI>   itr       = refexes.iterator();
       RefexIntVersionBI                       rv        = itr.next();
 
-      this.intValue = rv.getInt1();
+      this.int1 = rv.getInt1();
 
       if (partCount > 1) {
          revisions = new ArrayList<>(partCount - 1);
@@ -63,7 +63,7 @@ public class TkRefexIntMember extends TkRefexAbstractMember<TkRefexIntRevision> 
 
    public TkRefexIntMember(TkRefexIntMember another, ComponentTransformerBI transformer) {
       super(another, transformer);
-      this.intValue = transformer.transform(another.intValue, another, ComponentFields.REFEX_INTEGER1);
+      this.int1 = transformer.transform(another.int1, another, ComponentFields.REFEX_INTEGER1);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -91,7 +91,7 @@ public class TkRefexIntMember extends TkRefexAbstractMember<TkRefexIntRevision> 
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
          // Compare intValue
-         if (this.intValue != another.intValue) {
+         if (this.int1 != another.int1) {
             return false;
          }
 
@@ -131,7 +131,7 @@ public class TkRefexIntMember extends TkRefexAbstractMember<TkRefexIntRevision> 
    @Override
    public void readExternal(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super.readExternal(in, dataVersion);
-      intValue = in.readInt();
+      int1 = in.readInt();
 
       int versionSize = in.readInt();
 
@@ -153,7 +153,7 @@ public class TkRefexIntMember extends TkRefexAbstractMember<TkRefexIntRevision> 
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" int: ");
-      buff.append(this.intValue);
+      buff.append(this.int1);
       buff.append(" ");
       buff.append(super.toString());
 
@@ -163,7 +163,7 @@ public class TkRefexIntMember extends TkRefexAbstractMember<TkRefexIntRevision> 
    @Override
    public void writeExternal(DataOutput out) throws IOException {
       super.writeExternal(out);
-      out.writeInt(intValue);
+      out.writeInt(int1);
 
       if (revisions == null) {
          out.writeInt(0);
@@ -179,7 +179,7 @@ public class TkRefexIntMember extends TkRefexAbstractMember<TkRefexIntRevision> 
    //~--- get methods ---------------------------------------------------------
 
    public int getIntValue() {
-      return intValue;
+      return int1;
    }
 
    @Override
@@ -195,6 +195,6 @@ public class TkRefexIntMember extends TkRefexAbstractMember<TkRefexIntRevision> 
    //~--- set methods ---------------------------------------------------------
 
    public void setIntValue(int intValue) {
-      this.intValue = intValue;
+      this.int1 = intValue;
    }
 }

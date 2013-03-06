@@ -26,7 +26,7 @@ public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision
    //~--- fields --------------------------------------------------------------
 
    @XmlAttribute
-   public long longValue;
+   public long long1;
 
    //~--- constructors --------------------------------------------------------
 
@@ -42,7 +42,7 @@ public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision
       Iterator<? extends RefexLongVersionBI>   itr       = refexes.iterator();
       RefexLongVersionBI                       rv        = itr.next();
 
-      this.longValue = rv.getLong1();
+      this.long1 = rv.getLong1();
 
       if (partCount > 1) {
          revisions = new ArrayList<>(partCount - 1);
@@ -61,7 +61,7 @@ public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision
 
    public TkRefexLongMember(TkRefexLongMember another, ComponentTransformerBI transformer) {
       super(another, transformer);
-      this.longValue = transformer.transform(another.longValue, another, ComponentFields.REFEX_LONG1);
+      this.long1 = transformer.transform(another.long1, another, ComponentFields.REFEX_LONG1);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -89,7 +89,7 @@ public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
          // Compare longValue
-         if (this.longValue != another.longValue) {
+         if (this.long1 != another.long1) {
             return false;
          }
 
@@ -118,7 +118,7 @@ public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision
    @Override
    public void readExternal(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super.readExternal(in, dataVersion);
-      longValue = in.readLong();
+      long1 = in.readLong();
 
       int versionSize = in.readInt();
 
@@ -140,7 +140,7 @@ public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision
 
       buff.append(this.getClass().getSimpleName()).append(": ");
       buff.append(" long:");
-      buff.append(this.longValue);
+      buff.append(this.long1);
       buff.append(" ");
       buff.append(super.toString());
 
@@ -150,7 +150,7 @@ public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision
    @Override
    public void writeExternal(DataOutput out) throws IOException {
       super.writeExternal(out);
-      out.writeLong(longValue);
+      out.writeLong(long1);
 
       if (revisions == null) {
          out.writeInt(0);
@@ -166,7 +166,7 @@ public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision
    //~--- get methods ---------------------------------------------------------
 
    public long getLongValue() {
-      return longValue;
+      return long1;
    }
 
    public List<TkRefexLongRevision> getRevisionList() {
@@ -181,6 +181,6 @@ public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision
    //~--- set methods ---------------------------------------------------------
 
    public void setLongValue(long longValue) {
-      this.longValue = longValue;
+      this.long1 = longValue;
    }
 }
