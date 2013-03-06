@@ -40,7 +40,7 @@
                     </dependency>
                 </dependencies>
                 <executions>
-                    <execution>
+<!--                    <execution>
                         <id>load-bdb</id>
                         <goals>
                             <goal>load-bdb</goal>
@@ -51,7 +51,7 @@
                                 <String>/Users/kec/NetBeansProjects/econ/DescriptionLogicMetadata.econ</String>
                             </econFileStrings>
                         </configuration>
-                    </execution>
+                    </execution>-->
                 </executions>
             </plugin>
             <plugin>
