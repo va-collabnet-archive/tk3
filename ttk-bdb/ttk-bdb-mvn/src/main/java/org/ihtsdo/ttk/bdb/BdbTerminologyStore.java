@@ -1,33 +1,19 @@
 package org.ihtsdo.ttk.bdb;
 
-import org.ihtsdo.ttk.api.PathBI;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.ExternalStampBI;
 import org.ihtsdo.ttk.api.NidBitSetBI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.NidSetBI;
+import org.ihtsdo.ttk.api.PathBI;
 import org.ihtsdo.ttk.api.PositionBI;
+import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.TerminologyBuilderBI;
-import java.beans.PropertyChangeListener;
-import java.beans.VetoableChangeListener;
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.ihtsdo.ttk.bdb.id.NidCNidMapBdb;
-import org.ihtsdo.ttk.bdb.temp.AceLog;
-import org.ihtsdo.ttk.fx.FxComponentReference;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
-import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
-import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
-import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
-import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
-import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.TerminologyDI.CONCEPT_EVENT;
+import org.ihtsdo.ttk.api.TerminologySnapshotDI;
+import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.conattr.ConAttrVersionBI;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
@@ -35,12 +21,13 @@ import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.cs.ChangeSetPolicy;
 import org.ihtsdo.ttk.api.cs.ChangeSetWriterThreading;
+import org.ihtsdo.ttk.api.db.DbDependency;
+import org.ihtsdo.ttk.api.db.EccsDependency;
 import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
-import org.ihtsdo.ttk.api.db.DbDependency;
-import org.ihtsdo.ttk.api.db.EccsDependency;
-import org.ihtsdo.ttk.dto.TkConcept;
+import org.ihtsdo.ttk.bdb.id.NidCNidMapBdb;
+import org.ihtsdo.ttk.bdb.temp.AceLog;
 import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.change.LastChange;
@@ -51,11 +38,29 @@ import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 import org.ihtsdo.ttk.concept.cc.termstore.TerminologySnapshot;
 import org.ihtsdo.ttk.concept.cc.termstore.Termstore;
 import org.ihtsdo.ttk.concept.jsr166y.cs.CsProperty;
+import org.ihtsdo.ttk.dto.TkConcept;
+import org.ihtsdo.ttk.fx.FxComponentReference;
+import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
+import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
+import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
+import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.beans.PropertyChangeListener;
+import java.beans.VetoableChangeListener;
+
+import java.io.*;
+
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BdbTerminologyStore extends Termstore {
    private static ViewCoordinate metadataVC = null;
-
-   //~--- methods -------------------------------------------------------------
 
    private void addOrigins(Set<PathBI> paths, Collection<? extends PositionBI> origins) {
       if (origins == null) {
@@ -347,8 +352,6 @@ public class BdbTerminologyStore extends Termstore {
       Bdb.xrefAnnotation(annotation);
    }
 
-   //~--- get methods ---------------------------------------------------------
-
    @Override
    public NidBitSetBI getAllConceptNids() throws IOException {
       return Bdb.getConceptDb().getReadOnlyConceptIdSet();
@@ -405,6 +408,23 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
+   public FxConcept getFxConcept(FxComponentReference ref, UUID viewCoordinateUuid,
+                                 VersionPolicy versionPolicy, RefexPolicy refexPolicy,
+                                 RelationshipPolicy relationshipPolicy)
+           throws IOException, ContradictionException {
+      TerminologySnapshotDI ts = getSnapshot(getViewCoordinate(viewCoordinateUuid));
+      ConceptVersionBI      c;
+
+      if (ref.getNid() != Integer.MAX_VALUE) {
+         c = ts.getConceptVersion(ref.getNid());
+      } else {
+         c = ts.getConceptVersion(ref.getUuid());
+      }
+
+      return new FxConcept(ts, c, versionPolicy, refexPolicy, relationshipPolicy);
+   }
+
+   @Override
    public FxConcept getFxConcept(FxComponentReference ref, ViewCoordinate vc, VersionPolicy versionPolicy,
                                  RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
            throws IOException, ContradictionException {
@@ -416,6 +436,16 @@ public class BdbTerminologyStore extends Termstore {
       } else {
          c = ts.getConceptVersion(ref.getUuid());
       }
+
+      return new FxConcept(ts, c, versionPolicy, refexPolicy, relationshipPolicy);
+   }
+
+   @Override
+   public FxConcept getFxConcept(UUID conceptUUID, UUID viewCoordinateUuid, VersionPolicy versionPolicy,
+                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
+           throws IOException, ContradictionException {
+      TerminologySnapshotDI ts = getSnapshot(getViewCoordinate(viewCoordinateUuid));
+      ConceptVersionBI      c  = ts.getConceptVersion(conceptUUID);
 
       return new FxConcept(ts, c, versionPolicy, refexPolicy, relationshipPolicy);
    }
@@ -443,7 +473,7 @@ public class BdbTerminologyStore extends Termstore {
    @Override
    public Collection<DbDependency> getLatestChangeSetDependencies() throws IOException {
       CsProperty[] keysToCheck = new CsProperty[] { CsProperty.LAST_CHANGE_SET_WRITTEN,
-              CsProperty.LAST_CHANGE_SET_READ };
+          CsProperty.LAST_CHANGE_SET_READ };
       List<DbDependency> latestDependencies = new ArrayList<>(2);
 
       for (CsProperty prop : keysToCheck) {
@@ -568,11 +598,6 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public int getStamp(ExternalStampBI version) {
-      return Bdb.getStamp(version);
-   }
-
-   @Override
    public long getSequence() {
       return Bdb.gVersion.incrementAndGet();
    }
@@ -580,6 +605,11 @@ public class BdbTerminologyStore extends Termstore {
    @Override
    public TerminologySnapshotDI getSnapshot(ViewCoordinate c) {
       return new TerminologySnapshot(this, c);
+   }
+
+   @Override
+   public int getStamp(ExternalStampBI version) {
+      return Bdb.getStamp(version);
    }
 
    @Override
@@ -678,8 +708,6 @@ public class BdbTerminologyStore extends Termstore {
       return Bdb.getNidCNidMap().isKindOf(childNid, parentNid, vc);
    }
 
-   //~--- set methods ---------------------------------------------------------
-
    @Override
    public void setConceptNidForNid(int cNid, int nid) throws IOException {
       Bdb.getNidCNidMap().setCNidForNid(cNid, nid);
@@ -690,8 +718,6 @@ public class BdbTerminologyStore extends Termstore {
       Bdb.setProperty(key, value);
    }
 
-   //~--- inner classes -------------------------------------------------------
-
    private static class ConceptConverter implements Runnable {
       TkConcept                                 eConcept   = null;
       Throwable                                 exception  = null;
@@ -701,16 +727,12 @@ public class BdbTerminologyStore extends Termstore {
       ConcurrentSkipListSet<ConceptChronicleBI> indexedAnnotationConcepts;
       NidCNidMapBdb                             nidCnidMap;
 
-      //~--- constructors -----------------------------------------------------
-
       public ConceptConverter(LinkedBlockingQueue<ConceptConverter> converters, AtomicInteger conceptsRead,
                               ConcurrentSkipListSet<ConceptChronicleBI> indexedAnnotationConcepts) {
          this.converters                = converters;
          this.conceptsProcessed         = conceptsRead;
          this.indexedAnnotationConcepts = indexedAnnotationConcepts;
       }
-
-      //~--- methods ----------------------------------------------------------
 
       @Override
       public void run() {
@@ -741,8 +763,6 @@ public class BdbTerminologyStore extends Termstore {
 
          converters.add(this);
       }
-
-      //~--- set methods ------------------------------------------------------
 
       /*
        * (non-Javadoc)

@@ -81,7 +81,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             RefexCAB blueprint) throws InvalidCAB, IOException, ContradictionException {
         for (int pathNid : ec.getEditPaths().getSetValues()) {
             RefexRevision refexRevision =
-                    member.makeAnalog(blueprint.getInt(RefexProperty.STATUS_NID),
+                    member.makeAnalog(blueprint.getInt(RefexProperty.STATUS_UUID),
                     Long.MAX_VALUE,
                     ec.getAuthorNid(),
                     ec.getModuleNid(),
@@ -495,6 +495,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         int cNid = Bdb.uuidToNid(blueprint.getComponentUuid());
         Bdb.getNidCNidMap().setCNidForNid(cNid, cNid);
         Concept newC = Concept.get(cNid);
+        newC.setAnnotationStyleRefex(blueprint.isAnnotation());
 
         ConceptAttributes a = null;
         if (newC.getConceptAttributes() == null) {
