@@ -61,7 +61,7 @@ public class Classifier {
 
         System.out.println(TimeHelper.formatDate(time));
 
-        ViewCoordinate vc = StandardViewCoordinates.getSnomedLatest();
+        ViewCoordinate vc = StandardViewCoordinates.getSnomedInferredLatest();
 
         vc.setRelAssertionType(RelAssertionType.STATED);
 
