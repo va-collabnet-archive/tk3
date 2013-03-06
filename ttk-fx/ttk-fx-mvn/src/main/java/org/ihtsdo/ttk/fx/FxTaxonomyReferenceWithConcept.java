@@ -22,31 +22,28 @@ package org.ihtsdo.ttk.fx;
 
 import javafx.beans.property.SimpleObjectProperty;
 
+import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.fx.concept.FxConcept;
 import org.ihtsdo.ttk.fx.concept.component.relationship.FxRelationshipVersion;
-import org.ihtsdo.ttk.api.ContradictionException;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+
+import java.util.UUID;
 
 /**
  *
  * @author kec
  */
 public class FxTaxonomyReferenceWithConcept {
-   private final SimpleObjectProperty<FxConcept>             conceptProperty             = new SimpleObjectProperty<>();
+   private final SimpleObjectProperty<FxConcept>             conceptProperty             =
+      new SimpleObjectProperty<>();
    private final SimpleObjectProperty<FxRelationshipVersion> relationshipVersionProperty =
       new SimpleObjectProperty<>();
    private WhichConcept whichConcept = WhichConcept.ORIGIN;
 
-   //~--- constant enums ------------------------------------------------------
-
    public enum WhichConcept { ORIGIN, DESTINATION }
-
-   ;
-
-   //~--- constructors --------------------------------------------------------
 
    public FxTaxonomyReferenceWithConcept() {}
 
@@ -60,8 +57,6 @@ public class FxTaxonomyReferenceWithConcept {
       this.whichConcept = whichConcept;
       relationshipVersionProperty.set(rv);
    }
-
-   //~--- methods -------------------------------------------------------------
 
    public SimpleObjectProperty<FxConcept> conceptProperty() {
       return conceptProperty;
@@ -94,8 +89,6 @@ public class FxTaxonomyReferenceWithConcept {
       return relationshipVersionProperty.get().typeReferenceProperty();
    }
 
-   //~--- get methods ---------------------------------------------------------
-
    public FxConcept getConcept() {
       return conceptProperty.get();
    }
@@ -107,8 +100,6 @@ public class FxTaxonomyReferenceWithConcept {
    public FxComponentReference getTypeReference() {
       return relationshipVersionProperty.get().getTypeReference();
    }
-
-   //~--- set methods ---------------------------------------------------------
 
    public void setConcept(FxConcept concept) {
       conceptProperty.set(concept);

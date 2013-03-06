@@ -13,33 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
+
 package org.ihtsdo.ttk.fx.store;
 
-import java.io.IOException;
-import java.util.UUID;
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.fx.FxComponentReference;
 import org.ihtsdo.ttk.fx.concept.FxConcept;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+
+import java.util.UUID;
 
 /**
  *
  * @author kec
  */
 public interface FxTerminologyStoreDI {
-   
    FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc) throws IOException, ContradictionException;
 
+   FxConcept getFxConcept(FxComponentReference ref, UUID viewCoordinateUuid, VersionPolicy versionPolicy,
+                          RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
+           throws IOException, ContradictionException;
+
    FxConcept getFxConcept(FxComponentReference ref, ViewCoordinate vc, VersionPolicy versionPolicy,
-                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
+                          RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
+           throws IOException, ContradictionException;
+
+   FxConcept getFxConcept(UUID conceptUUID, UUID viewCoordinateUuid, VersionPolicy versionPolicy,
+                          RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
            throws IOException, ContradictionException;
 
    FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc, VersionPolicy versionPolicy,
-                                 RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
+                          RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
            throws IOException, ContradictionException;
-
-    
 }

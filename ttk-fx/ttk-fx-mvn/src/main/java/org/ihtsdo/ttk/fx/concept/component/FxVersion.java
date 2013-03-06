@@ -1,12 +1,16 @@
 package org.ihtsdo.ttk.fx.concept.component;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//~--- non-JDK imports --------------------------------------------------------
+
 import javafx.beans.property.SimpleObjectProperty;
-import javax.xml.bind.annotation.XmlSeeAlso;
+
+import org.ihtsdo.ttk.api.ComponentBI;
+import org.ihtsdo.ttk.api.ComponentVersionBI;
+import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.TerminologySnapshotDI;
+import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.ttk.api.id.IdBI;
 import org.ihtsdo.ttk.fx.FxComponentReference;
 import org.ihtsdo.ttk.fx.FxTime;
 import org.ihtsdo.ttk.fx.concept.component.attribute.FxConceptAttributesVersion;
@@ -20,13 +24,17 @@ import org.ihtsdo.ttk.fx.concept.component.refex.type_long.FxRefexLongVersion;
 import org.ihtsdo.ttk.fx.concept.component.refex.type_member.FxRefexMembershipVersion;
 import org.ihtsdo.ttk.fx.concept.component.refex.type_string.FxRefexStringVersion;
 import org.ihtsdo.ttk.fx.concept.component.relationship.FxRelationshipVersion;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.ComponentBI;
-import org.ihtsdo.ttk.api.ComponentVersionBI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
-import org.ihtsdo.ttk.api.id.IdBI;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+import java.io.Serializable;
+
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 @XmlSeeAlso( {
    FxConceptAttributesVersion.class, FxDescriptionVersion.class, FxIdentifier.class,
@@ -35,11 +43,9 @@ import org.ihtsdo.ttk.api.id.IdBI;
    FxRefexStringVersion.class, FxRefexIntVersion.class
 })
 public abstract class FxVersion implements Serializable {
-   private static final long serialVersionUID    = 1;
-   public static UUID        unspecifiedUserUuid = UUID.fromString("f7495b58-6630-3499-a44e-2052b5fcf06c");
-
-   //~--- fields --------------------------------------------------------------
-
+   private static final long                          serialVersionUID    = 1;
+   public static UUID                                 unspecifiedUserUuid =
+      UUID.fromString("f7495b58-6630-3499-a44e-2052b5fcf06c");
    private FxComponentReference                       authorReference;
    private SimpleObjectProperty<FxComponentReference> authorReferenceProperty;
    private FxTime                                     fxTime;
@@ -50,8 +56,7 @@ public abstract class FxVersion implements Serializable {
    private SimpleObjectProperty<FxComponentReference> pathReferenceProperty;
    private FxComponentReference                       statusReference;
    private SimpleObjectProperty<FxComponentReference> statusReferenceProperty;
-
-   //~--- constructors --------------------------------------------------------
+   private UUID                                       viewCoordinateUuid;
 
    public FxVersion() {
       super();
@@ -60,23 +65,23 @@ public abstract class FxVersion implements Serializable {
    public FxVersion(TerminologySnapshotDI ss, ComponentVersionBI another)
            throws IOException, ContradictionException {
       super();
-      statusReference = new FxComponentReference(ss.getConceptForNid(another.getStatusNid()));
-      fxTime          = new FxTime(another.getTime());
-      authorReference = new FxComponentReference(ss.getConceptForNid(another.getAuthorNid()));
-      moduleReference = new FxComponentReference(ss.getConceptForNid(another.getModuleNid()));
-      pathReference   = new FxComponentReference(ss.getConceptForNid(another.getPathNid()));
+      statusReference         = new FxComponentReference(ss.getConceptForNid(another.getStatusNid()));
+      fxTime                  = new FxTime(another.getTime());
+      authorReference         = new FxComponentReference(ss.getConceptForNid(another.getAuthorNid()));
+      moduleReference         = new FxComponentReference(ss.getConceptForNid(another.getModuleNid()));
+      pathReference           = new FxComponentReference(ss.getConceptForNid(another.getPathNid()));
+      this.viewCoordinateUuid = ss.getViewCoordinate().getVcUuid();
    }
 
    public FxVersion(TerminologySnapshotDI ss, IdBI id) throws IOException, ContradictionException {
       super();
-      statusReference = new FxComponentReference(ss.getConceptVersion(id.getStatusNid()));
-      fxTime          = new FxTime(id.getTime());
-      authorReference = new FxComponentReference(ss.getConceptVersion(id.getAuthorNid()));
-      moduleReference = new FxComponentReference(ss.getConceptVersion(id.getPathNid()));
-      pathReference   = new FxComponentReference(ss.getConceptVersion(id.getModuleNid()));
+      statusReference         = new FxComponentReference(ss.getConceptVersion(id.getStatusNid()));
+      fxTime                  = new FxTime(id.getTime());
+      authorReference         = new FxComponentReference(ss.getConceptVersion(id.getAuthorNid()));
+      moduleReference         = new FxComponentReference(ss.getConceptVersion(id.getPathNid()));
+      pathReference           = new FxComponentReference(ss.getConceptVersion(id.getModuleNid()));
+      this.viewCoordinateUuid = ss.getViewCoordinate().getVcUuid();
    }
-
-   //~--- methods -------------------------------------------------------------
 
    public SimpleObjectProperty<FxComponentReference> authorReferenceProperty() {
       if (authorReferenceProperty == null) {
@@ -193,8 +198,6 @@ public abstract class FxVersion implements Serializable {
       return buff.toString();
    }
 
-   //~--- get methods ---------------------------------------------------------
-
    public FxComponentReference getAuthorReference() {
       return (authorReferenceProperty == null)
              ? authorReference
@@ -225,7 +228,9 @@ public abstract class FxVersion implements Serializable {
              : statusReferenceProperty.get();
    }
 
-   //~--- set methods ---------------------------------------------------------
+   public UUID getViewCoordinateUuid() {
+      return viewCoordinateUuid;
+   }
 
    public void setAuthorReference(FxComponentReference authorReference) {
       if (authorReferenceProperty == null) {
@@ -265,5 +270,9 @@ public abstract class FxVersion implements Serializable {
       } else {
          statusReferenceProperty.set(statusReference);
       }
+   }
+
+   public void setViewCoordinateUuid(UUID viewCoordinateUuid) {
+      this.viewCoordinateUuid = viewCoordinateUuid;
    }
 }

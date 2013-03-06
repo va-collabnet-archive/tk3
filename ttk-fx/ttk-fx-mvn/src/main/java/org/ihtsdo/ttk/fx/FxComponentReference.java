@@ -46,7 +46,8 @@ public class FxComponentReference implements Externalizable {
    private SimpleIntegerProperty      nidProperty;
    private String                     text;
    private SimpleStringProperty       textProperty;
-   private UUID                       uuid;
+   private long                       uuidMsb;
+   private long                       uuidLsb;
    private SimpleObjectProperty<UUID> uuidProperty;
 
    //~--- constructors --------------------------------------------------------
@@ -55,7 +56,8 @@ public class FxComponentReference implements Externalizable {
 
    public FxComponentReference(ConceptVersionBI concept) throws IOException, ContradictionException {
       nid  = concept.getNid();
-      uuid = concept.getPrimUuid();
+      uuidMsb = concept.getPrimUuid().getMostSignificantBits();
+      uuidLsb = concept.getPrimUuid().getLeastSignificantBits();
       text = concept.getPreferredDescription().getText();
    }
 
@@ -64,7 +66,8 @@ public class FxComponentReference implements Externalizable {
    }
 
    public FxComponentReference(UUID uuid) {
-      this.uuid = uuid;
+      uuidMsb = uuid.getMostSignificantBits();
+      uuidLsb = uuid.getLeastSignificantBits();
    }
 
    public FxComponentReference(TerminologySnapshotDI ss, int nid) throws IOException, ContradictionException {
@@ -73,7 +76,8 @@ public class FxComponentReference implements Externalizable {
       ComponentVersionBI component = ss.getComponentVersion(nid);
 
       if (component != null) {
-         uuid = component.getPrimUuid();
+        uuidMsb = component.getPrimUuid().getMostSignificantBits();
+        uuidLsb = component.getPrimUuid().getLeastSignificantBits();
 
          if (component instanceof ConceptVersionBI) {
             text = ((ConceptVersionBI) component).getPreferredDescription().getText();
@@ -89,7 +93,8 @@ public class FxComponentReference implements Externalizable {
 
    public FxComponentReference(UUID uuid, int nid, String text) {
       this.nid  = nid;
-      this.uuid = uuid;
+      this.uuidMsb = uuid.getMostSignificantBits();
+      this.uuidLsb = uuid.getLeastSignificantBits();
       this.text = text;
    }
 
@@ -122,7 +127,8 @@ public class FxComponentReference implements Externalizable {
    @Override
    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
       text = in.readUTF();
-      uuid = new UUID(in.readLong(), in.readLong());
+      uuidMsb = in.readLong();
+      uuidLsb = in.readLong();
       nid  = in.readInt();
    }
 
@@ -141,7 +147,7 @@ public class FxComponentReference implements Externalizable {
 
    public SimpleObjectProperty<UUID> uuidProperty() {
       if (uuidProperty == null) {
-         uuidProperty = new SimpleObjectProperty<>(this, "uuid", uuid);
+         uuidProperty = new SimpleObjectProperty<>(this, "uuid", new UUID(uuidMsb, uuidLsb));
       }
 
       return uuidProperty;
@@ -204,7 +210,7 @@ public class FxComponentReference implements Externalizable {
     */
    public UUID getUuid() {
       return (uuidProperty == null)
-             ? uuid
+             ? new UUID(uuidMsb, uuidLsb)
              : uuidProperty.get();
    }
 
@@ -243,7 +249,8 @@ public class FxComponentReference implements Externalizable {
     */
    public void setUuid(UUID uuid) {
       if (uuidProperty == null) {
-         this.uuid = uuid;
+        this.uuidMsb = uuid.getMostSignificantBits();
+        this.uuidLsb = uuid.getLeastSignificantBits();
       } else {
          uuidProperty.set(uuid);
       }
