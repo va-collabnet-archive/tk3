@@ -39,7 +39,7 @@
                         <version>${org.apache.lucene.version}</version>
                     </dependency>
                 </dependencies>
-                <!--executions>
+                <executions>
                     <execution>
                         <id>load-bdb</id>
                         <goals>
@@ -47,11 +47,12 @@
                         </goals>
                         <configuration>
                             <econFileStrings>
-                                <String>/Users/kec/NetBeansProjects/eConcept.jbin</String>
+                                <String>/Users/kec/NetBeansProjects/econ/eConcept.econ</String>
+                                <String>/Users/kec/NetBeansProjects/econ/DescriptionLogicMetadata.econ</String>
                             </econFileStrings>
                         </configuration>
                     </execution>
-                </executions-->
+                </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
