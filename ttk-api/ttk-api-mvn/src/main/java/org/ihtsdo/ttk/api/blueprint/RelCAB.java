@@ -24,7 +24,7 @@ import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.TkRelType;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRfx;
+import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
 import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.ttk.api.uuid.UuidT5Generator;
 
@@ -44,41 +44,41 @@ public class RelCAB extends CreateOrAmendBlueprint {
     private UUID refinabilityUuid;
 
     public RelCAB(
-            int sourceNid, int typeNid, int destNid, int group, TkRelType type)
+            int sourceNid, int typeNid, int destNid, int group, TkRelType type, UUID moduleUuid)
             throws IOException, InvalidCAB, ContradictionException {
         this(Ts.get().getComponent(sourceNid).getPrimUuid(),
                 Ts.get().getComponent(typeNid).getPrimUuid(),
                 Ts.get().getComponent(destNid).getPrimUuid(),
-                group, null, type, null, null);
+                group, null, type, null, null, moduleUuid);
     }
 
     public RelCAB(
-            UUID sourceUuid, UUID typeUuid, UUID destUuid, int group, TkRelType type)
+            UUID sourceUuid, UUID typeUuid, UUID destUuid, int group, TkRelType type, UUID moduleUuid)
             throws IOException, InvalidCAB, ContradictionException {
-        this(sourceUuid, typeUuid, destUuid, group, null, type, null, null);
+        this(sourceUuid, typeUuid, destUuid, group, null, type, null, null, moduleUuid);
     }
     
     public RelCAB(
             int sourceNid, int typeNid, int destNid, int group, TkRelType type,
-            RelationshipVersionBI rel, ViewCoordinate vc)throws IOException, InvalidCAB, ContradictionException {
+            RelationshipVersionBI rel, ViewCoordinate vc, UUID moduleUuid)throws IOException, InvalidCAB, ContradictionException {
         this(Ts.get().getComponent(sourceNid).getPrimUuid(),
                 Ts.get().getComponent(typeNid).getPrimUuid(),
                 Ts.get().getComponent(destNid).getPrimUuid(),
-                group, null, type, rel, vc);
+                group, null, type, rel, vc, moduleUuid);
     }
 
     public RelCAB(
             UUID sourceUuid, UUID typeUuid, UUID destUuid, int group,
             TkRelType type, RelationshipVersionBI rel,
-            ViewCoordinate vc) throws IOException, InvalidCAB, ContradictionException {
-        this(sourceUuid, typeUuid, destUuid, group, null, type, rel, vc);
+            ViewCoordinate vc, UUID moduleUuid) throws IOException, InvalidCAB, ContradictionException {
+        this(sourceUuid, typeUuid, destUuid, group, null, type, rel, vc, moduleUuid);
     }
 
     public RelCAB(
             UUID sourceUuid, UUID typeUuid, UUID destUuid, int group,
             UUID componentUuid, TkRelType type, RelationshipVersionBI rel,
-            ViewCoordinate vc) throws IOException, InvalidCAB, ContradictionException {
-        super(componentUuid, rel, vc);
+            ViewCoordinate vc, UUID moduleUuid) throws IOException, InvalidCAB, ContradictionException {
+        super(componentUuid, rel, vc, moduleUuid);
         assert sourceUuid != null;
         assert typeUuid != null;
         assert destUuid != null;
@@ -91,40 +91,28 @@ public class RelCAB extends CreateOrAmendBlueprint {
 
         switch (type) {
             case STATED_HIERARCHY:
-                characteristicUuid =
-                        ts.getUuidsForNid(SnomedMetadataRfx.getREL_CH_STATED_RELATIONSHIP_NID()).get(0);
-                refinabilityUuid =
-                        ts.getUuidsForNid(SnomedMetadataRfx.getREL_NOT_REFINABLE_NID()).get(0);
+                characteristicUuid = SnomedMetadataRf2.STATED_RELATIONSHIP_RF2.getUuids()[0];
+                refinabilityUuid = SnomedMetadataRf2.NOT_REFINABLE_RF2.getUuids()[0];
                 break;
             case STATED_ROLE:
-                characteristicUuid =
-                        ts.getUuidsForNid(SnomedMetadataRfx.getREL_CH_STATED_RELATIONSHIP_NID()).get(0);
-                refinabilityUuid =
-                        ts.getUuidsForNid(SnomedMetadataRfx.getREL_OPTIONAL_REFINABILITY_NID()).get(0);
+                characteristicUuid = SnomedMetadataRf2.STATED_RELATIONSHIP_RF2.getUuids()[0];
+                refinabilityUuid = SnomedMetadataRf2.OPTIONAL_REFINIBILITY_RF2.getUuids()[0];
                 break;
             case INFERRED_HIERARCY:
-                characteristicUuid =
-                        ts.getUuidsForNid(SnomedMetadataRfx.getREL_CH_INFERRED_RELATIONSHIP_NID()).get(0);
-                refinabilityUuid =
-                        ts.getUuidsForNid(SnomedMetadataRfx.getREL_NOT_REFINABLE_NID()).get(0);
+                characteristicUuid = SnomedMetadataRf2.INFERRED_RELATIONSHIP_RF2.getUuids()[0];
+                refinabilityUuid = SnomedMetadataRf2.NOT_REFINABLE_RF2.getUuids()[0];
                 break;
             case QUALIFIER:
-                characteristicUuid =
-                        ts.getUuidsForNid(SnomedMetadataRfx.getREL_CH_QUALIFIER_CHARACTERISTIC_NID()).get(0);
-                refinabilityUuid =
-                        ts.getUuidsForNid(SnomedMetadataRfx.getREL_OPTIONAL_REFINABILITY_NID()).get(0);
+                characteristicUuid = SnomedMetadataRf2.QUALIFYING_RELATIONSSHIP_RF2.getUuids()[0];
+                refinabilityUuid = SnomedMetadataRf2.OPTIONAL_REFINIBILITY_RF2.getUuids()[0];
                 break;
             case INFERRED_ROLE:
-                characteristicUuid =
-                        ts.getUuidsForNid(SnomedMetadataRfx.getREL_CH_INFERRED_RELATIONSHIP_NID()).get(0);
-                refinabilityUuid =
-                        ts.getUuidsForNid(SnomedMetadataRfx.getREL_OPTIONAL_REFINABILITY_NID()).get(0);
+                characteristicUuid = SnomedMetadataRf2.INFERRED_RELATIONSHIP_RF2.getUuids()[0];
+                refinabilityUuid = SnomedMetadataRf2.OPTIONAL_REFINIBILITY_RF2.getUuids()[0];
                 break;
             case HISTORIC:
-                characteristicUuid =
-                        ts.getUuidsForNid(SnomedMetadataRfx.getREL_HISTORY_HISTORIC_NID()).get(0);
-                refinabilityUuid =
-                        ts.getUuidsForNid(SnomedMetadataRfx.getREL_NOT_REFINABLE_NID()).get(0);
+                characteristicUuid = SnomedMetadataRf2.HISTORICAL_RELATIONSSHIP_RF2.getUuids()[0];
+                refinabilityUuid = SnomedMetadataRf2.NOT_REFINABLE_RF2.getUuids()[0];
                 break;
         }
         if (getComponentUuid() == null) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 International Health Terminology Standards Development Organisation.
+ * Copyright 2013 International Health Terminology Standards Development Organisation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,33 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.ihtsdo.ttk.api.refex.type_nid_nid_nid_int;
 
-package org.ihtsdo.ttk.api.amend;
-
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.refex.type_int.RefexIntVersionBI;
+import org.ihtsdo.ttk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
 
 /**
  *
  * @author kec
- * @deprecated use InvalidCAB
  */
-
-@Deprecated
-public class InvalidAmendmentSpec extends InvalidCAB {
-
-    public InvalidAmendmentSpec() {
-    }
-
-    public InvalidAmendmentSpec(String string) {
-        super(string);
-    }
-
-    public InvalidAmendmentSpec(String string, Throwable thrwbl) {
-        super(string, thrwbl);
-    }
-
-    public InvalidAmendmentSpec(Throwable thrwbl) {
-        super(thrwbl);
-    }
-
+public interface RefexNidNidNidIntVersionBI <A extends RefexNidNidNidIntAnalogBI<A>> 
+    extends RefexNidNidNidVersionBI<A>, RefexIntVersionBI<A>{
+    
 }

@@ -13,164 +13,200 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
+
 package org.ihtsdo.ttk.api.blueprint;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.ihtsdo.ttk.api.ComponentBI;
+import org.ihtsdo.ttk.api.ComponentVersionBI;
+import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
+import org.ihtsdo.ttk.api.refex.RefexVersionBI;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+
 import java.security.NoSuchAlgorithmException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.ComponentBI;
-import org.ihtsdo.ttk.api.ComponentVersionBI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 
 /**
  *
  * @author kec
  */
 public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
+   private static UUID             currentStatusUuid = null;
+   private static UUID             retiredStatusUuid = null;
+   private List<RefexCAB>          annotations       = new ArrayList<>();
+   protected PropertyChangeSupport pcs               =
+      new PropertyChangeSupport(this);
+   private UUID                    componentUuid;
+   private UUID                    statusUuid;
+   private UUID                    moduleUuid;
+   private ComponentVersionBI      cv;
+   private ViewCoordinate          vc;
 
-    private static UUID currentStatusUuid = null;
-    private static UUID retiredStatusUuid = null;
-    private UUID componentUuid;
-    private UUID statusUuid;
-    private ComponentVersionBI cv;
-    private ViewCoordinate vc;
-    private List<RefexCAB> annotations = new ArrayList<>();
-    protected PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+   public CreateOrAmendBlueprint(UUID componentUuid, ComponentVersionBI cv,
+                                 ViewCoordinate vc, UUID moduleUuid)
+           throws IOException, InvalidCAB, ContradictionException {
+      currentStatusUuid  = SnomedMetadataRf2.ACTIVE_VALUE_RF2.getUuids()[0];
+      retiredStatusUuid  = SnomedMetadataRf2.INACTIVE_VALUE_RF2.getUuids()[0];
+      statusUuid         = currentStatusUuid;
+      this.moduleUuid    = moduleUuid;
+      this.componentUuid = componentUuid;
+      this.cv            = cv;
+      this.vc            = vc;
+      getAnnotationBlueprints();
+      pcs.addPropertyChangeListener(this);
+   }
 
-    public synchronized void removePropertyChangeListener(String string, PropertyChangeListener pl) {
-        pcs.removePropertyChangeListener(string, pl);
-    }
+   public synchronized void addPropertyChangeListener(
+           PropertyChangeListener pl) {
+      pcs.addPropertyChangeListener(pl);
+   }
 
-    public synchronized void removePropertyChangeListener(PropertyChangeListener pl) {
-        pcs.removePropertyChangeListener(pl);
-    }
+   public synchronized void addPropertyChangeListener(String string,
+           PropertyChangeListener pl) {
+      pcs.addPropertyChangeListener(string, pl);
+   }
 
-    public synchronized void addPropertyChangeListener(String string, PropertyChangeListener pl) {
-        pcs.addPropertyChangeListener(string, pl);
-    }
+   @Override
+   public void propertyChange(PropertyChangeEvent pce) {
+      try {
+         recomputeUuid();
+      } catch (NoSuchAlgorithmException | InvalidCAB | ContradictionException
+               | IOException ex) {
+         Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(
+             Level.SEVERE, null, ex);
+      }
+   }
 
-    public synchronized void addPropertyChangeListener(PropertyChangeListener pl) {
-        pcs.addPropertyChangeListener(pl);
-    }
+   public abstract void recomputeUuid()
+           throws NoSuchAlgorithmException, UnsupportedEncodingException,
+                  IOException, InvalidCAB, ContradictionException;
 
-    public CreateOrAmendBlueprint(UUID componentUuid, ComponentVersionBI cv, ViewCoordinate vc) throws IOException, InvalidCAB, ContradictionException {
-        try {
+   public synchronized void removePropertyChangeListener(
+           PropertyChangeListener pl) {
+      pcs.removePropertyChangeListener(pl);
+   }
 
-            currentStatusUuid = SnomedMetadataRf2.ACTIVE_VALUE_RF2.getLenient().getPrimUuid();
-            retiredStatusUuid = SnomedMetadataRf2.INACTIVE_VALUE_RF2.getLenient().getPrimUuid();
+   public synchronized void removePropertyChangeListener(String string,
+           PropertyChangeListener pl) {
+      pcs.removePropertyChangeListener(string, pl);
+   }
 
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-        statusUuid = currentStatusUuid;
-        this.componentUuid = componentUuid;
-        this.cv = cv;
-        this.vc = vc;
-        getAnnotationBlueprints();
-        pcs.addPropertyChangeListener(this);
-    }
+   public void replaceAnnotationBlueprints(List<RefexCAB> annotations) {
+      this.annotations = annotations;
+   }
 
-    public abstract void recomputeUuid() throws NoSuchAlgorithmException, UnsupportedEncodingException,
-            IOException, InvalidCAB, ContradictionException;
+   public List<RefexCAB> getAnnotationBlueprints()
+           throws IOException, InvalidCAB, ContradictionException {
+      if (annotations.isEmpty() && (cv != null)) {
+         if (cv.getCurrentRefexes(vc) != null) {
+            Collection<? extends RefexVersionBI<?>> originalRefexes =
+               cv.getCurrentRefexes(vc);
 
-    @Override
-    public void propertyChange(PropertyChangeEvent pce) {
-        try {
-            recomputeUuid();
-        } catch (NoSuchAlgorithmException | InvalidCAB | ContradictionException | IOException ex) {
-            Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
-    protected String getPrimoridalUuidStr(int nid)
-            throws IOException, InvalidCAB {
-        ComponentBI component = Ts.get().getComponent(nid);
-        if (component != null) {
-            return component.getPrimUuid().toString();
-        }
-        List<UUID> uuids = Ts.get().getUuidsForNid(nid);
-        if (uuids.size() == 1) {
-            return uuids.get(0).toString();
-        }
-        throw new InvalidCAB("Can't find primordialUuid for: " + component);
-    }
-
-    protected String getPrimoridalUuidStr(UUID uuid)
-            throws IOException, InvalidCAB {
-        ComponentBI component = Ts.get().getComponent(uuid);
-        if (component != null) {
-            return component.getPrimUuid().toString();
-        }
-        return uuid.toString();
-    }
-
-    public UUID getComponentUuid() {
-        return componentUuid;
-    }
-
-    public void setComponentUuid(UUID componentUuid) {
-        UUID oldUuid = this.componentUuid;
-        this.componentUuid = componentUuid;
-        pcs.firePropertyChange("componentUuid", oldUuid, this.componentUuid);
-    }
-
-    public int getComponentNid() throws IOException {
-        return Ts.get().getNidForUuids(componentUuid);
-    }
-
-    public List<RefexCAB> getAnnotationBlueprints() throws IOException, InvalidCAB, ContradictionException {
-        if (annotations.isEmpty() && cv != null) {
-            if (cv.getCurrentRefexes(vc) != null) {
-                Collection<? extends RefexVersionBI<?>> originalRefexes = cv.getCurrentRefexes(vc);
-                if (!originalRefexes.isEmpty()) {
-                    for (RefexVersionBI refex : originalRefexes) {
-                        annotations.add(refex.makeBlueprint(vc));
-                    }
-                }
+            if (!originalRefexes.isEmpty()) {
+               for (RefexVersionBI refex : originalRefexes) {
+                  annotations.add(refex.makeBlueprint(vc));
+               }
             }
-        }
-        return annotations;
-    }
+         }
+      }
 
-    public void setAnnotationBlueprint(RefexCAB annotation) {
-        annotations.add(annotation);
-    }
+      return annotations;
+   }
 
-    public void replaceAnnotationBlueprints(List<RefexCAB> annotations) {
-        this.annotations = annotations;
-    }
+   public int getComponentNid() throws IOException {
+      return Ts.get().getNidForUuids(componentUuid);
+   }
 
-    public UUID getStatusUuid() {
-        return statusUuid;
-    }
+   public UUID getComponentUuid() {
+      return componentUuid;
+   }
 
-    public int getStatusNid() throws IOException {
-        return Ts.get().getNidForUuids(statusUuid);
-    }
+   public UUID getModuleUuid() {
+      return moduleUuid;
+   }
 
-    public void setStatusUuid(UUID statusUuid) {
-        this.statusUuid = statusUuid;
-    }
+   protected String getPrimoridalUuidStr(int nid)
+           throws IOException, InvalidCAB {
+      ComponentBI component = Ts.get().getComponent(nid);
 
-    public void setCurrent() {
-        this.statusUuid = currentStatusUuid;
-    }
+      if (component != null) {
+         return component.getPrimUuid().toString();
+      }
 
-    public void setRetired() {
-        this.statusUuid = retiredStatusUuid;
-    }
+      List<UUID> uuids = Ts.get().getUuidsForNid(nid);
+
+      if (uuids.size() == 1) {
+         return uuids.get(0).toString();
+      }
+
+      throw new InvalidCAB("Can't find primordialUuid for: " + component);
+   }
+
+   protected String getPrimoridalUuidStr(UUID uuid)
+           throws IOException, InvalidCAB {
+      if (Ts.get() != null) {
+         ComponentBI component = Ts.get().getComponent(uuid);
+
+         if (component != null) {
+            return component.getPrimUuid().toString();
+         }
+      }
+
+      return uuid.toString();
+   }
+
+   public int getStatusNid() throws IOException {
+      return Ts.get().getNidForUuids(statusUuid);
+   }
+
+   public UUID getStatusUuid() {
+      return statusUuid;
+   }
+
+   public void setAnnotationBlueprint(RefexCAB annotation) {
+      annotations.add(annotation);
+   }
+
+   public void setComponentUuid(UUID componentUuid) {
+      UUID oldUuid = this.componentUuid;
+
+      this.componentUuid = componentUuid;
+      pcs.firePropertyChange("componentUuid", oldUuid, this.componentUuid);
+   }
+
+   public void setCurrent() {
+      this.statusUuid = currentStatusUuid;
+   }
+
+   public void setModuleUuid(UUID moduleUuid) {
+      this.moduleUuid = moduleUuid;
+   }
+
+   public void setRetired() {
+      this.statusUuid = retiredStatusUuid;
+   }
+
+   public void setStatusUuid(UUID statusUuid) {
+      this.statusUuid = statusUuid;
+   }
 }

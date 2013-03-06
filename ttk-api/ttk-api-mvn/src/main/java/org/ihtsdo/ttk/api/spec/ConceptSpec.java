@@ -97,7 +97,7 @@ public class ConceptSpec implements SpecBI {
         try {
             boolean found = false;
             for (UUID uuid : uuids) {
-                if (Ts.get().hasUuid(uuid)) {
+                if (Ts.get() != null && Ts.get().hasUuid(uuid)) {
                     found = true;
                     break;
                 }

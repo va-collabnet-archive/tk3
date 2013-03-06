@@ -41,43 +41,43 @@ public class MediaCAB extends CreateOrAmendBlueprint {
 
     public MediaCAB(
             int conceptNid, int typeNid, String format, String textDescription,
-            byte[] dataBytes)
+            byte[] dataBytes, UUID moduleUuid)
             throws IOException, InvalidCAB, ContradictionException {
         this(Ts.get().getComponent(conceptNid).getPrimUuid(),
                 Ts.get().getComponent(typeNid).getPrimUuid(),
-                format, textDescription, dataBytes);
+                format, textDescription, dataBytes, moduleUuid);
     }
 
     public MediaCAB(
             UUID conceptUuid, UUID typeUuid, String format, String textDescription,
-            byte[] dataBytes)
+            byte[] dataBytes, UUID moduleUuid)
             throws IOException, InvalidCAB, ContradictionException {
         this(conceptUuid, typeUuid, format, textDescription, dataBytes,
-                null, null, null);
+                null, null, null, moduleUuid);
     }
 
     public MediaCAB(
             int conceptNid, int typeNid, String format, String textDescription,
-            byte[] dataBytes, MediaVersionBI media, ViewCoordinate vc)
+            byte[] dataBytes, MediaVersionBI media, ViewCoordinate vc, UUID moduleUuid)
             throws IOException, InvalidCAB, ContradictionException {
         this(Ts.get().getComponent(conceptNid).getPrimUuid(),
                 Ts.get().getComponent(typeNid).getPrimUuid(),
-                format, textDescription, dataBytes, media, vc);
+                format, textDescription, dataBytes, media, vc, moduleUuid);
     }
 
     public MediaCAB(
             UUID conceptUuid, UUID typeUuid, String format, String textDescription,
-            byte[] dataBytes, MediaVersionBI media, ViewCoordinate vc)
+            byte[] dataBytes, MediaVersionBI media, ViewCoordinate vc, UUID moduleUuid)
             throws IOException, InvalidCAB, ContradictionException {
         this(conceptUuid, typeUuid, format, textDescription, dataBytes,
-                null, media, vc);
+                null, media, vc, moduleUuid);
     }
 
     public MediaCAB(
             UUID conceptUuid, UUID typeUuid, String format, String textDescription,
             byte[] dataBytes, UUID componentUuid, MediaVersionBI media,
-            ViewCoordinate vc) throws IOException, InvalidCAB, ContradictionException {
-        super(componentUuid, media, vc);
+            ViewCoordinate vc, UUID moduleUuid) throws IOException, InvalidCAB, ContradictionException {
+        super(componentUuid, media, vc, moduleUuid);
 
         this.conceptUuid = conceptUuid;
         this.typeUuid = typeUuid;

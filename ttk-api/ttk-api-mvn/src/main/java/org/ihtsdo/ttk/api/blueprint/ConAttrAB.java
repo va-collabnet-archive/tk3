@@ -33,10 +33,17 @@ public class ConAttrAB extends CreateOrAmendBlueprint {
     public boolean defined;
 
     public ConAttrAB(
-            int conceptNid, boolean defined)
+            UUID conceptUuid, boolean defined, UUID moduleUuid)
             throws IOException, InvalidCAB, ContradictionException {
-        this(Ts.get().getComponent(conceptNid).getPrimUuid(),
-                defined, null, null);
+        super(conceptUuid, null, null, moduleUuid);
+        this.defined = defined;
+    }
+
+     public ConAttrAB(
+            int conceptNid, boolean defined, UUID moduleUuid)
+            throws IOException, InvalidCAB, ContradictionException {
+        super(Ts.get().getComponent(conceptNid).getPrimUuid(), null, null, moduleUuid);
+        this.defined = defined;
     }
 
     public ConAttrAB(
@@ -49,7 +56,7 @@ public class ConAttrAB extends CreateOrAmendBlueprint {
     public ConAttrAB(
             UUID componentUuid, boolean defined, ConAttrVersionBI conAttr,
             ViewCoordinate vc) throws IOException, InvalidCAB, ContradictionException {
-        super(componentUuid, conAttr, vc);
+        super(componentUuid, conAttr, vc, Ts.get().getUuidPrimordialForNid(conAttr.getModuleNid()));
         this.defined = defined;
     }
 

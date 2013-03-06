@@ -18,6 +18,10 @@ import org.ihtsdo.ttk.api.refex.type_nid_long.RefexNidLongVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_string.RefexNidStringVersionBI;
 import org.ihtsdo.ttk.api.refex.type_int.RefexIntVersionBI;
 import org.ihtsdo.ttk.api.refex.type_long.RefexLongVersionBI;
+import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_float.RefexNidNidNidFloatVersionBI;
+import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_int.RefexNidNidNidIntVersionBI;
+import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_long.RefexNidNidNidLongVersionBI;
+import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_string.RefexNidNidNidStringVersionBI;
 import org.ihtsdo.ttk.api.refex.type_string.RefexStringVersionBI;
 
 public enum TK_REFEX_TYPE {
@@ -42,6 +46,11 @@ public enum TK_REFEX_TYPE {
     CID_LONG(12, RefexNidLongVersionBI.class),
     LONG(13, RefexLongVersionBI.class),
     ARRAY_BYTEARRAY(14, RefexArrayOfBytearrayVersionBI.class),
+    CID_CID_CID_FLOAT(15, RefexNidNidNidFloatVersionBI.class),
+    CID_CID_CID_INT(16, RefexNidNidNidIntVersionBI.class),
+    CID_CID_CID_LONG(17, RefexNidNidNidLongVersionBI.class),
+    CID_CID_CID_STRING(18, RefexNidNidNidStringVersionBI.class),
+    
     UNKNOWN(Byte.MAX_VALUE, null);
 
     public static TK_REFEX_TYPE getFromToken(int type) throws UnsupportedOperationException {
@@ -74,6 +83,14 @@ public enum TK_REFEX_TYPE {
                 return LONG;
             case 14:
                 return ARRAY_BYTEARRAY;
+            case 15:
+                return CID_CID_CID_FLOAT;
+            case 16:
+                return CID_CID_CID_INT;
+            case 17:
+                return CID_CID_CID_LONG;
+            case 18:
+                return CID_CID_CID_STRING;
         }
         try {
             throw new UnsupportedOperationException("Can't handle type: " + type + " " +
@@ -145,6 +162,18 @@ public enum TK_REFEX_TYPE {
         }
         if (RefexArrayOfBytearrayVersionBI.class.isAssignableFrom(c)) {
             return ARRAY_BYTEARRAY;
+        }
+        if (RefexNidNidNidFloatVersionBI.class.isAssignableFrom(c)) {
+            return CID_CID_CID_FLOAT;
+        }
+        if (RefexNidNidNidIntVersionBI.class.isAssignableFrom(c)) {
+            return CID_CID_CID_INT;
+        }
+        if (RefexNidNidNidLongVersionBI.class.isAssignableFrom(c)) {
+            return CID_CID_CID_LONG;
+        }
+        if (RefexNidNidNidStringVersionBI.class.isAssignableFrom(c)) {
+            return CID_CID_CID_STRING;
         }
         return UNKNOWN;
     }
