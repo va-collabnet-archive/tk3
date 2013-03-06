@@ -23,6 +23,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
+ * 
+ * Consider some alternate structures...
+ * 
+ * 4 bit words = 32 "letters" in the alphabet
+ * 
+ * [parent id][32 bit bitset to give keys to sequences magnitude][key, key, key...]
+ * 
+ * 
  * @author kec
  */
 public class UuidNidTrieMap {
