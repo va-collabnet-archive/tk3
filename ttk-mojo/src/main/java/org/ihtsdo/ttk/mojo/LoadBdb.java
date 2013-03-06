@@ -78,7 +78,7 @@ public class LoadBdb extends AbstractMojo {
 
          long start = System.currentTimeMillis();
          IsKindOfMetrics metrics = new IsKindOfMetrics(Taxonomies.SNOMED.getLenient().getNid(),
-                                      StandardViewCoordinates.getSnomedLatest());
+                                      StandardViewCoordinates.getSnomedInferredLatest());
 
          Ts.get().iterateConceptDataInParallel(metrics);
 
@@ -90,7 +90,7 @@ public class LoadBdb extends AbstractMojo {
                  " (" + (end - start) + " ms)");
          start   = System.currentTimeMillis();
          metrics = new IsKindOfMetrics(Taxonomies.SNOMED.getLenient().getNid(),
-                                       StandardViewCoordinates.getSnomedLatest());
+                                       StandardViewCoordinates.getSnomedInferredLatest());
          Ts.get().iterateConceptDataInSequence(metrics);
          end = System.currentTimeMillis();
          getLog().info("\nSequential: " + metrics.getReport());
@@ -99,7 +99,7 @@ public class LoadBdb extends AbstractMojo {
                  " (" + (end - start) + " ms)");
          start   = System.currentTimeMillis();
          metrics = new IsKindOfMetrics(Taxonomies.SNOMED.getLenient().getNid(),
-                                      StandardViewCoordinates.getSnomedLatest());
+                                      StandardViewCoordinates.getSnomedInferredLatest());
 
          Ts.get().iterateConceptDataInParallel(metrics);
 
@@ -111,7 +111,7 @@ public class LoadBdb extends AbstractMojo {
                  " (" + (end - start) + " ms)");
          start   = System.currentTimeMillis();
          metrics = new IsKindOfMetrics(Taxonomies.SNOMED.getLenient().getNid(),
-                                       StandardViewCoordinates.getSnomedLatest());
+                                       StandardViewCoordinates.getSnomedInferredLatest());
          Ts.get().iterateConceptDataInSequence(metrics);
          end = System.currentTimeMillis();
          getLog().info("\nSequential: " + metrics.getReport());
