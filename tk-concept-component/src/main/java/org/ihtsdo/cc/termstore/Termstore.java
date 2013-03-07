@@ -22,14 +22,22 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
-import org.apache.lucene.analysis.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.PositionSetReadOnly;
@@ -41,10 +49,27 @@ import org.ihtsdo.cc.lucene.LuceneManager;
 import org.ihtsdo.cc.lucene.SearchResult;
 import org.ihtsdo.cs.ChangeSetWriterHandler;
 import org.ihtsdo.cs.econcept.EConceptChangeSetWriter;
-import org.ihtsdo.helper.uuid.Type3UuidFactory;
 import org.ihtsdo.helper.uuid.Type5UuidFactory;
 import org.ihtsdo.helper.uuid.UuidFactory;
-import org.ihtsdo.tk.api.*;
+import org.ihtsdo.tk.api.ComponentBI;
+import org.ihtsdo.tk.api.ComponentChroncileBI;
+import org.ihtsdo.tk.api.ComponentContainerBI;
+import org.ihtsdo.tk.api.ComponentVersionBI;
+import org.ihtsdo.tk.api.ConceptContainerBI;
+import org.ihtsdo.tk.api.ContradictionException;
+import org.ihtsdo.tk.api.ContradictionManagerBI;
+import org.ihtsdo.tk.api.NidBitSetBI;
+import org.ihtsdo.tk.api.NidSet;
+import org.ihtsdo.tk.api.NidSetBI;
+import org.ihtsdo.tk.api.Path;
+import org.ihtsdo.tk.api.PathBI;
+import org.ihtsdo.tk.api.Position;
+import org.ihtsdo.tk.api.PositionBI;
+import org.ihtsdo.tk.api.PositionSetBI;
+import org.ihtsdo.tk.api.Precedence;
+import org.ihtsdo.tk.api.RelAssertionType;
+import org.ihtsdo.tk.api.TermChangeListener;
+import org.ihtsdo.tk.api.TerminologySnapshotDI;
 import org.ihtsdo.tk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.tk.api.changeset.ChangeSetGeneratorBI;
 import org.ihtsdo.tk.api.concept.ConceptChronicleBI;
@@ -154,7 +179,7 @@ public abstract class Termstore implements PersistentStoreI {
       LastChange.removeTermChangeListener(cl);
    }
 
-   public Collection<Integer> searchLucene(String query, SearchType searchType) throws IOException {
+   public Collection<Integer> searchLucene(String query, SearchType searchType) throws IOException{
       try {
          Query q = new QueryParser(LuceneManager.version, "desc",
                                    new StandardAnalyzer(LuceneManager.version)).parse(query);
@@ -169,7 +194,7 @@ public abstract class Termstore implements PersistentStoreI {
             if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
                TermstoreLogger.logger.fine(
                    "StandardAnalyzer query returned no results. Now trying WhitespaceAnalyzer query");
-               q = new QueryParser(LuceneManager.version, "desc", new WhitespaceAnalyzer()).parse(query);
+               q = new QueryParser(LuceneManager.version, "desc", new WhitespaceAnalyzer(LuceneManager.version)).parse(query);
             }
 
             result = LuceneManager.search(q);

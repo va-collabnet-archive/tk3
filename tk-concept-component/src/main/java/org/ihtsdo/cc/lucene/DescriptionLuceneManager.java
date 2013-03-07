@@ -20,14 +20,10 @@ public class DescriptionLuceneManager extends LuceneManager {
     protected static void writeToLuceneNoLock(Collection<Description> descriptions) throws CorruptIndexException, IOException {
         if (descWriter == null) {
             descLuceneMutableDir = setupWriter(descLuceneMutableDirFile, descLuceneMutableDir);
-            descWriter.setUseCompoundFile(true);
-            descWriter.setMergeFactor(15);
-            descWriter.setMaxMergeDocs(Integer.MAX_VALUE);
-            descWriter.setMaxBufferedDocs(1000);
         }
 
+        if (descWriter != null) {
         IndexWriter writerCopy = descWriter;
-        if (writerCopy != null) {
             for (Description desc : descriptions) {
                 if (desc != null) {
                     writerCopy.deleteDocuments(new Term("dnid", Integer.toString(desc.getNid())));
@@ -38,7 +34,7 @@ public class DescriptionLuceneManager extends LuceneManager {
         }
 
         if (descSearcher != null) {
-            descSearcher.close();
+            descSearcher.getIndexReader().close();
             LuceneManager.logger.info("Closing lucene desc Searcher");
         }
         descSearcher = null;

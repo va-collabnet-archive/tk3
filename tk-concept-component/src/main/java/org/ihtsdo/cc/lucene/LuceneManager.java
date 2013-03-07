@@ -4,15 +4,17 @@ package org.ihtsdo.cc.lucene;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.FieldInvertState;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriter.MaxFieldLength;
-import org.apache.lucene.search.DefaultSimilarity;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.LogByteSizeMergePolicy;
+import org.apache.lucene.index.MergePolicy;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.Similarity;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.similarities.DefaultSimilarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.store.SimpleFSDirectory;
@@ -36,8 +38,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.search.*;
 import org.ihtsdo.cc.P;
 import org.ihtsdo.cc.concept.Concept;
 import org.ihtsdo.cc.component.IdentifierSet;
@@ -51,18 +51,17 @@ public abstract class LuceneManager {
     protected static final Logger logger = Logger.getLogger(Concept.class.getName());
     private static NidBitSetBI uncommittedDescNids = new IdentifierSet();
     protected static DescriptionIndexGenerator descIndexer = null;
-    public final static Version version = Version.LUCENE_30;
+    public final static Version                version             = Version.LUCENE_40;
     private static ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
     private static Semaphore initSemaphore = new Semaphore(1);
+    private static Semaphore                   luceneWriterPermit  = new Semaphore(50);
+    private static ExecutorService             luceneWriterService =
+        Executors.newFixedThreadPool(1, new NamedThreadFactory(new ThreadGroup("Lucene group"), "Lucene writer"));
     public static Directory descLuceneMutableDir;
     public static Directory descLuceneReadOnlyDir;
-    protected static ParallelMultiSearcher descSearcher;
+    protected static IndexSearcher descSearcher;
     protected static IndexWriter descWriter;
-    private static Semaphore luceneWriterPermit = new Semaphore(50);
-    private static ExecutorService luceneWriterService = Executors.newFixedThreadPool(1,
-            new NamedThreadFactory(new ThreadGroup("Lucene group"), "Lucene writer"));
 
-    //~--- methods -------------------------------------------------------------
     public static void commitDescriptionsToLucene() throws InterruptedException {
         luceneWriterPermit.acquire();
 
@@ -91,7 +90,7 @@ public abstract class LuceneManager {
     }
 
     public static void close() {
-        ParallelMultiSearcher searcher;
+        IndexSearcher searcher;
         IndexWriter writer;
 
         writer = descWriter;
@@ -100,7 +99,7 @@ public abstract class LuceneManager {
         // Only do if not first time called
         if (searcher != null) {
             try {
-                searcher.close();
+                searcher.getIndexReader().close();
                 searcher = null;
             } catch (Throwable e) {
                 logger.log(Level.SEVERE, "Exception during lucene searcher close", e);
@@ -136,23 +135,16 @@ public abstract class LuceneManager {
     public static void createLuceneIndex(ViewCoordinate viewCoord) throws Exception {
         IndexWriter writer;
 
-        Similarity.setDefault(new ShortTextSimilarity());
         init();
         writer = descWriter;
 
         if (writer == null) {
             DescriptionLuceneManager.descLuceneMutableDirFile.mkdirs();
-            descLuceneMutableDir = setupWriter(DescriptionLuceneManager.descLuceneMutableDirFile,
-                    descLuceneMutableDir);
+            descLuceneMutableDir = setupWriter(DescriptionLuceneManager.descLuceneMutableDirFile, descLuceneMutableDir);
         }
 
-        writer.setUseCompoundFile(true);
-        writer.setMergeFactor(15);
-        writer.setMaxMergeDocs(Integer.MAX_VALUE);
-        writer.setMaxBufferedDocs(1000);
         descIndexer = new DescriptionIndexGenerator(writer);
         P.s.iterateConceptDataInSequence(descIndexer);
-        writer.optimize();
         writer.commit();
     }
 
@@ -168,8 +160,7 @@ public abstract class LuceneManager {
 
             try {
                 if (descLuceneReadOnlyDir == null) {
-                    descLuceneReadOnlyDir = initDirectory(DescriptionLuceneManager.descLuceneReadOnlyDirFile,
-                            false);
+                    descLuceneReadOnlyDir = initDirectory(DescriptionLuceneManager.descLuceneReadOnlyDirFile, false);
                 }
             } finally {
                 initSemaphore.release();
@@ -212,8 +203,8 @@ public abstract class LuceneManager {
     }
 
     public static SearchResult search(Query q) throws CorruptIndexException, IOException {
-        ParallelMultiSearcher searcherCopy;
-        ParallelMultiSearcher searcher;
+        IndexSearcher searcherCopy;
+        IndexSearcher searcher;
 
         init();
 
@@ -224,29 +215,27 @@ public abstract class LuceneManager {
         try {
             searcherCopy = descSearcher;
 
-            if (searcherCopy == null) {
-                IndexSearcher readOnlySearcher = null;
+            IndexReader    readOnlySearcher = null;
+            TtkMultiReader mr               = null;
 
+            if (searcherCopy == null) {
                 try {
-                    readOnlySearcher = new IndexSearcher(IndexReader.open(descLuceneReadOnlyDir));
+                    readOnlySearcher = DirectoryReader.open(descLuceneReadOnlyDir);
                 } catch (java.io.FileNotFoundException e) {
                     // ignore not accesible readonly
                 }
 
                 if (readOnlySearcher != null) {
-                    readOnlySearcher.setSimilarity(new ShortTextSimilarity());
+                    IndexReader mutableSearcher = DirectoryReader.open(descLuceneMutableDir);
 
-                    IndexSearcher mutableSearcher = new IndexSearcher(IndexReader.open(descLuceneMutableDir));
-
-                    mutableSearcher.setSimilarity(new ShortTextSimilarity());
-                    searcherCopy = new ParallelMultiSearcher(readOnlySearcher, mutableSearcher);
+                    mr           = new TtkMultiReader(readOnlySearcher, mutableSearcher);
+                    searcherCopy = new IndexSearcher(mr);
                     searcherCopy.setSimilarity(new ShortTextSimilarity());
                     descSearcher = searcherCopy;
                 } else {
-                    IndexSearcher mutableSearcher = new IndexSearcher(IndexReader.open(descLuceneMutableDir));
+                    IndexSearcher mutableSearcher = new IndexSearcher(DirectoryReader.open(descLuceneMutableDir));
 
-                    mutableSearcher.setSimilarity(new ShortTextSimilarity());
-                    searcherCopy = new ParallelMultiSearcher(mutableSearcher);
+                    searcherCopy = mutableSearcher;
                     searcherCopy.setSimilarity(new ShortTextSimilarity());
                     descSearcher = searcherCopy;
                 }
@@ -261,10 +250,9 @@ public abstract class LuceneManager {
 
             searcher = searcherCopy;
 
+            if (mr != null) {
             for (ScoreDoc sd : topDocs.scoreDocs) {
-                int index = searcherCopy.subSearcher(sd.doc);
-
-                if (index == 1) {
+                    if (!mr.isFirstIndex(sd.doc)) {
                     newDocs.add(sd);
 
                     Document d = searcher.doc(sd.doc);
@@ -273,11 +261,10 @@ public abstract class LuceneManager {
                     ids.add(nid);
                 }
             }
+            }
 
             for (ScoreDoc sd : topDocs.scoreDocs) {
-                int index = searcherCopy.subSearcher(sd.doc);
-
-                if (index == 0) {
+                if ((mr == null) || mr.isFirstIndex(sd.doc)) {
                     Document d = searcher.doc(sd.doc);
                     int nid = Integer.parseInt(d.get(searchTerm));
 
@@ -324,25 +311,28 @@ public abstract class LuceneManager {
         luceneDir.clearLock("write.lock");
 
         IndexWriter writer;
+        IndexWriterConfig config      = new IndexWriterConfig(version, new StandardAnalyzer(version));
+        MergePolicy       mergePolicy = new LogByteSizeMergePolicy();
+
+        config.setMergePolicy(mergePolicy);
+        config.setSimilarity(new ShortTextSimilarity());
 
         if (new File(luceneDirFile, "segments.gen").exists()) {
-            writer = new IndexWriter(luceneDir, new StandardAnalyzer(version), false, MaxFieldLength.UNLIMITED);
+            writer = new IndexWriter(luceneDir, config);
         } else {
-            writer = new IndexWriter(luceneDir, new StandardAnalyzer(version), true, MaxFieldLength.UNLIMITED);
+            writer = new IndexWriter(luceneDir, config);
         }
 
         descWriter = writer;
-        descWriter.setSimilarity(new ShortTextSimilarity());
 
         return luceneDir;
     }
 
-    public static void writeToLucene(Collection items) throws IOException {
+    public static void writeToLucene(Collection<Description> items) throws IOException {
         writeToLucene(items, null);
     }
 
-    public static synchronized void writeToLucene(Collection items, ViewCoordinate viewCoord)
-            throws IOException {
+    public static synchronized void writeToLucene(Collection<Description> items, ViewCoordinate viewCoord) throws IOException {
         init();
 
         try {
@@ -355,14 +345,12 @@ public abstract class LuceneManager {
         }
     }
 
-    //~--- get methods ---------------------------------------------------------
     public static int getMatchLimit() {
         return DescriptionLuceneManager.matchLimit;
     }
 
-    //~--- set methods ---------------------------------------------------------
-    public static void setLuceneRootDir(File root) {
-        ParallelMultiSearcher searcher;
+    public static void setLuceneRootDir(File root) throws IOException {
+        IndexSearcher searcher;
         IndexWriter writer;
 
         DescriptionLuceneManager.descLuceneMutableDirFile = new File(root,
@@ -383,12 +371,8 @@ public abstract class LuceneManager {
         }
 
         if (searcher != null) {
-            try {
-                searcher.close();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+            searcher.getIndexReader().close();
             }
-        }
 
         descLuceneMutableDir = null;
         descLuceneReadOnlyDir = null;
@@ -398,51 +382,16 @@ public abstract class LuceneManager {
         DescriptionLuceneManager.matchLimit = limit;
     }
 
-    //~--- inner classes -------------------------------------------------------
-    protected static class ShortTextSimilarity extends DefaultSimilarity {
-
-        public ShortTextSimilarity() {
-        }
-
-        //~--- methods ----------------------------------------------------------
-        @Override
-        public float computeNorm(String field, FieldInvertState state) {
-            return (float) (1.0 / (state.getLength() * 5));
-        }
-
-        @Override
-        public float coord(int overlap, int maxOverlap) {
-            return 1.0f;
-        }
-
-        @Override
-        public float idf(int docFreq, int numDocs) {
-            return (float) 1.0;
-        }
-
-        @Override
-        public float tf(float freq) {
-            return 1.0f;
-        }
-
-        @Override
-        public float tf(int freq) {
-            return 1.0f;
-        }
-    }
-
     private static class DescLuceneWriter implements Runnable {
 
         private int batchSize = 200;
         private IdentifierSet descNidsToWrite;
 
-        //~--- constructors -----------------------------------------------------
         public DescLuceneWriter(IdentifierSet descNidsToCommit) {
             super();
             this.descNidsToWrite = descNidsToCommit;
         }
 
-        //~--- methods ----------------------------------------------------------
         @Override
         public void run() {
             try {
@@ -470,6 +419,26 @@ public abstract class LuceneManager {
             }
 
             luceneWriterPermit.release();
+        }
+    }
+
+
+    protected static class ShortTextSimilarity extends DefaultSimilarity {
+        public ShortTextSimilarity() {}
+
+        @Override
+        public float coord(int overlap, int maxOverlap) {
+            return 1.0f;
+        }
+
+        @Override
+        public float tf(float freq) {
+            return 1.0f;
+        }
+
+        @Override
+        public float tf(int freq) {
+            return 1.0f;
         }
     }
 }
