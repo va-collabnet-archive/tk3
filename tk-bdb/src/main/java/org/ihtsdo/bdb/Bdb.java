@@ -269,7 +269,7 @@ public class Bdb {
     }
 
     public static void setup(String dbRoot) {
-        System.out.println("setup dbRoot: " + dbRoot);
+    	Logger.getLogger(Bdb.class.getName()).log(Level.INFO, "setup dbRoot: " + dbRoot);
         stampCache = new ConcurrentHashMap<>();
         try {
             closed = false;
@@ -284,7 +284,7 @@ public class Bdb {
                 // ensure all OFFSETS are initialized prior to multi-threading. 
             }
             bdbDirectory = new File(dbRoot);
-            System.out.println("absolute dbRoot: " + bdbDirectory.getAbsolutePath());
+            Logger.getLogger(Bdb.class.getName()).log(Level.INFO, "absolute dbRoot: " + bdbDirectory.getAbsolutePath());
             viewCoordinateMapFile = new File(bdbDirectory, "viewCoordinates.oos");
             bdbDirectory.mkdirs();
             LuceneManager.setLuceneRootDir(bdbDirectory);
