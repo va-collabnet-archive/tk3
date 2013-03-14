@@ -4,7 +4,7 @@
     <parent>
  	<groupId>org.ihtsdo.tk</groupId>
 	<artifactId>tk-mmb</artifactId>
-	<version>3.0.1-SNAPSHOT</version>
+	<version>3.0.1</version>
     </parent>
     <artifactId>tk-cern-prim</artifactId>
     <packaging>jar</packaging>
