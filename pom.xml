@@ -16,7 +16,7 @@ the specific language governing permissions and limitations under the License. -
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.ihtsdo.tk</groupId>
     <artifactId>tk-mmb</artifactId>
-    <version>3.0.1</version>
+    <version>3.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${branch}: (MMP) Terminology Toolkit</name>
     <description>The IHTSDO toolkit provides two software frameworks for
@@ -27,9 +27,9 @@ the specific language governing permissions and limitations under the License. -
         needs of their end users.
     </description>
     <scm>
-        <connection>scm:svn:https://csfe.aceworkspace.net/svn/repos/tk3/tags/tk-mmb-3.0.1</connection>
-        <developerConnection>scm:svn:https://csfe.aceworkspace.net/svn/repos/tk3/tags/tk-mmb-3.0.1</developerConnection>
-        <url>https://csfe.aceworkspace.net/integration/viewvc/viewvc.cgi/tags/tk-mmb-3.0.1?root=tk3&amp;system=exsy1002</url>
+        <connection>scm:svn:https://csfe.aceworkspace.net/svn/repos/tk3/trunk/tk3</connection>
+        <developerConnection>scm:svn:https://csfe.aceworkspace.net/svn/repos/tk3/trunk/tk3</developerConnection>
+        <url>https://csfe.aceworkspace.net/integration/viewvc/viewvc.cgi/trunk/?root=tk3&amp;system=exsy1002</url>
     </scm>
     <properties>
         <branch>trunk</branch>

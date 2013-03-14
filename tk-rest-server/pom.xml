@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.ihtsdo.tk</groupId>
         <artifactId>tk-mmb</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.2-SNAPSHOT</version>
     </parent>
     <artifactId>tk-rest-server</artifactId>
     <packaging>war</packaging>
