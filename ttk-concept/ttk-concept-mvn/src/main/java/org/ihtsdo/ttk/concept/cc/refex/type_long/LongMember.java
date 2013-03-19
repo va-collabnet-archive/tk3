@@ -13,7 +13,7 @@ import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.RefexProperty;
 import org.ihtsdo.ttk.api.refex.type_long.RefexLongAnalogBI;
 import org.ihtsdo.ttk.dto.component.refex.type_long.TkRefexLongMember;
 import org.ihtsdo.ttk.dto.component.refex.type_long.TkRefexLongRevision;
@@ -72,7 +72,7 @@ public class LongMember extends RefexMember<LongRevision, LongMember>
 
    @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.LONG1, getLong1());
+      rcs.with(RefexProperty.LONG_EXTENSION_1, getLong1());
    }
 
    @Override

@@ -673,7 +673,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             this.annotations.addAll(anotherAnnotationMap.values());
                 
                 for(RefexMember refsetMember : anotherAnnotationMap.values()){
-                    Concept refsetConcept = (Concept)Ts.get().getConceptForNid(refsetMember.getRefexNid());
+                    Concept refsetConcept = (Concept)Ts.get().getConceptForNid(refsetMember.getRefexExtensionNid());
                     if(refsetConcept.isAnnotationIndex()){
                         refsetConcept.getData().getMemberNids().add(refsetMember.getNid());
                         indexedAnnotationConcepts.add(refsetConcept);
@@ -1267,7 +1267,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
       if (annotations != null) {
          for (RefexChronicleBI<?> refex : annotations) {
-            if (refex.getRefexNid() == refexNid) {
+            if (refex.getRefexExtensionNid() == refexNid) {
                for (RefexVersionBI<?> version : refex.getVersions(xyz)) {
                   returnValues.add(version);
                }
@@ -1286,7 +1286,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
       if (annotations != null) {
          for (RefexChronicleBI<?> refex : annotations) {
-            if (refex.getRefexNid() == refexNid) {
+            if (refex.getRefexExtensionNid() == refexNid) {
                for (RefexVersionBI<?> version : refex.getVersions(xyz)) {
                   if (cls.isAssignableFrom(version.getClass())) {
                      returnValues.add((T) version);
@@ -1450,7 +1450,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       List<RefexChronicleBI<?>>                 returnValues = new ArrayList<>(r.size());
 
       for (RefexChronicleBI<?> rcbi : r) {
-         if (rcbi.getRefexNid() == refsetNid) {
+         if (rcbi.getRefexExtensionNid() == refsetNid) {
             returnValues.add(rcbi);
          }
       }

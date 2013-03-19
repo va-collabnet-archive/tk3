@@ -23,7 +23,7 @@ import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
 import org.ihtsdo.ttk.concept.cc.relationship.group.RelGroupVersion;
 import org.ihtsdo.cern.colt.map.OpenIntIntHashMap;
 import org.ihtsdo.ttk.api.blueprint.ConceptCB;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationThreadingPolicy;
 import org.ihtsdo.ttk.api.conattr.ConAttrVersionBI;
@@ -180,12 +180,12 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    }
 
    @Override
-   public ConceptCB makeBlueprint() throws IOException, ContradictionException, InvalidCAB {
+   public ConceptCB makeBlueprint() throws IOException, ContradictionException, InvalidBlueprintException {
       return concept.makeBlueprint(vc);
    }
 
    @Override
-   public ConceptCB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidCAB {
+   public ConceptCB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
       return concept.makeBlueprint(vc);
    }
 
@@ -1263,7 +1263,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
          if (refexes != null) {
             for (RefexChronicleBI<?> refex : refexes) {
-               if (refex.getRefexNid() == collectionNid) {
+               if (refex.getRefexExtensionNid() == collectionNid) {
                   return true;
                }
             }

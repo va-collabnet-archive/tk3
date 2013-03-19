@@ -42,7 +42,7 @@ import org.ihtsdo.ttk.concept.cc.relationship.group.RelGroupChronicle;
 import org.ihtsdo.ttk.concept.cc.relationship.group.RelGroupVersion;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.blueprint.ConceptCB;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationThreadingPolicy;
 import org.ihtsdo.ttk.api.conattr.ConAttrChronicleBI;
@@ -324,7 +324,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         return aac.isComponentChanged();
     }
 
-    public ConceptCB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidCAB {
+    public ConceptCB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
         ConceptVersion cv = getVersion(vc);
         UUID[] uuidArray = new UUID[cv.getRelsOutgoingDestinationsActiveIsa().size()];
         int index = 0;
@@ -682,7 +682,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
     public void updateXrefs() throws IOException {
         for (RefexMember<?, ?> m : getRefsetMembers()) {
-            NidPairForRefex npr = NidPair.getRefexNidMemberNidPair(m.getRefexNid(), m.getNid());
+            NidPairForRefex npr = NidPair.getRefexNidMemberNidPair(m.getRefexExtensionNid(), m.getNid());
 
             P.s.addXrefPair(m.referencedComponentNid, npr);
         }
@@ -1259,7 +1259,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         for (Description.Version d : descriptions) {
             if (d.getTypeNid() == typePrefNid) {
                 for (RefexVersionBI<?> refex : d.getCurrentRefexes(vc)) {
-                    if (refex.getRefexNid() == langRefexNid) {
+                    if (refex.getRefexExtensionNid() == langRefexNid) {
                         RefexNidVersionBI<?> langRefex = (RefexNidVersionBI<?>) refex;
 
                         if ((langRefex.getNid1() == ReferenceConcepts.PREFERRED_ACCEPTABILITY_RF1.getNid())

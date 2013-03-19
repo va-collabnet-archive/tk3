@@ -20,7 +20,7 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import java.util.Collection;
 import java.util.Set;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributesRevision;
 
 public class ConceptAttributesRevision extends Revision<ConceptAttributesRevision, ConceptAttributes>
@@ -187,7 +187,7 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
    }
 
     @Override
-    public ConAttrAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidCAB {
+    public ConAttrAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
         ConAttrAB conAttrBp = new ConAttrAB(primordialComponent.getConceptNid(), defined, getVersion(vc), vc);
         return conAttrBp;
     }

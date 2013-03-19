@@ -11,16 +11,13 @@ import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.concept.cc.refex.type_boolean.BooleanMember.Version;
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.RefexProperty;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanAnalogBI;
-import org.ihtsdo.ttk.dto.component.refex.type_boolean.TkRefexBooleanMember;
 import org.ihtsdo.ttk.dto.component.refex.type_boolean.TkRefexBooleanRevision;
 import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
-import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -77,7 +74,7 @@ public class BooleanRevision extends RefexRevision<BooleanRevision, BooleanMembe
 
     @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.BOOLEAN1, getBoolean1());
+      rcs.with(RefexProperty.BOOLEAN_EXTENSION_1, getBoolean1());
    }
 
    @Override

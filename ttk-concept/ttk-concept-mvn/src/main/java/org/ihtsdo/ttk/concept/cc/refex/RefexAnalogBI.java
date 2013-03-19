@@ -27,7 +27,7 @@ import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 public interface RefexAnalogBI<R extends RefexRevision<R, ?>>
         extends RefexVersionBI, AnalogBI {
 
-    void setRefexNid(int refexNid) throws PropertyVetoException;
+    void setRefexExtensionNid(int refexExtensionNid) throws PropertyVetoException;
 
     void setReferencedComponentNid(int componentNid) throws PropertyVetoException;
 

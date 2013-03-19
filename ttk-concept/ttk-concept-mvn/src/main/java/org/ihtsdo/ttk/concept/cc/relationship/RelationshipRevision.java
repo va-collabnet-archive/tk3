@@ -11,7 +11,7 @@ import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.Revision;
 import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 import org.ihtsdo.ttk.api.blueprint.RelCAB;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.relationship.RelationshipAnalogBI;
@@ -126,14 +126,14 @@ public class RelationshipRevision extends Revision<RelationshipRevision, Relatio
    }
 
    @Override
-   public RelCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidCAB {
+   public RelCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
       TkRelType relType = null;
 
       if ((getCharacteristicNid()
               == SnomedMetadataRf1.INFERRED_DEFINING_CHARACTERISTIC_TYPE_RF1.getLenient()
                  .getNid()) || (getCharacteristicNid()
                                 == SnomedMetadataRf2.INFERRED_RELATIONSHIP_RF2.getLenient().getNid())) {
-         throw new InvalidCAB("Inferred relationships can not be used to make blueprints");
+         throw new InvalidBlueprintException("Inferred relationships can not be used to make blueprints");
       } else if ((getCharacteristicNid()
                   == SnomedMetadataRf1.STATED_DEFINING_CHARACTERISTIC_TYPE_RF1.getLenient()
                      .getNid()) || (getCharacteristicNid()

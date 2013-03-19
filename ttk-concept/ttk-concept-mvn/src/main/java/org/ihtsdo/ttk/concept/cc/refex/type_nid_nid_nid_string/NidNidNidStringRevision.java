@@ -9,7 +9,7 @@ import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.RefexProperty;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_string
@@ -98,10 +98,10 @@ public class NidNidNidStringRevision
 
    @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.CNID1, getNid1());
-      rcs.with(RefexProperty.CNID2, getNid2());
-      rcs.with(RefexProperty.CNID3, getNid3());
-      rcs.with(RefexProperty.STRING1, getString1());
+      rcs.with(RefexProperty.COMPONENT_EXTENSION_1_ID, getNid1());
+      rcs.with(RefexProperty.COMPONENT_EXTENSION_2_ID, getNid2());
+      rcs.with(RefexProperty.COMPONENT_EXTENSION_3_ID, getNid3());
+      rcs.with(RefexProperty.STRING_EXTENSION_1, getString1());
    }
 
    @Override
@@ -115,7 +115,7 @@ public class NidNidNidStringRevision
 
          return (this.nid1 == another.nid1) && (this.nid2 == another.nid2)
                 && (this.nid3 == another.nid3)
-                && (this.string1 == another.string1) && super.equals(obj);
+                && (this.string1.equals(another.string1)) && super.equals(obj);
       }
 
       return false;

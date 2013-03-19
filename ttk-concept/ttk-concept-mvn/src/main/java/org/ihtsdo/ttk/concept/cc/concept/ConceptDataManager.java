@@ -153,7 +153,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
          addToMemberMap(refsetMember);
          modified();
          P.s.addXrefPair(refsetMember.getReferencedComponentNid(),
-                         NidPair.getRefexNidMemberNidPair(refsetMember.getRefexNid(), refsetMember.getNid()));
+                         NidPair.getRefexNidMemberNidPair(refsetMember.getRefexExtensionNid(), refsetMember.getNid()));
       }
    }
 

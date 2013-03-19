@@ -13,7 +13,7 @@ import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.RefexProperty;
 import org.ihtsdo.ttk.api.refex.type_nid_int.RefexNidIntAnalogBI;
 import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_int.TkRefexUuidIntMember;
@@ -74,8 +74,8 @@ public class NidIntMember extends RefexMember<NidIntRevision, NidIntMember>
 
    @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.CNID1, getNid1());
-      rcs.with(RefexProperty.INTEGER1, getInt1());
+      rcs.with(RefexProperty.COMPONENT_EXTENSION_1_ID, getNid1());
+      rcs.with(RefexProperty.INTEGER_EXTENSION_1, getInt1());
    }
 
    @Override

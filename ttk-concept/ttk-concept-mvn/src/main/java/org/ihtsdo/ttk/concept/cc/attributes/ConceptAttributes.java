@@ -33,7 +33,7 @@ import java.io.IOException;
 
 import java.util.*;
 import org.ihtsdo.ttk.api.blueprint.ConAttrAB;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 
 public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevision, ConceptAttributes>
         implements ConAttrAnalogBI<ConceptAttributesRevision> {
@@ -264,7 +264,7 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
 //    }
 
     @Override
-    public ConAttrAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidCAB {
+    public ConAttrAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
         ConAttrAB conAttrBp = new ConAttrAB(nid, defined,
                 getVersion(vc), vc);
         return conAttrBp;
@@ -444,7 +444,7 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
         }
 
         @Override
-        public ConAttrAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidCAB{
+        public ConAttrAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException{
             return getCv().makeBlueprint(vc);
         }
 

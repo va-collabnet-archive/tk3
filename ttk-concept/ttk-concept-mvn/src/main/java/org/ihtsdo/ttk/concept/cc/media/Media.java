@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.util.*;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 import org.ihtsdo.ttk.api.blueprint.MediaCAB;
 
 public class Media extends ConceptComponent<MediaRevision, Media>
@@ -285,7 +285,7 @@ public class Media extends ConceptComponent<MediaRevision, Media>
      * @see org.dwfa.vodb.types.I_ImageVersioned#getFormat()
      */
     @Override
-    public MediaCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidCAB {
+    public MediaCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
         MediaCAB mediaBp = new MediaCAB(getConceptNid(),
                 getTypeNid(),
                 getFormat(),
@@ -476,7 +476,7 @@ public class Media extends ConceptComponent<MediaRevision, Media>
         }
 
         @Override
-        public MediaCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidCAB {
+        public MediaCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
             return getCv().makeBlueprint(vc);
         }
 

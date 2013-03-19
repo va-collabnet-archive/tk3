@@ -19,7 +19,7 @@ import java.util.Set;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 
@@ -51,7 +51,7 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
     @Override
     protected void addComponentNids(Set<Integer> allNids) {
         allNids.add(primordialComponent.referencedComponentNid);
-        allNids.add(primordialComponent.refsetNid);
+        allNids.add(primordialComponent.refexExtensionNid);
         addRefsetTypeNids(allNids);
     }
 
@@ -112,8 +112,8 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
 
     //~--- get methods ---------------------------------------------------------
     @Override
-    public int getRefexNid() {
-        return primordialComponent.refsetNid;
+    public int getRefexExtensionNid() {
+        return primordialComponent.refexExtensionNid;
     }
 
     @Override
@@ -128,10 +128,10 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
 
     @Override
     public RefexCAB makeBlueprint(ViewCoordinate vc) throws IOException,
-            InvalidCAB, ContradictionException {
+            InvalidBlueprintException, ContradictionException {
         RefexCAB rcs = new RefexCAB(getTkRefsetType(),
                 P.s.getUuidPrimordialForNid(getReferencedComponentNid()),
-                Ts.get().getUuidPrimordialForNid(getRefexNid()),
+                Ts.get().getUuidPrimordialForNid(getRefexExtensionNid()),
                 getVersion(vc), vc, Ts.get().getUuidPrimordialForNid(getModuleNid()));
 
         addSpecProperties(rcs);
@@ -143,8 +143,8 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
 
     //~--- set methods ---------------------------------------------------------
     @Override
-    public void setRefexNid(int collectionNid) throws PropertyVetoException, IOException {
-        primordialComponent.setRefexNid(collectionNid);
+    public void setRefexExtensionNid(int collectionNid) throws PropertyVetoException, IOException {
+        primordialComponent.setRefexExtensionNid(collectionNid);
     }
 
     @Override

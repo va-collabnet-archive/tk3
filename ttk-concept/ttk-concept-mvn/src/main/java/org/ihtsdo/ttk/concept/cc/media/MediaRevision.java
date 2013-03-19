@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.Set;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 import org.ihtsdo.ttk.api.blueprint.MediaCAB;
 
 public class MediaRevision extends Revision<MediaRevision, Media>
@@ -111,7 +111,7 @@ public class MediaRevision extends Revision<MediaRevision, Media>
    }
    
    @Override
-    public MediaCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidCAB{
+    public MediaCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException{
         MediaCAB mediaBp = new MediaCAB(getConceptNid(),
                 getTypeNid(),
                 getFormat(),

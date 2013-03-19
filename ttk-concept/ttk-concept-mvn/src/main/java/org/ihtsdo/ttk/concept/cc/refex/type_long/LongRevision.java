@@ -13,7 +13,7 @@ import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.concept.cc.refex.type_long.LongMember.Version;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.RefexProperty;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_long.RefexLongAnalogBI;
@@ -65,7 +65,7 @@ public class LongRevision extends RefexRevision<LongRevision, LongMember>
 
    @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.LONG1, getLong1());
+      rcs.with(RefexProperty.LONG_EXTENSION_1, getLong1());
    }
 
    @Override

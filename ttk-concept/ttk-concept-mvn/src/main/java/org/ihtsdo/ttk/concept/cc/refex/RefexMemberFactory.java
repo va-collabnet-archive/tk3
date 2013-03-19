@@ -7,9 +7,9 @@ import com.sleepycat.bind.tuple.TupleInput;
 import org.ihtsdo.ttk.api.ComponentChroncileBI;
 import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
 import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.RefexProperty;
 import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.concept.Concept;
@@ -77,7 +77,7 @@ import java.io.IOException;
 
 public class RefexMemberFactory {
    public static RefexMember<?, ?> create(RefexCAB res, EditCoordinate ec)
-           throws IOException, InvalidCAB {
+           throws IOException, InvalidBlueprintException {
       RefexMember<?, ?> member = createBlank(res);
 
       return reCreate(res, member, ec);
@@ -299,10 +299,10 @@ public class RefexMemberFactory {
 
    public static RefexMember<?, ?> reCreate(RefexCAB res,
            RefexMember<?, ?> member, EditCoordinate ec)
-           throws IOException, InvalidCAB {
+           throws IOException, InvalidBlueprintException {
       Concept refexColCon = (Concept) P.s.getConcept(res.getRefexColllectionUuid());
 
-      member.refsetNid = refexColCon.getNid();
+      member.refexExtensionNid = refexColCon.getNid();
       member.nid       = P.s.getNidForUuids(res.getMemberUUID());
 
       if (refexColCon.isAnnotationStyleRefex()) {
@@ -322,7 +322,7 @@ public class RefexMemberFactory {
          if (i == 0) {
             member.setStatusAtPositionNid(
                 P.s.getStamp(
-                   res.getInt(RefexProperty.STATUS_UUID), Long.MAX_VALUE,
+                   res.getInt(RefexProperty.STATUS_ID), Long.MAX_VALUE,
                    ec.getAuthorNid(), ec.getModuleNid(),
                    ec.getEditPaths().getSetValues()[i]));
             member.setPrimordialUuid(res.getMemberUUID());
@@ -330,10 +330,10 @@ public class RefexMemberFactory {
             try {
                res.setPropertiesExceptSap(member);
             } catch (PropertyVetoException ex) {
-               throw new InvalidCAB("RefexAmendmentSpec: " + res, ex);
+               throw new InvalidBlueprintException("RefexAmendmentSpec: " + res, ex);
             }
          } else {
-            member.makeAnalog(res.getInt(RefexProperty.STATUS_UUID),
+            member.makeAnalog(res.getInt(RefexProperty.STATUS_ID),
                               Long.MAX_VALUE, ec.getAuthorNid(),
                               ec.getModuleNid(),
                               ec.getEditPaths().getSetValues()[i]);

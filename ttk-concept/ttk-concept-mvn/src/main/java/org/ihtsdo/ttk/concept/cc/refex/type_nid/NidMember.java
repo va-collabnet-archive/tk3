@@ -16,7 +16,7 @@ import org.ihtsdo.ttk.api.ComponentVersionBI;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.TerminologySnapshotDI;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.RefexProperty;
 import org.ihtsdo.ttk.api.refex.type_nid.RefexNidAnalogBI;
 import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid.TkRefexUuidMember;
@@ -75,7 +75,7 @@ public class NidMember extends RefexMember<NidRevision, NidMember>
 
    @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.CNID1, getNid1());
+      rcs.with(RefexProperty.COMPONENT_EXTENSION_1_ID, getNid1());
    }
 
    @Override

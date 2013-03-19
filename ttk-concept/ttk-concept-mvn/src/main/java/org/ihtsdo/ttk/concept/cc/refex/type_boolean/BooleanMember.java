@@ -11,18 +11,14 @@ import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB.RefexProperty;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.ttk.api.blueprint.RefexProperty;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanAnalogBI;
 import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanVersionBI;
 import org.ihtsdo.ttk.dto.component.refex.type_boolean.TkRefexBooleanMember;
 import org.ihtsdo.ttk.dto.component.refex.type_boolean.TkRefexBooleanRevision;
 import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
-import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 public class BooleanMember extends RefexMember<BooleanRevision, BooleanMember>
@@ -63,7 +59,7 @@ public class BooleanMember extends RefexMember<BooleanRevision, BooleanMember>
 
     @Override
     protected void addSpecProperties(RefexCAB rcs) {
-        rcs.with(RefexProperty.BOOLEAN1, getBoolean1());
+        rcs.with(RefexProperty.BOOLEAN_EXTENSION_1, getBoolean1());
     }
 
     @Override
@@ -183,6 +179,7 @@ public class BooleanMember extends RefexMember<BooleanRevision, BooleanMember>
         return null;
     }
 
+    @Override
     protected VersionComputer<RefexMember<BooleanRevision, BooleanMember>.Version> getVersionComputer() {
         return computer;
     }

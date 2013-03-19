@@ -15,7 +15,7 @@ import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.concept.cc.refex.type_nid_nid.NidNidMember.Version;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.RefexProperty;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid.RefexNidNidAnalogBI;
@@ -75,8 +75,8 @@ public class NidNidRevision extends RefexRevision<NidNidRevision, NidNidMember>
 
    @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.CNID1, getNid1());
-      rcs.with(RefexProperty.CNID2, getNid2());
+      rcs.with(RefexProperty.COMPONENT_EXTENSION_1_ID, getNid1());
+      rcs.with(RefexProperty.COMPONENT_EXTENSION_2_ID, getNid2());
    }
 
    @Override

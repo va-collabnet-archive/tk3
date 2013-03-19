@@ -13,7 +13,7 @@ import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.RefexProperty;
 import org.ihtsdo.ttk.api.refex.type_string.RefexStringAnalogBI;
 import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
 import org.ihtsdo.ttk.dto.component.refex.type_string.TkRefexStringMember;
@@ -72,7 +72,7 @@ public class StringMember extends RefexMember<StringRevision, StringMember>
 
    @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.STRING1, getString1());
+      rcs.with(RefexProperty.STRING_EXTENSION_1, getString1());
    }
    @Override
    public boolean equals(Object obj) {

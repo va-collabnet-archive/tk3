@@ -29,6 +29,7 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayAnalogBI;
 import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.blueprint.RefexProperty;
 import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TkRefexArrayOfByteArrayRevision;
 import org.ihtsdo.ttk.api.uuid.UuidT5Generator;
 
@@ -102,7 +103,7 @@ public class ArrayOfByteArrayRevision extends RefexRevision<ArrayOfByteArrayRevi
 
     @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexCAB.RefexProperty.ARRAY_OF_BYTEARRAY, getArrayOfByteArray());
+      rcs.with(RefexProperty.ARRAY_OF_BYTEARRAY, getArrayOfByteArray());
    }
 
    @Override

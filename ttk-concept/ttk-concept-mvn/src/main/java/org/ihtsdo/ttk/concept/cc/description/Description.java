@@ -36,7 +36,7 @@ import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.lang.LANG_CODE;
 import org.ihtsdo.ttk.api.blueprint.DescCAB;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 
 public class Description extends ConceptComponent<DescriptionRevision, Description>
         implements DescriptionAnalogBI<DescriptionRevision> {
@@ -314,7 +314,7 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
     }
 
     @Override
-    public DescCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidCAB {
+    public DescCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
         DescCAB descBp = new DescCAB(getConceptNid(), getTypeNid(),
                 LANG_CODE.getLangCode(lang), getText(), initialCaseSignificant,
                 getVersion(vc), vc, Ts.get().getUuidPrimordialForNid(getModuleNid()));
@@ -508,7 +508,7 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
         }
 
         @Override
-        public DescCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidCAB {
+        public DescCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
             return getCv().makeBlueprint(vc);
         }
 
