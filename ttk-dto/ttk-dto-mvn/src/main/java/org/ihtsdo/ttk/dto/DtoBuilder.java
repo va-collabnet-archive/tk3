@@ -24,7 +24,6 @@ import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.blueprint.ConAttrAB;
 import org.ihtsdo.ttk.api.blueprint.ConceptCB;
 import org.ihtsdo.ttk.api.blueprint.DescCAB;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.MediaCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.RelCAB;
@@ -68,6 +67,8 @@ import java.io.IOException;
 
 import java.util.List;
 import java.util.UUID;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
+import org.ihtsdo.ttk.api.blueprint.RefexProperty;
 
 /**
  *
@@ -85,7 +86,7 @@ public class DtoBuilder {
    }
 
    public TkConcept construct(ConceptCB blueprint)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       TkConcept newC = new TkConcept();
 
       newC.setAnnotationStyleRefex(blueprint.isAnnotation());
@@ -126,7 +127,7 @@ public class DtoBuilder {
    }
 
    private void construct(ConAttrAB blueprint, TkConcept c)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       TkConceptAttributes ca = new TkConceptAttributes();
 
       ca.primordialUuid = c.primordialUuid;
@@ -145,7 +146,7 @@ public class DtoBuilder {
    }
 
    private void construct(DescCAB blueprint, TkConcept c)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       TkDescription d = new TkDescription();
 
       d.primordialUuid = blueprint.getComponentUuid();
@@ -168,7 +169,7 @@ public class DtoBuilder {
    }
 
    private void construct(MediaCAB blueprint, TkConcept c)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       TkMedia img = new TkMedia();
 
       img.primordialUuid  = blueprint.getComponentUuid();
@@ -191,7 +192,7 @@ public class DtoBuilder {
    }
 
    private void construct(RefexCAB blueprint, TkComponent component)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       TkRefexAbstractMember annot = createRefex(blueprint);
 
       component.getAnnotations().add(annot);
@@ -202,7 +203,7 @@ public class DtoBuilder {
    }
 
    private void construct(RelCAB blueprint, TkConcept c)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       TkRelationship r = new TkRelationship();
 
       r.primordialUuid     = blueprint.getComponentUuid();
@@ -226,7 +227,7 @@ public class DtoBuilder {
    }
 
    private TkRefexAbstractMember createRefex(RefexCAB blueprint)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       switch (blueprint.getMemberType()) {
       case ARRAY_BYTEARRAY :
          TkRefexArrayOfByteArrayMember rm1 =
@@ -241,7 +242,7 @@ public class DtoBuilder {
          TkRefexBooleanMember rm2 = new TkRefexBooleanMember();
 
          rm2.booleanValue =
-            blueprint.getBoolean(RefexCAB.RefexProperty.BOOLEAN1);
+            blueprint.getBoolean(RefexProperty.BOOLEAN_EXTENSION_1);
          setStandardFields(rm2, blueprint);
 
          return rm2;
@@ -249,7 +250,7 @@ public class DtoBuilder {
       case CID :
          TkRefexUuidMember rm3 = new TkRefexUuidMember();
 
-         rm3.uuid1 = blueprint.getUUID(RefexCAB.RefexProperty.CNID1);
+         rm3.uuid1 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
          setStandardFields(rm3, blueprint);
 
          return rm3;
@@ -257,8 +258,8 @@ public class DtoBuilder {
       case CID_CID :
          TkRefexUuidUuidMember rm4 = new TkRefexUuidUuidMember();
 
-         rm4.uuid1 = blueprint.getUUID(RefexCAB.RefexProperty.CNID1);
-         rm4.uuid2 = blueprint.getUUID(RefexCAB.RefexProperty.CNID2);
+         rm4.uuid1 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
+         rm4.uuid2 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_2_ID);
          setStandardFields(rm4, blueprint);
 
          return rm4;
@@ -266,9 +267,9 @@ public class DtoBuilder {
       case CID_CID_CID :
          TkRefexUuidUuidUuidMember rm5 = new TkRefexUuidUuidUuidMember();
 
-         rm5.uuid1 = blueprint.getUUID(RefexCAB.RefexProperty.CNID1);
-         rm5.uuid2 = blueprint.getUUID(RefexCAB.RefexProperty.CNID2);
-         rm5.uuid3 = blueprint.getUUID(RefexCAB.RefexProperty.CNID3);
+         rm5.uuid1 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
+         rm5.uuid2 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_2_ID);
+         rm5.uuid3 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_3_ID);
          setStandardFields(rm5, blueprint);
 
          return rm5;
@@ -277,10 +278,10 @@ public class DtoBuilder {
          TkRefexUuidUuidUuidFloatMember rm6 =
             new TkRefexUuidUuidUuidFloatMember();
 
-         rm6.uuid1  = blueprint.getUUID(RefexCAB.RefexProperty.CNID1);
-         rm6.uuid2  = blueprint.getUUID(RefexCAB.RefexProperty.CNID2);
-         rm6.uuid3  = blueprint.getUUID(RefexCAB.RefexProperty.CNID3);
-         rm6.float1 = blueprint.getFloat(RefexCAB.RefexProperty.FLOAT1);
+         rm6.uuid1  = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
+         rm6.uuid2  = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_2_ID);
+         rm6.uuid3  = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_3_ID);
+         rm6.float1 = blueprint.getFloat(RefexProperty.FLOAT_EXTENSION_1);
          setStandardFields(rm6, blueprint);
 
          return rm6;
@@ -288,10 +289,10 @@ public class DtoBuilder {
       case CID_CID_CID_INT :
          TkRefexUuidUuidUuidIntMember rm7 = new TkRefexUuidUuidUuidIntMember();
 
-         rm7.uuid1 = blueprint.getUUID(RefexCAB.RefexProperty.CNID1);
-         rm7.uuid2 = blueprint.getUUID(RefexCAB.RefexProperty.CNID2);
-         rm7.uuid3 = blueprint.getUUID(RefexCAB.RefexProperty.CNID3);
-         rm7.int1  = blueprint.getInt(RefexCAB.RefexProperty.INTEGER1);
+         rm7.uuid1 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
+         rm7.uuid2 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_2_ID);
+         rm7.uuid3 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_3_ID);
+         rm7.int1  = blueprint.getInt(RefexProperty.INTEGER_EXTENSION_1);
          setStandardFields(rm7, blueprint);
 
          return rm7;
@@ -300,10 +301,10 @@ public class DtoBuilder {
          TkRefexUuidUuidUuidLongMember rm8 =
             new TkRefexUuidUuidUuidLongMember();
 
-         rm8.uuid1 = blueprint.getUUID(RefexCAB.RefexProperty.CNID1);
-         rm8.uuid2 = blueprint.getUUID(RefexCAB.RefexProperty.CNID2);
-         rm8.uuid3 = blueprint.getUUID(RefexCAB.RefexProperty.CNID3);
-         rm8.long1 = blueprint.getInt(RefexCAB.RefexProperty.LONG1);
+         rm8.uuid1 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
+         rm8.uuid2 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_2_ID);
+         rm8.uuid3 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_3_ID);
+         rm8.long1 = blueprint.getInt(RefexProperty.LONG_EXTENSION_1);
          setStandardFields(rm8, blueprint);
 
          return rm8;
@@ -312,10 +313,10 @@ public class DtoBuilder {
          TkRefexUuidUuidUuidStringMember rm9 =
             new TkRefexUuidUuidUuidStringMember();
 
-         rm9.uuid1   = blueprint.getUUID(RefexCAB.RefexProperty.CNID1);
-         rm9.uuid2   = blueprint.getUUID(RefexCAB.RefexProperty.CNID2);
-         rm9.uuid3   = blueprint.getUUID(RefexCAB.RefexProperty.CNID3);
-         rm9.string1 = blueprint.getString(RefexCAB.RefexProperty.STRING1);
+         rm9.uuid1   = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
+         rm9.uuid2   = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_2_ID);
+         rm9.uuid3   = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_3_ID);
+         rm9.string1 = blueprint.getString(RefexProperty.STRING_EXTENSION_1);
          setStandardFields(rm9, blueprint);
 
          return rm9;
@@ -323,9 +324,9 @@ public class DtoBuilder {
       case CID_CID_STR :
          TkRefexUuidUuidStringMember rm10 = new TkRefexUuidUuidStringMember();
 
-         rm10.uuid1   = blueprint.getUUID(RefexCAB.RefexProperty.CNID1);
-         rm10.uuid2   = blueprint.getUUID(RefexCAB.RefexProperty.CNID2);
-         rm10.string1 = blueprint.getString(RefexCAB.RefexProperty.STRING1);
+         rm10.uuid1   = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
+         rm10.uuid2   = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_2_ID);
+         rm10.string1 = blueprint.getString(RefexProperty.STRING_EXTENSION_1);
          setStandardFields(rm10, blueprint);
 
          return rm10;
@@ -333,8 +334,8 @@ public class DtoBuilder {
       case CID_FLOAT :
          TkRefexUuidFloatMember rm11 = new TkRefexUuidFloatMember();
 
-         rm11.uuid1  = blueprint.getUUID(RefexCAB.RefexProperty.CNID1);
-         rm11.float1 = blueprint.getFloat(RefexCAB.RefexProperty.FLOAT1);
+         rm11.uuid1  = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
+         rm11.float1 = blueprint.getFloat(RefexProperty.FLOAT_EXTENSION_1);
          setStandardFields(rm11, blueprint);
 
          return rm11;
@@ -342,8 +343,8 @@ public class DtoBuilder {
       case CID_INT :
          TkRefexUuidIntMember rm12 = new TkRefexUuidIntMember();
 
-         rm12.uuid1 = blueprint.getUUID(RefexCAB.RefexProperty.CNID1);
-         rm12.int1  = blueprint.getInt(RefexCAB.RefexProperty.INTEGER1);
+         rm12.uuid1 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
+         rm12.int1  = blueprint.getInt(RefexProperty.INTEGER_EXTENSION_1);
          setStandardFields(rm12, blueprint);
 
          return rm12;
@@ -351,8 +352,8 @@ public class DtoBuilder {
       case CID_LONG :
          TkRefexUuidLongMember rm13 = new TkRefexUuidLongMember();
 
-         rm13.uuid1 = blueprint.getUUID(RefexCAB.RefexProperty.CNID1);
-         rm13.long1 = blueprint.getInt(RefexCAB.RefexProperty.LONG1);
+         rm13.uuid1 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
+         rm13.long1 = blueprint.getInt(RefexProperty.LONG_EXTENSION_1);
          setStandardFields(rm13, blueprint);
 
          return rm13;
@@ -360,8 +361,8 @@ public class DtoBuilder {
       case CID_STR :
          TkRefexUuidStringMember rm14 = new TkRefexUuidStringMember();
 
-         rm14.uuid1   = blueprint.getUUID(RefexCAB.RefexProperty.CNID1);
-         rm14.string1 = blueprint.getString(RefexCAB.RefexProperty.STRING1);
+         rm14.uuid1   = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
+         rm14.string1 = blueprint.getString(RefexProperty.STRING_EXTENSION_1);
          setStandardFields(rm14, blueprint);
 
          return rm14;
@@ -369,7 +370,7 @@ public class DtoBuilder {
       case INT :
          TkRefexIntMember rm15 = new TkRefexIntMember();
 
-         rm15.int1 = blueprint.getInt(RefexCAB.RefexProperty.INTEGER1);
+         rm15.int1 = blueprint.getInt(RefexProperty.INTEGER_EXTENSION_1);
          setStandardFields(rm15, blueprint);
 
          return rm15;
@@ -377,7 +378,7 @@ public class DtoBuilder {
       case LONG :
          TkRefexLongMember rm16 = new TkRefexLongMember();
 
-         rm16.long1 = blueprint.getInt(RefexCAB.RefexProperty.LONG1);
+         rm16.long1 = blueprint.getInt(RefexProperty.LONG_EXTENSION_1);
          setStandardFields(rm16, blueprint);
 
          return rm16;
@@ -392,7 +393,7 @@ public class DtoBuilder {
       case STR :
          TkRefexStringMember rm18 = new TkRefexStringMember();
 
-         rm18.string1 = blueprint.getString(RefexCAB.RefexProperty.STRING1);
+         rm18.string1 = blueprint.getString(RefexProperty.STRING_EXTENSION_1);
          setStandardFields(rm18, blueprint);
 
          return rm18;
@@ -408,7 +409,7 @@ public class DtoBuilder {
                                   RefexCAB blueprint) {
       rm1.primordialUuid = blueprint.getMemberUUID();
       rm1.componentUuid  = blueprint.getComponentUuid();
-      rm1.refexUuid      = blueprint.getRefexColllectionUuid();
+      rm1.refexExtensionUuid      = blueprint.getRefexColllectionUuid();
       rm1.statusUuid     = blueprint.getStatusUuid();
       rm1.time           = time;
       rm1.authorUuid     = author;

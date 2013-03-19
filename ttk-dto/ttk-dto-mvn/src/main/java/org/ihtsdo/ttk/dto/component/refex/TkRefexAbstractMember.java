@@ -27,7 +27,7 @@ public abstract class TkRefexAbstractMember<V extends TkRevision> extends TkComp
    @XmlAttribute
    public UUID componentUuid;
    @XmlAttribute
-   public UUID refexUuid;
+   public UUID refexExtensionUuid;
 
    //~--- constructors --------------------------------------------------------
 
@@ -38,7 +38,7 @@ public abstract class TkRefexAbstractMember<V extends TkRevision> extends TkComp
    public TkRefexAbstractMember(RefexVersionBI another) throws IOException {
       super(another);
       this.componentUuid = Ts.get().getComponent(another.getReferencedComponentNid()).getPrimUuid();
-      this.refexUuid    = Ts.get().getComponent(another.getRefexNid()).getPrimUuid();
+      this.refexExtensionUuid    = Ts.get().getComponent(another.getRefexExtensionNid()).getPrimUuid();
    }
 
    public TkRefexAbstractMember(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
@@ -50,7 +50,7 @@ public abstract class TkRefexAbstractMember<V extends TkRevision> extends TkComp
       super(another, transformer);
 
          this.componentUuid = transformer.transform(another.componentUuid, another, ComponentFields.REFEX_REFERENCED_COMPONENT_UUID);
-         this.refexUuid    = transformer.transform(another.refexUuid, another, ComponentFields.REFEX_COLLECTION_UUID);
+         this.refexExtensionUuid    = transformer.transform(another.refexExtensionUuid, another, ComponentFields.REFEX_COLLECTION_UUID);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -78,7 +78,7 @@ public abstract class TkRefexAbstractMember<V extends TkRevision> extends TkComp
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
          // Compare refsetUuid
-         if (!this.refexUuid.equals(another.refexUuid)) {
+         if (!this.refexExtensionUuid.equals(another.refexExtensionUuid)) {
             return false;
          }
 
@@ -107,7 +107,7 @@ public abstract class TkRefexAbstractMember<V extends TkRevision> extends TkComp
    @Override
    public void readExternal(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super.readExternal(in, dataVersion);
-      refexUuid    = new UUID(in.readLong(), in.readLong());
+      refexExtensionUuid    = new UUID(in.readLong(), in.readLong());
       componentUuid = new UUID(in.readLong(), in.readLong());
    }
 
@@ -119,7 +119,7 @@ public abstract class TkRefexAbstractMember<V extends TkRevision> extends TkComp
       StringBuilder buff = new StringBuilder();
 
       buff.append(" refex:");
-      buff.append(informAboutUuid(this.refexUuid));
+      buff.append(informAboutUuid(this.refexExtensionUuid));
       buff.append(" component:");
       buff.append(informAboutUuid(this.componentUuid));
       buff.append(" ");
@@ -131,8 +131,8 @@ public abstract class TkRefexAbstractMember<V extends TkRevision> extends TkComp
    @Override
    public void writeExternal(DataOutput out) throws IOException {
       super.writeExternal(out);
-      out.writeLong(refexUuid.getMostSignificantBits());
-      out.writeLong(refexUuid.getLeastSignificantBits());
+      out.writeLong(refexExtensionUuid.getMostSignificantBits());
+      out.writeLong(refexExtensionUuid.getLeastSignificantBits());
       out.writeLong(componentUuid.getMostSignificantBits());
       out.writeLong(componentUuid.getLeastSignificantBits());
    }
@@ -143,8 +143,8 @@ public abstract class TkRefexAbstractMember<V extends TkRevision> extends TkComp
       return componentUuid;
    }
 
-   public UUID getRefexUuid() {
-      return refexUuid;
+   public UUID getRefexExtensionUuid() {
+      return refexExtensionUuid;
    }
 
    public abstract TK_REFEX_TYPE getType();
@@ -155,7 +155,7 @@ public abstract class TkRefexAbstractMember<V extends TkRevision> extends TkComp
       this.componentUuid = componentUuid;
    }
 
-   public void setRefexUuid(UUID refexUuid) {
-      this.refexUuid = refexUuid;
+   public void setRefexExtensionUuid(UUID refexExtensionUuid) {
+      this.refexExtensionUuid = refexExtensionUuid;
    }
 }
