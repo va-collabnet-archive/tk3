@@ -45,71 +45,113 @@ import java.util.logging.Logger;
  * @author kec
  */
 public class DescriptionLogicAuxiliary extends Taxonomy {
+
+   /** Field description */
    private static final String moduleName = "DL Module";
 
-   public DescriptionLogicAuxiliary()
-           throws NoSuchAlgorithmException, UnsupportedEncodingException {
-      super(TermAux.WB_AUX_PATH, TermAux.USER, moduleName,
-              TermAux.IS_A, "(DL Metadata)", LANG_CODE.EN);
+   public DescriptionLogicAuxiliary() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+      super(TermAux.WB_AUX_PATH, TermAux.USER, moduleName, TermAux.IS_A, "(DL Metadata)", LANG_CODE.EN);
 
       try {
          createConcept("description-logic auxiliary");
-         pushParent(last());
+         pushParent(current());
          createConcept("description-logic metadata");
-         pushParent(last());
+         pushParent(current());
          createConcept(moduleName);
          popParent();
          createConcept("object property characteristics");
-         pushParent(last());
+         pushParent(current());
          createConcept("functional");
          createConcept("transitive");
          createConcept("reflexive");
          popParent();
          createConcept("object property operators");
-         pushParent(last());
+         pushParent(current());
          createConcept("sub-property of");
          createConcept("composition");
          popParent();
          createConcept("set operators");
-         pushParent(last());
+         pushParent(current());
          createConcept("sufficient set");
          createConcept("necessary set");
          popParent();
          createConcept("connective operators");
-         pushParent(last());
+         pushParent(current());
          createConcept("and");
          createConcept("or");
          createConcept("disjoint with");
+         createConcept("definition root");
+         popParent();
+         createConcept("template operators");
+         pushParent(current());
+         createConcept("template merge");
+         createConcept("field substitution");
+         popParent();
+         createConcept("field operators");
+         pushParent(current());
+         createConcept("component extension 1 id substitution");
+         createConcept("component extension 2 id substitution");
+         createConcept("component extension 3 id substitution");
+         createConcept("integer 1 substitution");
+         createConcept("long 1 substitution");
+         createConcept("float 1 substitution");
+         popParent();
+         createConcept("field annotations");
+         pushParent(current());
+         createConcept("component extension 1 label").setAnnotation(true);
+         createConcept("component extension 1 order").setAnnotation(true);
+         createConcept("component extension 1 default value").setAnnotation(true);
+         createConcept("component extension 2 label").setAnnotation(true);
+         createConcept("component extension 2 order").setAnnotation(true);
+         createConcept("component extension 2 default value").setAnnotation(true);
+         createConcept("component extension 3 label").setAnnotation(true);
+         createConcept("component extension 3 order").setAnnotation(true);
+         createConcept("component extension 3 default value").setAnnotation(true);
+         createConcept("integer 1 label").setAnnotation(true);
+         createConcept("integer 1 order").setAnnotation(true);
+         createConcept("integer 1 default value").setAnnotation(true);
+         createConcept("long 1 label").setAnnotation(true);
+         createConcept("long 1 order").setAnnotation(true);
+         createConcept("long 1 default value").setAnnotation(true);
+         createConcept("float 1 label").setAnnotation(true);
+         createConcept("float 1 order").setAnnotation(true);
+         createConcept("float 1 default value").setAnnotation(true);
+         popParent();
+         createConcept("template concepts");
+         pushParent(current());
+         createConcept("skin of region template");
+         // add annotations for order and labels
+         current().getAnnotationBlueprints().add(null);
+         // create template
          popParent();
          createConcept("role operators");
-         pushParent(last());
+         pushParent(current());
          createConcept("universal restriction");
          createConcept("extensional restriction");
          popParent();
          createConcept("concrete domain operators");
-         pushParent(last());
+         pushParent(current());
          createConcept("greater than");
          createConcept("greater than or equal to");
          createConcept("equal to");
          createConcept("less than or equal to");
          createConcept("less than");
          popParent();
-         createConcept("description-logic family");
-         pushParent(last());
+         createConcept("description-logic variety");
+         pushParent(current());
          createConcept("EL++").setAnnotation(true);
          createConcept("SH").setAnnotation(true);
          popParent();
          createConcept("description-logic classifier");
-         pushParent(last());
+         pushParent(current());
          createConcept("SnoRocket");
          createConcept("ConDOR");
          popParent();
          createConcept("intrinsic roles");
-         pushParent(last());
+         pushParent(current());
          createConcept("role group");
       } catch (Exception ex) {
-         Logger.getLogger(DescriptionLogicAuxiliary.class.getName()).log(
-             Level.SEVERE, null, ex);
+         Logger.getLogger(DescriptionLogicAuxiliary.class.getName()).log(Level.SEVERE, null, ex);
       }
    }
 
@@ -120,18 +162,13 @@ public class DescriptionLogicAuxiliary extends Taxonomy {
       try {
          DescriptionLogicAuxiliary dlmdt = new DescriptionLogicAuxiliary();
 
-         writer =
-            new BufferedWriter(new FileWriter("DescriptionLogicBinding.java"));
-         dlmdt.exportJavaBinding(writer,
-                                 "org.ihtsdo.ttk.auxiliary.taxonomies",
-                                 "DescriptionLogicBinding");
+         writer = new BufferedWriter(new FileWriter("DescriptionLogicBinding.java"));
+         dlmdt.exportJavaBinding(writer, "org.ihtsdo.ttk.auxiliary.taxonomies", "DescriptionLogicBinding");
          data = new DataOutputStream(
-             new BufferedOutputStream(
-                 new FileOutputStream("DescriptionLogicMetadata.econ")));
+             new BufferedOutputStream(new FileOutputStream("DescriptionLogicMetadata.econ")));
          dlmdt.exportEConcept(data);
       } catch (Exception ex) {
-         Logger.getLogger(DescriptionLogicAuxiliary.class.getName()).log(
-             Level.SEVERE, null, ex);
+         Logger.getLogger(DescriptionLogicAuxiliary.class.getName()).log(Level.SEVERE, null, ex);
       } finally {
          try {
             if (writer != null) {
@@ -142,8 +179,7 @@ public class DescriptionLogicAuxiliary extends Taxonomy {
                data.close();
             }
          } catch (IOException ex) {
-            Logger.getLogger(DescriptionLogicAuxiliary.class.getName()).log(
-                Level.SEVERE, null, ex);
+            Logger.getLogger(DescriptionLogicAuxiliary.class.getName()).log(Level.SEVERE, null, ex);
          }
       }
    }

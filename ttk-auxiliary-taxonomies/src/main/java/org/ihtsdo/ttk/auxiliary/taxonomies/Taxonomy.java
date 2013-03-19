@@ -52,7 +52,7 @@ public class Taxonomy {
       new ArrayList<>();
    private Stack<ConceptCB>           parentStack                =
       new Stack<>();
-   private ConceptCB                  last;
+   private ConceptCB                  current;
    private ConceptSpec                isaTypeSpec;
    private ConceptSpec                moduleSpec;
    private ConceptSpec                pathSpec;
@@ -117,7 +117,7 @@ public class Taxonomy {
 
       conceptBps.put(name, cb);
       conceptBpsInInsertionOrder.add(cb);
-      last = cb;
+      current = cb;
 
       return cb;
    }
@@ -147,7 +147,17 @@ public class Taxonomy {
          constantName = constantName.replace(" ", "_");
          constantName = constantName.replace("-", "_");
          constantName = constantName.replace("+", "_PLUS");
-         out.append("\n\n   public static ConceptSpec " + constantName + " =");
+         constantName = constantName.replace("/", "_AND");
+         out.append("\n\n   /** Java binding for the concept described as <strong><em>"
+                 + preferredName
+                 + "</em></strong>;\n    * identified by UUID: <code>\n    * "
+                 + "<a href=\"http://localhost:8080/terminology/rest/concept/"
+                 + concept.getComponentUuid().toString()
+                 + "\">\n    * "
+                 + concept.getComponentUuid().toString()
+                 + "</a></code>.*/");
+         
+         out.append("\n   public static ConceptSpec " + constantName + " =");
          out.append("\n             new ConceptSpec(\"" + preferredName
                     + "\",");
          out.append("\n                    UUID.fromString(\""
@@ -157,8 +167,8 @@ public class Taxonomy {
       out.append("\n}\n");
    }
 
-   protected ConceptCB last() {
-      return last;
+   protected ConceptCB current() {
+      return current;
    }
 
    protected void popParent() {
