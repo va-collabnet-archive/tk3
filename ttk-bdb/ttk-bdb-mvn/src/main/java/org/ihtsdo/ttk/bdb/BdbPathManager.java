@@ -314,7 +314,7 @@ public class BdbPathManager {
                                             "\n\n****************************************\nDepth limit exceeded. Path concept: \n"
                                             + pathConcept.toLongString() + "\n\n extensionPart: \n\n"
                                             + extPart.toString() + "\n\n origin refset: \n\n"
-                                            + Concept.get(extPart.getRefexNid()).toLongString()
+                                            + Concept.get(extPart.getRefexExtensionNid()).toLongString()
                                             + "\n-------------------------------------------\n\n"));
                                 } else {
                                     result.add(new Position(conceptExtension.getLong1(),
@@ -344,7 +344,7 @@ public class BdbPathManager {
                                             "\n\n****************************************\nDepth limit exceeded. Path concept: \n"
                                             + pathConcept.toLongString() + "\n\n extensionPart: \n\n"
                                             + extPart.toString() + "\n\n origin refset: \n\n"
-                                            + Concept.get(extPart.getRefexNid()).toLongString()
+                                            + Concept.get(extPart.getRefexExtensionNid()).toLongString()
                                             + "\n-------------------------------------------\n\n"));
                                 } else {
                                     result.add(new Position(ThinVersionHelper.convert(conceptExtension.getInt1()),

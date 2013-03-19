@@ -462,7 +462,7 @@ public class BdbCommitManager {
    @SuppressWarnings("unchecked")
    public static void forget(RefexChronicleBI extension) throws IOException {
       RefexMember m         = (RefexMember) extension;
-      Concept      c         = Bdb.getConcept(m.getRefexNid());
+      Concept      c         = Bdb.getConcept(m.getRefexExtensionNid());
       ComponentBI  component = Bdb.getComponent(m.getReferencedComponentNid());
 
         if (component instanceof Concept) {
