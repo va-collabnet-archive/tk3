@@ -34,28 +34,28 @@ public class ConAttrAB extends CreateOrAmendBlueprint {
 
     public ConAttrAB(
             UUID conceptUuid, boolean defined, UUID moduleUuid)
-            throws IOException, InvalidCAB, ContradictionException {
+            throws IOException, InvalidBlueprintException, ContradictionException {
         super(conceptUuid, null, null, moduleUuid);
         this.defined = defined;
     }
 
      public ConAttrAB(
             int conceptNid, boolean defined, UUID moduleUuid)
-            throws IOException, InvalidCAB, ContradictionException {
+            throws IOException, InvalidBlueprintException, ContradictionException {
         super(Ts.get().getComponent(conceptNid).getPrimUuid(), null, null, moduleUuid);
         this.defined = defined;
     }
 
     public ConAttrAB(
             int conceptNid, boolean defined, ConAttrVersionBI conAttr,
-            ViewCoordinate vc) throws IOException, InvalidCAB, ContradictionException {
+            ViewCoordinate vc) throws IOException, InvalidBlueprintException, ContradictionException {
         this(Ts.get().getComponent(conceptNid).getPrimUuid(),
                 defined, conAttr, vc);
     }
 
     public ConAttrAB(
             UUID componentUuid, boolean defined, ConAttrVersionBI conAttr,
-            ViewCoordinate vc) throws IOException, InvalidCAB, ContradictionException {
+            ViewCoordinate vc) throws IOException, InvalidBlueprintException, ContradictionException {
         super(componentUuid, conAttr, vc, Ts.get().getUuidPrimordialForNid(conAttr.getModuleNid()));
         this.defined = defined;
     }
@@ -74,7 +74,7 @@ public class ConAttrAB extends CreateOrAmendBlueprint {
     }
 
     @Override
-    public void recomputeUuid() throws NoSuchAlgorithmException, UnsupportedEncodingException, IOException, InvalidCAB, ContradictionException {
-        throw new InvalidCAB ("UUID for ConAttrAB is set when concept is created");
+    public void recomputeUuid() throws NoSuchAlgorithmException, UnsupportedEncodingException, IOException, InvalidBlueprintException, ContradictionException {
+        throw new InvalidBlueprintException ("UUID for ConAttrAB is set when concept is created");
     }
 }

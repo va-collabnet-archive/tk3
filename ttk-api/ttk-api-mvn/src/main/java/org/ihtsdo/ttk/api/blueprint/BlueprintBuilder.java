@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 International Health Terminology Standards Development Organisation.
+ * Copyright 2013 International Health Terminology Standards Development Organisation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.ihtsdo.ttk.api.blueprint;
 
-package org.ihtsdo.ttk.api.refex;
-
-import java.beans.PropertyVetoException;
-import java.io.IOException;
-
-import org.ihtsdo.ttk.api.AnalogBI;
+import java.util.UUID;
+import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 
 /**
  *
  * @author kec
  */
-public interface RefexAnalogBI <A extends RefexAnalogBI<A>>
-        extends RefexVersionBI<A>, AnalogBI {
-	
-	void setRefexExtensionNid(int refexNid) throws IOException, PropertyVetoException;
-        void setReferencedComponentNid(int componentNid) throws IOException, PropertyVetoException;
+public class BlueprintBuilder {
+    ViewCoordinate vc; 
+    UUID moduleUuid;
 
+    public BlueprintBuilder(ViewCoordinate vc, UUID moduleUuid) {
+        this.vc = vc;
+        this.moduleUuid = moduleUuid;
+    }
 }

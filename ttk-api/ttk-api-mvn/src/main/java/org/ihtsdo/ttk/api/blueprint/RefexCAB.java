@@ -75,36 +75,37 @@ public class RefexCAB extends CreateOrAmendBlueprint {
       new EnumMap<>(RefexProperty.class);
    private TK_REFEX_TYPE memberType;
 
-   public enum RefexProperty {
-      MEMBER_UUID, COLLECTION_UUID, RC_UUID, STATUS_UUID, CNID1, CNID2, CNID3,
-      BOOLEAN1, INTEGER1, STRING1, LONG1, FLOAT1, ARRAY_OF_BYTEARRAY,
+   public RefexCAB(TK_REFEX_TYPE memberType, UUID rcUuid, UUID collectionUUID,
+                   RefexVersionBI refex, ViewCoordinate vc, UUID moduleUuid)
+           throws IOException, InvalidBlueprintException, ContradictionException {
+      this(memberType, rcUuid, collectionUUID, null, refex, vc, moduleUuid);
+      this.properties.put(RefexProperty.MEMBER_ID,
+                          computeMemberReferencedComponentUuid());
    }
 
    public RefexCAB(TK_REFEX_TYPE memberType, UUID rcUuid, UUID collectionUUID,
-                   RefexVersionBI refex, ViewCoordinate vc, UUID moduleUuid)
-           throws IOException, InvalidCAB, ContradictionException {
-      this(memberType, rcUuid, collectionUUID, null, refex, vc, moduleUuid);
-      this.properties.put(RefexProperty.MEMBER_UUID,
-                          computeMemberReferencedComponentUuid());
+                   ViewCoordinate vc, UUID moduleUuid)
+           throws IOException, InvalidBlueprintException, ContradictionException {
+      this(memberType, rcUuid, collectionUUID, null, null, vc, moduleUuid);
    }
 
    public RefexCAB(TK_REFEX_TYPE memberType, UUID rcUuid, UUID collectionUUID,
                    UUID memberUuid, RefexVersionBI refex, ViewCoordinate vc,
                    UUID moduleUuid)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       super(memberUuid, refex, vc, moduleUuid);
       this.memberType = memberType;
-      this.properties.put(RefexProperty.RC_UUID, rcUuid);
-      this.properties.put(RefexProperty.COLLECTION_UUID, collectionUUID);
-      this.properties.put(RefexProperty.STATUS_UUID,
+      this.properties.put(RefexProperty.REFERENCED_COMPONENT_ID, rcUuid);
+      this.properties.put(RefexProperty.REFEX_EXTENSION_ID, collectionUUID);
+      this.properties.put(RefexProperty.STATUS_ID,
                           SnomedMetadataRfx.getSTATUS_CURRENT_NID());
 
       if (getMemberUUID() != null) {
-         this.properties.put(RefexProperty.MEMBER_UUID, memberUuid);
+         this.properties.put(RefexProperty.MEMBER_ID, memberUuid);
       }
 
-      if (this.properties.get(RefexProperty.STATUS_UUID) != null) {
-         setStatusUuid((UUID) this.properties.get(RefexProperty.STATUS_UUID));
+      if (this.properties.get(RefexProperty.STATUS_ID) != null) {
+         setStatusUuid((UUID) this.properties.get(RefexProperty.STATUS_ID));
       }
    }
 
@@ -118,16 +119,16 @@ public class RefexCAB extends CreateOrAmendBlueprint {
     * @throws InvalidAmendmentSpec
     * @throws IOException
     */
-   public UUID computeMemberContentUuid() throws InvalidCAB, IOException {
+   public UUID computeMemberContentUuid() throws InvalidBlueprintException, IOException {
       try {
          StringBuilder sb = new StringBuilder();
 
          for (RefexProperty prop : RefexProperty.values()) {
             switch (prop) {
-            case MEMBER_UUID :
-            case STATUS_UUID :
-            case COLLECTION_UUID :
-            case RC_UUID :
+            case MEMBER_ID :
+            case STATUS_ID :
+            case REFEX_EXTENSION_ID :
+            case REFERENCED_COMPONENT_ID :
                break;
 
             default :
@@ -140,20 +141,20 @@ public class RefexCAB extends CreateOrAmendBlueprint {
          return UuidT5Generator.get(
              refexSpecNamespace,
              memberType.name()
-             + getPrimUuidStrForNidProp(RefexProperty.COLLECTION_UUID)
-             + getPrimUuidStrForNidProp(RefexProperty.RC_UUID) + sb.toString());
+             + getPrimUuidStrForNidProp(RefexProperty.REFEX_EXTENSION_ID)
+             + getPrimUuidStrForNidProp(RefexProperty.REFERENCED_COMPONENT_ID) + sb.toString());
       } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
          throw new RuntimeException(ex);
       }
    }
 
    public UUID computeMemberReferencedComponentUuid()
-           throws IOException, InvalidCAB {
+           throws IOException, InvalidBlueprintException {
       try {
          return UuidT5Generator.get(
              refexSpecNamespace,
              memberType.name()
-             + getPrimUuidStrForNidProp(RefexProperty.COLLECTION_UUID)
+             + getPrimUuidStrForNidProp(RefexProperty.REFEX_EXTENSION_ID)
              + getReferencedComponentUuid().toString());
       } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
          throw new RuntimeException(ex);
@@ -173,7 +174,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
    }
 
    public Object put(RefexProperty key, Boolean value) {
-      assert key == RefexProperty.BOOLEAN1;
+      assert key == RefexProperty.BOOLEAN_EXTENSION_1;
 
       return properties.put(key, value);
    }
@@ -187,20 +188,20 @@ public class RefexCAB extends CreateOrAmendBlueprint {
    }
 
    public Object put(RefexProperty key, String value) {
-      assert key == RefexProperty.STRING1;
+      assert key == RefexProperty.STRING_EXTENSION_1;
 
       return properties.put(key, value);
    }
 
    public Object put(RefexProperty key, UUID value) {
-      assert key == RefexProperty.MEMBER_UUID;
+      assert key == RefexProperty.MEMBER_ID;
 
-      return properties.put(RefexProperty.MEMBER_UUID, value);
+      return properties.put(RefexProperty.MEMBER_ID, value);
    }
 
    @Override
    public void recomputeUuid()
-           throws InvalidCAB, IOException, ContradictionException {
+           throws InvalidBlueprintException, IOException, ContradictionException {
       setComponentUuid(computeMemberReferencedComponentUuid());
 
       for (RefexCAB annotBp : getAnnotationBlueprints()) {
@@ -224,21 +225,21 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
       for (Entry<RefexProperty, Object> entry : properties.entrySet()) {
          switch (entry.getKey()) {
-         case RC_UUID :
+         case REFERENCED_COMPONENT_ID :
             if (!entry.getValue().equals(version.getPrimUuid())) {
                return false;
             }
 
             break;
 
-         case COLLECTION_UUID :
-            if (!entry.getValue().equals(version.getRefexNid())) {
+         case REFEX_EXTENSION_ID :
+            if (!entry.getValue().equals(version.getRefexExtensionNid())) {
                return false;
             }
 
             break;
 
-         case MEMBER_UUID :
+         case MEMBER_ID :
             try {
                if (version.getNid()
                        != Ts.get().getNidForUuids((UUID) entry.getValue())) {
@@ -250,7 +251,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
             break;
 
-         case BOOLEAN1 :
+         case BOOLEAN_EXTENSION_1 :
             if (!RefexBooleanVersionBI.class.isAssignableFrom(
                     version.getClass())) {
                return false;
@@ -265,7 +266,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
             break;
 
-         case CNID1 :
+         case COMPONENT_EXTENSION_1_ID :
             if (!RefexNidVersionBI.class.isAssignableFrom(version.getClass())) {
                return false;
             }
@@ -278,7 +279,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
             break;
 
-         case CNID3 :
+         case COMPONENT_EXTENSION_3_ID :
             if (!RefexNidNidNidVersionBI.class.isAssignableFrom(
                     version.getClass())) {
                return false;
@@ -293,7 +294,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
             break;
 
-         case CNID2 :
+         case COMPONENT_EXTENSION_2_ID :
             if (!RefexNidNidVersionBI.class.isAssignableFrom(
                     version.getClass())) {
                return false;
@@ -307,7 +308,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
             break;
 
-         case INTEGER1 :
+         case INTEGER_EXTENSION_1 :
             if (!RefexIntVersionBI.class.isAssignableFrom(version.getClass())) {
                return false;
             }
@@ -320,7 +321,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
             break;
 
-         case LONG1 :
+         case LONG_EXTENSION_1 :
             if (!RefexLongVersionBI.class.isAssignableFrom(
                     version.getClass())) {
                return false;
@@ -334,14 +335,14 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
             break;
 
-         case STATUS_UUID :
+         case STATUS_ID :
             if (!entry.getValue().equals(version.getStatusNid())) {
                return false;
             }
 
             break;
 
-         case STRING1 :
+         case STRING_EXTENSION_1 :
             if (!RefexStringVersionBI.class.isAssignableFrom(
                     version.getClass())) {
                return false;
@@ -379,7 +380,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
    }
 
    public RefexCAB with(RefexProperty key, Boolean value) {
-      assert key == RefexProperty.BOOLEAN1;
+      assert key == RefexProperty.BOOLEAN_EXTENSION_1;
       properties.put(key, value);
 
       return this;
@@ -398,7 +399,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
    }
 
    public RefexCAB with(RefexProperty key, String value) {
-      assert key == RefexProperty.STRING1;
+      assert key == RefexProperty.STRING_EXTENSION_1;
       properties.put(key, value);
 
       return this;
@@ -414,7 +415,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
    }
 
    public boolean getBoolean(RefexProperty key) {
-      assert key == RefexProperty.BOOLEAN1;
+      assert key == RefexProperty.BOOLEAN_EXTENSION_1;
 
       return (Boolean) properties.get(key);
    }
@@ -436,7 +437,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
          return this.getComponentUuid();
       }
 
-      return (UUID) properties.get(RefexProperty.MEMBER_UUID);
+      return (UUID) properties.get(RefexProperty.MEMBER_ID);
    }
 
    public UUID getMemberUuid() {
@@ -444,11 +445,11 @@ public class RefexCAB extends CreateOrAmendBlueprint {
    }
 
    private String getPrimUuidStrForNidProp(RefexProperty prop)
-           throws IOException, InvalidCAB {
+           throws IOException, InvalidBlueprintException {
       Object nidObj = properties.get(prop);
 
       if (nidObj == null) {
-         throw new InvalidCAB("No data for: " + prop);
+         throw new InvalidBlueprintException("No data for: " + prop);
       }
 
       int         nid       = (Integer) nidObj;
@@ -464,16 +465,16 @@ public class RefexCAB extends CreateOrAmendBlueprint {
          return uuids.get(0).toString();
       }
 
-      throw new InvalidCAB("Can't find nid for: " + prop + " props: "
+      throw new InvalidBlueprintException("Can't find nid for: " + prop + " props: "
                            + this.properties);
    }
 
    public UUID getReferencedComponentUuid() {
-      return (UUID) properties.get(RefexProperty.RC_UUID);
+      return (UUID) properties.get(RefexProperty.REFERENCED_COMPONENT_ID);
    }
 
    public UUID getRefexColllectionUuid() {
-      return (UUID) properties.get(RefexProperty.COLLECTION_UUID);
+      return (UUID) properties.get(RefexProperty.REFEX_EXTENSION_ID);
    }
 
    @Override
@@ -482,7 +483,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
          super.setStatusUuid(
              Ts.get().getComponent(
                 (Integer) this.properties.get(
-                   RefexProperty.STATUS_UUID)).getPrimUuid());
+                   RefexProperty.STATUS_ID)).getPrimUuid());
       } catch (IOException ex) {
          throw new RuntimeException(ex);
       }
@@ -491,13 +492,13 @@ public class RefexCAB extends CreateOrAmendBlueprint {
    }
 
    public String getString(RefexProperty key) {
-      assert key == RefexProperty.STRING1;
+      assert key == RefexProperty.STRING_EXTENSION_1;
 
       return (String) properties.get(key);
    }
 
    public UUID getUUID(RefexProperty key) {
-      assert key == RefexProperty.MEMBER_UUID;
+      assert key == RefexProperty.MEMBER_ID;
 
       return (UUID) properties.get(key);
    }
@@ -506,8 +507,8 @@ public class RefexCAB extends CreateOrAmendBlueprint {
       return properties.containsKey(key);
    }
 
-   public void setContentUuid() throws InvalidCAB, IOException {
-      this.properties.put(RefexProperty.MEMBER_UUID,
+   public void setContentUuid() throws InvalidBlueprintException, IOException {
+      this.properties.put(RefexProperty.MEMBER_ID,
                           computeMemberContentUuid());
    }
 
@@ -516,17 +517,17 @@ public class RefexCAB extends CreateOrAmendBlueprint {
       super.setCurrent();
 
       try {
-         this.properties.put(RefexProperty.STATUS_UUID,
+         this.properties.put(RefexProperty.STATUS_ID,
                              Ts.get().getNidForUuids(super.getStatusUuid()));
       } catch (IOException ex) {
          throw new RuntimeException(ex);
       }
    }
 
-   public UUID setMemberContentUuid() throws InvalidCAB, IOException {
+   public UUID setMemberContentUuid() throws InvalidBlueprintException, IOException {
       UUID memberContentUuid = computeMemberContentUuid();
 
-      properties.put(RefexProperty.MEMBER_UUID, memberContentUuid);
+      properties.put(RefexProperty.MEMBER_ID, memberContentUuid);
 
       return memberContentUuid;
    }
@@ -537,14 +538,14 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
    public void setMemberUuid(UUID memberUuid) {
       setComponentUuid(memberUuid);
-      properties.put(RefexProperty.MEMBER_UUID, memberUuid);
+      properties.put(RefexProperty.MEMBER_ID, memberUuid);
    }
 
    public void setProperties(RefexAnalogBI<?> version)
            throws PropertyVetoException, IOException {
       for (Entry<RefexProperty, Object> entry : properties.entrySet()) {
          switch (entry.getKey()) {
-         case MEMBER_UUID :
+         case MEMBER_ID :
             try {
                version.setNid(Ts.get().getNidForUuids((UUID) entry.getValue()));
             } catch (IOException e) {
@@ -553,13 +554,13 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
             break;
 
-         case RC_UUID :
+         case REFERENCED_COMPONENT_ID :
             version.setReferencedComponentNid(
                 Ts.get().getNidForUuids((UUID) entry.getValue()));
 
             break;
 
-         case BOOLEAN1 :
+         case BOOLEAN_EXTENSION_1 :
             RefexBooleanAnalogBI<?> booleanPart =
                (RefexBooleanAnalogBI<?>) version;
 
@@ -567,14 +568,14 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
             break;
 
-         case CNID1 :
+         case COMPONENT_EXTENSION_1_ID :
             RefexNidAnalogBI<?> c1v = (RefexNidAnalogBI<?>) version;
 
             c1v.setNid1((Integer) entry.getValue());
 
             break;
 
-         case CNID3 :
+         case COMPONENT_EXTENSION_3_ID :
             RefexNidNidNidAnalogBI<?> c3part =
                (RefexNidNidNidAnalogBI<?>) version;
 
@@ -582,33 +583,33 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
             break;
 
-         case CNID2 :
+         case COMPONENT_EXTENSION_2_ID :
             RefexNidNidAnalogBI<?> c2part = (RefexNidNidAnalogBI<?>) version;
 
             c2part.setNid2((Integer) entry.getValue());
 
             break;
 
-         case INTEGER1 :
+         case INTEGER_EXTENSION_1 :
             RefexIntAnalogBI<?> intPart = (RefexIntAnalogBI<?>) version;
 
             intPart.setInt1((Integer) entry.getValue());
 
             break;
 
-         case LONG1 :
+         case LONG_EXTENSION_1 :
             RefexLongAnalogBI<?> longPart = (RefexLongAnalogBI<?>) version;
 
             longPart.setLong1((Long) entry.getValue());
 
             break;
 
-         case STATUS_UUID :
+         case STATUS_ID :
             ((AnalogBI) version).setStatusNid((Integer) entry.getValue());
 
             break;
 
-         case STRING1 :
+         case STRING_EXTENSION_1 :
             RefexStringAnalogBI<?> strPart = (RefexStringAnalogBI<?>) version;
 
             strPart.setString1((String) entry.getValue());
@@ -633,7 +634,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
            throws PropertyVetoException, IOException {
       for (Entry<RefexProperty, Object> entry : properties.entrySet()) {
          switch (entry.getKey()) {
-         case MEMBER_UUID :
+         case MEMBER_ID :
             try {
                int nid = Ts.get().getNidForUuids((UUID) entry.getValue());
 
@@ -646,7 +647,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
             break;
 
-         case BOOLEAN1 :
+         case BOOLEAN_EXTENSION_1 :
             RefexBooleanAnalogBI<?> booleanPart =
                (RefexBooleanAnalogBI<?>) version;
 
@@ -654,25 +655,25 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
             break;
 
-         case COLLECTION_UUID :
-            version.setRefexNid((Integer) entry.getValue());
+         case REFEX_EXTENSION_ID :
+            version.setRefexExtensionNid((Integer) entry.getValue());
 
             break;
 
-         case RC_UUID :
+         case REFERENCED_COMPONENT_ID :
             version.setReferencedComponentNid(
                 Ts.get().getNidForUuids((UUID) entry.getValue()));
 
             break;
 
-         case CNID1 :
+         case COMPONENT_EXTENSION_1_ID :
             RefexNidAnalogBI<?> c1part = (RefexNidAnalogBI<?>) version;
 
             c1part.setNid1((Integer) entry.getValue());
 
             break;
 
-         case CNID3 :
+         case COMPONENT_EXTENSION_3_ID :
             RefexNidNidNidAnalogBI<?> c3part =
                (RefexNidNidNidAnalogBI<?>) version;
 
@@ -680,33 +681,33 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
             break;
 
-         case CNID2 :
+         case COMPONENT_EXTENSION_2_ID :
             RefexNidNidAnalogBI<?> c2part = (RefexNidNidAnalogBI<?>) version;
 
             c2part.setNid2((Integer) entry.getValue());
 
             break;
 
-         case INTEGER1 :
+         case INTEGER_EXTENSION_1 :
             RefexIntAnalogBI<?> intPart = (RefexIntAnalogBI<?>) version;
 
             intPart.setInt1((Integer) entry.getValue());
 
             break;
 
-         case LONG1 :
+         case LONG_EXTENSION_1 :
             RefexLongAnalogBI<?> longPart = (RefexLongAnalogBI<?>) version;
 
             longPart.setLong1((Long) entry.getValue());
 
             break;
 
-         case STATUS_UUID :
+         case STATUS_ID :
 
             // SAP property
             break;
 
-         case STRING1 :
+         case STRING_EXTENSION_1 :
             RefexStringAnalogBI<?> strPart = (RefexStringAnalogBI<?>) version;
 
             strPart.setString1((String) entry.getValue());
@@ -728,7 +729,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
    }
 
    protected void setReferencedComponentUuid(UUID rcUuid) {
-      this.properties.put(RefexProperty.RC_UUID, rcUuid);
+      this.properties.put(RefexProperty.REFERENCED_COMPONENT_ID, rcUuid);
    }
 
    @Override
@@ -736,7 +737,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
       super.setRetired();
 
       try {
-         this.properties.put(RefexProperty.STATUS_UUID,
+         this.properties.put(RefexProperty.STATUS_ID,
                              Ts.get().getNidForUuids(super.getStatusUuid()));
       } catch (IOException ex) {
          throw new RuntimeException(ex);
@@ -747,9 +748,9 @@ public class RefexCAB extends CreateOrAmendBlueprint {
    public void setStatusUuid(UUID statusUuid) {
       super.setStatusUuid(statusUuid);
 
-      if (this.properties.get(RefexProperty.STATUS_UUID) != null) {
+      if (this.properties.get(RefexProperty.STATUS_ID) != null) {
          try {
-            this.properties.put(RefexProperty.STATUS_UUID,
+            this.properties.put(RefexProperty.STATUS_ID,
                                 Ts.get().getNidForUuids(statusUuid));
          } catch (IOException ex) {
             throw new RuntimeException(ex);

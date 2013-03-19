@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import org.ihtsdo.ttk.api.blueprint.ConceptCB;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 
 public interface ConceptVersionBI extends ComponentVersionBI, ConceptChronicleBI {
 
@@ -152,8 +152,8 @@ public interface ConceptVersionBI extends ComponentVersionBI, ConceptChronicleBI
 
     boolean isMember(int evalRefsetNid) throws IOException;
 
-    ConceptCB makeBlueprint() throws IOException, ContradictionException, InvalidCAB;
+    ConceptCB makeBlueprint() throws IOException, ContradictionException, InvalidBlueprintException;
     
     @Override
-    ConceptCB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidCAB;
+    ConceptCB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException;
 }

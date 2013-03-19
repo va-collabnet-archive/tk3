@@ -18,6 +18,7 @@ import org.ihtsdo.ttk.api.refex.type_nid_long.RefexNidLongVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_string.RefexNidStringVersionBI;
 import org.ihtsdo.ttk.api.refex.type_int.RefexIntVersionBI;
 import org.ihtsdo.ttk.api.refex.type_long.RefexLongVersionBI;
+import org.ihtsdo.ttk.api.refex.type_nid_boolean.RefexNidBooleanVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_float.RefexNidNidNidFloatVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_int.RefexNidNidNidIntVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_long.RefexNidNidNidLongVersionBI;
@@ -50,6 +51,11 @@ public enum TK_REFEX_TYPE {
     CID_CID_CID_INT(16, RefexNidNidNidIntVersionBI.class),
     CID_CID_CID_LONG(17, RefexNidNidNidLongVersionBI.class),
     CID_CID_CID_STRING(18, RefexNidNidNidStringVersionBI.class),
+    /**
+     * A refex type that can annotate a referenced component with a component identifier
+     * and a boolean value. 
+     */
+    CID_BOOLEAN(19, RefexNidBooleanVersionBI.class),
     
     UNKNOWN(Byte.MAX_VALUE, null);
 

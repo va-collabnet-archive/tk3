@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import java.util.Set;
 import org.ihtsdo.ttk.api.blueprint.CreateOrAmendBlueprint;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 
 public interface ComponentVersionBI extends ComponentBI, VersionPointBI {
    boolean stampIsInRange(int min, int max);
@@ -60,5 +60,5 @@ public interface ComponentVersionBI extends ComponentBI, VersionPointBI {
    boolean versionsEqual(ViewCoordinate vc1, ViewCoordinate vc2, Boolean compareAuthoring);
    
    CreateOrAmendBlueprint makeBlueprint(ViewCoordinate vc) 
-           throws IOException, ContradictionException, InvalidCAB;
+           throws IOException, ContradictionException, InvalidBlueprintException;
 }

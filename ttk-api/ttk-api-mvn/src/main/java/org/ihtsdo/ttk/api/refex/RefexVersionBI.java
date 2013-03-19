@@ -11,13 +11,13 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 
 import java.io.IOException;
 
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 
 public interface RefexVersionBI<A extends RefexAnalogBI<A>>
         extends ComponentVersionBI, RefexChronicleBI<A>, AnalogGeneratorBI<A> {
 
     @Override
-    RefexCAB makeBlueprint(ViewCoordinate vc) throws IOException, InvalidCAB, ContradictionException;
+    RefexCAB makeBlueprint(ViewCoordinate vc) throws IOException, InvalidBlueprintException, ContradictionException;
 
     boolean refexFieldsEqual(RefexVersionBI another);
 }

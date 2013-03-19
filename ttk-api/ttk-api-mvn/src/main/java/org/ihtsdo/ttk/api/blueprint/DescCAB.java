@@ -51,7 +51,7 @@ public class DescCAB extends CreateOrAmendBlueprint {
 
    public DescCAB(int conceptNid, int typeNid, LANG_CODE lang, String text,
                   boolean initialCaseSignificant, UUID moduleUuid)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       this(Ts.get().getComponent(conceptNid).getPrimUuid(),
            Ts.get().getComponent(typeNid).getPrimUuid(), lang, text,
            initialCaseSignificant, moduleUuid);
@@ -59,7 +59,7 @@ public class DescCAB extends CreateOrAmendBlueprint {
 
    public DescCAB(UUID conceptUuid, UUID typeUuid, LANG_CODE lang, String text,
                   boolean initialCaseSignificant, UUID moduleUuid)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       this(conceptUuid, typeUuid, lang, text, initialCaseSignificant, null,
            null, null, moduleUuid);
    }
@@ -67,7 +67,7 @@ public class DescCAB extends CreateOrAmendBlueprint {
    public DescCAB(int conceptNid, int typeNid, LANG_CODE lang, String text,
                   boolean initialCaseSignificant, DescriptionVersionBI dv,
                   ViewCoordinate vc, UUID moduleUuid)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       this(Ts.get().getComponent(conceptNid).getPrimUuid(),
            Ts.get().getComponent(typeNid).getPrimUuid(), lang, text,
            initialCaseSignificant, dv, vc, moduleUuid);
@@ -76,7 +76,7 @@ public class DescCAB extends CreateOrAmendBlueprint {
    public DescCAB(UUID conceptUuid, UUID typeUuid, LANG_CODE lang, String text,
                   boolean initialCaseSignificant, DescriptionVersionBI dv,
                   ViewCoordinate vc, UUID moduleUuid)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       this(conceptUuid, typeUuid, lang, text, initialCaseSignificant, null, dv,
            vc, moduleUuid);
    }
@@ -84,7 +84,7 @@ public class DescCAB extends CreateOrAmendBlueprint {
    public DescCAB(UUID conceptUuid, UUID typeUuid, LANG_CODE lang, String text,
                   boolean initialCaseSignificant, UUID componentUuid,
                   DescriptionVersionBI dv, ViewCoordinate vc, UUID moduleUuid)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       super(componentUuid, dv, vc, moduleUuid);
       this.conceptUuid            = conceptUuid;
       this.lang                   = lang.getFormatedLanguageCode();
@@ -95,7 +95,7 @@ public class DescCAB extends CreateOrAmendBlueprint {
       if (getComponentUuid() == null) {
          try {
             recomputeUuid();
-         } catch (IOException | InvalidCAB | NoSuchAlgorithmException ex) {
+         } catch (IOException | InvalidBlueprintException | NoSuchAlgorithmException ex) {
             throw new RuntimeException(ex);
          }
       }
@@ -104,7 +104,7 @@ public class DescCAB extends CreateOrAmendBlueprint {
    @Override
    public void recomputeUuid()
            throws NoSuchAlgorithmException, UnsupportedEncodingException,
-                  IOException, InvalidCAB, ContradictionException {
+                  IOException, InvalidBlueprintException, ContradictionException {
       setComponentUuid(UuidT5Generator.get(descSpecNamespace,
               getPrimoridalUuidStr(conceptUuid) + lang + text));
 

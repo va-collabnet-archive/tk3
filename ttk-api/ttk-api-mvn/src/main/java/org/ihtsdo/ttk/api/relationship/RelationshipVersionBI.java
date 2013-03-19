@@ -4,7 +4,7 @@ import java.io.IOException;
 import org.ihtsdo.ttk.api.AnalogGeneratorBI;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.TypedComponentVersionBI;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 import org.ihtsdo.ttk.api.blueprint.RelCAB;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 
@@ -24,6 +24,6 @@ public interface RelationshipVersionBI<A extends RelationshipAnalogBI>
     public boolean isStated();
     
     @Override
-    public RelCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidCAB;
+    public RelCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException;
 
 }

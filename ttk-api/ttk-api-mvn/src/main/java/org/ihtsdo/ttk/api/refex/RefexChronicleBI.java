@@ -6,7 +6,7 @@ import org.ihtsdo.ttk.api.ComponentChroncileBI;
 
 public interface RefexChronicleBI<A extends RefexAnalogBI<A>>
         extends ComponentChroncileBI<RefexVersionBI<A>> {
-   int getRefexNid();
+   int getRefexExtensionNid();
 
    int getReferencedComponentNid();
 }

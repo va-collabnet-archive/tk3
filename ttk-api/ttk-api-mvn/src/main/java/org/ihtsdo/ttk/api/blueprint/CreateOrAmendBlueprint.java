@@ -64,7 +64,7 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
 
    public CreateOrAmendBlueprint(UUID componentUuid, ComponentVersionBI cv,
                                  ViewCoordinate vc, UUID moduleUuid)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       currentStatusUuid  = SnomedMetadataRf2.ACTIVE_VALUE_RF2.getUuids()[0];
       retiredStatusUuid  = SnomedMetadataRf2.INACTIVE_VALUE_RF2.getUuids()[0];
       statusUuid         = currentStatusUuid;
@@ -90,7 +90,7 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
    public void propertyChange(PropertyChangeEvent pce) {
       try {
          recomputeUuid();
-      } catch (NoSuchAlgorithmException | InvalidCAB | ContradictionException
+      } catch (NoSuchAlgorithmException | InvalidBlueprintException | ContradictionException
                | IOException ex) {
          Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(
              Level.SEVERE, null, ex);
@@ -99,7 +99,7 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
 
    public abstract void recomputeUuid()
            throws NoSuchAlgorithmException, UnsupportedEncodingException,
-                  IOException, InvalidCAB, ContradictionException;
+                  IOException, InvalidBlueprintException, ContradictionException;
 
    public synchronized void removePropertyChangeListener(
            PropertyChangeListener pl) {
@@ -115,8 +115,8 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
       this.annotations = annotations;
    }
 
-   public List<RefexCAB> getAnnotationBlueprints()
-           throws IOException, InvalidCAB, ContradictionException {
+   public final List<RefexCAB> getAnnotationBlueprints()
+           throws IOException, InvalidBlueprintException, ContradictionException {
       if (annotations.isEmpty() && (cv != null)) {
          if (cv.getCurrentRefexes(vc) != null) {
             Collection<? extends RefexVersionBI<?>> originalRefexes =
@@ -146,7 +146,7 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
    }
 
    protected String getPrimoridalUuidStr(int nid)
-           throws IOException, InvalidCAB {
+           throws IOException, InvalidBlueprintException {
       ComponentBI component = Ts.get().getComponent(nid);
 
       if (component != null) {
@@ -159,11 +159,11 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
          return uuids.get(0).toString();
       }
 
-      throw new InvalidCAB("Can't find primordialUuid for: " + component);
+      throw new InvalidBlueprintException("Can't find primordialUuid for: " + component);
    }
 
    protected String getPrimoridalUuidStr(UUID uuid)
-           throws IOException, InvalidCAB {
+           throws IOException, InvalidBlueprintException {
       if (Ts.get() != null) {
          ComponentBI component = Ts.get().getComponent(uuid);
 

@@ -110,7 +110,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
    private ConAttrAB conAttr;
 
    public ConceptCB(ConceptVersionBI cv, UUID newConceptUuid)
-           throws IOException, ContradictionException, InvalidCAB {
+           throws IOException, ContradictionException, InvalidBlueprintException {
       super(null, cv, cv.getViewCoordinate(),
             Ts.get().getUuidPrimordialForNid(
                cv.getConAttrsActive().getModuleNid()));
@@ -184,7 +184,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
    public ConceptCB(List<String> fullySpecifiedNames,
                     List<String> preferredNames, LANG_CODE lang, UUID isaType,
                     UUID moduleUuid, UUID... parents)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       super(null, null, null, moduleUuid);
       this.fsns      = fullySpecifiedNames;
       this.prefNames = preferredNames;
@@ -202,7 +202,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
    public ConceptCB(String fullySpecifiedName, String preferredName,
                     LANG_CODE lang, UUID isaType, UUID moduleUuid,
                     UUID... parents)
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       super(null, null, null, moduleUuid);
       this.fsns.add(fullySpecifiedName);
       this.fullySpecifiedName =
@@ -229,7 +229,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
     */
    public ConceptCB addFsn(DescCAB fsnBp, LANG_CODE dialect)
            throws NoSuchAlgorithmException, UnsupportedEncodingException,
-                  IOException, InvalidCAB, ContradictionException {
+                  IOException, InvalidBlueprintException, ContradictionException {
       fsns.add(fsnBp.getText());
       addFsnDialectRefexes(fsnBp, dialect);
       this.recomputeUuid();
@@ -239,68 +239,68 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
 
    private void addFsnDialectRefexes(DescCAB fsnBp, LANG_CODE dialect)
            throws NoSuchAlgorithmException, UnsupportedEncodingException,
-                  IOException, InvalidCAB, ContradictionException {
+                  IOException, InvalidBlueprintException, ContradictionException {
       RefexCAB usAnnot;
       RefexCAB gbAnnot;
 
       if (dialect == LANG_CODE.EN) {
          usAnnot = new RefexCAB(TK_REFEX_TYPE.CID, fsnBp.getComponentUuid(),
                                 usRefexUuid, null, null, getModuleUuid());
-         usAnnot.put(RefexCAB.RefexProperty.CNID1,
+         usAnnot.put(RefexProperty.COMPONENT_EXTENSION_1_ID,
                      SnomedMetadataRfx.getDESC_PREFERRED_NID());
          gbAnnot = new RefexCAB(TK_REFEX_TYPE.CID, fsnBp.getComponentUuid(),
                                 gbRefexUuid, null, null, getModuleUuid());
-         gbAnnot.put(RefexCAB.RefexProperty.CNID1,
+         gbAnnot.put(RefexProperty.COMPONENT_EXTENSION_1_ID,
                      SnomedMetadataRfx.getDESC_PREFERRED_NID());
          fsnBp.setAnnotationBlueprint(usAnnot);
          fsnBp.setAnnotationBlueprint(gbAnnot);
       } else if (dialect == LANG_CODE.EN_US) {
          usAnnot = new RefexCAB(TK_REFEX_TYPE.CID, fsnBp.getComponentUuid(),
                                 usRefexUuid, null, null, getModuleUuid());
-         usAnnot.put(RefexCAB.RefexProperty.CNID1,
+         usAnnot.put(RefexProperty.COMPONENT_EXTENSION_1_ID,
                      SnomedMetadataRfx.getDESC_PREFERRED_NID());
          fsnBp.setAnnotationBlueprint(usAnnot);
       } else if (dialect == LANG_CODE.EN_GB) {
-         throw new InvalidCAB(
+         throw new InvalidBlueprintException(
              "<html>Currently FSNs are only allowed for en or en-us. "
              + "<br>Please add gb dialect variants as preferred terms.");
       } else {
-         throw new InvalidCAB("Dialect not supported: "
+         throw new InvalidBlueprintException("Dialect not supported: "
                               + dialect.getFormatedLanguageCode());
       }
    }
 
    private void addPrefNameDialectRefexes(DescCAB prefBp, LANG_CODE dialect)
            throws NoSuchAlgorithmException, UnsupportedEncodingException,
-                  IOException, InvalidCAB, ContradictionException {
+                  IOException, InvalidBlueprintException, ContradictionException {
       RefexCAB usAnnot;
       RefexCAB gbAnnot;
 
       if (dialect == LANG_CODE.EN) {
          usAnnot = new RefexCAB(TK_REFEX_TYPE.CID, prefBp.getComponentUuid(),
                                 usRefexUuid, null, null, getModuleUuid());
-         usAnnot.put(RefexCAB.RefexProperty.CNID1,
+         usAnnot.put(RefexProperty.COMPONENT_EXTENSION_1_ID,
                      SnomedMetadataRfx.getDESC_PREFERRED_NID());
          gbAnnot = new RefexCAB(TK_REFEX_TYPE.CID, prefBp.getComponentUuid(),
                                 gbRefexUuid, null, null, getModuleUuid());
-         gbAnnot.put(RefexCAB.RefexProperty.CNID1,
+         gbAnnot.put(RefexProperty.COMPONENT_EXTENSION_1_ID,
                      SnomedMetadataRfx.getDESC_PREFERRED_NID());
          prefBp.setAnnotationBlueprint(usAnnot);
          prefBp.setAnnotationBlueprint(gbAnnot);
       } else if (dialect == LANG_CODE.EN_US) {
          usAnnot = new RefexCAB(TK_REFEX_TYPE.CID, prefBp.getComponentUuid(),
                                 usRefexUuid, null, null, getModuleUuid());
-         usAnnot.put(RefexCAB.RefexProperty.CNID1,
+         usAnnot.put(RefexProperty.COMPONENT_EXTENSION_1_ID,
                      SnomedMetadataRfx.getDESC_PREFERRED_NID());
          prefBp.setAnnotationBlueprint(usAnnot);
       } else if (dialect == LANG_CODE.EN_GB) {
          gbAnnot = new RefexCAB(TK_REFEX_TYPE.CID, prefBp.getComponentUuid(),
                                 gbRefexUuid, null, null, getModuleUuid());
-         gbAnnot.put(RefexCAB.RefexProperty.CNID1,
+         gbAnnot.put(RefexProperty.COMPONENT_EXTENSION_1_ID,
                      SnomedMetadataRfx.getDESC_PREFERRED_NID());
          prefBp.setAnnotationBlueprint(gbAnnot);
       } else {
-         throw new InvalidCAB("Dialect not supported: "
+         throw new InvalidBlueprintException("Dialect not supported: "
                               + dialect.getFormatedLanguageCode());
       }
    }
@@ -313,7 +313,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
     */
    public ConceptCB addPreferredName(DescCAB prefBp, LANG_CODE dialect)
            throws NoSuchAlgorithmException, UnsupportedEncodingException,
-                  IOException, InvalidCAB, ContradictionException {
+                  IOException, InvalidBlueprintException, ContradictionException {
       prefNames.add(prefBp.getText());
       this.recomputeUuid();
       addPrefNameDialectRefexes(prefBp, dialect);
@@ -342,7 +342,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
    }
 
    public DescCAB makeFsnCAB()
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
 
       // get rf1/rf2 concepts
       UUID fsnUuid =
@@ -354,7 +354,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
    }
 
    public DescCAB makePreferredCAB()
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
 
       // get rf1/rf2 concepts
       UUID synUuid = SnomedMetadataRf2.SYNONYM_RF2.getUuids()[0];
@@ -368,7 +368,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
    public void propertyChange(PropertyChangeEvent pce) {
       try {
          recomputeUuid();
-      } catch (NoSuchAlgorithmException | InvalidCAB | ContradictionException
+      } catch (NoSuchAlgorithmException | InvalidBlueprintException | ContradictionException
                | IOException ex) {
          Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(
              Level.SEVERE, null, ex);
@@ -378,7 +378,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
    @Override
    public void recomputeUuid()
            throws NoSuchAlgorithmException, UnsupportedEncodingException,
-                  IOException, InvalidCAB, ContradictionException {
+                  IOException, InvalidBlueprintException, ContradictionException {
       for (DescCAB descBp : getDescCABs()) {
          descBp.setConceptUuid(getComponentUuid());
          descBp.recomputeUuid();
@@ -405,7 +405,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
     */
    public void updateFsn(String newFsn, DescCAB fsnBp, LANG_CODE dialect)
            throws NoSuchAlgorithmException, UnsupportedEncodingException,
-                  IOException, InvalidCAB, ContradictionException {
+                  IOException, InvalidBlueprintException, ContradictionException {
       String oldText = fsnBp.getText();
 
       fsns.remove(oldText);
@@ -439,7 +439,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
    public void updatePreferredName(String newPreferredName, DescCAB prefBp,
                                    LANG_CODE dialect)
            throws NoSuchAlgorithmException, UnsupportedEncodingException,
-                  IOException, InvalidCAB, ContradictionException {
+                  IOException, InvalidBlueprintException, ContradictionException {
       String oldText = prefBp.getText();
 
       prefNames.remove(oldText);
@@ -462,7 +462,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
       }
    }
 
-   public ConAttrAB getConAttrAB() throws IOException, InvalidCAB, ContradictionException {
+   public ConAttrAB getConAttrAB() throws IOException, InvalidBlueprintException, ContradictionException {
        if (conAttr == null) {
            conAttr = new ConAttrAB(getComponentUuid(), defined, getModuleUuid());
        }
@@ -474,7 +474,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
    }
 
    public List<DescCAB> getFsnCABs()
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       if (fsnCABs.isEmpty()) {
          fsnCABs.add(makeFsnCAB());
       }
@@ -499,7 +499,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
    }
 
    public List<RelCAB> getParentCABs()
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       List<RelCAB> parentCabs = new ArrayList<>(getParents().size());
 
       for (UUID parentUuid : parents) {
@@ -518,7 +518,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
    }
 
    public List<DescCAB> getPrefCABs()
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       if (prefCABs.isEmpty()) {
          prefCABs.add(makePreferredCAB());
       }
@@ -531,7 +531,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
    }
 
    public List<RelCAB> getRelCABs()
-           throws IOException, InvalidCAB, ContradictionException {
+           throws IOException, InvalidBlueprintException, ContradictionException {
       if (relCABs.isEmpty()) {
          List<RelCAB> parentCABs = getParentCABs();
 

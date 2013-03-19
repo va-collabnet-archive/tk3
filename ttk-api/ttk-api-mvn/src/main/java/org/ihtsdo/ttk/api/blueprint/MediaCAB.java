@@ -42,7 +42,7 @@ public class MediaCAB extends CreateOrAmendBlueprint {
     public MediaCAB(
             int conceptNid, int typeNid, String format, String textDescription,
             byte[] dataBytes, UUID moduleUuid)
-            throws IOException, InvalidCAB, ContradictionException {
+            throws IOException, InvalidBlueprintException, ContradictionException {
         this(Ts.get().getComponent(conceptNid).getPrimUuid(),
                 Ts.get().getComponent(typeNid).getPrimUuid(),
                 format, textDescription, dataBytes, moduleUuid);
@@ -51,7 +51,7 @@ public class MediaCAB extends CreateOrAmendBlueprint {
     public MediaCAB(
             UUID conceptUuid, UUID typeUuid, String format, String textDescription,
             byte[] dataBytes, UUID moduleUuid)
-            throws IOException, InvalidCAB, ContradictionException {
+            throws IOException, InvalidBlueprintException, ContradictionException {
         this(conceptUuid, typeUuid, format, textDescription, dataBytes,
                 null, null, null, moduleUuid);
     }
@@ -59,7 +59,7 @@ public class MediaCAB extends CreateOrAmendBlueprint {
     public MediaCAB(
             int conceptNid, int typeNid, String format, String textDescription,
             byte[] dataBytes, MediaVersionBI media, ViewCoordinate vc, UUID moduleUuid)
-            throws IOException, InvalidCAB, ContradictionException {
+            throws IOException, InvalidBlueprintException, ContradictionException {
         this(Ts.get().getComponent(conceptNid).getPrimUuid(),
                 Ts.get().getComponent(typeNid).getPrimUuid(),
                 format, textDescription, dataBytes, media, vc, moduleUuid);
@@ -68,7 +68,7 @@ public class MediaCAB extends CreateOrAmendBlueprint {
     public MediaCAB(
             UUID conceptUuid, UUID typeUuid, String format, String textDescription,
             byte[] dataBytes, MediaVersionBI media, ViewCoordinate vc, UUID moduleUuid)
-            throws IOException, InvalidCAB, ContradictionException {
+            throws IOException, InvalidBlueprintException, ContradictionException {
         this(conceptUuid, typeUuid, format, textDescription, dataBytes,
                 null, media, vc, moduleUuid);
     }
@@ -76,7 +76,7 @@ public class MediaCAB extends CreateOrAmendBlueprint {
     public MediaCAB(
             UUID conceptUuid, UUID typeUuid, String format, String textDescription,
             byte[] dataBytes, UUID componentUuid, MediaVersionBI media,
-            ViewCoordinate vc, UUID moduleUuid) throws IOException, InvalidCAB, ContradictionException {
+            ViewCoordinate vc, UUID moduleUuid) throws IOException, InvalidBlueprintException, ContradictionException {
         super(componentUuid, media, vc, moduleUuid);
 
         this.conceptUuid = conceptUuid;
@@ -87,14 +87,14 @@ public class MediaCAB extends CreateOrAmendBlueprint {
         if (getComponentUuid() == null) {
             try {
                 recomputeUuid();
-            } catch (    IOException | InvalidCAB | NoSuchAlgorithmException ex) {
+            } catch (    IOException | InvalidBlueprintException | NoSuchAlgorithmException ex) {
                 throw new RuntimeException(ex);
             }
         }
     }
 
     @Override
-    public void recomputeUuid() throws NoSuchAlgorithmException, IOException, InvalidCAB, ContradictionException {
+    public void recomputeUuid() throws NoSuchAlgorithmException, IOException, InvalidBlueprintException, ContradictionException {
         setComponentUuid(
                 UuidT5Generator.get(mediaSpecNamespace,
                 getPrimoridalUuidStr(conceptUuid)

@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package org.ihtsdo.ttk.api.refex;
+package org.ihtsdo.ttk.api.refex.type_nid_boolean;
 
-import java.beans.PropertyVetoException;
-import java.io.IOException;
-
-import org.ihtsdo.ttk.api.AnalogBI;
+import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanAnalogBI;
+import org.ihtsdo.ttk.api.refex.type_nid.RefexNidAnalogBI;
 
 /**
  *
  * @author kec
  */
-public interface RefexAnalogBI <A extends RefexAnalogBI<A>>
-        extends RefexVersionBI<A>, AnalogBI {
-	
-	void setRefexExtensionNid(int refexNid) throws IOException, PropertyVetoException;
-        void setReferencedComponentNid(int componentNid) throws IOException, PropertyVetoException;
+public interface RefexNidBooleanAnalogBI<A extends RefexNidBooleanAnalogBI<A>>
+    extends RefexNidAnalogBI<A>, RefexBooleanAnalogBI<A>, RefexNidBooleanVersionBI<A> {
 
 }
