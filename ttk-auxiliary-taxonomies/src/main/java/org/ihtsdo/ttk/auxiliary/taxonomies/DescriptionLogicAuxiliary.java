@@ -127,7 +127,7 @@ public class DescriptionLogicAuxiliary extends Taxonomy {
          createConcept("role operators");
          pushParent(current());
          createConcept("universal restriction");
-         createConcept("extensional restriction");
+         createConcept("existential restriction");
          popParent();
          createConcept("concrete domain operators");
          pushParent(current());
