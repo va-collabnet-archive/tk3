@@ -1,19 +1,43 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>ttk-mmb</artifactId>
-    <groupId>org.ihtsdo.ttk</groupId>
-    <version>3.1.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>ttk-classifier</artifactId>
-  <version>3.1.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <name>${branch}: Classifier:</name>
-  <modules>
-      <module>ttk-classifier-mvn</module>
-  </modules>
-  <dependencies>
-      
-  </dependencies>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.ihtsdo.ttk</groupId>
+        <artifactId>ttk-mmb</artifactId>
+        <version>3.1.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>ttk-classifier</artifactId>
+    <name>${branch}: Classifier: Maven Module</name>
+    <url>http://maven.apache.org</url>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ttk-helpers</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>au.csiro</groupId>
+            <artifactId>snorocket-core</artifactId>
+            <version>1.4.3-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>log4j</artifactId>
+            <groupId>log4j</groupId>
+            <version>1.2.16</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ttk-logic</artifactId>
+            <version>${project.version}</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
 </project>
