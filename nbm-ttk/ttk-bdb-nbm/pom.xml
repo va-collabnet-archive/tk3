@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.ihtsdo.ttk</groupId>
+        <artifactId>ttk-bdb</artifactId>
+        <version>3.1.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>ttk-bdb-nbm</artifactId>
+    <packaging>nbm</packaging>
+
+    <name>${branch}: BDB: Netbeans Module</name>
+    <dependencies>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-api-annotations-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-modules</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ttk-bdb-mvn</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+                <configuration>
+                    <publicPackages>
+                        <publicPackage>org.ihtsdo.ttk.api.*</publicPackage>
+                        <publicPackage>org.ihtsdo.ttk.fx.*</publicPackage>
+                        <publicPackage>org.ihtsdo.ttk.helpers.*</publicPackage>
+                        <publicPackage>org.apache.log4j.*</publicPackage>
+                        <publicPackage>au.csiro.*</publicPackage>
+                    </publicPackages>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

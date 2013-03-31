@@ -19,12 +19,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
-            <artifactId>ttk-api-mvn</artifactId>
+            <artifactId>ttk-api</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
-            <artifactId>ttk-classifier-mvn</artifactId>
+            <artifactId>ttk-classifier</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

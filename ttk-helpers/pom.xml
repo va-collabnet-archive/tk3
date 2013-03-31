@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ttk-dto-mvn</artifactId>
+            <artifactId>ttk-dto</artifactId>
             <version>${project.version}</version>
             <type>jar</type>
         </dependency>

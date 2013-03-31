@@ -2,13 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-    <groupId>org.ihtsdo.ttk</groupId>
-    <artifactId>ttk-services</artifactId>
-    <version>3.1.1-SNAPSHOT</version>
-  </parent>
-    <artifactId>ttk-services-osgi</artifactId>
+        <artifactId>ttk-api</artifactId>
+        <groupId>org.ihtsdo.ttk</groupId>
+        <version>3.1.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>ttk-api-osgi</artifactId>
     <packaging>bundle</packaging>
-    <name>${branch}: Services: OSGi Bundle</name>
+    <name>${branch}: API: OSGi Bundle</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,11 +19,6 @@
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.core</artifactId>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>ttk-services-mvn</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
@@ -36,9 +31,12 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Bundle-Activator>org.ihtsdo.ttk.services.osgi.Activator</Bundle-Activator>
-                        <Export-Package>org.ihtsdo.ttk.services.*</Export-Package>
+                        <Bundle-Activator>org.ihtsdo.ttk.api.osgi.Activator</Bundle-Activator>
+                        <Export-Package>org.ihtsdo.ttk.api</Export-Package>
+                        <Export-Package>javafx</Export-Package>
                     </instructions>
+                    <remoteOBR>repo-rel</remoteOBR>
+                    <prefixUrl>file:///Users/kec/OsgiOBR</prefixUrl>                
                 </configuration>
             </plugin>
         </plugins>
@@ -169,4 +167,11 @@
             </build>
         </profile>
     </profiles>
+    <distributionManagement>
+        <!-- releases repo -->
+        <repository>
+            <id>repo-rel</id>
+            <url>file:///Users/kec/OsgiOBR</url>
+        </repository>
+    </distributionManagement>
 </project>

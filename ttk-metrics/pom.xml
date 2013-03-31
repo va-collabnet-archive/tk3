@@ -30,7 +30,7 @@
                 <dependencies>
                     <dependency>
                         <groupId>${project.groupId}</groupId>
-                        <artifactId>ttk-bdb-mvn</artifactId>
+                        <artifactId>ttk-bdb</artifactId>
                         <version>${project.version}</version>
                     </dependency>
                     <dependency>
