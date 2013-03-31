@@ -20,34 +20,61 @@ package org.ihtsdo.ttk.logic;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.ihtsdo.ttk.api.ConceptFetcherBI;
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
-import org.ihtsdo.ttk.api.blueprint.AnnotationBlueprintBuilder;
+import org.ihtsdo.ttk.api.NidBitSetBI;
+import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.ttk.api.TerminologyBuilderBI;
+import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexProperty;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
+import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.ttk.api.metadata.binding.Snomed;
+import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
+import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
+import org.ihtsdo.ttk.api.relationship.group.RelGroupVersionBI;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  *
  * @author kec
  */
-public class SnomedToLogicDag extends AnnotationBlueprintBuilder {
+public class SnomedToLogicDag extends LogicBlueprintBuilder implements ProcessUnfetchedConceptDataBI {
+
+   /** Field description */
+   TerminologyBuilderBI builder;
+   
+   public static boolean verbose = false;
 
    /**
     *
     * @param vc
+    * @param ec
     */
-   public SnomedToLogicDag(ViewCoordinate vc) {
+   public SnomedToLogicDag(ViewCoordinate vc, EditCoordinate ec) {
       super(DescriptionLogicBinding.EL_PLUS_PLUS.getUuids()[0], vc,
-            DescriptionLogicBinding.DL_MODULE.getUuids()[0], true);
+            DescriptionLogicBinding.DL_MODULE.getUuids()[0]);
+      builder = Ts.get().getTerminologyBuilder(ec, vc);
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public boolean continueWork() {
+      return true;
    }
 
    /**
@@ -59,26 +86,101 @@ public class SnomedToLogicDag extends AnnotationBlueprintBuilder {
     */
    public void convert(ConceptVersionBI cv)
            throws IOException, ContradictionException, InvalidBlueprintException {
-      pushReferencedComponent(cv.getPrimUuid());
+      setConceptUuid(cv.getPrimUuid());
 
-      boolean defined = (cv.getConAttrsActive() != null) && cv.getConAttrsActive().isDefined();
+      RefexCAB root    = newNode(DescriptionLogicBinding.DEFINITION_ROOT);
+      boolean  defined = (cv.getConAttrsActive() != null) && cv.getConAttrsActive().isDefined();
+      RefexCAB set;
 
-      // create sufficient set node
       if (defined) {
-         newAnnotation(TK_REFEX_TYPE.CID).put(RefexProperty.COMPONENT_EXTENSION_1_ID,
-                       DescriptionLogicBinding.SUFFICIENT_SET.getUuids()[0]);
+
+         // create sufficient set node
+         set = add(root, DescriptionLogicBinding.SUFFICIENT_SET);
       } else {
-         newAnnotation(TK_REFEX_TYPE.CID).put(RefexProperty.COMPONENT_EXTENSION_1_ID,
-                       DescriptionLogicBinding.NECESSARY_SET.getUuids()[0]);
+
+         // create necessary set node
+         set = add(root, DescriptionLogicBinding.NECESSARY_SET);
       }
 
-      RefexCAB setNode = current();
-
-      // link from the concept to the sufficient/necessary set node.
-      newAnnotation(TK_REFEX_TYPE.CID).put(RefexProperty.COMPONENT_EXTENSION_1_ID, last().getMemberUuid());
-      current().getAnnotationBlueprints().add(last());
-      pushReferencedComponent(setNode.getMemberUuid());
-
       // Make the roles, etc...
+      Collection<? extends RelationshipVersionBI> rels         = cv.getRelsOutgoingActive();
+      Collection<? extends RelGroupVersionBI>     relGroups    = cv.getRelGroupsActive();
+      Collection<RelationshipVersionBI>           definingRels = new ArrayList<>();
+
+      for (RelationshipVersionBI rel : rels) {
+         if (SnomedMetadataRf2.STATED_RELATIONSHIP_RF2.getStrict(vc).getNid() == rel.getCharacteristicNid()) {
+            definingRels.add(rel);
+         }
+      }
+
+      // need to exclude the non-defining ones...
+      if (definingRels.size() > 1) {
+         RefexCAB and = add(set, DescriptionLogicBinding.AND);
+
+         for (RelationshipVersionBI rel : definingRels) {
+            if (vc.getIsaTypeNids().contains(rel.getTypeNid())) {
+               add(and, rel.getDestinationNid());
+            } else if (rel.getGroup() == 0) {
+               addExtensionalRole(and, rel.getTypeNid(), rel.getDestinationNid());
+            }
+         }
+
+         for (RelGroupVersionBI relGroup : relGroups) {
+            RefexCAB group = add(and, DescriptionLogicBinding.ROLE_GROUP);
+
+            for (RelationshipVersionBI rel : relGroup.getAllCurrentRelVersions()) {
+               addExtensionalRole(group, rel.getTypeNid(), rel.getDestinationNid());
+            }
+         }
+      } else {
+         for (RelationshipVersionBI rel : definingRels) {
+            if (vc.getIsaTypeNids().contains(rel.getTypeNid())) {
+               add(set, rel.getDestinationNid());
+            } else {
+               throw new InvalidBlueprintException("Concept must have at least one is-a");
+            }
+         }
+      }
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @param cNid
+    * @param fetcher
+    *
+    * @throws Exception
+    */
+   @Override
+   public void processUnfetchedConceptData(int cNid, ConceptFetcherBI fetcher) throws Exception {
+      ConceptVersionBI cv = fetcher.fetch(vc);
+
+      if ((cv.getConAttrsActive() != null)
+          && ((cv.getConAttrsActive().getModuleNid() == Snomed.SNOMED_RELEASE_PATH.getStrict(vc).getNid())
+              || (cv.getConAttrsActive().getModuleNid() == Snomed.CORE_MODULE.getStrict(vc).getNid()))) {
+         convert(cv);
+         build(builder);
+         Ts.get().addUncommittedNoChecks(cv);
+         if (verbose) {
+            DefinitionTree dt = new DefinitionTree(cv, DescriptionLogicBinding.EL_PLUS_PLUS.getNid(vc));
+            System.out.print("\n" + cv.getPreferredDescription().getText() + ":");
+            dt.dfsPrint();
+         }
+
+      }
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    *
+    * @throws IOException
+    */
+   @Override
+   public NidBitSetBI getNidSet() throws IOException {
+      return Ts.get().getAllConceptNids();
    }
 }

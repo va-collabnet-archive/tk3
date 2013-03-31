@@ -18,40 +18,45 @@
 
 package org.ihtsdo.ttk.concept.cc.termstore;
 
-import org.ihtsdo.ttk.api.PositionSetBI;
-import org.ihtsdo.ttk.api.ConceptContainerBI;
-import org.ihtsdo.ttk.api.ComponentVersionBI;
-import org.ihtsdo.ttk.api.Precedence;
-import org.ihtsdo.ttk.api.ContradictionManagerBI;
-import org.ihtsdo.ttk.api.NidSet;
-import org.ihtsdo.ttk.api.ComponentBI;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.NidBitSetBI;
-import org.ihtsdo.ttk.api.RelAssertionType;
-import org.ihtsdo.ttk.api.PositionBI;
-import org.ihtsdo.ttk.api.PathBI;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.concept.cc.Position;
-import org.ihtsdo.ttk.api.TermChangeListener;
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
-import org.ihtsdo.ttk.api.ExternalStampBI;
-import org.ihtsdo.ttk.concept.cc.Path;
-import org.ihtsdo.ttk.api.ComponentContainerBI;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
+
+import org.ihtsdo.ttk.api.ComponentBI;
+import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentContainerBI;
+import org.ihtsdo.ttk.api.ComponentVersionBI;
+import org.ihtsdo.ttk.api.ConceptContainerBI;
+import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.ContradictionManagerBI;
+import org.ihtsdo.ttk.api.ExternalStampBI;
+import org.ihtsdo.ttk.api.NidBitSetBI;
+import org.ihtsdo.ttk.api.NidSet;
+import org.ihtsdo.ttk.api.NidSetBI;
+import org.ihtsdo.ttk.api.PathBI;
+import org.ihtsdo.ttk.api.PositionBI;
+import org.ihtsdo.ttk.api.PositionSetBI;
+import org.ihtsdo.ttk.api.Precedence;
+import org.ihtsdo.ttk.api.RelAssertionType;
+import org.ihtsdo.ttk.api.TermChangeListener;
+import org.ihtsdo.ttk.api.TerminologySnapshotDI;
+import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
+import org.ihtsdo.ttk.api.changeset.ChangeSetGeneratorBI;
+import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
+import org.ihtsdo.ttk.api.conflict.IdentifyAllConflictStrategy;
+import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRfx;
+import org.ihtsdo.ttk.api.metadata.binding.TermAux;
 import org.ihtsdo.ttk.concept.cc.P;
+import org.ihtsdo.ttk.concept.cc.Path;
+import org.ihtsdo.ttk.concept.cc.Position;
 import org.ihtsdo.ttk.concept.cc.PositionSetReadOnly;
 import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
 import org.ihtsdo.ttk.concept.cc.change.LastChange;
@@ -63,45 +68,90 @@ import org.ihtsdo.ttk.concept.jsr166y.cs.ChangeSetWriterHandler;
 import org.ihtsdo.ttk.concept.jsr166y.cs.econcept.EConceptChangeSetWriter;
 import org.ihtsdo.ttk.helpers.uuid.Type5UuidFactory;
 import org.ihtsdo.ttk.helpers.uuid.UuidFactory;
-import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
-import org.ihtsdo.ttk.api.changeset.ChangeSetGeneratorBI;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
-import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
-import org.ihtsdo.ttk.api.conflict.IdentifyAllConflictStrategy;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRfx;
-import org.ihtsdo.ttk.api.metadata.binding.TermAux;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+import java.security.NoSuchAlgorithmException;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author kec
  */
 public abstract class Termstore implements PersistentStoreI {
+
+   /** Field description */
    ConcurrentHashMap<UUID, TerminologySnapshotDI> persistentSnapshots = new ConcurrentHashMap<>();
-   private TerminologySnapshotDI                  globalSnapshot;
 
-   //~--- methods -------------------------------------------------------------
+   /** Field description */
+   private TerminologySnapshotDI globalSnapshot;
 
+   /**
+    * Method description
+    *
+    *
+    * @param key
+    * @param writer
+    */
    @Override
    public void addChangeSetGenerator(String key, ChangeSetGeneratorBI writer) {
       ChangeSetWriterHandler.addWriter(key, writer);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param cl
+    */
    @Override
    public void addTermChangeListener(TermChangeListener cl) {
       LastChange.addTermChangeListener(cl);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param cv
+    *
+    * @throws IOException
+    */
    @Override
    public void addUncommitted(ConceptVersionBI cv) throws IOException {
       addUncommitted(cv.getChronicle());
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param cv
+    *
+    * @throws IOException
+    */
    @Override
    public void addUncommittedNoChecks(ConceptVersionBI cv) throws IOException {
       addUncommittedNoChecks(cv.getChronicle());
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param snapshotUuid
+    * @param vc
+    *
+    * @return
+    */
    @Override
    public TerminologySnapshotDI cacheSnapshot(UUID snapshotUuid, ViewCoordinate vc) {
       if (persistentSnapshots.containsKey(snapshotUuid)) {
@@ -113,12 +163,140 @@ public abstract class Termstore implements PersistentStoreI {
       return persistentSnapshots.get(snapshotUuid);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param changeSetFileName
+    * @param changeSetTempFileName
+    * @param policy
+    *
+    * @return
+    */
    @Override
    public ChangeSetGeneratorBI createDtoChangeSetGenerator(File changeSetFileName,
-           File changeSetTempFileName, ChangeSetGenerationPolicy policy) {
+       File changeSetTempFileName, ChangeSetGenerationPolicy policy) {
       return new EConceptChangeSetWriter(changeSetFileName, changeSetTempFileName, policy, true);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param nid
+    *
+    * @return
+    */
+   @Override
+   public CharSequence informAboutNid(int nid) {
+      StringBuilder sb = new StringBuilder();
+
+      try {
+         int cNid = Ts.get().getConceptNidForNid(nid);
+
+         if (cNid == nid) {
+            ConceptChronicleBI cc = Ts.get().getConcept(cNid);
+
+            sb.append("'");
+            sb.append(cc.toUserString());
+            sb.append("' ");
+            sb.append(cNid);
+            sb.append(" ");
+            sb.append(cc.getPrimUuid());
+         } else {
+            ComponentBI component = Ts.get().getComponent(nid);
+
+            sb.append("comp: '");
+
+            if (component != null) {
+               sb.append(component.toUserString());
+            } else {
+               sb.append("null");
+            }
+
+            sb.append("' ");
+            sb.append(nid);
+            sb.append(" ");
+            sb.append(component.getPrimUuid());
+         }
+      } catch (IOException ex) {
+         Logger.getLogger(Termstore.class.getName()).log(Level.SEVERE, null, ex);
+      }
+
+      return sb;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @param uuid
+    *
+    * @return
+    */
+   @Override
+   public CharSequence informAboutUuid(UUID uuid) {
+      if (uuid == null) {
+         return "null";
+      }
+
+      StringBuilder sb = new StringBuilder();
+
+      if (Ts.get().hasUuid(uuid)) {
+         try {
+            int nid  = Ts.get().getNidForUuids(uuid);
+            if (nid == Integer.MAX_VALUE) {
+                sb.append("Component unassigned (Integer.MAX_VALUE) ").append(uuid);
+                return sb;
+            }
+            int cNid = Ts.get().getConceptNidForNid(nid);
+            if (cNid == Integer.MAX_VALUE) {
+                sb.append("Component: ").append(nid).append(" ").append(uuid);
+                sb.append("Concept unassigned (Integer.MAX_VALUE) ").append(uuid);
+                return sb;
+            }
+
+            if (cNid == nid) {
+               ConceptChronicleBI cc = Ts.get().getConcept(cNid);
+
+               sb.append("'");
+               sb.append(cc.toUserString());
+               sb.append("' ");
+               sb.append(cNid);
+               sb.append(" ");
+            } else {
+               ComponentBI component = Ts.get().getComponent(nid);
+
+               sb.append("comp: '");
+
+               if (component != null) {
+                  sb.append(component.toUserString());
+               } else {
+                  sb.append("null");
+               }
+
+               sb.append("' ");
+               sb.append(nid);
+               sb.append(" ");
+            }
+         } catch (IOException ex) {
+            Logger.getLogger(Termstore.class.getName()).log(Level.SEVERE, null, ex);
+         }
+      }
+
+      sb.append(uuid.toString());
+
+      return sb;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @param econFileStrings
+    *
+    * @throws Exception
+    */
    @Override
    public void loadEconFiles(String[] econFileStrings) throws Exception {
       List<File> econFiles = new ArrayList<>(econFileStrings.length);
@@ -132,6 +310,14 @@ public abstract class Termstore implements PersistentStoreI {
       LastChange.resumeChangeNotifications();
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    protected ViewCoordinate makeMetaVc() throws IOException {
       PathBI        viewPath          = new Path(TermAux.WB_AUX_PATH.getLenient().getNid(), null);
       PositionBI    viewPosition      = new Position(Long.MAX_VALUE, viewPath);
@@ -156,22 +342,58 @@ public abstract class Termstore implements PersistentStoreI {
                                 ViewCoordinate.LANGUAGE_SORT.TYPE_BEFORE_LANG);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param path
+    * @param time
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public PositionBI newPosition(PathBI path, long time) throws IOException {
       return new Position(time, path);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param key
+    */
    @Override
    public void removeChangeSetGenerator(String key) {
       ChangeSetWriterHandler.removeWriter(key);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param cl
+    */
    @Override
    public void removeTermChangeListener(TermChangeListener cl) {
       LastChange.removeTermChangeListener(cl);
    }
 
-   public Collection<Integer> searchLucene(String query, SearchType searchType) throws IOException, ParseException {
+   /**
+    * Method description
+    *
+    *
+    * @param query
+    * @param searchType
+    *
+    * @return
+    *
+    * @throws IOException
+    * @throws ParseException
+    */
+   public Collection<Integer> searchLucene(String query, SearchType searchType)
+           throws IOException, ParseException {
       try {
          Query q = new QueryParser(LuceneManager.version, "desc",
                                    new StandardAnalyzer(LuceneManager.version)).parse(query);
@@ -186,7 +408,8 @@ public abstract class Termstore implements PersistentStoreI {
             if (TermstoreLogger.logger.isLoggable(Level.FINE)) {
                TermstoreLogger.logger.fine(
                    "StandardAnalyzer query returned no results. Now trying WhitespaceAnalyzer query");
-               q = new QueryParser(LuceneManager.version, "desc", new WhitespaceAnalyzer(LuceneManager.version)).parse(query);
+               q = new QueryParser(LuceneManager.version, "desc",
+                                   new WhitespaceAnalyzer(LuceneManager.version)).parse(query);
             }
 
             result = LuceneManager.search(q);
@@ -227,8 +450,16 @@ public abstract class Termstore implements PersistentStoreI {
       }
    }
 
-   //~--- get methods ---------------------------------------------------------
-
+   /**
+    * Method description
+    *
+    *
+    * @param snapshotUuid
+    *
+    * @return
+    *
+    * @throws NoSuchElementException
+    */
    @Override
    public TerminologySnapshotDI getCachedSnapshot(UUID snapshotUuid) throws NoSuchElementException {
       if (persistentSnapshots.containsKey(snapshotUuid)) {
@@ -238,45 +469,118 @@ public abstract class Termstore implements PersistentStoreI {
       throw new NoSuchElementException("Snapshot uuid: " + snapshotUuid);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param uuids
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public ComponentChroncileBI<?> getComponent(Collection<UUID> uuids) throws IOException {
       return getComponent(getNidForUuids(uuids));
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param cc
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public ComponentChroncileBI<?> getComponent(ComponentContainerBI cc) throws IOException {
       return getComponent(cc.getNid());
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param nid
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public final ComponentChroncileBI<?> getComponent(int nid) throws IOException {
       return getConceptForNid(nid).getComponent(nid);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param uuids
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public ComponentChroncileBI<?> getComponent(UUID... uuids) throws IOException {
       return getComponent(getNidForUuids(uuids));
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param authorityNid
+    * @param altId
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
-   public ComponentChroncileBI<?> getComponentFromAlternateId(int authorityNid, String altId) throws IOException {
-        try {
-            return getComponent(P.s.getNidForUuids(Type5UuidFactory.get(P.s.getUuidPrimordialForNid(authorityNid), altId)));
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-            throw new RuntimeException(ex);
-        }
-   }
-   @Override
-   public int getNidFromAlternateId(UUID authorityUuid, String altId) throws IOException {
-       return P.s.getNidForUuids(UuidFactory.getUuidFromAlternateId(authorityUuid, altId));
+   public ComponentChroncileBI<?> getComponentFromAlternateId(int authorityNid, String altId)
+           throws IOException {
+      try {
+         return getComponent(
+             P.s.getNidForUuids(Type5UuidFactory.get(P.s.getUuidPrimordialForNid(authorityNid), altId)));
+      } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+         throw new RuntimeException(ex);
+      }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param c
+    * @param uuids
+    *
+    * @return
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    */
    @Override
    public ComponentVersionBI getComponentVersion(ViewCoordinate c, Collection<UUID> uuids)
            throws IOException, ContradictionException {
       return getComponentVersion(c, getNidForUuids(uuids));
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param coordinate
+    * @param nid
+    *
+    * @return
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    */
    @Override
    public ComponentVersionBI getComponentVersion(ViewCoordinate coordinate, int nid)
            throws IOException, ContradictionException {
@@ -289,80 +593,249 @@ public abstract class Termstore implements PersistentStoreI {
       return ((ComponentChroncileBI<?>) component).getVersion(coordinate);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param c
+    * @param uuids
+    *
+    * @return
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    */
    @Override
    public ComponentVersionBI getComponentVersion(ViewCoordinate c, UUID... uuids)
            throws IOException, ContradictionException {
       return getComponentVersion(c, getNidForUuids(uuids));
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param vc
+    * @param authorityNid
+    * @param altId
+    *
+    * @return
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    */
    @Override
-   public ComponentVersionBI getComponentVersionFromAlternateId(ViewCoordinate vc, int authorityNid, String altId)
+   public ComponentVersionBI getComponentVersionFromAlternateId(ViewCoordinate vc, int authorityNid,
+       String altId)
            throws IOException, ContradictionException {
-       try {
-            return getComponentVersion(vc, P.s.getNidForUuids(Type5UuidFactory.get(P.s.getUuidPrimordialForNid(authorityNid), altId)));
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-            throw new RuntimeException(ex);
-        }
-   }
-   @Override
-   public ComponentVersionBI getComponentVersionFromAlternateId(ViewCoordinate vc, UUID authorityUUID, String altId)
-           throws IOException, ContradictionException {
-       try {
-            return getComponentVersion(vc, P.s.getNidForUuids(Type5UuidFactory.get(authorityUUID, altId)));
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-            throw new RuntimeException(ex);
-        }
+      try {
+         return getComponentVersion(
+             vc, P.s.getNidForUuids(Type5UuidFactory.get(P.s.getUuidPrimordialForNid(authorityNid), altId)));
+      } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+         throw new RuntimeException(ex);
+      }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param vc
+    * @param authorityUUID
+    * @param altId
+    *
+    * @return
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    */
+   @Override
+   public ComponentVersionBI getComponentVersionFromAlternateId(ViewCoordinate vc, UUID authorityUUID,
+       String altId)
+           throws IOException, ContradictionException {
+      try {
+         return getComponentVersion(vc, P.s.getNidForUuids(Type5UuidFactory.get(authorityUUID, altId)));
+      } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+         throw new RuntimeException(ex);
+      }
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @param uuids
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public ConceptChronicleBI getConcept(Collection<UUID> uuids) throws IOException {
       return getConcept(getNidForUuids(uuids));
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param cc
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public ConceptChronicleBI getConcept(ConceptContainerBI cc) throws IOException {
       return getConcept(cc.getCnid());
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param cNid
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public ConceptChronicleBI getConcept(int cNid) throws IOException {
       return Concept.get(cNid);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param uuids
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public ConceptChronicleBI getConcept(UUID... uuids) throws IOException {
       return getConcept(getNidForUuids(uuids));
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param nid
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public ConceptChronicleBI getConceptForNid(int nid) throws IOException {
       return getConcept(getConceptNidForNid(nid));
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param authorityNid
+    * @param altId
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public Concept getConceptFromAlternateId(int authorityNid, String altId) throws IOException {
-        try {
-            return Concept.get(P.s.getNidForUuids(Type5UuidFactory.get(P.s.getUuidPrimordialForNid(authorityNid), altId)));
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-            throw new RuntimeException(ex);
-        }
+      try {
+         return Concept.get(
+             P.s.getNidForUuids(Type5UuidFactory.get(P.s.getUuidPrimordialForNid(authorityNid), altId)));
+      } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+         throw new RuntimeException(ex);
+      }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param authorityUuid
+    * @param altId
+    *
+    * @return
+    *
+    * @throws IOException
+    */
+   @Override
+   public ConceptChronicleBI getConceptFromAlternateId(UUID authorityUuid, String altId) throws IOException {
+      try {
+         return Concept.get(P.s.getNidForUuids(Type5UuidFactory.get(authorityUuid, altId)));
+      } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+         throw new RuntimeException(ex);
+      }
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @param c
+    * @param uuids
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public ConceptVersionBI getConceptVersion(ViewCoordinate c, Collection<UUID> uuids) throws IOException {
       return getConceptVersion(c, getNidForUuids(uuids));
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param c
+    * @param cNid
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public ConceptVersionBI getConceptVersion(ViewCoordinate c, int cNid) throws IOException {
       return new ConceptVersion(Concept.get(cNid), c);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param c
+    * @param uuids
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public ConceptVersionBI getConceptVersion(ViewCoordinate c, UUID... uuids) throws IOException {
       return getConceptVersion(c, getNidForUuids(uuids));
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param vc
+    * @param authorityNid
+    * @param altId
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public ConceptVersion getConceptVersionFromAlternateId(ViewCoordinate vc, int authorityNid, String altId)
            throws IOException {
@@ -371,6 +844,18 @@ public abstract class Termstore implements PersistentStoreI {
       return new ConceptVersion(c, vc);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param vc
+    * @param authorityUuid
+    * @param altId
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public ConceptVersion getConceptVersionFromAlternateId(ViewCoordinate vc, UUID authorityUuid, String altId)
            throws IOException {
@@ -379,15 +864,17 @@ public abstract class Termstore implements PersistentStoreI {
       return new ConceptVersion(c, vc);
    }
 
-    @Override
-    public ConceptChronicleBI getConceptFromAlternateId(UUID authorityUuid, String altId) throws IOException {
-       try {
-            return Concept.get(P.s.getNidForUuids(Type5UuidFactory.get(authorityUuid, altId)));
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
+   /**
+    * Method description
+    *
+    *
+    * @param c
+    * @param cNids
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public Map<Integer, ConceptVersionBI> getConceptVersions(ViewCoordinate c, NidBitSetBI cNids)
            throws IOException {
@@ -402,6 +889,16 @@ public abstract class Termstore implements PersistentStoreI {
       return Collections.unmodifiableMap(new HashMap<>(processor.conceptMap));
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param cNids
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public Map<Integer, ConceptChronicleBI> getConcepts(NidBitSetBI cNids) throws IOException {
       ConceptGetter processor = new ConceptGetter(cNids);
@@ -415,6 +912,12 @@ public abstract class Termstore implements PersistentStoreI {
       return Collections.unmodifiableMap(new HashMap<>(processor.conceptMap));
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public TerminologySnapshotDI getGlobalSnapshot() {
       if (globalSnapshot == null) {
@@ -424,6 +927,16 @@ public abstract class Termstore implements PersistentStoreI {
       return globalSnapshot;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param uuids
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public Collection<Integer> getNidCollection(Collection<UUID> uuids) throws IOException {
       List<Integer> nids = new ArrayList<>();
@@ -435,20 +948,62 @@ public abstract class Termstore implements PersistentStoreI {
       return nids;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param authorityUuid
+    * @param altId
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
-   public int getStamp(ExternalStampBI version) throws IOException {
-      return getStamp(getNidForUuids(version.getStatusUuid()), 
-                      version.getTime(),
-                      getNidForUuids(version.getAuthorUuid()),
-                      getNidForUuids(version.getModuleUuid()),
-                      getNidForUuids(version.getPathUuid()));
+   public int getNidFromAlternateId(UUID authorityUuid, String altId) throws IOException {
+      return P.s.getNidForUuids(UuidFactory.getUuidFromAlternateId(authorityUuid, altId));
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param vc
+    *
+    * @return
+    */
    @Override
    public TerminologySnapshotDI getSnapshot(ViewCoordinate vc) {
       return new TerminologySnapshot(this, vc);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param version
+    *
+    * @return
+    *
+    * @throws IOException
+    */
+   @Override
+   public int getStamp(ExternalStampBI version) throws IOException {
+      return getStamp(getNidForUuids(version.getStatusUuid()), version.getTime(),
+                      getNidForUuids(version.getAuthorUuid()), getNidForUuids(version.getModuleUuid()),
+                      getNidForUuids(version.getPathUuid()));
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @param nids
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public Collection<UUID> getUuidCollection(Collection<Integer> nids) throws IOException {
       List<UUID> uuids = new ArrayList<>();
@@ -460,8 +1015,12 @@ public abstract class Termstore implements PersistentStoreI {
       return uuids;
    }
 
-   //~--- set methods ---------------------------------------------------------
-
+   /**
+    * Method description
+    *
+    *
+    * @param globalSnapshot
+    */
    @Override
    public void setGlobalSnapshot(TerminologySnapshotDI globalSnapshot) {
       this.globalSnapshot = globalSnapshot;

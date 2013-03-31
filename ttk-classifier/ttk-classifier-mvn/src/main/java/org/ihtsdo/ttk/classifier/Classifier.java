@@ -20,138 +20,165 @@ package org.ihtsdo.ttk.classifier;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.UUID;
-
-import org.ihtsdo.ttk.api.NidBitSetBI;
-import org.ihtsdo.ttk.api.RelAssertionType;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.metadata.binding.Taxonomies;
-import org.ihtsdo.ttk.helpers.classifier.FetchKindOf;
-import org.ihtsdo.ttk.helpers.time.TimeHelper;
-
 import au.csiro.ontology.Factory;
 import au.csiro.ontology.IOntology;
 import au.csiro.ontology.axioms.IAxiom;
 import au.csiro.ontology.classification.IReasoner;
 import au.csiro.ontology.model.IConcept;
 import au.csiro.snorocket.core.SnorocketReasoner;
-import java.io.File;
+
+import org.ihtsdo.ttk.api.NidBitSetBI;
+import org.ihtsdo.ttk.api.RelAssertionType;
+import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
+import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
+import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.ttk.api.metadata.binding.Snomed;
+import org.ihtsdo.ttk.api.metadata.binding.Taxonomies;
+import org.ihtsdo.ttk.api.metadata.binding.TermAux;
+import org.ihtsdo.ttk.helpers.classifier.FetchKindOf;
+import org.ihtsdo.ttk.helpers.time.TimeHelper;
+import org.ihtsdo.ttk.logic.SnomedToLogicDag;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.UUID;
 
 /**
  *
  * @author kec
  */
 public class Classifier {
-    @SuppressWarnings("unchecked")
-	public static void classify() throws Exception {
 
-        // Implement the action as a FX Service...
-        // Step 1: Determine all current descendents of the SNOMED root concept
-        // for parallel iteration...
-        long time = System.currentTimeMillis();
+   /**
+    * Method description
+    *
+    *
+    * @throws Exception
+    */
+   @SuppressWarnings("unchecked")
+   public static void classify() throws Exception {
+      ViewCoordinate vc = StandardViewCoordinates.getSnomedInferredLatest();
 
-        System.out.println(TimeHelper.formatDate(time));
+      vc.setRelAssertionType(RelAssertionType.STATED);
 
-        ViewCoordinate vc = StandardViewCoordinates.getSnomedInferredLatest();
+      EditCoordinate ec = new EditCoordinate(TermAux.USER.getNid(), Snomed.CORE_MODULE.getNid(),
+                             Snomed.SNOMED_RELEASE_PATH.getNid());
 
-        vc.setRelAssertionType(RelAssertionType.STATED);
+      // Convert to new form.
+      SnomedToLogicDag converter = new SnomedToLogicDag(vc, ec);
+      long             time      = System.currentTimeMillis();
 
-        FetchKindOf kindOfFetcher = new FetchKindOf(Taxonomies.SNOMED.getLenient().getNid(), vc);
+      System.out.println(TimeHelper.formatDate(time));
+      Ts.get().iterateConceptDataInSequence(converter);
+      Ts.get().commit();
+      System.out.println("Conversion time: "
+                         + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
 
-        Ts.get().iterateConceptDataInSequence(kindOfFetcher);
+      // Implement the action as a FX Service...
+      // Step 1: Determine all current descendents of the SNOMED root concept
+      // for parallel iteration...
+      time = System.currentTimeMillis();
+      System.out.println(TimeHelper.formatDate(time));
 
-        NidBitSetBI kindOfConcepts = kindOfFetcher.getKindOfBitSet();
+      FetchKindOf kindOfFetcher = new FetchKindOf(Taxonomies.SNOMED.getLenient().getNid(), vc);
 
-        System.out.println("Kind of fetch: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
-        time = System.currentTimeMillis();
-        System.out.println(TimeHelper.formatDate(time));
+      Ts.get().iterateConceptDataInSequence(kindOfFetcher);
 
-        // Step 2: Determine all current descendents of the SNOMED Role concept
-        FetchKindOf roleFetcher = new FetchKindOf(Taxonomies.SNOMED_ROLE_ROOT.getLenient().getNid(), vc);
+      NidBitSetBI kindOfConcepts = kindOfFetcher.getKindOfBitSet();
 
-        Ts.get().iterateConceptDataInSequence(roleFetcher);
+      System.out.println("Kind of fetch: "
+                         + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
+      time = System.currentTimeMillis();
+      System.out.println(TimeHelper.formatDate(time));
 
-        NidBitSetBI roleConcepts = roleFetcher.getKindOfBitSet();
+      // Step 2: Determine all current descendents of the SNOMED Role concept
+      FetchKindOf roleFetcher = new FetchKindOf(Taxonomies.SNOMED_ROLE_ROOT.getLenient().getNid(), vc);
 
-        System.out.println("Role fetch: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
-        System.out.println("Kind of concepts: " + kindOfConcepts.cardinality());
-        System.out.println("Role concepts: " + roleConcepts.cardinality());
+      Ts.get().iterateConceptDataInSequence(roleFetcher);
 
-        // Step 3:
-        time = System.currentTimeMillis();
-        System.out.println(TimeHelper.formatDate(time));
+      NidBitSetBI roleConcepts = roleFetcher.getKindOfBitSet();
 
-        IReasoner<String> reasoner = new SnorocketReasoner<>();
-        Factory<String>   f        = new Factory<>();
-        AxiomConstructor   ac       = new AxiomConstructor(kindOfConcepts, roleConcepts, f, vc);
+      System.out.println("Role fetch: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
+      System.out.println("Kind of concepts: " + kindOfConcepts.cardinality());
+      System.out.println("Role concepts: " + roleConcepts.cardinality());
 
-        Ts.get().iterateConceptDataInParallel(ac);
-        System.out.println("Axiom constructor: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
-        time = System.currentTimeMillis();
-        System.out.println(TimeHelper.formatDate(time));
-        reasoner.classify(ac.axioms);
-        System.out.println("Classify: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
-        time = System.currentTimeMillis();
-        System.out.println(TimeHelper.formatDate(time));
+      // Step 3:
+      time = System.currentTimeMillis();
+      System.out.println(TimeHelper.formatDate(time));
 
-        @SuppressWarnings("unused")
-		IOntology<String> t = reasoner.getClassifiedOntology();
+      IReasoner<String> reasoner = new SnorocketReasoner<>();
+      Factory<String>   f        = new Factory<>();
+      AxiomConstructor  ac       = new AxiomConstructor(kindOfConcepts, roleConcepts, f, vc);
 
-        System.out.println("Get Ontology: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
-        time = System.currentTimeMillis();
-        System.out.println(TimeHelper.formatDate(time));
-        
-        
-        File stateDirectory = new File("target");
-        stateDirectory.mkdirs();
-        File stateFile = new File(stateDirectory, "classifier_uuid.state");
-        System.out.println("Writing state to disk...");
-        try (FileOutputStream fos = new FileOutputStream(stateFile, false)) {
-            reasoner.save(fos);
-        }
-        System.out.println("Write time: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
-        time = System.currentTimeMillis();
-        System.out.println(TimeHelper.formatDate(time));
-        
-        System.out.println("Reading state from disk...");
+      Ts.get().iterateConceptDataInParallel(ac);
+      System.out.println("Axiom constructor: "
+                         + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
+      time = System.currentTimeMillis();
+      System.out.println(TimeHelper.formatDate(time));
+      reasoner.classify(ac.axioms);
+      System.out.println("Classify: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
+      time = System.currentTimeMillis();
+      System.out.println(TimeHelper.formatDate(time));
 
-        FileInputStream fis = new FileInputStream(stateFile);
-        reasoner = SnorocketReasoner.load(fis);
-        f        = new Factory<>();
-        System.out.println("Read time: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
-        time = System.currentTimeMillis();
-        
-        System.out.println("Adding new concept");
-        // Add new concept
-        IConcept newConcept = f.createConcept(UUID.randomUUID().toString());
-        // Add new is-a
-        ArrayList<IConcept>                   defn       = new ArrayList<>();
-        defn.add(f.createConcept(AxiomConstructor.getUUID(Taxonomies.SNOMED.getStrict(vc).getNid())));
-        IConcept expr = f.createConjunction(defn.toArray(new IConcept[defn.size()]));
-        HashSet<IAxiom> newAxioms = new HashSet<>();
-        newAxioms.add(f.createConceptInclusion(newConcept, expr));
-        System.out.println("Start classify");
- 
-        reasoner.classify(newAxioms);
-        System.out.println("Classify: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
-        time = System.currentTimeMillis();
-        System.out.println(TimeHelper.formatDate(time));
+      @SuppressWarnings("unused") IOntology<String> t = reasoner.getClassifiedOntology();
 
-        t = reasoner.getClassifiedOntology();
+      System.out.println("Get Ontology: "
+                         + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
+      time = System.currentTimeMillis();
+      System.out.println(TimeHelper.formatDate(time));
 
-        System.out.println("Get Ontology: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
-        time = System.currentTimeMillis();
-        System.out.println(TimeHelper.formatDate(time));
+      File stateDirectory = new File("target");
 
-    }
-    
+      stateDirectory.mkdirs();
+
+      File stateFile = new File(stateDirectory, "classifier_uuid.state");
+
+//    System.out.println("Writing state to disk...");
+//    try (FileOutputStream fos = new FileOutputStream(stateFile, false)) {
+//        reasoner.save(fos);
+//    }
+//    System.out.println("Write time: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
+//    time = System.currentTimeMillis();
+//    System.out.println(TimeHelper.formatDate(time));
+//    
+//    System.out.println("Reading state from disk...");
+//
+//    FileInputStream fis = new FileInputStream(stateFile);
+//    reasoner = SnorocketReasoner.load(fis);
+//    f        = new Factory<>();
+//    System.out.println("Read time: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
+//    time = System.currentTimeMillis();
+
+      System.out.println("Adding new concept");
+
+      // Add new concept
+      IConcept newConcept = f.createConcept(UUID.randomUUID().toString());
+
+      // Add new is-a
+      ArrayList<IConcept> defn = new ArrayList<>();
+
+      defn.add(f.createConcept(AxiomConstructor.getUUID(Taxonomies.SNOMED.getStrict(vc).getNid())));
+
+      IConcept        expr      = f.createConjunction(defn.toArray(new IConcept[defn.size()]));
+      HashSet<IAxiom> newAxioms = new HashSet<>();
+
+      newAxioms.add(f.createConceptInclusion(newConcept, expr));
+      System.out.println("Start classify");
+      reasoner.classify(newAxioms);
+      System.out.println("Classify: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
+      time = System.currentTimeMillis();
+      System.out.println(TimeHelper.formatDate(time));
+      t = reasoner.getClassifiedOntology();
+      System.out.println("Get Ontology: "
+                         + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
+      time = System.currentTimeMillis();
+      System.out.println(TimeHelper.formatDate(time));
+   }
 }

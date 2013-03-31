@@ -23,8 +23,8 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
  * @author kec
  */
 public class BlueprintBuilder {
-    ViewCoordinate vc; 
-    UUID moduleUuid;
+    protected ViewCoordinate vc; 
+    protected UUID moduleUuid;
 
     public BlueprintBuilder(ViewCoordinate vc, UUID moduleUuid) {
         this.vc = vc;

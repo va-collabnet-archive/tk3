@@ -127,5 +127,8 @@ public interface TerminologyDI {
    int getConceptNidForNid(int nid);
    
    int getNidFromAlternateId(UUID authorityUuid, String altId) throws IOException;
+   
+   CharSequence informAboutUuid(UUID uuid);
+   CharSequence informAboutNid(int nid);
 
 }

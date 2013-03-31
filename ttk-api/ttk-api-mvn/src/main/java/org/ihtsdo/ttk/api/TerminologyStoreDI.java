@@ -19,6 +19,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 public interface TerminologyStoreDI extends TerminologyDI {
+
     enum DatabaseOptionPreferences {
         DB_LOCATION, BASELINE_FILES;
     }

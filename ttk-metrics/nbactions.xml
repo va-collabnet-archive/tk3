@@ -28,6 +28,7 @@
             <actionName>build-with-dependencies</actionName>
             <reactor>also-make</reactor>
             <goals>
+                <goal>-e</goal>
                 <goal>install</goal>
             </goals>
             <properties>
@@ -37,6 +38,7 @@
         <action>
             <actionName>build</actionName>
             <goals>
+                <goal>-e</goal>
                 <goal>install</goal>
             </goals>
             <properties>

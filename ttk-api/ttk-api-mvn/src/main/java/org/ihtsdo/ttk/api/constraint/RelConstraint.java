@@ -58,15 +58,15 @@ public class RelConstraint implements ConstraintBI {
 	}
 
 	public ConceptVersionBI getOrigin(ViewCoordinate c) throws IOException {
-		return originSpec.get(c);
+		return originSpec.getStrict(c);
 	}
 
 	public ConceptVersionBI getRelType(ViewCoordinate c) throws IOException {
-		return relTypeSpec.get(c);
+		return relTypeSpec.getStrict(c);
 	}
 
 	public ConceptVersionBI getDestination(ViewCoordinate c) throws IOException {
-		return destinationSpec.get(c);
+		return destinationSpec.getStrict(c);
 	}
 
 	public int getOriginNid() throws IOException {

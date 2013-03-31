@@ -41,6 +41,7 @@ public class ConceptResource {
 
         if (id.length() == 36) {
             c = ts.getConcept(UUID.fromString(id));
+            
         } else {
             c = ts.getConcept(Integer.parseInt(id));
         }

@@ -320,7 +320,7 @@
  * <br> <img src="doc-files/role.svg"/></dt></li>
  * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
  * the identifier for the role operator concept, either
- * {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#EXTENSIONAL_RESTRICTION} or
+ * {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#EXISTENTIAL_RESTRICTION} or
  * {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#UNIVERSAL_RESTRICTION}.</li>
  * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_2_ID} field of the node is
  * the identifier for the concept that defines the type of role, for example, in the case of role groups, the

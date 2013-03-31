@@ -19,17 +19,42 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
+/**
+ * Class description
+ *
+ *
+ * @version        Enter version here..., 13/03/27
+ * @author         Enter your name here...    
+ */
 public class TkRefexUuidBooleanRevision extends TkRevision {
-   public static final long serialVersionUID = 1;
-   @XmlAttribute
-   public UUID              uuid1;
-   @XmlAttribute
-   public boolean           boolean1;
 
+   /** Field description */
+   public static final long serialVersionUID = 1;
+
+   /** Field description */
+   @XmlAttribute
+   public UUID uuid1;
+
+   /** Field description */
+   @XmlAttribute
+   public boolean boolean1;
+
+   /**
+    * Constructs ...
+    *
+    */
    public TkRefexUuidBooleanRevision() {
       super();
    }
 
+   /**
+    * Constructs ...
+    *
+    *
+    * @param another
+    *
+    * @throws IOException
+    */
    public TkRefexUuidBooleanRevision(RefexNidBooleanVersionBI another) throws IOException {
       super(another);
 
@@ -39,12 +64,29 @@ public class TkRefexUuidBooleanRevision extends TkRevision {
       this.boolean1 = another.getBoolean1();
    }
 
+   /**
+    * Constructs ...
+    *
+    *
+    * @param in
+    * @param dataVersion
+    *
+    * @throws ClassNotFoundException
+    * @throws IOException
+    */
    public TkRefexUuidBooleanRevision(DataInput in, int dataVersion)
            throws IOException, ClassNotFoundException {
       super();
       readExternal(in, dataVersion);
    }
 
+   /**
+    * Constructs ...
+    *
+    *
+    * @param another
+    * @param transformer
+    */
    public TkRefexUuidBooleanRevision(TkRefexUuidBooleanRevision another, ComponentTransformerBI transformer) {
       super(another, transformer);
       this.uuid1    = transformer.transform(another.uuid1, another, ComponentFields.REFEX_COMPONENT_1_UUID);
@@ -90,20 +132,40 @@ public class TkRefexUuidBooleanRevision extends TkRevision {
       return false;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param transformer
+    *
+    * @return
+    */
    @Override
    public TkRefexUuidBooleanRevision makeTransform(ComponentTransformerBI transformer) {
       return new TkRefexUuidBooleanRevision(this, transformer);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param in
+    * @param dataVersion
+    *
+    * @throws ClassNotFoundException
+    * @throws IOException
+    */
    @Override
    public final void readExternal(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super.readExternal(in, dataVersion);
-      uuid1   = new UUID(in.readLong(), in.readLong());
-      boolean1= in.readBoolean();
+      uuid1    = new UUID(in.readLong(), in.readLong());
+      boolean1 = in.readBoolean();
    }
 
    /**
     * Returns a string representation of the object.
+    *
+    * @return
     */
    @Override
    public String toString() {
@@ -120,6 +182,14 @@ public class TkRefexUuidBooleanRevision extends TkRevision {
       return buff.toString();
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param out
+    *
+    * @throws IOException
+    */
    @Override
    public void writeExternal(DataOutput out) throws IOException {
       super.writeExternal(out);
@@ -128,18 +198,42 @@ public class TkRefexUuidBooleanRevision extends TkRevision {
       out.writeBoolean(boolean1);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   public boolean getBoolean1() {
+      return boolean1;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public UUID getUuid1() {
       return uuid1;
    }
 
-   public boolean isBoolean1() {
-      return boolean1;
-   }
-
+   /**
+    * Method description
+    *
+    *
+    * @param boolean1
+    */
    public void setBoolean1(boolean boolean1) {
       this.boolean1 = boolean1;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param uuid1
+    */
    public void setUuid1(UUID uuid1) {
       this.uuid1 = uuid1;
    }

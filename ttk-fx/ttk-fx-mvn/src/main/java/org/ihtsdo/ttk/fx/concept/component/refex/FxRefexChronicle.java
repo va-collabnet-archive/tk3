@@ -55,7 +55,7 @@ public abstract class FxRefexChronicle<V extends FxComponentVersion, T extends R
            throws IOException, ContradictionException {
       super(ss, concept, another);
       this.componentReference = new FxComponentReference(ss, another.getReferencedComponentNid());
-      this.refexReference     = new FxComponentReference(ss.getConceptVersion(another.getRefexNid()));
+      this.refexReference     = new FxComponentReference(ss.getConceptVersion(another.getRefexExtensionNid()));
    }
 
    //~--- get methods ---------------------------------------------------------

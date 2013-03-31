@@ -14,33 +14,25 @@ import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierLong;
 import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierString;
 import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierUuid;
 import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
-import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray
-   .TkRefexArrayOfByteArrayMember;
+import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TkRefexArrayOfByteArrayMember;
 import org.ihtsdo.ttk.dto.component.refex.type_boolean.TkRefexBooleanMember;
 import org.ihtsdo.ttk.dto.component.refex.type_int.TkRefexIntMember;
 import org.ihtsdo.ttk.dto.component.refex.type_long.TkRefexLongMember;
 import org.ihtsdo.ttk.dto.component.refex.type_member.TkRefexMember;
 import org.ihtsdo.ttk.dto.component.refex.type_string.TkRefexStringMember;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid.TkRefexUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_float
-   .TkRefexUuidFloatMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TkRefexUuidBooleanMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TkRefexUuidFloatMember;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_int.TkRefexUuidIntMember;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_long.TkRefexUuidLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_string
-   .TkRefexUuidStringMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TkRefexUuidStringMember;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid.TkRefexUuidUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_string
-   .TkRefexUuidUuidStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid
-   .TkRefexUuidUuidUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float
-   .TkRefexUuidUuidUuidFloatMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int
-   .TkRefexUuidUuidUuidIntMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long
-   .TkRefexUuidUuidUuidLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string
-   .TkRefexUuidUuidUuidStringMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_string.TkRefexUuidUuidStringMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TkRefexUuidUuidUuidMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float.TkRefexUuidUuidUuidFloatMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int.TkRefexUuidUuidUuidIntMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long.TkRefexUuidUuidUuidLongMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TkRefexUuidUuidUuidStringMember;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
@@ -54,30 +46,60 @@ import java.util.*;
 
 import javax.xml.bind.annotation.*;
 
+/**
+ * Class description
+ *
+ *
+ * @param <V>
+ *
+ * @version        Enter version here..., 13/03/27
+ * @author         Enter your name here...    
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class TkComponent<V extends TkRevision> extends TkRevision {
-   private static final long             serialVersionUID = 1;
+
+   /** Field description */
+   private static final long serialVersionUID = 1;
+
+   /** Field description */
    @XmlElementWrapper(name = "additional-ids")
    @XmlElement(name = "id")
-   public List<TkIdentifier>             additionalIds;
+   public List<TkIdentifier> additionalIds;
+
+   /** Field description */
    @XmlElementWrapper(name = "annotations")
    @XmlElement(name = "refex")
    public List<TkRefexAbstractMember<?>> annotations;
+
+   /** Field description */
    @XmlAttribute
-   public UUID                           primordialUuid;
+   public UUID primordialUuid;
+
+   /** Field description */
    @XmlElementWrapper(name = "revisions")
    @XmlElement(name = "revision")
-   public List<V>                        revisions;
+   public List<V> revisions;
 
+   /**
+    * Constructs ...
+    *
+    */
    public TkComponent() {
       super();
    }
 
+   /**
+    * Constructs ...
+    *
+    *
+    * @param another
+    *
+    * @throws IOException
+    */
    public TkComponent(ComponentVersionBI another) throws IOException {
       super(another);
 
-      Collection<? extends IdBI> anotherAdditionalIds =
-         another.getAdditionalIds();
+      Collection<? extends IdBI> anotherAdditionalIds = another.getAdditionalIds();
 
       if (anotherAdditionalIds != null) {
          this.additionalIds = new ArrayList<>(anotherAdditionalIds.size());
@@ -87,29 +109,42 @@ nextId:
          }
       }
 
-      Collection<? extends RefexChronicleBI<?>> anotherAnnotations =
-         another.getAnnotations();
+      Collection<? extends RefexChronicleBI<?>> anotherAnnotations = another.getAnnotations();
 
       processAnnotations(anotherAnnotations);
       this.primordialUuid = another.getPrimUuid();
    }
 
-   public TkComponent(DataInput in, int dataVersion)
-           throws IOException, ClassNotFoundException {
+   /**
+    * Constructs ...
+    *
+    *
+    * @param in
+    * @param dataVersion
+    *
+    * @throws ClassNotFoundException
+    * @throws IOException
+    */
+   public TkComponent(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super();
       readExternal(in, dataVersion);
    }
 
-   public TkComponent(TkComponent<V> another,
-                      ComponentTransformerBI transformer) {
+   /**
+    * Constructs ...
+    *
+    *
+    * @param another
+    * @param transformer
+    */
+   public TkComponent(TkComponent<V> another, ComponentTransformerBI transformer) {
       super(another, transformer);
 
       if (another.additionalIds != null) {
          this.additionalIds = new ArrayList<>(another.additionalIds.size());
 
          for (TkIdentifier id : another.additionalIds) {
-            this.additionalIds.add(
-                (TkIdentifier) id.makeTransform(transformer));
+            this.additionalIds.add((TkIdentifier) id.makeTransform(transformer));
          }
       }
 
@@ -117,13 +152,12 @@ nextId:
          this.annotations = new ArrayList<>(another.annotations.size());
 
          for (TkRefexAbstractMember<?> r : another.annotations) {
-            this.annotations.add(
-                (TkRefexAbstractMember<?>) r.makeTransform(transformer));
+            this.annotations.add((TkRefexAbstractMember<?>) r.makeTransform(transformer));
          }
       }
 
-      this.primordialUuid = transformer.transform(another.primordialUuid,
-              another, ComponentFields.PRIMORDIAL_UUID);
+      this.primordialUuid = transformer.transform(another.primordialUuid, another,
+          ComponentFields.PRIMORDIAL_UUID);
 
       if (another.revisions != null) {
          this.revisions = new ArrayList<>(another.revisions.size());
@@ -198,16 +232,19 @@ nextId:
     */
    @Override
    public int hashCode() {
-      return Arrays.hashCode(new int[] {
-         getPrimordialComponentUuid().hashCode(),
-         statusUuid.hashCode(),
-         pathUuid.hashCode(), (int) time,
-         (int) (time >>> 32) });
+      return Arrays.hashCode(new int[] { getPrimordialComponentUuid().hashCode(), statusUuid.hashCode(),
+                                         pathUuid.hashCode(), (int) time, (int) (time >>> 32) });
    }
 
-   private void processAnnotations(
-           Collection<? extends RefexChronicleBI<?>> annotations)
-           throws IOException {
+   /**
+    * Method description
+    *
+    *
+    * @param annotations
+    *
+    * @throws IOException
+    */
+   private void processAnnotations(Collection<? extends RefexChronicleBI<?>> annotations) throws IOException {
       if ((annotations != null) &&!annotations.isEmpty()) {
          this.annotations = new ArrayList<>(annotations.size());
 
@@ -217,9 +254,18 @@ nextId:
       }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param in
+    * @param dataVersion
+    *
+    * @throws ClassNotFoundException
+    * @throws IOException
+    */
    @Override
-   public void readExternal(DataInput in, int dataVersion)
-           throws IOException, ClassNotFoundException {
+   public void readExternal(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super.readExternal(in, dataVersion);
       primordialUuid = new UUID(in.readLong(), in.readLong());
 
@@ -285,8 +331,7 @@ nextId:
                break;
 
             case CID_CID_STR :
-               annotations.add(new TkRefexUuidUuidStringMember(in,
-                       dataVersion));
+               annotations.add(new TkRefexUuidUuidStringMember(in, dataVersion));
 
                break;
 
@@ -331,38 +376,37 @@ nextId:
                break;
 
             case ARRAY_BYTEARRAY :
-               annotations.add(new TkRefexArrayOfByteArrayMember(in,
-                       dataVersion));
+               annotations.add(new TkRefexArrayOfByteArrayMember(in, dataVersion));
 
                break;
 
             case CID_CID_CID_FLOAT :
-               annotations.add(new TkRefexUuidUuidUuidFloatMember(in,
-                       dataVersion));
+               annotations.add(new TkRefexUuidUuidUuidFloatMember(in, dataVersion));
 
                break;
 
             case CID_CID_CID_INT :
-               annotations.add(new TkRefexUuidUuidUuidIntMember(in,
-                       dataVersion));
+               annotations.add(new TkRefexUuidUuidUuidIntMember(in, dataVersion));
 
                break;
 
             case CID_CID_CID_LONG :
-               annotations.add(new TkRefexUuidUuidUuidLongMember(in,
-                       dataVersion));
+               annotations.add(new TkRefexUuidUuidUuidLongMember(in, dataVersion));
 
                break;
 
             case CID_CID_CID_STRING :
-               annotations.add(new TkRefexUuidUuidUuidStringMember(in,
-                       dataVersion));
+               annotations.add(new TkRefexUuidUuidUuidStringMember(in, dataVersion));
+
+               break;
+
+            case CID_BOOLEAN :
+               annotations.add(new TkRefexUuidBooleanMember(in, dataVersion));
 
                break;
 
             default :
-               throw new UnsupportedOperationException(
-                   "Can't handle refset type: " + type);
+               throw new UnsupportedOperationException("Can't handle refset type: " + type);
             }
          }
       }
@@ -370,6 +414,8 @@ nextId:
 
    /**
     * Returns a string representation of the object.
+    *
+    * @return
     */
    @Override
    public String toString() {
@@ -428,6 +474,14 @@ nextId:
       return buff.toString();
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param out
+    *
+    * @throws IOException
+    */
    @Override
    public void writeExternal(DataOutput out) throws IOException {
       super.writeExternal(out);
@@ -437,8 +491,7 @@ nextId:
       if (additionalIds == null) {
          out.writeShort(0);
       } else {
-         assert additionalIds.size() < 500 :
-                "additionalIds is: " + additionalIds.size();
+         assert additionalIds.size() < 500 : "additionalIds is: " + additionalIds.size();
          out.writeShort(additionalIds.size());
 
          for (TkIdentifier idv : additionalIds) {
@@ -450,8 +503,7 @@ nextId:
       if (annotations == null) {
          out.writeShort(0);
       } else {
-         assert annotations.size() < 500 :
-                "annotation count is: " + annotations.size();
+         assert annotations.size() < 500 : "annotation count is: " + annotations.size();
          out.writeShort(annotations.size());
 
          for (TkRefexAbstractMember<?> r : annotations) {
@@ -461,14 +513,32 @@ nextId:
       }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public List<TkIdentifier> getAdditionalIdComponents() {
       return additionalIds;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public List<TkRefexAbstractMember<?>> getAnnotations() {
       return annotations;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public List<TkIdentifier> getEIdentifiers() {
       List<TkIdentifier> ids;
 
@@ -484,6 +554,12 @@ nextId:
       return ids;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public int getIdComponentCount() {
       if (additionalIds == null) {
          return 1;
@@ -492,16 +568,40 @@ nextId:
       return additionalIds.size() + 1;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public UUID getPrimordialComponentUuid() {
       return primordialUuid;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public abstract List<? extends TkRevision> getRevisionList();
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public List<V> getRevisions() {
       return revisions;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public List<UUID> getUuids() {
       List<UUID> uuids;
 
@@ -519,7 +619,7 @@ nextId:
                uuids.add((UUID) idv.getDenotation());
             } else {
                uuids.add(UuidFactory.getUuidFromAlternateId(idv.authorityUuid,
-                       idv.getDenotation().toString()));
+                   idv.getDenotation().toString()));
             }
          }
       }
@@ -527,6 +627,12 @@ nextId:
       return uuids;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public int getVersionCount() {
       List<? extends TkRevision> extraVersions = getRevisionList();
 
@@ -537,19 +643,42 @@ nextId:
       return extraVersions.size() + 1;
    }
 
-   public void setAdditionalIdComponents(
-           List<TkIdentifier> additionalIdComponents) {
+   /**
+    * Method description
+    *
+    *
+    * @param additionalIdComponents
+    */
+   public void setAdditionalIdComponents(List<TkIdentifier> additionalIdComponents) {
       this.additionalIds = additionalIdComponents;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param annotations
+    */
    public void setAnnotations(List<TkRefexAbstractMember<?>> annotations) {
       this.annotations = annotations;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param primordialComponentUuid
+    */
    public void setPrimordialComponentUuid(UUID primordialComponentUuid) {
       this.primordialUuid = primordialComponentUuid;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param revisions
+    */
    public void setRevisions(List<V> revisions) {
       this.revisions = revisions;
    }

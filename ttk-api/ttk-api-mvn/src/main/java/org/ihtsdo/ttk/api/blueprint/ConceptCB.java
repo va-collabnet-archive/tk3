@@ -417,8 +417,8 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
          List<RefexCAB> annotationBlueprints = fsnBp.getAnnotationBlueprints();
 
          for (RefexCAB annot : annotationBlueprints) {
-            if ((annot.getRefexColllectionUuid() == usRefexUuid)
-                    || (annot.getRefexColllectionUuid() == gbRefexUuid)) {
+            if ((annot.getRefexCollectionUuid() == usRefexUuid)
+                    || (annot.getRefexCollectionUuid() == gbRefexUuid)) {
                annotationBlueprints.remove(annot);
             }
          }
@@ -451,8 +451,8 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
          List<RefexCAB> annotationBlueprints = prefBp.getAnnotationBlueprints();
 
          for (RefexCAB annot : annotationBlueprints) {
-            if ((annot.getRefexColllectionUuid() == usRefexUuid)
-                    || (annot.getRefexColllectionUuid() == gbRefexUuid)) {
+            if ((annot.getRefexCollectionUuid() == usRefexUuid)
+                    || (annot.getRefexCollectionUuid() == gbRefexUuid)) {
                annotationBlueprints.remove(annot);
             }
          }

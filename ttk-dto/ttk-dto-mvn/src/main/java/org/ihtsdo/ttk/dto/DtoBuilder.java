@@ -24,41 +24,35 @@ import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.blueprint.ConAttrAB;
 import org.ihtsdo.ttk.api.blueprint.ConceptCB;
 import org.ihtsdo.ttk.api.blueprint.DescCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
 import org.ihtsdo.ttk.api.blueprint.MediaCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
+import org.ihtsdo.ttk.api.blueprint.RefexProperty;
 import org.ihtsdo.ttk.api.blueprint.RelCAB;
 import org.ihtsdo.ttk.dto.component.TkComponent;
 import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributes;
 import org.ihtsdo.ttk.dto.component.description.TkDescription;
 import org.ihtsdo.ttk.dto.component.media.TkMedia;
 import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
-import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray
-   .TkRefexArrayOfByteArrayMember;
+import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TkRefexArrayOfByteArrayMember;
 import org.ihtsdo.ttk.dto.component.refex.type_boolean.TkRefexBooleanMember;
 import org.ihtsdo.ttk.dto.component.refex.type_int.TkRefexIntMember;
 import org.ihtsdo.ttk.dto.component.refex.type_long.TkRefexLongMember;
 import org.ihtsdo.ttk.dto.component.refex.type_member.TkRefexMember;
 import org.ihtsdo.ttk.dto.component.refex.type_string.TkRefexStringMember;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid.TkRefexUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_float
-   .TkRefexUuidFloatMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TkRefexUuidBooleanMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TkRefexUuidFloatMember;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_int.TkRefexUuidIntMember;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_long.TkRefexUuidLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_string
-   .TkRefexUuidStringMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TkRefexUuidStringMember;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid.TkRefexUuidUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_string
-   .TkRefexUuidUuidStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid
-   .TkRefexUuidUuidUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float
-   .TkRefexUuidUuidUuidFloatMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int
-   .TkRefexUuidUuidUuidIntMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long
-   .TkRefexUuidUuidUuidLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string
-   .TkRefexUuidUuidUuidStringMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_string.TkRefexUuidUuidStringMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TkRefexUuidUuidUuidMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float.TkRefexUuidUuidUuidFloatMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int.TkRefexUuidUuidUuidIntMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long.TkRefexUuidUuidUuidLongMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TkRefexUuidUuidUuidStringMember;
 import org.ihtsdo.ttk.dto.component.relationship.TkRelationship;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -67,24 +61,48 @@ import java.io.IOException;
 
 import java.util.List;
 import java.util.UUID;
-import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
-import org.ihtsdo.ttk.api.blueprint.RefexProperty;
 
 /**
  *
  * @author kec
  */
 public class DtoBuilder {
+
+   /** Field description */
    long time;
+
+   /** Field description */
    UUID author;
+
+   /** Field description */
    UUID path;
 
+   /**
+    * Constructs ...
+    *
+    *
+    * @param time
+    * @param author
+    * @param path
+    */
    public DtoBuilder(long time, UUID author, UUID path) {
       this.time   = time;
       this.author = author;
       this.path   = path;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param blueprint
+    *
+    * @return
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    * @throws InvalidBlueprintException
+    */
    public TkConcept construct(ConceptCB blueprint)
            throws IOException, InvalidBlueprintException, ContradictionException {
       TkConcept newC = new TkConcept();
@@ -126,6 +144,17 @@ public class DtoBuilder {
       return newC;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param blueprint
+    * @param c
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    * @throws InvalidBlueprintException
+    */
    private void construct(ConAttrAB blueprint, TkConcept c)
            throws IOException, InvalidBlueprintException, ContradictionException {
       TkConceptAttributes ca = new TkConceptAttributes();
@@ -145,6 +174,17 @@ public class DtoBuilder {
       c.conceptAttributes = ca;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param blueprint
+    * @param c
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    * @throws InvalidBlueprintException
+    */
    private void construct(DescCAB blueprint, TkConcept c)
            throws IOException, InvalidBlueprintException, ContradictionException {
       TkDescription d = new TkDescription();
@@ -168,6 +208,17 @@ public class DtoBuilder {
       c.getDescriptions().add(d);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param blueprint
+    * @param c
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    * @throws InvalidBlueprintException
+    */
    private void construct(MediaCAB blueprint, TkConcept c)
            throws IOException, InvalidBlueprintException, ContradictionException {
       TkMedia img = new TkMedia();
@@ -191,6 +242,17 @@ public class DtoBuilder {
       c.getMedia().add(img);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param blueprint
+    * @param component
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    * @throws InvalidBlueprintException
+    */
    private void construct(RefexCAB blueprint, TkComponent component)
            throws IOException, InvalidBlueprintException, ContradictionException {
       TkRefexAbstractMember annot = createRefex(blueprint);
@@ -202,6 +264,17 @@ public class DtoBuilder {
       }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param blueprint
+    * @param c
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    * @throws InvalidBlueprintException
+    */
    private void construct(RelCAB blueprint, TkConcept c)
            throws IOException, InvalidBlueprintException, ContradictionException {
       TkRelationship r = new TkRelationship();
@@ -226,12 +299,23 @@ public class DtoBuilder {
       c.getRelationships().add(r);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param blueprint
+    *
+    * @return
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    * @throws InvalidBlueprintException
+    */
    private TkRefexAbstractMember createRefex(RefexCAB blueprint)
            throws IOException, InvalidBlueprintException, ContradictionException {
       switch (blueprint.getMemberType()) {
       case ARRAY_BYTEARRAY :
-         TkRefexArrayOfByteArrayMember rm1 =
-            new TkRefexArrayOfByteArrayMember();
+         TkRefexArrayOfByteArrayMember rm1 = new TkRefexArrayOfByteArrayMember();
 
          rm1.arrayOfByteArray1 = blueprint.getArrayOfByteArray();
          setStandardFields(rm1, blueprint);
@@ -241,8 +325,7 @@ public class DtoBuilder {
       case BOOLEAN :
          TkRefexBooleanMember rm2 = new TkRefexBooleanMember();
 
-         rm2.booleanValue =
-            blueprint.getBoolean(RefexProperty.BOOLEAN_EXTENSION_1);
+         rm2.booleanValue = blueprint.getBoolean(RefexProperty.BOOLEAN_EXTENSION_1);
          setStandardFields(rm2, blueprint);
 
          return rm2;
@@ -275,8 +358,7 @@ public class DtoBuilder {
          return rm5;
 
       case CID_CID_CID_FLOAT :
-         TkRefexUuidUuidUuidFloatMember rm6 =
-            new TkRefexUuidUuidUuidFloatMember();
+         TkRefexUuidUuidUuidFloatMember rm6 = new TkRefexUuidUuidUuidFloatMember();
 
          rm6.uuid1  = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
          rm6.uuid2  = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_2_ID);
@@ -298,8 +380,7 @@ public class DtoBuilder {
          return rm7;
 
       case CID_CID_CID_LONG :
-         TkRefexUuidUuidUuidLongMember rm8 =
-            new TkRefexUuidUuidUuidLongMember();
+         TkRefexUuidUuidUuidLongMember rm8 = new TkRefexUuidUuidUuidLongMember();
 
          rm8.uuid1 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
          rm8.uuid2 = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_2_ID);
@@ -310,8 +391,7 @@ public class DtoBuilder {
          return rm8;
 
       case CID_CID_CID_STRING :
-         TkRefexUuidUuidUuidStringMember rm9 =
-            new TkRefexUuidUuidUuidStringMember();
+         TkRefexUuidUuidUuidStringMember rm9 = new TkRefexUuidUuidUuidStringMember();
 
          rm9.uuid1   = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
          rm9.uuid2   = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_2_ID);
@@ -320,6 +400,14 @@ public class DtoBuilder {
          setStandardFields(rm9, blueprint);
 
          return rm9;
+
+      case CID_BOOLEAN :
+         TkRefexUuidBooleanMember rm9b = new TkRefexUuidBooleanMember();
+
+         rm9b.uuid1    = blueprint.getUUID(RefexProperty.COMPONENT_EXTENSION_1_ID);
+         rm9b.boolean1 = blueprint.getBoolean(RefexProperty.BOOLEAN_EXTENSION_1);
+
+         return rm9b;
 
       case CID_CID_STR :
          TkRefexUuidUuidStringMember rm10 = new TkRefexUuidUuidStringMember();
@@ -400,19 +488,26 @@ public class DtoBuilder {
 
       case UNKNOWN :
       default :
-         throw new UnsupportedOperationException("Can't handle: "
-                 + blueprint.getMemberType());
+         throw new UnsupportedOperationException("Can't handle: " + blueprint.getMemberType());
       }
    }
 
-   private void setStandardFields(TkRefexAbstractMember rm1,
-                                  RefexCAB blueprint) {
-      rm1.primordialUuid = blueprint.getMemberUUID();
-      rm1.componentUuid  = blueprint.getComponentUuid();
-      rm1.refexExtensionUuid      = blueprint.getRefexColllectionUuid();
-      rm1.statusUuid     = blueprint.getStatusUuid();
-      rm1.time           = time;
-      rm1.authorUuid     = author;
-      rm1.moduleUuid     = blueprint.getModuleUuid();
+   /**
+    * Method description
+    *
+    *
+    * @param rm1
+    * @param blueprint
+    *
+    * @throws IOException
+    */
+   private void setStandardFields(TkRefexAbstractMember rm1, RefexCAB blueprint) throws IOException {
+      rm1.primordialUuid     = blueprint.getMemberUUID();
+      rm1.componentUuid      = blueprint.getComponentUuid();
+      rm1.refexExtensionUuid = blueprint.getRefexCollectionUuid();
+      rm1.statusUuid         = blueprint.getStatusUuid();
+      rm1.time               = time;
+      rm1.authorUuid         = author;
+      rm1.moduleUuid         = blueprint.getModuleUuid();
    }
 }

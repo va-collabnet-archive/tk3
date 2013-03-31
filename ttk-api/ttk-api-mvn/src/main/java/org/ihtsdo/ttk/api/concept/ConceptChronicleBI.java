@@ -72,7 +72,7 @@ public interface ConceptChronicleBI extends ComponentChroncileBI<ConceptVersionB
 
    Collection<? extends RefexChronicleBI<?>> getRefsetMembers() throws IOException;
 
-   Collection<? extends RelGroupVersionBI> getRelGroups(ViewCoordinate vc)
+   Collection<? extends RelGroupVersionBI> getRelGroupsActive(ViewCoordinate vc)
            throws IOException, ContradictionException;
 
    Collection<? extends RelationshipChronicleBI> getRelsIncoming() throws IOException;

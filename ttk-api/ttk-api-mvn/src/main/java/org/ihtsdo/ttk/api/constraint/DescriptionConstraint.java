@@ -58,11 +58,11 @@ public class DescriptionConstraint implements ConstraintBI {
 	}
 
 	public ConceptVersionBI getConcept(ViewCoordinate c) throws IOException {
-		return conceptSpec.get(c);
+		return conceptSpec.getStrict(c);
 	}
 
 	public ConceptVersionBI getDescType(ViewCoordinate c) throws IOException {
-		return descTypeSpec.get(c);
+		return descTypeSpec.getStrict(c);
 	}
 
 

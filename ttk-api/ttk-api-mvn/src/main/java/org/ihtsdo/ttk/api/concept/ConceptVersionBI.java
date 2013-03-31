@@ -72,7 +72,7 @@ public interface ConceptVersionBI extends ComponentVersionBI, ConceptChronicleBI
 
     Collection<? extends RefexVersionBI<?>> getRefsetMembersActive() throws IOException, ContradictionException;
 
-    Collection<? extends RelGroupVersionBI> getRelGroups() throws IOException, ContradictionException;
+    Collection<? extends RelGroupVersionBI> getRelGroupsActive() throws IOException, ContradictionException;
 
     Collection<? extends RelationshipVersionBI> getRelsIncomingActive()
             throws IOException, ContradictionException;

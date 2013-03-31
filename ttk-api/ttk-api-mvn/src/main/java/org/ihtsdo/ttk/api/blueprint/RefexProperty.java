@@ -27,10 +27,10 @@ public enum RefexProperty {
    /**
     * Identifier of the member, either represented as a UUID or a nid.
     */
-   MEMBER_ID,
+   MEMBER_ID, ENCLOSING_CONCEPT_ID,
 
    /**
-    * An identifier to the refex extension to which this member belongs. 
+    * An identifier to the refex extension to which this member belongs.
     */
    REFEX_EXTENSION_ID,
 
@@ -44,7 +44,7 @@ public enum RefexProperty {
     * Identifier of the status concept for this refex version,
     * either represented as a UUID or a nid.
     */
-   STATUS_ID,
+   STATUS_ID, TIME_IN_MS, AUTHOR_ID, MODULE_ID, PATH_ID,
 
    /**
     *

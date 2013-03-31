@@ -51,7 +51,7 @@ public enum TK_REFEX_TYPE {
     CID_CID_CID_INT(16, RefexNidNidNidIntVersionBI.class),
     CID_CID_CID_LONG(17, RefexNidNidNidLongVersionBI.class),
     CID_CID_CID_STRING(18, RefexNidNidNidStringVersionBI.class),
-    /**
+   /**
      * A refex type that can annotate a referenced component with a component identifier
      * and a boolean value. 
      */
@@ -97,6 +97,8 @@ public enum TK_REFEX_TYPE {
                 return CID_CID_CID_LONG;
             case 18:
                 return CID_CID_CID_STRING;
+            case 19:
+                return CID_BOOLEAN;
         }
         try {
             throw new UnsupportedOperationException("Can't handle type: " + type + " " +
@@ -127,6 +129,18 @@ public enum TK_REFEX_TYPE {
     }
 
     public static TK_REFEX_TYPE classToType(Class<?> c) {
+        if (RefexNidNidNidFloatVersionBI.class.isAssignableFrom(c)) {
+            return CID_CID_CID_FLOAT;
+        }
+        if (RefexNidNidNidIntVersionBI.class.isAssignableFrom(c)) {
+            return CID_CID_CID_INT;
+        }
+        if (RefexNidNidNidLongVersionBI.class.isAssignableFrom(c)) {
+            return CID_CID_CID_LONG;
+        }
+        if (RefexNidNidNidStringVersionBI.class.isAssignableFrom(c)) {
+            return CID_CID_CID_STRING;
+        }
         if (RefexNidNidNidVersionBI.class.isAssignableFrom(c)) {
             return CID_CID_CID;
         }
@@ -148,8 +162,8 @@ public enum TK_REFEX_TYPE {
         if (RefexNidLongVersionBI.class.isAssignableFrom(c)) {
             return CID_LONG;
         }
-        if (RefexBooleanVersionBI.class.isAssignableFrom(c)) {
-            return BOOLEAN;
+        if (RefexNidBooleanVersionBI.class.isAssignableFrom(c)) {
+            return CID_BOOLEAN;
         }
         if (RefexNidVersionBI.class.isAssignableFrom(c)) {
             return CID;
@@ -169,17 +183,8 @@ public enum TK_REFEX_TYPE {
         if (RefexArrayOfBytearrayVersionBI.class.isAssignableFrom(c)) {
             return ARRAY_BYTEARRAY;
         }
-        if (RefexNidNidNidFloatVersionBI.class.isAssignableFrom(c)) {
-            return CID_CID_CID_FLOAT;
-        }
-        if (RefexNidNidNidIntVersionBI.class.isAssignableFrom(c)) {
-            return CID_CID_CID_INT;
-        }
-        if (RefexNidNidNidLongVersionBI.class.isAssignableFrom(c)) {
-            return CID_CID_CID_LONG;
-        }
-        if (RefexNidNidNidStringVersionBI.class.isAssignableFrom(c)) {
-            return CID_CID_CID_STRING;
+        if (RefexBooleanVersionBI.class.isAssignableFrom(c)) {
+            return BOOLEAN;
         }
         return UNKNOWN;
     }

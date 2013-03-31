@@ -62,10 +62,8 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         if (refex != null) {
             return updateRefex(refex, blueprint);
         }
-        RefexChronicleBI<?> annot = createRefex(blueprint);
-        ComponentChroncileBI<?> component = P.s.getComponent(annot.getReferencedComponentNid());
-        component.addAnnotation(annot);
-        return annot;
+        refex = createRefex(blueprint);
+        return refex;
     }
 
     public ConceptAttributes getConAttr(ConAttrAB blueprint) throws IOException, InvalidBlueprintException {
@@ -112,7 +110,9 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
                 return (RefexMember<?, ?>) component;
             } else {
                 throw new InvalidBlueprintException(
-                        "Component exists of different type: "
+                        "Component exists of different type. Class to type:  "
+                        + TK_REFEX_TYPE.classToType(component.getClass()) 
+                        + "\ncomponent: "
                         + component + "\n\nRefexCAB: " + blueprint);
             }
         }
@@ -150,12 +150,21 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         return RefexMemberFactory.reCreate(blueprint, refex, ec);
     }
 
-    private RefexChronicleBI<?> createRefex(RefexCAB blueprint)
+    private RefexMember<?, ?> createRefex(RefexCAB blueprint)
             throws IOException, InvalidBlueprintException, ContradictionException {
+        
+        if (blueprint.hasProperty(RefexProperty.ENCLOSING_CONCEPT_ID)) {
+            P.s.setConceptNidForNid(blueprint.getInt(RefexProperty.ENCLOSING_CONCEPT_ID), 
+                    P.s.getNidForUuids(blueprint.getMemberUuid()));
+        }
+        
+        RefexMember<?, ?> newRefex = RefexMemberFactory.create(blueprint, ec);
+        
         for (RefexCAB annotBp : blueprint.getAnnotationBlueprints()) {
+            annotBp.setReferencedComponent(newRefex);
             construct(annotBp);
         }
-        return RefexMemberFactory.create(blueprint, ec);
+        return newRefex;
     }
 
     private RelationshipChronicleBI getRel(RelCAB blueprint)

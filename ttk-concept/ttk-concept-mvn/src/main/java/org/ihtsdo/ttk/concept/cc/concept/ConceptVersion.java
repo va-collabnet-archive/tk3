@@ -101,13 +101,13 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
            throws IOException, ContradictionException {
       switch (checkType) {
       case EQUALS :
-         return P.s.getConceptVersion(vc, cNid).getNid() == constraint.get(vc).getNid();
+         return P.s.getConceptVersion(vc, cNid).getNid() == constraint.getStrict(vc).getNid();
 
       case IGNORE :
          return true;
 
       case KIND_OF :
-         return P.s.getConceptVersion(vc, cNid).isKindOf(constraint.get(vc));
+         return P.s.getConceptVersion(vc, cNid).isKindOf(constraint.getStrict(vc));
 
       default :
          throw new UnsupportedOperationException("Illegal ConstraintCheckType: " + checkType);
@@ -676,10 +676,10 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    }
 
    @Override
-   public Collection<? extends RelGroupVersionBI> getRelGroups() throws IOException, ContradictionException {
+   public Collection<? extends RelGroupVersionBI> getRelGroupsActive() throws IOException, ContradictionException {
       ArrayList<RelGroupVersionBI> results = new ArrayList<>();
 
-      for (RelGroupChronicleBI rgc : concept.getRelGroups(vc)) {
+      for (RelGroupChronicleBI rgc : concept.getRelGroupsActive(vc)) {
          RelGroupVersionBI rgv = new RelGroupVersion(rgc, vc);
 
          if (rgv.getRels().size() > 0) {
@@ -691,9 +691,9 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    }
 
    @Override
-   public Collection<? extends RelGroupVersionBI> getRelGroups(ViewCoordinate vc)
+   public Collection<? extends RelGroupVersionBI> getRelGroupsActive(ViewCoordinate vc)
            throws IOException, ContradictionException {
-      return concept.getRelGroups(vc);
+      return concept.getRelGroupsActive(vc);
    }
 
    @Override

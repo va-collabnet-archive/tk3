@@ -1369,7 +1369,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     @Override
-    public Collection<? extends RelGroupVersionBI> getRelGroups(ViewCoordinate vc) throws IOException {
+    public Collection<? extends RelGroupVersionBI> getRelGroupsActive(ViewCoordinate vc) throws IOException {
         ArrayList<RelGroupVersionBI> results = new ArrayList<>();
 
         if (vc.getRelationshipAssertionType() == RelAssertionType.INFERRED_THEN_STATED) {

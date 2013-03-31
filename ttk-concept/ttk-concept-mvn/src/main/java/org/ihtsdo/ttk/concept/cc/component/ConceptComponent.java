@@ -2,21 +2,31 @@ package org.ihtsdo.ttk.concept.cc.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.ComponentVersionBI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.concept.cc.Position;
-import org.ihtsdo.ttk.api.AnalogBI;
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
-import org.ihtsdo.ttk.api.ComponentBI;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.AnalogGeneratorBI;
-import org.ihtsdo.ttk.api.PositionBI;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
+import org.ihtsdo.cern.colt.list.IntArrayList;
+import org.ihtsdo.ttk.api.AnalogBI;
+import org.ihtsdo.ttk.api.AnalogGeneratorBI;
+import org.ihtsdo.ttk.api.ComponentBI;
+import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentVersionBI;
+import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.NidSetBI;
+import org.ihtsdo.ttk.api.PositionBI;
+import org.ihtsdo.ttk.api.TerminologySnapshotDI;
+import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
+import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.ttk.api.id.IdBI;
+import org.ihtsdo.ttk.api.metadata.binding.TermAux;
+import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
+import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
 import org.ihtsdo.ttk.concept.cc.P;
+import org.ihtsdo.ttk.concept.cc.Position;
 import org.ihtsdo.ttk.concept.cc.concept.Concept;
 import org.ihtsdo.ttk.concept.cc.identifier.IdentifierVersion;
 import org.ihtsdo.ttk.concept.cc.identifier.IdentifierVersionLong;
@@ -25,21 +35,15 @@ import org.ihtsdo.ttk.concept.cc.identifier.IdentifierVersionUuid;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMemberFactory;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
-import org.ihtsdo.cern.colt.list.IntArrayList;
-import org.ihtsdo.ttk.helpers.time.TimeHelper;
-import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.id.IdBI;
-import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.metadata.binding.TermAux;
 import org.ihtsdo.ttk.dto.component.TkComponent;
 import org.ihtsdo.ttk.dto.component.identifier.TkIdentifier;
 import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierLong;
 import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierString;
 import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierUuid;
 import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.ttk.helpers.time.TimeHelper;
+import org.ihtsdo.ttk.helpers.uuid.Type3UuidFactory;
+import org.ihtsdo.ttk.helpers.uuid.Type5UuidFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -47,6 +51,7 @@ import java.beans.PropertyVetoException;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+
 import java.security.NoSuchAlgorithmException;
 
 import java.util.*;
@@ -54,26 +59,50 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.ttk.helpers.uuid.Type3UuidFactory;
-import org.ihtsdo.ttk.helpers.uuid.Type5UuidFactory;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 
+/**
+ * Class description
+ *
+ *
+ * @param <R>
+ * @param <C>
+ *
+ * @version        Enter version here..., 13/03/30
+ * @author         Enter your name here...    
+ */
 public abstract class ConceptComponent<R extends Revision<R, C>, C extends ConceptComponent<R, C>>
         implements ComponentBI, ComponentVersionBI, IdBI, AnalogBI, AnalogGeneratorBI<R>,
                    Comparable<ConceptComponent> {
-   protected static final Logger   logger           = Logger.getLogger(ConceptComponent.class.getName());
-   private static AtomicBoolean    fixAlert         = new AtomicBoolean(false);
-   static int                      authorityNid     = Integer.MAX_VALUE;
+
+   /** Field description */
+   protected static final Logger logger = Logger.getLogger(ConceptComponent.class.getName());
+
+   /** Field description */
+   private static AtomicBoolean fixAlert = new AtomicBoolean(false);
+
+   /** Field description */
+   static int authorityNid = Integer.MAX_VALUE;
+
+   /** Field description */
    private static AnnotationWriter annotationWriter = new AnnotationWriter();
 
-   //~--- fields --------------------------------------------------------------
+   /** Field description */
+   private static final UUID snomedAuthorityUuid = TermAux.SNOMED_IDENTIFIER.getUuids()[0];;
 
-   protected ArrayList<IdentifierVersion>          additionalIdVersions;
+   /** Field description */
+   protected ArrayList<IdentifierVersion> additionalIdVersions;
+
+   /** Field description */
    public ConcurrentSkipListSet<RefexMember<?, ?>> annotations;
-   public int                                      enclosingConceptNid;
-   public int                                      nid;
-   protected long                                  primordialLsb;
+
+   /** Field description */
+   public int enclosingConceptNid;
+
+   /** Field description */
+   public int nid;
+
+   /** Field description */
+   protected long primordialLsb;
 
    /**
     * primordial: first created or developed
@@ -84,15 +113,28 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
    /**
     * primordial: first created or developed Sap = status, author, position; position = path, time;
     */
-   public int               primordialStamp;
+   public int primordialStamp;
+
+   /** Field description */
    public RevisionSet<R, C> revisions;
 
-   //~--- constructors --------------------------------------------------------
-
+   /**
+    * Constructs ...
+    *
+    */
    public ConceptComponent() {
       super();
    }
 
+   /**
+    * Constructs ...
+    *
+    *
+    * @param enclosingConceptNid
+    * @param input
+    *
+    * @throws IOException
+    */
    protected ConceptComponent(int enclosingConceptNid, TupleInput input) throws IOException {
       super();
       this.enclosingConceptNid = enclosingConceptNid;
@@ -121,14 +163,26 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
    // TODO move the EComponent constructors to a helper class or factory class...
    // So that the size of this class is kept limited ?
+
+   /**
+    * Constructs ...
+    *
+    *
+    * @param eComponent
+    * @param enclosingConceptNid
+    *
+    * @throws IOException
+    */
    protected ConceptComponent(TkComponent<?> eComponent, int enclosingConceptNid) throws IOException {
       super();
       assert eComponent != null;
-        if (P.s.hasUuid(eComponent.primordialUuid)) {
-            this.nid = P.s.getNidForUuids(eComponent.primordialUuid);
-        } else {
-            this.nid = P.s.getNidForUuids(eComponent.getUuids());
-        }
+
+      if (P.s.hasUuid(eComponent.primordialUuid)) {
+         this.nid = P.s.getNidForUuids(eComponent.primordialUuid);
+      } else {
+         this.nid = P.s.getNidForUuids(eComponent.getUuids());
+      }
+
       assert this.nid != Integer.MAX_VALUE : "Processing nid: " + enclosingConceptNid;
       this.enclosingConceptNid = enclosingConceptNid;
 
@@ -168,21 +222,34 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       }
    }
 
-   //~--- enums ---------------------------------------------------------------
-
+   /**
+    * Enum description
+    *
+    */
    public enum IDENTIFIER_PART_TYPES {
       LONG(1), STRING(2), UUID(3);
 
+      /** Field description */
       private int partTypeId;
 
-      //~--- constructors -----------------------------------------------------
-
+      /**
+       * Constructs ...
+       *
+       *
+       * @param partTypeId
+       */
       IDENTIFIER_PART_TYPES(int partTypeId) {
          this.partTypeId = partTypeId;
       }
 
-      //~--- methods ----------------------------------------------------------
-
+      /**
+       * Method description
+       *
+       *
+       * @param input
+       *
+       * @return
+       */
       public static IDENTIFIER_PART_TYPES readType(TupleInput input) {
          int partTypeId = input.readByte();
 
@@ -200,12 +267,24 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
          throw new UnsupportedOperationException("partTypeId: " + partTypeId);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param output
+       */
       public void writeType(TupleOutput output) {
          output.writeByte(partTypeId);
       }
 
-      //~--- get methods ------------------------------------------------------
-
+      /**
+       * Method description
+       *
+       *
+       * @param denotationClass
+       *
+       * @return
+       */
       public static IDENTIFIER_PART_TYPES getType(Class<?> denotationClass) {
          if (UUID.class.isAssignableFrom(denotationClass)) {
             return UUID;
@@ -219,8 +298,16 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       }
    }
 
-   //~--- methods -------------------------------------------------------------
-
+   /**
+    * Method description
+    *
+    *
+    * @param annotation
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @SuppressWarnings("rawtypes")
    @Override
    public boolean addAnnotation(RefexChronicleBI annotation) throws IOException {
@@ -239,8 +326,22 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return annotations.add((RefexMember<?, ?>) annotation);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param allNids
+    */
    abstract protected void addComponentNids(Set<Integer> allNids);
 
+   /**
+    * Method description
+    *
+    *
+    * @param srcId
+    *
+    * @return
+    */
    public boolean addIdVersion(IdentifierVersion srcId) {
       if (additionalIdVersions == null) {
          additionalIdVersions = new ArrayList<>();
@@ -254,6 +355,18 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return returnValue;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param longId
+    * @param authorityNid
+    * @param statusNid
+    * @param ec
+    * @param time
+    *
+    * @return
+    */
    @Override
    public boolean addLongId(Long longId, int authorityNid, int statusNid, EditCoordinate ec, long time) {
       IdentifierVersionLong v = null;
@@ -266,13 +379,29 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return addIdVersion(v);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param version
+    *
+    * @return
+    */
    public final boolean addMutablePart(R version) {
       return addRevision(version);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param buf
+    * @param nidToConvert
+    */
    public static void addNidToBuffer(Appendable buf, int nidToConvert) {
       try {
-         if ((nidToConvert != 0) && (P.s.getConceptNidForNid(nidToConvert) == nidToConvert)) {
+         if ((nidToConvert != Integer.MAX_VALUE) && (nidToConvert != 0)
+             && (P.s.getConceptNidForNid(nidToConvert) == nidToConvert)) {
             buf.append("\"");
             buf.append(P.s.getConcept(nidToConvert).toString());
             buf.append("\" [");
@@ -291,6 +420,14 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param r
+    *
+    * @return
+    */
    @SuppressWarnings("unchecked")
    public final boolean addRevision(R r) {
       assert r != null;
@@ -314,10 +451,32 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return returnValue;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param r
+    *
+    * @return
+    */
    public final boolean addRevisionNoRedundancyCheck(R r) {
       return addRevision(r);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param stringId
+    * @param authorityNid
+    * @param statusNid
+    * @param time
+    * @param authorNid
+    * @param moduleNid
+    * @param pathNid
+    *
+    * @return
+    */
    public boolean addStringId(String stringId, int authorityNid, int statusNid, long time, int authorNid,
                               int moduleNid, int pathNid) {
       IdentifierVersionString v = new IdentifierVersionString(statusNid, time, authorNid, moduleNid, pathNid,
@@ -326,9 +485,16 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return addIdVersion(v);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param buf
+    * @param nidToConvert
+    */
    public static void addTextToBuffer(Appendable buf, int nidToConvert) {
       try {
-         if ((nidToConvert != 0) && (P.s.getConceptNidForNid(nidToConvert) == nidToConvert)) {
+         if ((nidToConvert != Integer.MAX_VALUE) && (nidToConvert != 0) && (P.s.getConceptNidForNid(nidToConvert) == nidToConvert)) {
             buf.append(P.s.getConcept(nidToConvert).toString());
          } else {
             buf.append(Integer.toString(nidToConvert));
@@ -342,6 +508,20 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param uuidId
+    * @param authorityNid
+    * @param statusNid
+    * @param time
+    * @param authorNid
+    * @param moduleNid
+    * @param pathNid
+    *
+    * @return
+    */
    public boolean addUuidId(UUID uuidId, int authorityNid, int statusNid, long time, int authorNid,
                             int moduleNid, int pathNid) {
       IdentifierVersionUuid v = new IdentifierVersionUuid(statusNid, time, authorNid, moduleNid, pathNid,
@@ -350,6 +530,12 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return addIdVersion(v);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    protected String assertionString() {
       try {
          return P.s.getConcept(enclosingConceptNid).toLongString();
@@ -360,6 +546,10 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return toString();
    }
 
+   /**
+    * Method description
+    *
+    */
    public void cancel() {
       clearVersions();
 
@@ -430,6 +620,10 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       }
    }
 
+   /**
+    * Method description
+    *
+    */
    protected void clearAnnotationVersions() {
       if (annotations != null) {
          for (RefexMember<?, ?> rm : annotations) {
@@ -438,13 +632,33 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       }
    }
 
+   /**
+    * Method description
+    *
+    */
    public abstract void clearVersions();
 
+   /**
+    * Method description
+    *
+    *
+    * @param o
+    *
+    * @return
+    */
    @Override
    public int compareTo(ConceptComponent o) {
       return this.nid - o.nid;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param another
+    *
+    * @return
+    */
    public boolean conceptComponentFieldsEqual(ConceptComponent<R, C> another) {
       if (this.nid != another.nid) {
          return false;
@@ -493,6 +707,14 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return true;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param stamp
+    *
+    * @return
+    */
    public boolean containsStamp(int stamp) {
       if (primordialStamp == stamp) {
          return true;
@@ -508,7 +730,15 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
       return false;
    }
-   private static final UUID snomedAuthorityUuid = TermAux.SNOMED_IDENTIFIER.getUuids()[0];;
+
+   /**
+    * Method description
+    *
+    *
+    * @param list
+    *
+    * @throws IOException
+    */
    public final void convertId(List<TkIdentifier> list) throws IOException {
       if ((list == null) || list.isEmpty()) {
          return;
@@ -517,41 +747,50 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       additionalIdVersions = new ArrayList<>(list.size());
 
       for (TkIdentifier idv : list) {
-           try {
-               Object denotation = idv.getDenotation();
+         try {
+            Object denotation = idv.getDenotation();
 
-               switch (IDENTIFIER_PART_TYPES.getType(denotation.getClass())) {
-               case LONG :
-                  additionalIdVersions.add(new IdentifierVersionLong((TkIdentifierLong) idv));
-                  if (idv.authorityUuid.equals(snomedAuthorityUuid)) {
-                      P.s.put(Type3UuidFactory.fromSNOMED(idv.getDenotation().toString()), nid);
-                  } else {
-                      P.s.put(Type5UuidFactory.get(idv.getAuthorityUuid(), idv.getDenotation().toString()), nid);
-                      
-                  }
-                  break;
+            switch (IDENTIFIER_PART_TYPES.getType(denotation.getClass())) {
+            case LONG :
+               additionalIdVersions.add(new IdentifierVersionLong((TkIdentifierLong) idv));
 
-               case STRING :
-                  additionalIdVersions.add(new IdentifierVersionString((TkIdentifierString) idv));
+               if (idv.authorityUuid.equals(snomedAuthorityUuid)) {
+                  P.s.put(Type3UuidFactory.fromSNOMED(idv.getDenotation().toString()), nid);
+               } else {
                   P.s.put(Type5UuidFactory.get(idv.getAuthorityUuid(), idv.getDenotation().toString()), nid);
-
-                  break;
-
-               case UUID :
-                  additionalIdVersions.add(new IdentifierVersionUuid((TkIdentifierUuid) idv));
-                  P.s.put(Type5UuidFactory.get(idv.getAuthorityUuid(), idv.getDenotation().toString()), nid);
-
-                  break;
-
-               default :
-                  throw new UnsupportedOperationException();
                }
-           } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-               throw new IOException(ex);
-           }
+
+               break;
+
+            case STRING :
+               additionalIdVersions.add(new IdentifierVersionString((TkIdentifierString) idv));
+               P.s.put(Type5UuidFactory.get(idv.getAuthorityUuid(), idv.getDenotation().toString()), nid);
+
+               break;
+
+            case UUID :
+               additionalIdVersions.add(new IdentifierVersionUuid((TkIdentifierUuid) idv));
+               P.s.put(Type5UuidFactory.get(idv.getAuthorityUuid(), idv.getDenotation().toString()), nid);
+
+               break;
+
+            default :
+               throw new UnsupportedOperationException();
+            }
+         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+            throw new IOException(ex);
+         }
       }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param obj
+    *
+    * @return
+    */
    @Override
    public boolean equals(Object obj) {
       if (obj == null) {
@@ -567,13 +806,38 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return false;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param another
+    *
+    * @return
+    */
    public abstract boolean fieldsEqual(ConceptComponent<R, C> another);
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public int hashCode() {
       return Hashcode.compute(new int[] { nid, primordialStamp });
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param ec
+    * @param vc
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    public boolean makeAdjudicationAnalogs(EditCoordinate ec, ViewCoordinate vc) throws IOException {
       boolean                 changed  = false;
       List<? extends Version> versions = this.getVersions(vc.getVcWithAllStatusValues());
@@ -588,7 +852,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       if (versions.size() == 1) {
          for (Version cv : versions) {
             if (!cv.isBaselineGeneration() && (cv.getPathNid() != pathNid)
-                    && (cv.getTime() != Long.MAX_VALUE)) {
+                && (cv.getTime() != Long.MAX_VALUE)) {
                changed = true;
                cv.makeAnalog(cv.getStatusNid(), Long.MAX_VALUE, ec.getModuleNid(), ec.getAuthorNid(),
                              pathNid);
@@ -619,7 +883,19 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return changed;
    }
 
-   public ConceptComponent<R, C> merge(C another, Set<ConceptChronicleBI> indexedAnnotationConcepts) throws IOException {
+   /**
+    * Method description
+    *
+    *
+    * @param another
+    * @param indexedAnnotationConcepts
+    *
+    * @return
+    *
+    * @throws IOException
+    */
+   public ConceptComponent<R, C> merge(C another, Set<ConceptChronicleBI> indexedAnnotationConcepts)
+           throws IOException {
       Set<Integer> versionSapNids = getVersionStamps();
 
       // merge versions
@@ -663,7 +939,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
                if (anotherAnnotation != null) {
                   for (RefexMember.Version annotationVersion : anotherAnnotation.getVersions()) {
                      if ((annotationVersion.getStamp() != -1)
-                             &&!annotationStamps.contains(annotationVersion.getStamp())) {
+                         &&!annotationStamps.contains(annotationVersion.getStamp())) {
                         annotation.addRevision(annotationVersion.getRevision());
                      }
                   }
@@ -671,14 +947,16 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             }
 
             this.annotations.addAll(anotherAnnotationMap.values());
-                
-                for(RefexMember refsetMember : anotherAnnotationMap.values()){
-                    Concept refsetConcept = (Concept)Ts.get().getConceptForNid(refsetMember.getRefexExtensionNid());
-                    if(refsetConcept.isAnnotationIndex()){
-                        refsetConcept.getData().getMemberNids().add(refsetMember.getNid());
-                        indexedAnnotationConcepts.add(refsetConcept);
-                    }
-                }
+
+            for (RefexMember refsetMember : anotherAnnotationMap.values()) {
+               Concept refsetConcept =
+                  (Concept) Ts.get().getConceptForNid(refsetMember.getRefexExtensionNid());
+
+               if (refsetConcept.isAnnotationIndex()) {
+                  refsetConcept.getData().getMemberNids().add(refsetMember.getNid());
+                  indexedAnnotationConcepts.add(refsetConcept);
+               }
+            }
          }
       }
 
@@ -706,14 +984,26 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param input
+    */
    private void readAnnotationsFromBdb(TupleInput input) {
       annotations = annotationWriter.entryToObject(input, enclosingConceptNid);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param input
+    */
    public final void readComponentFromBdb(TupleInput input) {
-      this.nid                = input.readInt();
-      this.primordialMsb      = input.readLong();
-      this.primordialLsb      = input.readLong();
+      this.nid             = input.readInt();
+      this.primordialMsb   = input.readLong();
+      this.primordialLsb   = input.readLong();
       this.primordialStamp = input.readInt();
       assert primordialStamp != 0 : "Processing nid: " + enclosingConceptNid;
       readIdentifierFromBdb(input);
@@ -721,8 +1011,20 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       readFromBdb(input);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param input
+    */
    public abstract void readFromBdb(TupleInput input);
 
+   /**
+    * Method description
+    *
+    *
+    * @param input
+    */
    private void readIdentifierFromBdb(TupleInput input) {
 
       // nid, list size, and conceptNid are read already by the binder...
@@ -767,6 +1069,12 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public final boolean readyToWrite() {
       assert nid != Integer.MAX_VALUE : assertionString();
       assert nid != 0 : assertionString();
@@ -793,8 +1101,22 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return true;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public abstract boolean readyToWriteComponent();
 
+   /**
+    * Method description
+    *
+    *
+    * @param r
+    *
+    * @return
+    */
    public boolean removeRevision(R r) {
       boolean changed = false;
 
@@ -806,6 +1128,15 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return changed;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param statusNid
+    * @param authorNid
+    * @param pathNid
+    * @param moduleNid
+    */
    public final void resetUncommitted(int statusNid, int authorNid, int pathNid, int moduleNid) {
       if (getTime() != Long.MIN_VALUE) {
          throw new UnsupportedOperationException("Cannot resetUncommitted if time != Long.MIN_VALUE");
@@ -817,6 +1148,15 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       this.clearVersions();
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param min
+    * @param max
+    *
+    * @return
+    */
    @Override
    public boolean stampIsInRange(int min, int max) {
       if ((primordialStamp >= min) && (primordialStamp <= max)) {
@@ -844,6 +1184,12 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return false;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public String toString() {
       StringBuffer buf = new StringBuffer();
@@ -893,9 +1239,26 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return buf.toString();
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public abstract String toUserString();
 
+   /**
+    * Method description
+    *
+    *
+    * @param snapshot
+    *
+    * @return
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    */
    @Override
    public String toUserString(TerminologySnapshotDI snapshot) throws IOException, ContradictionException {
       return toUserString();
@@ -981,6 +1344,12 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return buf.toString();
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public final int versionCount() {
       if (revisions == null) {
          return 1;
@@ -989,6 +1358,16 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return revisions.size() + 1;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param vc1
+    * @param vc2
+    * @param compareAuthoring
+    *
+    * @return
+    */
    @Override
    public boolean versionsEqual(ViewCoordinate vc1, ViewCoordinate vc2, Boolean compareAuthoring) {
       List<? extends Version> versions1 = getVersions(vc1);
@@ -1055,10 +1434,24 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return true;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param output
+    * @param maxReadOnlyStatusAtPositionNid
+    */
    private void writeAnnotationsToBdb(TupleOutput output, int maxReadOnlyStatusAtPositionNid) {
       annotationWriter.objectToEntry(annotations, output, maxReadOnlyStatusAtPositionNid);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param output
+    * @param maxReadOnlyStatusAtPositionNid
+    */
    public final void writeComponentToBdb(TupleOutput output, int maxReadOnlyStatusAtPositionNid) {
       assert nid != 0;
       assert primordialStamp != 0 : "Processing nid: " + enclosingConceptNid;
@@ -1072,6 +1465,13 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       writeToBdb(output, maxReadOnlyStatusAtPositionNid);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param output
+    * @param maxStamp
+    */
    private void writeIdentifierToBdb(TupleOutput output, int maxStamp) {
       List<IdentifierVersion> partsToWrite = new ArrayList<>();
 
@@ -1092,24 +1492,55 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param output
+    * @param maxReadOnlyStatusAtPositionNid
+    */
    public abstract void writeToBdb(TupleOutput output, int maxReadOnlyStatusAtPositionNid);
 
-   //~--- get methods ---------------------------------------------------------
-
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public ArrayList<IdentifierVersion> getAdditionalIdentifierParts() {
       return additionalIdVersions;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public Collection<? extends IdBI> getAdditionalIds() {
       return getAdditionalIdentifierParts();
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public Collection<? extends IdBI> getAllIds() {
       return getIdVersions();
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public Set<Integer> getAllNidsForId() throws IOException {
       HashSet<Integer> allNids = new HashSet<>();
@@ -1122,6 +1553,14 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return allNids;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public Set<Integer> getAllNidsForVersion() throws IOException {
       HashSet<Integer> allNids = new HashSet<>();
@@ -1135,10 +1574,24 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return allNids;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    public Set<Integer> getAllStamps() throws IOException {
       return getComponentStamps();
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public Set<Integer> getAnnotationStamps() {
       int size = 0;
 
@@ -1159,6 +1612,12 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return sapNids;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public Collection<? extends RefexChronicleBI<?>> getAnnotations() {
       if (annotations == null) {
@@ -1168,15 +1627,33 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return Collections.unmodifiableCollection(annotations);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public ConcurrentSkipListSet<? extends RefexChronicleBI<?>> getAnnotationsMod() {
       return annotations;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public int getAuthorNid() {
       return P.s.getAuthorNidForStamp(primordialStamp);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public final int getAuthorityNid() {
       try {
@@ -1186,11 +1663,25 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public ComponentChroncileBI getChronicle() {
       return (ComponentChroncileBI) this;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    public Set<Integer> getComponentStamps() throws IOException {
       int size = 1;
 
@@ -1215,11 +1706,27 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return stamps;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public int getConceptNid() {
       return enclosingConceptNid;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param xyz
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public Collection<? extends RefexVersionBI<?>> getCurrentAnnotationMembers(ViewCoordinate xyz)
            throws IOException {
@@ -1238,9 +1745,21 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return Collections.unmodifiableCollection(returnValues);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param xyz
+    * @param cls
+    * @param <T>
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public <T extends RefexVersionBI<?>> Collection<T> getCurrentAnnotationMembers(ViewCoordinate xyz,
-           Class<T> cls)
+       Class<T> cls)
            throws IOException {
       if (annotations == null) {
          return Collections.unmodifiableCollection(new ArrayList<T>());
@@ -1259,9 +1778,20 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return Collections.unmodifiableCollection(returnValues);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param xyz
+    * @param refexNid
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public Collection<? extends RefexVersionBI<?>> getCurrentAnnotationMembers(ViewCoordinate xyz,
-           int refexNid)
+       int refexNid)
            throws IOException {
       Collection<RefexVersionBI<?>> returnValues = new ArrayList<>();
 
@@ -1278,9 +1808,22 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return Collections.unmodifiableCollection(returnValues);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param xyz
+    * @param refexNid
+    * @param cls
+    * @param <T>
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public <T extends RefexVersionBI<?>> Collection<T> getCurrentAnnotationMembers(ViewCoordinate xyz,
-           int refexNid, Class<T> cls)
+       int refexNid, Class<T> cls)
            throws IOException {
       Collection<T> returnValues = new ArrayList<>();
 
@@ -1299,6 +1842,17 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return Collections.unmodifiableCollection(returnValues);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param xyz
+    * @param refsetNid
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public Collection<? extends RefexVersionBI<?>> getCurrentRefexMembers(ViewCoordinate xyz, int refsetNid)
            throws IOException {
@@ -1314,6 +1868,16 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return Collections.unmodifiableCollection(returnValues);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param xyz
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public Collection<? extends RefexVersionBI<?>> getCurrentRefexes(ViewCoordinate xyz) throws IOException {
       Collection<? extends RefexChronicleBI<?>> refexes      = getRefexes();
@@ -1328,17 +1892,40 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return Collections.unmodifiableCollection(returnValues);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param xyz
+    * @param refsetNid
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public Collection<? extends RefexVersionBI<?>> getCurrentRefexes(ViewCoordinate xyz, int refsetNid)
            throws IOException {
       return getCurrentRefexMembers(xyz, refsetNid);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public final Object getDenotation() {
       return new UUID(primordialMsb, primordialLsb);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public Concept getEnclosingConcept() {
       try {
          return Concept.get(enclosingConceptNid);
@@ -1347,6 +1934,12 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public Set<Integer> getIdStamps() {
       int size = 1;
 
@@ -1368,6 +1961,12 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return stamps;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public final List<IdBI> getIdVersions() {
       List<IdBI> returnValues = new ArrayList<>();
 
@@ -1380,6 +1979,16 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return Collections.unmodifiableList(returnValues);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param xyz
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public Collection<? extends RefexVersionBI<?>> getInactiveRefexes(ViewCoordinate xyz) throws IOException {
       Collection<? extends RefexVersionBI<?>>   currentRefexes = new HashSet(getCurrentRefexes(xyz));
@@ -1400,30 +2009,70 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return Collections.unmodifiableCollection(returnValues);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public int getModuleNid() {
       return P.s.getModuleNidForStamp(primordialStamp);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public final int getMutablePartCount() {
       return revisions.size();
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public final int getNid() {
       return nid;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public final int getPathNid() {
       return P.s.getPathNidForStamp(primordialStamp);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public PositionBI getPosition() throws IOException {
       return new Position(getTime(), P.s.getPath(getPathNid()));
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    public Set<PositionBI> getPositions() throws IOException {
       List<? extends Version> localVersions = getVersions();
       Set<PositionBI>         positions     = new HashSet<>(localVersions.size());
@@ -1435,15 +2084,37 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return positions;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public UUID getPrimUuid() {
       return new UUID(primordialMsb, primordialLsb);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    protected int getPrimordialStatusAtPositionNid() {
       return primordialStamp;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param refsetNid
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public Collection<? extends RefexChronicleBI<?>> getRefexMembers(int refsetNid) throws IOException {
       Collection<? extends RefexChronicleBI<?>> r            = getRefexes();
@@ -1458,9 +2129,17 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return returnValues;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public Collection<? extends RefexChronicleBI<?>> getRefexes() throws IOException {
-      List<NidPairForRefex>    pairs        = P.s.getRefexPairs(nid);
+      List<NidPairForRefex>     pairs        = P.s.getRefexPairs(nid);
       List<RefexChronicleBI<?>> returnValues = new ArrayList<>(pairs.size());
       HashSet<Integer>          addedMembers = new HashSet<>();
 
@@ -1496,12 +2175,30 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return Collections.unmodifiableCollection(returnValues);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param refsetNid
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    @Deprecated
    public Collection<? extends RefexChronicleBI<?>> getRefexes(int refsetNid) throws IOException {
       return getRefexMembers(refsetNid);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    public Set<Integer> getRefsetMemberSapNids() throws IOException {
       List<NidPairForRefex> pairs = P.s.getRefexPairs(nid);
 
@@ -1526,6 +2223,14 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return returnValues;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    public Collection<? extends RefexChronicleBI<?>> getRefsetMembers() throws IOException {
       List<NidPairForRefex> pairs = P.s.getRefexPairs(nid);
 
@@ -1548,21 +2253,45 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return Collections.unmodifiableCollection(returnValues);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public int getStamp() {
       return primordialStamp;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public final int getStatusNid() {
       return P.s.getStatusNidForStamp(primordialStamp);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public final long getTime() {
       return P.s.getTimeForStamp(primordialStamp);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public final List<UUID> getUUIDs() {
       List<UUID> returnValues = new ArrayList<>();
@@ -1582,8 +2311,20 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return returnValues;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    protected abstract IntArrayList getVariableVersionNids();
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public HashMap<Integer, ConceptComponent<R, C>.Version> getVersionSapMap() {
       int size = 1;
 
@@ -1600,6 +2341,12 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return sapMap;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public Set<Integer> getVersionStamps() {
       int size = 1;
 
@@ -1621,10 +2368,35 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return sapNids;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public abstract List<? extends Version> getVersions();
 
+   /**
+    * Method description
+    *
+    *
+    * @param c
+    *
+    * @return
+    */
    public abstract List<? extends Version> getVersions(ViewCoordinate c);
 
+   /**
+    * Method description
+    *
+    *
+    * @param xyz
+    * @param refsetNid
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public boolean hasCurrentAnnotationMember(ViewCoordinate xyz, int refsetNid) throws IOException {
       Collection<? extends RefexChronicleBI<?>> members = getCurrentAnnotationMembers(xyz, refsetNid);
@@ -1638,6 +2410,17 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return false;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param xyz
+    * @param refsetNid
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public boolean hasCurrentRefexMember(ViewCoordinate xyz, int refsetNid) throws IOException {
       Collection<? extends RefexChronicleBI<?>> refexes = getRefexMembers(refsetNid);
@@ -1649,6 +2432,14 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return false;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param r
+    *
+    * @return
+    */
    public final boolean hasRevision(R r) {
       if (revisions == null) {
          return false;
@@ -1657,21 +2448,51 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return revisions.contains(r);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param allowedStatusNids
+    *
+    * @return
+    */
    @Override
    public boolean isActive(NidSetBI allowedStatusNids) {
       return allowedStatusNids.contains(getStatusNid());
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param vc
+    *
+    * @return
+    */
    @Override
    public boolean isActive(ViewCoordinate vc) {
       return isActive(vc.getAllowedStatusNids());
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public boolean isBaselineGeneration() {
       return primordialStamp <= P.s.getMaxReadOnlyStamp();
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param input
+    *
+    * @return
+    */
    public static boolean isCanceled(TupleInput input) {
       int nid              = input.readInt();
       int primordialSapNid = input.readInt();
@@ -1679,6 +2500,12 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return primordialSapNid == -1;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public boolean isUncommitted() {
       if (this.getTime() == Long.MAX_VALUE) {
@@ -1712,8 +2539,12 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       return false;
    }
 
-   //~--- set methods ---------------------------------------------------------
-
+   /**
+    * Method description
+    *
+    *
+    * @param authorNid
+    */
    @Override
    public void setAuthorNid(int authorNid) {
       if (getTime() != Long.MAX_VALUE) {
@@ -1723,12 +2554,18 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
       if (authorNid != getAuthorNid()) {
          this.primordialStamp = P.s.getStamp(getStatusNid(), Long.MAX_VALUE, authorNid, getModuleNid(),
-                 getPathNid());
+             getPathNid());
          assert primordialStamp != 0 : "Processing nid: " + enclosingConceptNid;
          modified();
       }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param moduleId
+    */
    @Override
    public final void setModuleNid(int moduleId) {
       if (getTime() != Long.MAX_VALUE) {
@@ -1738,21 +2575,35 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
       if (moduleId != this.getModuleNid()) {
          this.primordialStamp = P.s.getStamp(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), moduleId,
-                 getPathNid());
+             getPathNid());
          assert primordialStamp != 0 : "Processing nid: " + enclosingConceptNid;
       }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param nid
+    *
+    * @throws PropertyVetoException
+    */
    @Override
    public final void setNid(int nid) throws PropertyVetoException {
-      if ((this.getStamp() != Integer.MAX_VALUE) && (this.getTime() != Long.MAX_VALUE)
-              && (this.nid != nid) && (this.nid != Integer.MAX_VALUE)) {
+      if ((this.getStamp() != Integer.MAX_VALUE) && (this.getTime() != Long.MAX_VALUE) && (this.nid != nid)
+          && (this.nid != Integer.MAX_VALUE)) {
          throw new PropertyVetoException("nid", null);
       }
 
       this.nid = nid;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param pathId
+    */
    @Override
    public final void setPathNid(int pathId) {
       if (getTime() != Long.MAX_VALUE) {
@@ -1761,24 +2612,42 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
       }
 
       if (pathId != getPathNid()) {
-         this.primordialStamp = P.s.getStamp(getStatusNid(), Long.MAX_VALUE, getAuthorNid(),
-                 getModuleNid(), pathId);
+         this.primordialStamp = P.s.getStamp(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), getModuleNid(),
+             pathId);
          assert primordialStamp != 0 : "Processing nid: " + enclosingConceptNid;
          modified();
       }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param pUuid
+    */
    public void setPrimordialUuid(UUID pUuid) {
       this.primordialMsb = pUuid.getMostSignificantBits();
       this.primordialLsb = pUuid.getLeastSignificantBits();
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param sapNid
+    */
    public void setStatusAtPositionNid(int sapNid) {
       this.primordialStamp = sapNid;
       assert primordialStamp != 0 : "Processing nid: " + enclosingConceptNid;
       modified();
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param statusId
+    */
    @Override
    public final void setStatusNid(int statusId) {
       if (getTime() != Long.MAX_VALUE) {
@@ -1788,11 +2657,17 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
       if (statusId != this.getStatusNid()) {
          this.primordialStamp = P.s.getStamp(statusId, Long.MAX_VALUE, getAuthorNid(), getModuleNid(),
-                 getPathNid());
+             getPathNid());
          assert primordialStamp != 0 : "Processing nid: " + enclosingConceptNid;
       }
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param time
+    */
    @Override
    public final void setTime(long time) {
       if (getTime() != Long.MAX_VALUE) {
@@ -1802,31 +2677,62 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 
       if (time != getTime()) {
          this.primordialStamp = P.s.getStamp(getStatusNid(), time, getAuthorNid(), getModuleNid(),
-                 getPathNid());
+             getPathNid());
          assert primordialStamp != 0 : "Processing nid: " + enclosingConceptNid;
       }
    }
 
-   //~--- inner classes -------------------------------------------------------
-
+   /**
+    * Class description
+    *
+    *
+    * @version        Enter version here..., 13/03/30
+    * @author         Enter your name here...    
+    */
    public abstract class Version implements ComponentVersionBI, AnalogGeneratorBI<R> {
+
+      /** Field description */
       protected ComponentVersionBI cv;
 
-      //~--- constructors -----------------------------------------------------
-
+      /**
+       * Constructs ...
+       *
+       *
+       * @param cv
+       */
       public Version(ComponentVersionBI cv) {
          super();
          this.cv = cv;
       }
 
-      //~--- methods ----------------------------------------------------------
-
+      /**
+       * Method description
+       *
+       *
+       * @param annotation
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @SuppressWarnings("rawtypes")
       @Override
       public boolean addAnnotation(RefexChronicleBI annotation) throws IOException {
          return ConceptComponent.this.addAnnotation(annotation);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param longId
+       * @param authorityNid
+       * @param statusNid
+       * @param ec
+       * @param time
+       *
+       * @return
+       */
       public boolean addLongId(Long longId, int authorityNid, int statusNid, EditCoordinate ec, long time) {
          return ConceptComponent.this.addLongId(longId, authorityNid, statusNid, ec, time);
       }
@@ -1836,7 +2742,6 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 //    public boolean addLongId(Long longId, int authorityNid, int statusNid, int pathNid, long time) {
 //        return ConceptComponent.this.addLongId(longId, authorityNid, statusNid, pathNid, time);
 //    }
-
 //    @Override
 //    public boolean addStringId(String stringId, int authorityNid, int statusNid, int pathNid, long time) {
 //        return ConceptComponent.this.addStringId(stringId, authorityNid, statusNid, pathNid, time);
@@ -1846,6 +2751,15 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 //    public boolean addUuidId(UUID uuidId, int authorityNid, int statusNid, int pathNid, long time) {
 //        return ConceptComponent.this.addUuidId(uuidId, authorityNid, statusNid, pathNid, time);
 //    }
+
+      /**
+       * Method description
+       *
+       *
+       * @param obj
+       *
+       * @return
+       */
       @Override
       public boolean equals(Object obj) {
          if (obj == null) {
@@ -1863,44 +2777,115 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
          return false;
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param another
+       *
+       * @return
+       */
       public abstract boolean fieldsEqual(ConceptComponent<R, C>.Version another);
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public int hashCode() {
          return Hashcode.compute(new int[] { this.getStamp(), nid });
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param ec
+       * @param vc
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       public boolean makeAdjudicationAnalogs(EditCoordinate ec, ViewCoordinate vc) throws IOException {
          return ConceptComponent.this.makeAdjudicationAnalogs(ec, vc);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param min
+       * @param max
+       *
+       * @return
+       */
       @Override
       public boolean stampIsInRange(int min, int max) {
          return cv.stampIsInRange(min, max);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public String toString() {
          return "Version: " + cv.toString();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public String toUserString() {
          return cv.toUserString();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param snapshot
+       *
+       * @return
+       *
+       * @throws ContradictionException
+       * @throws IOException
+       */
       @Override
       public String toUserString(TerminologySnapshotDI snapshot) throws IOException, ContradictionException {
          return cv.toUserString(snapshot);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param vc1
+       * @param vc2
+       * @param compareAuthoring
+       *
+       * @return
+       */
       @Override
       public boolean versionsEqual(ViewCoordinate vc1, ViewCoordinate vc2, Boolean compareAuthoring) {
          return ConceptComponent.this.versionsEqual(vc1, vc2, compareAuthoring);
       }
 
-      //~--- get methods ------------------------------------------------------
-
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       public List<IdentifierVersion> getAdditionalIdentifierParts() {
          if (additionalIdVersions == null) {
             return Collections.unmodifiableList(new ArrayList<IdentifierVersion>());
@@ -1909,143 +2894,365 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
          return Collections.unmodifiableList(additionalIdVersions);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public Collection<? extends IdBI> getAdditionalIds() {
          return ConceptComponent.this.getAdditionalIds();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public Collection<? extends IdBI> getAllIds() {
          return ConceptComponent.this.getIdVersions();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
       public Set<Integer> getAllNidsForVersion() throws IOException {
          return cv.getAllNidsForVersion();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       public Set<Integer> getAllStamps() throws IOException {
          return ConceptComponent.this.getAllStamps();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public Collection<? extends RefexChronicleBI<?>> getAnnotations() {
          return ConceptComponent.this.getAnnotations();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public int getAuthorNid() {
          return cv.getAuthorNid();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public ComponentChroncileBI getChronicle() {
          return ConceptComponent.this.getChronicle();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public int getConceptNid() {
          return enclosingConceptNid;
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param xyz
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
       public Collection<? extends RefexVersionBI<?>> getCurrentAnnotationMembers(ViewCoordinate xyz)
               throws IOException {
          return ConceptComponent.this.getCurrentAnnotationMembers(xyz);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param xyz
+       * @param cls
+       * @param <T>
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
-      public Collection<? extends RefexVersionBI<?>> getCurrentAnnotationMembers(ViewCoordinate xyz,
-              int refexNid)
-              throws IOException {
-         return ConceptComponent.this.getCurrentAnnotationMembers(xyz, refexNid);
-      }
-
-
-      @Override
-      public <T extends RefexVersionBI<?>> Collection<T> getCurrentAnnotationMembers(ViewCoordinate xyz, Class<T> cls)
+      public <T extends RefexVersionBI<?>> Collection<T> getCurrentAnnotationMembers(ViewCoordinate xyz,
+          Class<T> cls)
               throws IOException {
          return ConceptComponent.this.getCurrentAnnotationMembers(xyz, cls);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param xyz
+       * @param refexNid
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
-      public <T extends RefexVersionBI<?>> Collection<T> getCurrentAnnotationMembers(ViewCoordinate xyz, int refexNid, Class<T> cls)
+      public Collection<? extends RefexVersionBI<?>> getCurrentAnnotationMembers(ViewCoordinate xyz,
+          int refexNid)
+              throws IOException {
+         return ConceptComponent.this.getCurrentAnnotationMembers(xyz, refexNid);
+      }
+
+      /**
+       * Method description
+       *
+       *
+       * @param xyz
+       * @param refexNid
+       * @param cls
+       * @param <T>
+       *
+       * @return
+       *
+       * @throws IOException
+       */
+      @Override
+      public <T extends RefexVersionBI<?>> Collection<T> getCurrentAnnotationMembers(ViewCoordinate xyz,
+          int refexNid, Class<T> cls)
               throws IOException {
          return ConceptComponent.this.getCurrentAnnotationMembers(xyz, refexNid, cls);
       }
+
+      /**
+       * Method description
+       *
+       *
+       * @param xyz
+       * @param refsetNid
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
       public Collection<? extends RefexVersionBI<?>> getCurrentRefexMembers(ViewCoordinate xyz, int refsetNid)
               throws IOException {
          return ConceptComponent.this.getCurrentRefexMembers(xyz, refsetNid);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param xyz
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
       public Collection<? extends RefexVersionBI<?>> getCurrentRefexes(ViewCoordinate xyz)
               throws IOException {
          return ConceptComponent.this.getCurrentRefexes(xyz);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param xyz
+       * @param refsetNid
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
       public Collection<? extends RefexVersionBI<?>> getCurrentRefexes(ViewCoordinate xyz, int refsetNid)
               throws IOException {
          return ConceptComponent.this.getCurrentRefexMembers(xyz, refsetNid);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       public Concept getEnclosingConcept() {
          return ConceptComponent.this.getEnclosingConcept();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param xyz
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
       public Collection<? extends RefexVersionBI<?>> getInactiveRefexes(ViewCoordinate xyz)
               throws IOException {
          return ConceptComponent.this.getInactiveRefexes(xyz);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public int getModuleNid() {
          return cv.getModuleNid();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public int getNid() {
          return nid;
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public int getPathNid() {
          return cv.getPathNid();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
       public PositionBI getPosition() throws IOException {
          return cv.getPosition();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       public Set<PositionBI> getPositions() throws IOException {
          return ConceptComponent.this.getPositions();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public UUID getPrimUuid() {
          return new UUID(primordialMsb, primordialLsb);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param refsetNid
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
       public Collection<? extends RefexChronicleBI<?>> getRefexMembers(int refsetNid) throws IOException {
          return ConceptComponent.this.getRefexMembers(refsetNid);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
       public Collection<? extends RefexChronicleBI<?>> getRefexes() throws IOException {
          return ConceptComponent.this.getRefexes();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param refsetNid
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
       @Deprecated
       public Collection<? extends RefexChronicleBI<?>> getRefexes(int refsetNid) throws IOException {
          return ConceptComponent.this.getRefexMembers(refsetNid);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       public R getRevision() {
          if (cv == ConceptComponent.this) {
             return makeAnalog(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid());
@@ -2054,26 +3261,56 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
          return (R) cv;
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public int getStamp() {
          return cv.getStamp();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public int getStatusNid() {
          return cv.getStatusNid();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public long getTime() {
          return cv.getTime();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public List<UUID> getUUIDs() {
          return ConceptComponent.this.getUUIDs();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       public abstract IntArrayList getVariableVersionNids();
 
 //    @Override
@@ -2085,11 +3322,34 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 //    public List<? extends I_IdPart> getVisibleIds(PositionSet viewpointSet, int... authorityNids) {
 //        return ConceptComponent.this.getVisibleIds(viewpointSet, authorityNids);
 //    }
+
+      /**
+       * Method description
+       *
+       *
+       * @param xyz
+       * @param refsetNid
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
       public boolean hasCurrentAnnotationMember(ViewCoordinate xyz, int refsetNid) throws IOException {
          return ConceptComponent.this.hasCurrentAnnotationMember(xyz, refsetNid);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param xyz
+       * @param refsetNid
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
       public boolean hasCurrentRefexMember(ViewCoordinate xyz, int refsetNid) throws IOException {
          return ConceptComponent.this.hasCurrentRefexMember(xyz, refsetNid);
@@ -2099,48 +3359,127 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
 //    public boolean hasExtensions() throws IOException {
 //        return ConceptComponent.this.hasExtensions();
 //    }
+
+      /**
+       * Method description
+       *
+       *
+       * @param allowedStatusNids
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
       public boolean isActive(NidSetBI allowedStatusNids) throws IOException {
          return cv.isActive(allowedStatusNids);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param vc
+       *
+       * @return
+       *
+       * @throws IOException
+       */
       @Override
       public boolean isActive(ViewCoordinate vc) throws IOException {
          return isActive(vc.getAllowedStatusNids());
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public boolean isBaselineGeneration() {
          return cv.isBaselineGeneration();
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @return
+       */
       @Override
       public boolean isUncommitted() {
          return getTime() == Long.MAX_VALUE;
       }
 
-      //~--- set methods ------------------------------------------------------
-
+      /**
+       * Method description
+       *
+       *
+       * @param authorNid
+       *
+       * @throws PropertyVetoException
+       */
       public void setAuthorNid(int authorNid) throws PropertyVetoException {
          ((AnalogBI) cv).setAuthorNid(authorNid);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param moduleNid
+       *
+       * @throws PropertyVetoException
+       */
       public void setModuleNid(int moduleNid) throws PropertyVetoException {
          ((AnalogBI) cv).setModuleNid(moduleNid);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param nid
+       *
+       * @throws PropertyVetoException
+       */
       public final void setNid(int nid) throws PropertyVetoException {
          ((AnalogBI) cv).setNid(nid);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param pathId
+       *
+       * @throws PropertyVetoException
+       */
       public void setPathNid(int pathId) throws PropertyVetoException {
          ((AnalogBI) cv).setPathNid(pathId);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param statusNid
+       *
+       * @throws PropertyVetoException
+       */
       public void setStatusNid(int statusNid) throws PropertyVetoException {
          ((AnalogBI) cv).setStatusNid(statusNid);
       }
 
+      /**
+       * Method description
+       *
+       *
+       * @param time
+       *
+       * @throws PropertyVetoException
+       */
       public void setTime(long time) throws PropertyVetoException {
          ((AnalogBI) cv).setTime(time);
       }

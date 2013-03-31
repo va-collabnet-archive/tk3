@@ -94,7 +94,7 @@ public class DescriptionSpec implements SpecBI {
 
 
 	public DescriptionVersionBI get(ViewCoordinate c) throws IOException {
-		ConceptVersionBI concept = conceptSpec.get(c);
+		ConceptVersionBI concept = conceptSpec.getStrict(c);
 		DescriptionVersionBI desc = (DescriptionVersionBI) Ts.get().getComponent(descUuids);
 		if (concept.getNid() != desc.getConceptNid()) {
 			throw new RuntimeException("Concept NIDs do not match. 1: "

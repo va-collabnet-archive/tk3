@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.*;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TkRefexUuidUuidUuidStringMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TkRefexUuidUuidUuidStringRevision;
 
 public class TkRefexUuidBooleanMember extends TkRefexAbstractMember<TkRefexUuidBooleanRevision> {
    public static final long serialVersionUID = 1;

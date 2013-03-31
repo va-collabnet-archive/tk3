@@ -24,6 +24,9 @@ public class Snomed {
     public static ConceptSpec CORE_NAMESPACE =
             new ConceptSpec("Core Namespace",
             UUID.fromString("d6bbe207-7b5c-3e32-a2a1-f9259a7260c1"));
+    public static ConceptSpec CORE_MODULE =
+            new ConceptSpec("SNOMED CT core module",
+            UUID.fromString("1b4f1ba5-b725-390f-8c3b-33ec7096bdca"));
     public static ConceptSpec SNOMED_RELEASE_PATH =
             new ConceptSpec("SNOMED Core",
             UUID.fromString("8c230474-9f11-30ce-9cad-185a96fd03a2"));
