@@ -29,10 +29,6 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>jfxrt</artifactId>
-        </dependency>
     </dependencies>
     <profiles>
         <profile>
