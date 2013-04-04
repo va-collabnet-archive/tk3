@@ -7,7 +7,7 @@
     </parent>
     <artifactId>ttk-rest-server</artifactId>
     <packaging>war</packaging>
-    <name>${branch}: REST SERVER: Maven Module</name>
+    <name>${branch}: REST Server</name>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
     </properties>
@@ -21,10 +21,6 @@
         </plugins>
     </build>
     <dependencies>
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>jfxrt</artifactId>
-        </dependency>
          <dependency>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
