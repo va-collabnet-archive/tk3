@@ -15,8 +15,12 @@ package org.ihtsdo.ttk.mojo;
 * See the License for the specific language governing permissions and
 * limitations under the License.
  */
+import com.sun.javafx.application.LauncherImpl;
+import com.sun.javafx.application.PlatformImpl;
 import org.ihtsdo.ttk.helpers.metrics.IsKindOfMetrics;
 import java.io.File;
+import javafx.application.Application;
+import javafx.stage.Stage;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.ihtsdo.ttk.helpers.io.FileIO;
@@ -27,6 +31,8 @@ import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.ttk.api.metadata.binding.Taxonomies;
 import org.ihtsdo.ttk.api.metadata.binding.TermAux;
 import org.ihtsdo.ttk.classifier.Classifier;
+import org.ihtsdo.ttk.lookup.Looker;
+import org.ihtsdo.ttk.lookup.TermstoreLatch;
 
 /**
  * Goal which touches a timestamp file.
@@ -66,8 +72,9 @@ public class LoadBdb extends AbstractMojo {
       try {
          File    bdbFolderFile = new File(bdbFolderLocation);
          boolean dbExists      = bdbFolderFile.exists();
-
+         
          Ts.setup(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS, bdbFolderLocation);
+         Looker.lookup(TermstoreLatch.class).await();
 
          if (!dbExists) {
             Ts.get().loadEconFiles(econFileStrings);
