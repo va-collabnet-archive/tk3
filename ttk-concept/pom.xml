@@ -22,10 +22,15 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ttk-fx</artifactId>
+            <artifactId>ttk-api-with-fx-properties</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ttk-lookup</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+       <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>ttk-helpers</artifactId>
             <version>${project.version}</version>
