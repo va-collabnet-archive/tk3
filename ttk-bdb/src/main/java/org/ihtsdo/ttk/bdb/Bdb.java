@@ -31,9 +31,14 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.FutureTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import org.ihtsdo.ttk.bdb.nidmaps.UuidToNidMapBdb;
 import org.ihtsdo.ttk.helpers.io.FileIO;
 import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
@@ -50,6 +55,14 @@ import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
 import org.ihtsdo.ttk.concept.cc.concept.Concept;
 import org.ihtsdo.ttk.concept.cc.concept.OFFSETS;
 import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
+import org.ihtsdo.ttk.fx.progress.AggregateProgressItem;
+import org.ihtsdo.ttk.lookup.properties.AllowItemCancel;
+import org.ihtsdo.ttk.lookup.properties.ShowGlobalTaskProgress;
+import org.ihtsdo.ttk.fx.store.FxTs;
+import org.ihtsdo.ttk.lookup.Looker;
+import org.ihtsdo.ttk.lookup.TermstoreLatch;
+import org.ihtsdo.ttk.lookup.TtkEnvironment;
+import org.ihtsdo.ttk.lookup.WorkerPublisher;
 
 public class Bdb {
 
@@ -71,7 +84,7 @@ public class Bdb {
     private static ConcurrentHashMap<UUID, ViewCoordinate> viewCoordinates = new ConcurrentHashMap<>();
     private static File bdbDirectory;
     private static File viewCoordinateMapFile;
-
+    private static CountDownLatch setupLatch = new CountDownLatch(5);
 
     public static boolean removeMemoryMonitorListener(LowMemoryListener listener) {
         return memoryMonitor.removeListener(listener);
@@ -145,20 +158,23 @@ public class Bdb {
     static int getAuthorNidForSapNid(int sapNid) {
         return stampDb.getAuthorNid(sapNid);
     }
+
     static int getPathNidForSapNid(int sapNid) {
         return stampDb.getPathNid(sapNid);
     }
+
     static int getStatusNidForSapNid(int sapNid) {
         return stampDb.getStatusNid(sapNid);
     }
-    
+
     static int getModuleNidForSapNid(int sapNid) {
         return stampDb.getModuleNid(sapNid);
     }
+
     static long getTimeForSapNid(int sapNid) {
         return stampDb.getTime(sapNid);
     }
-    
+
     static ViewCoordinate getViewCoordinate(UUID vcUuid) {
         return viewCoordinates.get(vcUuid);
     }
@@ -173,6 +189,217 @@ public class Bdb {
 
     static void addRelOrigin(int destinationCNid, int originCNid) throws IOException {
         nidCidMapDb.addRelOrigin(destinationCNid, originCNid);
+    }
+
+    private static void startupWithFx() throws InterruptedException, ExecutionException {
+
+        Task<Void> setupPropDbTask = new Task<Void>() {
+            {
+
+                updateTitle("Setup property database");
+                updateMessage("initializing");
+                updateProgress(0, 1);
+            }
+
+            @Override
+            protected Void call() throws Exception {
+                updateMessage("starting");
+
+                if (isCancelled()) {
+                    updateMessage("Cancelled");
+                    updateProgress(1, 1);
+                    return null;
+                }
+                propDb = new PropertiesBdb(readOnly, mutable);
+                updateMessage("finished");
+                updateProgress(1, 1);
+                finishSetup();
+                return null;
+            }
+        };
+
+
+        Task<Void> setupUuidsToNidMapDb = new Task<Void>() {
+            {
+                updateTitle("Setup uuid to nid database");
+                updateMessage("initializing");
+                updateProgress(0, 1);
+            }
+
+            @Override
+            protected Void call() throws Exception {
+                updateMessage("starting");
+                if (isCancelled()) {
+                    updateMessage("Cancelled");
+                    updateProgress(1, 1);
+                    return null;
+                }
+                uuidsToNidMapDb = new UuidToNidMapBdb(readOnly, mutable);
+                updateMessage("finished");
+                updateProgress(1, 1);
+                finishSetup();
+                return null;
+            }
+        };
+
+
+        Task<Void> setupComponentNidToConceptNidDb = new Task<Void>() {
+            {
+                updateTitle("Setup component nid to concept nid database");
+                updateMessage("initializing");
+                updateProgress(0, 1);
+            }
+
+            @Override
+            protected Void call() throws Exception {
+                updateMessage("starting");
+                if (isCancelled()) {
+                    updateMessage("Cancelled");
+                    updateProgress(1, 1);
+                    return null;
+                }
+                nidCidMapDb = new NidCNidMapBdb(readOnly, mutable);
+                updateMessage("finished");
+                updateProgress(1, 1);
+                finishSetup();
+                return null;
+            }
+        };
+
+        Task<Void> setupStampDb = new Task<Void>() {
+            {
+                updateTitle("Setup STAMP database");
+                updateMessage("initializing");
+                updateProgress(0, 1);
+            }
+
+            @Override
+            protected Void call() throws Exception {
+                updateMessage("starting");
+                if (isCancelled()) {
+                    updateMessage("Cancelled");
+                    updateProgress(1, 1);
+                    return null;
+                }
+                stampDb = new StampBdb(readOnly, mutable);
+                updateMessage("finished");
+                updateProgress(1, 1);
+                finishSetup();
+                return null;
+            }
+        };
+
+        Task<Void> setupConceptDb = new Task<Void>() {
+            {
+                updateTitle("Setup Concept database");
+                updateMessage("initializing");
+                updateProgress(0, 1);
+            }
+
+            @Override
+            protected Void call() throws Exception {
+                updateMessage("starting");
+                if (isCancelled()) {
+                    updateMessage("Cancelled");
+                    updateProgress(1, 1);
+                    return null;
+                }
+                conceptDb = new ConceptBdb(readOnly, mutable);
+                updateMessage("finished");
+                updateProgress(1, 1);
+                finishSetup();
+                return null;
+            }
+        };
+
+
+
+        AggregateProgressItem aggregateProgressItem = new AggregateProgressItem("Setting up Embedded Termstore...",
+                "Berkeley DB Version: " + JEVersion.CURRENT_VERSION.getVersionString(),
+                setupPropDbTask, setupUuidsToNidMapDb, setupComponentNidToConceptNidDb,
+                setupStampDb, setupConceptDb);
+
+        WorkerPublisher.publish(aggregateProgressItem, "Termstore startup worker",
+                Arrays.asList(new ShowGlobalTaskProgress(), new AllowItemCancel()));
+
+        ExecutorService startupService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
+        startupService.submit(setupUuidsToNidMapDb);
+        startupService.submit(setupPropDbTask);
+        startupService.submit(setupStampDb);
+        setupUuidsToNidMapDb.get(); // prerequisite for setupComponentNidToConceptNidDb
+        startupService.submit(setupComponentNidToConceptNidDb);
+
+        setupComponentNidToConceptNidDb.get(); // prerequisite for setupConceptDb
+        startupService.submit(setupConceptDb);
+        startupService.shutdown();
+        setupPropDbTask.get();
+        setupUuidsToNidMapDb.get();
+        setupStampDb.get();
+        setupConceptDb.get();
+    }
+
+    private static void startupNoFx() throws InterruptedException, ExecutionException {
+        FutureTask<Void> setupPropDbTask = new FutureTask<>(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                propDb = new PropertiesBdb(readOnly, mutable);
+                finishSetup();
+                return null;
+            }
+        });
+
+
+        FutureTask<Void> setupUuidsToNidMapDb = new FutureTask<>(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                uuidsToNidMapDb = new UuidToNidMapBdb(readOnly, mutable);
+                finishSetup();
+                return null;
+            }
+        });
+
+
+        FutureTask<Void> setupComponentNidToConceptNidDb = new FutureTask<>(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                nidCidMapDb = new NidCNidMapBdb(readOnly, mutable);
+                finishSetup();
+                return null;
+            }
+        });
+
+        FutureTask<Void> setupStampDb = new FutureTask<>(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                stampDb = new StampBdb(readOnly, mutable);
+                finishSetup();
+                return null;
+            }
+        });
+
+        FutureTask<Void> setupConceptDb = new FutureTask<>(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                conceptDb = new ConceptBdb(readOnly, mutable);
+                finishSetup();
+                return null;
+            }
+        });
+
+        ExecutorService startupService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
+        startupService.submit(setupUuidsToNidMapDb);
+        startupService.submit(setupPropDbTask);
+        startupService.submit(setupStampDb);
+        setupUuidsToNidMapDb.get(); // prerequisite for setupComponentNidToConceptNidDb
+        startupService.submit(setupComponentNidToConceptNidDb);
+
+        setupComponentNidToConceptNidDb.get(); // prerequisite for setupConceptDb
+        startupService.submit(setupConceptDb);
+        startupService.shutdown();
+        setupPropDbTask.get();
+        setupUuidsToNidMapDb.get();
+        setupStampDb.get();
+        setupConceptDb.get();
     }
 
     private enum HeapSize {
@@ -205,7 +432,7 @@ public class Bdb {
         File jePropOptionsDir = new File(configDir, "je-prop-options");
         jePropOptionsDir.mkdirs();
         for (HeapSize size : HeapSize.values()) {
-            File destFile =new File(configDir, size.configFileName);
+            File destFile = new File(configDir, size.configFileName);
             if (!destFile.exists()) {
                 FileIO.copyFile(size.getPropFile(configDir), new File(configDir, size.configFileName));
             }
@@ -271,7 +498,9 @@ public class Bdb {
     public static void setup(String dbRoot) {
         setup(dbRoot, true);
     }
+
     public static void setup(String dbRoot, boolean staticPublish) {
+
         System.out.println("setup dbRoot: " + dbRoot);
         stampCache = new ConcurrentHashMap<>();
         try {
@@ -282,7 +511,7 @@ public class Bdb {
             BdbCommitManager.reset();
             NidDataFromBdb.resetExecutorPool();
             BdbPathManager.reset();
-            
+
             for (@SuppressWarnings("unused") OFFSETS o : OFFSETS.values()) {
                 // ensure all OFFSETS are initialized prior to multi-threading. 
             }
@@ -292,92 +521,82 @@ public class Bdb {
             bdbDirectory.mkdirs();
             LuceneManager.setLuceneRootDir(bdbDirectory);
 
-//            inform(activity, "Setting up database environment...");
             mutable = new Bdb(false, new File(bdbDirectory, "mutable"));
-//            inform(activity, "Berkeley DB Version: " + JEVersion.CURRENT_VERSION.getVersionString());
             File readOnlyDir = new File(bdbDirectory, "read-only");
             boolean readOnlyExists = readOnlyDir.exists();
             readOnly = new Bdb(readOnlyExists, readOnlyDir);
-//            inform(activity, "loading property database...");
-            propDb = new PropertiesBdb(readOnly, mutable);
-
-
-
-//            inform(activity, "loading uuid to nid map database...");
-            uuidsToNidMapDb = new UuidToNidMapBdb(readOnly, mutable);
-
-//            inform(activity, "loading nid->cid database...");
-            nidCidMapDb = new NidCNidMapBdb(readOnly, mutable);
-//            inform(activity, "loading status@position database...");
-            stampDb = new StampBdb(readOnly, mutable);
-//            inform(activity, "loading concept database...");
-            conceptDb = new ConceptBdb(readOnly, mutable);
-            
-            
-            if (staticPublish) {
-                BdbTerminologyStore ts = new BdbTerminologyStore();
-                if (P.s == null) {
-                    Ts.set(ts);
-                    P.s = ts;
-                }
-            }
-            
-            Concept.reset();
-
-            ReferenceConcepts.reset();
-            
-//            inform(activity, "setting up term factory...");
-
-            String versionString = getProperty(G_VERSION);
-            if (versionString != null) {
-                gVersion.set(Long.parseLong(versionString));
-            }
-
-//            BdbTermFactory tf = new BdbTermFactory();
-//            if (Terms.get() != null) {
-//                tf = (BdbTermFactory) Terms.get();
-//            } else {
-//                Terms.set(tf);
-//            }
-
-
-            //watchList.put(ReferenceConcepts.REFSET_PATH_ORIGINS.getNid(), ReferenceConcepts.REFSET_PATH_ORIGINS.getNid());
-
-//            inform(activity, "Loading paths...");
-            if (viewCoordinateMapFile.exists()) {
-                FileInputStream fis = new FileInputStream(viewCoordinateMapFile);
-                try (ObjectInputStream ois = new ObjectInputStream(fis)) {
-                    try {
-                        viewCoordinates = (ConcurrentHashMap<UUID, ViewCoordinate>) ois.readObject();
-                    } catch ( IOException | ClassNotFoundException ex) {
-                        Logger.getLogger(Bdb.class.getName()).log(Level.SEVERE, null, ex);
+            if (Looker.lookup(TtkEnvironment.class).useFxWorkers()) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            startupWithFx();
+                        } catch (InterruptedException | ExecutionException ex) {
+                            Logger.getLogger(Bdb.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
-                }
+                });
+            } else {
+                startupNoFx();
             }
-            pathManager = BdbPathManager.get();
-//            tf.setPathManager(pathManager);
-//            inform(activity, "Database open...");
-            AceLog.getAppLog().info("mutable maxMem: "
-                    + Bdb.mutable.bdbEnv.getConfig().getConfigParam("je.maxMemory"));
-            AceLog.getAppLog().info("mutable shared cache: "
-                    + Bdb.mutable.bdbEnv.getConfig().getSharedCache());
-            AceLog.getAppLog().info("readOnly maxMem: "
-                    + Bdb.readOnly.bdbEnv.getConfig().getConfigParam("je.maxMemory"));
-            AceLog.getAppLog().info("readOnly shared cache: "
-                    + Bdb.readOnly.bdbEnv.getConfig().getSharedCache());
+
+
         } catch (IOException | DatabaseException | IllegalArgumentException e) {
             throw new RuntimeException(e);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Bdb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(Bdb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-//    private static void inform(ActivityPanel activity, String info) {
-//        if (activity != null) {
-//            activity.setProgressInfoLower(info);
-//        } else {
-//            AceLog.getAppLog().info(info);
-//        }
-//
-//    }
+    private static void finishSetup() {
+        setupLatch.countDown();
+        if (setupLatch.getCount() == 0) {
+            try {
+                BdbTerminologyStore ts = new BdbTerminologyStore();
+                if (P.s == null) {
+                    Ts.set(ts);
+                    FxTs.set(ts);
+                    P.s = ts;
+                }
+                Looker.add(ts, UUID.randomUUID(), "Embedded BdbTerminologyStore");
+                Concept.reset();
+
+                ReferenceConcepts.reset();
+                String versionString = getProperty(G_VERSION);
+                if (versionString != null) {
+                    gVersion.set(Long.parseLong(versionString));
+                }
+                if (viewCoordinateMapFile.exists()) {
+                    FileInputStream fis = new FileInputStream(viewCoordinateMapFile);
+                    try (ObjectInputStream ois = new ObjectInputStream(fis)) {
+                        try {
+                            viewCoordinates = (ConcurrentHashMap<UUID, ViewCoordinate>) ois.readObject();
+                        } catch (IOException | ClassNotFoundException ex) {
+                            Logger.getLogger(Bdb.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                pathManager = BdbPathManager.get();
+                Looker.lookup(TermstoreLatch.class).openLatch();
+
+
+
+                AceLog.getAppLog().info("mutable maxMem: "
+                        + Bdb.mutable.bdbEnv.getConfig().getConfigParam("je.maxMemory"));
+                AceLog.getAppLog().info("mutable shared cache: "
+                        + Bdb.mutable.bdbEnv.getConfig().getSharedCache());
+                AceLog.getAppLog().info("readOnly maxMem: "
+                        + Bdb.readOnly.bdbEnv.getConfig().getConfigParam("je.maxMemory"));
+                AceLog.getAppLog().info("readOnly shared cache: "
+                        + Bdb.readOnly.bdbEnv.getConfig().getSharedCache());
+
+            } catch (IOException ex) {
+                Logger.getLogger(Bdb.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 
     public static Database setupDatabase(boolean readOnly, String dbName, Bdb bdb) throws IOException, DatabaseException {
         DatabaseConfig dbConfig = new DatabaseConfig();
@@ -426,11 +645,11 @@ public class Bdb {
         if (version.getTime() == Long.MIN_VALUE) {
             return -1;
         }
-        String stampKey = "" + version.getStatusUuid() + 
-                version.getTime() +
-                version.getAuthorUuid() + 
-                version.getModuleUuid() +
-                version.getPathUuid();
+        String stampKey = "" + version.getStatusUuid()
+                + version.getTime()
+                + version.getAuthorUuid()
+                + version.getModuleUuid()
+                + version.getPathUuid();
         Integer stamp = stampCache.get(stampKey);
         if (stamp != null) {
             return stamp;
@@ -568,7 +787,7 @@ public class Bdb {
     }
 
     /**
-     * For unit test teardown. May corrupt database. 
+     * For unit test teardown. May corrupt database.
      */
     public static void fastExit() {
         try {
@@ -587,12 +806,12 @@ public class Bdb {
             closed = true;
             try {
                 I_ShowActivity activity = new ConsoleActivityViewer();
-            
+
                 activity.setStopButtonVisible(false);
 
                 activity.setProgressInfoLower("1-a/11: Stopping Isa Cache generation.");
-                
-                
+
+
                 FileOutputStream fos = new FileOutputStream(viewCoordinateMapFile);
                 try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
                     oos.writeObject(viewCoordinates);
@@ -648,7 +867,7 @@ public class Bdb {
         stampCache = null;
         stampDb = null;
         uuidsToNidMapDb = null;
-       
+
         Concept.reset();
         AceLog.getAppLog().info("bdb close finished.");
     }
