@@ -13,70 +13,192 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
+
 package org.ihtsdo.ttk.lookup;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.openide.util.lookup.AbstractLookup;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.Collection;
 import java.util.Collections;
-import org.openide.util.lookup.AbstractLookup;
+import java.util.Objects;
 
 /**
  *
  * @author kec
+ *
+ * @param <T>
  */
 public class InstanceWrapper<T> extends AbstractLookup.Pair<T> {
-    
-    private T instance;
-    private String id;
-    private String displayName;
-    private Collection<Object> instanceProperties;
 
-    public InstanceWrapper(T instance, String id, String displayName, Collection<Object> instanceProperties) {
-        this.instance = instance;
-        this.id = id;
-        this.displayName = displayName;
-        this.instanceProperties = instanceProperties;
-    }
+   /** Field description */
+   private T instance;
 
-    public Collection<Object> getInstanceProperties() {
-        if (instanceProperties == null) {
-            return Collections.EMPTY_LIST;
-        }
-        return instanceProperties;
-    }
+   /** Field description */
+   private String id;
 
-    @Override
-    protected boolean instanceOf(Class<?> c) {
-        return c.isInstance(instance);
-    }
+   /** Field description */
+   private String displayName;
 
-    @Override
-    protected boolean creatorOf(Object obj) {
-        return instance == obj;
-    }
+   /** Field description */
+   private Collection<InstancePropertyBI> instanceProperties;
 
-    @Override
-    public T getInstance() {
-        return instance;
-    }
+   /**
+    * Constructs ...
+    *
+    *
+    * @param instance
+    * @param id
+    * @param displayName
+    * @param instanceProperties
+    */
+   public InstanceWrapper(T instance, String id, String displayName, Collection<InstancePropertyBI> instanceProperties) {
+      this.instance           = instance;
+      this.id                 = id;
+      this.displayName        = displayName;
+      this.instanceProperties = instanceProperties;
+   }
 
-    @Override
-    public Class<? extends T> getType() {
-        return (Class<? extends T>) instance.getClass();
-    }
+   /**
+    * Method description
+    *
+    *
+    * @param obj
+    *
+    * @return
+    */
+   @Override
+   protected boolean creatorOf(Object obj) {
+      return instance == obj;
+   }
 
-    @Override
-    public String getId() {
-        return id;
-    }
+   /**
+    * Method description
+    *
+    *
+    * @param obj
+    *
+    * @return
+    */
+   @Override
+   public boolean equals(Object obj) {
+      if (obj == null) {
+         return false;
+      }
 
-    @Override
-    public String getDisplayName() {
-        return displayName;
-    }
+      if (getClass() != obj.getClass()) {
+         return false;
+      }
 
-    @Override
-    public String toString() {
-        return "InstanceWrapper{" + "id=" + id + ", displayName=" + displayName + ", instanceProperties=" + instanceProperties + '}';
-    }
-    
+      final InstanceWrapper<T> other = (InstanceWrapper<T>) obj;
+
+      if (!Objects.equals(this.id, other.id)) {
+         return false;
+      }
+
+      return true;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public int hashCode() {
+      int hash = 7;
+
+      hash = 97 * hash + Objects.hashCode(this.id);
+
+      return hash;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @param c
+    *
+    * @return
+    */
+   @Override
+   protected boolean instanceOf(Class<?> c) {
+      return c.isInstance(instance);
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public String toString() {
+      return "InstanceWrapper{" + displayName + ", properties="
+             + instanceProperties+ ", id=" + id + '}';
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public String getDisplayName() {
+      return displayName;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public String getId() {
+      return id;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public T getInstance() {
+      return instance;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   public Collection<InstancePropertyBI> getInstanceProperties() {
+      if (instanceProperties == null) {
+         return Collections.EMPTY_LIST;
+      }
+
+      return instanceProperties;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public Class<? extends T> getType() {
+      return (Class<? extends T>) instance.getClass();
+   }
 }
