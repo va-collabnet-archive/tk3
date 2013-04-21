@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.ihtsdo.ttk</groupId>
-        <artifactId>ttk-mmb</artifactId>
+        <artifactId>ttk-api-layer</artifactId>
         <version>3.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-metrics</artifactId>
-    <name>${branch}: Metrics</name>
+    <name>${branch}:API Layer: Metrics</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

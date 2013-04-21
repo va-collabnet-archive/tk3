@@ -395,30 +395,20 @@ the specific language governing permissions and limitations under the License. -
         </plugins>
     </build>
     <modules>
-        <module>ttk-bdb</module>
         <module>ttk-concept</module>
         <module>ttk-cern-prim</module>
         <module>ttk-junit-ext</module>
-        <module>ttk-mojo</module>
-        <module>ttk-rest-client</module>
-        <module>ttk-rest-server</module>
         <module>ttk-services</module>
-        <module>ttk-uuid-maps</module>
         <module>ttk-classifier</module>
         <module>ttk-logic</module>
         <module>nbm-ttk</module>
         <module>osgi-ttk</module>
         <module>ttk-fx-presentation-layer</module>
     <module>ttk-api-layer</module>
+    <module>ttk-persistence-layer</module>
   </modules>
     <profiles>
-        <profile>
-            <id>metrics</id>
-            <modules>
-                <module>ttk-metrics</module>
-            </modules>
-        </profile>
-        <profile>
+         <profile>
             <id>default-tools.jar</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
