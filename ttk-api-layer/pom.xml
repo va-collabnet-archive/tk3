@@ -10,6 +10,12 @@
   <packaging>pom</packaging>
     <name>${branch}: API Layer</name>
     <modules>
-        
+        <module>ttk-api</module>
+        <module>ttk-api-with-fx-properties</module>
+        <module>ttk-auxiliary-taxonomies</module>
+        <module>ttk-dto</module>
+        <module>ttk-helpers</module>
+        <module>ttk-lookup</module>
+        <module>ttk-preferences</module>
     </modules>
 </project>

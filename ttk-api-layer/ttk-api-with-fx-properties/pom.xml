@@ -3,11 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.ihtsdo.ttk</groupId>
-        <artifactId>ttk-mmb</artifactId>
+        <artifactId>ttk-api-layer</artifactId>
         <version>3.1.1-SNAPSHOT</version>
     </parent>
-    <artifactId>ttk-helpers</artifactId>
-    <name>${branch}: Helpers</name>
+    <artifactId>ttk-api-with-fx-properties</artifactId>
+    <name>${branch}: API Layer: API with JavaFX properties</name>
+    <description>API Layer module that provides Concepts and Concept Components that are based on the 
+        JavaFX Property Architecture: https://wikis.oracle.com/display/OpenJDK/JavaFX+Property+Architecture
+    </description>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,10 +22,19 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>ttk-dto</artifactId>
+            <groupId>org.ihtsdo.ttk</groupId>
+            <artifactId>ttk-api</artifactId>
             <version>${project.version}</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ttk-helpers</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>jfxrt</artifactId>
         </dependency>
     </dependencies>
 </project>
