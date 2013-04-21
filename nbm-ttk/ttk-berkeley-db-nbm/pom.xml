@@ -12,7 +12,7 @@
     <packaging>nbm</packaging>
 
  
-    <name>${branch}: NBM: Berkeley DB JE</name>
+    <name>${branch}:L4: Netbeans Modules: Berkeley DB JE</name>
 
     <dependencies>
         <dependency>

@@ -8,7 +8,7 @@
     </parent>
     <artifactId>ttk-business-logic-layer-osgi</artifactId>
     <packaging>bundle</packaging>
-    <name>${branch}: OSGi: Business Logic Layer</name>
+    <name>${branch}:L4: OSGi Modules: Business Logic Layer</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

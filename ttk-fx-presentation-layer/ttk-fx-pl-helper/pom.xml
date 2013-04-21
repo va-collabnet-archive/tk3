@@ -9,7 +9,7 @@
         <version>3.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-fx-pl-helper</artifactId>
-    <name>${branch}: FX Presentation Layer: helper</name>
+    <name>${branch}:L3: FX Presentation Layer: helper</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

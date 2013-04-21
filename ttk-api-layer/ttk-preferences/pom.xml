@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.ihtsdo.ttk</groupId>
   <artifactId>ttk-preferences</artifactId>
-  <name>${branch}: API Layer: Preferences</name>
+  <name>${branch}:L2: API Layer: Preferences</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

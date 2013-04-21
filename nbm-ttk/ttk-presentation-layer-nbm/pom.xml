@@ -8,7 +8,7 @@
     </parent>
     <artifactId>ttk-presentation-layer-nbm</artifactId>
     <packaging>nbm</packaging>
-    <name>${branch}: NBM: NetBeans Presentation Layer</name>
+    <name>${branch}:L4: Netbeans Modules: NetBeans Presentation Layer</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

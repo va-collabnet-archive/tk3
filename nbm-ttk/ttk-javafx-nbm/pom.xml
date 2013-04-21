@@ -9,7 +9,7 @@
     <artifactId>ttk-javafx-nbm</artifactId>
     <packaging>nbm</packaging>
 
-    <name>${branch}: NBM: JavaFX</name>
+    <name>${branch}:L4: Netbeans Modules: JavaFX</name>
 
     <dependencies>
         <dependency>

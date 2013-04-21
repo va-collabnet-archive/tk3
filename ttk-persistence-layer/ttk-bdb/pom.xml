@@ -7,7 +7,7 @@
         <version>3.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-bdb</artifactId>
-    <name>${branch}: Persistence Layer: Berkeley Database</name>
+    <name>${branch}:L0: Persistence Layer: Berkeley Database</name>
     <dependencies>
         <dependency>
             <groupId>com.sleepycat</groupId>

@@ -9,7 +9,7 @@
 
     <artifactId>ttk-client-persistence-layer-osgi</artifactId>
     <packaging>bundle</packaging>
-    <name>${branch}: OSGi: Client Persistence Layer</name>
+    <name>${branch}:L4: OSGi Modules: Client Persistence Layer</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -7,7 +7,7 @@
         <version>3.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-fx-presentation-layer</artifactId>
-    <name>${branch}: FX Presentation Layer</name>
+    <name>${branch}:L3: FX Presentation Layer</name>
     <url>http://maven.apache.org</url>
     <packaging>pom</packaging>
     <properties>

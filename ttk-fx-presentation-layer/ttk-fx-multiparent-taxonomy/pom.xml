@@ -9,7 +9,7 @@
         <version>3.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-fx-multiparent-taxonomy</artifactId>
-    <name>${branch}: FX Presentation Layer: multiparent taxonomy</name>
+    <name>${branch}:L3: FX Presentation Layer: multiparent taxonomy</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

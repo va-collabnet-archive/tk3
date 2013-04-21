@@ -3,31 +3,16 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.ihtsdo.ttk</groupId>
-        <artifactId>ttk-mmb</artifactId>
+        <artifactId>ttk-api-layer</artifactId>
         <version>3.1.1-SNAPSHOT</version>
     </parent>
-    <artifactId>ttk-classifier</artifactId>
-    <name>${branch}: Classifier</name>
+    <artifactId>ttk-services</artifactId>
+    <name>${branch}:L2: API Layer: Services</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>ttk-helpers</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>au.csiro</groupId>
-            <artifactId>snorocket-core</artifactId>
-            <version>1.4.3-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <artifactId>log4j</artifactId>
-            <groupId>log4j</groupId>
-            <version>1.2.16</version>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -35,9 +20,12 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ttk-logic</artifactId>
+            <artifactId>ttk-api</artifactId>
             <version>${project.version}</version>
-            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>jfxrt</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -7,7 +7,7 @@
         <version>3.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-api-with-fx-properties</artifactId>
-    <name>${branch}: API Layer: API with JavaFX properties</name>
+    <name>${branch}:L2: API Layer: API with JavaFX properties</name>
     <description>API Layer module that provides Concepts and Concept Components that are based on the 
         JavaFX Property Architecture: https://wikis.oracle.com/display/OpenJDK/JavaFX+Property+Architecture
     </description>

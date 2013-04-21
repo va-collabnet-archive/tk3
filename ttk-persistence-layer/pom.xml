@@ -9,7 +9,7 @@
   <groupId>org.ihtsdo.ttk</groupId>
   <artifactId>ttk-persistence-layer</artifactId>
   <packaging>pom</packaging>
-  <name>${branch}: Persistence Layer</name>
+  <name>${branch}:L0: Persistence Layer</name>
   <modules>
       <module>ttk-bdb</module>
       <module>ttk-rest-client</module>

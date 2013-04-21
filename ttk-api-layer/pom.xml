@@ -8,17 +8,19 @@
     </parent>
     <artifactId>ttk-api-layer</artifactId>
     <packaging>pom</packaging>
-    <name>${branch}: API Layer</name>
+    <name>${branch}:L2: API Layer</name>
     <modules>
         <module>ttk-api</module>
         <module>ttk-api-with-fx-properties</module>
         <module>ttk-auxiliary-taxonomies</module>
         <module>ttk-dto</module>
         <module>ttk-helpers</module>
+        <module>ttk-logic</module>
         <module>ttk-lookup</module>
-				<module>ttk-junit-ext</module>
+        <module>ttk-junit-ext</module>
         <module>ttk-mojo</module>
         <module>ttk-preferences</module>
+        <module>ttk-services</module>
     </modules>
     <profiles>
         <profile>

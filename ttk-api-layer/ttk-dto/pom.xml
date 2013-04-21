@@ -7,7 +7,7 @@
     <version>3.1.1-SNAPSHOT</version>
   </parent>
   <artifactId>ttk-dto</artifactId>
-  <name>${branch}: API Layer: Data Transfer Objects</name>
+  <name>${branch}:L2: API Layer: Data Transfer Objects</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

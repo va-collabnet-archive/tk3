@@ -8,7 +8,7 @@
     <artifactId>ttk-client-persistence-layer-nbm</artifactId>
     <packaging>nbm</packaging>
 
-    <name>${branch}: NBM: Client Persistence Layer</name>
+    <name>${branch}:L4: Netbeans Modules: Client Persistence Layer</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

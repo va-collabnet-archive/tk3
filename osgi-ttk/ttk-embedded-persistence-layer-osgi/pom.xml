@@ -8,7 +8,7 @@
     </parent>
     <artifactId>ttk-embedded-persistence-layer-osgi</artifactId>
     <packaging>bundle</packaging>
-    <name>${branch}: OSGi: Embedded Persistence Layer</name>
+    <name>${branch}:L4: OSGi Modules: Embedded Persistence Layer</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
