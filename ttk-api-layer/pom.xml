@@ -16,6 +16,7 @@
         <module>ttk-dto</module>
         <module>ttk-helpers</module>
         <module>ttk-lookup</module>
+				<module>ttk-junit-ext</module>
         <module>ttk-mojo</module>
         <module>ttk-preferences</module>
     </modules>
