@@ -8,7 +8,12 @@
   </parent>
   <groupId>org.ihtsdo.ttk</groupId>
   <artifactId>ttk-persistence-layer</artifactId>
-  <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>ttk-persistence-layer</name>
+  <name>${branch}: Persistence Layer</name>
+  <modules>
+      <module>ttk-bdb</module>
+      <module>ttk-rest-client</module>
+      <module>ttk-rest-server</module>
+      <module>ttk-uuid-maps</module>
+  </modules>
 </project>
