@@ -16,5 +16,6 @@
     <modules>
         <module>ttk-fx-multiparent-taxonomy</module>
         <module>ttk-fx-pl-helper</module>
+        <module>ttk-icons</module> 
     </modules>
 </project>
