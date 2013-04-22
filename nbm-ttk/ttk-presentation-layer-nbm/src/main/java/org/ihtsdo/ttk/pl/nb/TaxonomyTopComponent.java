@@ -25,13 +25,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.layout.BorderPane;
 import javafx.util.Callback;
 import javax.swing.Timer;
 import org.ihtsdo.ttk.api.ContradictionException;
@@ -127,7 +127,7 @@ public final class TaxonomyTopComponent extends TopComponent {
         setToolTipText(Bundle.HINT_TaxonomyTopComponent());
         fxPanel = new JFXPanel();
         setLayout(new BorderLayout());
-        add(fxPanel);
+        add(fxPanel, BorderLayout.CENTER);
         dbStartupListener = new DbStartupListener();
     }
 
@@ -138,9 +138,7 @@ public final class TaxonomyTopComponent extends TopComponent {
     }
 
     private Scene createScene() {
-        Group rootGroup = new Group();
         TreeView treeView = new TreeView();
-        rootGroup.getChildren().add(treeView);
         try {
 
             treeView.setCellFactory(new Callback<TreeView<FxTaxonomyReferenceWithConcept>, TreeCell<FxTaxonomyReferenceWithConcept>>() {
@@ -247,7 +245,9 @@ public final class TaxonomyTopComponent extends TopComponent {
         } catch (IOException | ContradictionException ex) {
             Exceptions.printStackTrace(ex);
         }
-        return new Scene(rootGroup);
+        BorderPane border = new BorderPane();
+        border.setCenter(treeView);
+        return new Scene(border);
     }
 
     /**
