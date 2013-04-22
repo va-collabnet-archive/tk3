@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gov.va.ohi.sim.fx.helper;
+package org.ihtsdo.ttk.pl.fx.helper;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
