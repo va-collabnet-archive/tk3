@@ -395,12 +395,12 @@ the specific language governing permissions and limitations under the License. -
         </plugins>
     </build>
     <modules>
-        <module>nbm-ttk</module>
-        <module>osgi-ttk</module>
-        <module>ttk-fx-presentation-layer</module>
-        <module>ttk-api-layer</module>
         <module>ttk-persistence-layer</module>
         <module>ttk-business-logic-layer</module>
+        <module>ttk-api-layer</module>
+        <module>ttk-fx-presentation-layer</module>
+        <module>nbm-ttk</module>
+        <module>osgi-ttk</module>
     </modules>
     <profiles>
         <profile>
