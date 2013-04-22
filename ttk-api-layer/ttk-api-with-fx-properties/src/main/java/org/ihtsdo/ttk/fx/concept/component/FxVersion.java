@@ -70,7 +70,13 @@ public abstract class FxVersion implements Serializable {
       authorReference         = new FxComponentReference(ss.getConceptForNid(another.getAuthorNid()));
       moduleReference         = new FxComponentReference(ss.getConceptForNid(another.getModuleNid()));
       pathReference           = new FxComponentReference(ss.getConceptForNid(another.getPathNid()));
-      this.viewCoordinateUuid = ss.getViewCoordinate().getVcUuid();
+      viewCoordinateUuid = ss.getViewCoordinate().getVcUuid();
+      assert statusReference != null: "statusReference is null";
+      assert fxTime != null: "fxTime is null";
+      assert authorReference != null: "authorReference is null";
+      assert moduleReference != null: "moduleReference is null";
+      assert pathReference != null: "pathReference is null";
+      assert viewCoordinateUuid != null: "viewCoordinateUuid is null";
    }
 
    public FxVersion(TerminologySnapshotDI ss, IdBI id) throws IOException, ContradictionException {
@@ -273,6 +279,7 @@ public abstract class FxVersion implements Serializable {
    }
 
    public void setViewCoordinateUuid(UUID viewCoordinateUuid) {
+       assert viewCoordinateUuid != null;
       this.viewCoordinateUuid = viewCoordinateUuid;
    }
 }
