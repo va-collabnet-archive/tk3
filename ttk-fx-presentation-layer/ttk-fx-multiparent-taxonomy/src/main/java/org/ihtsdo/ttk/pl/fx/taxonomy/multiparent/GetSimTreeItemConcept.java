@@ -40,7 +40,7 @@ class GetSimTreeItemConcept implements Callable<Boolean> {
    SimTreeItem treeItem;
 
    public GetSimTreeItemConcept(SimTreeItem treeItem) {
-      this.treeItem = treeItem;
+      this(treeItem, true);
    }
 
    public GetSimTreeItemConcept(SimTreeItem treeItem, boolean addChildren) {
@@ -54,6 +54,8 @@ class GetSimTreeItemConcept implements Callable<Boolean> {
       this.versionPolicy      = versionPolicy;
       this.refexPolicy        = refexPolicy;
       this.relationshipPolicy = relationshipPolicy;
+      assert treeItem.getValue().getRelationshipVersion().getViewCoordinateUuid() != null: 
+              "treeItem.getValue() relationshipVersion viewCoordinate is null: " + treeItem.getValue();
    }
 
    @Override

@@ -4,9 +4,9 @@
  */
 package org.ihtsdo.ttk.pl.fx.taxonomy.multiparent;
 
-import gov.va.ohi.sim.fx.helper.IconHelper;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.ihtsdo.ttk.pl.fx.helper.IconHelper;
 
 /**
  *
