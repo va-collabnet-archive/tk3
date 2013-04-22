@@ -13,7 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
+
 package org.ihtsdo.ttk.lookup;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -23,18 +28,50 @@ import java.util.concurrent.TimeUnit;
  * @author kec
  */
 public class TermstoreLatch {
-    CountDownLatch latch = new CountDownLatch(1);
 
-    public void await() throws InterruptedException {
-        latch.await();
-    }
+   /** Field description */
+   CountDownLatch latch = new CountDownLatch(1);
 
-    public boolean await(long timeout, TimeUnit unit) throws InterruptedException {
-        return latch.await(timeout, unit);
-    }
+   /**
+    * Method description
+    *
+    *
+    * @throws InterruptedException
+    */
+   public void await() throws InterruptedException {
+      latch.await();
+   }
 
-    public void openLatch() {
-        latch.countDown();
-    }
-    
+   /**
+    * Method description
+    *
+    *
+    * @param timeout
+    * @param unit
+    *
+    * @return
+    *
+    * @throws InterruptedException
+    */
+   public boolean await(long timeout, TimeUnit unit) throws InterruptedException {
+      return latch.await(timeout, unit);
+   }
+
+   /**
+    * Method description
+    *
+    */
+   public void openLatch() {
+      latch.countDown();
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   public boolean ready() {
+      return latch.getCount() == 0;
+   }
 }
