@@ -604,6 +604,7 @@ public class BdbTerminologyStore extends Termstore {
 
    @Override
    public TerminologySnapshotDI getSnapshot(ViewCoordinate c) {
+      assert c != null;
       return new TerminologySnapshot(this, c);
    }
 
