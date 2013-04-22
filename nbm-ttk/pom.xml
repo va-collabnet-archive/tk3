@@ -9,17 +9,17 @@
     <artifactId>nbm-ttk</artifactId>
     <name>${branch}:L4: Netbeans Modules</name>
     <url>http://maven.apache.org</url>
-    <packaging>pom</packaging>
+    <packaging>pom</packaging> 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <modules>
+        <module>ttk-presentation-layer-nbm</module>
+        <module>ttk-fx-presentation-layer-nbm</module>
         <module>ttk-api-layer-nbm</module>
         <module>ttk-business-logic-layer-nbm</module>
         <module>ttk-client-persistence-layer-nbm</module>
         <module>ttk-embedded-persistence-layer-nbm</module>
-        <module>ttk-fx-presentation-layer-nbm</module>
-        <module>ttk-presentation-layer-nbm</module>
         <module>ttk-lucene-nbm</module>
         <module>ttk-javafx-nbm</module>
         <module>ttk-berkeley-db-nbm</module>

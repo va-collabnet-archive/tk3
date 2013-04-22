@@ -16,19 +16,47 @@
 package org.ihtsdo.ttk.pl.nb;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.JFXPanel;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import org.netbeans.api.progress.ProgressHandle;
-import org.netbeans.api.progress.ProgressHandleFactory;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.util.Callback;
+import javax.swing.Timer;
+import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
+import org.ihtsdo.ttk.api.metadata.binding.Taxonomies;
+import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
+import org.ihtsdo.ttk.fx.FxTaxonomyReferenceWithConcept;
+import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
+import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
+import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
+import org.ihtsdo.ttk.fx.store.FxTs;
+import org.ihtsdo.ttk.lookup.Looker;
+import org.ihtsdo.ttk.lookup.TermstoreLatch;
+import org.ihtsdo.ttk.pl.fx.helper.GetConceptService;
+import org.ihtsdo.ttk.pl.fx.taxonomy.multiparent.SimTreeCell;
+import org.ihtsdo.ttk.pl.fx.taxonomy.multiparent.SimTreeIcons;
+import org.ihtsdo.ttk.pl.fx.taxonomy.multiparent.SimTreeItem;
+import org.ihtsdo.ttk.pl.fx.taxonomy.multiparent.TaxonomyProgressIndicatorSkin;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.StatusDisplayer;
+import org.openide.util.Exceptions;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
@@ -56,27 +84,51 @@ import org.openide.util.NbBundle.Messages;
 public final class TaxonomyTopComponent extends TopComponent {
 
     JFXPanel fxPanel;
+    DbStartupListener dbStartupListener;
+    GetConceptService conceptService = new GetConceptService();
+
+    private class DbStartupListener implements ActionListener {
+
+        Timer timer = new Timer(1000, this);
+
+        {
+            timer.start();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (Looker.lookup(TermstoreLatch.class).ready()) {
+                timer.removeActionListener(DbStartupListener.this);
+                timer.stop();
+                timer = null;
+                dbStartupListener = null;
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Ts.get().putViewCoordinate(StandardViewCoordinates.getSnomedStatedLatest());
+                            Ts.get().putViewCoordinate(StandardViewCoordinates.getSnomedInferredLatest());
+                            Ts.get().putViewCoordinate(StandardViewCoordinates.getSnomedInferredThenStatedLatest());
+                            initFX(fxPanel);
+                        } catch (IOException ex) {
+                            Exceptions.printStackTrace(ex);
+                        }
+                    }
+                });
+            }
+        }
+    }
 
     public TaxonomyTopComponent() {
-//                Looker.add(aggregateProgressItem, UUID.randomUUID(), 
-//                "Termstore startup worker", Collections.singletonList(new ShowGlobalTaskProgress()));
 
-        
-        ProgressHandle p = ProgressHandleFactory.createHandle("My Task");
-        StatusDisplayer.getDefault().setStatusText("Loading taxonomy");
+        StatusDisplayer.getDefault().setStatusText("Loading database and interface...");
         initComponents();
         setName(Bundle.CTL_TaxonomyTopComponent());
         setToolTipText(Bundle.HINT_TaxonomyTopComponent());
         fxPanel = new JFXPanel();
         setLayout(new BorderLayout());
         add(fxPanel);
-        
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                initFX(fxPanel);
-            }
-        });
+        dbStartupListener = new DbStartupListener();
     }
 
     private void initFX(JFXPanel fxPanel) {
@@ -85,16 +137,117 @@ public final class TaxonomyTopComponent extends TopComponent {
         fxPanel.setScene(scene);
     }
 
-    private static Scene createScene() {
-        Group root = new Group();
-        Scene scene = new Scene(root, Color.ALICEBLUE);
-        Text text = new Text();
-        text.setX(40);
-        text.setY(100);
-        text.setFont(new Font(25));
-        text.setText("Welcome JavaFX!");
-        root.getChildren().add(text);
-        return (scene);
+    private Scene createScene() {
+        Group rootGroup = new Group();
+        TreeView treeView = new TreeView();
+        rootGroup.getChildren().add(treeView);
+        try {
+
+            treeView.setCellFactory(new Callback<TreeView<FxTaxonomyReferenceWithConcept>, TreeCell<FxTaxonomyReferenceWithConcept>>() {
+                @Override
+                public TreeCell<FxTaxonomyReferenceWithConcept> call(TreeView<FxTaxonomyReferenceWithConcept> p) {
+                    return new SimTreeCell();
+                }
+            });
+            treeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+            treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+                @Override
+                public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                    if (newValue instanceof SimTreeItem) {
+                        SimTreeItem simTreeItem = (SimTreeItem) newValue;
+                        FxConcept concept = simTreeItem.getValue().getConcept();
+                        conceptService.setConceptUuid(simTreeItem.getValue().getConcept().getPrimordialUuid());
+                        conceptService.setViewCoordinateUuid(concept.getViewCoordinateUuid());
+                        conceptService.restart();
+                    }
+                }
+            });
+            treeView.setShowRoot(false);
+
+
+            FxTaxonomyReferenceWithConcept root = new FxTaxonomyReferenceWithConcept();
+            SimTreeItem rootItem = new SimTreeItem(root);
+            FxTaxonomyReferenceWithConcept snomedRoot = new FxTaxonomyReferenceWithConcept();
+            snomedRoot.setConcept(FxTs.get().getFxConcept(Taxonomies.SNOMED.getUuids()[0],
+                    StandardViewCoordinates.getSnomedInferredLatest(), VersionPolicy.ACTIVE_VERSIONS,
+                    RefexPolicy.REFEX_MEMBERS,
+                    RelationshipPolicy.ORIGINATING_AND_DESTINATION_TAXONOMY_RELATIONSHIPS));
+            FxTaxonomyReferenceWithConcept dlRoot = new FxTaxonomyReferenceWithConcept();
+            dlRoot.setConcept(FxTs.get().getFxConcept(DescriptionLogicBinding.DESCRIPTION_LOGIC_AUXILIARY.getUuids()[0],
+                    StandardViewCoordinates.getSnomedStatedLatest(), VersionPolicy.ACTIVE_VERSIONS,
+                    RefexPolicy.REFEX_MEMBERS,
+                    RelationshipPolicy.ORIGINATING_AND_DESTINATION_TAXONOMY_RELATIONSHIPS));
+
+
+            SimTreeItem snomedRootItem = new SimTreeItem(snomedRoot, SimTreeIcons.ROOT.getImageView());
+            rootItem.getChildren().add(snomedRootItem);
+            SimTreeItem dlRootItem = new SimTreeItem(dlRoot, SimTreeIcons.ROOT.getImageView());
+            rootItem.getChildren().add(dlRootItem);
+            rootItem.setExpanded(true);
+
+            // item.computeGraphic();
+            snomedRootItem.addChildren();
+            dlRootItem.addChildren();
+
+            // put this event handler on the root
+            snomedRootItem.addEventHandler(TreeItem.branchCollapsedEvent(), new EventHandler() {
+                @Override
+                public void handle(Event t) {
+
+                    // remove grandchildren
+                    SimTreeItem sourceTreeItem = (SimTreeItem) t.getSource();
+
+                    sourceTreeItem.removeGrandchildren();
+                }
+            });
+            dlRootItem.addEventHandler(TreeItem.branchCollapsedEvent(), new EventHandler() {
+                @Override
+                public void handle(Event t) {
+
+                    // remove grandchildren
+                    SimTreeItem sourceTreeItem = (SimTreeItem) t.getSource();
+
+                    sourceTreeItem.removeGrandchildren();
+                }
+            });
+            snomedRootItem.addEventHandler(TreeItem.branchExpandedEvent(), new EventHandler() {
+                @Override
+                public void handle(Event t) {
+
+                    // add grandchildren
+                    SimTreeItem sourceTreeItem = (SimTreeItem) t.getSource();
+                    ProgressIndicator p2 = new ProgressIndicator();
+
+                    p2.setSkin(new TaxonomyProgressIndicatorSkin(p2));
+                    p2.setPrefSize(16, 16);
+                    p2.setProgress(-1);
+                    sourceTreeItem.setProgressIndicator(p2);
+                    sourceTreeItem.addChildrenConceptsAndGrandchildrenItems(p2);
+                }
+            });
+            dlRootItem.addEventHandler(TreeItem.branchExpandedEvent(), new EventHandler() {
+                @Override
+                public void handle(Event t) {
+
+                    // add grandchildren
+                    SimTreeItem sourceTreeItem = (SimTreeItem) t.getSource();
+                    ProgressIndicator p2 = new ProgressIndicator();
+
+                    p2.setSkin(new TaxonomyProgressIndicatorSkin(p2));
+                    p2.setPrefSize(16, 16);
+                    p2.setProgress(-1);
+                    sourceTreeItem.setProgressIndicator(p2);
+                    sourceTreeItem.addChildrenConceptsAndGrandchildrenItems(p2);
+                }
+            });
+            treeView.setRoot(rootItem);
+
+
+
+        } catch (IOException | ContradictionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return new Scene(rootGroup);
     }
 
     /**

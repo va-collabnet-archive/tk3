@@ -9,7 +9,7 @@
     <artifactId>ttk-lucene-nbm</artifactId>
     <packaging>nbm</packaging>
 
-    <name>${branch}:L4: Netbeans Modules: Lucene</name>
+    <name>${branch}:L4: NBM: Lucene</name>
 
 
     <dependencies>

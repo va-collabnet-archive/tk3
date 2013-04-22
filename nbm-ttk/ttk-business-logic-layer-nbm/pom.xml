@@ -8,7 +8,7 @@
     <artifactId>ttk-business-logic-layer-nbm</artifactId>
     <packaging>nbm</packaging>
 
-    <name>${branch}:L4: Netbeans Modules: Business Logic Layer</name>
+    <name>${branch}:L4: NBM: Business Logic Layer</name>
 
     <dependencies>
         <dependency>
