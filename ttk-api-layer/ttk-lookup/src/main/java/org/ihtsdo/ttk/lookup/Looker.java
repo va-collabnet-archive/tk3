@@ -79,7 +79,7 @@ public class Looker {
    public static void addPair(AbstractLookup.Pair<?> pair) {
       content.addPair(pair);
    }
-   public static <T> InstanceWrapper<T> add(T instance, UUID uuid, String displayName, Collection<InstancePropertyBI> instanceProperties) {
+   public static <T> InstanceWrapper<T> add(T instance, UUID uuid, String displayName, Collection<? extends InstancePropertyBI> instanceProperties) {
       InstanceWrapper<T> wrapper = new InstanceWrapper(instance, uuid.toString(), displayName, instanceProperties);
       content.addPair(wrapper);
       return wrapper;

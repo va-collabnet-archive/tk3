@@ -411,6 +411,11 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
         }
     }
 
+    @Override
+    public TK_REFEX_TYPE getRefexType() {
+        return getTkRefsetType();
+    }
+
  
     //~--- inner classes -------------------------------------------------------
     public class Version extends ConceptComponent<R, C>.Version
@@ -421,6 +426,10 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
         }
 
         //~--- methods ----------------------------------------------------------
+        @Override
+        public TK_REFEX_TYPE getRefexType() {
+            return RefexMember.this.getRefexType();
+        }
 
 
         public R makeAnalog() {

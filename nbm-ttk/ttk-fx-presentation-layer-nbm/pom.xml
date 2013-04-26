@@ -35,6 +35,37 @@
                     <groupId>com.oracle</groupId>
                     <artifactId>jfxrt</artifactId>
                 </exclusion>
+                 <exclusion>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>ttk-lookup</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>ttk-api-with-fx-properties</artifactId>
+                </exclusion>
+           </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ttk-fx-concept-details</artifactId>
+            <version>${project.version}</version>
+           <exclusions>
+                <exclusion>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>jfxrt</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>ttk-lookup</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>ttk-api-with-fx-properties</artifactId>
+                </exclusion>
+               <exclusion>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>ttk-logic</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -45,6 +76,14 @@
                 <exclusion>
                     <groupId>com.oracle</groupId>
                     <artifactId>jfxrt</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>ttk-lookup</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>ttk-api-with-fx-properties</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

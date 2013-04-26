@@ -38,7 +38,7 @@ import org.ihtsdo.ttk.api.metadata.binding.Taxonomies;
 import org.ihtsdo.ttk.api.metadata.binding.TermAux;
 import org.ihtsdo.ttk.helpers.classifier.FetchKindOf;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
-import org.ihtsdo.ttk.logic.SnomedToLogicDag;
+import org.ihtsdo.ttk.logic.SnomedToLogicTree;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -72,7 +72,7 @@ public class Classifier {
                              Snomed.SNOMED_RELEASE_PATH.getNid());
 
       // Convert to new form.
-      SnomedToLogicDag converter = new SnomedToLogicDag(vc, ec);
+      SnomedToLogicTree converter = new SnomedToLogicTree(vc, ec);
       long             time      = System.currentTimeMillis();
 
       System.out.println(TimeHelper.formatDate(time));

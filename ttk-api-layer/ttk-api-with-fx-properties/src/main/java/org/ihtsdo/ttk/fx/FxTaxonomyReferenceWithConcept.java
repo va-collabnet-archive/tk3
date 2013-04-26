@@ -98,6 +98,9 @@ public class FxTaxonomyReferenceWithConcept {
    }
 
    public FxComponentReference getTypeReference() {
+       if (relationshipVersionProperty.get() == null) {
+           return null;
+       }
       return relationshipVersionProperty.get().getTypeReference();
    }
 

@@ -13,101 +13,181 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
+
 package org.ihtsdo.ttk.bdb;
 
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
-import org.ihtsdo.ttk.bdb.concept.I_ProcessUnfetchedConceptData;
-import org.ihtsdo.ttk.bdb.concept.ParallelConceptIterator;
-import org.ihtsdo.ttk.bdb.temp.AceLog;
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.ihtsdo.ttk.api.ComponentChroncileBI;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
 import org.ihtsdo.ttk.api.NidBitSetBI;
-import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
+import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.ttk.bdb.temp.AceLog;
 import org.ihtsdo.ttk.concept.cc.component.IdentifierSet;
 import org.ihtsdo.ttk.concept.cc.concept.Concept;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMemberFactory;
+import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  *
  * @author maestro
  */
-public class AnnotationAdder implements I_ProcessUnfetchedConceptData {
+public class AnnotationAdder implements ProcessUnfetchedConceptDataBI {
 
-    static class TkRmComparator implements Comparator<TkRefexAbstractMember<?>> {
+   /** Field description */
+   NidBitSetBI conceptNids = new IdentifierSet();
 
-        @Override
-        public int compare(TkRefexAbstractMember<?> t, TkRefexAbstractMember<?> t1) {
-            return t.primordialUuid.compareTo(t1.primordialUuid);
-        }
-    }
-    NidBitSetBI conceptNids = new IdentifierSet();
-    ConcurrentHashMap<Integer, ConcurrentSkipListSet<TkRefexAbstractMember<?>>> membersForConcept =
-            new ConcurrentHashMap<>();
+   /** Field description */
+   ConcurrentHashMap<Integer, ConcurrentSkipListSet<TkRefexAbstractMember<?>>> membersForConcept =
+      new ConcurrentHashMap<>();
 
-    AnnotationAdder(List<TkRefexAbstractMember<?>> members) {
+   /**
+    * Constructs ...
+    *
+    *
+    * @param members
+    */
+   AnnotationAdder(List<TkRefexAbstractMember<?>> members) {
+      TkRmComparator comparator = new TkRmComparator();
+      int            errors     = 0;
+      Set<UUID>      errorSet   = new TreeSet<>();
 
-        TkRmComparator comparator = new TkRmComparator();
-        int errors = 0;
-        Set<UUID> errorSet = new TreeSet<>();
-        for (TkRefexAbstractMember<?> member : members) {
-            UUID componentUuid = member.getComponentUuid();
-            int nid = Bdb.uuidToNid(componentUuid);
-            int cNid = Bdb.getConceptNid(nid);
-            if (cNid + Integer.MIN_VALUE >= 0) {
-                conceptNids.setMember(cNid);
-                ConcurrentSkipListSet<TkRefexAbstractMember<?>> set =
-                        new ConcurrentSkipListSet<>(comparator);
-                membersForConcept.putIfAbsent(cNid, set);
-                membersForConcept.get(cNid).add(member);
+      for (TkRefexAbstractMember<?> member : members) {
+         UUID componentUuid = member.getComponentUuid();
+         int  nid           = Bdb.uuidToNid(componentUuid);
+         int  cNid          = Bdb.getConceptNid(nid);
+
+         if (cNid + Integer.MIN_VALUE >= 0) {
+            conceptNids.setMember(cNid);
+
+            ConcurrentSkipListSet<TkRefexAbstractMember<?>> set = new ConcurrentSkipListSet<>(comparator);
+
+            membersForConcept.putIfAbsent(cNid, set);
+            membersForConcept.get(cNid).add(member);
+         } else {
+            errors++;
+            errorSet.add(componentUuid);
+
+            int nid2  = Bdb.uuidToNid(member.getComponentUuid());
+            int cNid2 = Bdb.getConceptNid(nid);
+
+            AceLog.getAppLog().warning("No concept for: " + member);
+         }
+      }
+
+      if (errors > 0) {
+         AceLog.getAppLog().warning(errors + " processing errors.\n\nError set: " + errorSet.size() + "\n"
+                                    + errorSet);
+      }
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public boolean allowCancel() {
+      return false;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public boolean continueWork() {
+      return true;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @param cNid
+    * @param fcfc
+    *
+    * @throws Exception
+    */
+   @Override
+   public void processUnfetchedConceptData(int cNid, ConceptFetcherBI fcfc) throws Exception {
+      if (conceptNids.isMember(cNid)) {
+         Concept                                         c   = (Concept) fcfc.fetch();
+         ConcurrentSkipListSet<TkRefexAbstractMember<?>> set = membersForConcept.get(cNid);
+
+         for (TkRefexAbstractMember<?> member : set) {
+            ComponentChroncileBI<?> component = c.getComponent(Bdb.uuidToNid(member.getComponentUuid()));
+
+            if (component != null) {
+               component.addAnnotation(RefexMemberFactory.create(member, cNid));
             } else {
-                errors++;
-                errorSet.add(componentUuid);
-                int nid2 = Bdb.uuidToNid(member.getComponentUuid());
-                int cNid2 = Bdb.getConceptNid(nid);
-                AceLog.getAppLog().warning("No concept for: " + member);
+               AceLog.getAppLog().warning("Cannot import annotation. Component is null for: " + member);
             }
-        }
-        if (errors > 0) {
-                AceLog.getAppLog().warning(errors + " processing errors.\n\nError set: " + 
-                        errorSet.size() + "\n" +
-                        errorSet);
-        }
-    }
+         }
 
-    @Override
-    public void processUnfetchedConceptData(int cNid, ConceptFetcherBI fcfc) throws Exception {
-        if (conceptNids.isMember(cNid)) {
-            Concept c = (Concept) fcfc.fetch();
-            ConcurrentSkipListSet<TkRefexAbstractMember<?>> set =
-                    membersForConcept.get(cNid);
-            for (TkRefexAbstractMember<?> member : set) {
-                ComponentChroncileBI<?> component = c.getComponent(Bdb.uuidToNid(member.getComponentUuid()));
-                if (component != null) {
-                    component.addAnnotation(RefexMemberFactory.create(member, cNid));
-                } else {
-                    AceLog.getAppLog().warning("Cannot import annotation. Component is null for: " + member);
-                }
-            }
-            membersForConcept.remove(cNid);
-            BdbCommitManager.addUncommittedNoChecks(c);
-        }
-    }
+         membersForConcept.remove(cNid);
+         BdbCommitManager.addUncommittedNoChecks(c);
+      }
+   }
 
-    @Override
-    public void setParallelConceptIterators(List<ParallelConceptIterator> pcis) {
-        // nothing to do...;
-    }
+   /**
+    * Method description
+    *
+    *
+    * @return
+    *
+    * @throws IOException
+    */
+   @Override
+   public NidBitSetBI getNidSet() throws IOException {
+      return conceptNids;
+   }
 
-    @Override
-    public NidBitSetBI getNidSet() throws IOException {
-        return conceptNids;
-    }
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public String getTitle() {
+      return "Adding annotations";
+   }
 
-    @Override
-    public boolean continueWork() {
-        return true;
-    }
+   /**
+    * Class description
+    *
+    *
+    * @version        Enter version here..., 13/04/25
+    * @author         Enter your name here...    
+    */
+   static class TkRmComparator implements Comparator<TkRefexAbstractMember<?>> {
+
+      /**
+       * Method description
+       *
+       *
+       * @param t
+       * @param t1
+       *
+       * @return
+       */
+      @Override
+      public int compare(TkRefexAbstractMember<?> t, TkRefexAbstractMember<?> t1) {
+         return t.primordialUuid.compareTo(t1.primordialUuid);
+      }
+   }
 }

@@ -27,6 +27,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
+import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 
 public abstract class FxComponentChronicle<V extends FxComponentVersion, T extends ComponentVersionBI>
         implements Serializable {
@@ -83,6 +84,12 @@ public abstract class FxComponentChronicle<V extends FxComponentVersion, T exten
 
          for (T v : another.getVersions(ss.getViewCoordinate())) {
             this.versions.add(makeVersion(ss, v));
+         }
+         
+         for (RefexChronicleBI<?> annotation: another.getAnnotations()) {
+             for (RefexVersionBI av: annotation.getVersions(ss.getViewCoordinate())) {
+                 
+             }
          }
 
          break;

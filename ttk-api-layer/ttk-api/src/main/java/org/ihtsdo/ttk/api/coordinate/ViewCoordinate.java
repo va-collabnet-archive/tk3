@@ -118,6 +118,8 @@ public class ViewCoordinate implements Externalizable {
 
       if (langPrefList != null) {
          this.langPrefList = new NidList(langPrefList.getListArray());
+      } else {
+          this.langPrefList = new NidList(new int[] {languageNid});
       }
 
       this.langSort = langSort;

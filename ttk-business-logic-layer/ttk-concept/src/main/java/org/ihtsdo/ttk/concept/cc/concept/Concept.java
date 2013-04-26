@@ -1046,7 +1046,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             case TYPE_B4_LANG:
                 result = getTypePreferredDesc(getDescriptionVersions(allowedStatus,
                         new NidSet(typePrefOrder.getListArray()), positionSet, precedencePolicy,
-                        contradictionManager), typePrefOrder, langPrefOrder, allowedStatus, positionSet, true);
+                        contradictionManager), typePrefOrder);
 
                 if (result != null) {
                     return result;
@@ -1583,8 +1583,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
      * (non-Javadoc) @see java.lang.Object#toString()
      */
     private Description.Version getTypePreferredDesc(Collection<Description.Version> descriptions,
-            NidListBI typePrefOrder, NidListBI langPrefOrder, NidSetBI allowedStatus,
-            PositionSetBI positionSet, boolean tryLang)
+            NidListBI typePrefOrder)
             throws IOException {
         if (descriptions.size() > 0) {
             if (descriptions.size() > 1) {

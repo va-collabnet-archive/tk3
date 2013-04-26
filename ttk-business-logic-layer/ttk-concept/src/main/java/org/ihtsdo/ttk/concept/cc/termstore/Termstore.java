@@ -81,6 +81,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
 
 /**
  *
@@ -332,14 +333,14 @@ public abstract class Termstore implements PersistentStoreI {
       isaTypeNids.add(TermAux.IS_A.getLenient().getNid());
 
       ContradictionManagerBI contradictionManager = new IdentifyAllConflictStrategy();
-      int                    languageNid          = SnomedMetadataRfx.getUS_DIALECT_REFEX_NID();
+      int                    languageNid          = SnomedMetadataRf2.US_ENGLISH_REFSET_RF2.getNid();
       int                    classifierNid        = ReferenceConcepts.SNOROCKET.getNid();
 
       return new ViewCoordinate(UUID.fromString("014ae770-b32a-11e1-afa6-0800200c9a66"), "meta-vc",
                                 Precedence.PATH, positionSet, allowedStatusNids, isaTypeNids,
                                 contradictionManager, languageNid, classifierNid,
                                 RelAssertionType.INFERRED_THEN_STATED, null,
-                                ViewCoordinate.LANGUAGE_SORT.TYPE_BEFORE_LANG);
+                                ViewCoordinate.LANGUAGE_SORT.RF2_LANG_REFEX);
    }
 
    /**

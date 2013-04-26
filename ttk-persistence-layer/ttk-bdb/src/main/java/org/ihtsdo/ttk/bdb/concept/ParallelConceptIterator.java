@@ -3,11 +3,7 @@
  */
 package org.ihtsdo.ttk.bdb.concept;
 
-import java.io.IOException;
-import java.util.concurrent.Callable;
-import java.util.logging.Level;
-
-
+//~--- non-JDK imports --------------------------------------------------------
 import com.sleepycat.bind.tuple.IntegerBinding;
 import com.sleepycat.je.Cursor;
 import com.sleepycat.je.CursorConfig;
@@ -15,37 +11,127 @@ import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
-import org.ihtsdo.ttk.bdb.temp.AceLog;
+
+
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.ttk.bdb.temp.AceLog;
 import org.ihtsdo.ttk.concept.cc.concept.Concept;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptVersion;
 
-public class ParallelConceptIterator implements Callable<Boolean>, I_FetchConceptFromCursor {
+//~--- JDK imports ------------------------------------------------------------
 
+import java.io.IOException;
+
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import javafx.concurrent.Task;
+import org.ihtsdo.ttk.api.ConceptFetcherBI;
+
+/**
+ * Class description
+ *
+ *
+ * @version Enter version here..., 13/04/25
+ * @author Enter your name here...
+ */
+public class ParallelConceptIterator implements Callable<Boolean>, ConceptFetcherBI {
+
+    /**
+     * Field description
+     */
+    private int processedCount = 0;
+    /**
+     * Field description
+     */
+    private boolean stop = false;
+    /**
+     * Field description
+     */
+    private ProcessUnfetchedConceptDataBI processor;
+    /**
+     * Field description
+     */
+    private int first;
+    /**
+     * Field description
+     */
+    private int last;
+    /**
+     * Field description
+     */
+    private int countToProcess;
+    /**
+     * Field description
+     */
+    private Database readOnly;
+    /**
+     * Field description
+     */
+    private Database mutable;
+    /**
+     * Field description
+     */
+    private ParallelConceptIterator.FETCH fetchKind;
+    /**
+     * Field description
+     */
+    private int currentCNid;
+    /**
+     * Field description
+     */
+    private Cursor roCursor;
+    /**
+     * Field description
+     */
+    private Cursor mutableCursor;
+    /**
+     * Field description
+     */
+    private DatabaseEntry aKey;
+    /**
+     * Field description
+     */
+    private DatabaseEntry roFoundData;
+    /**
+     * Field description
+     */
+    private DatabaseEntry mutableFoundData;
+    /**
+     * Field description
+     */
+    private Thread currentThread;
+    
+    /**
+     * For reporting progress. 
+     */
+    private ParallelConceptIteratorTask task;
+
+    public void setTask(ParallelConceptIteratorTask task) {
+        this.task = task;
+    }
+
+    /**
+     * Enum description
+     *
+     */
     private enum FETCH {
-        ONE,
-        TWO,
-        THREE
+
+        ONE, TWO, THREE
     };
 
-    private ProcessUnfetchedConceptDataBI processor;
-    private int first;
-    private int last;
-    private int countToProcess;
-    private int processedCount = 0;
-    private Database readOnly;
-    private Database mutable;
-    private ParallelConceptIterator.FETCH fetchKind;
-    private int currentCNid;
-    private Cursor roCursor;
-    private Cursor mutableCursor;
-    private DatabaseEntry aKey;
-    private DatabaseEntry roFoundData;
-    private DatabaseEntry mutableFoundData;
-    private Thread currentThread;
-    private boolean stop = false;
-
+    /**
+     * Constructs ...
+     *
+     *
+     * @param first
+     * @param last
+     * @param count
+     * @param processor
+     * @param readOnly
+     * @param mutable
+     * @param task
+     */
     public ParallelConceptIterator(int first, int last, int count, ProcessUnfetchedConceptDataBI processor,
             Database readOnly, Database mutable) {
         super();
@@ -64,88 +150,83 @@ public class ParallelConceptIterator implements Callable<Boolean>, I_FetchConcep
         currentThread = Thread.currentThread();
     }
 
-    @Override
-    public Concept fetch() throws Exception {
-        switch (fetchKind) {
-        case ONE:
-            return fetchOne();
-        case TWO:
-            return fetchTwo();
-        case THREE:
-            return fetchThree();
-        default:
-            break;
+    /**
+     * Method description
+     *
+     *
+     * @param mutableCursor
+     * @param mutableFoundKey
+     * @param mutableFoundData
+     *
+     * @return
+     */
+    private int advanceCursor(Cursor mutableCursor, DatabaseEntry mutableFoundKey,
+            DatabaseEntry mutableFoundData) {
+        if (stop) {
+            return Integer.MAX_VALUE;
         }
-        return null;
-    }
-    
-    @Override
-    public ConceptVersion fetch(ViewCoordinate vc) throws Exception {
-        Concept c = fetch();
-        if (c != null) {
-            return c.getVersion(vc);
+
+        int mutableKey;
+
+        if (mutableCursor.getNext(mutableFoundKey, mutableFoundData, LockMode.READ_UNCOMMITTED)
+                == OperationStatus.SUCCESS) {
+            mutableKey = IntegerBinding.entryToInt(mutableFoundKey);
+        } else {
+            mutableKey = Integer.MAX_VALUE;
         }
-        return null;
+
+        return mutableKey;
     }
 
-    private Concept fetchThree() throws IOException {
-        Concept c = Concept.getIfInMap(currentCNid);
-        if (c != null) {
-            return c;
-        }
-        mutableCursor.getCurrent(aKey, mutableFoundData, LockMode.READ_UNCOMMITTED);
-        return Concept.get(currentCNid, new byte[0], mutableFoundData.getData());
-    }
-
-    private Concept fetchTwo() throws IOException {
-        Concept c = Concept.getIfInMap(currentCNid);
-        if (c != null) {
-            return c;
-        }
-        roCursor.getCurrent(aKey, roFoundData, LockMode.READ_UNCOMMITTED);
-        return Concept.get(currentCNid, roFoundData.getData(), new byte[0]);
-    }
-
-    private Concept fetchOne() throws IOException {
-        Concept c = Concept.getIfInMap(currentCNid);
-        if (c != null) {
-            return c;
-        }
-        roCursor.getCurrent(aKey, roFoundData, LockMode.READ_UNCOMMITTED);
-        mutableCursor.getCurrent(aKey, mutableFoundData, LockMode.READ_UNCOMMITTED);
-        return Concept.get(currentCNid, roFoundData.getData(), mutableFoundData.getData());
-    }
-
+    /**
+     * Method description
+     *
+     *
+     * @return
+     *
+     * @throws Exception
+     */
     @Override
     public Boolean call() throws Exception {
+        task.updateMessage("iterating");
+        task.updateProgress(0, countToProcess);
         CursorConfig cursorConfig = new CursorConfig();
+
         cursorConfig.setReadUncommitted(true);
         roCursor = readOnly.openCursor(null, cursorConfig);
         mutableCursor = mutable.openCursor(null, cursorConfig);
+
         int roKey = first;
         int mutableKey = first;
+
         try {
             DatabaseEntry roFoundKey = new DatabaseEntry();
+
             IntegerBinding.intToEntry(roKey, roFoundKey);
+
             DatabaseEntry roFoundDataPartial = new DatabaseEntry();
+
             roFoundDataPartial.setPartial(true);
             roFoundDataPartial.setPartial(0, 0, true);
 
             DatabaseEntry mutableFoundKey = new DatabaseEntry();
+
             IntegerBinding.intToEntry(mutableKey, mutableFoundKey);
+
             DatabaseEntry mutableFoundDataPartial = new DatabaseEntry();
+
             mutableFoundDataPartial.setPartial(true);
             mutableFoundDataPartial.setPartial(0, 0, true);
-
             roKey = setupCursor(roCursor, roFoundKey, roFoundDataPartial);
             mutableKey = setupCursor(mutableCursor, mutableFoundKey, mutableFoundDataPartial);
 
-            while ((roKey <= last || mutableKey <= last) && processor.continueWork()) {
+            while (((roKey <= last) || (mutableKey <= last)) && processor.continueWork()) {
                 if (roKey == mutableKey) {
                     fetchKind = FETCH.ONE;
                     currentCNid = roKey;
                     processor.processUnfetchedConceptData(currentCNid, this);
                     processedCount++;
+                    task.updateProgress(processedCount, countToProcess);
                     if (roKey < last) {
                         roKey = advanceCursor(roCursor, roFoundKey, roFoundDataPartial);
                         mutableKey = advanceCursor(mutableCursor, mutableFoundKey, mutableFoundDataPartial);
@@ -158,6 +239,8 @@ public class ParallelConceptIterator implements Callable<Boolean>, I_FetchConcep
                     currentCNid = roKey;
                     processor.processUnfetchedConceptData(currentCNid, this);
                     processedCount++;
+                    task.updateProgress(processedCount, countToProcess);
+
                     if (roKey < last) {
                         roKey = advanceCursor(roCursor, roFoundKey, roFoundDataPartial);
                     } else {
@@ -168,6 +251,8 @@ public class ParallelConceptIterator implements Callable<Boolean>, I_FetchConcep
                     currentCNid = mutableKey;
                     processor.processUnfetchedConceptData(currentCNid, this);
                     processedCount++;
+                    task.updateProgress(processedCount, countToProcess);
+
                     if (mutableKey < last) {
                         mutableKey = advanceCursor(mutableCursor, mutableFoundKey, mutableFoundDataPartial);
                     } else {
@@ -175,12 +260,15 @@ public class ParallelConceptIterator implements Callable<Boolean>, I_FetchConcep
                     }
                 }
             }
+
             if (AceLog.getAppLog().isLoggable(Level.FINE)) {
-                AceLog.getAppLog().fine(
-                    "Parallel concept iterator finished.\n" + " First: " + first + " last: " + last + " roKey: "
-                        + roKey + " mutableKey: " + mutableKey + " processedCount: " + processedCount
-                        + " countToProcess: " + countToProcess);
+                AceLog.getAppLog().fine("Parallel concept iterator finished.\n" + " First: " + first + " last: "
+                        + last + " roKey: " + roKey + " mutableKey: " + mutableKey
+                        + " processedCount: " + processedCount + " countToProcess: "
+                        + countToProcess);
             }
+            task.updateMessage("Finished. Processed: " + processedCount + " items");
+            task.updateProgress(countToProcess, countToProcess);
             return true;
         } finally {
             roCursor.close();
@@ -188,38 +276,163 @@ public class ParallelConceptIterator implements Callable<Boolean>, I_FetchConcep
         }
     }
 
-    private int advanceCursor(Cursor mutableCursor, DatabaseEntry mutableFoundKey, DatabaseEntry mutableFoundData) {
-    	if (stop) {
-    		return Integer.MAX_VALUE;
-    	}
-        int mutableKey;
-        if (mutableCursor.getNext(mutableFoundKey, mutableFoundData, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
-            mutableKey = IntegerBinding.entryToInt(mutableFoundKey);
-        } else {
-            mutableKey = Integer.MAX_VALUE;
+    /**
+     * Method description
+     *
+     *
+     * @return
+     *
+     * @throws Exception
+     */
+    @Override
+    public Concept fetch() throws Exception {
+        switch (fetchKind) {
+            case ONE:
+                return fetchOne();
+
+            case TWO:
+                return fetchTwo();
+
+            case THREE:
+                return fetchThree();
+
+            default:
+                break;
         }
-        return mutableKey;
+
+        return null;
     }
 
+    /**
+     * Method description
+     *
+     *
+     * @param vc
+     *
+     * @return
+     *
+     * @throws Exception
+     */
+    @Override
+    public ConceptVersion fetch(ViewCoordinate vc) throws Exception {
+        Concept c = fetch();
+
+        if (c != null) {
+            return c.getVersion(vc);
+        }
+
+        return null;
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @return
+     *
+     * @throws IOException
+     */
+    private Concept fetchOne() throws IOException {
+        Concept c = Concept.getIfInMap(currentCNid);
+
+        if (c != null) {
+            return c;
+        }
+
+        roCursor.getCurrent(aKey, roFoundData, LockMode.READ_UNCOMMITTED);
+        mutableCursor.getCurrent(aKey, mutableFoundData, LockMode.READ_UNCOMMITTED);
+
+        return Concept.get(currentCNid, roFoundData.getData(), mutableFoundData.getData());
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @return
+     *
+     * @throws IOException
+     */
+    private Concept fetchThree() throws IOException {
+        Concept c = Concept.getIfInMap(currentCNid);
+
+        if (c != null) {
+            return c;
+        }
+
+        mutableCursor.getCurrent(aKey, mutableFoundData, LockMode.READ_UNCOMMITTED);
+
+        return Concept.get(currentCNid, new byte[0], mutableFoundData.getData());
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @return
+     *
+     * @throws IOException
+     */
+    private Concept fetchTwo() throws IOException {
+        Concept c = Concept.getIfInMap(currentCNid);
+
+        if (c != null) {
+            return c;
+        }
+
+        roCursor.getCurrent(aKey, roFoundData, LockMode.READ_UNCOMMITTED);
+
+        return Concept.get(currentCNid, roFoundData.getData(), new byte[0]);
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @param cursor
+     * @param foundKey
+     * @param foundData
+     *
+     * @return
+     */
     private int setupCursor(Cursor cursor, DatabaseEntry foundKey, DatabaseEntry foundData) {
         int cNid;
-        if (cursor.getSearchKeyRange(foundKey, foundData, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
+
+        if (cursor.getSearchKeyRange(foundKey, foundData, LockMode.READ_UNCOMMITTED)
+                == OperationStatus.SUCCESS) {
             cNid = IntegerBinding.entryToInt(foundKey);
         } else {
             cNid = Integer.MAX_VALUE;
         }
+
         return cNid;
     }
 
+    /**
+     * Method description
+     *
+     */
+    public void stop() {
+        this.stop = true;
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @return
+     */
     public Thread getCurrentThread() {
         return currentThread;
     }
 
+    /**
+     * Method description
+     *
+     *
+     * @param currentThread
+     */
     public void setCurrentThread(Thread currentThread) {
         this.currentThread = currentThread;
-    }
-
-    public void stop() {
-    	this.stop = true;
     }
 }

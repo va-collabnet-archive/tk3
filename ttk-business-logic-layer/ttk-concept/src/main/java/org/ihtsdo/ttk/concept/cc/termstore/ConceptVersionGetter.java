@@ -62,5 +62,15 @@ class ConceptVersionGetter implements ProcessUnfetchedConceptDataBI {
     public NidBitSetBI getNidSet() throws IOException {
         return cNids;
     }
+
+    @Override
+    public boolean allowCancel() {
+        return false;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Batch fetch of concept versions";
+    }
     
 }

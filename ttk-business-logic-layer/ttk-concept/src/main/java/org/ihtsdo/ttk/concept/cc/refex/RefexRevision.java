@@ -58,6 +58,10 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
     protected abstract void addRefsetTypeNids(Set<Integer> allNids);
 
     protected abstract void addSpecProperties(RefexCAB rcs);
+    @Override
+    public TK_REFEX_TYPE getRefexType() {
+        return getTkRefsetType();
+    }
 
     @Override
     public boolean equals(Object obj) {

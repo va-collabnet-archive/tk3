@@ -62,4 +62,14 @@ public class DescriptionIndexGenerator extends IndexGenerator {
 
         return doc;
     }
+
+    @Override
+    public boolean allowCancel() {
+        return false;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Generating description index";
+    }
 }

@@ -3,15 +3,21 @@ package org.ihtsdo.ttk.fx.concept.component.refex;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
+import org.ihtsdo.ttk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayVersionBI;
 import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanVersionBI;
 import org.ihtsdo.ttk.api.refex.type_int.RefexIntVersionBI;
 import org.ihtsdo.ttk.api.refex.type_long.RefexLongVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid.RefexNidVersionBI;
+import org.ihtsdo.ttk.api.refex.type_nid_boolean.RefexNidBooleanVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_float.RefexNidFloatVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_int.RefexNidIntVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_long.RefexNidLongVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid.RefexNidNidVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
+import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_float.RefexNidNidNidFloatVersionBI;
+import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_int.RefexNidNidNidIntVersionBI;
+import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_long.RefexNidNidNidLongVersionBI;
+import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_string.RefexNidNidNidStringVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_string.RefexNidNidStringVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_string.RefexNidStringVersionBI;
 import org.ihtsdo.ttk.api.refex.type_string.RefexStringVersionBI;
@@ -22,6 +28,10 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+/**
+ * Enum description
+ *
+ */
 public enum FX_REFEX_TYPE {
 
    /**
@@ -40,20 +50,41 @@ public enum FX_REFEX_TYPE {
                                     COMP_STR(10, RefexNidStringVersionBI.class),
                                     COMP_FLOAT(11, RefexNidFloatVersionBI.class),
                                     COMP_LONG(12, RefexNidLongVersionBI.class),
-                                    LONG(13, RefexLongVersionBI.class), UNKNOWN(Byte.MAX_VALUE, null);
+                                    LONG(13, RefexLongVersionBI.class),
+                                    ARRAY_BYTEARRAY(14, RefexArrayOfBytearrayVersionBI.class),
+                                    COMP_COMP_COMP_FLOAT(15, RefexNidNidNidFloatVersionBI.class),
+                                    COMP_COMP_COMP_INT(16, RefexNidNidNidIntVersionBI.class),
+                                    COMP_COMP_COMP_LONG(17, RefexNidNidNidLongVersionBI.class),
+                                    COMP_COMP_COMP_STRING(18, RefexNidNidNidStringVersionBI.class),
+                                    COMP_BOOLEAN(19, RefexNidBooleanVersionBI.class),
+                                    UNKNOWN(Byte.MAX_VALUE, null);
 
-   private int                             externalizedToken;
+   /** Field description */
+   private int externalizedToken;
+
+   /** Field description */
    private Class<? extends RefexVersionBI> rxc;
 
-   //~--- constructors --------------------------------------------------------
-
+   /**
+    * Constructs ...
+    *
+    *
+    * @param externalizedToken
+    * @param rxc
+    */
    FX_REFEX_TYPE(int externalizedToken, Class<? extends RefexVersionBI> rxc) {
       this.externalizedToken = externalizedToken;
       this.rxc               = rxc;
    }
 
-   //~--- methods -------------------------------------------------------------
-
+   /**
+    * Method description
+    *
+    *
+    * @param c
+    *
+    * @return
+    */
    public static FX_REFEX_TYPE classToType(Class<?> c) {
       if (RefexNidNidNidVersionBI.class.isAssignableFrom(c)) {
          return COMP_COMP_COMP;
@@ -110,18 +141,44 @@ public enum FX_REFEX_TYPE {
       return UNKNOWN;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param input
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    public static FX_REFEX_TYPE readType(DataInput input) throws IOException {
       int type = input.readByte();
 
       return getFromToken(type);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param output
+    *
+    * @throws IOException
+    */
    public void writeType(DataOutput output) throws IOException {
       output.writeByte(externalizedToken);
    }
 
-   //~--- get methods ---------------------------------------------------------
-
+   /**
+    * Method description
+    *
+    *
+    * @param type
+    *
+    * @return
+    *
+    * @throws UnsupportedOperationException
+    */
    public static FX_REFEX_TYPE getFromToken(int type) throws UnsupportedOperationException {
       switch (type) {
       case 1 :
@@ -167,10 +224,22 @@ public enum FX_REFEX_TYPE {
       throw new UnsupportedOperationException("Can't handle type: " + type);
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public Class<? extends RefexVersionBI> getRefexClass() {
       return rxc;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    public int getTypeToken() {
       return this.externalizedToken;
    }

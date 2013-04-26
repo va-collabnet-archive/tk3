@@ -26,7 +26,6 @@ import org.ihtsdo.ttk.api.ConceptFetcherBI;
 import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 
 /**
@@ -87,4 +86,14 @@ public class IsKindOfMetrics implements ProcessUnfetchedConceptDataBI {
 
       return sb.toString();
    }
+
+    @Override
+    public boolean allowCancel() {
+        return false;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Is-kind-of metrics test";
+    }
 }

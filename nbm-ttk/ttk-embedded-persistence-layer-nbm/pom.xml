@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.ihtsdo.ttk</groupId>
@@ -41,20 +43,24 @@
             <exclusions>
                 <exclusion>
                     <groupId>${project.groupId}</groupId>
+                    <artifactId>ttk-cern-prim</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>${project.groupId}</groupId>
                     <artifactId>ttk-api</artifactId>
                 </exclusion>
-                 <exclusion>
+                <exclusion>
                     <groupId>${project.groupId}</groupId>
                     <artifactId>ttk-lookup</artifactId>
                 </exclusion>
-               <exclusion>
+                <exclusion>
                     <groupId>${project.groupId}</groupId>
                     <artifactId>ttk-dto</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>${project.groupId}</groupId>
                     <artifactId>ttk-api-with-fx-properties</artifactId>
-                 </exclusion>
+                </exclusion>
                 <exclusion>
                     <groupId>${project.groupId}</groupId>
                     <artifactId>ttk-helpers</artifactId>
@@ -87,6 +93,10 @@
                     <groupId>com.sleepycat</groupId>
                     <artifactId>je</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>jfxrt</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -94,7 +104,7 @@
             <artifactId>ttk-berkeley-db-nbm</artifactId>
             <version>${project.version}</version>
         </dependency>
-     </dependencies>
+    </dependencies>
 
     <build>
         <plugins>

@@ -112,7 +112,7 @@ public class AggregateProgressItem implements Worker<Void> {
 
    /**
     * Constructs ...
-    *
+    * TODO add ability to dynamically add subordinates...
     *
     * @param title
     * @param message

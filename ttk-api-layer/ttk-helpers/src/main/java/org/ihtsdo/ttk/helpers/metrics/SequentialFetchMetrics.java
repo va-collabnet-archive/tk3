@@ -82,4 +82,14 @@ public class SequentialFetchMetrics implements ProcessComponentChronicleBI, Proc
    public NidBitSetBI getNidSet() throws IOException {
       return null;
    }
+
+    @Override
+    public boolean allowCancel() {
+        return false;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Sequential fetch metrics test";
+    }
 }

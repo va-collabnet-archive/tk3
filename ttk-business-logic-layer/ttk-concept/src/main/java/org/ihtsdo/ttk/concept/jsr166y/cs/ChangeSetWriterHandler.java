@@ -112,4 +112,14 @@ public class ChangeSetWriterHandler implements Runnable, ProcessUnfetchedConcept
    public NidBitSetBI getNidSet() {
       return cNidsToWrite;
    }
+
+    @Override
+    public boolean allowCancel() {
+        return false;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Writing change sets";
+    }
 }

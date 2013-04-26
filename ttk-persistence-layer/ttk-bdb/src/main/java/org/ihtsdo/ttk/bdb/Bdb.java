@@ -193,7 +193,7 @@ public class Bdb {
 
     private static void startupWithFx() throws InterruptedException, ExecutionException {
 
-        Task<Void> setupPropDbTask = new Task<Void>() {
+        final Task<Void> setupPropDbTask = new Task<Void>() {
             {
 
                 updateTitle("Setup property database");
@@ -219,7 +219,7 @@ public class Bdb {
         };
 
 
-        Task<Void> setupUuidsToNidMapDb = new Task<Void>() {
+        final Task<Void> setupUuidsToNidMapDb = new Task<Void>() {
             {
                 updateTitle("Setup uuid to nid database");
                 updateMessage("initializing");
@@ -243,7 +243,7 @@ public class Bdb {
         };
 
 
-        Task<Void> setupComponentNidToConceptNidDb = new Task<Void>() {
+        final Task<Void> setupComponentNidToConceptNidDb = new Task<Void>() {
             {
                 updateTitle("Setup component nid to concept nid database");
                 updateMessage("initializing");
@@ -266,7 +266,7 @@ public class Bdb {
             }
         };
 
-        Task<Void> setupStampDb = new Task<Void>() {
+        final Task<Void> setupStampDb = new Task<Void>() {
             {
                 updateTitle("Setup STAMP database");
                 updateMessage("initializing");
@@ -289,7 +289,7 @@ public class Bdb {
             }
         };
 
-        Task<Void> setupConceptDb = new Task<Void>() {
+        final Task<Void> setupConceptDb = new Task<Void>() {
             {
                 updateTitle("Setup Concept database");
                 updateMessage("initializing");
@@ -322,20 +322,30 @@ public class Bdb {
         WorkerPublisher.publish(aggregateProgressItem, "Termstore startup worker",
                 Arrays.asList(new ShowGlobalTaskProgress(), new AllowItemCancel()));
 
-        ExecutorService startupService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
-        startupService.submit(setupUuidsToNidMapDb);
-        startupService.submit(setupPropDbTask);
-        startupService.submit(setupStampDb);
-        setupUuidsToNidMapDb.get(); // prerequisite for setupComponentNidToConceptNidDb
-        startupService.submit(setupComponentNidToConceptNidDb);
+        final ExecutorService startupService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
+        startupService.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    startupService.submit(setupUuidsToNidMapDb);
+                    startupService.submit(setupPropDbTask);
+                    startupService.submit(setupStampDb);
+                    setupUuidsToNidMapDb.get(); // prerequisite for setupComponentNidToConceptNidDb
+                    startupService.submit(setupComponentNidToConceptNidDb);
 
-        setupComponentNidToConceptNidDb.get(); // prerequisite for setupConceptDb
-        startupService.submit(setupConceptDb);
-        startupService.shutdown();
-        setupPropDbTask.get();
-        setupUuidsToNidMapDb.get();
-        setupStampDb.get();
-        setupConceptDb.get();
+                    setupComponentNidToConceptNidDb.get(); // prerequisite for setupConceptDb
+
+                    startupService.submit(setupConceptDb);
+                    startupService.shutdown();
+                    setupPropDbTask.get();
+                    setupUuidsToNidMapDb.get();
+                    setupStampDb.get();
+                    setupConceptDb.get();
+                } catch (InterruptedException | ExecutionException ex) {
+                    Logger.getLogger(Bdb.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
     }
 
     private static void startupNoFx() throws InterruptedException, ExecutionException {
@@ -526,11 +536,14 @@ public class Bdb {
             boolean readOnlyExists = readOnlyDir.exists();
             readOnly = new Bdb(readOnlyExists, readOnlyDir);
             if (Looker.lookup(TtkEnvironment.class).useFxWorkers()) {
+
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
                         try {
+
                             startupWithFx();
+
                         } catch (InterruptedException | ExecutionException ex) {
                             Logger.getLogger(Bdb.class.getName()).log(Level.SEVERE, null, ex);
                         }

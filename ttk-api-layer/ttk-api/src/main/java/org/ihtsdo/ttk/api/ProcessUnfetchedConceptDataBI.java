@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
+
+
 package org.ihtsdo.ttk.api;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 
@@ -24,16 +28,33 @@ import java.io.IOException;
  */
 public interface ProcessUnfetchedConceptDataBI extends ContinuationTrackerBI {
 
-    public void processUnfetchedConceptData(int cNid,
-            ConceptFetcherBI fetcher) throws Exception;
+   /**
+    * @return True if user is allowed to cancel this process.
+    */
+   boolean allowCancel();
 
-    /**
-     * 
-     * @return a <code>NidBitSetBI</code> of concept nids to iterate over. A null value is allowed
-     * and will cause all concepts to be iterated over. 
-     * @throws IOException 
-     */
-    public NidBitSetBI getNidSet() throws IOException;
+   /**
+    * Method description
+    *
+    *
+    * @param cNid
+    * @param fetcher
+    *
+    * @throws Exception
+    */
+   void processUnfetchedConceptData(int cNid, ConceptFetcherBI fetcher) throws Exception;
 
+   /**
+    *
+    * @return a <code>NidBitSetBI</code> of concept nids to iterate over. A null value is allowed
+    * and will cause all concepts to be iterated over.
+    * @throws IOException
+    */
+   NidBitSetBI getNidSet() throws IOException;
+
+   /**
+    *
+    * @return Title for this processor, for display in global progress list.
+    */
+   String getTitle();
 }
-

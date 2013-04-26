@@ -98,6 +98,7 @@
                 <configuration>
                     <publicPackages>
                         <publicPackage>org.ihtsdo.ttk.concept.*</publicPackage>
+                        <publicPackage>org.ihtsdo.cern.*</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>

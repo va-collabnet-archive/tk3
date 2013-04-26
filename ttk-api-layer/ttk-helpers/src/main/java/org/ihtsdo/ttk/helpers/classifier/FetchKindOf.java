@@ -13,9 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
+
 package org.ihtsdo.ttk.helpers.classifier;
 
-import java.io.IOException;
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
 import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
@@ -23,47 +27,122 @@ import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author kec
  */
 public class FetchKindOf implements ProcessUnfetchedConceptDataBI {
-   private int                kindOfNid;
+
+   /** Field description */
+   private int kindOfNid;
+
+   /** Field description */
    private TerminologyStoreDI store;
-   private ViewCoordinate     vc;
-   private NidBitSetBI        kindOfBitSet;
 
-    public NidBitSetBI getKindOfBitSet() {
-        return kindOfBitSet;
-    }
-   
+   /** Field description */
+   private ViewCoordinate vc;
 
-    public FetchKindOf(int kindOfNid, ViewCoordinate vc) throws IOException {
-        this.kindOfNid = kindOfNid;
-        this.vc = vc;
-        this.store = Ts.get();
-        this.kindOfBitSet = store.getEmptyNidSet();
-        
-    }
+   /** Field description */
+   private NidBitSetBI kindOfBitSet;
 
-   //~--- methods -------------------------------------------------------------
+   /**
+    * Constructs ...
+    *
+    *
+    * @param kindOfNid
+    * @param vc
+    *
+    * @throws IOException
+    */
+   public FetchKindOf(int kindOfNid, ViewCoordinate vc) throws IOException {
+      this.kindOfNid    = kindOfNid;
+      this.vc           = vc;
+      this.store        = Ts.get();
+      this.kindOfBitSet = store.getEmptyNidSet();
+   }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public boolean allowCancel() {
+      return false;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
    @Override
    public boolean continueWork() {
       return true;
    }
 
+   /**
+    * Method description
+    *
+    *
+    * @param cNid
+    * @param fetcher
+    *
+    * @throws Exception
+    */
    @Override
    public void processUnfetchedConceptData(int cNid, ConceptFetcherBI fetcher) throws Exception {
       if (store.isKindOf(cNid, kindOfNid, vc)) {
          kindOfBitSet.setMember(cNid);
-      } 
+      }
    }
 
-   //~--- get methods ---------------------------------------------------------
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   public NidBitSetBI getKindOfBitSet() {
+      return kindOfBitSet;
+   }
 
+   /**
+    * Method description
+    *
+    *
+    * @return
+    *
+    * @throws IOException
+    */
    @Override
    public NidBitSetBI getNidSet() throws IOException {
       return null;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public String getTitle() {
+      try {
+         return "Fetching kind-of: " + store.getConcept(kindOfNid).toString();
+      } catch (IOException ex) {
+         Logger.getLogger(FetchKindOf.class.getName()).log(Level.SEVERE, null, ex);
+      }
+
+      return "Fetching kind-of: " + kindOfNid;
    }
 }

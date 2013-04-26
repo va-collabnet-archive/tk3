@@ -216,4 +216,14 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
     public boolean continueWork() {
         return true;
     }
+
+    @Override
+    public boolean allowCancel() {
+        return true;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Constructing axioms for classifier";
+    }
 }

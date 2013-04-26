@@ -100,4 +100,5 @@ public class FxRefexBooleanVersion extends FxRefexVersion<FxRefexBooleanChronicl
    public void setBoolean1(boolean booleanValue) {
       this.boolean1Property.set(booleanValue);
    }
+  
 }

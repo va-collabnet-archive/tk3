@@ -25,8 +25,6 @@ import javafx.beans.value.ObservableValue;
 
 import javafx.concurrent.Worker;
 
-import org.ihtsdo.ttk.lookup.properties.AllowItemCancel;
-import org.ihtsdo.ttk.lookup.properties.ShowGlobalTaskProgress;
 
 import static javafx.concurrent.Worker.State.CANCELLED;
 import static javafx.concurrent.Worker.State.FAILED;
@@ -36,7 +34,6 @@ import static javafx.concurrent.Worker.State.SUCCEEDED;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,6 +48,13 @@ public class WorkerPublisher implements ChangeListener<Worker.State> {
 
    /** Field description */
    InstanceWrapper<Worker> lookupWrapper;
+   
+   String description;
+
+    @Override
+    public String toString() {
+        return "WorkerPublisher{" + "description=" + description + ", id=" + id + ", lookupWrapper=" + lookupWrapper + '}';
+    }
 
    /**
     * Constructs ...
@@ -59,7 +63,8 @@ public class WorkerPublisher implements ChangeListener<Worker.State> {
     * @param worker
     * @param description
     */
-   private WorkerPublisher(Worker worker, String description, List<InstancePropertyBI> properties) {
+   private WorkerPublisher(Worker worker, String description, List<? extends InstancePropertyBI> properties) {
+      this.description = description;
       worker.stateProperty().addListener(this);
 
       switch (worker.getState()) {
@@ -68,12 +73,13 @@ public class WorkerPublisher implements ChangeListener<Worker.State> {
       case SUCCEEDED :
          worker.stateProperty().removeListener(this);
 
-         // already done with work, don't add to lookup.
+         System.out.println("Remove worker publisher: " + this);
          break;
 
       case READY :
       case RUNNING :
          lookupWrapper = Looker.add(worker, UUID.randomUUID(), description, properties);
+         System.out.println("added worker publisher: " + this);
                                     
       }
    }
@@ -95,6 +101,7 @@ public class WorkerPublisher implements ChangeListener<Worker.State> {
       case SUCCEEDED :
          ov.removeListener(this);
          Looker.removePair(lookupWrapper);
+         System.out.println("Removed worker publisher[2]: " + this);
 
          break;
       }
@@ -109,7 +116,7 @@ public class WorkerPublisher implements ChangeListener<Worker.State> {
     *
     * @return
     */
-   public static WorkerPublisher publish(Worker<?> worker, String description, List<InstancePropertyBI> properties) {
+   public static WorkerPublisher publish(Worker<?> worker, String description, List<? extends InstancePropertyBI> properties) {
       return new WorkerPublisher(worker, description, properties);
    }
 }

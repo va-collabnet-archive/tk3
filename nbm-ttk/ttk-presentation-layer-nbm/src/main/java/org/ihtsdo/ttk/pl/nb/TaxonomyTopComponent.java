@@ -52,6 +52,7 @@ import org.ihtsdo.ttk.pl.fx.taxonomy.multiparent.SimTreeCell;
 import org.ihtsdo.ttk.pl.fx.taxonomy.multiparent.SimTreeIcons;
 import org.ihtsdo.ttk.pl.fx.taxonomy.multiparent.SimTreeItem;
 import org.ihtsdo.ttk.pl.fx.taxonomy.multiparent.TaxonomyProgressIndicatorSkin;
+import org.ihtsdo.ttk.pl.fx.taxonomy.multiparent.TaxonomyView;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -70,7 +71,7 @@ import org.openide.util.NbBundle.Messages;
         preferredID = "TaxonomyTopComponent",
         iconBase = "org/ihtsdo/ttk/pl/nb/node.png",
         persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "editor", openAtStartup = true)
+@TopComponent.Registration(mode = "explorer", openAtStartup = true)
 @ActionID(category = "Window", id = "org.ihtsdo.ttk.pl.nb.TaxonomyTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
@@ -138,7 +139,7 @@ public final class TaxonomyTopComponent extends TopComponent {
     }
 
     private Scene createScene() {
-        TreeView treeView = new TreeView();
+        TreeView<FxTaxonomyReferenceWithConcept> treeView = new TaxonomyView("taxonomy selection","main");
         try {
 
             treeView.setCellFactory(new Callback<TreeView<FxTaxonomyReferenceWithConcept>, TreeCell<FxTaxonomyReferenceWithConcept>>() {

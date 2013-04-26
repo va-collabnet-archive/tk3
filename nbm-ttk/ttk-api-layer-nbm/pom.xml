@@ -39,6 +39,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>ttk-logic</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>ttk-api-with-fx-properties</artifactId>
             <version>${project.version}</version>
             <exclusions>
@@ -86,6 +91,7 @@
                         <publicPackage>org.ihtsdo.ttk.dto.*</publicPackage>
                         <publicPackage>org.ihtsdo.ttk.fx.*</publicPackage>
                         <publicPackage>org.ihtsdo.ttk.helpers.*</publicPackage>
+                        <publicPackage>org.ihtsdo.ttk.logic.*</publicPackage>
                         <publicPackage>org.ihtsdo.ttk.lookup.*</publicPackage>
                         <publicPackage>org.ihtsdo.ttk.auxiliary.taxonomies.*</publicPackage>
                     </publicPackages>

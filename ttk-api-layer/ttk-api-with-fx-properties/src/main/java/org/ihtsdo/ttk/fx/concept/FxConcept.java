@@ -16,19 +16,6 @@ import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.description.DescriptionChronicleBI;
 import org.ihtsdo.ttk.api.media.MediaChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
-import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanVersionBI;
-import org.ihtsdo.ttk.api.refex.type_int.RefexIntVersionBI;
-import org.ihtsdo.ttk.api.refex.type_long.RefexLongVersionBI;
-import org.ihtsdo.ttk.api.refex.type_member.RefexMemberVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid.RefexNidVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_float.RefexNidFloatVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_int.RefexNidIntVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_long.RefexNidLongVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid.RefexNidNidVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_string.RefexNidNidStringVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_string.RefexNidStringVersionBI;
-import org.ihtsdo.ttk.api.refex.type_string.RefexStringVersionBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipChronicleBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.ttk.fx.FxComponentReference;
@@ -37,19 +24,6 @@ import org.ihtsdo.ttk.fx.concept.component.description.FxDescriptionChronicle;
 import org.ihtsdo.ttk.fx.concept.component.description.FxDescriptionVersion;
 import org.ihtsdo.ttk.fx.concept.component.media.FxMediaChronicle;
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexChronicle;
-import org.ihtsdo.ttk.fx.concept.component.refex.type_boolean.FxRefexBooleanChronicle;
-import org.ihtsdo.ttk.fx.concept.component.refex.type_comp.FxRefexCompChronicle;
-import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_comp.FxRefexCompCompChronicle;
-import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_comp_comp.FxRefexCompCompCompChronicle;
-import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_comp_string.FxRefexCompCompStringChronicle;
-import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_float.FxRefexCompFloatChronicle;
-import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_int.FxRefexCompIntChronicle;
-import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_long.FxRefexCompLongChronicle;
-import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_string.FxRefexCompStringChronicle;
-import org.ihtsdo.ttk.fx.concept.component.refex.type_int.FxRefexIntChronicle;
-import org.ihtsdo.ttk.fx.concept.component.refex.type_long.FxRefexLongChronicle;
-import org.ihtsdo.ttk.fx.concept.component.refex.type_member.FxRefexMembershipChronicle;
-import org.ihtsdo.ttk.fx.concept.component.refex.type_string.FxRefexStringChronicle;
 import org.ihtsdo.ttk.fx.concept.component.relationship.FxRelationshipChronicle;
 import org.ihtsdo.ttk.fx.concept.component.relationship.FxRelationshipVersion;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
@@ -70,6 +44,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexFactory;
 
 /**
  * Property definition pattern from
@@ -380,35 +355,7 @@ NEXT_REL:
    public static FxRefexChronicle<?, ?> convertRefex(TerminologySnapshotDI ss, FxConcept concept,
        RefexChronicleBI<?> m)
            throws IOException, ContradictionException {
-      if (m.getPrimordialVersion() instanceof RefexNidNidNidVersionBI) {
-         return new FxRefexCompCompCompChronicle(ss, concept, m);
-      } else if (m.getPrimordialVersion() instanceof RefexNidNidStringVersionBI) {
-         return new FxRefexCompCompStringChronicle(ss, concept, m);
-      } else if (m.getPrimordialVersion() instanceof RefexNidNidVersionBI) {
-         return new FxRefexCompCompChronicle(ss, concept, m);
-      } else if (m.getPrimordialVersion() instanceof RefexNidFloatVersionBI) {
-         return new FxRefexCompFloatChronicle(ss, concept, m);
-      } else if (m.getPrimordialVersion() instanceof RefexNidIntVersionBI) {
-         return new FxRefexCompIntChronicle(ss, concept, m);
-      } else if (m.getPrimordialVersion() instanceof RefexNidLongVersionBI) {
-         return new FxRefexCompLongChronicle(ss, concept, m);
-      } else if (m.getPrimordialVersion() instanceof RefexNidStringVersionBI) {
-         return new FxRefexCompStringChronicle(ss, concept, m);
-      } else if (m.getPrimordialVersion() instanceof RefexNidVersionBI) {
-         return new FxRefexCompChronicle(ss, concept, m);
-      } else if (m.getPrimordialVersion() instanceof RefexIntVersionBI) {
-         return new FxRefexIntChronicle(ss, concept, m);
-      } else if (m.getPrimordialVersion() instanceof RefexStringVersionBI) {
-         return new FxRefexStringChronicle(ss, concept, m);
-      } else if (m.getPrimordialVersion() instanceof RefexLongVersionBI) {
-         return new FxRefexLongChronicle(ss, concept, m);
-      } else if (m.getPrimordialVersion() instanceof RefexBooleanVersionBI) {
-         return new FxRefexBooleanChronicle(ss, concept, m);
-      } else if (m.getPrimordialVersion() instanceof RefexMemberVersionBI) {
-         return new FxRefexMembershipChronicle(ss, concept, m);
-      } else {
-         throw new UnsupportedOperationException("Cannot handle: " + m);
-      }
+      return FxRefexFactory.make(ss, concept, m);
    }
 
    public ObjectProperty<ObservableList<FxDescriptionChronicle>> descriptions() {

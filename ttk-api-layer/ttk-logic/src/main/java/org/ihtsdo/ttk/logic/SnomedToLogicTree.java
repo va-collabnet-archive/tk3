@@ -48,19 +48,17 @@ import java.util.Collection;
  *
  * @author kec
  */
-public class SnomedToLogicDag extends LogicBlueprintBuilder implements ProcessUnfetchedConceptDataBI {
+public class SnomedToLogicTree extends LogicBlueprintBuilder implements ProcessUnfetchedConceptDataBI {
 
    /** Field description */
    TerminologyBuilderBI builder;
    
-   public static boolean verbose = false;
-
    /**
     *
     * @param vc
     * @param ec
     */
-   public SnomedToLogicDag(ViewCoordinate vc, EditCoordinate ec) {
+   public SnomedToLogicTree(ViewCoordinate vc, EditCoordinate ec) {
       super(DescriptionLogicBinding.EL_PLUS_PLUS.getUuids()[0], vc,
             DescriptionLogicBinding.DL_MODULE.getUuids()[0]);
       builder = Ts.get().getTerminologyBuilder(ec, vc);
@@ -183,4 +181,14 @@ public class SnomedToLogicDag extends LogicBlueprintBuilder implements ProcessUn
    public NidBitSetBI getNidSet() throws IOException {
       return Ts.get().getAllConceptNids();
    }
+
+    @Override
+    public boolean allowCancel() {
+        return false;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Converting RF2 to Logic Tree";
+    }
 }
