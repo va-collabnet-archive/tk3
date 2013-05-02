@@ -23,7 +23,7 @@ import org.ihtsdo.ttk.bdb.id.NidCNidMapBdb;
 import org.ihtsdo.ttk.bdb.stamp.StampBdb;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.ComponentBI;
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
 
@@ -980,7 +980,7 @@ public class Bdb {
         int cNid = Bdb.getConceptNid(nid);
         assert cNid != Integer.MAX_VALUE : "No cNid for nid: " + nid;
         Concept c = Concept.get(cNid);
-        ComponentChroncileBI<?> component = c.getComponent(nid);
+        ComponentChronicleBI<?> component = c.getComponent(nid);
         if (component != null) {
             return component.getPrimUuid();
         }

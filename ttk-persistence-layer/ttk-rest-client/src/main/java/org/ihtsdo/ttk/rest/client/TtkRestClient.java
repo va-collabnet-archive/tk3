@@ -29,7 +29,7 @@ import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.TerminologyBuilderBI;
 import org.ihtsdo.ttk.api.TerminologyDI.CONCEPT_EVENT;
 import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.conattr.ConAttrVersionBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
 import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
@@ -548,7 +548,7 @@ public class TtkRestClient extends Termstore {
    }
 
    @Override
-   public boolean forget(ConAttrVersionBI attr) throws IOException {
+   public boolean forget(ConceptAttributeVersionBI attr) throws IOException {
       throw new UnsupportedOperationException("Not supported yet.");
    }
 

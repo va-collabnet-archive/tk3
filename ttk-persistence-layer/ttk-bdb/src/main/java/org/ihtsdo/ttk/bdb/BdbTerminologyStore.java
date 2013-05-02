@@ -2,7 +2,7 @@ package org.ihtsdo.ttk.bdb;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.ExternalStampBI;
 import org.ihtsdo.ttk.api.NidBitSetBI;
@@ -14,7 +14,7 @@ import org.ihtsdo.ttk.api.TerminologyBuilderBI;
 import org.ihtsdo.ttk.api.TerminologyDI.CONCEPT_EVENT;
 import org.ihtsdo.ttk.api.TerminologySnapshotDI;
 import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.conattr.ConAttrVersionBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
 import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
@@ -147,7 +147,7 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public boolean forget(ConAttrVersionBI attr) throws IOException {
+   public boolean forget(ConceptAttributeVersionBI attr) throws IOException {
       boolean forgotten = BdbCommitManager.forget(attr);
 
       if (forgotten) {
@@ -640,7 +640,7 @@ public class BdbTerminologyStore extends Termstore {
 
    @Override
    public UUID getUuidPrimordialForNid(int nid) throws IOException {
-      ComponentChroncileBI<?> c = getComponent(nid);
+      ComponentChronicleBI<?> c = getComponent(nid);
 
       if (c != null) {
          return c.getPrimUuid();

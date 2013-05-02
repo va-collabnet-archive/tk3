@@ -4,20 +4,20 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.blueprint.ConAttrAB;
-import org.ihtsdo.ttk.api.blueprint.DescCAB;
+import org.ihtsdo.ttk.api.blueprint.ConceptAttributeAB;
+import org.ihtsdo.ttk.api.blueprint.DescriptionCAB;
 
-import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
+import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexProperty;
-import org.ihtsdo.ttk.api.blueprint.RelCAB;
+import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
+import org.ihtsdo.ttk.api.blueprint.RelationshipCAB;
 import org.ihtsdo.ttk.api.TerminologyBuilderBI;
 import org.ihtsdo.ttk.api.blueprint.ConceptCB;
 import org.ihtsdo.ttk.api.blueprint.MediaCAB;
-import org.ihtsdo.ttk.api.conattr.ConAttrChronicleBI;
-import org.ihtsdo.ttk.api.conattr.ConAttrVersionBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeChronicleBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
@@ -29,7 +29,7 @@ import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipChronicleBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
 import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributesRevision;
@@ -57,7 +57,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
 
     @Override
     public RefexChronicleBI<?> construct(RefexCAB blueprint)
-            throws IOException, InvalidBlueprintException, ContradictionException {
+            throws IOException, InvalidCAB, ContradictionException {
         RefexMember<?, ?> refex = getRefex(blueprint);
         if (refex != null) {
             return updateRefex(refex, blueprint);
@@ -66,28 +66,28 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         return refex;
     }
 
-    public ConceptAttributes getConAttr(ConAttrAB blueprint) throws IOException, InvalidBlueprintException {
+    public ConceptAttributes getConAttr(ConceptAttributeAB blueprint) throws IOException, InvalidCAB {
         ConceptAttributes cac = (ConceptAttributes) P.s.getConcept(blueprint.getComponentUuid()).getConAttrs();
         if (cac == null) {
-            throw new InvalidBlueprintException("ConAttrAB can only be used for amendment, not creation."
+            throw new InvalidCAB("ConAttrAB can only be used for amendment, not creation."
                     + " Use ConceptCB instead. " + blueprint);
         }
         return cac;
     }
 
     private RefexChronicleBI<?> updateRefex(RefexMember<?, ?> member,
-            RefexCAB blueprint) throws InvalidBlueprintException, IOException, ContradictionException {
+            RefexCAB blueprint) throws InvalidCAB, IOException, ContradictionException {
         for (int pathNid : ec.getEditPaths().getSetValues()) {
             RefexRevision refexRevision =
-                    member.makeAnalog(blueprint.getInt(RefexProperty.STATUS_ID),
+                    member.makeAnalog(blueprint.getInt(ComponentProperty.STATUS_ID),
                     Long.MAX_VALUE,
                     ec.getAuthorNid(),
                     ec.getModuleNid(),
                     pathNid);
             try {
-                blueprint.setPropertiesExceptSap(refexRevision);
+                blueprint.setPropertiesExceptStamp(refexRevision);
             } catch (PropertyVetoException ex) {
-                throw new InvalidBlueprintException("Refex: " + member
+                throw new InvalidCAB("Refex: " + member
                         + "\n\nRefexAmendmentSpec: " + blueprint, ex);
             }
         }
@@ -98,20 +98,21 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
     }
 
     private RefexMember<?, ?> getRefex(RefexCAB blueprint)
-            throws InvalidBlueprintException, IOException {
-        if (P.s.hasUuid(blueprint.getMemberUUID())) {
-            ComponentChroncileBI<?> component =
+            throws InvalidCAB, IOException {
+        if (P.s.hasUuid(blueprint.getMemberUUID()) && Integer.MAX_VALUE !=
+                P.s.getConceptNidForNid(P.s.getNidForUuids(blueprint.getMemberUUID()))) {
+            ComponentChronicleBI<?> component =
                     P.s.getComponent(blueprint.getMemberUUID());
             if (component == null) {
                 return null;
             }
             if (blueprint.getMemberType()
-                    == TK_REFEX_TYPE.classToType(component.getClass())) {
+                    == ToolkitRefexType.classToType(component.getClass())) {
                 return (RefexMember<?, ?>) component;
             } else {
-                throw new InvalidBlueprintException(
+                throw new InvalidCAB(
                         "Component exists of different type. Class to type:  "
-                        + TK_REFEX_TYPE.classToType(component.getClass()) 
+                        + ToolkitRefexType.classToType(component.getClass()) 
                         + "\ncomponent: "
                         + component + "\n\nRefexCAB: " + blueprint);
             }
@@ -121,7 +122,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
 
     @Override
     public RefexChronicleBI<?> constructIfNotCurrent(RefexCAB blueprint)
-            throws IOException, InvalidBlueprintException, ContradictionException {
+            throws IOException, InvalidCAB, ContradictionException {
         RefexMember<?, ?> refex = getRefex(blueprint);
         if (refex != null) {
             if (refex.getStamp() == -1) {
@@ -146,16 +147,16 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
 
     private RefexChronicleBI<?> reCreateRefex(RefexMember<?, ?> refex,
             RefexCAB blueprint)
-            throws IOException, InvalidBlueprintException {
+            throws IOException, InvalidCAB {
         return RefexMemberFactory.reCreate(blueprint, refex, ec);
     }
 
     private RefexMember<?, ?> createRefex(RefexCAB blueprint)
-            throws IOException, InvalidBlueprintException, ContradictionException {
+            throws IOException, InvalidCAB, ContradictionException {
         
-        if (blueprint.hasProperty(RefexProperty.ENCLOSING_CONCEPT_ID)) {
-            P.s.setConceptNidForNid(blueprint.getInt(RefexProperty.ENCLOSING_CONCEPT_ID), 
-                    P.s.getNidForUuids(blueprint.getMemberUuid()));
+        if (blueprint.hasProperty(ComponentProperty.ENCLOSING_CONCEPT_ID)) {
+            P.s.setConceptNidForNid(blueprint.getInt(ComponentProperty.ENCLOSING_CONCEPT_ID), 
+                    P.s.getNidForUuids(blueprint.getComponentUuid()));
         }
         
         RefexMember<?, ?> newRefex = RefexMemberFactory.create(blueprint, ec);
@@ -167,10 +168,10 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         return newRefex;
     }
 
-    private RelationshipChronicleBI getRel(RelCAB blueprint)
-            throws InvalidBlueprintException, IOException {
+    private RelationshipChronicleBI getRel(RelationshipCAB blueprint)
+            throws InvalidCAB, IOException {
         if (P.s.hasUuid(blueprint.getComponentUuid())) {
-            ComponentChroncileBI<?> component =
+            ComponentChronicleBI<?> component =
                     P.s.getComponent(blueprint.getComponentUuid());
             if (component == null) {
                 return null;
@@ -178,7 +179,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             if (component instanceof RelationshipChronicleBI) {
                 return (RelationshipChronicleBI) component;
             } else {
-                throw new InvalidBlueprintException(
+                throw new InvalidCAB(
                         "Component exists of different type: "
                         + component + "\n\nRelCAB: " + blueprint);
             }
@@ -187,7 +188,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
     }
 
     @Override
-    public RelationshipChronicleBI construct(RelCAB blueprint) throws IOException, InvalidBlueprintException, ContradictionException {
+    public RelationshipChronicleBI construct(RelationshipCAB blueprint) throws IOException, InvalidCAB, ContradictionException {
         RelationshipChronicleBI relc = getRel(blueprint);
 
         if (relc == null) {
@@ -199,7 +200,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             Bdb.getNidCNidMap().setCNidForNid(c.getNid(), r.nid);
             r.setPrimordialUuid(blueprint.getComponentUuid());
             try {
-                r.setDestinationNid(blueprint.getDestNid());
+                r.setDestinationNid(blueprint.getTargetNid());
             } catch (PropertyVetoException ex) {
                 throw new IOException(ex);
             }
@@ -224,7 +225,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
                             p));
                 }
             }
-            c.getRelsOutgoing().add(r);
+            c.getRelationshipsOutgoing().add(r);
             for (int p : ec.getEditPaths().getSetValues()) {
                 for (RefexCAB annotBp : blueprint.getAnnotationBlueprints()) {
                     construct(annotBp);
@@ -239,10 +240,10 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
                         ec.getAuthorNid(),
                         ec.getModuleNid(),
                         p);
-                if (r.getDestinationNid() != blueprint.getDestNid()) {
-                    throw new InvalidBlueprintException(
+                if (r.getDestinationNid() != blueprint.getTargetNid()) {
+                    throw new InvalidCAB(
                             "r.getDestinationNid() != spec.getDestNid(): "
-                            + r.getDestinationNid() + " : " + blueprint.getDestNid());
+                            + r.getDestinationNid() + " : " + blueprint.getTargetNid());
                 }
                 rv.setTypeNid(blueprint.getTypeNid());
                 rv.setRefinabilityNid(blueprint.getRefinabilityNid());
@@ -256,7 +257,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
     }
 
     @Override
-    public RelationshipChronicleBI constructIfNotCurrent(RelCAB blueprint) throws IOException, InvalidBlueprintException, ContradictionException {
+    public RelationshipChronicleBI constructIfNotCurrent(RelationshipCAB blueprint) throws IOException, InvalidCAB, ContradictionException {
         RelationshipChronicleBI relc = getRel(blueprint);
         if (relc == null) {
             return construct(blueprint);
@@ -270,10 +271,10 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         return relc;
     }
 
-    private DescriptionChronicleBI getDesc(DescCAB blueprint)
-            throws InvalidBlueprintException, IOException {
+    private DescriptionChronicleBI getDesc(DescriptionCAB blueprint)
+            throws InvalidCAB, IOException {
         if (P.s.hasUuid(blueprint.getComponentUuid())) {
-            ComponentChroncileBI<?> component =
+            ComponentChronicleBI<?> component =
                     P.s.getComponent(blueprint.getComponentUuid());
             if (component == null) {
                 return null;
@@ -281,7 +282,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             if (component instanceof DescriptionChronicleBI) {
                 return (DescriptionChronicleBI) component;
             } else {
-                throw new InvalidBlueprintException(
+                throw new InvalidCAB(
                         "Component exists of different type: "
                         + component + "\n\nDescCAB: " + blueprint);
             }
@@ -290,8 +291,8 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
     }
 
     @Override
-    public DescriptionChronicleBI constructIfNotCurrent(DescCAB blueprint) throws IOException,
-            InvalidBlueprintException, ContradictionException {
+    public DescriptionChronicleBI constructIfNotCurrent(DescriptionCAB blueprint) throws IOException,
+            InvalidCAB, ContradictionException {
         DescriptionChronicleBI desc = getDesc(blueprint);
         if (desc == null) {
             return construct(blueprint);
@@ -306,7 +307,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
     }
 
     @Override
-    public DescriptionChronicleBI construct(DescCAB blueprint) throws IOException, InvalidBlueprintException, ContradictionException {
+    public DescriptionChronicleBI construct(DescriptionCAB blueprint) throws IOException, InvalidCAB, ContradictionException {
         DescriptionChronicleBI desc = getDesc(blueprint);
 
         if (desc == null) {
@@ -367,9 +368,9 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
     }
 
     private MediaChronicleBI getMedia(MediaCAB blueprint)
-            throws InvalidBlueprintException, IOException {
+            throws InvalidCAB, IOException {
         if (P.s.hasUuid(blueprint.getComponentUuid())) {
-            ComponentChroncileBI<?> component =
+            ComponentChronicleBI<?> component =
                     P.s.getComponent(blueprint.getComponentUuid());
             if (component == null) {
                 return null;
@@ -377,7 +378,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             if (component instanceof MediaChronicleBI) {
                 return (MediaChronicleBI) component;
             } else {
-                throw new InvalidBlueprintException(
+                throw new InvalidCAB(
                         "Component exists of different type: "
                         + component + "\n\nMediaCAB: " + blueprint);
             }
@@ -387,7 +388,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
 
     @Override
     public MediaChronicleBI constructIfNotCurrent(MediaCAB blueprint) throws IOException,
-            InvalidBlueprintException, ContradictionException {
+            InvalidCAB, ContradictionException {
         MediaChronicleBI mediaC = getMedia(blueprint);
         if (mediaC == null) {
             return construct(blueprint);
@@ -402,7 +403,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
     }
 
     @Override
-    public MediaChronicleBI construct(MediaCAB blueprint) throws IOException, InvalidBlueprintException, ContradictionException {
+    public MediaChronicleBI construct(MediaCAB blueprint) throws IOException, InvalidCAB, ContradictionException {
         MediaChronicleBI imgC = getMedia(blueprint);
 
         if (imgC == null) {
@@ -461,9 +462,9 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
     }
 
     private ConceptChronicleBI getConcept(ConceptCB blueprint)
-            throws InvalidBlueprintException, IOException {
+            throws InvalidCAB, IOException {
         if (P.s.hasUuid(blueprint.getComponentUuid())) {
-            ComponentChroncileBI<?> component =
+            ComponentChronicleBI<?> component =
                     P.s.getComponent(blueprint.getComponentUuid());
             if (component == null) {
                 return null;
@@ -471,7 +472,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             if (component instanceof ConceptChronicleBI) {
                 return (ConceptChronicleBI) component;
             } else {
-                throw new InvalidBlueprintException(
+                throw new InvalidCAB(
                         "Component exists of different type: "
                         + component + "\n\nConceptCAB: " + blueprint);
             }
@@ -481,7 +482,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
 
     @Override
     public ConceptChronicleBI constructIfNotCurrent(ConceptCB blueprint)
-            throws IOException, InvalidBlueprintException, ContradictionException {
+            throws IOException, InvalidCAB, ContradictionException {
         ConceptChronicleBI cc = getConcept(blueprint);
         if (cc == null) {
             return construct(blueprint);
@@ -491,7 +492,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
                     || concept.getConAttrs().getVersions().isEmpty()) {
                 return construct(blueprint);
             } else {
-                throw new InvalidBlueprintException(
+                throw new InvalidCAB(
                         "Concept already exists: "
                         + cc + "\n\nConceptCAB cannot be used for update: " + blueprint);
             }
@@ -499,12 +500,12 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
     }
 
     @Override
-    public ConceptChronicleBI construct(ConceptCB blueprint) throws IOException, InvalidBlueprintException, ContradictionException {
+    public ConceptChronicleBI construct(ConceptCB blueprint) throws IOException, InvalidCAB, ContradictionException {
 
         int cNid = Bdb.uuidToNid(blueprint.getComponentUuid());
         Bdb.getNidCNidMap().setCNidForNid(cNid, cNid);
         Concept newC = Concept.get(cNid);
-        newC.setAnnotationStyleRefex(blueprint.isAnnotation());
+        newC.setAnnotationStyleRefex(blueprint.isAnnotationRefexExtensionIdentity());
 
         ConceptAttributes a = null;
         if (newC.getConceptAttributes() == null) {
@@ -520,7 +521,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             a.nid = cNid;
             a.enclosingConceptNid = cNid;
         } else {
-            throw new InvalidBlueprintException("Concept already exists:\n" + blueprint + "\n\n" + newC);
+            throw new InvalidCAB("Concept already exists:\n" + blueprint + "\n\n" + newC);
         }
 
         a.setDefined(blueprint.isDefined());
@@ -545,32 +546,32 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             }
         }
 
-        List<DescCAB> fsnBps = blueprint.getFsnCABs();
-        List<DescCAB> prefBps = blueprint.getPrefCABs();
-        List<DescCAB> descBps = blueprint.getDescCABs();
-        List<RelCAB> relBps = blueprint.getRelCABs();
+        List<DescriptionCAB> fsnBps = blueprint.getFullySpecifiedNameCABs();
+        List<DescriptionCAB> prefBps = blueprint.getPreferredNameCABs();
+        List<DescriptionCAB> descBps = blueprint.getDescriptionCABs();
+        List<RelationshipCAB> relBps = blueprint.getRelationshipCABs();
         List<MediaCAB> mediaBps = blueprint.getMediaCABs();
 
-        if (blueprint.getConAttrAB() != null) {
-            for (RefexCAB annot : blueprint.getConAttrAB().getAnnotationBlueprints()) {
+        if (blueprint.getConceptAttributeAB() != null) {
+            for (RefexCAB annot : blueprint.getConceptAttributeAB().getAnnotationBlueprints()) {
                 this.construct(annot);
             }
         }
 
-        for (DescCAB fsnBp : fsnBps) {
+        for (DescriptionCAB fsnBp : fsnBps) {
             this.construct(fsnBp);
         }
-        for (DescCAB prefBp : prefBps) {
+        for (DescriptionCAB prefBp : prefBps) {
             this.construct(prefBp);
         }
-        for (DescCAB descBp : descBps) {
+        for (DescriptionCAB descBp : descBps) {
             if (fsnBps.contains(descBp) || prefBps.contains(descBp)) {
                 continue;
             } else {
                 this.construct(descBp);
             }
         }
-        for (RelCAB relBp : relBps) {
+        for (RelationshipCAB relBp : relBps) {
             this.construct(relBp);
         }
         for (MediaCAB mediaBp : mediaBps) {
@@ -580,9 +581,9 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
     }
 
     @Override
-    public ConAttrChronicleBI construct(ConAttrAB blueprint) throws IOException, InvalidBlueprintException, ContradictionException {
+    public ConceptAttributeChronicleBI construct(ConceptAttributeAB blueprint) throws IOException, InvalidCAB, ContradictionException {
         ConceptAttributes cac = getConAttr(blueprint);
-        for (ConAttrVersionBI cav : cac.getVersions(vc)) {
+        for (ConceptAttributeVersionBI cav : cac.getVersions(vc)) {
             for (int p : ec.getEditPaths().getSetValues()) {
 
                 if (cac.revisions == null) {
@@ -607,9 +608,9 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
     }
 
     @Override
-    public ConAttrChronicleBI constructIfNotCurrent(ConAttrAB blueprint) throws IOException, InvalidBlueprintException {
+    public ConceptAttributeChronicleBI constructIfNotCurrent(ConceptAttributeAB blueprint) throws IOException, InvalidCAB {
         ConceptAttributes cac = getConAttr(blueprint);
-        for (ConAttrVersionBI cav : cac.getVersions(vc)) {
+        for (ConceptAttributeVersionBI cav : cac.getVersions(vc)) {
             if (blueprint.validate(cav)) {
                 return cac;
             }

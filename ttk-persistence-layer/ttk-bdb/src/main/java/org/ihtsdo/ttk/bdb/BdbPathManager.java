@@ -290,7 +290,7 @@ public class BdbPathManager {
             ArrayList<PositionBI> result = new ArrayList<>();
             Concept pathConcept = Bdb.getConceptDb().getConcept(nid);
 
-            for (RefexChronicleBI<?> extPart : pathConcept.getRefexes(ReferenceConcepts.REFSET_PATH_ORIGINS.getNid())) {
+            for (RefexChronicleBI<?> extPart : pathConcept.getRefexMembers(ReferenceConcepts.REFSET_PATH_ORIGINS.getNid())) {
                 if (extPart == null) {
                     AceLog.getAppLog().alertAndLogException(new Exception("Null path origins for: "
                             + pathConcept.toLongString() + "\n\nin refset: \n\n"

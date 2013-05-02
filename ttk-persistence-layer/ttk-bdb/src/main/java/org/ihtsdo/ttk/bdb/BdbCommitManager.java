@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
 import org.ihtsdo.ttk.bdb.id.NidCNidMapBdb;
 import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
 import org.ihtsdo.ttk.bdb.temp.AceLog;
-import org.ihtsdo.ttk.api.conattr.ConAttrVersionBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.cs.ChangeSetPolicy;
 import org.ihtsdo.ttk.api.cs.ChangeSetWriterThreading;
@@ -381,7 +381,7 @@ public class BdbCommitManager {
         return false;
     }
 
-    public static boolean forget(ConAttrVersionBI attr) throws IOException {
+    public static boolean forget(ConceptAttributeVersionBI attr) throws IOException {
         Concept c = Bdb.getConcept(attr.getConceptNid());
       ConceptAttributes a = (ConceptAttributes) attr;
 
@@ -551,7 +551,7 @@ public class BdbCommitManager {
         } else {
 
             // have to forget "all" references to component...
-            c.getRelsOutgoing().remove((Relationship) rel);
+            c.getRelationshipsOutgoing().remove((Relationship) rel);
             c.getData().getSrcRelNids().remove(rel.getNid());
             r.primordialStamp = -1;
         }

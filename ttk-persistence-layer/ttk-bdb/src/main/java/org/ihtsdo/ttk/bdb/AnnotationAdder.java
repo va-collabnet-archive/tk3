@@ -20,7 +20,7 @@ package org.ihtsdo.ttk.bdb;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
 import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
@@ -129,7 +129,7 @@ public class AnnotationAdder implements ProcessUnfetchedConceptDataBI {
          ConcurrentSkipListSet<TkRefexAbstractMember<?>> set = membersForConcept.get(cNid);
 
          for (TkRefexAbstractMember<?> member : set) {
-            ComponentChroncileBI<?> component = c.getComponent(Bdb.uuidToNid(member.getComponentUuid()));
+            ComponentChronicleBI<?> component = c.getComponent(Bdb.uuidToNid(member.getComponentUuid()));
 
             if (component != null) {
                component.addAnnotation(RefexMemberFactory.create(member, cNid));

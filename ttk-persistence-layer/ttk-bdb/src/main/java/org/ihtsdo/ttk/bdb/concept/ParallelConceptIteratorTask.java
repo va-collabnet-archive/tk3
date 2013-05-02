@@ -100,4 +100,46 @@ public class ParallelConceptIteratorTask extends Task<Boolean> {
    public void updateTitle(String string) {
       super.updateTitle(string);    
    }
+
+    @Override
+    protected void scheduled() {
+        System.out.println(this.getTitle() + " scheduled. ");
+        super.scheduled(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void running() {
+        System.out.println(this.getTitle() + " running. ");
+        super.running(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void succeeded() {
+        System.out.println(this.getTitle() + " succeeding. ");
+        super.succeeded(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void cancelled() {
+         System.out.println(this.getTitle() + " canceled. ");
+       super.cancelled(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void failed() {
+        System.out.println(this.getTitle() + " failed. ");
+        super.failed(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean cancel(boolean bln) {
+        System.out.println(this.getTitle() + " cancel. ");
+        return super.cancel(bln); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void done() {
+        System.out.println(this.getTitle() + " done. ");
+        super.done(); //To change body of generated methods, choose Tools | Templates.
+    }
 }

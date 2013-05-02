@@ -25,7 +25,7 @@ import java.io.IOException;
 
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
-import javafx.concurrent.Task;
+import java.util.logging.Logger;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
 
 /**
@@ -37,6 +37,7 @@ import org.ihtsdo.ttk.api.ConceptFetcherBI;
  */
 public class ParallelConceptIterator implements Callable<Boolean>, ConceptFetcherBI {
 
+    static boolean verbose = true;
     /**
      * Field description
      */
@@ -187,7 +188,7 @@ public class ParallelConceptIterator implements Callable<Boolean>, ConceptFetche
      * @throws Exception
      */
     @Override
-    public Boolean call() throws Exception {
+    public Boolean call() throws Exception  {
         task.updateMessage("iterating");
         task.updateProgress(0, countToProcess);
         CursorConfig cursorConfig = new CursorConfig();
@@ -198,6 +199,12 @@ public class ParallelConceptIterator implements Callable<Boolean>, ConceptFetche
 
         int roKey = first;
         int mutableKey = first;
+            if (verbose) {
+                System.out.println("Parallel concept iterator starting.\n" + " First: " + first + " last: "
+                        + last + " roKey: " + roKey + " mutableKey: " + mutableKey
+                        + " processedCount: " + processedCount + " countToProcess: "
+                        + countToProcess);
+            }
 
         try {
             DatabaseEntry roFoundKey = new DatabaseEntry();
@@ -239,7 +246,12 @@ public class ParallelConceptIterator implements Callable<Boolean>, ConceptFetche
                     currentCNid = roKey;
                     processor.processUnfetchedConceptData(currentCNid, this);
                     processedCount++;
-                    task.updateProgress(processedCount, countToProcess);
+                    if (processedCount <= countToProcess) {
+                        task.updateProgress(processedCount, countToProcess);
+                    } else {
+                        task.updateProgress(processedCount, processedCount);
+                    }
+                    
 
                     if (roKey < last) {
                         roKey = advanceCursor(roCursor, roFoundKey, roFoundDataPartial);
@@ -261,8 +273,8 @@ public class ParallelConceptIterator implements Callable<Boolean>, ConceptFetche
                 }
             }
 
-            if (AceLog.getAppLog().isLoggable(Level.FINE)) {
-                AceLog.getAppLog().fine("Parallel concept iterator finished.\n" + " First: " + first + " last: "
+            if (verbose) {
+                System.out.println("Parallel concept iterator finished.\n" + " First: " + first + " last: "
                         + last + " roKey: " + roKey + " mutableKey: " + mutableKey
                         + " processedCount: " + processedCount + " countToProcess: "
                         + countToProcess);
@@ -270,6 +282,9 @@ public class ParallelConceptIterator implements Callable<Boolean>, ConceptFetche
             task.updateMessage("Finished. Processed: " + processedCount + " items");
             task.updateProgress(countToProcess, countToProcess);
             return true;
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+            throw new Exception(ex);
         } finally {
             roCursor.close();
             mutableCursor.close();

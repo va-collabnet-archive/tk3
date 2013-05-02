@@ -173,7 +173,7 @@ public class IndexCacheRecord {
         for (int originCNid : originCNids) {
             ConceptChronicleBI c = Ts.get().getConcept(originCNid);
 
-            for (RelationshipChronicleBI r : c.getRelsOutgoing()) {
+            for (RelationshipChronicleBI r : c.getRelationshipsOutgoing()) {
                 if (r.getDestinationNid() == cNid) {
                     returnValues.add(r.getNid());
                 }
@@ -202,7 +202,7 @@ public class IndexCacheRecord {
         for (int originCNid : originCNids) {
             ConceptChronicleBI c = Ts.get().getConcept(originCNid);
 
-            for (RelationshipChronicleBI r : c.getRelsOutgoing()) {
+            for (RelationshipChronicleBI r : c.getRelationshipsOutgoing()) {
                 if (r.getDestinationNid() == cNid) {
                     for (RelationshipVersionBI rv : r.getVersions()) {
                         if (relTypes.contains(rv.getTypeNid())) {
@@ -241,7 +241,7 @@ public class IndexCacheRecord {
         for (int originCNid : originCNids) {
             Concept c = Concept.get(originCNid);
 
-            for (Relationship r : c.getRelsOutgoing()) {
+            for (Relationship r : c.getRelationshipsOutgoing()) {
                 if (r.getDestinationNid() == cNid) {
                     returnValues.add(r);
                 }
