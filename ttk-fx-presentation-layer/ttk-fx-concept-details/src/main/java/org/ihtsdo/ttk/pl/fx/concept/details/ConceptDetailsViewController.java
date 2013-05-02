@@ -168,7 +168,7 @@ public class ConceptDetailsViewController
                long              time      = System.currentTimeMillis();
 
                System.out.println(TimeHelper.formatDate(time));
-               Ts.get().iterateConceptDataInSequence(converter);
+               Ts.get().iterateConceptDataInParallel(converter);
                Ts.get().commit();
                System.out.println("Conversion time: "
                                   + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
