@@ -16,13 +16,13 @@
 package org.ihtsdo.ttk.concept.cc.attributes;
 
 import java.beans.PropertyVetoException;
-import org.ihtsdo.ttk.api.conattr.ConAttrVersionBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
 
 /**
  *
  * @author kec
  */
-public interface ConceptAttributesFacade extends ConAttrVersionBI {
+public interface ConceptAttributesFacade extends ConceptAttributeVersionBI {
     void setDefined(boolean defined) throws PropertyVetoException;
     ConceptAttributesRevision makeAnalog(int statusNid, int authorNid, int pathNid, long time);
 }

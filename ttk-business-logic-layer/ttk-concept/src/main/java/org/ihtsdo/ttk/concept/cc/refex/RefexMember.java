@@ -23,7 +23,7 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexAnalogBI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.dto.component.TkRevision;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
@@ -34,8 +34,9 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
+import org.ihtsdo.ttk.api.blueprint.IdDirective;
+import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.RefexDirective;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
@@ -286,12 +287,13 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
     }
 
     @Override
-    public RefexCAB makeBlueprint(ViewCoordinate vc) throws IOException,
-            InvalidBlueprintException, ContradictionException {
+    public RefexCAB makeBlueprint(ViewCoordinate vc, 
+            IdDirective idDirective, RefexDirective refexDirective) throws IOException,
+            InvalidCAB, ContradictionException {
         RefexCAB rcs = new RefexCAB(getTkRefsetType(), 
                 P.s.getUuidPrimordialForNid(getReferencedComponentNid()),
-                Ts.get().getUuidPrimordialForNid(getRefexExtensionNid()),
-                getVersion(vc), vc, Ts.get().getUuidPrimordialForNid(getModuleNid()));
+                getRefexExtensionNid(),
+                getVersion(vc), vc, idDirective, refexDirective);
 
         addSpecProperties(rcs);
 
@@ -299,7 +301,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
     }
 
   
-    protected abstract TK_REFEX_TYPE getTkRefsetType();
+    protected abstract ToolkitRefexType getTkRefsetType();
 
     @Override
     public RefexMember<R, C>.Version getVersion(ViewCoordinate c) throws ContradictionException {
@@ -412,7 +414,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
     }
 
     @Override
-    public TK_REFEX_TYPE getRefexType() {
+    public ToolkitRefexType getRefexType() {
         return getTkRefsetType();
     }
 
@@ -427,7 +429,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
 
         //~--- methods ----------------------------------------------------------
         @Override
-        public TK_REFEX_TYPE getRefexType() {
+        public ToolkitRefexType getRefexType() {
             return RefexMember.this.getRefexType();
         }
 
@@ -500,8 +502,9 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
         }
 
         @Override
-        public RefexCAB makeBlueprint(ViewCoordinate vc) throws IOException, InvalidBlueprintException, ContradictionException {
-            return getCv().makeBlueprint(vc);
+        public RefexCAB makeBlueprint(ViewCoordinate vc, 
+            IdDirective idDirective, RefexDirective refexDirective) throws IOException, InvalidCAB, ContradictionException {
+            return getCv().makeBlueprint(vc, idDirective, refexDirective);
         }
     
         public int getTypeNid() {

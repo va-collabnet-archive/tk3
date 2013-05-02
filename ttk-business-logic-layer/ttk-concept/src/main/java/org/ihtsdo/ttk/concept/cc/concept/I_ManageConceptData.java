@@ -9,7 +9,7 @@ import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
 import org.ihtsdo.ttk.concept.cc.description.Description;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.NidListBI;
 import org.ihtsdo.ttk.api.NidSetBI;
 
@@ -55,7 +55,7 @@ public interface I_ManageConceptData {
 
    Collection<Integer> getAllNids() throws IOException;
 
-   ComponentChroncileBI<?> getComponent(int nid) throws IOException;
+   ComponentChronicleBI<?> getComponent(int nid) throws IOException;
 
    ConceptAttributes getConceptAttributes() throws IOException;
 

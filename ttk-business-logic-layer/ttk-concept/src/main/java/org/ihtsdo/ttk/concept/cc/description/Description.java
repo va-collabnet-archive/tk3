@@ -34,9 +34,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.lang.LANG_CODE;
-import org.ihtsdo.ttk.api.blueprint.DescCAB;
-import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
+import org.ihtsdo.ttk.api.lang.LanguageCode;
+import org.ihtsdo.ttk.api.blueprint.DescriptionCAB;
+import org.ihtsdo.ttk.api.blueprint.IdDirective;
+import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.RefexDirective;
 
 public class Description extends ConceptComponent<DescriptionRevision, Description>
         implements DescriptionAnalogBI<DescriptionRevision> {
@@ -314,10 +316,11 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
     }
 
     @Override
-    public DescCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
-        DescCAB descBp = new DescCAB(getConceptNid(), getTypeNid(),
-                LANG_CODE.getLangCode(lang), getText(), initialCaseSignificant,
-                getVersion(vc), vc, Ts.get().getUuidPrimordialForNid(getModuleNid()));
+    public DescriptionCAB makeBlueprint(ViewCoordinate vc, 
+            IdDirective idDirective, RefexDirective refexDirective) throws IOException, ContradictionException, InvalidCAB {
+        DescriptionCAB descBp = new DescriptionCAB(getConceptNid(), getTypeNid(),
+                LanguageCode.getLangCode(lang), getText(), initialCaseSignificant,
+                getVersion(vc), vc, idDirective, refexDirective);
         return descBp;
     }
 
@@ -508,8 +511,9 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
         }
 
         @Override
-        public DescCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
-            return getCv().makeBlueprint(vc);
+        public DescriptionCAB makeBlueprint(ViewCoordinate vc, 
+            IdDirective idDirective, RefexDirective refexDirective) throws IOException, ContradictionException, InvalidCAB {
+            return getCv().makeBlueprint(vc, idDirective, refexDirective);
         }
 
         @Override

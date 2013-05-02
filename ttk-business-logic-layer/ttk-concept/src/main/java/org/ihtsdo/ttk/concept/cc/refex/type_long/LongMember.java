@@ -13,11 +13,11 @@ import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.refex.type_long.RefexLongAnalogBI;
 import org.ihtsdo.ttk.dto.component.refex.type_long.TkRefexLongMember;
 import org.ihtsdo.ttk.dto.component.refex.type_long.TkRefexLongRevision;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -72,7 +72,7 @@ public class LongMember extends RefexMember<LongRevision, LongMember>
 
    @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.LONG_EXTENSION_1, getLong1());
+      rcs.with(ComponentProperty.LONG_EXTENSION_1, getLong1());
    }
 
    @Override
@@ -175,13 +175,13 @@ public class LongMember extends RefexMember<LongRevision, LongMember>
    }
 
    @Override
-   protected TK_REFEX_TYPE getTkRefsetType() {
-      return TK_REFEX_TYPE.LONG;
+   protected ToolkitRefexType getTkRefsetType() {
+      return ToolkitRefexType.LONG;
    }
 
    @Override
    public int getTypeNid() {
-      return TK_REFEX_TYPE.LONG.getTypeToken();
+      return ToolkitRefexType.LONG.getTypeToken();
    }
 
    @Override

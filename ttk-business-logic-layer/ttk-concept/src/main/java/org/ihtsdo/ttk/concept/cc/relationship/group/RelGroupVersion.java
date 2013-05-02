@@ -4,7 +4,7 @@ package org.ihtsdo.ttk.concept.cc.relationship.group;
 
 import org.ihtsdo.ttk.concept.cc.Position;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.PositionBI;
@@ -31,6 +31,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import org.ihtsdo.ttk.api.blueprint.IdDirective;
+import org.ihtsdo.ttk.api.blueprint.RefexDirective;
 
 public class RelGroupVersion implements RelGroupVersionBI {
    private long                time = Long.MIN_VALUE;
@@ -64,7 +66,8 @@ public class RelGroupVersion implements RelGroupVersionBI {
    }
 
    @Override
-   public CreateOrAmendBlueprint makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException {
+   public CreateOrAmendBlueprint makeBlueprint(ViewCoordinate vc, 
+            IdDirective idDirective, RefexDirective refexDirective) throws IOException, ContradictionException {
       throw new UnsupportedOperationException("Not supported yet.");
    }
 
@@ -215,7 +218,7 @@ public class RelGroupVersion implements RelGroupVersionBI {
    }
 
    @Override
-   public ComponentChroncileBI getChronicle() {
+   public ComponentChronicleBI getChronicle() {
       return rg;
    }
 
@@ -258,14 +261,8 @@ public class RelGroupVersion implements RelGroupVersionBI {
    }
 
    @Override
-   public Collection<? extends RefexVersionBI<?>> getCurrentRefexes(ViewCoordinate xyz) throws IOException {
-      return rg.getCurrentRefexes(xyz);
-   }
-
-   @Override
-   public Collection<? extends RefexVersionBI<?>> getCurrentRefexes(ViewCoordinate xyz, int refsetNid)
-           throws IOException {
-      throw new UnsupportedOperationException("Not supported yet.");
+   public Collection<? extends RefexVersionBI<?>> getRefexesActive(ViewCoordinate xyz) throws IOException {
+      return rg.getRefexesActive(xyz);
    }
 
    @Override
@@ -347,12 +344,6 @@ public class RelGroupVersion implements RelGroupVersionBI {
    @Override
    public Collection<? extends RefexChronicleBI<?>> getRefexes() throws IOException {
       return rg.getRefexes();
-   }
-
-   @Override
-   @Deprecated
-   public Collection<? extends RefexChronicleBI<?>> getRefexes(int refsetNid) throws IOException {
-      return rg.getRefexMembers(refsetNid);
    }
 
    @Override

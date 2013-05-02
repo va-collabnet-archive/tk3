@@ -16,9 +16,9 @@ import org.ihtsdo.ttk.api.ComponentVersionBI;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.TerminologySnapshotDI;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.refex.type_nid.RefexNidAnalogBI;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid.TkRefexUuidMember;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid.TkRefexUuidRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
@@ -75,7 +75,7 @@ public class NidMember extends RefexMember<NidRevision, NidMember>
 
    @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.COMPONENT_EXTENSION_1_ID, getNid1());
+      rcs.with(ComponentProperty.COMPONENT_EXTENSION_1_ID, getNid1());
    }
 
    @Override
@@ -193,13 +193,13 @@ public class NidMember extends RefexMember<NidRevision, NidMember>
    }
 
    @Override
-   protected TK_REFEX_TYPE getTkRefsetType() {
-      return TK_REFEX_TYPE.CID;
+   protected ToolkitRefexType getTkRefsetType() {
+      return ToolkitRefexType.CID;
    }
 
    @Override
    public int getTypeNid() {
-      return TK_REFEX_TYPE.CID.getTypeToken();
+      return ToolkitRefexType.CID.getTypeToken();
    }
 
    @Override

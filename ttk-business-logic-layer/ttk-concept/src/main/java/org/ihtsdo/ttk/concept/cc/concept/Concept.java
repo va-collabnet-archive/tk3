@@ -6,7 +6,7 @@ import org.ihtsdo.ttk.api.NidListBI;
 import org.ihtsdo.ttk.api.Precedence;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.ContradictionManagerBI;
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.NidSet;
 import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.NidBitSetBI;
@@ -42,10 +42,12 @@ import org.ihtsdo.ttk.concept.cc.relationship.group.RelGroupChronicle;
 import org.ihtsdo.ttk.concept.cc.relationship.group.RelGroupVersion;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.blueprint.ConceptCB;
-import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
+import org.ihtsdo.ttk.api.blueprint.IdDirective;
+import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.RefexDirective;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationThreadingPolicy;
-import org.ihtsdo.ttk.api.conattr.ConAttrChronicleBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeChronicleBI;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
 import org.ihtsdo.ttk.api.conflict.IdentifyAllConflictStrategy;
@@ -324,17 +326,9 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         return aac.isComponentChanged();
     }
 
-    public ConceptCB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
-        ConceptVersion cv = getVersion(vc);
-        UUID[] uuidArray = new UUID[cv.getRelsOutgoingDestinationsActiveIsa().size()];
-        int index = 0;
-
-        for (ConceptVersionBI parent : cv.getRelsOutgoingDestinationsActiveIsa()) {
-            uuidArray[index] = parent.getPrimUuid();
-            index++;
-        }
-
-        ConceptCB cab = new ConceptCB(getVersion(vc), UUID.randomUUID());
+    public ConceptCB makeBlueprint(ViewCoordinate vc, 
+            IdDirective idDirective, RefexDirective refexDirective) throws IOException, ContradictionException, InvalidCAB {
+        ConceptCB cab = new ConceptCB(getVersion(vc), idDirective, refexDirective);
 
         return cab;
     }
@@ -524,25 +518,25 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         }
 
         if (getDescriptions() != null) {
-            for (ComponentChroncileBI cc : getDescriptions()) {
+            for (ComponentChronicleBI cc : getDescriptions()) {
                 processor.process(cc);
             }
         }
 
         if (getNativeSourceRels() != null) {
-            for (ComponentChroncileBI cc : getNativeSourceRels()) {
+            for (ComponentChronicleBI cc : getNativeSourceRels()) {
                 processor.process(cc);
             }
         }
 
         if (getImages() != null) {
-            for (ComponentChroncileBI cc : getImages()) {
+            for (ComponentChronicleBI cc : getImages()) {
                 processor.process(cc);
             }
         }
 
         if (getRefsetMembers() != null) {
-            for (ComponentChroncileBI cc : getRefsetMembers()) {
+            for (ComponentChronicleBI cc : getRefsetMembers()) {
                 processor.process(cc);
             }
         }
@@ -797,7 +791,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         Map<Integer, HashSet<RelationshipChronicleBI>> statedGroupMap = new HashMap<>();
         Map<Integer, HashSet<RelationshipChronicleBI>> inferredGroupMap = new HashMap<>();
 
-        for (RelationshipChronicleBI r : getRelsOutgoing()) {
+        for (RelationshipChronicleBI r : getRelationshipsOutgoing()) {
 
             // Inferred
             for (RelationshipVersionBI rv : r.getVersions()) {
@@ -852,7 +846,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             }
         }
 
-        if (getRelsOutgoing() != null) {
+        if (getRelationshipsOutgoing() != null) {
             for (Relationship r : getNativeSourceRels()) {
                 sapNids.addAll(r.getComponentStamps());
             }
@@ -873,12 +867,12 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     @Override
-    public ComponentChroncileBI<?> getComponent(int nid) throws IOException {
+    public ComponentChronicleBI<?> getComponent(int nid) throws IOException {
         return data.getComponent(nid);
     }
 
     @Override
-    public ConAttrChronicleBI getConAttrs() throws IOException {
+    public ConceptAttributeChronicleBI getConAttrs() throws IOException {
         return getConceptAttributes();
     }
 
@@ -964,19 +958,12 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     @Override
-    public Collection<? extends RefexVersionBI<?>> getCurrentRefexes(ViewCoordinate xyz) throws IOException {
+    public Collection<? extends RefexVersionBI<?>> getRefexesActive(ViewCoordinate xyz) throws IOException {
         if (getConceptAttributes() != null) {
-            return getConceptAttributes().getCurrentRefexes(xyz);
+            return getConceptAttributes().getRefexesActive(xyz);
         }
 
         return new ArrayList<>(0);
-    }
-
-    @Override
-    @Deprecated
-    public Collection<? extends RefexVersionBI<?>> getCurrentRefexes(ViewCoordinate xyz, int refsetNid)
-            throws IOException {
-        return getCurrentRefexMembers(xyz, refsetNid);
     }
 
     @Override
@@ -1258,7 +1245,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
         for (Description.Version d : descriptions) {
             if (d.getTypeNid() == typePrefNid) {
-                for (RefexVersionBI<?> refex : d.getCurrentRefexes(vc)) {
+                for (RefexVersionBI<?> refex : d.getRefexesActive(vc)) {
                     if (refex.getRefexExtensionNid() == langRefexNid) {
                         RefexNidVersionBI<?> langRefex = (RefexNidVersionBI<?>) refex;
 
@@ -1295,7 +1282,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
     @Override
     public Collection<? extends RefexChronicleBI<?>> getRefexMembers(int refsetNid) throws IOException {
-        return getRefexes(refsetNid);
+        return getConceptAttributes().getRefexMembers(refsetNid);
     }
 
     private Description.Version getRefexSpecifiedDesc(Collection<Description.Version> descriptions,
@@ -1344,12 +1331,6 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         return getConceptAttributes().getRefexes();
     }
 
-    @Override
-    @Deprecated
-    public Collection<? extends RefexChronicleBI<?>> getRefexes(int refsetNid) throws IOException {
-        return getConceptAttributes().getRefexMembers(refsetNid);
-    }
-
     public RefexMember<?, ?> getRefsetMember(int memberNid) throws IOException {
         return data.getRefsetMember(memberNid);
     }
@@ -1369,7 +1350,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     @Override
-    public Collection<? extends RelGroupVersionBI> getRelGroupsActive(ViewCoordinate vc) throws IOException {
+    public Collection<? extends RelGroupVersionBI> getRelationshipGroupsActive(ViewCoordinate vc) throws IOException {
         ArrayList<RelGroupVersionBI> results = new ArrayList<>();
 
         if (vc.getRelationshipAssertionType() == RelAssertionType.INFERRED_THEN_STATED) {
@@ -1392,7 +1373,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
         tempVc.setAllowedStatusNids(null);
 
-        for (RelationshipChronicleBI r : getRelsOutgoing()) {
+        for (RelationshipChronicleBI r : getRelationshipsOutgoing()) {
             for (RelationshipVersionBI rv : r.getVersions(tempVc)) {
                 int group = rv.getGroup();
 
@@ -1430,7 +1411,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     @Override
-    public Collection<Relationship> getRelsIncoming() throws IOException {
+    public Collection<Relationship> getRelationshipsIncoming() throws IOException {
         if (isCanceled()) {
             return new ArrayList<>();
         }
@@ -1439,7 +1420,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     @Override
-    public Collection<Relationship> getRelsOutgoing() throws IOException {
+    public Collection<Relationship> getRelationshipsOutgoing() throws IOException {
         return getNativeSourceRels();
     }
 

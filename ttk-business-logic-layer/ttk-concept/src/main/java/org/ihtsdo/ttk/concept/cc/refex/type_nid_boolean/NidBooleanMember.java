@@ -6,9 +6,9 @@ import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
 import org.ihtsdo.cern.colt.list.IntArrayList;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_boolean.RefexNidBooleanAnalogBI;
@@ -113,8 +113,8 @@ public class NidBooleanMember extends RefexMember<NidBooleanRevision, NidBoolean
     */
    @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.COMPONENT_EXTENSION_1_ID, getNid1());
-      rcs.with(RefexProperty.BOOLEAN_EXTENSION_1, getBoolean1());
+      rcs.with(ComponentProperty.COMPONENT_EXTENSION_1_ID, getNid1());
+      rcs.with(ComponentProperty.BOOLEAN_EXTENSION_1, getBoolean1());
    }
 
    /**
@@ -336,8 +336,8 @@ public class NidBooleanMember extends RefexMember<NidBooleanRevision, NidBoolean
     * @return
     */
    @Override
-   protected TK_REFEX_TYPE getTkRefsetType() {
-      return TK_REFEX_TYPE.CID_BOOLEAN;
+   protected ToolkitRefexType getTkRefsetType() {
+      return ToolkitRefexType.CID_BOOLEAN;
    }
 
    /**
@@ -348,7 +348,7 @@ public class NidBooleanMember extends RefexMember<NidBooleanRevision, NidBoolean
     */
    @Override
    public int getTypeNid() {
-      return TK_REFEX_TYPE.CID_BOOLEAN.getTypeToken();
+      return ToolkitRefexType.CID_BOOLEAN.getTypeToken();
    }
 
    /**

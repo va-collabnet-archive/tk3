@@ -21,9 +21,11 @@ import org.ihtsdo.ttk.dto.component.media.TkMediaRevision;
 import java.util.Collection;
 import java.util.Set;
 import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
+import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.MediaCAB;
+import org.ihtsdo.ttk.api.blueprint.RefexDirective;
 
 public class MediaRevision extends Revision<MediaRevision, Media>
         implements MediaVersionFacade {
@@ -111,14 +113,15 @@ public class MediaRevision extends Revision<MediaRevision, Media>
    }
    
    @Override
-    public MediaCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException{
+    public MediaCAB makeBlueprint(ViewCoordinate vc, 
+            IdDirective idDirective, RefexDirective refexDirective) throws IOException, ContradictionException, InvalidCAB{
         MediaCAB mediaBp = new MediaCAB(getConceptNid(),
                 getTypeNid(),
                 getFormat(),
                 getTextDescription(),
                 getMedia(),
                 getVersion(vc),
-                vc, Ts.get().getUuidPrimordialForNid(getModuleNid()));
+                vc, idDirective, refexDirective);
         return mediaBp;
     }
 

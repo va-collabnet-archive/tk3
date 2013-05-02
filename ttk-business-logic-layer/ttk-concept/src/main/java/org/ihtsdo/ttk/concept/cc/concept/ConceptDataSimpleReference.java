@@ -19,7 +19,7 @@ import org.ihtsdo.ttk.concept.cc.component.RefexMemberBinder;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 import org.ihtsdo.ttk.concept.cc.component.RelationshipBinder;
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.NidList;
 import org.ihtsdo.ttk.api.NidListBI;
 import org.ihtsdo.ttk.api.NidSet;
@@ -516,7 +516,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
    }
 
    @Override
-   public ComponentChroncileBI<?> getComponent(int nid) throws IOException {
+   public ComponentChronicleBI<?> getComponent(int nid) throws IOException {
       if ((getConceptAttributes() != null) && (getConceptAttributes().nid == nid)) {
          return getConceptAttributes();
       }
@@ -549,7 +549,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
          return getRefsetMember(nid);
       }
       
-      ComponentChroncileBI<?> component = getAnnotation(nid);
+      ComponentChronicleBI<?> component = getAnnotation(nid);
       
       if (component != null) {
           return component;

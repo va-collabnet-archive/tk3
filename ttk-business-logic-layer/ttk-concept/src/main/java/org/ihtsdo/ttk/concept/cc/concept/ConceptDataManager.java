@@ -262,7 +262,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
          Concept c = (Concept) P.s.getConceptForNid(originNid);
 
          if (c != null) {
-            for (Relationship r : c.getRelsOutgoing()) {
+            for (Relationship r : c.getRelationshipsOutgoing()) {
                if (r != null && r.getDestinationNid() == enclosingConcept.getNid()) {
                    if (allowedTypes.contains(r.getTypeNid())) {
                        destRels.add(r);

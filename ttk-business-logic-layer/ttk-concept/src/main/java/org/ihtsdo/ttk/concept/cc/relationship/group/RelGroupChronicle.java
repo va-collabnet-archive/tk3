@@ -149,14 +149,8 @@ public class RelGroupChronicle implements RelGroupChronicleBI {
    }
 
    @Override
-   public Collection<? extends RefexVersionBI<?>> getCurrentRefexes(ViewCoordinate xyz) throws IOException {
+   public Collection<? extends RefexVersionBI<?>> getRefexesActive(ViewCoordinate xyz) throws IOException {
       throw new UnsupportedOperationException("Not supported.");
-   }
-
-   @Override
-   public Collection<? extends RefexVersionBI<?>> getCurrentRefexes(ViewCoordinate xyz, int refsetNid)
-           throws IOException {
-      throw new UnsupportedOperationException("Not supported yet.");
    }
 
    @Override
@@ -207,11 +201,6 @@ public class RelGroupChronicle implements RelGroupChronicleBI {
    @Override
    public Collection<? extends RefexChronicleBI<?>> getRefexes() throws IOException {
       throw new UnsupportedOperationException("Not supported.");
-   }
-
-   @Override
-   public Collection<? extends RefexChronicleBI<?>> getRefexes(int refsetNid) throws IOException {
-      throw new UnsupportedOperationException("Not supported yet.");
    }
 
    @Override

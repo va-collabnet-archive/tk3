@@ -26,11 +26,11 @@ import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayAnalogBI;
 import org.ihtsdo.ttk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayVersionBI;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TkRefexArrayOfByteArrayRevision;
 import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TkRefexArrayOfByteArrayMember;
 import org.ihtsdo.ttk.api.hash.Hashcode;
@@ -90,7 +90,7 @@ public class ArrayOfByteArrayMember extends RefexMember<ArrayOfByteArrayRevision
  
     @Override
     protected void addSpecProperties(RefexCAB rcs) {
-        rcs.with(RefexProperty.ARRAY_OF_BYTEARRAY, arrayOfByteArray);
+        rcs.with(ComponentProperty.ARRAY_OF_BYTEARRAY, arrayOfByteArray);
     }
 
     @Override
@@ -214,13 +214,13 @@ public class ArrayOfByteArrayMember extends RefexMember<ArrayOfByteArrayRevision
     //~--- get methods ---------------------------------------------------------
 
     @Override
-    protected TK_REFEX_TYPE getTkRefsetType() {
-        return TK_REFEX_TYPE.ARRAY_BYTEARRAY;
+    protected ToolkitRefexType getTkRefsetType() {
+        return ToolkitRefexType.ARRAY_BYTEARRAY;
     }
 
     @Override
     public int getTypeNid() {
-        return TK_REFEX_TYPE.ARRAY_BYTEARRAY.getTypeToken();
+        return ToolkitRefexType.ARRAY_BYTEARRAY.getTypeToken();
     }
 
     @Override

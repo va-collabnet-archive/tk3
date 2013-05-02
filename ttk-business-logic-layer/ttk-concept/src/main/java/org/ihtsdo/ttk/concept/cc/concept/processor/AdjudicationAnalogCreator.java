@@ -15,7 +15,7 @@
  */
 package org.ihtsdo.ttk.concept.cc.concept.processor;
 
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.ProcessComponentChronicleBI;
 import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
@@ -38,7 +38,7 @@ public class AdjudicationAnalogCreator implements ProcessComponentChronicleBI {
     
     
     @Override
-    public void process(ComponentChroncileBI cc) throws Exception {
+    public void process(ComponentChronicleBI cc) throws Exception {
         if (cc.makeAdjudicationAnalogs(ec, vc)) {
             componentChanged = true;
         }

@@ -244,9 +244,9 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
     }
 
     private List<TkRelationship> processRelationships(Concept c, AtomicBoolean changed) throws IOException {
-        List<TkRelationship> rels = new ArrayList<>(c.getRelsOutgoing().size());
+        List<TkRelationship> rels = new ArrayList<>(c.getRelationshipsOutgoing().size());
 
-        for (Relationship r : c.getRelsOutgoing()) {
+        for (Relationship r : c.getRelationshipsOutgoing()) {
             TkRelationship ecr = null;
 
             for (Relationship.Version v : r.getVersions()) {

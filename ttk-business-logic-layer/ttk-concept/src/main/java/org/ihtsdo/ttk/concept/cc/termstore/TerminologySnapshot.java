@@ -15,7 +15,7 @@ import org.ihtsdo.ttk.api.TerminologyBuilderBI;
 import org.ihtsdo.ttk.api.TerminologySnapshotDI;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGeneratorBI;
-import org.ihtsdo.ttk.api.conattr.ConAttrVersionBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
 import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
@@ -276,7 +276,7 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     * @throws IOException
     */
    @Override
-   public boolean forget(ConAttrVersionBI attr) throws IOException {
+   public boolean forget(ConceptAttributeVersionBI attr) throws IOException {
       return store.forget(attr);
    }
 

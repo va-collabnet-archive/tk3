@@ -12,11 +12,11 @@ import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_nid.RefexNidNidNidAnalogBI;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TkRefexUuidUuidUuidRevision;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -87,9 +87,9 @@ public class NidNidNidRevision extends RefexRevision<NidNidNidRevision, NidNidNi
 
    @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.COMPONENT_EXTENSION_1_ID, getNid1());
-      rcs.with(RefexProperty.COMPONENT_EXTENSION_2_ID, getNid2());
-      rcs.with(RefexProperty.COMPONENT_EXTENSION_3_ID, getNid3());
+      rcs.with(ComponentProperty.COMPONENT_EXTENSION_1_ID, getNid1());
+      rcs.with(ComponentProperty.COMPONENT_EXTENSION_2_ID, getNid2());
+      rcs.with(ComponentProperty.COMPONENT_EXTENSION_3_ID, getNid3());
    }
 
    @Override
@@ -198,8 +198,8 @@ public class NidNidNidRevision extends RefexRevision<NidNidNidRevision, NidNidNi
    }
 
    @Override
-   protected TK_REFEX_TYPE getTkRefsetType() {
-      return TK_REFEX_TYPE.CID_CID_CID;
+   protected ToolkitRefexType getTkRefsetType() {
+      return ToolkitRefexType.CID_CID_CID;
    }
 
    @Override

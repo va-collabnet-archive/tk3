@@ -17,7 +17,7 @@ import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.PositionBI;
 import org.ihtsdo.ttk.api.PositionSetBI;
 import org.ihtsdo.ttk.api.Precedence;
-import org.ihtsdo.ttk.api.conattr.ConAttrAnalogBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeAnalogBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
@@ -32,11 +32,13 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
-import org.ihtsdo.ttk.api.blueprint.ConAttrAB;
-import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
+import org.ihtsdo.ttk.api.blueprint.ConceptAttributeAB;
+import org.ihtsdo.ttk.api.blueprint.IdDirective;
+import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.RefexDirective;
 
 public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevision, ConceptAttributes>
-        implements ConAttrAnalogBI<ConceptAttributesRevision> {
+        implements ConceptAttributeAnalogBI<ConceptAttributesRevision> {
 
     private static VersionComputer<ConceptAttributes.Version> computer =
             new VersionComputer<>();
@@ -79,7 +81,7 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
     }
 
     public void addTuples(NidSetBI allowedStatus, PositionSetBI positionSet,
-            List< ConAttrAnalogBI> returnTuples, Precedence precedencePolicy,
+            List< ConceptAttributeAnalogBI> returnTuples, Precedence precedencePolicy,
             ContradictionManagerBI contradictionManager, long time)
             throws IOException {
         List<Version> returnList = new ArrayList<>();
@@ -88,7 +90,6 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
                 precedencePolicy, contradictionManager, time);
         returnTuples.addAll(returnList);
     }
-
 
     @Override
     public void clearVersions() {
@@ -206,9 +207,9 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
 
     /**
      * Test method to check to see if two objects are equal in all respects.
+     *
      * @param another
-     * @return either a zero length String, or a String containing a description of the
-     * validation failures.
+     * @return either a zero length String, or a String containing a description of the validation failures.
      * @throws IOException
      */
     public String validate(ConceptAttributes another) throws IOException {
@@ -262,14 +263,13 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
 //    public int getConId() {
 //        return nid;
 //    }
-
     @Override
-    public ConAttrAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
-        ConAttrAB conAttrBp = new ConAttrAB(nid, defined,
-                getVersion(vc), vc);
+    public ConceptAttributeAB makeBlueprint(ViewCoordinate vc, 
+            IdDirective idDirective, RefexDirective refexDirective) throws IOException, ContradictionException, InvalidCAB {
+        ConceptAttributeAB conAttrBp = new ConceptAttributeAB(nid, defined,
+                getVersion(vc), vc, refexDirective, idDirective);
         return conAttrBp;
     }
-
 
     @Override
     public ConceptAttributes getPrimordialVersion() {
@@ -378,7 +378,6 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
 //    public boolean hasExtensions() throws IOException {
 //        return getEnclosingConcept().hasExtensionsForComponent(nid);
 //    }
-
     @Override
     public boolean isDefined() {
         return defined;
@@ -401,14 +400,13 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
 
     //~--- inner classes -------------------------------------------------------
     public class Version extends ConceptComponent<ConceptAttributesRevision, ConceptAttributes>.Version
-            implements ConAttrAnalogBI<ConceptAttributesRevision> {
+            implements ConceptAttributeAnalogBI<ConceptAttributesRevision> {
 
-        public Version(ConAttrAnalogBI<ConceptAttributesRevision> cv) {
+        public Version(ConceptAttributeAnalogBI<ConceptAttributesRevision> cv) {
             super(cv);
         }
 
         //~--- methods ----------------------------------------------------------
-
         public ConceptAttributesRevision makeAnalog() {
             if (cv == ConceptAttributes.this) {
                 return new ConceptAttributesRevision(ConceptAttributes.this, ConceptAttributes.this);
@@ -431,21 +429,14 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
             return false;
         }
 
-        //~--- get methods ------------------------------------------------------
-
-        @Override
-        public Collection<? extends RefexVersionBI<?>> getCurrentRefexes(ViewCoordinate xyz, int refsetNid)
-                throws IOException {
-            return ConceptAttributes.this.getCurrentRefexMembers(xyz, refsetNid);
-        }
-
-        public ConAttrAnalogBI<ConceptAttributesRevision> getCv() {
-            return (ConAttrAnalogBI<ConceptAttributesRevision>) cv;
+        public ConceptAttributeAnalogBI<ConceptAttributesRevision> getCv() {
+            return (ConceptAttributeAnalogBI<ConceptAttributesRevision>) cv;
         }
 
         @Override
-        public ConAttrAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException{
-            return getCv().makeBlueprint(vc);
+        public ConceptAttributeAB makeBlueprint(ViewCoordinate vc, 
+            IdDirective idDirective, RefexDirective refexDirective) throws IOException, ContradictionException, InvalidCAB {
+            return getCv().makeBlueprint(vc, idDirective, refexDirective);
         }
 
         @Override

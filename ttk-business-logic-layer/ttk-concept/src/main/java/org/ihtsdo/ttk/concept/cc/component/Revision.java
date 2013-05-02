@@ -7,7 +7,7 @@ import org.ihtsdo.ttk.api.ComponentVersionBI;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.concept.cc.Position;
 import org.ihtsdo.ttk.api.AnalogBI;
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.AnalogGeneratorBI;
 import org.ihtsdo.ttk.api.PositionBI;
@@ -287,8 +287,8 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
    }
 
    @Override
-   public ComponentChroncileBI getChronicle() {
-      return (ComponentChroncileBI) primordialComponent;
+   public ComponentChronicleBI getChronicle() {
+      return (ComponentChronicleBI) primordialComponent;
    }
 
    @Override
@@ -330,14 +330,8 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
    }
 
    @Override
-   public Collection<? extends RefexVersionBI<?>> getCurrentRefexes(ViewCoordinate xyz) throws IOException {
-      return primordialComponent.getCurrentRefexes(xyz);
-   }
-
-   @Override
-   public Collection<? extends RefexVersionBI<?>> getCurrentRefexes(ViewCoordinate xyz, int refsetNid)
-           throws IOException {
-      return primordialComponent.getCurrentRefexes(xyz, refsetNid);
+   public Collection<? extends RefexVersionBI<?>> getRefexesActive(ViewCoordinate xyz) throws IOException {
+      return primordialComponent.getRefexesActive(xyz);
    }
 
    public Concept getEnclosingConcept() {
@@ -386,12 +380,6 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
    @Override
    public Collection<? extends RefexChronicleBI<?>> getRefexes() throws IOException {
       return primordialComponent.getRefexes();
-   }
-
-   @Override
-   @Deprecated
-   public Collection<? extends RefexChronicleBI<?>> getRefexes(int refsetNid) throws IOException {
-      return primordialComponent.getRefexMembers(refsetNid);
    }
 
    @Override

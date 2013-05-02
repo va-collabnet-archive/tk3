@@ -19,13 +19,15 @@ import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.concept.cc.concept.Concept;
 import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
-import org.ihtsdo.ttk.api.blueprint.RelCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.RelationshipCAB;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.relationship.RelationshipAnalogBI;
 import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf1;
 import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
-import org.ihtsdo.ttk.api.TkRelType;
+import org.ihtsdo.ttk.api.TkRelationshipType;
+import org.ihtsdo.ttk.api.blueprint.IdDirective;
+import org.ihtsdo.ttk.api.blueprint.RefexDirective;
 import org.ihtsdo.ttk.dto.component.relationship.TkRelationship;
 import org.ihtsdo.ttk.dto.component.relationship.TkRelationshipRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
@@ -190,8 +192,9 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
    }
 
    @Override
-   public RelCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
-      TkRelType relType = null;
+   public RelationshipCAB makeBlueprint(ViewCoordinate vc, 
+            IdDirective idDirective, RefexDirective refexDirective) throws IOException, ContradictionException, InvalidCAB {
+      TkRelationshipType relType = null;
 
       if ((getCharacteristicNid()
               == SnomedMetadataRf1.INFERRED_DEFINING_CHARACTERISTIC_TYPE_RF1.getLenient()
@@ -199,16 +202,16 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
                                 == SnomedMetadataRf1.DEFINING_CHARACTERISTIC_TYPE_RF1.getLenient()
                                    .getNid()) || (getCharacteristicNid()
                                       == SnomedMetadataRf2.INFERRED_RELATIONSHIP_RF2.getLenient().getNid())) {
-         throw new InvalidBlueprintException("Inferred relationships can not be used to make blueprints");
+         throw new InvalidCAB("Inferred relationships can not be used to make blueprints");
       } else if ((getCharacteristicNid()
                   == SnomedMetadataRf1.STATED_DEFINING_CHARACTERISTIC_TYPE_RF1.getLenient()
                      .getNid()) || (getCharacteristicNid()
                                     == SnomedMetadataRf2.STATED_RELATIONSHIP_RF2.getLenient().getNid())) {
-         relType = TkRelType.STATED_HIERARCHY;
+         relType = TkRelationshipType.STATED_HIERARCHY;
       }
 
-      RelCAB relBp = new RelCAB(getOriginNid(), getTypeNid(), getDestinationNid(), getGroup(), relType,
-                                getVersion(vc), vc, Ts.get().getUuidPrimordialForNid(getModuleNid()));
+      RelationshipCAB relBp = new RelationshipCAB(getOriginNid(), getTypeNid(), getDestinationNid(), getGroup(), relType,
+                                getVersion(vc), vc, idDirective, refexDirective);
 
       return relBp;
    }
@@ -595,8 +598,9 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
       }
 
       @Override
-      public RelCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
-         return getCv().makeBlueprint(vc);
+      public RelationshipCAB makeBlueprint(ViewCoordinate vc, 
+            IdDirective idDirective, RefexDirective refexDirective) throws IOException, ContradictionException, InvalidCAB {
+         return getCv().makeBlueprint(vc, idDirective, refexDirective);
       }
 
       //~--- get methods ------------------------------------------------------

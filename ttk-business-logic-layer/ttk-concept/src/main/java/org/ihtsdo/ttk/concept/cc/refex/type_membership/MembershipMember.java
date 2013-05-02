@@ -15,7 +15,7 @@ import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.refex.RefexAnalogBI;
 import org.ihtsdo.ttk.api.refex.type_long.RefexLongAnalogBI;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.type_member.TkRefexMember;
 import org.ihtsdo.ttk.dto.component.refex.type_member.TkRefexRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
@@ -164,13 +164,13 @@ public class MembershipMember extends RefexMember<MembershipRevision, Membership
    //~--- get methods ---------------------------------------------------------
 
    @Override
-   protected TK_REFEX_TYPE getTkRefsetType() {
-      return TK_REFEX_TYPE.MEMBER;
+   protected ToolkitRefexType getTkRefsetType() {
+      return ToolkitRefexType.MEMBER;
    }
 
    @Override
    public int getTypeNid() {
-      return TK_REFEX_TYPE.MEMBER.getTypeToken();
+      return ToolkitRefexType.MEMBER.getTypeToken();
    }
 
    @Override

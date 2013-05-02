@@ -13,9 +13,9 @@ import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.refex.type_int.RefexIntAnalogBI;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.type_int.TkRefexIntMember;
 import org.ihtsdo.ttk.dto.component.refex.type_int.TkRefexIntRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
@@ -72,7 +72,7 @@ public class IntMember extends RefexMember<IntRevision, IntMember>
 
    @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.INTEGER_EXTENSION_1, this.int1);
+      rcs.with(ComponentProperty.INTEGER_EXTENSION_1, this.int1);
    }
 
    @Override
@@ -175,13 +175,13 @@ public class IntMember extends RefexMember<IntRevision, IntMember>
    }
 
    @Override
-   protected TK_REFEX_TYPE getTkRefsetType() {
-      return TK_REFEX_TYPE.INT;
+   protected ToolkitRefexType getTkRefsetType() {
+      return ToolkitRefexType.INT;
    }
 
    @Override
    public int getTypeNid() {
-      return TK_REFEX_TYPE.INT.getTypeToken();
+      return ToolkitRefexType.INT.getTypeToken();
    }
 
    @Override

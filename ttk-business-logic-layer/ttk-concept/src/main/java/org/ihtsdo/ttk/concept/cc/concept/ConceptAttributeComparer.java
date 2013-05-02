@@ -2,7 +2,7 @@ package org.ihtsdo.ttk.concept.cc.concept;
 
 import org.ihtsdo.ttk.concept.cc.concept.AttributeComparer;
 import org.ihtsdo.ttk.api.ComponentVersionBI;
-import org.ihtsdo.ttk.api.conattr.ConAttrVersionBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
 import org.ihtsdo.ttk.api.contradiction.ComponentType;
 
 public class ConceptAttributeComparer extends AttributeComparer {
@@ -17,7 +17,7 @@ public class ConceptAttributeComparer extends AttributeComparer {
 
 	@Override
 	boolean hasSameAttributes(ComponentVersionBI v) {
-		ConAttrVersionBI conAttrVersion = (ConAttrVersionBI)v;
+		ConceptAttributeVersionBI conAttrVersion = (ConceptAttributeVersionBI)v;
 
 		if ((conAttrVersion.isDefined() != lcaDefinedValue) ||
 			(conAttrVersion.getStatusNid() != lcaStatusNid))
@@ -28,7 +28,7 @@ public class ConceptAttributeComparer extends AttributeComparer {
 
 	@Override
 	public void initializeAttributes(ComponentVersionBI v) {
-		ConAttrVersionBI conAttrVersion = (ConAttrVersionBI)v;
+		ConceptAttributeVersionBI conAttrVersion = (ConceptAttributeVersionBI)v;
 		comparerInitialized = true;
 		
 		lcaDefinedValue = conAttrVersion.isDefined();

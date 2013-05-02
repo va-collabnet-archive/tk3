@@ -13,7 +13,7 @@ import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.type_member.TkRefexRevision;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -129,8 +129,8 @@ public class MembershipRevision extends RefexRevision<MembershipRevision, Member
    //~--- get methods ---------------------------------------------------------
 
     @Override
-   protected TK_REFEX_TYPE getTkRefsetType() {
-      return TK_REFEX_TYPE.MEMBER;
+   protected ToolkitRefexType getTkRefsetType() {
+      return ToolkitRefexType.MEMBER;
    }
 
    @Override

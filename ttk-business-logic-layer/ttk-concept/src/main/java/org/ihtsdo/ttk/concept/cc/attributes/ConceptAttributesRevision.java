@@ -11,24 +11,26 @@ import org.ihtsdo.cern.colt.list.IntArrayList;
 
 import org.ihtsdo.ttk.concept.cc.component.Revision;
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.blueprint.ConAttrAB;
-import org.ihtsdo.ttk.api.conattr.ConAttrAnalogBI;
+import org.ihtsdo.ttk.api.blueprint.ConceptAttributeAB;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeAnalogBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Collection;
 import java.util.Set;
+import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
+import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.RefexDirective;
 import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributesRevision;
 
 public class ConceptAttributesRevision extends Revision<ConceptAttributesRevision, ConceptAttributes>
-        implements ConAttrAnalogBI<ConceptAttributesRevision> {  
+        implements ConceptAttributeAnalogBI<ConceptAttributesRevision> {  
    private boolean defined = false;
 
    //~--- constructors --------------------------------------------------------
-   public ConceptAttributesRevision(ConAttrAnalogBI another, ConceptAttributes primoridalMember) {
+   public ConceptAttributesRevision(ConceptAttributeAnalogBI another, ConceptAttributes primoridalMember) {
       super(another.getStatusNid(), another.getTime(), another.getAuthorNid(), another.getModuleNid(),
               another.getPathNid(), primoridalMember);
       this.defined = another.isDefined();
@@ -54,7 +56,7 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
       super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
    }
    
-   public ConceptAttributesRevision(ConAttrAnalogBI another, int statusNid, long time, int authorNid,
+   public ConceptAttributesRevision(ConceptAttributeAnalogBI another, int statusNid, long time, int authorNid,
                                     int moduleNid, int pathNid, ConceptAttributes primoridalMember) {
       super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
       this.defined = another.isDefined();
@@ -187,8 +189,10 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
    }
 
     @Override
-    public ConAttrAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
-        ConAttrAB conAttrBp = new ConAttrAB(primordialComponent.getConceptNid(), defined, getVersion(vc), vc);
+    public ConceptAttributeAB makeBlueprint(ViewCoordinate vc, 
+            IdDirective idDirective, RefexDirective refexDirective) throws IOException, ContradictionException, InvalidCAB {
+        ConceptAttributeAB conAttrBp = new ConceptAttributeAB(primordialComponent.getConceptNid(), defined, getVersion(vc), vc,
+                refexDirective, idDirective);
         return conAttrBp;
     }
 }

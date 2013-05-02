@@ -13,11 +13,11 @@ import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_int.RefexNidIntAnalogBI;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_int.TkRefexUuidIntRevision;
 
 public class NidIntRevision extends RefexRevision<NidIntRevision, NidIntMember>
@@ -71,8 +71,8 @@ public class NidIntRevision extends RefexRevision<NidIntRevision, NidIntMember>
 
     @Override
     protected void addSpecProperties(RefexCAB rcs) {
-        rcs.with(RefexProperty.COMPONENT_EXTENSION_1_ID, getNid1());
-        rcs.with(RefexProperty.INTEGER_EXTENSION_1, getInt1());
+        rcs.with(ComponentProperty.COMPONENT_EXTENSION_1_ID, getNid1());
+        rcs.with(ComponentProperty.INTEGER_EXTENSION_1, getInt1());
     }
 
     @Override
@@ -157,8 +157,8 @@ public class NidIntRevision extends RefexRevision<NidIntRevision, NidIntMember>
     }
 
     @Override
-    protected TK_REFEX_TYPE getTkRefsetType() {
-        return TK_REFEX_TYPE.CID_INT;
+    protected ToolkitRefexType getTkRefsetType() {
+        return ToolkitRefexType.CID_INT;
     }
 
     @Override

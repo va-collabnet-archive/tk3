@@ -12,9 +12,9 @@ import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.refex.type_nid_float.RefexNidFloatAnalogBI;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TkRefexUuidFloatMember;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TkRefexUuidFloatRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
@@ -74,8 +74,8 @@ public class NidFloatMember extends RefexMember<NidFloatRevision, NidFloatMember
 
    @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.COMPONENT_EXTENSION_1_ID, getNid1());
-      rcs.with(RefexProperty.FLOAT_EXTENSION_1, getFloat1());
+      rcs.with(ComponentProperty.COMPONENT_EXTENSION_1_ID, getNid1());
+      rcs.with(ComponentProperty.FLOAT_EXTENSION_1, getFloat1());
    }
 
    @Override
@@ -194,13 +194,13 @@ public class NidFloatMember extends RefexMember<NidFloatRevision, NidFloatMember
    }
 
    @Override
-   protected TK_REFEX_TYPE getTkRefsetType() {
-      return TK_REFEX_TYPE.CID_FLOAT;
+   protected ToolkitRefexType getTkRefsetType() {
+      return ToolkitRefexType.CID_FLOAT;
    }
 
    @Override
    public int getTypeNid() {
-      return TK_REFEX_TYPE.CID_FLOAT.getTypeToken();
+      return ToolkitRefexType.CID_FLOAT.getTypeToken();
    }
 
    @Override

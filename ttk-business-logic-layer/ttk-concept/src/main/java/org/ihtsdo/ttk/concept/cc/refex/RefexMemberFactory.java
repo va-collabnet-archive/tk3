@@ -4,12 +4,12 @@ package org.ihtsdo.ttk.concept.cc.refex;
 
 import com.sleepycat.bind.tuple.TupleInput;
 
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ComponentChronicleBI;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
+import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.concept.Concept;
@@ -53,10 +53,10 @@ import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int.TkRefexUuidUui
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long.TkRefexUuidUuidUuidLongMember;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TkRefexUuidUuidUuidStringMember;
 
-import static org.ihtsdo.ttk.api.TK_REFEX_TYPE.CID_CID_CID_FLOAT;
-import static org.ihtsdo.ttk.api.TK_REFEX_TYPE.CID_CID_CID_INT;
-import static org.ihtsdo.ttk.api.TK_REFEX_TYPE.CID_CID_CID_LONG;
-import static org.ihtsdo.ttk.api.TK_REFEX_TYPE.CID_CID_CID_STRING;
+import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_FLOAT;
+import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_INT;
+import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_LONG;
+import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_STRING;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -83,10 +83,10 @@ public class RefexMemberFactory {
     * @return
     *
     * @throws IOException
-    * @throws InvalidBlueprintException
+    * @throws InvalidCAB
     */
    public static RefexMember<?, ?> create(RefexCAB res, EditCoordinate ec)
-           throws IOException, InvalidBlueprintException {
+           throws IOException, InvalidCAB {
       RefexMember<?, ?> member = createBlank(res);
 
       return reCreate(res, member, ec);
@@ -185,7 +185,7 @@ public class RefexMemberFactory {
    @SuppressWarnings("rawtypes")
    public RefexMember create(int nid, int typeToken, int enclosingConceptNid, TupleInput input)
            throws IOException {
-      TK_REFEX_TYPE memberType = TK_REFEX_TYPE.getFromToken(typeToken);
+      ToolkitRefexType memberType = ToolkitRefexType.getFromToken(typeToken);
 
       switch (memberType) {
       case BOOLEAN :
@@ -334,11 +334,11 @@ public class RefexMemberFactory {
     * @return
     *
     * @throws IOException
-    * @throws InvalidBlueprintException
+    * @throws InvalidCAB
     */
    public static RefexMember<?, ?> reCreate(RefexCAB blueprint, RefexMember<?, ?> member, EditCoordinate ec)
-           throws IOException, InvalidBlueprintException {
-      Concept refexColCon = (Concept) P.s.getConcept(blueprint.getRefexCollectionUuid());
+           throws IOException, InvalidCAB {
+      Concept refexColCon = (Concept) P.s.getConcept(blueprint.getRefexCollectionNid());
 
       member.refexExtensionNid = refexColCon.getNid();
       member.nid               = P.s.getNidForUuids(blueprint.getMemberUUID());
@@ -349,13 +349,13 @@ public class RefexMemberFactory {
          member.enclosingConceptNid = P.s.getConceptNidForNid(rcNid);
          P.s.setConceptNidForNid(member.enclosingConceptNid, member.nid);
 
-         ComponentChroncileBI<?> component = blueprint.getReferencedComponent();
+         ComponentChronicleBI<?> component = blueprint.getReferencedComponent();
          if (component == null) {
              component = P.s.getComponent(blueprint.getReferencedComponentUuid());
          }
 
          if (component == null) {
-            throw new InvalidBlueprintException("Component for annotation is null. Blueprint: " + blueprint);
+            throw new InvalidCAB("Component for annotation is null. Blueprint: " + blueprint);
          }
 
          component.addAnnotation(member);
@@ -371,17 +371,17 @@ public class RefexMemberFactory {
 
       for (int i = 0; i < ec.getEditPaths().size(); i++) {
          if (i == 0) {
-            member.setStatusAtPositionNid(P.s.getStamp(blueprint.getInt(RefexProperty.STATUS_ID), Long.MAX_VALUE,
+            member.setStatusAtPositionNid(P.s.getStamp(blueprint.getInt(ComponentProperty.STATUS_ID), Long.MAX_VALUE,
                 ec.getAuthorNid(), ec.getModuleNid(), ec.getEditPaths().getSetValues()[i]));
             member.setPrimordialUuid(blueprint.getMemberUUID());
 
             try {
-               blueprint.setPropertiesExceptSap(member);
+               blueprint.setPropertiesExceptStamp(member);
             } catch (PropertyVetoException ex) {
-               throw new InvalidBlueprintException("RefexAmendmentSpec: " + blueprint, ex);
+               throw new InvalidCAB("RefexAmendmentSpec: " + blueprint, ex);
             }
          } else {
-            member.makeAnalog(blueprint.getInt(RefexProperty.STATUS_ID), Long.MAX_VALUE, ec.getAuthorNid(),
+            member.makeAnalog(blueprint.getInt(ComponentProperty.STATUS_ID), Long.MAX_VALUE, ec.getAuthorNid(),
                               ec.getModuleNid(), ec.getEditPaths().getSetValues()[i]);
          }
       }

@@ -28,7 +28,7 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
 
 import org.ihtsdo.ttk.api.ComponentBI;
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.ComponentContainerBI;
 import org.ihtsdo.ttk.api.ComponentVersionBI;
 import org.ihtsdo.ttk.api.ConceptContainerBI;
@@ -481,7 +481,7 @@ public abstract class Termstore implements PersistentStoreI {
     * @throws IOException
     */
    @Override
-   public ComponentChroncileBI<?> getComponent(Collection<UUID> uuids) throws IOException {
+   public ComponentChronicleBI<?> getComponent(Collection<UUID> uuids) throws IOException {
       return getComponent(getNidForUuids(uuids));
    }
 
@@ -496,7 +496,7 @@ public abstract class Termstore implements PersistentStoreI {
     * @throws IOException
     */
    @Override
-   public ComponentChroncileBI<?> getComponent(ComponentContainerBI cc) throws IOException {
+   public ComponentChronicleBI<?> getComponent(ComponentContainerBI cc) throws IOException {
       return getComponent(cc.getNid());
    }
 
@@ -511,7 +511,7 @@ public abstract class Termstore implements PersistentStoreI {
     * @throws IOException
     */
    @Override
-   public final ComponentChroncileBI<?> getComponent(int nid) throws IOException {
+   public final ComponentChronicleBI<?> getComponent(int nid) throws IOException {
       return getConceptForNid(nid).getComponent(nid);
    }
 
@@ -526,7 +526,7 @@ public abstract class Termstore implements PersistentStoreI {
     * @throws IOException
     */
    @Override
-   public ComponentChroncileBI<?> getComponent(UUID... uuids) throws IOException {
+   public ComponentChronicleBI<?> getComponent(UUID... uuids) throws IOException {
       return getComponent(getNidForUuids(uuids));
    }
 
@@ -542,7 +542,7 @@ public abstract class Termstore implements PersistentStoreI {
     * @throws IOException
     */
    @Override
-   public ComponentChroncileBI<?> getComponentFromAlternateId(int authorityNid, String altId)
+   public ComponentChronicleBI<?> getComponentFromAlternateId(int authorityNid, String altId)
            throws IOException {
       try {
          return getComponent(
@@ -591,7 +591,7 @@ public abstract class Termstore implements PersistentStoreI {
          return new ConceptVersion((Concept) component, coordinate);
       }
 
-      return ((ComponentChroncileBI<?>) component).getVersion(coordinate);
+      return ((ComponentChronicleBI<?>) component).getVersion(coordinate);
    }
 
    /**

@@ -7,7 +7,7 @@ import org.ihtsdo.ttk.concept.cc.component.Revision;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.refex.RefexAnalogBI;
 import org.ihtsdo.ttk.dto.component.TkRevision;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -19,7 +19,9 @@ import java.util.Set;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
+import org.ihtsdo.ttk.api.blueprint.IdDirective;
+import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.RefexDirective;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 
@@ -59,7 +61,7 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
 
     protected abstract void addSpecProperties(RefexCAB rcs);
     @Override
-    public TK_REFEX_TYPE getRefexType() {
+    public ToolkitRefexType getRefexType() {
         return getTkRefsetType();
     }
 
@@ -131,19 +133,24 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
     }
 
     @Override
-    public RefexCAB makeBlueprint(ViewCoordinate vc) throws IOException,
-            InvalidBlueprintException, ContradictionException {
-        RefexCAB rcs = new RefexCAB(getTkRefsetType(),
+    public RefexCAB makeBlueprint(ViewCoordinate vc, 
+            IdDirective idDirective, RefexDirective refexDirective) throws IOException,
+            InvalidCAB, ContradictionException {
+        RefexCAB rcs = new RefexCAB(
+                getTkRefsetType(),
                 P.s.getUuidPrimordialForNid(getReferencedComponentNid()),
-                Ts.get().getUuidPrimordialForNid(getRefexExtensionNid()),
-                getVersion(vc), vc, Ts.get().getUuidPrimordialForNid(getModuleNid()));
+                getRefexExtensionNid(),
+                getVersion(vc), 
+                vc, 
+                idDirective, 
+                refexDirective);
 
         addSpecProperties(rcs);
 
         return rcs;
     }
 
-    protected abstract TK_REFEX_TYPE getTkRefsetType();
+    protected abstract ToolkitRefexType getTkRefsetType();
 
     //~--- set methods ---------------------------------------------------------
     @Override

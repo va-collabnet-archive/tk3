@@ -6,9 +6,9 @@ import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
 import org.ihtsdo.cern.colt.list.IntArrayList;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_int.RefexNidNidNidIntAnalogBI;
@@ -81,10 +81,10 @@ public class NidNidNidIntMember
 
    @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.COMPONENT_EXTENSION_1_ID, getNid1());
-      rcs.with(RefexProperty.COMPONENT_EXTENSION_2_ID, getNid2());
-      rcs.with(RefexProperty.COMPONENT_EXTENSION_3_ID, getNid3());
-      rcs.with(RefexProperty.INTEGER_EXTENSION_1, getInt1());
+      rcs.with(ComponentProperty.COMPONENT_EXTENSION_1_ID, getNid1());
+      rcs.with(ComponentProperty.COMPONENT_EXTENSION_2_ID, getNid2());
+      rcs.with(ComponentProperty.COMPONENT_EXTENSION_3_ID, getNid3());
+      rcs.with(ComponentProperty.INTEGER_EXTENSION_1, getInt1());
    }
 
    @Override
@@ -227,13 +227,13 @@ public class NidNidNidIntMember
    }
 
    @Override
-   protected TK_REFEX_TYPE getTkRefsetType() {
-      return TK_REFEX_TYPE.CID_CID_CID_INT;
+   protected ToolkitRefexType getTkRefsetType() {
+      return ToolkitRefexType.CID_CID_CID_INT;
    }
 
    @Override
    public int getTypeNid() {
-      return TK_REFEX_TYPE.CID_CID_CID_INT.getTypeToken();
+      return ToolkitRefexType.CID_CID_CID_INT.getTypeToken();
    }
 
    @Override

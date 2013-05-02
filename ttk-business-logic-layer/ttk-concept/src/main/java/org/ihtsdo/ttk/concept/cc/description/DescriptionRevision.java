@@ -10,8 +10,8 @@ import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.Revision;
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.blueprint.DescCAB;
-import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
+import org.ihtsdo.ttk.api.blueprint.DescriptionCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.description.DescriptionAnalogBI;
 import org.ihtsdo.ttk.dto.component.description.TkDescriptionRevision;
@@ -27,8 +27,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.ttk.api.blueprint.IdDirective;
+import org.ihtsdo.ttk.api.blueprint.RefexDirective;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.lang.LANG_CODE;
+import org.ihtsdo.ttk.api.lang.LanguageCode;
 import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
 
 public class DescriptionRevision extends Revision<DescriptionRevision, Description>
@@ -270,10 +272,12 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
    }
    
    @Override
-    public DescCAB makeBlueprint(ViewCoordinate vc) throws IOException, ContradictionException, InvalidBlueprintException {
-        DescCAB descBp = new DescCAB(getConceptNid(), getTypeNid(),
-                LANG_CODE.getLangCode(lang), getText(), initialCaseSignificant,
-                getVersion(vc), vc, Ts.get().getUuidPrimordialForNid(getModuleNid()));
+    public DescriptionCAB makeBlueprint(ViewCoordinate vc, 
+            IdDirective idDirective, RefexDirective refexDirective) throws IOException, ContradictionException, InvalidCAB {
+        DescriptionCAB descBp = new DescriptionCAB(getConceptNid(), getTypeNid(),
+                LanguageCode.getLangCode(lang), getText(), initialCaseSignificant,
+                getVersion(vc), vc,
+                idDirective, refexDirective);
         return descBp;
     }
 

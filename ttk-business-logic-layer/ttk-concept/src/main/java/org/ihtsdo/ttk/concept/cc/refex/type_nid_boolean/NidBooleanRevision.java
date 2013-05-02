@@ -12,10 +12,10 @@ import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexProperty;
+import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -80,8 +80,8 @@ public class NidBooleanRevision extends RefexRevision<NidBooleanRevision, NidBoo
 
     @Override
    protected void addSpecProperties(RefexCAB rcs) {
-      rcs.with(RefexProperty.COMPONENT_EXTENSION_1_ID, getNid1());
-      rcs.with(RefexProperty.BOOLEAN_EXTENSION_1, getBoolean1());
+      rcs.with(ComponentProperty.COMPONENT_EXTENSION_1_ID, getNid1());
+      rcs.with(ComponentProperty.BOOLEAN_EXTENSION_1, getBoolean1());
    }
 
    @Override
@@ -168,8 +168,8 @@ public class NidBooleanRevision extends RefexRevision<NidBooleanRevision, NidBoo
    }
 
     @Override
-   protected TK_REFEX_TYPE getTkRefsetType() {
-      return TK_REFEX_TYPE.CID_FLOAT;
+   protected ToolkitRefexType getTkRefsetType() {
+      return ToolkitRefexType.CID_FLOAT;
    }
    
    @Override

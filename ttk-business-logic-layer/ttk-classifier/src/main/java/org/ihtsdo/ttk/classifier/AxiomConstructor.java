@@ -152,7 +152,7 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
         // Special handling to support role groups...
         // RoleInclusion axiom of the form new RoleInclusion(new Role<>(childRole), new Role<>(parentRole)).
         if (roleConcepts.isMember(cNid)) {
-            for (RelationshipVersionBI rv : cv.getRelsOutgoingActiveIsa()) {
+            for (RelationshipVersionBI rv : cv.getRelationshipsOutgoingActiveIsa()) {
                 if (roleConcepts.isMember(rv.getDestinationNid())) {
                     axioms.add(new RoleInclusion(getRole(getUUID(cNid)), getRole(getUUID(rv.getDestinationNid()))));
                 }
@@ -160,11 +160,11 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
         }
 
         // Aggregate the conjuncts of the necessary condition into defn
-        for (RelationshipVersionBI rv : cv.getRelsOutgoingActiveIsa()) {
+        for (RelationshipVersionBI rv : cv.getRelationshipsOutgoingActiveIsa()) {
             defn.add(getConcept(getUUID(rv.getDestinationNid())));
         }
 
-        for (RelationshipVersionBI rv : cv.getRelsOutgoingActive()) {
+        for (RelationshipVersionBI rv : cv.getRelationshipsOutgoingActive()) {
             if (roleConcepts.isMember(rv.getTypeNid())) {
                 if (rv.getGroup() == 0) {
                 	// TODO: add role group unless never grouped
@@ -201,7 +201,7 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
         	axioms.add(f.createConceptInclusion(c, expr));
 
         	// check if concept is fully defined and add the sufficient condition axiom
-        	if ((cv.getConAttrsActive() != null) && cv.getConAttrsActive().isDefined()) {
+        	if ((cv.getConceptAttributesActive() != null) && cv.getConceptAttributesActive().isDefined()) {
         		axioms.add(f.createConceptInclusion(expr, c));
         	}
         }
