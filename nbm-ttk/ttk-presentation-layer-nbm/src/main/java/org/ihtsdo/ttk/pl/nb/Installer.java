@@ -47,6 +47,8 @@ import org.openide.util.Exceptions;
  */
 public class Installer extends ModuleInstall {
 
+    private static WorkerListener workerListener;
+    private static Lookup.Result<Worker> lookupResult;
    /**
     * Method description
     *
@@ -65,10 +67,12 @@ public class Installer extends ModuleInstall {
            });
            latch.await();
            Looker.lookup(TtkEnvironment.class).setUseFxWorkers(true);
+           
+           // Setup integration of FX progress info with Netbeans progress info. 
 
-           Lookup.Result<Worker> resultResult = Looker.lookupResult(Worker.class);
-
-           resultResult.addLookupListener(new WorkerListener(resultResult));
+           lookupResult = Looker.lookupResult(Worker.class);
+           workerListener = new WorkerListener(lookupResult);
+           lookupResult.addLookupListener(workerListener);
        } catch (InterruptedException ex) {
            Exceptions.printStackTrace(ex);
        }

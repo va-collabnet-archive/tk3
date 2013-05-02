@@ -101,6 +101,7 @@ public class WorkerListener implements LookupListener {
     */
    @Override
    public final void resultChanged(LookupEvent ev) {
+      System.out.println("WorkerListener resultChanged: " + ev);
       Lookup.Result result = (Lookup.Result) ev.getSource();
 
       handleResults(result);
