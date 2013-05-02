@@ -10,7 +10,9 @@ import java.io.IOException;
 
 import java.util.Set;
 import org.ihtsdo.ttk.api.blueprint.CreateOrAmendBlueprint;
-import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
+import org.ihtsdo.ttk.api.blueprint.IdDirective;
+import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
+import org.ihtsdo.ttk.api.blueprint.RefexDirective;
 
 public interface ComponentVersionBI extends ComponentBI, VersionPointBI {
    boolean stampIsInRange(int min, int max);
@@ -25,7 +27,7 @@ public interface ComponentVersionBI extends ComponentBI, VersionPointBI {
    
    int getModuleNid();
 
-   ComponentChroncileBI getChronicle();
+   ComponentChronicleBI getChronicle();
 
    PositionBI getPosition() throws IOException;
 
@@ -58,7 +60,23 @@ public interface ComponentVersionBI extends ComponentBI, VersionPointBI {
     * @return <code>true</code> if the versions are equal. <code>false</code> otherwise.
     */
    boolean versionsEqual(ViewCoordinate vc1, ViewCoordinate vc2, Boolean compareAuthoring);
-   
-   CreateOrAmendBlueprint makeBlueprint(ViewCoordinate vc) 
-           throws IOException, ContradictionException, InvalidBlueprintException;
+
+    /**
+     * Makes blueprint of a version of a component as specified by the given
+     * <code>viewCoordinate</code>. The blueprint is a clone of the component
+     * and is the preferred method for editing or creating a new version of a
+     * component.
+     *
+     * @param viewCoordinate the view coordinate specifying which version is active or inactive
+     * @param idDirective 
+     * @param refexDirective 
+     * @return the blueprint of the component
+     * @throws IOException signals that an I/O exception has occurred
+     * @throws ContradictionException if more than one version is found for a given position or view coordinate
+     * @throws InvalidCAB if the any of the values in blueprint to make are invalid
+     * @see org.ihtsdo.tk.api.blueprint.CreateOrAmendBlueprint
+     */
+    CreateOrAmendBlueprint makeBlueprint(ViewCoordinate viewCoordinate, 
+            IdDirective idDirective, RefexDirective refexDirective)
+            throws IOException, ContradictionException, InvalidCAB;
 }

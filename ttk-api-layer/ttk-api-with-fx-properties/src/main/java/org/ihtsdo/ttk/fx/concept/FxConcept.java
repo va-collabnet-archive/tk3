@@ -194,7 +194,7 @@ public class FxConcept implements Serializable {
 
    protected final void addDestinationRelationships(ConceptChronicleBI c, TerminologySnapshotDI ss)
            throws ContradictionException, IOException {
-      Collection<? extends RelationshipChronicleBI> relsIncoming = c.getRelsIncoming();
+      Collection<? extends RelationshipChronicleBI> relsIncoming = c.getRelationshipsIncoming();
 
       _destinationRelationships =
          FXCollections.observableArrayList(new ArrayList<FxRelationshipChronicle>(relsIncoming.size()));
@@ -210,7 +210,7 @@ public class FxConcept implements Serializable {
 
    protected final void addDestinationTaxonomyRelationships(ConceptChronicleBI c, TerminologySnapshotDI ss)
            throws ContradictionException, IOException {
-      Collection<? extends RelationshipChronicleBI> relsIncoming = c.getRelsIncoming();
+      Collection<? extends RelationshipChronicleBI> relsIncoming = c.getRelationshipsIncoming();
 
       _destinationRelationships =
          FXCollections.observableArrayList(new ArrayList<FxRelationshipChronicle>(relsIncoming.size()));
@@ -293,9 +293,9 @@ NEXT_REL:
    protected final void addOriginRelationships(ConceptChronicleBI c, TerminologySnapshotDI ss)
            throws ContradictionException, IOException {
       _originRelationships = FXCollections.observableArrayList(
-         new ArrayList<FxRelationshipChronicle>(c.getRelsOutgoing().size()));
+         new ArrayList<FxRelationshipChronicle>(c.getRelationshipsOutgoing().size()));
 
-      for (RelationshipChronicleBI rel : c.getRelsOutgoing()) {
+      for (RelationshipChronicleBI rel : c.getRelationshipsOutgoing()) {
          FxRelationshipChronicle fxc = new FxRelationshipChronicle(ss, this, rel);
 
          if (!fxc.getVersions().isEmpty()) {
@@ -307,11 +307,11 @@ NEXT_REL:
    protected final void addOriginTaxonomyRelationships(ConceptChronicleBI c, TerminologySnapshotDI ss)
            throws ContradictionException, IOException {
       _originRelationships = FXCollections.observableArrayList(
-         new ArrayList<FxRelationshipChronicle>(c.getRelsOutgoing().size()));
+         new ArrayList<FxRelationshipChronicle>(c.getRelationshipsOutgoing().size()));
 
       NidSetBI taxonomyTypes = ss.getViewCoordinate().getIsaTypeNids();
 
-      for (RelationshipChronicleBI rel : c.getRelsOutgoing()) {
+      for (RelationshipChronicleBI rel : c.getRelationshipsOutgoing()) {
          FxRelationshipChronicle          fxc      = new FxRelationshipChronicle(ss, this, rel);
          ArrayList<FxRelationshipVersion> toRemove = new ArrayList<>();
 

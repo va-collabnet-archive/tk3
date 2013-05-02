@@ -20,7 +20,7 @@ package org.ihtsdo.ttk.api;
  *
  * @author kec
  */
-public enum TkRelType {
+public enum TkRelationshipType {
     STATED_HIERARCHY, STATED_ROLE,
     INFERRED_HIERARCY, INFERRED_ROLE,
     HISTORIC, QUALIFIER;

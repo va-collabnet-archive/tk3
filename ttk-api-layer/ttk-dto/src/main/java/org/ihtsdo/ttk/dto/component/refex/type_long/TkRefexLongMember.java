@@ -6,7 +6,7 @@ import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_long.RefexLongVersionBI;
 import org.ihtsdo.ttk.dto.component.TkRevision;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -174,8 +174,8 @@ public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision
    }
 
    @Override
-   public TK_REFEX_TYPE getType() {
-      return TK_REFEX_TYPE.LONG;
+   public ToolkitRefexType getType() {
+      return ToolkitRefexType.LONG;
    }
 
    //~--- set methods ---------------------------------------------------------

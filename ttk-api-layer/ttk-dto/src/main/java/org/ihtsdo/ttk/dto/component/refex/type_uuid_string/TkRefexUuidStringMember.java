@@ -8,7 +8,7 @@ import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_string.RefexNidStringVersionBI;
 import org.ihtsdo.ttk.dto.UtfHelper;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -201,8 +201,8 @@ public class TkRefexUuidStringMember extends TkRefexAbstractMember<TkRefexUuidSt
    }
 
    @Override
-   public TK_REFEX_TYPE getType() {
-      return TK_REFEX_TYPE.CID_STR;
+   public ToolkitRefexType getType() {
+      return ToolkitRefexType.CID_STR;
    }
 
    //~--- set methods ---------------------------------------------------------

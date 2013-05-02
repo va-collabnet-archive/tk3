@@ -161,7 +161,7 @@ public class AggregateProgressItem implements Worker<Void> {
    @Override
    public final boolean cancel() {
       boolean canceled = false;
-
+System.out.println("AggregateProgressItem canceling");
       for (Worker<?> item : subordinates) {
          item.cancel();
       }

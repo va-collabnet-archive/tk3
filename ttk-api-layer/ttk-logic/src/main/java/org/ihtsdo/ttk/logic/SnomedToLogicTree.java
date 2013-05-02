@@ -26,7 +26,7 @@ import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.TerminologyBuilderBI;
 import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
+import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
 import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
@@ -51,8 +51,16 @@ import java.util.Collection;
 public class SnomedToLogicTree extends LogicBlueprintBuilder implements ProcessUnfetchedConceptDataBI {
 
    /** Field description */
-   TerminologyBuilderBI builder;
-   
+   ThreadLocal<TerminologyBuilderBI> builder = new ThreadLocal<TerminologyBuilderBI>() {
+      @Override
+      protected TerminologyBuilderBI initialValue() {
+         return Ts.get().getTerminologyBuilder(ec, vc);
+      }
+   };
+
+   /** Field description */
+   EditCoordinate ec;
+
    /**
     *
     * @param vc
@@ -61,7 +69,18 @@ public class SnomedToLogicTree extends LogicBlueprintBuilder implements ProcessU
    public SnomedToLogicTree(ViewCoordinate vc, EditCoordinate ec) {
       super(DescriptionLogicBinding.EL_PLUS_PLUS.getUuids()[0], vc,
             DescriptionLogicBinding.DL_MODULE.getUuids()[0]);
-      builder = Ts.get().getTerminologyBuilder(ec, vc);
+      this.ec = ec;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public boolean allowCancel() {
+      return true;
    }
 
    /**
@@ -80,14 +99,14 @@ public class SnomedToLogicTree extends LogicBlueprintBuilder implements ProcessU
     * @param cv
     * @throws IOException
     * @throws ContradictionException
-    * @throws InvalidBlueprintException
+    * @throws InvalidCAB
     */
-   public void convert(ConceptVersionBI cv)
-           throws IOException, ContradictionException, InvalidBlueprintException {
+   public void convert(ConceptVersionBI cv) throws IOException, ContradictionException, InvalidCAB {
       setConceptUuid(cv.getPrimUuid());
 
       RefexCAB root    = newNode(DescriptionLogicBinding.DEFINITION_ROOT);
-      boolean  defined = (cv.getConAttrsActive() != null) && cv.getConAttrsActive().isDefined();
+      boolean  defined = (cv.getConceptAttributesActive() != null)
+                         && cv.getConceptAttributesActive().isDefined();
       RefexCAB set;
 
       if (defined) {
@@ -101,8 +120,8 @@ public class SnomedToLogicTree extends LogicBlueprintBuilder implements ProcessU
       }
 
       // Make the roles, etc...
-      Collection<? extends RelationshipVersionBI> rels         = cv.getRelsOutgoingActive();
-      Collection<? extends RelGroupVersionBI>     relGroups    = cv.getRelGroupsActive();
+      Collection<? extends RelationshipVersionBI> rels         = cv.getRelationshipsOutgoingActive();
+      Collection<? extends RelGroupVersionBI>     relGroups    = cv.getRelationshipGroupsActive();
       Collection<RelationshipVersionBI>           definingRels = new ArrayList<>();
 
       for (RelationshipVersionBI rel : rels) {
@@ -135,7 +154,7 @@ public class SnomedToLogicTree extends LogicBlueprintBuilder implements ProcessU
             if (vc.getIsaTypeNids().contains(rel.getTypeNid())) {
                add(set, rel.getDestinationNid());
             } else {
-               throw new InvalidBlueprintException("Concept must have at least one is-a");
+               throw new InvalidCAB("Concept must have at least one is-a");
             }
          }
       }
@@ -154,18 +173,21 @@ public class SnomedToLogicTree extends LogicBlueprintBuilder implements ProcessU
    public void processUnfetchedConceptData(int cNid, ConceptFetcherBI fetcher) throws Exception {
       ConceptVersionBI cv = fetcher.fetch(vc);
 
-      if ((cv.getConAttrsActive() != null)
-          && ((cv.getConAttrsActive().getModuleNid() == Snomed.SNOMED_RELEASE_PATH.getStrict(vc).getNid())
-              || (cv.getConAttrsActive().getModuleNid() == Snomed.CORE_MODULE.getStrict(vc).getNid()))) {
+      if ((cv.getConceptAttributesActive() != null)
+          && ((cv.getConceptAttributesActive().getModuleNid()
+               == Snomed.SNOMED_RELEASE_PATH.getStrict(
+                  vc).getNid()) || (cv.getConceptAttributesActive().getModuleNid()
+                                    == Snomed.CORE_MODULE.getStrict(vc).getNid()))) {
          convert(cv);
-         build(builder);
+         build(builder.get());
          Ts.get().addUncommittedNoChecks(cv);
+
          if (verbose) {
             DefinitionTree dt = new DefinitionTree(cv, DescriptionLogicBinding.EL_PLUS_PLUS.getNid(vc));
+
             System.out.print("\n" + cv.getPreferredDescription().getText() + ":");
             dt.dfsPrint();
          }
-
       }
    }
 
@@ -182,13 +204,14 @@ public class SnomedToLogicTree extends LogicBlueprintBuilder implements ProcessU
       return Ts.get().getAllConceptNids();
    }
 
-    @Override
-    public boolean allowCancel() {
-        return false;
-    }
-
-    @Override
-    public String getTitle() {
-        return "Converting RF2 to Logic Tree";
-    }
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public String getTitle() {
+      return "Converting RF2 to Logic Tree";
+   }
 }

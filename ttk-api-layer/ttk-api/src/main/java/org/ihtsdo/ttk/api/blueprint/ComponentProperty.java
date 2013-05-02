@@ -18,16 +18,16 @@
 
 package org.ihtsdo.ttk.api.blueprint;
 
-/**
- *
- * @author kec
- */
-public enum RefexProperty {
+   /**
+     * The Enum ComponentProperty lists the available properties that can be
+     * associated with a refex member.
+     */
+public enum ComponentProperty {
 
    /**
     * Identifier of the member, either represented as a UUID or a nid.
     */
-   MEMBER_ID, ENCLOSING_CONCEPT_ID,
+   COMPONENT_ID, ENCLOSING_CONCEPT_ID,
 
    /**
     * An identifier to the refex extension to which this member belongs.
@@ -61,33 +61,37 @@ public enum RefexProperty {
     */
    COMPONENT_EXTENSION_3_ID,
 
-   /**
-    *
-    */
+      /**
+         * The boolean value associated with this refex member.
+         */
    BOOLEAN_EXTENSION_1,
 
-   /**
-    *
-    */
-   INTEGER_EXTENSION_1,
+       /**
+         * The integer value associated with this refex member.
+         */
+    INTEGER_EXTENSION_1,
 
-   /**
-    *
-    */
-   STRING_EXTENSION_1,
+       /**
+         * The string value associated with this refex member.
+         */
+    STRING_EXTENSION_1,
 
-   /**
-    *
-    */
+        /**
+         * The long value associated with this refex member.
+         */
    LONG_EXTENSION_1,
 
-   /**
-    *
-    */
+       /**
+         * The float value associated with this refex member.
+         */
    FLOAT_EXTENSION_1,
 
-   /**
-    *
-    */
+        /**
+         * The array bytearray value associated with this refex member.
+         */
    ARRAY_OF_BYTEARRAY
 }
+
+
+
+ 

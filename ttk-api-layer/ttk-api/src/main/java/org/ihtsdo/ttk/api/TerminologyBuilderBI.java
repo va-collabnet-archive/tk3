@@ -1,14 +1,14 @@
 package org.ihtsdo.ttk.api;
 
 import java.io.IOException;
-import org.ihtsdo.ttk.api.blueprint.ConAttrAB;
+import org.ihtsdo.ttk.api.blueprint.ConceptAttributeAB;
 import org.ihtsdo.ttk.api.blueprint.ConceptCB;
-import org.ihtsdo.ttk.api.blueprint.DescCAB;
-import org.ihtsdo.ttk.api.blueprint.InvalidBlueprintException;
+import org.ihtsdo.ttk.api.blueprint.DescriptionCAB;
+import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.MediaCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.RelCAB;
-import org.ihtsdo.ttk.api.conattr.ConAttrChronicleBI;
+import org.ihtsdo.ttk.api.blueprint.RelationshipCAB;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeChronicleBI;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.api.description.DescriptionChronicleBI;
@@ -27,7 +27,7 @@ public interface TerminologyBuilderBI {
      * @throws IOException
      * @throws InvalidAmendmentSpec
      */
-    RefexChronicleBI<?> construct(RefexCAB blueprint) throws IOException, InvalidBlueprintException, ContradictionException;
+    RefexChronicleBI<?> construct(RefexCAB blueprint) throws IOException, InvalidCAB, ContradictionException;
 
     /**
      *  This method incurs an extra cost to determine if a current version already meets the specification. 
@@ -37,7 +37,7 @@ public interface TerminologyBuilderBI {
      * @throws IOException
      * @throws InvalidAmendmentSpec
      */
-    RefexChronicleBI<?> constructIfNotCurrent(RefexCAB blueprint) throws IOException, InvalidBlueprintException, ContradictionException;
+    RefexChronicleBI<?> constructIfNotCurrent(RefexCAB blueprint) throws IOException, InvalidCAB, ContradictionException;
 
     /**
      *  
@@ -47,7 +47,7 @@ public interface TerminologyBuilderBI {
      * @throws IOException
      * @throws InvalidAmendmentSpec
      */
-    RelationshipChronicleBI construct(RelCAB blueprint) throws IOException, InvalidBlueprintException, ContradictionException;
+    RelationshipChronicleBI construct(RelationshipCAB blueprint) throws IOException, InvalidCAB, ContradictionException;
 
     /**
      *  This method incurs an extra cost to determine if a current version already meets the specification. 
@@ -57,7 +57,7 @@ public interface TerminologyBuilderBI {
      * @throws IOException
      * @throws InvalidAmendmentSpec
      */
-    RelationshipChronicleBI constructIfNotCurrent(RelCAB blueprint) throws IOException, InvalidBlueprintException, ContradictionException;
+    RelationshipChronicleBI constructIfNotCurrent(RelationshipCAB blueprint) throws IOException, InvalidCAB, ContradictionException;
 
     /**
      *  
@@ -67,7 +67,7 @@ public interface TerminologyBuilderBI {
      * @throws IOException
      * @throws InvalidAmendmentSpec
      */
-    DescriptionChronicleBI construct(DescCAB blueprint) throws IOException, InvalidBlueprintException, ContradictionException;
+    DescriptionChronicleBI construct(DescriptionCAB blueprint) throws IOException, InvalidCAB, ContradictionException;
 
     /**
      *  This method incurs an extra cost to determine if a current version already meets the specification. 
@@ -77,7 +77,7 @@ public interface TerminologyBuilderBI {
      * @throws IOException
      * @throws InvalidAmendmentSpec
      */
-    DescriptionChronicleBI constructIfNotCurrent(DescCAB blueprint) throws IOException, InvalidBlueprintException, ContradictionException;
+    DescriptionChronicleBI constructIfNotCurrent(DescriptionCAB blueprint) throws IOException, InvalidCAB, ContradictionException;
 
     /**
      *  
@@ -87,7 +87,7 @@ public interface TerminologyBuilderBI {
      * @throws IOException
      * @throws InvalidAmendmentSpec
      */
-    MediaChronicleBI construct(MediaCAB blueprint) throws IOException, InvalidBlueprintException, ContradictionException;
+    MediaChronicleBI construct(MediaCAB blueprint) throws IOException, InvalidCAB, ContradictionException;
 
     /**
      *  This method incurs an extra cost to determine if a current version already meets the specification. 
@@ -97,7 +97,7 @@ public interface TerminologyBuilderBI {
      * @throws IOException
      * @throws InvalidAmendmentSpec
      */
-    MediaChronicleBI constructIfNotCurrent(MediaCAB blueprint) throws IOException, InvalidBlueprintException, ContradictionException;
+    MediaChronicleBI constructIfNotCurrent(MediaCAB blueprint) throws IOException, InvalidCAB, ContradictionException;
 
     /**
      *  
@@ -107,7 +107,7 @@ public interface TerminologyBuilderBI {
      * @throws IOException
      * @throws InvalidAmendmentSpec
      */
-    ConceptChronicleBI construct(ConceptCB blueprint) throws IOException, InvalidBlueprintException, ContradictionException;
+    ConceptChronicleBI construct(ConceptCB blueprint) throws IOException, InvalidCAB, ContradictionException;
 
     /**
      *  This method incurs an extra cost to determine if a current version 
@@ -118,25 +118,25 @@ public interface TerminologyBuilderBI {
      * @throws IOException
      * @throws InvalidAmendmentSpec
      */
-    ConceptChronicleBI constructIfNotCurrent(ConceptCB blueprint) throws IOException, InvalidBlueprintException, ContradictionException;
+    ConceptChronicleBI constructIfNotCurrent(ConceptCB blueprint) throws IOException, InvalidCAB, ContradictionException;
 
     /**
      *  
      * @param res
-     * @return A <code>ConAttrChronicleBI</code> if the <code>blueprint</code> regardless of if the ConAttrChronicleBI was modified. 
+     * @return A <code>ConceptAttributeChronicleBI</code> if the <code>blueprint</code> regardless of if the ConceptAttributeChronicleBI was modified. 
      * @throws IOException
      * @throws InvalidAmendmentSpec
      */
-    ConAttrChronicleBI construct(ConAttrAB blueprint) throws IOException, InvalidBlueprintException, ContradictionException;
+    ConceptAttributeChronicleBI construct(ConceptAttributeAB blueprint) throws IOException, InvalidCAB, ContradictionException;
 
     /**
      *  This method incurs an extra cost to determine if a current version already meets the specification. 
      * @param res
-     * @return A <code>ConAttrChronicleBI</code> if the <code>blueprint</code> regardless of if the ConAttrChronicleBI was modified. 
+     * @return A <code>ConceptAttributeChronicleBI</code> if the <code>blueprint</code> regardless of if the ConceptAttributeChronicleBI was modified. 
      * @throws IOException
      * @throws InvalidAmendmentSpec
      */
-    ConAttrChronicleBI constructIfNotCurrent(ConAttrAB blueprint) throws IOException, InvalidBlueprintException, ContradictionException;
+    ConceptAttributeChronicleBI constructIfNotCurrent(ConceptAttributeAB blueprint) throws IOException, InvalidCAB, ContradictionException;
 
     EditCoordinate getEditCoordinate();
 }

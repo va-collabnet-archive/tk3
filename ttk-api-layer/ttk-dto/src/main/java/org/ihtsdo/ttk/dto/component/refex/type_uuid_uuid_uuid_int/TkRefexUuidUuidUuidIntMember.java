@@ -2,7 +2,7 @@ package org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
@@ -227,8 +227,8 @@ public class TkRefexUuidUuidUuidIntMember
    }
 
    @Override
-   public TK_REFEX_TYPE getType() {
-      return TK_REFEX_TYPE.CID_CID_CID_INT;
+   public ToolkitRefexType getType() {
+      return ToolkitRefexType.CID_CID_CID_INT;
    }
 
    public UUID getUuid1() {

@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import org.ihtsdo.ttk.fx.concept.component.FxComponentVersion;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.conattr.ConAttrVersionBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -29,7 +29,7 @@ public class FxConceptAttributesVersion
    }
 
    public FxConceptAttributesVersion(FxConceptAttributesChronicle chronicle, TerminologySnapshotDI ss,
-                                     ConAttrVersionBI another)
+                                     ConceptAttributeVersionBI another)
            throws IOException, ContradictionException {
       super(chronicle, ss, another);
       this.definedProperty.set(another.isDefined());

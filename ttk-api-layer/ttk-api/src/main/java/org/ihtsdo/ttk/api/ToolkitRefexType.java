@@ -25,7 +25,7 @@ import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_long.RefexNidNidNidLongVersionB
 import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_string.RefexNidNidNidStringVersionBI;
 import org.ihtsdo.ttk.api.refex.type_string.RefexStringVersionBI;
 
-public enum TK_REFEX_TYPE {
+public enum ToolkitRefexType {
 
     /**
      * CID = Component IDentifier
@@ -59,7 +59,7 @@ public enum TK_REFEX_TYPE {
     
     UNKNOWN(Byte.MAX_VALUE, null);
 
-    public static TK_REFEX_TYPE getFromToken(int type) throws UnsupportedOperationException {
+    public static ToolkitRefexType getFromToken(int type) throws UnsupportedOperationException {
         switch (type) {
             case 1:
                 return MEMBER;
@@ -104,14 +104,14 @@ public enum TK_REFEX_TYPE {
             throw new UnsupportedOperationException("Can't handle type: " + type + " " +
                             Ts.get().getConceptForNid(type).toLongString());
         } catch (IOException ex) {
-            Logger.getLogger(TK_REFEX_TYPE.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ToolkitRefexType.class.getName()).log(Level.SEVERE, null, ex);
             throw new UnsupportedOperationException("Can't handle type: " + type);
         }
     }
     private int externalizedToken;
     private Class<? extends RefexVersionBI> rxc;
 
-    TK_REFEX_TYPE(int externalizedToken, Class<? extends RefexVersionBI> rxc) {
+    ToolkitRefexType(int externalizedToken, Class<? extends RefexVersionBI> rxc) {
         this.externalizedToken = externalizedToken;
         this.rxc = rxc;
     }
@@ -128,7 +128,7 @@ public enum TK_REFEX_TYPE {
         output.writeByte(externalizedToken);
     }
 
-    public static TK_REFEX_TYPE classToType(Class<?> c) {
+    public static ToolkitRefexType classToType(Class<?> c) {
         if (RefexNidNidNidFloatVersionBI.class.isAssignableFrom(c)) {
             return CID_CID_CID_FLOAT;
         }
@@ -189,7 +189,7 @@ public enum TK_REFEX_TYPE {
         return UNKNOWN;
     }
 
-    public static TK_REFEX_TYPE readType(DataInput input) throws IOException {
+    public static ToolkitRefexType readType(DataInput input) throws IOException {
         int type = input.readByte();
         return getFromToken(type);
     }

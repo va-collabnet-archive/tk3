@@ -1,11 +1,11 @@
-package org.ihtsdo.ttk.api.description;
+package org.ihtsdo.ttk.api.conattr;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.ttk.api.AnalogGeneratorBI;
+import org.ihtsdo.ttk.api.ComponentVersionBI;
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TypedComponentVersionBI;
-import org.ihtsdo.ttk.api.blueprint.DescriptionCAB;
+import org.ihtsdo.ttk.api.blueprint.ConceptAttributeAB;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexDirective;
@@ -14,8 +14,6 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
-
-import java.util.regex.Pattern;
 
 /**
  * Interface description
@@ -26,8 +24,8 @@ import java.util.regex.Pattern;
  * @version        Enter version here..., 13/04/30
  * @author         Enter your name here...    
  */
-public interface DescriptionVersionBI<A extends DescriptionAnalogBI>
-        extends TypedComponentVersionBI, DescriptionChronicleBI, AnalogGeneratorBI<A> {
+public interface ConceptAttributeVersionBI<A extends ConceptAttributeAnalogBI>
+        extends ComponentVersionBI, ConceptAttributeChronicleBI, AnalogGeneratorBI<A> {
 
    /**
     * Method description
@@ -44,7 +42,7 @@ public interface DescriptionVersionBI<A extends DescriptionAnalogBI>
     * @throws InvalidCAB
     */
    @Override
-   public DescriptionCAB makeBlueprint(ViewCoordinate vc, IdDirective idDirective,
+   public ConceptAttributeAB makeBlueprint(ViewCoordinate vc, IdDirective idDirective,
        RefexDirective refexDirective)
            throws IOException, ContradictionException, InvalidCAB;
 
@@ -52,33 +50,7 @@ public interface DescriptionVersionBI<A extends DescriptionAnalogBI>
     * Method description
     *
     *
-    * @param p
-    *
     * @return
     */
-   public boolean matches(Pattern p);
-
-   /**
-    * Method description
-    *
-    *
-    * @return
-    */
-   public String getLang();
-
-   /**
-    * Method description
-    *
-    *
-    * @return
-    */
-   public String getText();
-
-   /**
-    * Method description
-    *
-    *
-    * @return
-    */
-   public boolean isInitialCaseSignificant();
+   public boolean isDefined();
 }

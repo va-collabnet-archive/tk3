@@ -23,24 +23,24 @@ package org.ihtsdo.ttk.api.blueprint;
  *
  * @author kec
  */
-public class InvalidBlueprintException extends Exception {
+public class InvalidCAB extends Exception {
 
    /**
     *    
     */
    private static final long serialVersionUID = 1L;
 
-   public InvalidBlueprintException() {}
+   public InvalidCAB() {}
 
-   public InvalidBlueprintException(String string) {
+   public InvalidCAB(String string) {
       super(string);
    }
 
-   public InvalidBlueprintException(Throwable thrwbl) {
+   public InvalidCAB(Throwable thrwbl) {
       super(thrwbl);
    }
 
-   public InvalidBlueprintException(String string, Throwable thrwbl) {
+   public InvalidCAB(String string, Throwable thrwbl) {
       super(string, thrwbl);
    }
 }

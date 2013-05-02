@@ -21,7 +21,7 @@ package org.ihtsdo.ttk.auxiliary.taxonomies;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.ttk.api.blueprint.ConceptCB;
-import org.ihtsdo.ttk.api.lang.LANG_CODE;
+import org.ihtsdo.ttk.api.lang.LanguageCode;
 import org.ihtsdo.ttk.api.spec.ConceptSpec;
 import org.ihtsdo.ttk.api.uuid.UuidT5Generator;
 import org.ihtsdo.ttk.dto.DtoBuilder;
@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.UUID;
+import org.ihtsdo.ttk.api.blueprint.IdDirective;
 
 /**
  *
@@ -58,10 +59,10 @@ public class Taxonomy {
    private ConceptSpec                pathSpec;
    private ConceptSpec                authorSpec;
    private String                     semanticTag;
-   private LANG_CODE                  lang;
+   private LanguageCode                  lang;
 
    public Taxonomy(ConceptSpec path, ConceptSpec author, ConceptSpec module,
-                   ConceptSpec isaType, String semanticTag, LANG_CODE lang) {
+                   ConceptSpec isaType, String semanticTag, LanguageCode lang) {
       this.pathSpec    = path;
       this.authorSpec  = author;
       this.moduleSpec  = module;
@@ -72,7 +73,7 @@ public class Taxonomy {
 
    public Taxonomy(ConceptSpec pathSpec, ConceptSpec authorSpec,
                    String moduleName, ConceptSpec isaType, String semanticTag,
-                   LANG_CODE lang)
+                   LanguageCode lang)
            throws NoSuchAlgorithmException, UnsupportedEncodingException {
       this.pathSpec    = pathSpec;
       this.authorSpec  = authorSpec;
@@ -83,7 +84,7 @@ public class Taxonomy {
    }
 
    public Taxonomy(String pathName, ConceptSpec author, String moduleName,
-                   ConceptSpec isaType, String semanticTag, LANG_CODE lang)
+                   ConceptSpec isaType, String semanticTag, LanguageCode lang)
            throws NoSuchAlgorithmException, UnsupportedEncodingException {
       this.pathSpec    = new ConceptSpec(pathName, getUuid(moduleName));
       this.authorSpec  = author;
@@ -94,7 +95,7 @@ public class Taxonomy {
    }
 
    public Taxonomy(String pathName, String authorName, String moduleName,
-                   ConceptSpec isaType, String semanticTag, LANG_CODE lang)
+                   ConceptSpec isaType, String semanticTag, LanguageCode lang)
            throws NoSuchAlgorithmException, UnsupportedEncodingException {
       this.pathSpec    = new ConceptSpec(pathName, getUuid(pathName));
       this.authorSpec  = new ConceptSpec(authorName, getUuid(moduleName));
@@ -105,9 +106,12 @@ public class Taxonomy {
    }
 
    protected ConceptCB createConcept(String name) throws Exception {
-      ConceptCB cb = new ConceptCB(name + " " + semanticTag, name, lang,
-                                   isaTypeSpec.getUuids()[0],
-                                   moduleSpec.getUuids()[0], getParentArray());
+      ConceptCB cb = new ConceptCB(name + " " + semanticTag, 
+              name, lang, 
+              isaTypeSpec.getUuids()[0],
+              IdDirective.GENERATE_HASH,
+              moduleSpec.getUuids()[0], 
+              getParentArray());
 
       cb.setComponentUuid(getUuid(name));
 
@@ -125,7 +129,8 @@ public class Taxonomy {
    public void exportEConcept(DataOutputStream out) throws Exception {
       DtoBuilder dtoBuilder = new DtoBuilder(System.currentTimeMillis(),
                                  authorSpec.getUuids()[0],
-                                 pathSpec.getUuids()[0]);
+                                 pathSpec.getUuids()[0],
+                                 moduleSpec.getUuids()[0]);
 
       for (ConceptCB concept : conceptBpsInInsertionOrder) {
          dtoBuilder.construct(concept).writeExternal(out);

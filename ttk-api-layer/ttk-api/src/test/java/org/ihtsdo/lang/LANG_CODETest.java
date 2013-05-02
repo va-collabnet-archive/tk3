@@ -15,7 +15,7 @@
  */
 package org.ihtsdo.lang;
 
-import org.ihtsdo.ttk.api.lang.LANG_CODE;
+import org.ihtsdo.ttk.api.lang.LanguageCode;
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -45,66 +45,66 @@ public class LANG_CODETest {
     }
 
     /**
-     * Test of values method, of class LANG_CODE.
+     * Test of values method, of class LanguageCode.
      */
     @Test
     public void testValues() {
         System.out.println("values");
-        LANG_CODE[] expResult = LANG_CODE.values();
-        LANG_CODE[] result = LANG_CODE.values();
+        LanguageCode[] expResult = LanguageCode.values();
+        LanguageCode[] result = LanguageCode.values();
         assertEquals(expResult, result);
     }
 
     /**
-     * Test of valueOf method, of class LANG_CODE.
+     * Test of valueOf method, of class LanguageCode.
      */
     @Test
     public void testValueOf() {
         System.out.println("valueOf");
         String name = "EN_AU";
-        LANG_CODE expResult = LANG_CODE.EN_AU;
-        LANG_CODE result = LANG_CODE.valueOf(name);
+        LanguageCode expResult = LanguageCode.EN_AU;
+        LanguageCode result = LanguageCode.valueOf(name);
         assertEquals(expResult, result);
     }
 
     /**
-     * Test of getFormatedLanguageCode method, of class LANG_CODE.
+     * Test of getFormatedLanguageCode method, of class LanguageCode.
      */
     @Test
     public void testGetFormatedLanguageCode() {
         System.out.println("getFormatedLanguageCode");
-        LANG_CODE instance = LANG_CODE.EN_AU;
+        LanguageCode instance = LanguageCode.EN_AU;
         String expResult = "en-AU";
         String result = instance.getFormatedLanguageCode();
         assertEquals(expResult, result);
-        instance = LANG_CODE.EN;
+        instance = LanguageCode.EN;
         expResult = "en";
         result = instance.getFormatedLanguageCode();
         assertEquals(expResult, result);
     }
 
     /**
-     * Test of getLangCode method, of class LANG_CODE.
+     * Test of getLangCode method, of class LanguageCode.
      */
     @Test
     public void testGetLangCode() {
         System.out.println("getLangCode");
         String name = "EN_AU";
-        LANG_CODE expResult = LANG_CODE.EN_AU;
-        LANG_CODE result = LANG_CODE.getLangCode(name);
+        LanguageCode expResult = LanguageCode.EN_AU;
+        LanguageCode result = LanguageCode.getLangCode(name);
         assertEquals(expResult, result);
         name = "en-AU";
-        result = LANG_CODE.getLangCode(name);
+        result = LanguageCode.getLangCode(name);
         assertEquals(expResult, result);
     }
 
     /**
-     * Test of toString method, of class LANG_CODE.
+     * Test of toString method, of class LanguageCode.
      */
     @Test
     public void testToString() {
         System.out.println("toString");
-        LANG_CODE instance = LANG_CODE.EN_AU;
+        LanguageCode instance = LanguageCode.EN_AU;
         String expResult = "EN_AU";
         String result = instance.toString();
         assertEquals(expResult, result);

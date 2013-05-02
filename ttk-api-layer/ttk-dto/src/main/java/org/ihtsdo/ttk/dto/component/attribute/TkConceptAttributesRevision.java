@@ -2,7 +2,7 @@ package org.ihtsdo.ttk.dto.component.attribute;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.conattr.ConAttrVersionBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
 import org.ihtsdo.ttk.dto.component.TkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -31,7 +31,7 @@ public class TkConceptAttributesRevision extends TkRevision {
       super();
    }
 
-   public TkConceptAttributesRevision(ConAttrVersionBI another) throws IOException {
+   public TkConceptAttributesRevision(ConceptAttributeVersionBI another) throws IOException {
       super(another);
       this.defined = another.isDefined();
    }

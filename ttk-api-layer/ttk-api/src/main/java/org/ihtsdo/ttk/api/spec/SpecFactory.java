@@ -16,7 +16,7 @@ public class SpecFactory {
     public static ConceptSpec get(ConceptChronicleBI concept, ViewCoordinate vc) throws IOException {
         ConceptVersionBI cv = Ts.get().getConceptVersion(vc, concept.getNid());
         try {
-            return new ConceptSpec(cv.getDescsActive().iterator().next().getText(),
+            return new ConceptSpec(cv.getDescriptionsActive().iterator().next().getText(),
                     concept.getPrimUuid());
         } catch (ContradictionException ex) {
             for (DescriptionChronicleBI desc : concept.getDescs()) {
@@ -31,7 +31,7 @@ public class SpecFactory {
 
     public static ConceptSpec get(ConceptVersionBI concept) throws IOException {
         try {
-            return new ConceptSpec(concept.getDescsActive().iterator().next().getText(),
+            return new ConceptSpec(concept.getDescriptionsActive().iterator().next().getText(),
                     concept.getPrimUuid());
         } catch (ContradictionException ex) {
             return new ConceptSpec(

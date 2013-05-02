@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGeneratorBI;
-import org.ihtsdo.ttk.api.conattr.ConAttrVersionBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
@@ -59,7 +59,7 @@ public interface TerminologyDI {
    ChangeSetGeneratorBI createDtoChangeSetGenerator(File changeSetFileName, File changeSetTempFileName,
            ChangeSetGenerationPolicy policy);
 
-   boolean forget(ConAttrVersionBI attr) throws IOException;
+   boolean forget(ConceptAttributeVersionBI attr) throws IOException;
 
    void forget(ConceptChronicleBI concept) throws IOException;
 

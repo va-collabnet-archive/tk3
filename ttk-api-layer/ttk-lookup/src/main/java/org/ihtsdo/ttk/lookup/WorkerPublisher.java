@@ -25,7 +25,6 @@ import javafx.beans.value.ObservableValue;
 
 import javafx.concurrent.Worker;
 
-
 import static javafx.concurrent.Worker.State.CANCELLED;
 import static javafx.concurrent.Worker.State.FAILED;
 import static javafx.concurrent.Worker.State.READY;
@@ -48,13 +47,9 @@ public class WorkerPublisher implements ChangeListener<Worker.State> {
 
    /** Field description */
    InstanceWrapper<Worker> lookupWrapper;
-   
-   String description;
 
-    @Override
-    public String toString() {
-        return "WorkerPublisher{" + "description=" + description + ", id=" + id + ", lookupWrapper=" + lookupWrapper + '}';
-    }
+   /** Field description */
+   String description;
 
    /**
     * Constructs ...
@@ -62,6 +57,7 @@ public class WorkerPublisher implements ChangeListener<Worker.State> {
     *
     * @param worker
     * @param description
+    * @param properties
     */
    private WorkerPublisher(Worker worker, String description, List<? extends InstancePropertyBI> properties) {
       this.description = description;
@@ -72,15 +68,14 @@ public class WorkerPublisher implements ChangeListener<Worker.State> {
       case FAILED :
       case SUCCEEDED :
          worker.stateProperty().removeListener(this);
-
          System.out.println("Remove worker publisher: " + this);
+
          break;
 
       case READY :
       case RUNNING :
          lookupWrapper = Looker.add(worker, UUID.randomUUID(), description, properties);
          System.out.println("added worker publisher: " + this);
-                                    
       }
    }
 
@@ -113,10 +108,24 @@ public class WorkerPublisher implements ChangeListener<Worker.State> {
     *
     * @param worker
     * @param description
+    * @param properties
     *
     * @return
     */
-   public static WorkerPublisher publish(Worker<?> worker, String description, List<? extends InstancePropertyBI> properties) {
+   public static WorkerPublisher publish(Worker<?> worker, String description,
+       List<? extends InstancePropertyBI> properties) {
       return new WorkerPublisher(worker, description, properties);
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public String toString() {
+      return "WorkerPublisher{" + "description=" + description + ", id=" + id + ", lookupWrapper="
+             + lookupWrapper + '}';
    }
 }

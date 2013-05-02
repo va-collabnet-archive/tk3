@@ -2,8 +2,8 @@ package org.ihtsdo.ttk.dto.component.attribute;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.conattr.ConAttrChronicleBI;
-import org.ihtsdo.ttk.api.conattr.ConAttrVersionBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeChronicleBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.dto.component.TkComponent;
 
@@ -34,12 +34,12 @@ public class TkConceptAttributes extends TkComponent<TkConceptAttributesRevision
       super();
    }
 
-   public TkConceptAttributes(ConAttrChronicleBI another) throws IOException {
+   public TkConceptAttributes(ConceptAttributeChronicleBI another) throws IOException {
       super(another.getPrimordialVersion());
 
-      Collection<? extends ConAttrVersionBI> versions = another.getVersions();
-      Iterator<? extends ConAttrVersionBI>   itr      = versions.iterator();
-      ConAttrVersionBI                       vers     = itr.next();
+      Collection<? extends ConceptAttributeVersionBI> versions = another.getVersions();
+      Iterator<? extends ConceptAttributeVersionBI>   itr      = versions.iterator();
+      ConceptAttributeVersionBI                       vers     = itr.next();
 
       this.defined = vers.isDefined();
 

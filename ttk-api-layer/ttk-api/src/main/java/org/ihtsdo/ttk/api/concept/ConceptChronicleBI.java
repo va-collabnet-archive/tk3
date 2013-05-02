@@ -2,11 +2,11 @@ package org.ihtsdo.ttk.api.concept;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationThreadingPolicy;
-import org.ihtsdo.ttk.api.conattr.ConAttrChronicleBI;
+import org.ihtsdo.ttk.api.conattr.ConceptAttributeChronicleBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.description.DescriptionChronicleBI;
 import org.ihtsdo.ttk.api.media.MediaChronicleBI;
@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.Collection;
 import org.ihtsdo.ttk.api.ProcessComponentChronicleBI;
 
-public interface ConceptChronicleBI extends ComponentChroncileBI<ConceptVersionBI> {
+public interface ConceptChronicleBI extends ComponentChronicleBI<ConceptVersionBI> {
    void cancel() throws IOException;
 
    boolean commit(ChangeSetGenerationPolicy changeSetPolicy,
@@ -39,12 +39,12 @@ public interface ConceptChronicleBI extends ComponentChroncileBI<ConceptVersionB
 
    //~--- get methods ---------------------------------------------------------
 
-   ConAttrChronicleBI getConAttrs() throws IOException;
+   ConceptAttributeChronicleBI getConAttrs() throws IOException;
 
    RefexVersionBI<?> getCurrentRefsetMemberForComponent(ViewCoordinate vc, int componentNid)
            throws IOException;
    
-   ComponentChroncileBI<?> getComponent(int nid) throws IOException;
+   ComponentChronicleBI<?> getComponent(int nid) throws IOException;
    
 
 
@@ -72,12 +72,12 @@ public interface ConceptChronicleBI extends ComponentChroncileBI<ConceptVersionB
 
    Collection<? extends RefexChronicleBI<?>> getRefsetMembers() throws IOException;
 
-   Collection<? extends RelGroupVersionBI> getRelGroupsActive(ViewCoordinate vc)
+   Collection<? extends RelGroupVersionBI> getRelationshipGroupsActive(ViewCoordinate vc)
            throws IOException, ContradictionException;
 
-   Collection<? extends RelationshipChronicleBI> getRelsIncoming() throws IOException;
+   Collection<? extends RelationshipChronicleBI> getRelationshipsIncoming() throws IOException;
 
-   Collection<? extends RelationshipChronicleBI> getRelsOutgoing() throws IOException;
+   Collection<? extends RelationshipChronicleBI> getRelationshipsOutgoing() throws IOException;
 
    boolean hasCurrentRefsetMemberForComponent(ViewCoordinate vc, int componentNid) throws IOException;
 

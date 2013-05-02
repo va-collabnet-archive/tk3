@@ -2,7 +2,7 @@ package org.ihtsdo.ttk.dto;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.description.DescriptionChronicleBI;
 import org.ihtsdo.ttk.api.media.MediaChronicleBI;
@@ -50,10 +50,10 @@ import org.ihtsdo.ttk.dto.component.relationship.TkRelationship;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-import static org.ihtsdo.ttk.api.TK_REFEX_TYPE.CID_CID_CID_FLOAT;
-import static org.ihtsdo.ttk.api.TK_REFEX_TYPE.CID_CID_CID_INT;
-import static org.ihtsdo.ttk.api.TK_REFEX_TYPE.CID_CID_CID_LONG;
-import static org.ihtsdo.ttk.api.TK_REFEX_TYPE.CID_CID_CID_STRING;
+import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_FLOAT;
+import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_INT;
+import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_LONG;
+import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_STRING;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -140,9 +140,9 @@ public class TkConcept {
       annotationIndexStyleRefex = c.isAnnotationIndex();
       conceptAttributes         = new TkConceptAttributes(c.getConAttrs());
       primordialUuid            = conceptAttributes.primordialUuid;
-      relationships             = new ArrayList<>(c.getRelsOutgoing().size());
+      relationships             = new ArrayList<>(c.getRelationshipsOutgoing().size());
 
-      for (RelationshipChronicleBI rel : c.getRelsOutgoing()) {
+      for (RelationshipChronicleBI rel : c.getRelationshipsOutgoing()) {
          relationships.add(new TkRelationship(rel));
       }
 
@@ -449,7 +449,7 @@ public class TkConcept {
          refsetMembers = new ArrayList<>(refsetMemberCount);
 
          for (int i = 0; i < refsetMemberCount; i++) {
-            TK_REFEX_TYPE type = TK_REFEX_TYPE.readType(in);
+            ToolkitRefexType type = ToolkitRefexType.readType(in);
 
             switch (type) {
             case CID :

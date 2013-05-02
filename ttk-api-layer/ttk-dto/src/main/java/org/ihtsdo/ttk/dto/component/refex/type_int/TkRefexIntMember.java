@@ -7,7 +7,7 @@ import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_int.RefexIntVersionBI;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -188,8 +188,8 @@ public class TkRefexIntMember extends TkRefexAbstractMember<TkRefexIntRevision> 
    }
 
    @Override
-   public TK_REFEX_TYPE getType() {
-      return TK_REFEX_TYPE.INT;
+   public ToolkitRefexType getType() {
+      return ToolkitRefexType.INT;
    }
 
    //~--- set methods ---------------------------------------------------------

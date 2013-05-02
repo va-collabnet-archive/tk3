@@ -21,7 +21,7 @@ package org.ihtsdo.ttk.auxiliary.taxonomies;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.lang.LANG_CODE;
+import org.ihtsdo.ttk.api.lang.LanguageCode;
 import org.ihtsdo.ttk.api.metadata.binding.TermAux;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -50,7 +50,7 @@ public class DescriptionLogicAuxiliary extends Taxonomy {
    private static final String moduleName = "DL Module";
 
    public DescriptionLogicAuxiliary() throws NoSuchAlgorithmException, UnsupportedEncodingException {
-      super(TermAux.WB_AUX_PATH, TermAux.USER, moduleName, TermAux.IS_A, "(DL Metadata)", LANG_CODE.EN);
+      super(TermAux.WB_AUX_PATH, TermAux.USER, moduleName, TermAux.IS_A, "(DL Metadata)", LanguageCode.EN);
 
       try {
          createConcept("description-logic auxiliary");
@@ -98,24 +98,24 @@ public class DescriptionLogicAuxiliary extends Taxonomy {
          popParent();
          createConcept("field annotations");
          pushParent(current());
-         createConcept("component extension 1 label").setAnnotation(true);
-         createConcept("component extension 1 order").setAnnotation(true);
-         createConcept("component extension 1 default value").setAnnotation(true);
-         createConcept("component extension 2 label").setAnnotation(true);
-         createConcept("component extension 2 order").setAnnotation(true);
-         createConcept("component extension 2 default value").setAnnotation(true);
-         createConcept("component extension 3 label").setAnnotation(true);
-         createConcept("component extension 3 order").setAnnotation(true);
-         createConcept("component extension 3 default value").setAnnotation(true);
-         createConcept("integer 1 label").setAnnotation(true);
-         createConcept("integer 1 order").setAnnotation(true);
-         createConcept("integer 1 default value").setAnnotation(true);
-         createConcept("long 1 label").setAnnotation(true);
-         createConcept("long 1 order").setAnnotation(true);
-         createConcept("long 1 default value").setAnnotation(true);
-         createConcept("float 1 label").setAnnotation(true);
-         createConcept("float 1 order").setAnnotation(true);
-         createConcept("float 1 default value").setAnnotation(true);
+         createConcept("component extension 1 label").setAnnotationRefexExtensionIdentity(true);
+         createConcept("component extension 1 order").setAnnotationRefexExtensionIdentity(true);
+         createConcept("component extension 1 default value").setAnnotationRefexExtensionIdentity(true);
+         createConcept("component extension 2 label").setAnnotationRefexExtensionIdentity(true);
+         createConcept("component extension 2 order").setAnnotationRefexExtensionIdentity(true);
+         createConcept("component extension 2 default value").setAnnotationRefexExtensionIdentity(true);
+         createConcept("component extension 3 label").setAnnotationRefexExtensionIdentity(true);
+         createConcept("component extension 3 order").setAnnotationRefexExtensionIdentity(true);
+         createConcept("component extension 3 default value").setAnnotationRefexExtensionIdentity(true);
+         createConcept("integer 1 label").setAnnotationRefexExtensionIdentity(true);
+         createConcept("integer 1 order").setAnnotationRefexExtensionIdentity(true);
+         createConcept("integer 1 default value").setAnnotationRefexExtensionIdentity(true);
+         createConcept("long 1 label").setAnnotationRefexExtensionIdentity(true);
+         createConcept("long 1 order").setAnnotationRefexExtensionIdentity(true);
+         createConcept("long 1 default value").setAnnotationRefexExtensionIdentity(true);
+         createConcept("float 1 label").setAnnotationRefexExtensionIdentity(true);
+         createConcept("float 1 order").setAnnotationRefexExtensionIdentity(true);
+         createConcept("float 1 default value").setAnnotationRefexExtensionIdentity(true);
          popParent();
          createConcept("template concepts");
          pushParent(current());
@@ -139,8 +139,8 @@ public class DescriptionLogicAuxiliary extends Taxonomy {
          popParent();
          createConcept("description-logic variety");
          pushParent(current());
-         createConcept("EL++").setAnnotation(true);
-         createConcept("SH").setAnnotation(true);
+         createConcept("EL++").setAnnotationRefexExtensionIdentity(true);
+         createConcept("SH").setAnnotationRefexExtensionIdentity(true);
          popParent();
          createConcept("description-logic classifier");
          pushParent(current());

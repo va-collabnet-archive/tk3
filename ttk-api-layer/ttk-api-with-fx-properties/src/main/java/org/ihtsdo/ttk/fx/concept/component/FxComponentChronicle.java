@@ -9,7 +9,7 @@ import org.ihtsdo.ttk.fx.concept.FxConcept;
 import org.ihtsdo.ttk.fx.concept.component.identifier.FxIdentifier;
 import org.ihtsdo.ttk.fx.concept.component.identifier.FxIdentifierUuid;
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexChronicle;
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.ComponentVersionBI;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.TerminologySnapshotDI;
@@ -58,7 +58,7 @@ public abstract class FxComponentChronicle<V extends FxComponentVersion, T exten
       this.versions = FXCollections.observableArrayList(new ArrayList<V>(1));
    }
 
-   public FxComponentChronicle(TerminologySnapshotDI ss, FxConcept concept, ComponentChroncileBI<T> another)
+   public FxComponentChronicle(TerminologySnapshotDI ss, FxConcept concept, ComponentChronicleBI<T> another)
            throws IOException, ContradictionException {
       super();
       this.concept                 = concept;
@@ -165,7 +165,7 @@ public abstract class FxComponentChronicle<V extends FxComponentVersion, T exten
    protected abstract V makeVersion(TerminologySnapshotDI ss, T version)
            throws IOException, ContradictionException;
 
-   private void processRefexes(TerminologySnapshotDI ss, ComponentChroncileBI<T> another)
+   private void processRefexes(TerminologySnapshotDI ss, ComponentChronicleBI<T> another)
            throws IOException, ContradictionException {
       HashSet<RefexChronicleBI<?>> refexesToProcess = new HashSet<>();
 

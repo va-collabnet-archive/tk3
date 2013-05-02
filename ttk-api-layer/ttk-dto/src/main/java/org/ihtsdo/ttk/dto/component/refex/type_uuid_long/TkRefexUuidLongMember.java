@@ -4,7 +4,7 @@ package org.ihtsdo.ttk.dto.component.refex.type_uuid_long;
 
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.refex.type_nid_long.RefexNidLongVersionBI;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -200,8 +200,8 @@ public class TkRefexUuidLongMember extends TkRefexAbstractMember<TkRefexUuidLong
    }
 
    @Override
-   public TK_REFEX_TYPE getType() {
-      return TK_REFEX_TYPE.CID_LONG;
+   public ToolkitRefexType getType() {
+      return ToolkitRefexType.CID_LONG;
    }
 
    //~--- set methods ---------------------------------------------------------

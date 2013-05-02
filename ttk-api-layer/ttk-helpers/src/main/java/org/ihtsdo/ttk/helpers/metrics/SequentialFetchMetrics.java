@@ -20,7 +20,7 @@ package org.ihtsdo.ttk.helpers.metrics;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.ComponentChroncileBI;
+import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
 import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.ProcessComponentChronicleBI;
@@ -53,7 +53,7 @@ public class SequentialFetchMetrics implements ProcessComponentChronicleBI, Proc
    }
 
    @Override
-   public void process(ComponentChroncileBI cc) throws Exception {
+   public void process(ComponentChronicleBI cc) throws Exception {
       processedComponentCount.incrementAndGet();
    }
 

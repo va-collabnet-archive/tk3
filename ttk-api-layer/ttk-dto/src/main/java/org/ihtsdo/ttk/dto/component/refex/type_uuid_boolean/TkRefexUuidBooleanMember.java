@@ -2,7 +2,7 @@ package org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
@@ -192,8 +192,8 @@ public class TkRefexUuidBooleanMember extends TkRefexAbstractMember<TkRefexUuidB
    }
 
    @Override
-   public TK_REFEX_TYPE getType() {
-      return TK_REFEX_TYPE.CID_STR;
+   public ToolkitRefexType getType() {
+      return ToolkitRefexType.CID_STR;
    }
 
    public UUID getUuid1() {

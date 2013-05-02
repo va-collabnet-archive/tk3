@@ -2,7 +2,7 @@ package org.ihtsdo.ttk.dto.component.refex;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.dto.component.TkComponent;
@@ -147,7 +147,7 @@ public abstract class TkRefexAbstractMember<V extends TkRevision> extends TkComp
       return refexExtensionUuid;
    }
 
-   public abstract TK_REFEX_TYPE getType();
+   public abstract ToolkitRefexType getType();
 
    //~--- set methods ---------------------------------------------------------
 

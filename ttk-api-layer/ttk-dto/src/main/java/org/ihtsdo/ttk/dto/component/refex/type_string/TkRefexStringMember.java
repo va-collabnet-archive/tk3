@@ -6,7 +6,7 @@ import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_string.RefexStringVersionBI;
 import org.ihtsdo.ttk.dto.UtfHelper;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -175,8 +175,8 @@ public class TkRefexStringMember extends TkRefexAbstractMember<TkRefexStringRevi
    }
 
    @Override
-   public TK_REFEX_TYPE getType() {
-      return TK_REFEX_TYPE.STR;
+   public ToolkitRefexType getType() {
+      return ToolkitRefexType.STR;
    }
 
    //~--- set methods ---------------------------------------------------------

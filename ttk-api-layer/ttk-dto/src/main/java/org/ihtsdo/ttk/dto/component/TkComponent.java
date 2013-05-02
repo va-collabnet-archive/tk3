@@ -3,7 +3,7 @@ package org.ihtsdo.ttk.dto.component;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.ttk.api.ComponentVersionBI;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.id.IdBI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.uuid.UuidFactory;
@@ -307,7 +307,7 @@ nextId:
          annotations = new ArrayList<>(annotationCount);
 
          for (int i = 0; i < annotationCount; i++) {
-            TK_REFEX_TYPE type = TK_REFEX_TYPE.readType(in);
+            ToolkitRefexType type = ToolkitRefexType.readType(in);
 
             switch (type) {
             case CID :

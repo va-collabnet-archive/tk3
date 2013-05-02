@@ -23,15 +23,15 @@ public interface TerminologyStoreDI extends TerminologyDI {
     enum DatabaseOptionPreferences {
         DB_LOCATION, BASELINE_FILES;
     }
-   ComponentChroncileBI<?> getComponent(Collection<UUID> uuids) throws IOException;
+   ComponentChronicleBI<?> getComponent(Collection<UUID> uuids) throws IOException;
 
-   ComponentChroncileBI<?> getComponent(ComponentContainerBI cc) throws IOException;
+   ComponentChronicleBI<?> getComponent(ComponentContainerBI cc) throws IOException;
 
-   ComponentChroncileBI<?> getComponent(int nid) throws IOException;
+   ComponentChronicleBI<?> getComponent(int nid) throws IOException;
 
-   ComponentChroncileBI<?> getComponent(UUID... uuids) throws IOException;
+   ComponentChronicleBI<?> getComponent(UUID... uuids) throws IOException;
    
-   ComponentChroncileBI<?> getComponentFromAlternateId(int authorityNid, String altId) throws IOException;
+   ComponentChronicleBI<?> getComponentFromAlternateId(int authorityNid, String altId) throws IOException;
 
    ComponentVersionBI getComponentVersion(ViewCoordinate vc, Collection<UUID> uuids)
            throws IOException, ContradictionException;

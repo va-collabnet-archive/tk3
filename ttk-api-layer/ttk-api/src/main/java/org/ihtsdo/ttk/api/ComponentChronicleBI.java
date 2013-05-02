@@ -8,7 +8,7 @@ import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
 
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 
-public interface ComponentChroncileBI<T extends ComponentVersionBI>
+public interface ComponentChronicleBI<T extends ComponentVersionBI>
         extends ComponentBI {
 
     T getVersion(ViewCoordinate c) throws ContradictionException;

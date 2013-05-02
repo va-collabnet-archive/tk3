@@ -5,7 +5,7 @@ package org.ihtsdo.ttk.dto.component.refex.type_boolean;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanVersionBI;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -172,8 +172,8 @@ public class TkRefexBooleanMember extends TkRefexAbstractMember<TkRefexBooleanRe
    }
 
    @Override
-   public TK_REFEX_TYPE getType() {
-      return TK_REFEX_TYPE.BOOLEAN;
+   public ToolkitRefexType getType() {
+      return ToolkitRefexType.BOOLEAN;
    }
 
    //~--- set methods ---------------------------------------------------------

@@ -21,7 +21,7 @@ package org.ihtsdo.ttk.helpers.econcept.transfrom;
 //~--- non-JDK imports --------------------------------------------------------
 import org.ihtsdo.ttk.api.country.COUNTRY_CODE;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
-import org.ihtsdo.ttk.api.lang.LANG_CODE;
+import org.ihtsdo.ttk.api.lang.LanguageCode;
 import org.ihtsdo.ttk.dto.TkConcept;
 import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributes;
 import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributesRevision;
@@ -51,14 +51,14 @@ public class EConceptToRF2UuidTransformer implements EConceptTransformerBI {
    Writer       descriptionsWriter;
    Date         effectiveDate;
    Writer       identifiersWriter;
-   LANG_CODE    language;
+   LanguageCode    language;
    String       namespace;
    Writer       relationshipsWriter;
    ReleaseType  releaseType;
 
    //~--- constructors --------------------------------------------------------
 
-   public EConceptToRF2UuidTransformer(File directory, ReleaseType releaseType, LANG_CODE language,
+   public EConceptToRF2UuidTransformer(File directory, ReleaseType releaseType, LanguageCode language,
                              COUNTRY_CODE country, String namespace, Date effectiveDate)
            throws IOException {
       directory.mkdirs();

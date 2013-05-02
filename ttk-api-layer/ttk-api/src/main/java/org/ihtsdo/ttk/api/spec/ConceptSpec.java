@@ -217,7 +217,7 @@ public class ConceptSpec implements SpecBI {
            throws IOException, ContradictionException {
       boolean found = false;
 
-      for (DescriptionVersionBI desc : localVersion.getDescsActive()) {
+      for (DescriptionVersionBI desc : localVersion.getDescriptionsActive()) {
          if (desc.getText().equals(description)) {
             found = true;
 
@@ -252,7 +252,7 @@ next:
 
          typeNids.add(relType.getNid());
 
-         for (RelationshipChronicleBI rel : local.getRelsOutgoing()) {
+         for (RelationshipChronicleBI rel : local.getRelationshipsOutgoing()) {
             for (RelationshipVersionBI rv : rel.getVersions()) {
                if ((rv.getTypeNid() == relType.getNid())
                    && (rv.getDestinationNid() == destination.getNid())) {
@@ -287,7 +287,7 @@ next:
 
          typeNids.add(relType.getNid());
 
-         for (ConceptVersionBI dest : local.getRelsOutgoingDestinations(typeNids)) {
+         for (ConceptVersionBI dest : local.getRelationshipsOutgoingDestinations(typeNids)) {
             if (dest.equals(destination)) {
                continue next;
             }

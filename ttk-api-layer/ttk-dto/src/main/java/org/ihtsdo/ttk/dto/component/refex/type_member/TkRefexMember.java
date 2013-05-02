@@ -7,7 +7,7 @@ import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.dto.component.TkRevision;
-import org.ihtsdo.ttk.api.TK_REFEX_TYPE;
+import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -152,7 +152,7 @@ public class TkRefexMember extends TkRefexAbstractMember<TkRefexRevision> {
    }
 
    @Override
-   public TK_REFEX_TYPE getType() {
-      return TK_REFEX_TYPE.MEMBER;
+   public ToolkitRefexType getType() {
+      return ToolkitRefexType.MEMBER;
    }
 }

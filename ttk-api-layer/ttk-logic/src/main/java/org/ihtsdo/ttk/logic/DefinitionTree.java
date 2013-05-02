@@ -78,7 +78,7 @@ public class DefinitionTree {
       this.refexExtensionNid = refexExtensionNid;
 
       for (RefexVersionBI<?> annotation :
-          cv.getConAttrsActive().getCurrentAnnotationMembers(cv.getViewCoordinate())) {
+          cv.getConceptAttributesActive().getCurrentAnnotationMembers(cv.getViewCoordinate())) {
          if (annotation.getRefexExtensionNid() == refexExtensionNid) {
             nodes.put(annotation.getNid(), annotation);
 
