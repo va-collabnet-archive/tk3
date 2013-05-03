@@ -100,7 +100,13 @@ public class ConceptDetailsViewController
     */
    private void changeConcept(FxConcept contextConcept) {
       if (contextConcept != null) {
-         textField.setText(contextConcept.toString());
+          try {
+              System.out.println(contextConcept.toXml());
+              System.out.println(Ts.get().getConcept(contextConcept.getPrimordialUuid()).toLongString());
+             textField.setText(contextConcept.toString());
+          } catch (IOException ex) {
+              Logger.getLogger(ConceptDetailsViewController.class.getName()).log(Level.SEVERE, null, ex);
+          }
       } else {
          textField.setText("No selection");
       }

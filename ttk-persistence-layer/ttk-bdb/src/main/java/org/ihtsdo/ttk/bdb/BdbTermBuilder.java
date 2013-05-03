@@ -157,6 +157,10 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         if (blueprint.hasProperty(ComponentProperty.ENCLOSING_CONCEPT_ID)) {
             P.s.setConceptNidForNid(blueprint.getInt(ComponentProperty.ENCLOSING_CONCEPT_ID), 
                     P.s.getNidForUuids(blueprint.getComponentUuid()));
+        } else {
+            P.s.setConceptNidForNid(P.s.getConceptNidForNid(
+                    blueprint.getInt(ComponentProperty.REFERENCED_COMPONENT_ID)), 
+                    blueprint.getComponentNid());
         }
         
         RefexMember<?, ?> newRefex = RefexMemberFactory.create(blueprint, ec);

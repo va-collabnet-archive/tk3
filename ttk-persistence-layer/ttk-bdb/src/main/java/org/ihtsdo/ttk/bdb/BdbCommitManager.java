@@ -118,10 +118,8 @@ public class BdbCommitManager {
         c.modified();
         LastChange.touch(c);
 
-        c = null;
-
-        if (concept.isUncommitted()) {
-            uncommittedCNidsNoChecks.setMember(concept.getNid());
+        if (c.isUncommitted()) {
+            uncommittedCNidsNoChecks.setMember(c.getNid());
          } else {
             c = (Concept) concept;
 

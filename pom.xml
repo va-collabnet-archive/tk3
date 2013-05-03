@@ -401,7 +401,7 @@ the specific language governing permissions and limitations under the License. -
         <module>ttk-fx-presentation-layer</module>
         <module>nbm-ttk</module>
         <module>osgi-ttk</module>
-    </modules>
+  </modules>
     <profiles>
         <profile>
             <id>default-tools.jar</id>

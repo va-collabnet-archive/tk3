@@ -305,6 +305,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
       newEdge.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
       newEdge.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, destinationNode.getComponentNid());
       newEdge.put(ComponentProperty.BOOLEAN_EXTENSION_1, truth);
+      newEdge.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
       originNode.getAnnotationBlueprints().add(newEdge);
 
       if (verbose) {
@@ -334,6 +335,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
       case 1 :
          newNode = newNode(ToolkitRefexType.CID);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, specs[0]);
+         newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
          nodes.get().push(newNode);
 
          if (verbose) {
@@ -346,6 +348,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          newNode = newNode(ToolkitRefexType.CID_CID);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, specs[0]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, specs[1]);
+         newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
 
          if (verbose) {
             System.out.println(newNode);
@@ -360,6 +363,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, specs[0]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, specs[1]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_3_ID, specs[2]);
+         newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
 
          if (verbose) {
             System.out.println(newNode);
@@ -411,6 +415,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
       case 1 :
          newNode = newNode(ToolkitRefexType.CID);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, specs[0]);
+         newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
          nodes.get().push(newNode);
 
          if (verbose) {
@@ -423,6 +428,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          newNode = newNode(ToolkitRefexType.CID_CID);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, specs[0]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, specs[1]);
+         newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
          nodes.get().push(newNode);
 
          if (verbose) {
@@ -436,6 +442,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, specs[0]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, specs[1]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_3_ID, specs[2]);
+         newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
          nodes.get().push(newNode);
 
          if (verbose) {
@@ -499,6 +506,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          newNode = newNode(ToolkitRefexType.CID_CID);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, spec);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, nids[0]);
+         newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
          nodes.get().push(newNode);
 
          if (verbose) {
@@ -512,6 +520,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, spec);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, nids[0]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_3_ID, nids[1]);
+         newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
          nodes.get().push(newNode);
 
          if (verbose) {

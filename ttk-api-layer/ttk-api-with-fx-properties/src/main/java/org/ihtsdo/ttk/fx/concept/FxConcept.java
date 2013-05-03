@@ -35,8 +35,10 @@ import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.StringWriter;
 
 import java.util.*;
+import javax.xml.bind.JAXB;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -522,6 +524,11 @@ NEXT_REL:
       return this.conceptReference.getText();
    }
 
+   public String toXml() {
+       StringWriter sw = new StringWriter();
+       JAXB.marshal(this, sw);
+       return sw.toString();
+   }
    public FxConceptAttributesChronicle getConceptAttributes() {
       return conceptAttributes;
    }

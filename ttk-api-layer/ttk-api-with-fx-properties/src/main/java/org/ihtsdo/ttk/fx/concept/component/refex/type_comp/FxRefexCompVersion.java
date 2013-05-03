@@ -18,6 +18,7 @@ import org.ihtsdo.ttk.api.refex.type_nid.RefexNidVersionBI;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlSeeAlso;
+import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexChronicle;
 
 @XmlSeeAlso( {
@@ -42,7 +43,7 @@ public class FxRefexCompVersion<T extends FxRefexChronicle, V extends FxRefexCom
                              RefexNidVersionBI another)
            throws IOException, ContradictionException {
       super(chronicle, ss, another);
-      this.comp1Ref = new FxComponentReference(ss.getConceptVersion(another.getNid1()));
+      this.comp1Ref = new FxComponentReference(ss, another.getNid1());
    }
 
    //~--- methods -------------------------------------------------------------
