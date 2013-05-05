@@ -57,7 +57,7 @@ public class DescriptionLogicAuxiliary extends Taxonomy {
          pushParent(current());
          createConcept("description-logic metadata");
          pushParent(current());
-         createConcept(moduleName);
+         createModuleConcept(moduleName);
          popParent();
          createConcept("object property characteristics");
          pushParent(current());
@@ -82,10 +82,11 @@ public class DescriptionLogicAuxiliary extends Taxonomy {
          createConcept("disjoint with");
          createConcept("definition root");
          popParent();
-         createConcept("template operators");
+         createConcept("node operators");
          pushParent(current());
          createConcept("template merge");
          createConcept("field substitution");
+         createConcept("concept reference");
          popParent();
          createConcept("field operators");
          pushParent(current());

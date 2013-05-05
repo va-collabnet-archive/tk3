@@ -13,8 +13,13 @@ import org.ihtsdo.ttk.api.refex.type_nid_float.RefexNidFloatVersionBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_comp_comp_float.FxRefexCompCompCompFloatVersion;
 
 
+@XmlSeeAlso( {
+    FxRefexCompCompCompFloatVersion.class, 
+})
 public class FxRefexCompFloatVersion<T extends FxRefexChronicle, V extends FxRefexCompFloatVersion>
         extends FxRefexCompVersion<T, V> {
    public static final long serialVersionUID = 1;

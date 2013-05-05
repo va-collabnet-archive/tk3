@@ -615,7 +615,7 @@ public class BdbTerminologyStore extends Termstore {
 
    @Override
    public int getStamp(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-      return Bdb.getStampDb().getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
+      return Bdb.getStampDb().getStamp(statusNid, time, authorNid, moduleNid, pathNid);
    }
 
    @Override

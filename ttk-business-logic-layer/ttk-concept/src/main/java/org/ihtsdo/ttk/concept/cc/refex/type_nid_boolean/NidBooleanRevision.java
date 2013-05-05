@@ -57,14 +57,14 @@ public class NidBooleanRevision extends RefexRevision<NidBooleanRevision, NidBoo
       boolean1 = input.readBoolean();
    }
 
-   public NidBooleanRevision(int statusNid, long time, int authorNid, int pathNid, int moduleNid,
+   public NidBooleanRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, 
                            NidBooleanMember primoridalMember) {
       super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
       nid1      = primoridalMember.getC1Nid();
       boolean1 = primoridalMember.getBoolean1();
    }
 
-   protected NidBooleanRevision(int statusNid, long time, int authorNid, int pathNid, int moduleNid,
+   protected NidBooleanRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
                               NidBooleanRevision another) {
       super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       nid1      = another.nid1;

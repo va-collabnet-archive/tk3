@@ -84,7 +84,8 @@ public class FxComponentReference implements Externalizable {
          } else if (component instanceof DescriptionVersionBI) {
             text = ((DescriptionVersionBI) component).getText();
          } else {
-            text = component.getClass().getSimpleName();
+            text = component.getChronicle().getClass().getSimpleName() + " for: " +
+                    ss.getConceptForNid(nid).getFullySpecifiedDescription().getText();
          }
       } else {
          text = "null component";

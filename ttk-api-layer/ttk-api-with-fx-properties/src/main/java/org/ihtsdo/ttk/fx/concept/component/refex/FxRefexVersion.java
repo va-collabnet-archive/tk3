@@ -30,12 +30,24 @@ import org.ihtsdo.ttk.api.id.IdBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
+import org.ihtsdo.ttk.fx.concept.component.refex.type_comp.FxRefexCompVersion;
+import org.ihtsdo.ttk.fx.concept.component.refex.type_int.FxRefexIntVersion;
+import org.ihtsdo.ttk.fx.concept.component.refex.type_long.FxRefexLongVersion;
+import org.ihtsdo.ttk.fx.concept.component.refex.type_string.FxRefexStringVersion;
 
 /**
  *
  * @author kec
  */
+@XmlSeeAlso( {
+    FxRefexCompVersion.class, 
+    FxRefexIntVersion.class, 
+    FxRefexLongVersion.class, 
+    FxRefexStringVersion.class, 
+    FxRefexCompVersion.class, 
+})
 public class FxRefexVersion<T extends FxRefexChronicle, V extends FxRefexVersion>
         extends FxComponentVersion<T, V> {
    public FxRefexVersion() {}
@@ -54,12 +66,12 @@ public class FxRefexVersion<T extends FxRefexChronicle, V extends FxRefexVersion
 
    @XmlTransient
    public FxComponentReference getComponentRef() {
-      return chronicle.componentReference;
+      return chronicle.referencedComponentReference;
    }
 
    @XmlTransient
    public FxComponentReference getRefexRef() {
-      return chronicle.refexReference;
+      return chronicle.refexExtensionIdentifierReference;
    }
 
    @XmlTransient

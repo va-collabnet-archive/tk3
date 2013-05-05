@@ -76,7 +76,10 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
     /**
      * Field description
      */
-    private AtomicLong propigationId = new AtomicLong();
+    private static AtomicLong propigationId = new AtomicLong();
+    
+   private Object lastPropigationId = Long.MIN_VALUE;
+
     /**
      * Field description
      */
@@ -88,7 +91,7 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
         }
     };
     /**
-     * Map to hold additional IDs. 
+     * Map to hold additional IDs.
      */
     private HashMap<Object, Integer> idMap = new HashMap<>();
     /**
@@ -107,7 +110,6 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
      * Field description
      */
     protected RefexDirective refexDirective;
-    
     protected ComponentChronicleBI<?> referencedComponent;
 
     public ComponentChronicleBI<?> getReferencedComponent() {
@@ -135,12 +137,8 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
             RefexDirective refexDirective)
             throws IOException, InvalidCAB, ContradictionException {
         if (currentStatusUuid == null || retiredStatusUuid == null) {
-            try {
-                currentStatusUuid = SnomedMetadataRf2.ACTIVE_VALUE_RF2.getLenient().getPrimUuid();
-                retiredStatusUuid = SnomedMetadataRf2.INACTIVE_VALUE_RF2.getLenient().getPrimUuid();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            currentStatusUuid = SnomedMetadataRf2.ACTIVE_VALUE_RF2.getUuids()[0];
+            retiredStatusUuid = SnomedMetadataRf2.INACTIVE_VALUE_RF2.getUuids()[0];
         }
         setStatusUuid(currentStatusUuid);
         setComponentUuidNoRecompute(componentUuid);
@@ -238,10 +236,13 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
      */
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-        try {
-            recomputeUuid();
-        } catch (NoSuchAlgorithmException | InvalidCAB | ContradictionException | IOException ex) {
-            Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(Level.SEVERE, null, ex);
+        if (!propertyChangeEvent.getPropagationId().equals(lastPropigationId)) {
+            try {
+                lastPropigationId = propertyChangeEvent.getPropagationId();
+                recomputeUuid();
+            } catch (NoSuchAlgorithmException | InvalidCAB | ContradictionException | IOException ex) {
+                Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -449,6 +450,9 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
      * @throws InvalidCAB if the any of the values in blueprint to make are invalid
      */
     protected String getPrimoridalUuidString(UUID uuid) throws IOException, InvalidCAB {
+        if (Ts.get() == null) {
+            return uuid.toString();
+        }
         if (Ts.get().hasUuid(uuid)) {
             ComponentChronicleBI<?> component = Ts.get().getComponent(uuid);
 
@@ -487,8 +491,9 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
      * @param componentUuid the uuid of the component specified by this blueprint
      */
     public void setComponentUuid(UUID componentUuid) {
+        UUID oldUuid = (UUID) properties.get(ComponentProperty.COMPONENT_ID);
         properties.put(ComponentProperty.COMPONENT_ID, componentUuid);
-        pcs.firePropertyChange("componentUuid", null, componentUuid);
+        pcs.firePropertyChange("componentUuid", oldUuid, componentUuid);
     }
 
     /**
@@ -553,6 +558,9 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
      */
     public UUID getUuid(ComponentProperty key) {
         Object obj = properties.get(key);
+        if (obj == null) {
+            return null;
+        }
         if (obj instanceof UUID) {
             return (UUID) obj;
         }

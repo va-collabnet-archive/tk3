@@ -145,7 +145,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
            throws IOException, InvalidCAB, ContradictionException {
       RefexCAB role = addSegment(root, true, DescriptionLogicBinding.EXISTENTIAL_RESTRICTION, typeNid);
 
-      add(role, destinationNid);
+      add(role, DescriptionLogicBinding.CONCEPT_REFERENCE.getNid(), destinationNid);
    }
 
    /**
@@ -165,10 +165,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
    public RefexCAB addSegment(RefexCAB originNode, boolean truth, ConceptSpec... specs)
            throws IOException, InvalidCAB, ContradictionException {
       RefexCAB destinationNode = newNode(specs);
-      RefexCAB edge            = newEdge(originNode, truth, destinationNode);
-
-      originNode.getAnnotationBlueprints().add(edge);
-
+      newEdge(originNode, truth, destinationNode);
       return destinationNode;
    }
 
@@ -189,10 +186,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
    public RefexCAB addSegment(RefexCAB originNode, boolean truth, int... nids)
            throws IOException, InvalidCAB, ContradictionException {
       RefexCAB destinationNode = newNode(nids);
-      RefexCAB edge            = newEdge(originNode, truth, destinationNode);
-
-      originNode.getAnnotationBlueprints().add(edge);
-
+      newEdge(originNode, truth, destinationNode);
       return destinationNode;
    }
 
@@ -215,10 +209,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
                               int destinationNid)
            throws IOException, InvalidCAB, ContradictionException {
       RefexCAB destinationNode = newNode(restricionType, destinationNid);
-      RefexCAB edge            = newEdge(originNode, truth, destinationNode);
-
-      originNode.getAnnotationBlueprints().add(edge);
-
+      newEdge(originNode, truth, destinationNode);
       return destinationNode;
    }
 
@@ -234,7 +225,8 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
     */
    public void build(TerminologyBuilderBI builder)
            throws IOException, InvalidCAB, ContradictionException {
-      while (!nodes.get().isEmpty()) {
+      Stack<RefexCAB> threadLocalNodes = nodes.get();
+      while (!threadLocalNodes.isEmpty()) {
          count.incrementAndGet();
 
          if (count.get() % 1000 == 0) {
@@ -249,7 +241,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
             }
          }
 
-         RefexCAB blueprint = nodes.get().pop();
+         RefexCAB blueprint = threadLocalNodes.pop();
 
           //System.out.println("Constructing: " + blueprint);
           try {
@@ -336,7 +328,6 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          newNode = newNode(ToolkitRefexType.CID);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, specs[0]);
          newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
-         nodes.get().push(newNode);
 
          if (verbose) {
             System.out.println(newNode);
@@ -354,7 +345,6 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
             System.out.println(newNode);
          }
 
-         nodes.get().push(newNode);
 
          return newNode;
 
@@ -368,8 +358,6 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          if (verbose) {
             System.out.println(newNode);
          }
-
-         nodes.get().push(newNode);
 
          return newNode;
 
@@ -416,7 +404,6 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          newNode = newNode(ToolkitRefexType.CID);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, specs[0]);
          newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
-         nodes.get().push(newNode);
 
          if (verbose) {
             System.out.println(newNode);
@@ -429,7 +416,6 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, specs[0]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, specs[1]);
          newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
-         nodes.get().push(newNode);
 
          if (verbose) {
             System.out.println(newNode);
@@ -443,7 +429,6 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, specs[1]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_3_ID, specs[2]);
          newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
-         nodes.get().push(newNode);
 
          if (verbose) {
             System.out.println(newNode);
@@ -507,7 +492,6 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, spec);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, nids[0]);
          newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
-         nodes.get().push(newNode);
 
          if (verbose) {
             System.out.println(newNode);
@@ -521,7 +505,6 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, nids[0]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_3_ID, nids[1]);
          newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
-         nodes.get().push(newNode);
 
          if (verbose) {
             System.out.println(newNode);

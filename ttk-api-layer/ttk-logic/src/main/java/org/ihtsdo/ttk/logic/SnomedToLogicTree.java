@@ -136,7 +136,7 @@ public class SnomedToLogicTree extends LogicBlueprintBuilder implements ProcessU
 
          for (RelationshipVersionBI rel : definingRels) {
             if (vc.getIsaTypeNids().contains(rel.getTypeNid())) {
-               add(and, rel.getDestinationNid());
+               add(and, DescriptionLogicBinding.CONCEPT_REFERENCE.getNid(), rel.getDestinationNid());
             } else if (rel.getGroup() == 0) {
                addExtensionalRole(and, rel.getTypeNid(), rel.getDestinationNid());
             }
@@ -152,7 +152,7 @@ public class SnomedToLogicTree extends LogicBlueprintBuilder implements ProcessU
       } else {
          for (RelationshipVersionBI rel : definingRels) {
             if (vc.getIsaTypeNids().contains(rel.getTypeNid())) {
-               add(set, rel.getDestinationNid());
+               add(set, DescriptionLogicBinding.CONCEPT_REFERENCE.getNid(), rel.getDestinationNid());
             } else {
                throw new InvalidCAB("Concept must have at least one is-a");
             }

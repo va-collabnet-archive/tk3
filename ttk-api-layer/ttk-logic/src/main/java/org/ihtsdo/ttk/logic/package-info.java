@@ -36,7 +36,7 @@
  *      <li><a href="#logical-and">Logical And</a></li>
  *      <li><a href="#logical-or">Logical Or</a></li>
  *      <li><a href="#disjoint-with">Disjoint With</a></li>
- *      <li><a href="#concept">Concept</a></li>
+ *      <li><a href="#concept">Concept Reference</a></li>
  *      <li><a href="#concept-substitution">Concept Substitution</a></li>
  *      <li><a href="#role">Role</a></li>
  *      <li><a href="#template-merge">Template Merge</a></li>
@@ -274,14 +274,17 @@
  * to connectives, concepts, and/or an annotations indicating template merges.</li>
  * </ul></dd>
  *
- * <dt id="concept"><b>Concept</b></dt>
+ * <dt id="concept"><b>Concept Reference</b></dt>
  * <dd><ul>
  * <li>A concept, as used in a conjunction or a role restriction is represented by an annotation of type:
- *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID}.
+ *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID_CID}.
+ * <br><br>NEED TO update diagram!
  * <br> <img src="doc-files/referenced-concept.svg"/></li>
  * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
+ * {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#CONCEPT_REFERENCE}.</li>
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_2_ID} field of the node is
  * the identifier for the concept.</li>
-* <li>The Concept node will not have annotations.</li>
+* <li>The Concept Reference node will not have annotations.</li>
  * </ul> 
  * </dd>
  * </dl>
@@ -290,12 +293,19 @@
  *
  * <dt id="concept-substitution"><b>Concept Substitution</b></dt>
  * <dd><ul>
- * <li>A concept substitution, as used in a conjunction or a role restriction i
- * s represented by an annotation of type:
- *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID}.
+ * <li>A concept substitution, as used in a conjunction or a role restriction is
+ *  represented by an annotation of type:
+ *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID_CID}.
+ * <br><br>NEED TO update diagram!
  * <br> <img src="doc-files/concept-substitution.svg"/></li>
  * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
- * the one of the following .</li>
+ * {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#FIELD_SUBSTITUTION}</li>
+ * <ul>
+ * <li></li>
+ * </ul>
+ * 
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_2_ID} field of the node is
+ * the one of the following:</li>
  * <ul>
  * <li>{@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#COMPONENT_EXTENSION_1_ID_SUBSTITUTION},</li>
  * <li>{@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#COMPONENT_EXTENSION_2_ID_SUBSTITUTION},</li>

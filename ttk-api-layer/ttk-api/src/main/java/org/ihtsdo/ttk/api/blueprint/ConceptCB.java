@@ -60,6 +60,10 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
 
     public static final UUID conceptSpecNamespace =
             UUID.fromString("620d1f30-5285-11e0-b8af-0800200c9a66");
+    private static final UUID usRefexUuid = SnomedMetadataRf2.US_ENGLISH_REFSET_RF2.getUuids()[0];
+    private static final UUID gbRefexUuid = SnomedMetadataRf2.GB_ENGLISH_REFSET_RF2.getUuids()[0];
+    private Object lastPropigationId = Long.MIN_VALUE;
+
     private String fullySpecifiedName;
     private String preferredName;
     private List<String> fsns = new ArrayList<>();
@@ -75,34 +79,32 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
     private List<RelationshipCAB> relCABs = new ArrayList<>();
     private List<MediaCAB> mediaCABs = new ArrayList<>();
     private ConceptAttributeAB conAttrAB;
-    private int usRefexNid = SnomedMetadataRfx.getUS_DIALECT_REFEX_NID();
-    private int gbRefexNid = SnomedMetadataRfx.getGB_DIALECT_REFEX_NID();
     private Collection<UUID> parents = new TreeSet<UUID>() {
         @Override
         public boolean add(UUID e) {
             boolean result = super.add(e);
-            computeComponentUuid();
+            setComponentUuid(computeComponentUuid());
             return result;
         }
 
         @Override
         public boolean addAll(Collection<? extends UUID> clctn) {
             boolean result = super.addAll(clctn);
-            computeComponentUuid();
+            setComponentUuid(computeComponentUuid());
             return result;
         }
 
         @Override
         public boolean remove(Object obj) {
             boolean result = super.remove(obj);
-            computeComponentUuid();
+            setComponentUuid(computeComponentUuid());
             return result;
         }
 
         @Override
         public boolean removeAll(Collection<?> clctn) {
             boolean result = super.removeAll(clctn);
-            computeComponentUuid();
+            setComponentUuid(computeComponentUuid());
             return result;
         }
     };
@@ -150,7 +152,29 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
             this.parents.addAll(Arrays.asList(parentUuids));
         }
         pcs.addPropertyChangeListener(this);
-        computeComponentUuid();
+        setComponentUuid(computeComponentUuid());
+    }
+    public ConceptCB(String fullySpecifiedName,
+            String preferredName,
+            LanguageCode langCode,
+            UUID isaTypeUuid,
+            IdDirective idDirective,
+            UUID moduleUuid,
+            UUID conceptUuid,
+            UUID... parentUuids) throws IOException, InvalidCAB, ContradictionException {
+        super(conceptUuid, null, null, idDirective, RefexDirective.EXCLUDE);
+        this.fsns.add(fullySpecifiedName);
+        this.fullySpecifiedName = fullySpecifiedName; //@akf todo: these should be removed when NewConcept, etc. is upated
+        this.prefNames.add(preferredName);
+        this.preferredName = preferredName; //@akf todo: these should be removed when NewConcept, etc. is upated
+        this.lang = langCode.getFormatedLanguageCode();
+        this.isaType = isaTypeUuid;
+        this.moduleUuid = moduleUuid;
+        if (parentUuids != null) {
+            this.parents.addAll(Arrays.asList(parentUuids));
+        }
+        pcs.addPropertyChangeListener(this);
+        setComponentUuid(computeComponentUuid());
     }
 
     /**
@@ -183,14 +207,15 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
             this.parents.addAll(Arrays.asList(parentUuids));
         }
         pcs.addPropertyChangeListener(this);
-        computeComponentUuid();
+            setComponentUuid(computeComponentUuid());
     }
+
     public ConceptCB(ConceptVersionBI conceptVersion,
             IdDirective idDirective,
             RefexDirective refexDirective)
             throws IOException, ContradictionException, InvalidCAB {
         this(conceptVersion,
-            null, idDirective, refexDirective);
+                null, idDirective, refexDirective);
     }
 
     /**
@@ -235,9 +260,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
             descCABs.add(descBp);
         }
         for (RelationshipVersionBI rv : conceptVersion.getRelationshipsOutgoingActive()) {
-            if (rv.getCharacteristicNid() == SnomedMetadataRf1.INFERRED_DEFINING_CHARACTERISTIC_TYPE_RF1.getLenient().getNid()
-                    || rv.getCharacteristicNid() == SnomedMetadataRf1.DEFINING_CHARACTERISTIC_TYPE_RF1.getLenient().getNid()
-                    || rv.getCharacteristicNid() == SnomedMetadataRf2.INFERRED_RELATIONSHIP_RF2.getLenient().getNid()) {
+            if (rv.getCharacteristicNid() == SnomedMetadataRf2.INFERRED_RELATIONSHIP_RF2.getLenient().getNid()) {
                 continue;
             }
             RelationshipCAB relBp = rv.makeBlueprint(conceptVersion.getViewCoordinate(), idDirective, refexDirective);
@@ -257,10 +280,13 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
      */
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-        try {
-            recomputeUuid();
-        } catch (NoSuchAlgorithmException | InvalidCAB | ContradictionException | IOException ex) {
-            Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(Level.SEVERE, null, ex);
+        if (!propertyChangeEvent.getPropagationId().equals(lastPropigationId)) {
+            try {
+                lastPropigationId = propertyChangeEvent.getPropagationId();
+                recomputeUuid();
+            } catch (NoSuchAlgorithmException | InvalidCAB | ContradictionException | IOException ex) {
+                Logger.getLogger(CreateOrAmendBlueprint.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }
@@ -271,7 +297,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
      *
      * @throws RuntimeException indicates a runtime exception has occurred
      */
-    public final void computeComponentUuid() throws RuntimeException {
+    private UUID computeComponentUuid() throws RuntimeException {
         switch (idDirective) {
             case GENERATE_HASH:
             case GENERATE_REFEX_CONTENT_HASH:
@@ -284,23 +310,19 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
                     for (String desc : descs) {
                         sb.append(desc);
                     }
-                    setComponentUuid(
-                            UuidT5Generator.get(conceptSpecNamespace,
-                            sb.toString()));
+                    return UuidT5Generator.get(conceptSpecNamespace, sb.toString());
                 } catch (IOException | NoSuchAlgorithmException ex) {
                     throw new RuntimeException(ex);
                 }
-                break;
 
             case GENERATE_RANDOM:
             case GENERATE_RANDOM_CONCEPT_REST_HASH:
-                setComponentUuid(UUID.randomUUID());
-                break;
+                return UUID.randomUUID();
 
             case PRESERVE_CONCEPT_REST_HASH:
             case PRESERVE:
             default:
-            // nothing to generate. 
+            return getComponentUuid();
 
         }
     }
@@ -322,7 +344,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
         switch (idDirective) {
             case GENERATE_HASH:
             case GENERATE_REFEX_CONTENT_HASH:
-                computeComponentUuid();
+                setComponentUuid(computeComponentUuid());
                 break;
             case GENERATE_RANDOM:
             case GENERATE_RANDOM_CONCEPT_REST_HASH:
@@ -367,7 +389,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
      */
     public void setFullySpecifiedName(String fullySpecifiedName) {
         this.fullySpecifiedName = fullySpecifiedName;
-        computeComponentUuid();
+        setComponentUuid(computeComponentUuid());
     }
 
     /**
@@ -412,7 +434,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
         if (dialect == LanguageCode.EN) {
             usAnnot = new RefexCAB(ToolkitRefexType.CID,
                     fullySpecifiedNameBlueprint.getComponentUuid(),
-                    usRefexNid, null, null, idDirective, refexDirective);
+                    usRefexUuid, idDirective, refexDirective);
             usAnnot.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, SnomedMetadataRfx.getDESC_PREFERRED_NID());
             if (moduleUuid != null) {
                 usAnnot.properties.put(ComponentProperty.MODULE_ID, moduleUuid);
@@ -420,7 +442,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
 
             gbAnnot = new RefexCAB(ToolkitRefexType.CID,
                     fullySpecifiedNameBlueprint.getComponentUuid(),
-                    gbRefexNid, null, null, idDirective, refexDirective);
+                    gbRefexUuid, idDirective, refexDirective);
             gbAnnot.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, SnomedMetadataRfx.getDESC_PREFERRED_NID());
             if (moduleUuid != null) {
                 gbAnnot.properties.put(ComponentProperty.MODULE_ID, moduleUuid);
@@ -430,7 +452,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
         } else if (dialect == LanguageCode.EN_US) {
             usAnnot = new RefexCAB(ToolkitRefexType.CID,
                     fullySpecifiedNameBlueprint.getComponentUuid(),
-                    usRefexNid, null, null, idDirective, refexDirective);
+                    usRefexUuid, idDirective, refexDirective);
             usAnnot.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, SnomedMetadataRfx.getDESC_PREFERRED_NID());
             if (moduleUuid != null) {
                 usAnnot.properties.put(ComponentProperty.MODULE_ID, moduleUuid);
@@ -468,7 +490,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
         if (dialect != null) {
             List<RefexCAB> annotationBlueprints = fullySpecifiedNameBlueprint.getAnnotationBlueprints();
             for (RefexCAB annot : annotationBlueprints) {
-                if (annot.getRefexCollectionNid() == usRefexNid || annot.getRefexCollectionNid() == gbRefexNid) {
+                if (annot.getRefexCollectionUuid().equals(usRefexUuid) || annot.getRefexCollectionUuid().equals(gbRefexUuid)) {
                     annotationBlueprints.remove(annot);
                 }
             }
@@ -493,7 +515,8 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
      */
     public void setIsaType(UUID isaTypeUuid) {
         this.isaType = isaTypeUuid;
-        computeComponentUuid();
+        setComponentUuid(computeComponentUuid());
+
     }
 
     /**
@@ -513,7 +536,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
      */
     public void setLang(String lang) {
         this.lang = lang;
-        computeComponentUuid();
+        setComponentUuid(computeComponentUuid());
     }
 
     /**
@@ -532,7 +555,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
      */
     public void setPreferredName(String preferredName) {
         this.preferredName = preferredName;
-        computeComponentUuid();
+        setComponentUuid(computeComponentUuid());
     }
 
     /**
@@ -577,7 +600,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
         if (dialect == LanguageCode.EN) {
             usAnnot = new RefexCAB(ToolkitRefexType.CID,
                     preferredBlueprint.getComponentUuid(),
-                    usRefexNid, null, null, idDirective, refexDirective);
+                    usRefexUuid, idDirective, refexDirective);
             usAnnot.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, SnomedMetadataRfx.getDESC_PREFERRED_NID());
             if (moduleUuid != null) {
                 usAnnot.properties.put(ComponentProperty.MODULE_ID, moduleUuid);
@@ -585,7 +608,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
 
             gbAnnot = new RefexCAB(ToolkitRefexType.CID,
                     preferredBlueprint.getComponentUuid(),
-                    gbRefexNid, null, null, idDirective, refexDirective);
+                    gbRefexUuid, idDirective, refexDirective);
             gbAnnot.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, SnomedMetadataRfx.getDESC_PREFERRED_NID());
             if (moduleUuid != null) {
                 gbAnnot.properties.put(ComponentProperty.MODULE_ID, moduleUuid);
@@ -595,7 +618,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
         } else if (dialect == LanguageCode.EN_US) {
             usAnnot = new RefexCAB(ToolkitRefexType.CID,
                     preferredBlueprint.getComponentUuid(),
-                    usRefexNid, null, null, idDirective, refexDirective);
+                    usRefexUuid, idDirective, refexDirective);
             usAnnot.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, SnomedMetadataRfx.getDESC_PREFERRED_NID());
             if (moduleUuid != null) {
                 usAnnot.properties.put(ComponentProperty.MODULE_ID, moduleUuid);
@@ -604,7 +627,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
         } else if (dialect == LanguageCode.EN_GB) {
             gbAnnot = new RefexCAB(ToolkitRefexType.CID,
                     preferredBlueprint.getComponentUuid(),
-                    gbRefexNid, null, null, idDirective, refexDirective);
+                    gbRefexUuid, idDirective, refexDirective);
             gbAnnot.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, SnomedMetadataRfx.getDESC_PREFERRED_NID());
             if (moduleUuid != null) {
                 gbAnnot.properties.put(ComponentProperty.MODULE_ID, moduleUuid);
@@ -640,7 +663,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
         if (dialect != null) {
             List<RefexCAB> annotationBlueprints = preferredNameBlueprint.getAnnotationBlueprints();
             for (RefexCAB annot : annotationBlueprints) {
-                if (annot.getRefexCollectionNid() == usRefexNid || annot.getRefexCollectionNid() == gbRefexNid) {
+                if (annot.getRefexCollectionUuid().equals(usRefexUuid) || annot.getRefexCollectionUuid().equals(gbRefexUuid)) {
                     annotationBlueprints.remove(annot);
                 }
             }
@@ -698,7 +721,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
     public DescriptionCAB makeFullySpecifiedNameCAB(IdDirective idDirective)
             throws IOException, InvalidCAB, ContradictionException {
         //get rf1/rf2 concepts
-        UUID fsnUuid = SnomedMetadataRf2.FULLY_SPECIFIED_NAME_RF2.getLenient().getPrimUuid();
+        UUID fsnUuid = SnomedMetadataRf2.FULLY_SPECIFIED_NAME_RF2.getUuids()[0];
         DescriptionCAB blueprint = new DescriptionCAB(
                 getComponentUuid(),
                 fsnUuid,
@@ -725,7 +748,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
     public DescriptionCAB makePreferredCAB(IdDirective idDirective)
             throws IOException, InvalidCAB, ContradictionException {
         //get rf1/rf2 concepts
-        UUID synUuid = SnomedMetadataRf2.SYNONYM_RF2.getLenient().getPrimUuid();
+        UUID synUuid = SnomedMetadataRf2.SYNONYM_RF2.getUuids()[0];
         DescriptionCAB blueprint = new DescriptionCAB(
                 getComponentUuid(),
                 synUuid,
@@ -845,6 +868,13 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
      * @return the concept attribute blueprint
      */
     public ConceptAttributeAB getConceptAttributeAB() {
+        if (conAttrAB == null) {
+            try {
+                conAttrAB = new ConceptAttributeAB(getComponentUuid(), defined, null, null, refexDirective, idDirective);
+            } catch (IOException | InvalidCAB | ContradictionException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
         return conAttrAB;
     }
 

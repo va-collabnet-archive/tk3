@@ -60,14 +60,14 @@ public class NidFloatRevision extends RefexRevision<NidFloatRevision, NidFloatMe
       floatValue = input.readFloat();
    }
 
-   public NidFloatRevision(int statusNid, long time, int authorNid, int pathNid, int moduleNid,
+   public NidFloatRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
                            NidFloatMember primoridalMember) {
       super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
       c1Nid      = primoridalMember.getC1Nid();
       floatValue = primoridalMember.getFloatValue();
    }
 
-   protected NidFloatRevision(int statusNid, long time, int authorNid, int pathNid, int moduleNid,
+   protected NidFloatRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
                               NidFloatRevision another) {
       super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       c1Nid      = another.c1Nid;

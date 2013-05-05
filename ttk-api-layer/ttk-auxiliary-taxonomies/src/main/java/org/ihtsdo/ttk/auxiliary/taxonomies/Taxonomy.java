@@ -113,7 +113,25 @@ public class Taxonomy {
               moduleSpec.getUuids()[0], 
               getParentArray());
 
-      cb.setComponentUuid(getUuid(name));
+      if (conceptBps.containsKey(name)) {
+         throw new Exception("Concept is already added");
+      }
+
+      conceptBps.put(name, cb);
+      conceptBpsInInsertionOrder.add(cb);
+      current = cb;
+
+      return cb;
+   }
+
+   protected ConceptCB createModuleConcept(String name) throws Exception {
+      ConceptCB cb = new ConceptCB(name + " " + semanticTag, 
+              name, lang, 
+              isaTypeSpec.getUuids()[0],
+              IdDirective.PRESERVE_CONCEPT_REST_HASH,
+              moduleSpec.getUuids()[0], 
+              moduleSpec.getUuids()[0],
+              getParentArray());
 
       if (conceptBps.containsKey(name)) {
          throw new Exception("Concept is already added");

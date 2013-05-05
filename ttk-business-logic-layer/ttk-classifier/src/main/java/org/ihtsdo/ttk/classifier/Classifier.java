@@ -49,6 +49,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
+import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
 
 /**
  *
@@ -68,7 +69,7 @@ public class Classifier {
 
       vc.setRelAssertionType(RelAssertionType.STATED);
 
-      EditCoordinate ec = new EditCoordinate(TermAux.USER.getNid(), Snomed.CORE_MODULE.getNid(),
+      EditCoordinate ec = new EditCoordinate(TermAux.USER.getNid(), DescriptionLogicBinding.DL_MODULE.getNid(),
                              Snomed.SNOMED_RELEASE_PATH.getNid());
 
       // Convert to new form.
@@ -76,7 +77,7 @@ public class Classifier {
       long             time      = System.currentTimeMillis();
 
       System.out.println(TimeHelper.formatDate(time));
-      Ts.get().iterateConceptDataInSequence(converter);
+      Ts.get().iterateConceptDataInParallel(converter);
       Ts.get().commit();
       System.out.println("Conversion time: "
                          + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));

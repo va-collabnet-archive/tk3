@@ -667,7 +667,7 @@ public class Bdb {
         if (stamp != null) {
             return stamp;
         }
-        stamp = stampDb.getSapNid(
+        stamp = stampDb.getStamp(
                 uuidToNid(version.getStatusUuid()),
                 version.getTime(),
                 uuidToNid(version.getAuthorUuid()),
@@ -688,7 +688,7 @@ public class Bdb {
         if (time == Long.MIN_VALUE) {
             return -1;
         }
-        return stampDb.getSapNid(statusNid, time, authorNid, moduleNid, pathNid);
+        return stampDb.getStamp(statusNid, time, authorNid, moduleNid, pathNid);
     }
 
     public static StampBdb getStampDb() {

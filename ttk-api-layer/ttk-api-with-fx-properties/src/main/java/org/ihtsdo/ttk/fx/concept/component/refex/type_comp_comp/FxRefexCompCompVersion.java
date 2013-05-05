@@ -17,7 +17,9 @@ import java.io.IOException;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexChronicle;
 
-@XmlSeeAlso({ FxRefexCompCompStringVersion.class, FxRefexCompCompCompVersion.class })
+@XmlSeeAlso({ 
+    FxRefexCompCompStringVersion.class, 
+    FxRefexCompCompCompVersion.class })
 public class FxRefexCompCompVersion<T extends FxRefexChronicle, V extends FxRefexCompCompVersion>
         extends FxRefexCompVersion<T, V> {
    public static final long serialVersionUID = 1;

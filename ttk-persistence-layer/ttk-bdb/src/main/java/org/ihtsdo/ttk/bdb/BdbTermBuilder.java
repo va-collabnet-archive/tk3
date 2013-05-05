@@ -216,7 +216,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             for (int p : ec.getEditPaths().getSetValues()) {
                 if (r.primordialStamp == Integer.MIN_VALUE) {
                     r.primordialStamp =
-                            Bdb.getStampDb().getSapNid(blueprint.getStatusNid(), Long.MAX_VALUE,
+                            Bdb.getStampDb().getStamp(blueprint.getStatusNid(), Long.MAX_VALUE,
                             ec.getAuthorNid(), ec.getModuleNid(), p);
                 } else {
                     if (r.revisions == null) {
@@ -331,7 +331,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             for (int p : ec.getEditPaths().getSetValues()) {
                 if (d.primordialStamp == Integer.MIN_VALUE) {
                     d.primordialStamp =
-                            Bdb.getStampDb().getSapNid(blueprint.getStatusNid(), Long.MAX_VALUE, ec.getAuthorNid(),
+                            Bdb.getStampDb().getStamp(blueprint.getStatusNid(), Long.MAX_VALUE, ec.getAuthorNid(),
                             ec.getModuleNid(), p);
                 } else {
                     if (d.revisions == null) {
@@ -426,7 +426,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             for (int p : ec.getEditPaths().getSetValues()) {
                 if (img.primordialStamp == Integer.MIN_VALUE) {
                     img.primordialStamp =
-                            Bdb.getStampDb().getSapNid(blueprint.getStatusNid(), Long.MAX_VALUE, ec.getAuthorNid(),
+                            Bdb.getStampDb().getStamp(blueprint.getStatusNid(), Long.MAX_VALUE, ec.getAuthorNid(),
                             ec.getModuleNid(), p);
                 } else {
                     if (img.revisions == null) {
@@ -536,7 +536,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             if (primoridal) {
                 primoridal = false;
                 a.primordialStamp =
-                        Bdb.getStampDb().getSapNid(blueprint.getStatusNid(), Long.MAX_VALUE, ec.getAuthorNid(),
+                        Bdb.getStampDb().getStamp(blueprint.getStatusNid(), Long.MAX_VALUE, ec.getAuthorNid(),
                             ec.getModuleNid(), p);
             } else {
                 if (a.revisions == null) {

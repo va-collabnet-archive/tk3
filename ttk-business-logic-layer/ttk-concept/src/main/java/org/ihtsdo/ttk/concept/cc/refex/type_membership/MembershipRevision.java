@@ -42,12 +42,12 @@ public class MembershipRevision extends RefexRevision<MembershipRevision, Member
    }
 
 
-   public MembershipRevision(int statusNid, long time, int authorNid, int pathNid, int moduleNid,
+   public MembershipRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
                              MembershipMember primoridalMember) {
       super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
    }
 
-   protected MembershipRevision(int statusNid, long time, int authorNid, int pathNid, int moduleNid,
+   protected MembershipRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
                                 MembershipRevision another) {
       super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
    }

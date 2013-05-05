@@ -1030,4 +1030,14 @@ public abstract class Termstore implements PersistentStoreI {
    public void setGlobalSnapshot(TerminologySnapshotDI globalSnapshot) {
       this.globalSnapshot = globalSnapshot;
    }
+   
+       @Override
+    public CharSequence informAboutId(Object id) {
+        if (id instanceof UUID) {
+            return informAboutUuid((UUID) id);
+        } else if (id instanceof Number) {
+            informAboutNid((Integer) id);
+        }
+        return id.toString();
+    }
 }

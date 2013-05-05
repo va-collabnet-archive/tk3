@@ -10,19 +10,19 @@ public class DescriptionLogicBinding {
 
    /** Java binding for the concept described as <strong><em>description-logic auxiliary</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/13d44889-54f9-55fa-b177-f8236cc71db4">
-    * 13d44889-54f9-55fa-b177-f8236cc71db4</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/6edeb707-c021-5321-a086-4aec883ce504">
+    * 6edeb707-c021-5321-a086-4aec883ce504</a></code>.*/
    public static ConceptSpec DESCRIPTION_LOGIC_AUXILIARY =
              new ConceptSpec("description-logic auxiliary",
-                    UUID.fromString("13d44889-54f9-55fa-b177-f8236cc71db4"));
+                    UUID.fromString("6edeb707-c021-5321-a086-4aec883ce504"));
 
    /** Java binding for the concept described as <strong><em>description-logic metadata</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/2a8746ac-531c-5d7c-9bc0-ed7f1971b320">
-    * 2a8746ac-531c-5d7c-9bc0-ed7f1971b320</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/38834707-c199-57c2-8582-bef277675488">
+    * 38834707-c199-57c2-8582-bef277675488</a></code>.*/
    public static ConceptSpec DESCRIPTION_LOGIC_METADATA =
              new ConceptSpec("description-logic metadata",
-                    UUID.fromString("2a8746ac-531c-5d7c-9bc0-ed7f1971b320"));
+                    UUID.fromString("38834707-c199-57c2-8582-bef277675488"));
 
    /** Java binding for the concept described as <strong><em>DL Module</em></strong>;
     * identified by UUID: <code>
@@ -34,505 +34,513 @@ public class DescriptionLogicBinding {
 
    /** Java binding for the concept described as <strong><em>object property characteristics</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/17075b90-8b5b-5420-9b92-7ab154c0bf79">
-    * 17075b90-8b5b-5420-9b92-7ab154c0bf79</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/fc439049-b011-5f1a-8cb7-10ab5b5d844d">
+    * fc439049-b011-5f1a-8cb7-10ab5b5d844d</a></code>.*/
    public static ConceptSpec OBJECT_PROPERTY_CHARACTERISTICS =
              new ConceptSpec("object property characteristics",
-                    UUID.fromString("17075b90-8b5b-5420-9b92-7ab154c0bf79"));
+                    UUID.fromString("fc439049-b011-5f1a-8cb7-10ab5b5d844d"));
 
    /** Java binding for the concept described as <strong><em>functional</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/fe189549-3f94-5778-a147-7db66340c8bf">
-    * fe189549-3f94-5778-a147-7db66340c8bf</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/af055e03-3505-5276-a675-c9897ef9917f">
+    * af055e03-3505-5276-a675-c9897ef9917f</a></code>.*/
    public static ConceptSpec FUNCTIONAL =
              new ConceptSpec("functional",
-                    UUID.fromString("fe189549-3f94-5778-a147-7db66340c8bf"));
+                    UUID.fromString("af055e03-3505-5276-a675-c9897ef9917f"));
 
    /** Java binding for the concept described as <strong><em>transitive</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/e1c7a4b6-05ed-53dd-affb-bd4f93734186">
-    * e1c7a4b6-05ed-53dd-affb-bd4f93734186</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/6914e6e8-cab2-5dd6-a724-f78ff7e03087">
+    * 6914e6e8-cab2-5dd6-a724-f78ff7e03087</a></code>.*/
    public static ConceptSpec TRANSITIVE =
              new ConceptSpec("transitive",
-                    UUID.fromString("e1c7a4b6-05ed-53dd-affb-bd4f93734186"));
+                    UUID.fromString("6914e6e8-cab2-5dd6-a724-f78ff7e03087"));
 
    /** Java binding for the concept described as <strong><em>reflexive</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/3b44332e-7853-5917-8c92-3bcf6cde193d">
-    * 3b44332e-7853-5917-8c92-3bcf6cde193d</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/b3c2f785-b53f-5883-9654-5c9c8e601951">
+    * b3c2f785-b53f-5883-9654-5c9c8e601951</a></code>.*/
    public static ConceptSpec REFLEXIVE =
              new ConceptSpec("reflexive",
-                    UUID.fromString("3b44332e-7853-5917-8c92-3bcf6cde193d"));
+                    UUID.fromString("b3c2f785-b53f-5883-9654-5c9c8e601951"));
 
    /** Java binding for the concept described as <strong><em>object property operators</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/d63d5496-bef8-5d8c-bc89-ec26915e948f">
-    * d63d5496-bef8-5d8c-bc89-ec26915e948f</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/23f32600-7e18-50c7-ac70-ab1b63ab633e">
+    * 23f32600-7e18-50c7-ac70-ab1b63ab633e</a></code>.*/
    public static ConceptSpec OBJECT_PROPERTY_OPERATORS =
              new ConceptSpec("object property operators",
-                    UUID.fromString("d63d5496-bef8-5d8c-bc89-ec26915e948f"));
+                    UUID.fromString("23f32600-7e18-50c7-ac70-ab1b63ab633e"));
 
    /** Java binding for the concept described as <strong><em>sub-property of</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/77c5fb44-c2f3-5e00-8e78-14dafef52912">
-    * 77c5fb44-c2f3-5e00-8e78-14dafef52912</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/1a2096b9-87f1-5491-a961-cb57c0935f61">
+    * 1a2096b9-87f1-5491-a961-cb57c0935f61</a></code>.*/
    public static ConceptSpec SUB_PROPERTY_OF =
              new ConceptSpec("sub-property of",
-                    UUID.fromString("77c5fb44-c2f3-5e00-8e78-14dafef52912"));
+                    UUID.fromString("1a2096b9-87f1-5491-a961-cb57c0935f61"));
 
    /** Java binding for the concept described as <strong><em>composition</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/a6849af5-28c0-550b-ac5d-348c6dbfc373">
-    * a6849af5-28c0-550b-ac5d-348c6dbfc373</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/90da4cd7-b88a-59b3-a5ec-c4c45c77078a">
+    * 90da4cd7-b88a-59b3-a5ec-c4c45c77078a</a></code>.*/
    public static ConceptSpec COMPOSITION =
              new ConceptSpec("composition",
-                    UUID.fromString("a6849af5-28c0-550b-ac5d-348c6dbfc373"));
+                    UUID.fromString("90da4cd7-b88a-59b3-a5ec-c4c45c77078a"));
 
    /** Java binding for the concept described as <strong><em>set operators</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/04fb6455-f5aa-5ca0-82f7-3a5a241f4c82">
-    * 04fb6455-f5aa-5ca0-82f7-3a5a241f4c82</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/0da2e287-c370-58f3-8642-b9486301f3ce">
+    * 0da2e287-c370-58f3-8642-b9486301f3ce</a></code>.*/
    public static ConceptSpec SET_OPERATORS =
              new ConceptSpec("set operators",
-                    UUID.fromString("04fb6455-f5aa-5ca0-82f7-3a5a241f4c82"));
+                    UUID.fromString("0da2e287-c370-58f3-8642-b9486301f3ce"));
 
    /** Java binding for the concept described as <strong><em>sufficient set</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/4297bd09-f9f1-59f1-97dd-0fb674a492a2">
-    * 4297bd09-f9f1-59f1-97dd-0fb674a492a2</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/be17105a-7c87-507b-9854-485b3a20c314">
+    * be17105a-7c87-507b-9854-485b3a20c314</a></code>.*/
    public static ConceptSpec SUFFICIENT_SET =
              new ConceptSpec("sufficient set",
-                    UUID.fromString("4297bd09-f9f1-59f1-97dd-0fb674a492a2"));
+                    UUID.fromString("be17105a-7c87-507b-9854-485b3a20c314"));
 
    /** Java binding for the concept described as <strong><em>necessary set</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/0b668713-1022-5be0-ba91-72ed42446563">
-    * 0b668713-1022-5be0-ba91-72ed42446563</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/ac651ddb-49fd-5649-b7d7-915242687986">
+    * ac651ddb-49fd-5649-b7d7-915242687986</a></code>.*/
    public static ConceptSpec NECESSARY_SET =
              new ConceptSpec("necessary set",
-                    UUID.fromString("0b668713-1022-5be0-ba91-72ed42446563"));
+                    UUID.fromString("ac651ddb-49fd-5649-b7d7-915242687986"));
 
    /** Java binding for the concept described as <strong><em>connective operators</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/0b40c996-affc-5ba1-a463-0f598bb923dd">
-    * 0b40c996-affc-5ba1-a463-0f598bb923dd</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/0e781b28-39b1-54ac-b245-006a859fddee">
+    * 0e781b28-39b1-54ac-b245-006a859fddee</a></code>.*/
    public static ConceptSpec CONNECTIVE_OPERATORS =
              new ConceptSpec("connective operators",
-                    UUID.fromString("0b40c996-affc-5ba1-a463-0f598bb923dd"));
+                    UUID.fromString("0e781b28-39b1-54ac-b245-006a859fddee"));
 
    /** Java binding for the concept described as <strong><em>and</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/1bda840d-d732-5113-a757-88d311ace581">
-    * 1bda840d-d732-5113-a757-88d311ace581</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/096376b4-58e6-5863-871e-a0da1e70ec79">
+    * 096376b4-58e6-5863-871e-a0da1e70ec79</a></code>.*/
    public static ConceptSpec AND =
              new ConceptSpec("and",
-                    UUID.fromString("1bda840d-d732-5113-a757-88d311ace581"));
+                    UUID.fromString("096376b4-58e6-5863-871e-a0da1e70ec79"));
 
    /** Java binding for the concept described as <strong><em>or</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/88626893-a82a-518f-9b16-845dc682243f">
-    * 88626893-a82a-518f-9b16-845dc682243f</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/dc4cf251-ed3c-5465-91fc-8adc1bbcec51">
+    * dc4cf251-ed3c-5465-91fc-8adc1bbcec51</a></code>.*/
    public static ConceptSpec OR =
              new ConceptSpec("or",
-                    UUID.fromString("88626893-a82a-518f-9b16-845dc682243f"));
+                    UUID.fromString("dc4cf251-ed3c-5465-91fc-8adc1bbcec51"));
 
    /** Java binding for the concept described as <strong><em>disjoint with</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/08d1f501-6b95-5918-a06a-9b552e2e320e">
-    * 08d1f501-6b95-5918-a06a-9b552e2e320e</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/a4808b3b-e70d-55a4-aca1-7dfd920383a6">
+    * a4808b3b-e70d-55a4-aca1-7dfd920383a6</a></code>.*/
    public static ConceptSpec DISJOINT_WITH =
              new ConceptSpec("disjoint with",
-                    UUID.fromString("08d1f501-6b95-5918-a06a-9b552e2e320e"));
+                    UUID.fromString("a4808b3b-e70d-55a4-aca1-7dfd920383a6"));
 
    /** Java binding for the concept described as <strong><em>definition root</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/0457d607-98ca-5fb1-8ccf-b741593d36e3">
-    * 0457d607-98ca-5fb1-8ccf-b741593d36e3</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/5dde719f-7bb0-5a43-9890-13bdadb6a403">
+    * 5dde719f-7bb0-5a43-9890-13bdadb6a403</a></code>.*/
    public static ConceptSpec DEFINITION_ROOT =
              new ConceptSpec("definition root",
-                    UUID.fromString("0457d607-98ca-5fb1-8ccf-b741593d36e3"));
+                    UUID.fromString("5dde719f-7bb0-5a43-9890-13bdadb6a403"));
 
-   /** Java binding for the concept described as <strong><em>template operators</em></strong>;
+   /** Java binding for the concept described as <strong><em>node operators</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/96bd657c-5101-5c87-a451-019facae55aa">
-    * 96bd657c-5101-5c87-a451-019facae55aa</a></code>.*/
-   public static ConceptSpec TEMPLATE_OPERATORS =
-             new ConceptSpec("template operators",
-                    UUID.fromString("96bd657c-5101-5c87-a451-019facae55aa"));
+    * <a href="http://localhost:8080/terminology/rest/concept/3b5e4cfa-2de6-5bba-bccb-71a7a80e4c40">
+    * 3b5e4cfa-2de6-5bba-bccb-71a7a80e4c40</a></code>.*/
+   public static ConceptSpec NODE_OPERATORS =
+             new ConceptSpec("node operators",
+                    UUID.fromString("3b5e4cfa-2de6-5bba-bccb-71a7a80e4c40"));
 
    /** Java binding for the concept described as <strong><em>template merge</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/bc72bf82-cdbe-5755-8f1e-0df287e5da22">
-    * bc72bf82-cdbe-5755-8f1e-0df287e5da22</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/c825c71a-cb64-58d4-a809-56ec2ca1cd8e">
+    * c825c71a-cb64-58d4-a809-56ec2ca1cd8e</a></code>.*/
    public static ConceptSpec TEMPLATE_MERGE =
              new ConceptSpec("template merge",
-                    UUID.fromString("bc72bf82-cdbe-5755-8f1e-0df287e5da22"));
+                    UUID.fromString("c825c71a-cb64-58d4-a809-56ec2ca1cd8e"));
 
    /** Java binding for the concept described as <strong><em>field substitution</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/b5baa4bf-07b3-5018-bc50-89fceeabff06">
-    * b5baa4bf-07b3-5018-bc50-89fceeabff06</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/cc25057a-dbb7-5d75-a330-0d2baa9bcff8">
+    * cc25057a-dbb7-5d75-a330-0d2baa9bcff8</a></code>.*/
    public static ConceptSpec FIELD_SUBSTITUTION =
              new ConceptSpec("field substitution",
-                    UUID.fromString("b5baa4bf-07b3-5018-bc50-89fceeabff06"));
+                    UUID.fromString("cc25057a-dbb7-5d75-a330-0d2baa9bcff8"));
+
+   /** Java binding for the concept described as <strong><em>concept reference</em></strong>;
+    * identified by UUID: <code>
+    * <a href="http://localhost:8080/terminology/rest/concept/1e2c4981-7db4-5eb1-a934-ee86b64d7fc2">
+    * 1e2c4981-7db4-5eb1-a934-ee86b64d7fc2</a></code>.*/
+   public static ConceptSpec CONCEPT_REFERENCE =
+             new ConceptSpec("concept reference",
+                    UUID.fromString("1e2c4981-7db4-5eb1-a934-ee86b64d7fc2"));
 
    /** Java binding for the concept described as <strong><em>field operators</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/bab95b06-a97c-56be-9f2d-e7b7d88e6d0d">
-    * bab95b06-a97c-56be-9f2d-e7b7d88e6d0d</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/8b1648fe-fd95-546c-9c20-c4514aa93fae">
+    * 8b1648fe-fd95-546c-9c20-c4514aa93fae</a></code>.*/
    public static ConceptSpec FIELD_OPERATORS =
              new ConceptSpec("field operators",
-                    UUID.fromString("bab95b06-a97c-56be-9f2d-e7b7d88e6d0d"));
+                    UUID.fromString("8b1648fe-fd95-546c-9c20-c4514aa93fae"));
 
    /** Java binding for the concept described as <strong><em>component extension 1 id substitution</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/08d4f8c4-2c91-5c85-9227-b31fb6370856">
-    * 08d4f8c4-2c91-5c85-9227-b31fb6370856</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/f3536349-ab17-5b01-8b11-44e9826e4ed3">
+    * f3536349-ab17-5b01-8b11-44e9826e4ed3</a></code>.*/
    public static ConceptSpec COMPONENT_EXTENSION_1_ID_SUBSTITUTION =
              new ConceptSpec("component extension 1 id substitution",
-                    UUID.fromString("08d4f8c4-2c91-5c85-9227-b31fb6370856"));
+                    UUID.fromString("f3536349-ab17-5b01-8b11-44e9826e4ed3"));
 
    /** Java binding for the concept described as <strong><em>component extension 2 id substitution</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/45720936-8c9f-52a2-977b-cdf1678913df">
-    * 45720936-8c9f-52a2-977b-cdf1678913df</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/3f76330a-cbef-5814-b17a-9bf68d6f782a">
+    * 3f76330a-cbef-5814-b17a-9bf68d6f782a</a></code>.*/
    public static ConceptSpec COMPONENT_EXTENSION_2_ID_SUBSTITUTION =
              new ConceptSpec("component extension 2 id substitution",
-                    UUID.fromString("45720936-8c9f-52a2-977b-cdf1678913df"));
+                    UUID.fromString("3f76330a-cbef-5814-b17a-9bf68d6f782a"));
 
    /** Java binding for the concept described as <strong><em>component extension 3 id substitution</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/37214838-c299-5582-8aba-40d1928ecb46">
-    * 37214838-c299-5582-8aba-40d1928ecb46</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/c4801b8b-7973-5ab4-ac2f-c67c098ce8fa">
+    * c4801b8b-7973-5ab4-ac2f-c67c098ce8fa</a></code>.*/
    public static ConceptSpec COMPONENT_EXTENSION_3_ID_SUBSTITUTION =
              new ConceptSpec("component extension 3 id substitution",
-                    UUID.fromString("37214838-c299-5582-8aba-40d1928ecb46"));
+                    UUID.fromString("c4801b8b-7973-5ab4-ac2f-c67c098ce8fa"));
 
    /** Java binding for the concept described as <strong><em>integer 1 substitution</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/f38208ab-fa9c-500c-9854-2cba1ec3c5c5">
-    * f38208ab-fa9c-500c-9854-2cba1ec3c5c5</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/33dd3e5f-fecd-58b5-85fd-b2ec74329954">
+    * 33dd3e5f-fecd-58b5-85fd-b2ec74329954</a></code>.*/
    public static ConceptSpec INTEGER_1_SUBSTITUTION =
              new ConceptSpec("integer 1 substitution",
-                    UUID.fromString("f38208ab-fa9c-500c-9854-2cba1ec3c5c5"));
+                    UUID.fromString("33dd3e5f-fecd-58b5-85fd-b2ec74329954"));
 
    /** Java binding for the concept described as <strong><em>long 1 substitution</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/caabee0f-8f15-59f8-838e-8aea9d18ccc7">
-    * caabee0f-8f15-59f8-838e-8aea9d18ccc7</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/3b940ff9-6281-524d-a4b5-972b4a289886">
+    * 3b940ff9-6281-524d-a4b5-972b4a289886</a></code>.*/
    public static ConceptSpec LONG_1_SUBSTITUTION =
              new ConceptSpec("long 1 substitution",
-                    UUID.fromString("caabee0f-8f15-59f8-838e-8aea9d18ccc7"));
+                    UUID.fromString("3b940ff9-6281-524d-a4b5-972b4a289886"));
 
    /** Java binding for the concept described as <strong><em>float 1 substitution</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/7ce282d8-49c9-5e69-b82c-223cc9d2077e">
-    * 7ce282d8-49c9-5e69-b82c-223cc9d2077e</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/849174d0-c632-5313-9384-652708f240fb">
+    * 849174d0-c632-5313-9384-652708f240fb</a></code>.*/
    public static ConceptSpec FLOAT_1_SUBSTITUTION =
              new ConceptSpec("float 1 substitution",
-                    UUID.fromString("7ce282d8-49c9-5e69-b82c-223cc9d2077e"));
+                    UUID.fromString("849174d0-c632-5313-9384-652708f240fb"));
 
    /** Java binding for the concept described as <strong><em>field annotations</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/59495eb8-c17b-50da-ab18-cf3c96d8c2b9">
-    * 59495eb8-c17b-50da-ab18-cf3c96d8c2b9</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/56bf467d-2bd2-5dea-b777-bf9d965b1c6d">
+    * 56bf467d-2bd2-5dea-b777-bf9d965b1c6d</a></code>.*/
    public static ConceptSpec FIELD_ANNOTATIONS =
              new ConceptSpec("field annotations",
-                    UUID.fromString("59495eb8-c17b-50da-ab18-cf3c96d8c2b9"));
+                    UUID.fromString("56bf467d-2bd2-5dea-b777-bf9d965b1c6d"));
 
    /** Java binding for the concept described as <strong><em>component extension 1 label</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/a5efe6d1-10cf-5d2f-b460-74c9d51b3f95">
-    * a5efe6d1-10cf-5d2f-b460-74c9d51b3f95</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/caccad35-b2bd-5aa9-8510-7fdebf99f170">
+    * caccad35-b2bd-5aa9-8510-7fdebf99f170</a></code>.*/
    public static ConceptSpec COMPONENT_EXTENSION_1_LABEL =
              new ConceptSpec("component extension 1 label",
-                    UUID.fromString("a5efe6d1-10cf-5d2f-b460-74c9d51b3f95"));
+                    UUID.fromString("caccad35-b2bd-5aa9-8510-7fdebf99f170"));
 
    /** Java binding for the concept described as <strong><em>component extension 1 order</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/7b737ba2-68d6-550c-8153-6ae46042ea59">
-    * 7b737ba2-68d6-550c-8153-6ae46042ea59</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/5a0e7ddb-2fb8-5ed1-bcd0-97605cf19dc7">
+    * 5a0e7ddb-2fb8-5ed1-bcd0-97605cf19dc7</a></code>.*/
    public static ConceptSpec COMPONENT_EXTENSION_1_ORDER =
              new ConceptSpec("component extension 1 order",
-                    UUID.fromString("7b737ba2-68d6-550c-8153-6ae46042ea59"));
+                    UUID.fromString("5a0e7ddb-2fb8-5ed1-bcd0-97605cf19dc7"));
 
    /** Java binding for the concept described as <strong><em>component extension 1 default value</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/4a23dcd8-7e4b-5395-aca9-9874e2ae4ffb">
-    * 4a23dcd8-7e4b-5395-aca9-9874e2ae4ffb</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/bd130300-3642-5bdf-9e23-8cceecbf0579">
+    * bd130300-3642-5bdf-9e23-8cceecbf0579</a></code>.*/
    public static ConceptSpec COMPONENT_EXTENSION_1_DEFAULT_VALUE =
              new ConceptSpec("component extension 1 default value",
-                    UUID.fromString("4a23dcd8-7e4b-5395-aca9-9874e2ae4ffb"));
+                    UUID.fromString("bd130300-3642-5bdf-9e23-8cceecbf0579"));
 
    /** Java binding for the concept described as <strong><em>component extension 2 label</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/91794086-2ac4-5cd3-82ca-3c97871dae50">
-    * 91794086-2ac4-5cd3-82ca-3c97871dae50</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/415bd88a-586f-59fa-be94-0b121f0fabc1">
+    * 415bd88a-586f-59fa-be94-0b121f0fabc1</a></code>.*/
    public static ConceptSpec COMPONENT_EXTENSION_2_LABEL =
              new ConceptSpec("component extension 2 label",
-                    UUID.fromString("91794086-2ac4-5cd3-82ca-3c97871dae50"));
+                    UUID.fromString("415bd88a-586f-59fa-be94-0b121f0fabc1"));
 
    /** Java binding for the concept described as <strong><em>component extension 2 order</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/40550e91-17a4-5315-8994-8a5e4265a333">
-    * 40550e91-17a4-5315-8994-8a5e4265a333</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/5fdedf50-4f40-5dd4-b1c8-aff35ed74ace">
+    * 5fdedf50-4f40-5dd4-b1c8-aff35ed74ace</a></code>.*/
    public static ConceptSpec COMPONENT_EXTENSION_2_ORDER =
              new ConceptSpec("component extension 2 order",
-                    UUID.fromString("40550e91-17a4-5315-8994-8a5e4265a333"));
+                    UUID.fromString("5fdedf50-4f40-5dd4-b1c8-aff35ed74ace"));
 
    /** Java binding for the concept described as <strong><em>component extension 2 default value</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/7946dfb1-4fa2-5563-a3ec-312aa974502d">
-    * 7946dfb1-4fa2-5563-a3ec-312aa974502d</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/8302f6ac-58d3-5e3b-9dd2-230b91b42d67">
+    * 8302f6ac-58d3-5e3b-9dd2-230b91b42d67</a></code>.*/
    public static ConceptSpec COMPONENT_EXTENSION_2_DEFAULT_VALUE =
              new ConceptSpec("component extension 2 default value",
-                    UUID.fromString("7946dfb1-4fa2-5563-a3ec-312aa974502d"));
+                    UUID.fromString("8302f6ac-58d3-5e3b-9dd2-230b91b42d67"));
 
    /** Java binding for the concept described as <strong><em>component extension 3 label</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/4d0fda22-5bdf-5abe-98fa-74b5d5c3e1f0">
-    * 4d0fda22-5bdf-5abe-98fa-74b5d5c3e1f0</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/c4d6d9be-1f68-515b-b65c-3b6740972c2d">
+    * c4d6d9be-1f68-515b-b65c-3b6740972c2d</a></code>.*/
    public static ConceptSpec COMPONENT_EXTENSION_3_LABEL =
              new ConceptSpec("component extension 3 label",
-                    UUID.fromString("4d0fda22-5bdf-5abe-98fa-74b5d5c3e1f0"));
+                    UUID.fromString("c4d6d9be-1f68-515b-b65c-3b6740972c2d"));
 
    /** Java binding for the concept described as <strong><em>component extension 3 order</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/920d4db3-e5ee-5729-b1da-f9ca318c3e01">
-    * 920d4db3-e5ee-5729-b1da-f9ca318c3e01</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/e0102ff2-ff07-5de6-b74b-4f669f0a9b0f">
+    * e0102ff2-ff07-5de6-b74b-4f669f0a9b0f</a></code>.*/
    public static ConceptSpec COMPONENT_EXTENSION_3_ORDER =
              new ConceptSpec("component extension 3 order",
-                    UUID.fromString("920d4db3-e5ee-5729-b1da-f9ca318c3e01"));
+                    UUID.fromString("e0102ff2-ff07-5de6-b74b-4f669f0a9b0f"));
 
    /** Java binding for the concept described as <strong><em>component extension 3 default value</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/83bd1e9f-1d5e-5f2e-946c-e264da893e40">
-    * 83bd1e9f-1d5e-5f2e-946c-e264da893e40</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/b7c0fd62-ba4b-5ecc-9f6e-ddf5c85cb11e">
+    * b7c0fd62-ba4b-5ecc-9f6e-ddf5c85cb11e</a></code>.*/
    public static ConceptSpec COMPONENT_EXTENSION_3_DEFAULT_VALUE =
              new ConceptSpec("component extension 3 default value",
-                    UUID.fromString("83bd1e9f-1d5e-5f2e-946c-e264da893e40"));
+                    UUID.fromString("b7c0fd62-ba4b-5ecc-9f6e-ddf5c85cb11e"));
 
    /** Java binding for the concept described as <strong><em>integer 1 label</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/42d56bd3-7d69-560f-8474-ed54cdd7fbf8">
-    * 42d56bd3-7d69-560f-8474-ed54cdd7fbf8</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/631a655a-4bac-5e4e-b952-1e3a5e4c1354">
+    * 631a655a-4bac-5e4e-b952-1e3a5e4c1354</a></code>.*/
    public static ConceptSpec INTEGER_1_LABEL =
              new ConceptSpec("integer 1 label",
-                    UUID.fromString("42d56bd3-7d69-560f-8474-ed54cdd7fbf8"));
+                    UUID.fromString("631a655a-4bac-5e4e-b952-1e3a5e4c1354"));
 
    /** Java binding for the concept described as <strong><em>integer 1 order</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/e08b6580-76be-576d-b1fb-6caefc265ce0">
-    * e08b6580-76be-576d-b1fb-6caefc265ce0</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/69142bc5-dbbf-5a3d-9d1b-42694699068b">
+    * 69142bc5-dbbf-5a3d-9d1b-42694699068b</a></code>.*/
    public static ConceptSpec INTEGER_1_ORDER =
              new ConceptSpec("integer 1 order",
-                    UUID.fromString("e08b6580-76be-576d-b1fb-6caefc265ce0"));
+                    UUID.fromString("69142bc5-dbbf-5a3d-9d1b-42694699068b"));
 
    /** Java binding for the concept described as <strong><em>integer 1 default value</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/13a0203d-d402-5f66-93d1-9aa359ae0ba9">
-    * 13a0203d-d402-5f66-93d1-9aa359ae0ba9</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/72abb5d1-e933-581c-ba34-083723138732">
+    * 72abb5d1-e933-581c-ba34-083723138732</a></code>.*/
    public static ConceptSpec INTEGER_1_DEFAULT_VALUE =
              new ConceptSpec("integer 1 default value",
-                    UUID.fromString("13a0203d-d402-5f66-93d1-9aa359ae0ba9"));
+                    UUID.fromString("72abb5d1-e933-581c-ba34-083723138732"));
 
    /** Java binding for the concept described as <strong><em>long 1 label</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/83e72c64-6eb9-56f3-bf29-f2baca8f7a46">
-    * 83e72c64-6eb9-56f3-bf29-f2baca8f7a46</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/d2f2387b-f7f8-5dff-b537-cf1413c7ab06">
+    * d2f2387b-f7f8-5dff-b537-cf1413c7ab06</a></code>.*/
    public static ConceptSpec LONG_1_LABEL =
              new ConceptSpec("long 1 label",
-                    UUID.fromString("83e72c64-6eb9-56f3-bf29-f2baca8f7a46"));
+                    UUID.fromString("d2f2387b-f7f8-5dff-b537-cf1413c7ab06"));
 
    /** Java binding for the concept described as <strong><em>long 1 order</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/a58ae9dd-8339-5a6d-9af5-43065883ce9d">
-    * a58ae9dd-8339-5a6d-9af5-43065883ce9d</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/4159cb86-a471-5f47-b46a-241a24ae435c">
+    * 4159cb86-a471-5f47-b46a-241a24ae435c</a></code>.*/
    public static ConceptSpec LONG_1_ORDER =
              new ConceptSpec("long 1 order",
-                    UUID.fromString("a58ae9dd-8339-5a6d-9af5-43065883ce9d"));
+                    UUID.fromString("4159cb86-a471-5f47-b46a-241a24ae435c"));
 
    /** Java binding for the concept described as <strong><em>long 1 default value</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/8c05030d-ceba-5ea3-931b-9b7e93c5b7f1">
-    * 8c05030d-ceba-5ea3-931b-9b7e93c5b7f1</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/371de6ce-faa0-55f7-81e7-4ff06609ba0b">
+    * 371de6ce-faa0-55f7-81e7-4ff06609ba0b</a></code>.*/
    public static ConceptSpec LONG_1_DEFAULT_VALUE =
              new ConceptSpec("long 1 default value",
-                    UUID.fromString("8c05030d-ceba-5ea3-931b-9b7e93c5b7f1"));
+                    UUID.fromString("371de6ce-faa0-55f7-81e7-4ff06609ba0b"));
 
    /** Java binding for the concept described as <strong><em>float 1 label</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/239f2dff-7056-5b27-b5fd-e59158e3fd97">
-    * 239f2dff-7056-5b27-b5fd-e59158e3fd97</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/a9cf9625-4be8-51cf-b713-8688cf1ea125">
+    * a9cf9625-4be8-51cf-b713-8688cf1ea125</a></code>.*/
    public static ConceptSpec FLOAT_1_LABEL =
              new ConceptSpec("float 1 label",
-                    UUID.fromString("239f2dff-7056-5b27-b5fd-e59158e3fd97"));
+                    UUID.fromString("a9cf9625-4be8-51cf-b713-8688cf1ea125"));
 
    /** Java binding for the concept described as <strong><em>float 1 order</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/5b34058a-7d3c-548c-b6cc-e7a65e01f3cc">
-    * 5b34058a-7d3c-548c-b6cc-e7a65e01f3cc</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/51eec46e-49c8-5d83-97da-1f120d0891a9">
+    * 51eec46e-49c8-5d83-97da-1f120d0891a9</a></code>.*/
    public static ConceptSpec FLOAT_1_ORDER =
              new ConceptSpec("float 1 order",
-                    UUID.fromString("5b34058a-7d3c-548c-b6cc-e7a65e01f3cc"));
+                    UUID.fromString("51eec46e-49c8-5d83-97da-1f120d0891a9"));
 
    /** Java binding for the concept described as <strong><em>float 1 default value</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/3298962c-899f-55d7-92d8-609e3aaabe5f">
-    * 3298962c-899f-55d7-92d8-609e3aaabe5f</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/238c3a57-3699-5636-898d-8e16304b0c5f">
+    * 238c3a57-3699-5636-898d-8e16304b0c5f</a></code>.*/
    public static ConceptSpec FLOAT_1_DEFAULT_VALUE =
              new ConceptSpec("float 1 default value",
-                    UUID.fromString("3298962c-899f-55d7-92d8-609e3aaabe5f"));
+                    UUID.fromString("238c3a57-3699-5636-898d-8e16304b0c5f"));
 
    /** Java binding for the concept described as <strong><em>template concepts</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/f6cd5da9-08be-50fe-a532-bf24c777318d">
-    * f6cd5da9-08be-50fe-a532-bf24c777318d</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/98ff6518-1d68-52b5-ae11-d7696568737a">
+    * 98ff6518-1d68-52b5-ae11-d7696568737a</a></code>.*/
    public static ConceptSpec TEMPLATE_CONCEPTS =
              new ConceptSpec("template concepts",
-                    UUID.fromString("f6cd5da9-08be-50fe-a532-bf24c777318d"));
+                    UUID.fromString("98ff6518-1d68-52b5-ae11-d7696568737a"));
 
    /** Java binding for the concept described as <strong><em>skin of region template</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/801d37d8-0a59-512b-b64a-00b8c346d768">
-    * 801d37d8-0a59-512b-b64a-00b8c346d768</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/98ff2993-7054-5b26-9ed9-de8976419a45">
+    * 98ff2993-7054-5b26-9ed9-de8976419a45</a></code>.*/
    public static ConceptSpec SKIN_OF_REGION_TEMPLATE =
              new ConceptSpec("skin of region template",
-                    UUID.fromString("801d37d8-0a59-512b-b64a-00b8c346d768"));
+                    UUID.fromString("98ff2993-7054-5b26-9ed9-de8976419a45"));
 
    /** Java binding for the concept described as <strong><em>role operators</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/70817989-83a6-52f9-ae71-52b34627035d">
-    * 70817989-83a6-52f9-ae71-52b34627035d</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/730e934c-b652-52dc-b975-6a0194360c9f">
+    * 730e934c-b652-52dc-b975-6a0194360c9f</a></code>.*/
    public static ConceptSpec ROLE_OPERATORS =
              new ConceptSpec("role operators",
-                    UUID.fromString("70817989-83a6-52f9-ae71-52b34627035d"));
+                    UUID.fromString("730e934c-b652-52dc-b975-6a0194360c9f"));
 
    /** Java binding for the concept described as <strong><em>universal restriction</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/92d5eda2-1f73-5fa9-9b63-1d2f5f9a033e">
-    * 92d5eda2-1f73-5fa9-9b63-1d2f5f9a033e</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/22e7de60-df98-5e2d-a255-f2a139dcf3ae">
+    * 22e7de60-df98-5e2d-a255-f2a139dcf3ae</a></code>.*/
    public static ConceptSpec UNIVERSAL_RESTRICTION =
              new ConceptSpec("universal restriction",
-                    UUID.fromString("92d5eda2-1f73-5fa9-9b63-1d2f5f9a033e"));
+                    UUID.fromString("22e7de60-df98-5e2d-a255-f2a139dcf3ae"));
 
    /** Java binding for the concept described as <strong><em>existential restriction</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/dbae52b3-1305-5e15-8f14-29635f25a712">
-    * dbae52b3-1305-5e15-8f14-29635f25a712</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/d3d19f37-5ab5-5c91-a496-f7c3e2ba87c2">
+    * d3d19f37-5ab5-5c91-a496-f7c3e2ba87c2</a></code>.*/
    public static ConceptSpec EXISTENTIAL_RESTRICTION =
              new ConceptSpec("existential restriction",
-                    UUID.fromString("dbae52b3-1305-5e15-8f14-29635f25a712"));
+                    UUID.fromString("d3d19f37-5ab5-5c91-a496-f7c3e2ba87c2"));
 
    /** Java binding for the concept described as <strong><em>concrete domain operators</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/03975efc-eb02-59ef-879b-09d926e1ba22">
-    * 03975efc-eb02-59ef-879b-09d926e1ba22</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/f25d6b1e-dba5-5deb-8158-efb0dfa0bdbd">
+    * f25d6b1e-dba5-5deb-8158-efb0dfa0bdbd</a></code>.*/
    public static ConceptSpec CONCRETE_DOMAIN_OPERATORS =
              new ConceptSpec("concrete domain operators",
-                    UUID.fromString("03975efc-eb02-59ef-879b-09d926e1ba22"));
+                    UUID.fromString("f25d6b1e-dba5-5deb-8158-efb0dfa0bdbd"));
 
    /** Java binding for the concept described as <strong><em>greater than</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/1ee9dc45-4b1f-59a6-937f-b8f5adbba13e">
-    * 1ee9dc45-4b1f-59a6-937f-b8f5adbba13e</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/469fb6ab-c759-597e-8cc2-f597a0c6677f">
+    * 469fb6ab-c759-597e-8cc2-f597a0c6677f</a></code>.*/
    public static ConceptSpec GREATER_THAN =
              new ConceptSpec("greater than",
-                    UUID.fromString("1ee9dc45-4b1f-59a6-937f-b8f5adbba13e"));
+                    UUID.fromString("469fb6ab-c759-597e-8cc2-f597a0c6677f"));
 
    /** Java binding for the concept described as <strong><em>greater than or equal to</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/89423f3b-68c6-5984-975b-cd8190a957c8">
-    * 89423f3b-68c6-5984-975b-cd8190a957c8</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/0828aaff-68c1-53d6-af48-b54e34f8cfc2">
+    * 0828aaff-68c1-53d6-af48-b54e34f8cfc2</a></code>.*/
    public static ConceptSpec GREATER_THAN_OR_EQUAL_TO =
              new ConceptSpec("greater than or equal to",
-                    UUID.fromString("89423f3b-68c6-5984-975b-cd8190a957c8"));
+                    UUID.fromString("0828aaff-68c1-53d6-af48-b54e34f8cfc2"));
 
    /** Java binding for the concept described as <strong><em>equal to</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/0ce2d3ac-4bed-5d1a-84ad-df82904963bb">
-    * 0ce2d3ac-4bed-5d1a-84ad-df82904963bb</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/ab52a3c1-a94c-5efd-a287-e8fb108e19fe">
+    * ab52a3c1-a94c-5efd-a287-e8fb108e19fe</a></code>.*/
    public static ConceptSpec EQUAL_TO =
              new ConceptSpec("equal to",
-                    UUID.fromString("0ce2d3ac-4bed-5d1a-84ad-df82904963bb"));
+                    UUID.fromString("ab52a3c1-a94c-5efd-a287-e8fb108e19fe"));
 
    /** Java binding for the concept described as <strong><em>less than or equal to</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/e6786551-462c-5d6e-add3-dc6792cb27b2">
-    * e6786551-462c-5d6e-add3-dc6792cb27b2</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/d98fe052-a2e2-5a9d-b78e-615e157aff6c">
+    * d98fe052-a2e2-5a9d-b78e-615e157aff6c</a></code>.*/
    public static ConceptSpec LESS_THAN_OR_EQUAL_TO =
              new ConceptSpec("less than or equal to",
-                    UUID.fromString("e6786551-462c-5d6e-add3-dc6792cb27b2"));
+                    UUID.fromString("d98fe052-a2e2-5a9d-b78e-615e157aff6c"));
 
    /** Java binding for the concept described as <strong><em>less than</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/a14ae99f-725c-56e9-91a0-2a08cade46db">
-    * a14ae99f-725c-56e9-91a0-2a08cade46db</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/32635a53-41f0-5d28-a8cc-afa97af209bd">
+    * 32635a53-41f0-5d28-a8cc-afa97af209bd</a></code>.*/
    public static ConceptSpec LESS_THAN =
              new ConceptSpec("less than",
-                    UUID.fromString("a14ae99f-725c-56e9-91a0-2a08cade46db"));
+                    UUID.fromString("32635a53-41f0-5d28-a8cc-afa97af209bd"));
 
    /** Java binding for the concept described as <strong><em>description-logic variety</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/1b3d9003-a331-55cd-a14b-186f5df9af0c">
-    * 1b3d9003-a331-55cd-a14b-186f5df9af0c</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/71152302-c87e-5172-85ed-3fc57805aa04">
+    * 71152302-c87e-5172-85ed-3fc57805aa04</a></code>.*/
    public static ConceptSpec DESCRIPTION_LOGIC_VARIETY =
              new ConceptSpec("description-logic variety",
-                    UUID.fromString("1b3d9003-a331-55cd-a14b-186f5df9af0c"));
+                    UUID.fromString("71152302-c87e-5172-85ed-3fc57805aa04"));
 
    /** Java binding for the concept described as <strong><em>EL++</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/7725a070-6006-5614-a162-1ba94276f1eb">
-    * 7725a070-6006-5614-a162-1ba94276f1eb</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/2c0c8de0-0ffa-5ad8-b210-329ae43e72c1">
+    * 2c0c8de0-0ffa-5ad8-b210-329ae43e72c1</a></code>.*/
    public static ConceptSpec EL_PLUS_PLUS =
              new ConceptSpec("EL++",
-                    UUID.fromString("7725a070-6006-5614-a162-1ba94276f1eb"));
+                    UUID.fromString("2c0c8de0-0ffa-5ad8-b210-329ae43e72c1"));
 
    /** Java binding for the concept described as <strong><em>SH</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/fd631e3e-8b2e-553c-8767-57078996da05">
-    * fd631e3e-8b2e-553c-8767-57078996da05</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/541f3f53-c1a1-51e4-948f-11b8b34db096">
+    * 541f3f53-c1a1-51e4-948f-11b8b34db096</a></code>.*/
    public static ConceptSpec SH =
              new ConceptSpec("SH",
-                    UUID.fromString("fd631e3e-8b2e-553c-8767-57078996da05"));
+                    UUID.fromString("541f3f53-c1a1-51e4-948f-11b8b34db096"));
 
    /** Java binding for the concept described as <strong><em>description-logic classifier</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/6d5c3163-99d9-5ca3-8b2b-478f5144aa52">
-    * 6d5c3163-99d9-5ca3-8b2b-478f5144aa52</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/3bb73c40-d5c8-59a4-a7c0-92c3ddcdc206">
+    * 3bb73c40-d5c8-59a4-a7c0-92c3ddcdc206</a></code>.*/
    public static ConceptSpec DESCRIPTION_LOGIC_CLASSIFIER =
              new ConceptSpec("description-logic classifier",
-                    UUID.fromString("6d5c3163-99d9-5ca3-8b2b-478f5144aa52"));
+                    UUID.fromString("3bb73c40-d5c8-59a4-a7c0-92c3ddcdc206"));
 
    /** Java binding for the concept described as <strong><em>SnoRocket</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/55533111-5a96-5666-88a9-7297d4a1accb">
-    * 55533111-5a96-5666-88a9-7297d4a1accb</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/53e2fb90-dcb3-5b54-b3d5-d1e87797697e">
+    * 53e2fb90-dcb3-5b54-b3d5-d1e87797697e</a></code>.*/
    public static ConceptSpec SNOROCKET =
              new ConceptSpec("SnoRocket",
-                    UUID.fromString("55533111-5a96-5666-88a9-7297d4a1accb"));
+                    UUID.fromString("53e2fb90-dcb3-5b54-b3d5-d1e87797697e"));
 
    /** Java binding for the concept described as <strong><em>ConDOR</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/4eb4ad45-f7ca-586a-adfa-821bdc9ce62b">
-    * 4eb4ad45-f7ca-586a-adfa-821bdc9ce62b</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/d1f9d417-e6f5-59ab-bb07-aff104119de5">
+    * d1f9d417-e6f5-59ab-bb07-aff104119de5</a></code>.*/
    public static ConceptSpec CONDOR =
              new ConceptSpec("ConDOR",
-                    UUID.fromString("4eb4ad45-f7ca-586a-adfa-821bdc9ce62b"));
+                    UUID.fromString("d1f9d417-e6f5-59ab-bb07-aff104119de5"));
 
    /** Java binding for the concept described as <strong><em>intrinsic roles</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/74337ec3-b6a8-5890-8516-9c54fa9d645c">
-    * 74337ec3-b6a8-5890-8516-9c54fa9d645c</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/23c501d3-16c2-5a77-a7b4-5016a18c6487">
+    * 23c501d3-16c2-5a77-a7b4-5016a18c6487</a></code>.*/
    public static ConceptSpec INTRINSIC_ROLES =
              new ConceptSpec("intrinsic roles",
-                    UUID.fromString("74337ec3-b6a8-5890-8516-9c54fa9d645c"));
+                    UUID.fromString("23c501d3-16c2-5a77-a7b4-5016a18c6487"));
 
    /** Java binding for the concept described as <strong><em>role group</em></strong>;
     * identified by UUID: <code>
-    * <a href="http://localhost:8080/terminology/rest/concept/8a71e0f2-0ed3-5daf-bf84-9c19cce84b39">
-    * 8a71e0f2-0ed3-5daf-bf84-9c19cce84b39</a></code>.*/
+    * <a href="http://localhost:8080/terminology/rest/concept/41c27aa0-1ebf-5b9c-8c62-780fc07dc0f4">
+    * 41c27aa0-1ebf-5b9c-8c62-780fc07dc0f4</a></code>.*/
    public static ConceptSpec ROLE_GROUP =
              new ConceptSpec("role group",
-                    UUID.fromString("8a71e0f2-0ed3-5daf-bf84-9c19cce84b39"));
+                    UUID.fromString("41c27aa0-1ebf-5b9c-8c62-780fc07dc0f4"));
 }

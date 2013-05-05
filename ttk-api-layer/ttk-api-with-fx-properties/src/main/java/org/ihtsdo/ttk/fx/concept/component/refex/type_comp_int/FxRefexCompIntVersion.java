@@ -12,9 +12,14 @@ import org.ihtsdo.ttk.api.refex.type_nid_int.RefexNidIntVersionBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexChronicle;
+import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_comp_comp_int.FxRefexCompCompCompIntVersion;
 
+@XmlSeeAlso( {
+    FxRefexCompCompCompIntVersion.class, 
+})
 public class FxRefexCompIntVersion <T extends FxRefexChronicle, V extends FxRefexCompIntVersion>
         extends FxRefexCompVersion<T, V> {
    public static final long serialVersionUID = 1;

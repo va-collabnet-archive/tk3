@@ -503,7 +503,7 @@ public class BdbCommitManager {
                 c.getData().getMemberNids().remove(m.getNid());
             }
 
-            m.setStatusAtPositionNid(-1);
+            m.setSTAMP(-1);
         }
 
 

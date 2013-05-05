@@ -29,25 +29,25 @@ import java.util.concurrent.ConcurrentSkipListSet;
  */
 public class RevisionSet<R extends Revision<R, C>, C extends ConceptComponent<R, C>>
         extends ConcurrentSkipListSet<R> {
-   int primordialSapt;
+   int primordialStamp;
 
    //~--- constructors --------------------------------------------------------
 
-   public RevisionSet(int primordialSapt) {
+   public RevisionSet(int primordialStamp) {
       super(new Comparator<R>() {
          @Override
          public int compare(R r1, R r2) {
             return r1.stamp - r2.stamp;
          }
       });
-      this.primordialSapt = primordialSapt;
+      this.primordialStamp = primordialStamp;
    }
 
    //~--- methods -------------------------------------------------------------
 
    @Override
    public boolean add(R e) {
-      if (e.stamp == primordialSapt) {
+      if (e.stamp == primordialStamp) {
          return false;
       }
 

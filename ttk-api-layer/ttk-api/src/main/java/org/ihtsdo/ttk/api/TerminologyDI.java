@@ -130,5 +130,6 @@ public interface TerminologyDI {
    
    CharSequence informAboutUuid(UUID uuid);
    CharSequence informAboutNid(int nid);
+   CharSequence informAboutId(Object id);
 
 }

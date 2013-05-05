@@ -1027,4 +1027,14 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
    public boolean isKindOf(int childNid, int parentNid) throws IOException, ContradictionException {
       return store.isKindOf(childNid, parentNid, vc);
    }
+
+    @Override
+    public CharSequence informAboutId(Object id) {
+        if (id instanceof UUID) {
+            return informAboutUuid((UUID) id);
+        } else if (id instanceof Number) {
+            informAboutNid((Integer) id);
+        }
+        return id.toString();
+    }
 }

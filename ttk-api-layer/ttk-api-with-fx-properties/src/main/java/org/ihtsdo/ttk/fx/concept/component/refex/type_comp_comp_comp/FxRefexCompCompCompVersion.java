@@ -12,8 +12,18 @@ import org.ihtsdo.ttk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_comp_comp_float.FxRefexCompCompCompFloatVersion;
+import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_comp_comp_int.FxRefexCompCompCompIntVersion;
+import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_comp_comp_long.FxRefexCompCompCompLongVersion;
+import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_comp_comp_string.FxRefexCompCompCompStringVersion;
 
-
+@XmlSeeAlso( {
+    FxRefexCompCompCompFloatVersion.class,
+    FxRefexCompCompCompIntVersion.class,
+    FxRefexCompCompCompLongVersion.class,
+    FxRefexCompCompCompStringVersion.class, 
+})
 public class FxRefexCompCompCompVersion<T extends FxRefexChronicle, V extends FxRefexCompCompCompVersion>
         extends FxRefexCompCompVersion<T, V> {
    public static final long serialVersionUID = 1;

@@ -18,12 +18,16 @@ import org.ihtsdo.ttk.api.refex.type_nid.RefexNidVersionBI;
 import java.io.IOException;
 
 import javax.xml.bind.annotation.XmlSeeAlso;
-import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexChronicle;
+import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_boolean.FxRefexCompBooleanVersion;
 
 @XmlSeeAlso( {
-   FxRefexCompCompVersion.class, FxRefexCompFloatVersion.class, FxRefexCompLongVersion.class,
-   FxRefexCompStringVersion.class, FxRefexCompIntVersion.class
+    FxRefexCompBooleanVersion.class,
+    FxRefexCompCompVersion.class, 
+    FxRefexCompFloatVersion.class, 
+    FxRefexCompIntVersion.class,
+    FxRefexCompLongVersion.class,
+    FxRefexCompStringVersion.class, 
 })
 public class FxRefexCompVersion<T extends FxRefexChronicle, V extends FxRefexCompVersion>
         extends FxRefexVersion<T, V> {

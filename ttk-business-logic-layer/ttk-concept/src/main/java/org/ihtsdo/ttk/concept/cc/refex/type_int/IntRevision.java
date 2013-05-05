@@ -52,7 +52,7 @@ public class IntRevision extends RefexRevision<IntRevision, IntMember>
    }
 
    public IntRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, IntMember primoridalMember) {
-      super(statusNid, time, authorNid, moduleNid, pathNid,primoridalMember);
+      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
       intValue = primoridalMember.getInt1();
    }
 

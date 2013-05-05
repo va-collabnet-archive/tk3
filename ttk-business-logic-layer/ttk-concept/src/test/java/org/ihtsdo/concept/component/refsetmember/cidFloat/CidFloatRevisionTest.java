@@ -127,7 +127,7 @@ public class CidFloatRevisionTest {
         member.nid = 1;
         member.primordialStamp = 1; 
         member.setC1Nid(1);
-        member.setStatusAtPositionNid(1);
+        member.setSTAMP(1);
         member.setFloatValue((float) 1.1);
 
         obj.primordialComponent = member; 
@@ -150,7 +150,7 @@ public class CidFloatRevisionTest {
         member.primordialStamp = 2; 
         member.setC1Nid(2);
         member.setFloatValue((float) 2.2);
-        member.setStatusAtPositionNid(2);
+        member.setSTAMP(2);
 
         obj.primordialComponent = member; 
 

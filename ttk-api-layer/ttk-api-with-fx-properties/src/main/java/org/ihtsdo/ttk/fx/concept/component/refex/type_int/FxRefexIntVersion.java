@@ -11,8 +11,14 @@ import org.ihtsdo.ttk.api.refex.type_int.RefexIntVersionBI;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexVersion;
+import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_int.FxRefexCompIntVersion;
+
+@XmlSeeAlso( {
+    FxRefexCompIntVersion.class, 
+})
 
 public class FxRefexIntVersion extends FxRefexVersion<FxRefexIntChronicle, FxRefexIntVersion> {
    public static final long serialVersionUID = 1;

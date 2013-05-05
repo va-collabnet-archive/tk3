@@ -371,7 +371,7 @@ public class RefexMemberFactory {
 
       for (int i = 0; i < ec.getEditPaths().size(); i++) {
          if (i == 0) {
-            member.setStatusAtPositionNid(P.s.getStamp(blueprint.getInt(ComponentProperty.STATUS_ID), Long.MAX_VALUE,
+            member.setSTAMP(P.s.getStamp(blueprint.getInt(ComponentProperty.STATUS_ID), Long.MAX_VALUE,
                 ec.getAuthorNid(), ec.getModuleNid(), ec.getEditPaths().getSetValues()[i]));
             member.setPrimordialUuid(blueprint.getMemberUUID());
 
