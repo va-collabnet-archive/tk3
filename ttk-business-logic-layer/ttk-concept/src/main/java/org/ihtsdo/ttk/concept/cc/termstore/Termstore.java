@@ -163,7 +163,10 @@ public abstract class Termstore implements PersistentStoreI {
 
       return persistentSnapshots.get(snapshotUuid);
    }
-
+   @Override
+   public boolean isConceptNid(int nid) {
+       return nid == getConceptNidForNid(nid);
+   }
    /**
     * Method description
     *

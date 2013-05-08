@@ -21,13 +21,12 @@ package org.ihtsdo.ttk.logic;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid.RefexNidVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_boolean.RefexNidBooleanVersionBI;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
+import org.ihtsdo.ttk.helpers.refex.RefexStringHelper;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -36,6 +35,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 
 /**
  *
@@ -43,22 +43,39 @@ import java.util.Map;
  */
 public class DefinitionTree {
 
-   /** Field description */
+   /**
+    * The size of indent used for converting the definition to a indented text tree.
+    */
    private static final String indent = "    ";
 
-   /** Field description */
-   private Map<Integer, RefexVersionBI> nodes = new HashMap<>();
+   /**
+    * Map from the refex's id, to the refex version.
+    */
+   private Map<Integer, DefinitionPart> parts = new HashMap<>();
 
-   /** Field description */
-   private RefexNidVersionBI definitionRoot = null;
+   /**
+    * Root node of the definition tree.
+    */
+   private DefinitionPart definitionRoot = null;
 
-   /** Field description */
+   /**
+    * Number of rows for this definition tree.
+    */
+   private int rows = 0;
+
+   /**
+    * Number of columns for this definition tree.
+    */
+   private int columns = 0;
+
+   /**
+    * The version of the concept that this definition is derived from.
+    */
    private ConceptVersionBI cv;
 
-   /** Field description */
-   private ViewCoordinate vc;
-
-   /** Field description */
+   /**
+    * Extension identifier for the refex that holds the definition.
+    */
    private int refexExtensionNid;
 
    /**
@@ -74,21 +91,53 @@ public class DefinitionTree {
    public DefinitionTree(ConceptVersionBI cv, int refexExtensionNid)
            throws IOException, ContradictionException {
       this.cv                = cv;
-      this.vc                = cv.getViewCoordinate();
       this.refexExtensionNid = refexExtensionNid;
 
       for (RefexVersionBI<?> annotation :
-          cv.getConceptAttributesActive().getCurrentAnnotationMembers(cv.getViewCoordinate())) {
+          cv.getConceptAttributesActive().getAnnotationsActive(cv.getViewCoordinate())) {
          if (annotation.getRefexExtensionNid() == refexExtensionNid) {
-            nodes.put(annotation.getNid(), annotation);
+            DefinitionPart part = new DefinitionPart(annotation);
+
+            parts.put(annotation.getNid(), part);
+
+            for (RefexVersionBI<?> edge :
+                part.getRefexVersion().getAnnotationsActive(cv.getViewCoordinate())) {
+               parts.put(edge.getNid(), new DefinitionPart(edge));
+            }
 
             if ((definitionRoot == null) && (annotation instanceof RefexNidVersionBI)) {
                if (((RefexNidVersionBI) annotation).getNid1()
                    == DescriptionLogicBinding.DEFINITION_ROOT.getNid(cv.getViewCoordinate())) {
-                  definitionRoot = (RefexNidVersionBI) annotation;
+                  definitionRoot = part;
                }
             }
          }
+      }
+
+      computeRowsAndColumns(definitionRoot, 0, 0);
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @param part
+    * @param row
+    * @param column
+    *
+    * @throws IOException
+    */
+   private void computeRowsAndColumns(DefinitionPart part, int row, int column) throws IOException {
+      rows    = Math.max(rows, row);
+      columns = Math.max(columns, column);
+      part.setColumn(column);
+      part.setRow(row);
+
+      int rowIncrement = 0;
+
+      for (DefinitionPart childPart : part.getChildren(parts, cv.getViewCoordinate(), refexExtensionNid)) {
+         computeRowsAndColumns(childPart, row + rowIncrement, column + 1);
+         rowIncrement++;
       }
    }
 
@@ -96,12 +145,31 @@ public class DefinitionTree {
     * Method description
     *
     *
+    *
+    * @return
     * @throws ContradictionException
     * @throws IOException
     */
-   public void dfsPrint() throws IOException, ContradictionException {
-      dfsPrint(true, definitionRoot, 1);
-      System.out.println();
+   public StringBuilder dfsPrint() throws IOException, ContradictionException {
+      return dfsPrint(new StringBuilder());
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @param sb
+    *
+    * @return
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    */
+   public StringBuilder dfsPrint(StringBuilder sb) throws IOException, ContradictionException {
+      dfsPrint(true, definitionRoot, 1, sb);
+      sb.append("\n");
+
+      return sb;
    }
 
    /**
@@ -111,38 +179,69 @@ public class DefinitionTree {
     * @param truth
     * @param node
     * @param depth
+    * @param sb
     *
     * @throws ContradictionException
     * @throws IOException
     */
-   private void dfsPrint(boolean truth, RefexVersionBI node, int depth)
+   private void dfsPrint(boolean truth, DefinitionPart node, int depth, StringBuilder sb)
            throws IOException, ContradictionException {
-      System.out.println();
+      sb.append("\n");
 
       for (int i = 0; i < depth; i++) {
-         System.out.print(indent);
+         sb.append(indent);
       }
 
       if (!truth) {
-         System.out.print("FALSE: ");
+         sb.append("FALSE: ");
       }
 
-      if (node instanceof RefexNidVersionBI) {
-         System.out.print(Ts.get().getConceptVersion(vc,
-             ((RefexNidVersionBI) node).getNid1()).getPreferredDescription().getText());
-      } else {
-         System.out.print(node);
-      }
+      RefexStringHelper.appendToStringBuilder(node.getRefexVersion(), sb, cv.getViewCoordinate());
 
-      Collection<? extends RefexVersionBI<?>> edges = node.getCurrentAnnotationMembers(vc);
+      Collection<? extends RefexVersionBI<?>> edges =
+         node.getRefexVersion().getAnnotationsActive(cv.getViewCoordinate());
 
       for (RefexVersionBI<?> edge : edges) {
          if ((edge.getRefexExtensionNid() == refexExtensionNid)
              && (edge instanceof RefexNidBooleanVersionBI)) {
             RefexNidBooleanVersionBI theEdge = (RefexNidBooleanVersionBI) edge;
 
-            dfsPrint(theEdge.getBoolean1(), nodes.get(theEdge.getNid1()), depth + 1);
+            dfsPrint(theEdge.getBoolean1(), parts.get(theEdge.getNid1()), depth + 1, sb);
          }
       }
    }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   public int getColumns() {
+      return columns;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   public Collection<DefinitionPart> getParts() {
+      return parts.values();
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   public int getRows() {
+      return rows;
+   }
+
+    public ViewCoordinate getViewCoordinate() {
+        return cv.getViewCoordinate();
+    }
 }

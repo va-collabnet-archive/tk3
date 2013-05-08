@@ -40,12 +40,12 @@ the specific language governing permissions and limitations under the License. -
     </distributionManagement>
   	
     <properties>
-        <branch>ttk</branch>
+        <branch>ttk 3.1.1</branch>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <drools.version>5.5.0.Final</drools.version>
         <jbpm.version>5.4.0.Final</jbpm.version>
         <mvel2.version>2.1.3.Final</mvel2.version>
-        <javafx.version>2.2.7</javafx.version>
+        <javafx.version>2.2.21</javafx.version>
         <org.apache.lucene.version>4.0.0</org.apache.lucene.version>
         <je.version>5.0.73</je.version>
         <juint.version>4.11</juint.version>

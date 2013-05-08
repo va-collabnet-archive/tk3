@@ -54,7 +54,7 @@ public class TkConceptAttributes extends TkComponent<TkConceptAttributesRevision
       ViewCoordinate vc = null;
       int refexNid = Integer.MAX_VALUE;
       
-      another.getCurrentAnnotationMembers(vc, refexNid, null);
+      another.getAnnotationsActive(vc, refexNid, null);
    }
 
    public TkConceptAttributes(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {

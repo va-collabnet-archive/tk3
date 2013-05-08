@@ -27,6 +27,12 @@
       <version>${project.version}</version>
       <type>jar</type>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>ttk-helpers</artifactId>
+      <version>${project.version}</version>
+      <type>jar</type>
+    </dependency>
 
   </dependencies>
 </project>

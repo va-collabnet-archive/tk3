@@ -917,50 +917,50 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     @Override
-    public Collection<? extends RefexVersionBI<?>> getCurrentAnnotationMembers(ViewCoordinate vc)
+    public Collection<? extends RefexVersionBI<?>> getAnnotationsActive(ViewCoordinate vc)
             throws IOException {
-        return getConceptAttributes().getCurrentAnnotationMembers(vc);
+        return getConceptAttributes().getAnnotationsActive(vc);
     }
 
     @Override
-    public <T extends RefexVersionBI<?>> Collection<T> getCurrentAnnotationMembers(ViewCoordinate xyz,
+    public <T extends RefexVersionBI<?>> Collection<T> getAnnotationsActive(ViewCoordinate xyz,
             Class<T> cls)
             throws IOException {
-        return getConceptAttributes().getCurrentAnnotationMembers(xyz, cls);
+        return getConceptAttributes().getAnnotationsActive(xyz, cls);
     }
 
     @Override
-    public Collection<? extends RefexVersionBI<?>> getCurrentAnnotationMembers(ViewCoordinate xyz,
+    public Collection<? extends RefexVersionBI<?>> getAnnotationsActive(ViewCoordinate xyz,
             int refexNid)
             throws IOException {
         if (getConceptAttributes() != null) {
-            return getConceptAttributes().getCurrentAnnotationMembers(xyz, refexNid);
+            return getConceptAttributes().getAnnotationsActive(xyz, refexNid);
         }
 
         return Collections.EMPTY_LIST;
     }
 
     @Override
-    public <T extends RefexVersionBI<?>> Collection<T> getCurrentAnnotationMembers(ViewCoordinate xyz,
+    public <T extends RefexVersionBI<?>> Collection<T> getAnnotationsActive(ViewCoordinate xyz,
             int refexNid, Class<T> cls)
             throws IOException {
-        return getConceptAttributes().getCurrentAnnotationMembers(xyz, refexNid, cls);
+        return getConceptAttributes().getAnnotationsActive(xyz, refexNid, cls);
     }
 
     @Override
-    public Collection<? extends RefexVersionBI<?>> getCurrentRefexMembers(ViewCoordinate xyz, int refsetNid)
+    public Collection<? extends RefexVersionBI<?>> getRefexMembersActive(ViewCoordinate xyz, int refsetNid)
             throws IOException {
         if (getConceptAttributes() != null) {
-            return getConceptAttributes().getCurrentRefexMembers(xyz, refsetNid);
+            return getConceptAttributes().getRefexMembersActive(xyz, refsetNid);
         }
 
         return new ArrayList<>(0);
     }
 
     @Override
-    public Collection<? extends RefexVersionBI<?>> getRefexesActive(ViewCoordinate xyz) throws IOException {
+    public Collection<? extends RefexVersionBI<?>> getRefexMembersActive(ViewCoordinate xyz) throws IOException {
         if (getConceptAttributes() != null) {
-            return getConceptAttributes().getRefexesActive(xyz);
+            return getConceptAttributes().getRefexMembersActive(xyz);
         }
 
         return new ArrayList<>(0);
@@ -1177,8 +1177,8 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     @Override
-    public Collection<? extends RefexVersionBI<?>> getInactiveRefexes(ViewCoordinate xyz) throws IOException {
-        return getConceptAttributes().getInactiveRefexes(xyz);
+    public Collection<? extends RefexVersionBI<?>> getRefexMembersInactive(ViewCoordinate xyz) throws IOException {
+        return getConceptAttributes().getRefexMembersInactive(xyz);
     }
 
     @Override
@@ -1245,7 +1245,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
         for (Description.Version d : descriptions) {
             if (d.getTypeNid() == typePrefNid) {
-                for (RefexVersionBI<?> refex : d.getRefexesActive(vc)) {
+                for (RefexVersionBI<?> refex : d.getRefexMembersActive(vc)) {
                     if (refex.getRefexExtensionNid() == langRefexNid) {
                         RefexNidVersionBI<?> langRefex = (RefexNidVersionBI<?>) refex;
 

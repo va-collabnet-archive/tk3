@@ -25,12 +25,10 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -38,17 +36,9 @@ import javafx.scene.control.TextField;
 
 import javafx.util.Callback;
 
-import org.ihtsdo.ttk.api.RelAssertionType;
 import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
-import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.metadata.binding.Snomed;
-import org.ihtsdo.ttk.api.metadata.binding.TermAux;
 import org.ihtsdo.ttk.fx.concept.FxConcept;
 import org.ihtsdo.ttk.fx.context.TerminologyContext;
-import org.ihtsdo.ttk.helpers.time.TimeHelper;
-import org.ihtsdo.ttk.logic.SnomedToLogicTree;
 import org.ihtsdo.ttk.lookup.Looker;
 
 import org.openide.util.Lookup;
@@ -66,6 +56,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
+import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
+import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
+import org.ihtsdo.ttk.logic.DefinitionTree;
 
 /**
  *
@@ -82,9 +76,8 @@ public class ConceptDetailsViewController
    @FXML                           // fx:id="textField"
    private TextField textField;    // Value injected by FXMLLoader
 
-   /** Field description */
-   @FXML                         // fx:id="testButton"
-   private Button testButton;    // Value injected by FXMLLoader
+   @FXML                         // fx:id="definitionPane"
+   private DefinitionPane definitionPane;    // Value injected by FXMLLoader
 
    /** Field description */
    TerminologyContext currentContext;
@@ -103,8 +96,13 @@ public class ConceptDetailsViewController
           try {
               System.out.println(contextConcept.toXml());
               System.out.println(Ts.get().getConcept(contextConcept.getPrimordialUuid()).toLongString());
+              ConceptVersionBI concept = Ts.getGlobalSnapshot().getConceptVersion(contextConcept.getConceptReference().getNid());
+              DefinitionTree dt = new DefinitionTree(concept, DescriptionLogicBinding.EL_PLUS_PLUS.getNid());
+              System.out.println(dt.dfsPrint());
              textField.setText(contextConcept.toString());
-          } catch (IOException ex) {
+             definitionPane.setDefinitionTree(dt);
+             definitionPane.setGridLinesVisible(true);
+          } catch (IOException | ContradictionException ex) {
               Logger.getLogger(ConceptDetailsViewController.class.getName()).log(Level.SEVERE, null, ex);
           }
       } else {
@@ -154,43 +152,6 @@ public class ConceptDetailsViewController
     * Method description
     *
     *
-    * @param event
-    */
-   @FXML
-   public void doEvent(ActionEvent event) {
-      new Thread(new Runnable() {
-         @Override
-         public void run() {
-            try {
-               ViewCoordinate vc = StandardViewCoordinates.getSnomedInferredLatest();
-
-               vc.setRelAssertionType(RelAssertionType.STATED);
-
-               EditCoordinate ec = new EditCoordinate(TermAux.USER.getNid(), Snomed.CORE_MODULE.getNid(),
-                                      Snomed.SNOMED_RELEASE_PATH.getNid());
-
-               // Convert to new form.
-               SnomedToLogicTree converter = new SnomedToLogicTree(vc, ec);
-               long              time      = System.currentTimeMillis();
-
-               System.out.println(TimeHelper.formatDate(time));
-               Ts.get().iterateConceptDataInParallel(converter);
-               Ts.get().commit();
-               System.out.println("Conversion time: "
-                                  + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
-            } catch (IOException ex) {
-               Logger.getLogger(ConceptDetailsViewController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
-               Logger.getLogger(ConceptDetailsViewController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-         }
-      }).start();
-   }
-
-   /**
-    * Method description
-    *
-    *
     * @param fxmlFileLocation
     * @param resources
     */
@@ -200,8 +161,6 @@ public class ConceptDetailsViewController
              "fx:id=\"contextChoiceBox\" was not injected: check your FXML file 'ConceptDetailsView.fxml'.";
       assert textField != null :
              "fx:id=\"textField\" was not injected: check your FXML file 'ConceptDetailsView.fxml'.";
-      assert testButton != null :
-             "fx:id=\"testButton\" was not injected: check your FXML file 'ConceptDetailsView.fxml'.";
       contextComboBox.setButtonCell(new ContextListCell());
       contextComboBox.setCellFactory(new Callback<ListView<Object>, ListCell<Object>>() {
          @Override

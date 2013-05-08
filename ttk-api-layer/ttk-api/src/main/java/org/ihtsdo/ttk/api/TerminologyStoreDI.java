@@ -20,6 +20,8 @@ import java.util.UUID;
 
 public interface TerminologyStoreDI extends TerminologyDI {
 
+   boolean isConceptNid(int nid);
+
     enum DatabaseOptionPreferences {
         DB_LOCATION, BASELINE_FILES;
     }

@@ -110,6 +110,7 @@ public final class TaxonomyTopComponent extends TopComponent {
                             Ts.get().putViewCoordinate(StandardViewCoordinates.getSnomedStatedLatest());
                             Ts.get().putViewCoordinate(StandardViewCoordinates.getSnomedInferredLatest());
                             Ts.get().putViewCoordinate(StandardViewCoordinates.getSnomedInferredThenStatedLatest());
+                            Ts.get().setGlobalSnapshot(Ts.get().getSnapshot(StandardViewCoordinates.getSnomedInferredThenStatedLatest()));
                             initFX(fxPanel);
                         } catch (IOException ex) {
                             Exceptions.printStackTrace(ex);

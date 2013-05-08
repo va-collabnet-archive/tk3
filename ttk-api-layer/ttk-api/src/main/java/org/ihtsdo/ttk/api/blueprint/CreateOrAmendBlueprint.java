@@ -315,8 +315,8 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
             throws IOException, InvalidCAB, ContradictionException {
         if (annotations.isEmpty() && (cv != null)) {
             if (refexDirective == RefexDirective.INCLUDE) {
-                if (cv.getRefexesActive(vc) != null) {
-                    Collection<? extends RefexVersionBI<?>> originalRefexes = cv.getRefexesActive(vc);
+                if (cv.getRefexMembersActive(vc) != null) {
+                    Collection<? extends RefexVersionBI<?>> originalRefexes = cv.getRefexMembersActive(vc);
 
                     if (!originalRefexes.isEmpty()) {
                         IdDirective refexIdDirective = idDirective;

@@ -37,8 +37,8 @@ import org.ihtsdo.ttk.api.ComponentVersionBI;
 public class Dag {
    public static void depthFirstSearch(ViewCoordinate vc, ComponentVersionBI node, int refexNid)
            throws IOException, MalformedDagException {
-      for (RefexVersionBI<?> edge : node.getCurrentAnnotationMembers(vc, refexNid)) {
-         Collection<? extends RefexVersionBI<?>> children = edge.getCurrentAnnotationMembers(vc,
+      for (RefexVersionBI<?> edge : node.getAnnotationsActive(vc, refexNid)) {
+         Collection<? extends RefexVersionBI<?>> children = edge.getAnnotationsActive(vc,
                                                                refexNid);
 
          if (children.size() != 1) {

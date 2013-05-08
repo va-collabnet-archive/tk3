@@ -297,41 +297,41 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
    }
 
    @Override
-   public Collection<? extends RefexVersionBI<?>> getCurrentAnnotationMembers(ViewCoordinate xyz)
+   public Collection<? extends RefexVersionBI<?>> getAnnotationsActive(ViewCoordinate xyz)
            throws IOException {
-      return primordialComponent.getCurrentAnnotationMembers(xyz);
+      return primordialComponent.getAnnotationsActive(xyz);
    }
 
    @Override
-   public <T extends RefexVersionBI<?>> Collection<T> getCurrentAnnotationMembers(ViewCoordinate xyz,
+   public <T extends RefexVersionBI<?>> Collection<T> getAnnotationsActive(ViewCoordinate xyz,
            Class<T> cls)
            throws IOException {
-      return primordialComponent.getCurrentAnnotationMembers(xyz, cls);
+      return primordialComponent.getAnnotationsActive(xyz, cls);
    }
 
    @Override
-   public Collection<? extends RefexVersionBI<?>> getCurrentAnnotationMembers(ViewCoordinate xyz,
+   public Collection<? extends RefexVersionBI<?>> getAnnotationsActive(ViewCoordinate xyz,
            int refexNid)
            throws IOException {
-      return primordialComponent.getCurrentAnnotationMembers(xyz, refexNid);
+      return primordialComponent.getAnnotationsActive(xyz, refexNid);
    }
 
    @Override
-   public <T extends RefexVersionBI<?>> Collection<T> getCurrentAnnotationMembers(ViewCoordinate xyz,
+   public <T extends RefexVersionBI<?>> Collection<T> getAnnotationsActive(ViewCoordinate xyz,
            int refexNid, Class<T> cls)
            throws IOException {
-      return primordialComponent.getCurrentAnnotationMembers(xyz, refexNid, cls);
+      return primordialComponent.getAnnotationsActive(xyz, refexNid, cls);
    }
 
    @Override
-   public Collection<? extends RefexVersionBI<?>> getCurrentRefexMembers(ViewCoordinate xyz, int refsetNid)
+   public Collection<? extends RefexVersionBI<?>> getRefexMembersActive(ViewCoordinate xyz, int refsetNid)
            throws IOException {
-      return primordialComponent.getCurrentRefexMembers(xyz, refsetNid);
+      return primordialComponent.getRefexMembersActive(xyz, refsetNid);
    }
 
    @Override
-   public Collection<? extends RefexVersionBI<?>> getRefexesActive(ViewCoordinate xyz) throws IOException {
-      return primordialComponent.getRefexesActive(xyz);
+   public Collection<? extends RefexVersionBI<?>> getRefexMembersActive(ViewCoordinate xyz) throws IOException {
+      return primordialComponent.getRefexMembersActive(xyz);
    }
 
    public Concept getEnclosingConcept() {
@@ -339,8 +339,8 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
    }
 
    @Override
-   public Collection<? extends RefexVersionBI<?>> getInactiveRefexes(ViewCoordinate xyz) throws IOException {
-      return getChronicle().getInactiveRefexes(xyz);
+   public Collection<? extends RefexVersionBI<?>> getRefexMembersInactive(ViewCoordinate xyz) throws IOException {
+      return getChronicle().getRefexMembersInactive(xyz);
    }
 
    @Override

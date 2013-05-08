@@ -21,7 +21,8 @@
           </items>
         </ComboBox>
         <TextField fx:id="textField" prefHeight="22.0" prefWidth="600.0" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
-        <Button fx:id="testButton" mnemonicParsing="false" onAction="#doEvent" text="Button" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <org.ihtsdo.ttk.pl.fx.concept.details.DefinitionPane fx:id="definitionPane" GridPane.columnIndex="0" GridPane.rowIndex="2">
+        </org.ihtsdo.ttk.pl.fx.concept.details.DefinitionPane>
       </children>
       <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
