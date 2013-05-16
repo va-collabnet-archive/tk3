@@ -19,7 +19,7 @@
         </plugins>
     </build>
     <dependencies>
-         <dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
             <artifactId>ttk-bdb</artifactId>
@@ -27,6 +27,11 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
+            <version>${jersey-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-servlet</artifactId>
             <version>${jersey-version}</version>
         </dependency>
         <dependency>
@@ -58,6 +63,17 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <profiles>
+        <profile>
+            <id>java7</id>
+            <dependencies>
+                <dependency>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>jfxrt</artifactId>
+                </dependency>
+            </dependencies>              
+        </profile>
+    </profiles>
     <repositories>
         <repository>
             <id>glassfish.java.net</id>

@@ -74,6 +74,7 @@ import java.io.ObjectInputStream;
 import java.util.*;
 
 import javax.ws.rs.core.MediaType;
+import org.ihtsdo.ttk.fx.store.FxTs;
 
 /**
  *
@@ -111,6 +112,7 @@ public class TtkRestClient extends Termstore {
       restClientSingleton = new TtkRestClient();
       P.s                 = restClientSingleton;
       Ts.set(restClientSingleton);
+      FxTs.set(restClientSingleton);
       P.s.putViewCoordinate(P.s.getMetadataVC());
       P.s.putViewCoordinate(StandardViewCoordinates.getSnomedInferredLatest());
       Ts.get().setGlobalSnapshot(Ts.get().getSnapshot(StandardViewCoordinates.getSnomedInferredLatest()));
@@ -343,7 +345,7 @@ public class TtkRestClient extends Termstore {
 
    @Override
    public List<NidPairForRefex> getRefexPairs(int cNid) throws IOException {
-      WebResource r  = restClient.resource(serverUrlStr + "nidpairs/refex" + cNid);
+      WebResource r  = restClient.resource(serverUrlStr + "nidpairs/refex/" + cNid);
       InputStream is = r.accept(bdbMediaType).get(InputStream.class);
 
       try (ObjectInputStream ois = new ObjectInputStream(is)) {

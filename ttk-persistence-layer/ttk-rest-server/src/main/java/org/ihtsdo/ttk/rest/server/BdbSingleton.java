@@ -32,22 +32,21 @@ public class BdbSingleton extends SingletonTypeInjectableProvider<Context, Persi
             if (System.getProperty("BdbSingleton.BDB_LOCATION") != null) {
                 directory = System.getProperty("BdbSingleton.BDB_LOCATION");
             }
-
             if (new File(directory).exists()) {
                 Ts.setup(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS, directory);
             } else {
                 Ts.setup(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS, directory);
-                System.out.println("Start load of eConcept.jbin");
 
                 File[] econFiles = new File[]{new File("/Users/kec/NetBeansProjects/eConcept.jbin")};
 
                 Ts.get().loadEconFiles(econFiles);
                 System.out.println("Finished load of eConcept.jbin");
             }
+        System.out.println("3. Initializing BdbSingleton.");
             Ts.get().setGlobalSnapshot(Ts.get().getSnapshot(StandardViewCoordinates.getSnomedInferredLatest()));
             Ts.get().putViewCoordinate(StandardViewCoordinates.getSnomedInferredThenStatedLatest());
             Ts.get().putViewCoordinate(StandardViewCoordinates.getSnomedStatedLatest());
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             Logger.getLogger(BdbSingleton.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
