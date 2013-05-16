@@ -20,6 +20,7 @@ package org.ihtsdo.ttk.pl.fx.concept.details;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.javafx.experiments.scenicview.ScenicView;
 import javafx.application.Platform;
 
 import javafx.beans.value.ChangeListener;
@@ -94,14 +95,13 @@ public class ConceptDetailsViewController
    private void changeConcept(FxConcept contextConcept) {
       if (contextConcept != null) {
           try {
-              System.out.println(contextConcept.toXml());
-              System.out.println(Ts.get().getConcept(contextConcept.getPrimordialUuid()).toLongString());
+              //System.out.println(contextConcept.toXml());
+              //System.out.println(Ts.get().getConcept(contextConcept.getPrimordialUuid()).toLongString());
               ConceptVersionBI concept = Ts.getGlobalSnapshot().getConceptVersion(contextConcept.getConceptReference().getNid());
               DefinitionTree dt = new DefinitionTree(concept, DescriptionLogicBinding.EL_PLUS_PLUS.getNid());
-              System.out.println(dt.dfsPrint());
+              //System.out.println(dt.dfsPrint());
              textField.setText(contextConcept.toString());
              definitionPane.setDefinitionTree(dt);
-             definitionPane.setGridLinesVisible(true);
           } catch (IOException | ContradictionException ex) {
               Logger.getLogger(ConceptDetailsViewController.class.getName()).log(Level.SEVERE, null, ex);
           }

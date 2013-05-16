@@ -90,6 +90,6 @@ public class TaxonomyView extends TreeView<FxTaxonomyReferenceWithConcept>
          context.getContextProperty().setValue(value);
       }
 
-      System.out.println(context);
+      //System.out.println(context);
    }
 }
