@@ -1165,15 +1165,7 @@ public class DefinitionPane extends Pane {
             int columnIndex = getNodeColumnIndex(child);
             int colspan     = getNodeColumnSpan(child);
 
-            if (colspan == REMAINING) {
-               colspan = columnWidths.length - columnIndex;
-            }
-
-            int rowspan = getNodeRowSpan(child);
-
-            if (rowspan == REMAINING) {
-               rowspan = rowHeights.length - rowIndex;
-            }
+           int rowspan = getNodeRowSpan(child);
 
             double areaX = x;
 
