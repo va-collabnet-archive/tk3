@@ -19,6 +19,7 @@
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>jfxrt</artifactId>
+            <version>${javafx.version}</version>
          </dependency>
     </dependencies>
 
