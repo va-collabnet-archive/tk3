@@ -97,7 +97,10 @@ public class RelationshipCAB extends CreateOrAmendBlueprint {
      * view coordinate
      */
     public RelationshipCAB(
-            UUID sourceUuid, UUID typeUuid, UUID targetUuid, int group, 
+            UUID sourceUuid, 
+            UUID typeUuid, 
+            UUID targetUuid, 
+            int group, 
             TkRelationshipType relationshipType,
             IdDirective idDirective)
             throws IOException, InvalidCAB, ContradictionException {
@@ -173,8 +176,12 @@ public class RelationshipCAB extends CreateOrAmendBlueprint {
      * view coordinate
      */
     public RelationshipCAB(
-            UUID sourceUuid, UUID typeUuid, UUID targetUuid, int group,
-            TkRelationshipType relationshipType, RelationshipVersionBI relationshipVersion,
+            UUID sourceUuid, 
+            UUID typeUuid, 
+            UUID targetUuid, 
+            int group,
+            TkRelationshipType relationshipType, 
+            RelationshipVersionBI relationshipVersion,
             ViewCoordinate viewCoordinate,
             IdDirective idDirective,
             RefexDirective refexDirective) 

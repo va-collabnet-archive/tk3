@@ -140,20 +140,9 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
             IdDirective idDirective,
             UUID moduleUuid,
             UUID... parentUuids) throws IOException, InvalidCAB, ContradictionException {
-        super(null, null, null, idDirective, RefexDirective.EXCLUDE);
-        this.fsns.add(fullySpecifiedName);
-        this.fullySpecifiedName = fullySpecifiedName; //@akf todo: these should be removed when NewConcept, etc. is upated
-        this.prefNames.add(preferredName);
-        this.preferredName = preferredName; //@akf todo: these should be removed when NewConcept, etc. is upated
-        this.lang = langCode.getFormatedLanguageCode();
-        this.isaType = isaTypeUuid;
-        this.moduleUuid = moduleUuid;
-        if (parentUuids != null) {
-            this.parents.addAll(Arrays.asList(parentUuids));
-        }
-        pcs.addPropertyChangeListener(this);
-        setComponentUuid(computeComponentUuid());
+        this(fullySpecifiedName, preferredName, langCode, isaTypeUuid, idDirective, moduleUuid, null, parentUuids);
     }
+
     public ConceptCB(String fullySpecifiedName,
             String preferredName,
             LanguageCode langCode,

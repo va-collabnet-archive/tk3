@@ -11,6 +11,8 @@ import java.lang.reflect.Method;
 public class Ts {
    public static final String        BERKELEY_DB_FOLDER              = "berkeley-db";
    public static final String        EMBEDDED_BERKELEY_DB_IMPL_CLASS = "org.ihtsdo.ttk.bdb.Bdb";
+   public static final String        DEFAULT_LOCAL_HOST_SERVER = "http://localhost:8080/terminology/rest/";
+   public static final String        DEFAULT_CLIENT_IMPL_CLASS = "org.ihtsdo.ttk.rest.client.TtkRestClient";
    private static Class<?>           implClass;
    private static TerminologyStoreDI store;
 
@@ -29,8 +31,11 @@ public class Ts {
       method.invoke(null);
    }
 
-   public static void setup() throws Exception {
+   public static void setupEmbedded() throws Exception {
       setup(EMBEDDED_BERKELEY_DB_IMPL_CLASS, BERKELEY_DB_FOLDER);
+   }
+   public static void setupClient() throws Exception {
+      setup(DEFAULT_CLIENT_IMPL_CLASS, DEFAULT_LOCAL_HOST_SERVER);
    }
 
    public static void setup(String storeClassName, String dbRoot) throws Exception {

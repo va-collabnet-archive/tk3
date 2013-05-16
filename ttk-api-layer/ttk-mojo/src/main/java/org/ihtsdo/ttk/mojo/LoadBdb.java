@@ -15,12 +15,8 @@ package org.ihtsdo.ttk.mojo;
 * See the License for the specific language governing permissions and
 * limitations under the License.
  */
-import com.sun.javafx.application.LauncherImpl;
-import com.sun.javafx.application.PlatformImpl;
 import org.ihtsdo.ttk.helpers.metrics.IsKindOfMetrics;
 import java.io.File;
-import javafx.application.Application;
-import javafx.stage.Stage;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.ihtsdo.ttk.helpers.io.FileIO;

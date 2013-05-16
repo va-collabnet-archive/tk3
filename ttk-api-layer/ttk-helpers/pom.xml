@@ -30,5 +30,22 @@
             <version>${project.version}</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.ihtsdo.ttk</groupId>
+            <artifactId>ttk-lookup</artifactId>
+            <version>3.1.1-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
+    <profiles>
+        <profile>
+            <id>java7</id>
+            <dependencies>
+                <dependency>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>jfxrt</artifactId>
+                </dependency>
+            </dependencies>              
+        </profile>
+    </profiles>
 </project>

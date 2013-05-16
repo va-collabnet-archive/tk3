@@ -20,7 +20,42 @@ package org.ihtsdo.ttk.logic;
  * @author kec
  */
 public enum DefinitionPartType {
-    VERTEX, 
+    DEFINITION_ROOT("dl-definition-root", 1),
+    NECESSARY_SET("dl-necessary-set", 1),
+    SUFFICIENT_SET("dl-sufficient-set", 1),
+    AND("dl-and", 1),
+    OR("dl-or", 1),
+    DISJOINT_WITH("dl-disjoint-with", 1),
+    EXISTENTIAL_RESTRICTION("dl-existential-restriction", 3),
+    UNIVERSAL_RESTRICTION("dl-universal-restriction", 3),
+    CONCEPT_REFERENCE_PRIMITIVE("dl-concept-reference-primitive", 3),
+    CONCEPT_REFERENCE_DEFINED("dl-concept-reference-defined", 3),
+    FIELD_SUBSTITUTION("dl-field-substution", 3),
+    TEMPLATE_MERGE("dl-template-merge", 3),
+    EDGE_TRUE("dl-edge-true", 1),
+    EDGE_FALSE("dl-edge-false", 1),
     
-    EDGE
+    FEATURE_INT("dl-feature-int", 4),
+    FEATURE_LONG("dl-feature-long", 4),
+    FEATURE_FLOAT("dl-feature-float", 4),
+    ROLE_GROUP("dl-role-group", 1),
+    UNKNOWN("dl-unknown", 1); 
+    
+    final String cssStyle;
+    final int columnSpan;
+
+    public int getColumnSpan() {
+        return columnSpan;
+    }
+
+    private DefinitionPartType(String cssStyle, int columnSpan) {
+        this.cssStyle = cssStyle;
+        this.columnSpan = columnSpan;
+    }
+
+    public String getCssStyleClass() {
+        return cssStyle;
+    }
+    
+    
 }

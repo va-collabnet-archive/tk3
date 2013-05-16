@@ -140,10 +140,14 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
             currentStatusUuid = SnomedMetadataRf2.ACTIVE_VALUE_RF2.getUuids()[0];
             retiredStatusUuid = SnomedMetadataRf2.INACTIVE_VALUE_RF2.getUuids()[0];
         }
+        this.idDirective = idDirective;
+        this.refexDirective = refexDirective;
+        this.cv = componentVersion;
+        this.vc = viewCoordinate;
         setStatusUuid(currentStatusUuid);
         setComponentUuidNoRecompute(componentUuid);
 
-        if (idDirective == IdDirective.PRESERVE) {
+        if (idDirective == IdDirective.PRESERVE && componentVersion != null) {
             setComponentUuidNoRecompute(componentVersion.getPrimUuid());
         } else if (idDirective == IdDirective.GENERATE_RANDOM) {
             setComponentUuidNoRecompute(UUID.randomUUID());
@@ -155,10 +159,6 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
             setComponentUuidNoRecompute(componentVersion.getPrimUuid());
         }
 
-        this.idDirective = idDirective;
-        this.refexDirective = refexDirective;
-        this.cv = componentVersion;
-        this.vc = viewCoordinate;
         getAnnotationBlueprintsFromOriginal();
         pcs.addPropertyChangeListener(this);
     }
@@ -494,6 +494,10 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
         UUID oldUuid = (UUID) properties.get(ComponentProperty.COMPONENT_ID);
         properties.put(ComponentProperty.COMPONENT_ID, componentUuid);
         pcs.firePropertyChange("componentUuid", oldUuid, componentUuid);
+    }
+
+    public EnumMap<ComponentProperty, Object> getProperties() {
+        return properties;
     }
 
     /**

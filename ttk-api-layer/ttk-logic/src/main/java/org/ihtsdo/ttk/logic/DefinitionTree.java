@@ -22,9 +22,11 @@ package org.ihtsdo.ttk.logic;
 
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
+import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid.RefexNidVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_boolean.RefexNidBooleanVersionBI;
+import org.ihtsdo.ttk.api.spec.ValidationException;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
 import org.ihtsdo.ttk.helpers.refex.RefexStringHelper;
 
@@ -35,7 +37,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 
 /**
  *
@@ -125,18 +126,23 @@ public class DefinitionTree {
     * @param row
     * @param column
     *
+    *
+    * @throws ContradictionException
     * @throws IOException
+    * @throws ValidationException
     */
-   private void computeRowsAndColumns(DefinitionPart part, int row, int column) throws IOException {
+   private void computeRowsAndColumns(DefinitionPart part, int row, int column)
+           throws IOException, ValidationException, ContradictionException {
       rows    = Math.max(rows, row);
       columns = Math.max(columns, column);
-      part.setColumn(column);
-      part.setRow(row);
+      part.setColumnIndex(column);
+      part.setRowIndex(row);
 
       int rowIncrement = 0;
 
       for (DefinitionPart childPart : part.getChildren(parts, cv.getViewCoordinate(), refexExtensionNid)) {
-         computeRowsAndColumns(childPart, row + rowIncrement, column + 1);
+         computeRowsAndColumns(childPart, row + rowIncrement,
+                               column + part.getPartType(cv.getViewCoordinate()).columnSpan);
          rowIncrement++;
       }
    }
@@ -241,7 +247,13 @@ public class DefinitionTree {
       return rows;
    }
 
-    public ViewCoordinate getViewCoordinate() {
-        return cv.getViewCoordinate();
-    }
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   public ViewCoordinate getViewCoordinate() {
+      return cv.getViewCoordinate();
+   }
 }

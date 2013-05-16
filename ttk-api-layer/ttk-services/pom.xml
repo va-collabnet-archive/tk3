@@ -23,9 +23,16 @@
             <artifactId>ttk-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>jfxrt</artifactId>
-        </dependency>
     </dependencies>
+    <profiles>
+        <profile>
+            <id>java7</id>
+            <dependencies>
+                <dependency>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>jfxrt</artifactId>
+                </dependency>
+            </dependencies>              
+        </profile>
+    </profiles>
 </project>
