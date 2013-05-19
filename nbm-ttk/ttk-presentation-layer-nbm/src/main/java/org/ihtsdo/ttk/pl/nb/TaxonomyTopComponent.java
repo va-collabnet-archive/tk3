@@ -111,7 +111,7 @@ public final class TaxonomyTopComponent extends TopComponent {
                             Ts.get().putViewCoordinate(StandardViewCoordinates.getSnomedInferredLatest());
                             Ts.get().putViewCoordinate(StandardViewCoordinates.getSnomedInferredThenStatedLatest());
                             Ts.get().setGlobalSnapshot(Ts.get().getSnapshot(StandardViewCoordinates.getSnomedInferredThenStatedLatest()));
-                            //initFX(fxPanel);
+                            initFX(fxPanel);
                         } catch (IOException ex) {
                             Exceptions.printStackTrace(ex);
                         }
@@ -132,7 +132,124 @@ public final class TaxonomyTopComponent extends TopComponent {
         add(fxPanel, BorderLayout.CENTER);
         dbStartupListener = new DbStartupListener();
     }
+private void initFX(JFXPanel fxPanel) {
+        // This method is invoked on the JavaFX thread
+        Scene scene = createScene();
+        fxPanel.setScene(scene);
+    }
 
+    private Scene createScene() {
+        TreeView<FxTaxonomyReferenceWithConcept> treeView = new TaxonomyView("taxonomy selection","main");
+        try {
+
+            treeView.setCellFactory(new Callback<TreeView<FxTaxonomyReferenceWithConcept>, TreeCell<FxTaxonomyReferenceWithConcept>>() {
+                @Override
+                public TreeCell<FxTaxonomyReferenceWithConcept> call(TreeView<FxTaxonomyReferenceWithConcept> p) {
+                    return new SimTreeCell();
+                }
+            });
+            treeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+            treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+                @Override
+                public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                    if (newValue instanceof SimTreeItem) {
+                        SimTreeItem simTreeItem = (SimTreeItem) newValue;
+                        FxConcept concept = simTreeItem.getValue().getConcept();
+                        conceptService.setConceptUuid(simTreeItem.getValue().getConcept().getPrimordialUuid());
+                        conceptService.setViewCoordinateUuid(concept.getViewCoordinateUuid());
+                        conceptService.restart();
+                    }
+                }
+            });
+            treeView.setShowRoot(false);
+
+
+            FxTaxonomyReferenceWithConcept root = new FxTaxonomyReferenceWithConcept();
+            SimTreeItem rootItem = new SimTreeItem(root);
+            FxTaxonomyReferenceWithConcept snomedRoot = new FxTaxonomyReferenceWithConcept();
+            snomedRoot.setConcept(FxTs.get().getFxConcept(Taxonomies.SNOMED.getUuids()[0],
+                    StandardViewCoordinates.getSnomedInferredLatest(), VersionPolicy.ACTIVE_VERSIONS,
+                    RefexPolicy.REFEX_MEMBERS,
+                    RelationshipPolicy.ORIGINATING_AND_DESTINATION_TAXONOMY_RELATIONSHIPS));
+            FxTaxonomyReferenceWithConcept dlRoot = new FxTaxonomyReferenceWithConcept();
+            dlRoot.setConcept(FxTs.get().getFxConcept(DescriptionLogicBinding.DESCRIPTION_LOGIC_AUXILIARY.getUuids()[0],
+                    StandardViewCoordinates.getSnomedStatedLatest(), VersionPolicy.ACTIVE_VERSIONS,
+                    RefexPolicy.REFEX_MEMBERS,
+                    RelationshipPolicy.ORIGINATING_AND_DESTINATION_TAXONOMY_RELATIONSHIPS));
+
+
+            SimTreeItem snomedRootItem = new SimTreeItem(snomedRoot, SimTreeIcons.ROOT.getImageView());
+            rootItem.getChildren().add(snomedRootItem);
+            SimTreeItem dlRootItem = new SimTreeItem(dlRoot, SimTreeIcons.ROOT.getImageView());
+            rootItem.getChildren().add(dlRootItem);
+            rootItem.setExpanded(true);
+
+            // item.computeGraphic();
+            snomedRootItem.addChildren();
+            dlRootItem.addChildren();
+
+            // put this event handler on the root
+            snomedRootItem.addEventHandler(TreeItem.branchCollapsedEvent(), new EventHandler() {
+                @Override
+                public void handle(Event t) {
+
+                    // remove grandchildren
+                    SimTreeItem sourceTreeItem = (SimTreeItem) t.getSource();
+
+                    sourceTreeItem.removeGrandchildren();
+                }
+            });
+            dlRootItem.addEventHandler(TreeItem.branchCollapsedEvent(), new EventHandler() {
+                @Override
+                public void handle(Event t) {
+
+                    // remove grandchildren
+                    SimTreeItem sourceTreeItem = (SimTreeItem) t.getSource();
+
+                    sourceTreeItem.removeGrandchildren();
+                }
+            });
+            snomedRootItem.addEventHandler(TreeItem.branchExpandedEvent(), new EventHandler() {
+                @Override
+                public void handle(Event t) {
+
+                    // add grandchildren
+                    SimTreeItem sourceTreeItem = (SimTreeItem) t.getSource();
+                    ProgressIndicator p2 = new ProgressIndicator();
+
+                    p2.setSkin(new TaxonomyProgressIndicatorSkin(p2));
+                    p2.setPrefSize(16, 16);
+                    p2.setProgress(-1);
+                    sourceTreeItem.setProgressIndicator(p2);
+                    sourceTreeItem.addChildrenConceptsAndGrandchildrenItems(p2);
+                }
+            });
+            dlRootItem.addEventHandler(TreeItem.branchExpandedEvent(), new EventHandler() {
+                @Override
+                public void handle(Event t) {
+
+                    // add grandchildren
+                    SimTreeItem sourceTreeItem = (SimTreeItem) t.getSource();
+                    ProgressIndicator p2 = new ProgressIndicator();
+
+                    p2.setSkin(new TaxonomyProgressIndicatorSkin(p2));
+                    p2.setPrefSize(16, 16);
+                    p2.setProgress(-1);
+                    sourceTreeItem.setProgressIndicator(p2);
+                    sourceTreeItem.addChildrenConceptsAndGrandchildrenItems(p2);
+                }
+            });
+            treeView.setRoot(rootItem);
+
+
+
+        } catch (IOException | ContradictionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        BorderPane border = new BorderPane();
+        border.setCenter(treeView);
+        return new Scene(border);
+    }
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this
      * code. The content of this method is always regenerated by the Form Editor.

@@ -1,4 +1,4 @@
-package org.ihtsdo.ttk.concept.jsr166y.cs;
+package org.ihtsdo.ttk.concept.cs;
 
 import java.io.IOException;
 

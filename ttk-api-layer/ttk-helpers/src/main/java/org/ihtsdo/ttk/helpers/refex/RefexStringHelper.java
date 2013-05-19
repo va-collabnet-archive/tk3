@@ -108,8 +108,12 @@ public class RefexStringHelper {
             sb.append(getTextForNid(vc, case3.getNid1()));
          }
 
-         sb.append(" ");
-         sb.append(case3.getBoolean1());
+         if (case3.getBoolean1()) {
+            sb.append("   ");
+         } else {
+            sb.append(" ");
+            sb.append(case3.getBoolean1());
+         }
 
          break;
 

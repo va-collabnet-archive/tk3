@@ -66,7 +66,8 @@ public final class ConceptTopComponent extends TopComponent {
             @Override
             public void run() {
                 try {
-                    Pane conceptDetailsPane = (Pane) FXMLLoader.load(getClass().getResource("/org/ihtsdo/ttk/pl/fx/concept/details/ConceptDetailsView.fxml"));
+                    Pane conceptDetailsPane = (Pane) FXMLLoader.load(getClass().getResource(
+                            "/org/ihtsdo/ttk/pl/fx/concept/details/fxml/ConceptDetailsView.fxml"));
 
                     Scene myScene = new Scene(conceptDetailsPane);
                     fxPanel.setScene(myScene);

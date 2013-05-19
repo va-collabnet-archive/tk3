@@ -30,6 +30,7 @@ import javafx.collections.ListChangeListener.Change;
 
 import javafx.fxml.FXMLLoader;
 
+import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -44,6 +45,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.logic.DefinitionPart;
@@ -60,6 +64,20 @@ import static javafx.scene.layout.Region.USE_PREF_SIZE;
 
 import static org.ihtsdo.ttk.logic.DefinitionPartType.AND;
 import static org.ihtsdo.ttk.logic.DefinitionPartType.CONCEPT_REFERENCE_DEFINED;
+import static org.ihtsdo.ttk.logic.DefinitionPartType.DEFINITION_ROOT;
+import static org.ihtsdo.ttk.logic.DefinitionPartType.DISJOINT_WITH;
+import static org.ihtsdo.ttk.logic.DefinitionPartType.EDGE_FALSE;
+import static org.ihtsdo.ttk.logic.DefinitionPartType.EDGE_TRUE;
+import static org.ihtsdo.ttk.logic.DefinitionPartType.EXISTENTIAL_RESTRICTION;
+import static org.ihtsdo.ttk.logic.DefinitionPartType.FEATURE_FLOAT;
+import static org.ihtsdo.ttk.logic.DefinitionPartType.FEATURE_INT;
+import static org.ihtsdo.ttk.logic.DefinitionPartType.FEATURE_LONG;
+import static org.ihtsdo.ttk.logic.DefinitionPartType.FIELD_SUBSTITUTION;
+import static org.ihtsdo.ttk.logic.DefinitionPartType.NECESSARY_SET;
+import static org.ihtsdo.ttk.logic.DefinitionPartType.OR;
+import static org.ihtsdo.ttk.logic.DefinitionPartType.ROLE_GROUP;
+import static org.ihtsdo.ttk.logic.DefinitionPartType.SUFFICIENT_SET;
+import static org.ihtsdo.ttk.logic.DefinitionPartType.UNIVERSAL_RESTRICTION;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -75,7 +93,11 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -122,6 +144,12 @@ public class DefinitionPane extends Pane {
    private static final double GRID_LINE_DASH = 3;
 
    /** Field description */
+   private static final String PART_FOR_NODE = "part for node";
+
+   /** Field description */
+   private static Insets standardInset = new Insets(2, 0, 2, 0);
+
+   /** Field description */
    private boolean metricsDirty = true;
 
    // This is set to true while in layoutChildren and set false on the conclusion.
@@ -129,6 +157,14 @@ public class DefinitionPane extends Pane {
 
    /** Field description */
    private boolean performingLayout = false;
+
+   /**
+    * Edges of the definition tree.
+    */
+   private Group edges = new Group();
+
+   /** Field description */
+   private final Map<DefinitionPart, Node> partNodeMap = new HashMap<>();
 
    /** Field description */
    private DefinitionTree definitionTree;
@@ -147,11 +183,6 @@ public class DefinitionPane extends Pane {
 
    /** Field description */
    private Group gridLines;
-
-   /**
-    * Edges of the definition tree. 
-    */
-   private Group edges = new Group();
 
    /** Field description */
    private double[] rowMinHeight;
@@ -184,7 +215,7 @@ public class DefinitionPane extends Pane {
     */
 
    /**
-    * Creates a DefinitionPane layout with hgap/vgap = 0 and TOP_LEFT alignment.
+    * Creates a DefinitionPane layout with localHGap/vgap = 0 and TOP_LEFT alignment.
     */
    public DefinitionPane() {
       super();
@@ -200,13 +231,66 @@ public class DefinitionPane extends Pane {
     * Adds a child to the defpane at the specified column,row position.
     * This convenience method will set the defpane column and row constraints
     * on the child.
-    * @param child the node being added to the defpane
+    * @param child the parentNode being added to the defpane
     * @param columnIndex the column index position for the child within the defpane
     * @param rowIndex the row index position for the child within the defpane
     */
    public void add(Node child, int columnIndex, int rowIndex) {
       setConstraints(child, columnIndex, rowIndex);
       getChildren().add(child);
+   }
+
+   /**
+    * Method description
+    *
+    */
+   private void addDefinitionTreeEdges() {
+      this.getChildren().remove(this.edges);
+      this.edges.getChildren().clear();
+      // Add edges here.
+      for (Node parentNode : getChildren()) {
+         try {
+            DefinitionPart defPart =
+               (DefinitionPart) parentNode.getProperties().get(DefinitionPane.PART_FOR_NODE);
+
+            if (defPart != null && isOriginNodeOrDestinationNode(defPart)) {
+               Integer columnIndex = getColumnIndex(parentNode);
+               Integer columnSpan = getColumnSpan(parentNode);
+               double width = columnWidths[columnIndex];
+               for (int i = 1; i < columnSpan; i++) {
+                   width += columnWidths[columnIndex + i];
+               }
+               Integer rowIndex = getRowIndex(parentNode);
+               double rowHeight = 0;
+               for (int i = 0; i <= rowIndex; i++) {
+                   rowHeight += rowHeights[i];
+               }
+               Bounds startBounds = parentNode.getBoundsInParent();
+               double startX      = startBounds.getMinX() + width;
+               double startY      = rowHeight;
+
+               for (DefinitionPart child : getDestinationNodes(defPart)) {
+                  Node   childNode = partNodeMap.get(child);
+                  Integer childRowIndex = getRowIndex(childNode);
+                  double childRowHeight = 0;
+                  for (int i = 0; i <= childRowIndex; i++) {
+                    childRowHeight += rowHeights[i];
+                  }
+                  Bounds endBounds = childNode.getBoundsInParent();
+                  double endX      = endBounds.getMinX();
+                  double endY      = childRowHeight;
+                  Path   path      = new Path();
+
+                  path.getElements().add(new MoveTo(startX, startY));
+                  path.getElements().add(new LineTo(endX, endY));
+                  edges.getChildren().add(path);
+               }
+            }
+         } catch (IOException | ContradictionException ex) {
+            Logger.getLogger(DefinitionPane.class.getName()).log(Level.SEVERE, null, ex);
+         }
+      }
+      this.getChildren().add(this.edges);
    }
 
    /**
@@ -229,9 +313,8 @@ public class DefinitionPane extends Pane {
 
       // compute non-percentage column widths
       for (int i = 0; i < numColumns; i++) {
-         
-            columnWidths[i] = boundedSize(areaWidths[i], columnMinWidth[i], columnPrefWidth[i]);
-            columnTotal     += columnWidths[i];
+         columnWidths[i] = boundedSize(areaWidths[i], columnMinWidth[i], columnPrefWidth[i]);
+         columnTotal     += columnWidths[i];
       }
 
       double widthAvailable = ((width == -1)
@@ -269,14 +352,12 @@ public class DefinitionPane extends Pane {
       double       rowTotal      = vgaps;
       final double contentHeight = getHeight() - top - bottom;
 
-
       // compute non-percentage row heights
       for (int i = 0; i < numRows; i++) {
-         
-            rowHeights[i] = boundedSize(areaHeights[i], rowMinHeight[i], rowPrefHeight[i]);
-            rowTotal      += rowHeights[i];
-         
+         rowHeights[i] = boundedSize(areaHeights[i], rowMinHeight[i], rowPrefHeight[i]);
+         rowTotal      += rowHeights[i];
       }
+
 /*
       double heightAvailable = ((height == -1)
                                 ? prefHeight(-1)
@@ -434,7 +515,6 @@ public class DefinitionPane extends Pane {
              + bottom;
    }
 
-
    /**
     * Method description
     *
@@ -478,9 +558,9 @@ public class DefinitionPane extends Pane {
     * @param heights
     */
    private void computeColumnMetrics(int numColumns, double heights[]) {
-      columnMinWidth     = createDoubleArray(numColumns, 0);
-      columnPrefWidth    = createDoubleArray(numColumns, 0);
-      columnWidths       = createDoubleArray(numColumns, 0);
+      columnMinWidth  = createDoubleArray(numColumns, 0);
+      columnPrefWidth = createDoubleArray(numColumns, 0);
+      columnWidths    = createDoubleArray(numColumns, 0);
 
       final double snaphgap = snapSpace(getHgap());
 
@@ -570,18 +650,17 @@ public class DefinitionPane extends Pane {
 
          if (columnPrefWidth[i] == USE_PREF_SIZE) {
             columnPrefWidth[i] = (columnPrefWidth[i] == 0)
-                                ? (boundedSize(columnPrefWidth[i], columnMinWidth[i], columnPrefWidth[i])
-                                   == USE_PREF_SIZE)
-                                  ? 0
-                                  : boundedSize(columnPrefWidth[i], columnMinWidth[i], columnPrefWidth[i])
-                                : columnPrefWidth[i];
+                                 ? (boundedSize(columnPrefWidth[i], columnMinWidth[i], columnPrefWidth[i])
+                                    == USE_PREF_SIZE)
+                                   ? 0
+                                   : boundedSize(columnPrefWidth[i], columnMinWidth[i], columnPrefWidth[i])
+                                 : columnPrefWidth[i];
          }
 
          columnPrefWidth[i] = boundedSize(columnPrefWidth[i], columnMinWidth[i], columnPrefWidth[i]);
-
-         System.out.println("computeColumnMetrics: column "+i+": h="+columnWidths[i]+" min="+columnMinWidth[i]+" pref="+columnPrefWidth[i]);
+         System.out.println("computeColumnMetrics: column " + i + ": h=" + columnWidths[i] + " min="
+                            + columnMinWidth[i] + " pref=" + columnPrefWidth[i]);
       }
-
    }
 
    /**
@@ -618,7 +697,6 @@ public class DefinitionPane extends Pane {
       }
    }
 
-
    /**
     * Method description
     *
@@ -636,7 +714,8 @@ public class DefinitionPane extends Pane {
          computeRowMetrics(rowHeights.length, columnWidths);
       }
 
-      return snapSpace(getInsets().getTop())
+       addDefinitionTreeEdges();
+       return snapSpace(getInsets().getTop())
              + (computeTotalHeight(rowMinHeight) + (rowMinHeight.length - 1) * snapSpace(getVgap()))
              + snapSpace(getInsets().getBottom());
    }
@@ -658,7 +737,8 @@ public class DefinitionPane extends Pane {
          computeColumnMetrics(columnWidths.length, rowHeights);
       }
 
-      return snapSpace(getInsets().getLeft())
+       addDefinitionTreeEdges();
+       return snapSpace(getInsets().getLeft())
              + (computeTotalWidth(columnMinWidth) + (columnMinWidth.length - 1) * snapSpace(getHgap()))
              + snapSpace(getInsets().getRight());
    }
@@ -680,7 +760,8 @@ public class DefinitionPane extends Pane {
          computeRowMetrics(rowHeights.length, columnWidths);
       }
 
-      return snapSpace(getInsets().getTop())
+       addDefinitionTreeEdges();
+       return snapSpace(getInsets().getTop())
              + (computeTotalHeight(rowPrefHeight) + (rowPrefHeight.length - 1) * snapSpace(getVgap()))
              + snapSpace(getInsets().getBottom());
    }
@@ -702,7 +783,8 @@ public class DefinitionPane extends Pane {
          computeColumnMetrics(columnWidths.length, rowHeights);
       }
 
-      return snapSpace(getInsets().getLeft())
+       addDefinitionTreeEdges();
+       return snapSpace(getInsets().getLeft())
              + (computeTotalWidth(columnPrefWidth) + (columnPrefWidth.length - 1) * snapSpace(getHgap()))
              + snapSpace(getInsets().getRight());
    }
@@ -715,10 +797,10 @@ public class DefinitionPane extends Pane {
     * @param widths
     */
    private void computeRowMetrics(int numRows, double widths[]) {
-      rowMinHeight     = createDoubleArray(numRows, 0);
-      rowPrefHeight    = createDoubleArray(numRows, 0);
-      rowHeights       = createDoubleArray(numRows, 0);
-      rowBaseline      = createDoubleArray(numRows, 0);
+      rowMinHeight  = createDoubleArray(numRows, 0);
+      rowPrefHeight = createDoubleArray(numRows, 0);
+      rowHeights    = createDoubleArray(numRows, 0);
+      rowBaseline   = createDoubleArray(numRows, 0);
 
       double snapvgap = snapSpace(getVgap());
 
@@ -755,17 +837,17 @@ public class DefinitionPane extends Pane {
          rowBaseline[i] = getMaxAreaBaselineOffset(baselineNodes, margins);
          baselineNodes.clear();
 
-         if (computeMin ||  computePref || (rowVPos == VPos.BASELINE)) {
+         if (computeMin || computePref || (rowVPos == VPos.BASELINE)) {
 
             // compute from content
             for (int j = 0; j < endNodes.size(); j++) {
-               Node   child    = endNodes.get(j);
-               Insets margin   = getMargin(child);
-               double top      = (margin != null)
-                                 ? margin.getTop()
-                                 : 0;
-               int    rowIndex = getNodeRowIndex(child);
-               int    rowspan  = getNodeRowSpan(child);
+               Node   child      = endNodes.get(j);
+               Insets margin     = getMargin(child);
+               double top        = (margin != null)
+                                   ? margin.getTop()
+                                   : 0;
+               int    rowIndex   = getNodeRowIndex(child);
+               int    rowspan    = getNodeRowSpan(child);
                int    columnSpan = getNodeColumnSpan(child);
 
                if (rowspan == REMAINING) {
@@ -776,9 +858,11 @@ public class DefinitionPane extends Pane {
 
                if (computePref) {
                   double widthOfColumnSpan = widths[colIndex];
+
                   for (int columnSpanIndex = 1; columnSpanIndex < columnSpan; columnSpanIndex++) {
-                      widthOfColumnSpan += widths[colIndex + columnSpanIndex];
+                     widthOfColumnSpan += widths[colIndex + columnSpanIndex];
                   }
+
                   double preferredHeight = computeChildPrefAreaHeight(child, margin, widthOfColumnSpan);
 
                   if (rowspan > 1) {
@@ -827,11 +911,10 @@ public class DefinitionPane extends Pane {
                               : rowPrefHeight[i];
          }
 
-
          rowPrefHeight[i] = boundedSize(rowPrefHeight[i], rowMinHeight[i], rowPrefHeight[i]);
-         System.out.println("computeRowMetrics: row "+i+": h="+rowHeights[i]+" min="+rowMinHeight[i]+" pref="+rowPrefHeight[i]);
+         System.out.println("computeRowMetrics: row " + i + ": h=" + rowHeights[i] + " min="
+                            + rowMinHeight[i] + " pref=" + rowPrefHeight[i]);
       }
-
    }
 
    /**
@@ -843,10 +926,10 @@ public class DefinitionPane extends Pane {
     * @return
     */
    private double computeTotalHeight(double heights[]) {
-      double totalHeight           = 0;
+      double totalHeight = 0;
 
       for (int i = 0; i < heights.length; i++) {
-            totalHeight += heights[i];
+         totalHeight += heights[i];
       }
 
       return totalHeight;
@@ -861,11 +944,12 @@ public class DefinitionPane extends Pane {
     * @return
     */
    private double computeTotalWidth(double widths[]) {
-      double totalWidth           = 0;
- 
+      double totalWidth = 0;
+
       for (int i = 0; i < widths.length; i++) {
          totalWidth += widths[i];
       }
+
       return totalWidth;
    }
 
@@ -962,7 +1046,6 @@ public class DefinitionPane extends Pane {
       return line;
    }
 
-
    /**
     * For debug purposes only: controls whether lines are displayed to show the defpane's rows and columns.
     * Default is <code>false</code>.
@@ -1044,7 +1127,7 @@ public class DefinitionPane extends Pane {
 
                columnWidths[index] += change;
 
-               // if (node.id.startsWith("debug.")) println("{if (shrinking) "vshrink" else "vgrow"}: {node.id} portion({portion})=available({available})/({sizeof adjusting}) change={change}");
+               // if (parentNode.id.startsWith("debug.")) println("{if (shrinking) "vshrink" else "vgrow"}: {parentNode.id} portion({portion})=available({available})/({sizeof adjusting}) change={change}");
                available -= change;
 
                if (Math.abs(change) < Math.abs(portion)) {
@@ -1116,7 +1199,6 @@ public class DefinitionPane extends Pane {
       return hgap;
    }
 
-
    /**
     * Method description
     *
@@ -1124,6 +1206,7 @@ public class DefinitionPane extends Pane {
    @Override
    protected void layoutChildren() {
       performingLayout = true;
+
       final double snaphgap      = snapSpace(getHgap());
       final double snapvgap      = snapSpace(getVgap());
       final double top           = snapSpace(getInsets().getTop());
@@ -1131,7 +1214,7 @@ public class DefinitionPane extends Pane {
       final double left          = snapSpace(getInsets().getLeft());
       final double right         = snapSpace(getInsets().getRight());
       final double width         = getWidth();
-      final double height        = getHeight(); // When is height computed?
+      final double height        = getHeight();    // When is height computed?
       final double contentHeight = height - top - bottom;
       final double contentWidth  = width - left - right;
       double       columnTotal   = 0;
@@ -1161,13 +1244,11 @@ public class DefinitionPane extends Pane {
          Node child = getChildren().get(i);
 
          if (child.isManaged()) {
-            int rowIndex    = getNodeRowIndex(child);
-            int columnIndex = getNodeColumnIndex(child);
-            int colspan     = getNodeColumnSpan(child);
-
-           int rowspan = getNodeRowSpan(child);
-
-            double areaX = x;
+            int    rowIndex    = getNodeRowIndex(child);
+            int    columnIndex = getNodeColumnIndex(child);
+            int    colspan     = getNodeColumnSpan(child);
+            int    rowspan     = getNodeRowSpan(child);
+            double areaX       = x;
 
             for (int j = 0; j < columnIndex; j++) {
                areaX += columnWidths[j] + snaphgap;
@@ -1193,16 +1274,17 @@ public class DefinitionPane extends Pane {
 
             Insets margin = getMargin(child);
 
-            //System.out.println("layoutNode("+child.toString()+" row/span="+rowIndex+"/"+rowspan+" col/span="+columnIndex+"/"+colspan+" area="+areaX+","+areaY+" "+areaW+"x"+areaH+""+" rowBaseline="+rowBaseline[rowIndex]);
+            // System.out.println("layoutNode("+child.toString()+" row/span="+rowIndex+"/"+rowspan+" col/span="+columnIndex+"/"+colspan+" area="+areaX+","+areaY+" "+areaW+"x"+areaH+""+" rowBaseline="+rowBaseline[rowIndex]);
             layoutInArea(child, areaX, areaY, areaW, areaH, rowBaseline[rowIndex], margin,
-                         shouldColumnFillWidth(columnIndex), shouldRowFillHeight(rowIndex), HPos.LEFT, VPos.CENTER);
+                         shouldColumnFillWidth(columnIndex), shouldRowFillHeight(rowIndex), HPos.LEFT,
+                         VPos.CENTER);
          }
       }
-      edges.getChildren().clear();
-      // Add edges here. 
 
+      edges.getChildren().clear();
       layoutGridLines(x, y, rowTotal, columnTotal);
-      performingLayout = false;
+       addDefinitionTreeEdges();
+       performingLayout = false;
    }
 
    /**
@@ -1222,9 +1304,6 @@ public class DefinitionPane extends Pane {
       if (!gridLines.getChildren().isEmpty()) {
          gridLines.getChildren().clear();
       }
-
-      double hgap = snapSpace(getHgap());
-      double vgap = snapSpace(getVgap());
 
       // create vertical lines
       double linex = x;
@@ -1476,25 +1555,25 @@ public class DefinitionPane extends Pane {
 
    /**
     * Returns the child's column index constraint if set.
-    * @param child the child node of a defpane
+    * @param child the child parentNode of a defpane
     * @return the column index for the child or null if no column index was set
     */
-   private  static Integer getColumnIndex(Node child) {
+   private static Integer getColumnIndex(Node child) {
       return (Integer) getConstraint(child, COLUMN_INDEX_CONSTRAINT);
    }
 
    /**
     * Returns the child's column-span constraint if set.
-    * @param child the child node of a defpane
+    * @param child the child parentNode of a defpane
     * @return the column span for the child or null if no column span was set
     */
-   private  static Integer getColumnSpan(Node child) {
+   private static Integer getColumnSpan(Node child) {
       return (Integer) getConstraint(child, COLUMN_SPAN_CONSTRAINT);
    }
 
-
    /**
     * Method description
+    *
     *
     *
     * @param node
@@ -1545,21 +1624,62 @@ public class DefinitionPane extends Pane {
     * Method description
     *
     *
+    * @param defPart
+    *
+    * @return
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    */
+   List<DefinitionPart> getDestinationNodes(DefinitionPart defPart)
+           throws ContradictionException, IOException {
+      return getDestinationNodes(defPart, new ArrayList<DefinitionPart>());
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @param defPart
+    * @param destinationNodes
+    *
+    * @return
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    */
+   List<DefinitionPart> getDestinationNodes(DefinitionPart defPart,
+       ArrayList<DefinitionPart> destinationNodes)
+           throws ContradictionException, IOException {
+      for (DefinitionPart child : definitionTree.getChildren(defPart)) {
+         if (isOriginNodeOrDestinationNode(child)) {
+            destinationNodes.add(child);
+         } else {
+            getDestinationNodes(child, destinationNodes);
+         }
+      }
+
+      return destinationNodes;
+   }
+
+   /**
+    * Method description
+    *
+    *
     * @return
     */
-   private  double getHgap() {
+   private double getHgap() {
       return (hgap == null)
              ? 0
              : hgap.get();
    }
 
- 
    /**
     * Returns the child's margin constraint if set.
-    * @param child the child node of a defpane
+    * @param child the child parentNode of a defpane
     * @return the margin for the child or null if no margin was set
     */
-   private  static Insets getMargin(Node child) {
+   private static Insets getMargin(Node child) {
       return (Insets) getConstraint(child, MARGIN_CONSTRAINT);
    }
 
@@ -1591,10 +1711,9 @@ public class DefinitionPane extends Pane {
 
    /* utility method for computing the max of children's min or pref heights, taking into account baseline alignment */
 
-
-
    /**
     * Method description
+    *
     *
     *
     * @param node
@@ -1613,6 +1732,7 @@ public class DefinitionPane extends Pane {
     * Method description
     *
     *
+    *
     * @param node
     *
     * @return
@@ -1629,6 +1749,7 @@ public class DefinitionPane extends Pane {
     * Method description
     *
     *
+    *
     * @param node
     *
     * @return
@@ -1641,9 +1762,9 @@ public class DefinitionPane extends Pane {
              : 1;
    }
 
-
    /**
     * Method description
+    *
     *
     *
     * @param node
@@ -1662,6 +1783,7 @@ public class DefinitionPane extends Pane {
     * Method description
     *
     *
+    *
     * @param node
     *
     * @return
@@ -1678,6 +1800,7 @@ public class DefinitionPane extends Pane {
     * Method description
     *
     *
+    *
     * @param node
     *
     * @return
@@ -1690,25 +1813,23 @@ public class DefinitionPane extends Pane {
              : 1;
    }
 
-
    /**
     * Returns the child's row index constraint if set.
-    * @param child the child node of a defpane
+    * @param child the child parentNode of a defpane
     * @return the row index for the child or null if no row index was set
     */
-   private  static Integer getRowIndex(Node child) {
+   private static Integer getRowIndex(Node child) {
       return (Integer) getConstraint(child, ROW_INDEX_CONSTRAINT);
    }
 
    /**
     * Returns the child's row-span constraint if set.
-    * @param child the child node of a defpane
+    * @param child the child parentNode of a defpane
     * @return the row span for the child or null if no row span was set
     */
-   private  static Integer getRowSpan(Node child) {
+   private static Integer getRowSpan(Node child) {
       return (Integer) getConstraint(child, ROW_SPAN_CONSTRAINT);
    }
-
 
    /**
     * Method description
@@ -1716,7 +1837,7 @@ public class DefinitionPane extends Pane {
     *
     * @return
     */
-   private  double getVgap() {
+   private double getVgap() {
       return (vgap == null)
              ? 0
              : vgap.get();
@@ -1728,10 +1849,47 @@ public class DefinitionPane extends Pane {
     *
     * @return
     */
-   private  boolean isGridLinesVisible() {
+   private boolean isGridLinesVisible() {
       return (gridLinesVisible == null)
              ? false
              : gridLinesVisible.get();
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @param defPart
+    *
+    * @return
+    *
+    * @throws ContradictionException
+    * @throws IOException
+    */
+   private boolean isOriginNodeOrDestinationNode(DefinitionPart defPart)
+           throws ContradictionException, IOException {
+       if (defPart == null) {
+           return false;
+       }
+      switch (defPart.getPartType(definitionTree.getViewCoordinate())) {
+      case AND :
+      case OR :
+      case CONCEPT_REFERENCE_DEFINED :
+      case CONCEPT_REFERENCE_PRIMITIVE :
+      case UNIVERSAL_RESTRICTION :
+      case EXISTENTIAL_RESTRICTION :
+      case ROLE_GROUP :
+      case SUFFICIENT_SET :
+      case NECESSARY_SET :
+      case FEATURE_FLOAT :
+      case FEATURE_INT :
+      case FEATURE_LONG :
+      case FIELD_SUBSTITUTION :
+         return true;
+
+      default :
+         return false;
+      }
    }
 
    /**
@@ -1740,10 +1898,10 @@ public class DefinitionPane extends Pane {
     * If a defpane child has no column index set, it will be positioned in
     * the first column.
     * Setting the value to null will remove the constraint.
-    * @param child the child node of a defpane
+    * @param child the child parentNode of a defpane
     * @param value the column index of the child
     */
-   private  static void setColumnIndex(Node child, Integer value) {
+   private static void setColumnIndex(Node child, Integer value) {
       if ((value != null) && (value < 0)) {
          throw new IllegalArgumentException("columnIndex must be greater or equal to 0, but was " + value);
       }
@@ -1759,10 +1917,10 @@ public class DefinitionPane extends Pane {
     * <p>
     * If a defpane child has no column span set, it will default to spanning one column.
     * Setting the value to null will remove the constraint.
-    * @param child the child node of a defpane
+    * @param child the child parentNode of a defpane
     * @param value the column span of the child
     */
-   private  static void setColumnSpan(Node child, Integer value) {
+   private static void setColumnSpan(Node child, Integer value) {
       if ((value != null) && (value < 1)) {
          throw new IllegalArgumentException("columnSpan must be greater or equal to 1, but was " + value);
       }
@@ -1772,6 +1930,7 @@ public class DefinitionPane extends Pane {
 
    /**
     * Method description
+    *
     *
     *
     * @param node
@@ -1792,30 +1951,27 @@ public class DefinitionPane extends Pane {
 
    /**
     * Sets the column,row indeces for the child when contained in a defpane.
-    * @param child the child node of a defpane
+    * @param child the child parentNode of a defpane
     * @param columnIndex the column index position for the child
     * @param rowIndex the row index position for the child
     */
-   private  static void setConstraints(Node child, int columnIndex, int rowIndex) {
+   private static void setConstraints(Node child, int columnIndex, int rowIndex) {
       setRowIndex(child, rowIndex);
       setColumnIndex(child, columnIndex);
    }
 
-
    /**
     * Sets the grid position, spans, and alignment for the child when contained in a defpane.
-    * @param child the child node of a defpane
+    * @param child the child parentNode of a defpane
     * @param columnIndex the column index position for the child
     * @param rowIndex the row index position for the child
     * @param columnspan the number of columns the child should span
     * @param rowspan the number of rows the child should span
     * @param halignment the horizontal alignment of the child
     * @param valignment the vertical alignment of the child
-    * @param hgrow the horizontal grow priority of the child
-    * @param vgrow the vertical grow priority of the child
     */
-   private  static void setConstraints(Node child, int columnIndex, int rowIndex, int columnspan, int rowspan,
-                                     HPos halignment, VPos valignment) {
+   private static void setConstraints(Node child, int columnIndex, int rowIndex, int columnspan, int rowspan,
+                                      HPos halignment, VPos valignment) {
       setRowIndex(child, rowIndex);
       setColumnIndex(child, columnIndex);
       setRowSpan(child, rowspan);
@@ -1838,6 +1994,7 @@ public class DefinitionPane extends Pane {
       this.getChildren().clear();
       this.edges.getChildren().clear();
       this.getChildren().add(this.edges);
+
       for (DefinitionPart part : definitionTree.getParts()) {
          if (part.getColumnIndex() > 1) {
             Node               node;
@@ -1882,7 +2039,7 @@ public class DefinitionPane extends Pane {
             case EXISTENTIAL_RESTRICTION :
                node = setupNodeTextFromNid2(
                   part, definitionTree, partType,
-                  (Node) FXMLLoader.load(getClass().getResource("/fxml/ExistentialRestriction.fxml")));
+                  (Node) FXMLLoader.load(getClass().getResource("/org/ihtsdo/ttk/pl/fx/concept/details/fxml/ExistentialRestriction.fxml")));
 
                break;
 
@@ -1907,7 +2064,7 @@ public class DefinitionPane extends Pane {
                break;
 
             case NECESSARY_SET :
-               node = FXMLLoader.load(getClass().getResource("/fxml/NecessarySet.fxml"));
+               node = FXMLLoader.load(getClass().getResource("/org/ihtsdo/ttk/pl/fx/concept/details/fxml/NecessarySet.fxml"));
 
                break;
 
@@ -1917,7 +2074,7 @@ public class DefinitionPane extends Pane {
                break;
 
             case SUFFICIENT_SET :
-               node = FXMLLoader.load(getClass().getResource("/fxml/SufficientSet.fxml"));
+               node = FXMLLoader.load(getClass().getResource("/org/ihtsdo/ttk/pl/fx/concept/details/fxml/SufficientSet.fxml"));
 
                break;
 
@@ -1929,12 +2086,12 @@ public class DefinitionPane extends Pane {
             case UNIVERSAL_RESTRICTION :
                node = setupNodeTextFromNid2(
                   part, definitionTree, partType,
-                  (Node) FXMLLoader.load(getClass().getResource("/fxml/ExistentialRestriction.fxml")));
+                  (Node) FXMLLoader.load(getClass().getResource("/org/ihtsdo/ttk/pl/fx/concept/details/fxml/ExistentialRestriction.fxml")));
 
                break;
 
             case ROLE_GROUP :
-               node = FXMLLoader.load(getClass().getResource("/fxml/RoleGroup.fxml"));
+               node = FXMLLoader.load(getClass().getResource("/org/ihtsdo/ttk/pl/fx/concept/details/fxml/RoleGroup.fxml"));
 
                break;
 
@@ -1942,8 +2099,13 @@ public class DefinitionPane extends Pane {
                node = new Label(part.getText(definitionTree.getViewCoordinate()));
             }
 
+            // parentNode to tree part
+            node.getProperties().put(PART_FOR_NODE, part);
+
+            // tree part to parentNode
+            partNodeMap.put(part, node);
             DefinitionPane.setConstraints(node, part.getColumnIndex(), part.getRowIndex(),
-                                    partType.getColumnSpan(), 1, HPos.LEFT, VPos.CENTER);
+                                          partType.getColumnSpan(), 1, HPos.LEFT, VPos.CENTER);
             this.add(node, part.getColumnIndex(), part.getRowIndex());
          }
       }
@@ -1955,10 +2117,10 @@ public class DefinitionPane extends Pane {
     * Sets the horizontal alignment for the child when contained by a defpane.
     * If set, will override the defpane's default horizontal alignment.
     * Setting the value to null will remove the constraint.
-    * @param child the child node of a defpane
+    * @param child the child parentNode of a defpane
     * @param value the hozizontal alignment for the child
     */
-   private  static void setHalignment(Node child, HPos value) {
+   private static void setHalignment(Node child, HPos value) {
       setConstraint(child, HALIGNMENT_CONSTRAINT, value);
    }
 
@@ -1966,10 +2128,10 @@ public class DefinitionPane extends Pane {
     * Sets the margin for the child when contained by a defpane.
     * If set, the defpane will lay it out with the margin space around it.
     * Setting the value to null will remove the constraint.
-    * @param child the child node of a defpane
+    * @param child the child parentNode of a defpane
     * @param value the margin of space around the child
     */
-   private  static void setMargin(Node child, Insets value) {
+   private static void setMargin(Node child, Insets value) {
       setConstraint(child, MARGIN_CONSTRAINT, value);
    }
 
@@ -1979,10 +2141,10 @@ public class DefinitionPane extends Pane {
     * If a defpane child has no row index set, it will be positioned in the
     * first row.
     * Setting the value to null will remove the constraint.
-    * @param child the child node of a defpane
+    * @param child the child parentNode of a defpane
     * @param value the row index of the child
     */
-   private  static void setRowIndex(Node child, Integer value) {
+   private static void setRowIndex(Node child, Integer value) {
       if ((value != null) && (value < 0)) {
          throw new IllegalArgumentException("rowIndex must be greater or equal to 0, but was " + value);
       }
@@ -1998,10 +2160,10 @@ public class DefinitionPane extends Pane {
     * <p>
     * If a defpane child has no row span set, it will default to spanning one row.
     * Setting the value to null will remove the constraint.
-    * @param child the child node of a defpane
+    * @param child the child parentNode of a defpane
     * @param value the row span of the child
     */
-   private  static void setRowSpan(Node child, Integer value) {
+   private static void setRowSpan(Node child, Integer value) {
       if ((value != null) && (value < 1)) {
          throw new IllegalArgumentException("rowSpan must be greater or equal to 1, but was " + value);
       }
@@ -2013,7 +2175,7 @@ public class DefinitionPane extends Pane {
     * Sets the vertical alignment for the child when contained by a defpane.
     * If set, will override the defpane's default vertical alignment.
     * Setting the value to null will remove the constraint.
-    * @param child the child node of a defpane
+    * @param child the child parentNode of a defpane
     * @param value the vertical alignment for the child
     */
    public static void setValignment(Node child, VPos value) {
@@ -2029,7 +2191,7 @@ public class DefinitionPane extends Pane {
    public final void setVgap(double value) {
       vgapProperty().set(value);
    }
-private static Insets standardInset = new Insets(2,0,2,0);
+
    /**
     * Method description
     *
@@ -2044,9 +2206,9 @@ private static Insets standardInset = new Insets(2,0,2,0);
    }
 
    /**
-    *                                                                         
-    *                         Stylesheet Handling                             
-    *                                                                         
+    *
+    *                         Stylesheet Handling
+    *
     */
 
    /**
@@ -2057,8 +2219,8 @@ private static Insets standardInset = new Insets(2,0,2,0);
 
       /** Field description */
       private static final StyleableProperty<DefinitionPane, Boolean> GRID_LINES_VISIBLE =
-         new StyleableProperty<DefinitionPane, Boolean>("-fx-grid-lines-visible", BooleanConverter.getInstance(),
-                               Boolean.FALSE) {
+         new StyleableProperty<DefinitionPane, Boolean>("-fx-grid-lines-visible",
+                               BooleanConverter.getInstance(), Boolean.FALSE) {
          @Override
          public boolean isSettable(DefinitionPane node) {
             return (node.gridLinesVisibleProperty() == null) ||!node.gridLinesVisibleProperty().isBound();
@@ -2070,10 +2232,8 @@ private static Insets standardInset = new Insets(2,0,2,0);
       };
 
       /** Field description */
-      private static final StyleableProperty<DefinitionPane, Number> HGAP = new StyleableProperty<DefinitionPane,
-                                                                         Number>("-fx-hgap",
-                                                                            SizeConverter.getInstance(),
-                                                                            0.0) {
+      private static final StyleableProperty<DefinitionPane, Number> HGAP =
+         new StyleableProperty<DefinitionPane, Number>("-fx-hgap", SizeConverter.getInstance(), 0.0) {
          @Override
          public boolean isSettable(DefinitionPane node) {
             return (node.hgapProperty() == null) ||!node.hgapProperty().isBound();
@@ -2099,10 +2259,8 @@ private static Insets standardInset = new Insets(2,0,2,0);
       };
 
       /** Field description */
-      private static final StyleableProperty<DefinitionPane, Number> VGAP = new StyleableProperty<DefinitionPane,
-                                                                         Number>("-fx-vgap",
-                                                                            SizeConverter.getInstance(),
-                                                                            0.0) {
+      private static final StyleableProperty<DefinitionPane, Number> VGAP =
+         new StyleableProperty<DefinitionPane, Number>("-fx-vgap", SizeConverter.getInstance(), 0.0) {
          @Override
          public boolean isSettable(DefinitionPane node) {
             return (node.vgapProperty() == null) ||!node.vgapProperty().isBound();
@@ -2117,8 +2275,7 @@ private static Insets standardInset = new Insets(2,0,2,0);
       private static final List<StyleableProperty> STYLEABLES;
 
       static {
-         final List<StyleableProperty> styleables =
-            new ArrayList<>(Region.impl_CSS_STYLEABLES());
+         final List<StyleableProperty> styleables = new ArrayList<>(Region.impl_CSS_STYLEABLES());
 
          Collections.addAll(styleables, GRID_LINES_VISIBLE, HGAP, ALIGNMENT, VGAP);
          STYLEABLES = Collections.unmodifiableList(styleables);

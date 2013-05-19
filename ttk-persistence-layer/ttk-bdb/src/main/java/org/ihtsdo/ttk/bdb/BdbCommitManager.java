@@ -42,7 +42,7 @@ import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 import org.ihtsdo.ttk.concept.cc.relationship.RelationshipRevision;
-import org.ihtsdo.ttk.concept.jsr166y.cs.ChangeSetWriterHandler;
+import org.ihtsdo.ttk.concept.cs.ChangeSetWriterHandler;
 
 public class BdbCommitManager {
 

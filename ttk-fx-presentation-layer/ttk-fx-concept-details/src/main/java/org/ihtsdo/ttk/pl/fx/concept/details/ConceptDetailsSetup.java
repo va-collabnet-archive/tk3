@@ -65,7 +65,7 @@ public class ConceptDetailsSetup implements EventHandler<ActionEvent> {
       try {
          Pane conceptDetailsPane = (Pane) FXMLLoader.load(
                                        getClass().getResource(
-                                          "/fxml/ConceptDetailsView.fxml"));
+                                          "/org/ihtsdo/ttk/pl/fx/concept/details/fxml/ConceptDetailsView.fxml"));
 
          borderPane.setCenter(conceptDetailsPane);
       } catch (IOException ex) {

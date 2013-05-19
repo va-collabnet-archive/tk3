@@ -34,8 +34,11 @@ import org.ihtsdo.ttk.helpers.refex.RefexStringHelper;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,6 +51,9 @@ public class DefinitionTree {
     * The size of indent used for converting the definition to a indented text tree.
     */
    private static final String indent = "    ";
+
+   /** Field description */
+   private Map<DefinitionPart, List<DefinitionPart>> childMap = new HashMap<>();
 
    /**
     * Map from the refex's id, to the refex version.
@@ -138,9 +144,13 @@ public class DefinitionTree {
       part.setColumnIndex(column);
       part.setRowIndex(row);
 
-      int rowIncrement = 0;
+      int                       rowIncrement = 0;
+      ArrayList<DefinitionPart> childList    = new ArrayList<>();
+
+      childMap.put(part, childList);
 
       for (DefinitionPart childPart : part.getChildren(parts, cv.getViewCoordinate(), refexExtensionNid)) {
+         childList.add(childPart);
          computeRowsAndColumns(childPart, row + rowIncrement,
                                column + part.getPartType(cv.getViewCoordinate()).columnSpan);
          rowIncrement++;
@@ -215,6 +225,24 @@ public class DefinitionTree {
             dfsPrint(theEdge.getBoolean1(), parts.get(theEdge.getNid1()), depth + 1, sb);
          }
       }
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @param parent
+    *
+    * @return
+    */
+   public List<DefinitionPart> getChildren(DefinitionPart parent) {
+      List<DefinitionPart> children = childMap.get(parent);
+
+      if (children == null) {
+         children = Collections.EMPTY_LIST;
+      }
+
+      return children;
    }
 
    /**

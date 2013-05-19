@@ -1,4 +1,4 @@
-package org.ihtsdo.ttk.concept.jsr166y.cs.econcept;
+package org.ihtsdo.ttk.concept.cs.econcept;
 
 //~--- non-JDK imports --------------------------------------------------------
 import org.ihtsdo.ttk.concept.cc.concept.Concept;
@@ -12,7 +12,6 @@ import org.ihtsdo.ttk.concept.cc.identifier.IdentifierVersionString;
 import org.ihtsdo.ttk.concept.cc.identifier.IdentifierVersionUuid;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
-import org.ihtsdo.ttk.concept.jsr166y.cs.ComputeEConceptForChangeSetI;
 import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
 import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
@@ -39,11 +38,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.media.Media;
-import org.ihtsdo.ttk.concept.jsr166y.cs.ChangeSetLogger;
-import org.ihtsdo.ttk.concept.jsr166y.cs.ChangeSetWriterHandler;
 import org.ihtsdo.ttk.api.id.LongIdBI;
 import org.ihtsdo.ttk.api.id.StringIdBI;
 import org.ihtsdo.ttk.api.id.UuidIdBI;
+import org.ihtsdo.ttk.concept.cs.ChangeSetLogger;
+import org.ihtsdo.ttk.concept.cs.ComputeEConceptForChangeSetI;
 import org.ihtsdo.ttk.dto.TkConcept;
 import org.ihtsdo.ttk.dto.component.description.TkDescriptionRevision;
 import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierLong;

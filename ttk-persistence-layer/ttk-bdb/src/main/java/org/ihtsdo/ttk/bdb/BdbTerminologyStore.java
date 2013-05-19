@@ -37,7 +37,7 @@ import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 import org.ihtsdo.ttk.concept.cc.termstore.TerminologySnapshot;
 import org.ihtsdo.ttk.concept.cc.termstore.Termstore;
-import org.ihtsdo.ttk.concept.jsr166y.cs.CsProperty;
+import org.ihtsdo.ttk.concept.cs.CsProperty;
 import org.ihtsdo.ttk.dto.TkConcept;
 import org.ihtsdo.ttk.fx.FxComponentReference;
 import org.ihtsdo.ttk.fx.concept.FxConcept;

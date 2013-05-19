@@ -1,4 +1,4 @@
-package org.ihtsdo.ttk.concept.jsr166y.cs.econcept;
+package org.ihtsdo.ttk.concept.cs.econcept;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -16,10 +16,10 @@ import org.ihtsdo.ttk.concept.cc.concept.Concept;
 
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.concept.jsr166y.cs.ChangeSetLogger;
-import org.ihtsdo.ttk.concept.jsr166y.cs.CsProperty;
-import org.ihtsdo.ttk.concept.jsr166y.cs.ChangeSetReaderI;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.ttk.concept.cs.ChangeSetLogger;
+import org.ihtsdo.ttk.concept.cs.ChangeSetReaderI;
+import org.ihtsdo.ttk.concept.cs.CsProperty;
 import org.ihtsdo.ttk.dto.TkConcept;
 
 public class EConceptChangeSetReader implements ChangeSetReaderI {

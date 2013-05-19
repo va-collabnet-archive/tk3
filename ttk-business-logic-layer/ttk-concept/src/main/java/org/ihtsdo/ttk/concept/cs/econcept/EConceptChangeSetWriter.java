@@ -1,4 +1,4 @@
-package org.ihtsdo.ttk.concept.jsr166y.cs.econcept;
+package org.ihtsdo.ttk.concept.cs.econcept;
 
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
@@ -12,17 +12,17 @@ import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 
 import org.ihtsdo.ttk.concept.cc.concept.Concept;
-import org.ihtsdo.ttk.concept.jsr166y.cs.ComputeEConceptForChangeSetI;
 import org.ihtsdo.ttk.helpers.econcept.transfrom.EConceptTransformerBI;
 import org.ihtsdo.ttk.helpers.io.FileIO;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.concept.jsr166y.cs.ChangeSetLogger;
-import org.ihtsdo.ttk.concept.jsr166y.cs.CsProperty;
 import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGeneratorBI;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.ttk.concept.cs.ChangeSetLogger;
+import org.ihtsdo.ttk.concept.cs.ComputeEConceptForChangeSetI;
+import org.ihtsdo.ttk.concept.cs.CsProperty;
 import org.ihtsdo.ttk.dto.TkConcept;
 
 public class EConceptChangeSetWriter implements ChangeSetGeneratorBI {

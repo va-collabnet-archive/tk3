@@ -64,8 +64,8 @@ import org.ihtsdo.ttk.concept.cc.concept.Concept;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptVersion;
 import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
 import org.ihtsdo.ttk.concept.cc.lucene.SearchResult;
-import org.ihtsdo.ttk.concept.jsr166y.cs.ChangeSetWriterHandler;
-import org.ihtsdo.ttk.concept.jsr166y.cs.econcept.EConceptChangeSetWriter;
+import org.ihtsdo.ttk.concept.cs.ChangeSetWriterHandler;
+import org.ihtsdo.ttk.concept.cs.econcept.EConceptChangeSetWriter;
 import org.ihtsdo.ttk.helpers.uuid.Type5UuidFactory;
 import org.ihtsdo.ttk.helpers.uuid.UuidFactory;
 
