@@ -1,25 +1,38 @@
 package org.ihtsdo.ttk.api;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface PositionBI {
 
-    public PathBI getPath();
+    PathBI getPath();
 
-    public long getTime();
+    long getTime();
 
-    public boolean isSubsequentOrEqualTo(long time, int pathNid);
+    boolean isSubsequentOrEqualTo(long time, int pathNid);
 
-    public boolean isAntecedentOrEqualTo(long time, int pathNid);
+    boolean isAntecedentOrEqualTo(long time, int pathNid);
 
-    public boolean isAntecedentOrEqualTo(PositionBI another);
+    boolean isAntecedentOrEqualTo(PositionBI another);
 
-    public boolean checkAntecedentOrEqualToOrigins(Collection<? extends PositionBI> origins);
+    boolean checkAntecedentOrEqualToOrigins(Collection<? extends PositionBI> origins);
 
-    public boolean isSubsequentOrEqualTo(PositionBI another);
+    boolean isSubsequentOrEqualTo(PositionBI another);
 
-    public boolean equals(long time, int pathNid);
+    boolean equals(long time, int pathNid);
 
-    public Collection<? extends PositionBI> getAllOrigins();
+    @Deprecated
+    Collection<? extends PositionBI> getAllOrigins();
+    
+    /**
+     * Need to also enable "blocking" at positions... add getBarriers() ? that 
+     * returns Collection<? extends PositionBI> , 
+     * Need to support retirement of an intersection (standard refex
+     * retirement?)
+     * @return 
+     */
+    Map<Long, ? extends PositionBI> getIntersections();
+    
+    Collection<? extends PositionBI> getBarriers();
 
 }
