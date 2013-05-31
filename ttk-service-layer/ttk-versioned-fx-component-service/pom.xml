@@ -6,9 +6,9 @@
         <artifactId>ttk-service-layer</artifactId>
         <version>3.1.1-SNAPSHOT</version>
     </parent>
-    <artifactId>ttk-api-with-fx-properties</artifactId>
+    <artifactId>ttk-versioned-fx-component-service</artifactId>
     <name>${branch}:L2: Service Layer: API with JavaFX properties</name>
-    <description>API Layer module that provides Concepts and Concept Components that are based on the 
+    <description>Service that provides Concepts and Concept Components that are based on the 
         JavaFX Property Architecture: https://wikis.oracle.com/display/OpenJDK/JavaFX+Property+Architecture
     </description>
     <url>http://maven.apache.org</url>

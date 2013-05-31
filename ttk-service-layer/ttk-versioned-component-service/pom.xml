@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ttk-versioned-component-service</artifactId>
     <packaging>jar</packaging>
-    <name>${branch}:L2: Service Layer: API</name>
+    <name>${branch}:L2: Service Layer: Versioned component service</name>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>

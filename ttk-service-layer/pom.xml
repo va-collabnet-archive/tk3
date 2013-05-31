@@ -11,7 +11,7 @@
     <name>${branch}:L2: API Layer</name>
     <modules>
         <module>ttk-versioned-component-service</module>
-        <module>ttk-api-with-fx-properties</module>
+        <module>ttk-versioned-fx-component-service</module>
         <module>ttk-auxiliary-taxonomies</module>
         <module>ttk-dto</module>
         <module>ttk-helpers</module>
