@@ -20,26 +20,30 @@ package org.ihtsdo.ttk.pl.fx.concept.details;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.value.WritableValue;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 
+import javafx.event.EventHandler;
+
 import javafx.fxml.FXMLLoader;
 
-import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -60,8 +64,6 @@ import static javafx.geometry.VPos.BOTTOM;
 import static javafx.geometry.VPos.CENTER;
 import static javafx.geometry.VPos.TOP;
 
-import static javafx.scene.layout.Region.USE_PREF_SIZE;
-
 import static org.ihtsdo.ttk.logic.DefinitionPartType.AND;
 import static org.ihtsdo.ttk.logic.DefinitionPartType.CONCEPT_REFERENCE_DEFINED;
 import static org.ihtsdo.ttk.logic.DefinitionPartType.DEFINITION_ROOT;
@@ -81,23 +83,18 @@ import static org.ihtsdo.ttk.logic.DefinitionPartType.UNIVERSAL_RESTRICTION;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import com.sun.javafx.css.StyleableBooleanProperty;
-import com.sun.javafx.css.StyleableDoubleProperty;
-import com.sun.javafx.css.StyleableObjectProperty;
-import com.sun.javafx.css.StyleableProperty;
-import com.sun.javafx.css.converters.BooleanConverter;
-import com.sun.javafx.css.converters.EnumConverter;
-import com.sun.javafx.css.converters.SizeConverter;
-
 import java.io.IOException;
 
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.layout.AnchorPane;
+import org.ihtsdo.ttk.pl.fx.helper.Drag;
 
 /**
  *
@@ -170,22 +167,10 @@ public class DefinitionPane extends Pane {
    private DefinitionTree definitionTree;
 
    /** Field description */
-   private DoubleProperty hgap;
-
-   /** Field description */
-   private DoubleProperty vgap;
-
-   /** Field description */
    private ObjectProperty<Pos> alignment;
 
    /** Field description */
-   private BooleanProperty gridLinesVisible;
-
-   /** Field description */
    private Group gridLines;
-
-   /** Field description */
-   private double[] rowMinHeight;
 
    /** Field description */
    private double[] rowPrefHeight;
@@ -197,13 +182,13 @@ public class DefinitionPane extends Pane {
    private double[] rowHeights;
 
    /** Field description */
-   private double[] columnMinWidth;
+   private double[] rowMaxY;
 
    /** Field description */
    private double[] columnPrefWidth;
 
    /** Field description */
-   private double[] columnWidths;
+   private double[] columnMaxX;
 
    {
       getStyleClass().add("dl-grid");
@@ -219,6 +204,18 @@ public class DefinitionPane extends Pane {
     */
    public DefinitionPane() {
       super();
+      setOnDragOver(new EventHandler<DragEvent>() {
+         @Override
+         public void handle(DragEvent event) {
+            System.out.println("OnDragOver2: " + event.getSceneX() + "," + event.getSceneY());
+
+            if (Drag.getDragImageView() != null) {
+               Point2D localPoint = sceneToLocal(new Point2D(event.getSceneX(), event.getSceneY()));
+
+               Drag.getDragImageView().relocate((int) localPoint.getX(), (int) localPoint.getY());
+            }
+         }
+      });
       getChildren().addListener(new ListChangeListener<Node>() {
          @Override
          public void onChanged(Change<? extends Node> c) {
@@ -247,38 +244,25 @@ public class DefinitionPane extends Pane {
    private void addDefinitionTreeEdges() {
       this.getChildren().remove(this.edges);
       this.edges.getChildren().clear();
+
       // Add edges here.
       for (Node parentNode : getChildren()) {
          try {
             DefinitionPart defPart =
                (DefinitionPart) parentNode.getProperties().get(DefinitionPane.PART_FOR_NODE);
 
-            if (defPart != null && isOriginNodeOrDestinationNode(defPart)) {
-               Integer columnIndex = getColumnIndex(parentNode);
-               Integer columnSpan = getColumnSpan(parentNode);
-               double width = columnWidths[columnIndex];
-               for (int i = 1; i < columnSpan; i++) {
-                   width += columnWidths[columnIndex + i];
-               }
-               Integer rowIndex = getRowIndex(parentNode);
-               double rowHeight = 0;
-               for (int i = 0; i <= rowIndex; i++) {
-                   rowHeight += rowHeights[i];
-               }
-               Bounds startBounds = parentNode.getBoundsInParent();
-               double startX      = startBounds.getMinX() + width;
-               double startY      = rowHeight;
+            if ((defPart != null) && isOriginNodeOrDestinationNode(defPart)) {
+               Integer columnIndex    = getColumnIndex(parentNode);
+               Integer columnSpan     = getColumnSpan(parentNode);
+               Integer endColumnIndex = columnIndex + columnSpan - 1;
+               Integer rowIndex       = getRowIndex(parentNode);
+               double  startX         = columnMaxX[endColumnIndex];
+               double  startY         = Math.ceil(getRowAverage(rowIndex));
 
                for (DefinitionPart child : getDestinationNodes(defPart)) {
                   Node   childNode = partNodeMap.get(child);
-                  Integer childRowIndex = getRowIndex(childNode);
-                  double childRowHeight = 0;
-                  for (int i = 0; i <= childRowIndex; i++) {
-                    childRowHeight += rowHeights[i];
-                  }
-                  Bounds endBounds = childNode.getBoundsInParent();
-                  double endX      = endBounds.getMinX();
-                  double endY      = childRowHeight;
+                  double endX      = columnMaxX[getColumnIndex(childNode) - 1];
+                  double endY      = Math.ceil(getRowAverage(getRowIndex(childNode)));
                   Path   path      = new Path();
 
                   path.getElements().add(new MoveTo(startX, startY));
@@ -290,6 +274,9 @@ public class DefinitionPane extends Pane {
             Logger.getLogger(DefinitionPane.class.getName()).log(Level.SEVERE, null, ex);
          }
       }
+
+      edges.setLayoutX(0);
+      edges.setLayoutY(0);
       this.getChildren().add(this.edges);
    }
 
@@ -306,15 +293,14 @@ public class DefinitionPane extends Pane {
       final double snaphgap     = snapSpace(getHgap());
       final double left         = snapSpace(getInsets().getLeft());
       final double right        = snapSpace(getInsets().getRight());
-      final int    numColumns   = columnWidths.length;
+      final int    numColumns   = columnPrefWidth.length;
       final double hgaps        = snaphgap * (numColumns - 1);
       double       columnTotal  = hgaps;
-      final double contentWidth = getWidth() - left - right;
 
       // compute non-percentage column widths
       for (int i = 0; i < numColumns; i++) {
-         columnWidths[i] = boundedSize(areaWidths[i], columnMinWidth[i], columnPrefWidth[i]);
-         columnTotal     += columnWidths[i];
+         columnPrefWidth[i] = Math.min(areaWidths[i], columnPrefWidth[i]);
+         columnTotal     += columnPrefWidth[i];
       }
 
       double widthAvailable = ((width == -1)
@@ -344,66 +330,25 @@ public class DefinitionPane extends Pane {
     * @return
     */
    private double adjustRowHeights(double areaHeights[], double height) {
-      final double snapvgap      = snapSpace(getVgap());
-      final double top           = snapSpace(getInsets().getTop());
-      final double bottom        = snapSpace(getInsets().getBottom());
-      final int    numRows       = rowHeights.length;
-      final double vgaps         = snapvgap * (numRows - 1);
-      double       rowTotal      = vgaps;
-      final double contentHeight = getHeight() - top - bottom;
+      final double snapvgap = snapSpace(getVgap());
+      final int    numRows  = rowHeights.length;
+      final double vgaps    = snapvgap * (numRows - 1);
+      double       rowTotal = vgaps;
 
       // compute non-percentage row heights
       for (int i = 0; i < numRows; i++) {
-         rowHeights[i] = boundedSize(areaHeights[i], rowMinHeight[i], rowPrefHeight[i]);
-         rowTotal      += rowHeights[i];
+         rowHeights[i] = Math.min(areaHeights[i], rowPrefHeight[i]);
+
+         if (i > 0) {
+            rowMaxY[i] = rowHeights[i] + rowMaxY[i - 1];
+         } else {
+            rowMaxY[i] = rowHeights[i];
+         }
+
+         rowTotal += rowHeights[i];
       }
 
-/*
-      double heightAvailable = ((height == -1)
-                                ? prefHeight(-1)
-                                : height) - top - bottom - rowTotal;
-
-      // now that both fixed and percentage rows have been computed, divy up any surplus or deficit
-      if (heightAvailable != 0) {
-
-         // maybe grow or shrink row heights
-         double remaining = growOrShrinkRowHeights(Priority.ALWAYS, heightAvailable);
-
-         remaining = growOrShrinkRowHeights(Priority.SOMETIMES, remaining);
-         rowTotal  += (heightAvailable - remaining);
-      }
-*/
       return rowTotal;
-   }
-
-   /**
-    * The alignment of of the grid within the defpane's width and height.
-    *
-    * @return
-    */
-   public final ObjectProperty<Pos> alignmentProperty() {
-      if (alignment == null) {
-         alignment = new StyleableObjectProperty<Pos>(Pos.TOP_LEFT) {
-            @Override
-            public void invalidated() {
-               requestLayout();
-            }
-            @Override
-            public StyleableProperty getStyleableProperty() {
-               return DefinitionPane.StyleableProperties.ALIGNMENT;
-            }
-            @Override
-            public Object getBean() {
-               return DefinitionPane.this;
-            }
-            @Override
-            public String getName() {
-               return "alignment";
-            }
-         };
-      }
-
-      return alignment;
    }
 
    /**
@@ -424,61 +369,6 @@ public class DefinitionPane extends Pane {
       return Math.min(Math.max(value, min), Math.max(min, max));
    }
 
-   /**
-    * Method description
-    *
-    *
-    * @param child
-    * @param margin
-    * @param width
-    *
-    * @return
-    */
-   private double computeChildMinAreaHeight(Node child, Insets margin, double width) {
-      double top    = (margin != null)
-                      ? snapSpace(margin.getTop(), isSnapToPixel())
-                      : 0;
-      double bottom = (margin != null)
-                      ? snapSpace(margin.getBottom(), isSnapToPixel())
-                      : 0;
-      double alt    = -1;
-
-      if (child.getContentBias() == Orientation.HORIZONTAL) {    // width depends on height
-         alt = snapSize((width != -1)
-                        ? boundedSize(width, child.minWidth(-1), child.maxWidth(-1))
-                        : child.minWidth(-1));
-      }
-
-      return top + snapSize(child.minHeight(alt)) + bottom;
-   }
-
-   /**
-    * Method description
-    *
-    *
-    * @param child
-    * @param margin
-    * @param height
-    *
-    * @return
-    */
-   private double computeChildMinAreaWidth(Node child, Insets margin, double height) {
-      double left  = (margin != null)
-                     ? snapSpace(margin.getLeft(), isSnapToPixel())
-                     : 0;
-      double right = (margin != null)
-                     ? snapSpace(margin.getRight(), isSnapToPixel())
-                     : 0;
-      double alt   = -1;
-
-      if (child.getContentBias() == Orientation.VERTICAL) {    // width depends on height
-         alt = snapSize((height != -1)
-                        ? boundedSize(height, child.minHeight(-1), child.maxHeight(-1))
-                        : child.minHeight(-1));
-      }
-
-      return left + snapSize(child.minWidth(alt)) + right;
-   }
 
    /**
     * Method description
@@ -492,16 +382,16 @@ public class DefinitionPane extends Pane {
     */
    private double computeChildPrefAreaHeight(Node child, Insets margin, double width) {
       double top    = (margin != null)
-                      ? snapSpace(margin.getTop(), isSnapToPixel())
+                      ? Math.ceil(margin.getTop())
                       : 0;
       double bottom = (margin != null)
-                      ? snapSpace(margin.getBottom(), isSnapToPixel())
+                      ? Math.ceil(margin.getBottom())
                       : 0;
       double left   = (margin != null)
-                      ? snapSpace(margin.getLeft(), isSnapToPixel())
+                      ? Math.ceil(margin.getLeft())
                       : 0;
       double right  = (margin != null)
-                      ? snapSpace(margin.getRight(), isSnapToPixel())
+                      ? Math.ceil(margin.getRight())
                       : 0;
       double alt    = -1;
 
@@ -527,16 +417,16 @@ public class DefinitionPane extends Pane {
     */
    private double computeChildPrefAreaWidth(Node child, Insets margin, double height) {
       double top    = (margin != null)
-                      ? snapSpace(margin.getTop(), isSnapToPixel())
+                      ? Math.ceil(margin.getTop())
                       : 0;
       double bottom = (margin != null)
-                      ? snapSpace(margin.getBottom(), isSnapToPixel())
+                      ? Math.ceil(margin.getBottom())
                       : 0;
       double left   = (margin != null)
-                      ? snapSpace(margin.getLeft(), isSnapToPixel())
+                      ? Math.ceil(margin.getLeft())
                       : 0;
       double right  = (margin != null)
-                      ? snapSpace(margin.getRight(), isSnapToPixel())
+                      ? Math.ceil(margin.getRight())
                       : 0;
       double alt    = -1;
 
@@ -558,17 +448,12 @@ public class DefinitionPane extends Pane {
     * @param heights
     */
    private void computeColumnMetrics(int numColumns, double heights[]) {
-      columnMinWidth  = createDoubleArray(numColumns, 0);
       columnPrefWidth = createDoubleArray(numColumns, 0);
-      columnWidths    = createDoubleArray(numColumns, 0);
+      columnMaxX      = createDoubleArray(numColumns, 0);
 
       final double snaphgap = snapSpace(getHgap());
 
       for (int i = 0; i < numColumns; i++) {
-         boolean    computeMin  = true;
-         boolean    computeMax  = true;
-         boolean    computePref = true;
-         boolean    computeGrow = true;
          List<Node> startNodes  = new ArrayList<>();
          List<Node> endNodes    = new ArrayList<>();
 
@@ -588,7 +473,6 @@ public class DefinitionPane extends Pane {
             }
          }
 
-         if (computeMin || computeMax || computePref || computeGrow) {
 
             // compute from content
             for (int j = 0; j < endNodes.size(); j++) {
@@ -603,7 +487,7 @@ public class DefinitionPane extends Pane {
 
                int rowIndex = getNodeRowIndex(child);
 
-               if (computePref) {
+               
                   double preferredWidth = computeChildPrefAreaWidth(child, margin, heights[rowIndex]);
 
                   if (colspan > 1) {
@@ -617,49 +501,12 @@ public class DefinitionPane extends Pane {
                   }
 
                   columnPrefWidth[i] = Math.max(columnPrefWidth[i], preferredWidth);
-               }
-
-               if (computeMin) {
-                  double minimumWidth = computeChildMinAreaWidth(child, margin, heights[rowIndex]);
-
-                  if (colspan > 1) {
-                     double w = 0.0f;
-
-                     for (int k = columnIndex; k < columnIndex + colspan - 1; k++) {
-                        w += columnMinWidth[k];
-                     }
-
-                     minimumWidth -= w + ((colspan - 1) * snaphgap);
-                  }
-
-                  columnMinWidth[i] = Math.max(columnMinWidth[i], minimumWidth);
-               }
+               
             }
-         }
+         
 
-         if (columnMinWidth[i] == USE_PREF_SIZE) {
-
-            // RT-20573 Use the bounded size if the pref has not been set
-            columnMinWidth[i] = (columnPrefWidth[i] == 0)
-                                ? (boundedSize(columnPrefWidth[i], columnMinWidth[i], columnPrefWidth[i])
-                                   == USE_PREF_SIZE)
-                                  ? 0
-                                  : boundedSize(columnPrefWidth[i], columnMinWidth[i], columnPrefWidth[i])
-                                : columnPrefWidth[i];
-         }
-
-         if (columnPrefWidth[i] == USE_PREF_SIZE) {
-            columnPrefWidth[i] = (columnPrefWidth[i] == 0)
-                                 ? (boundedSize(columnPrefWidth[i], columnMinWidth[i], columnPrefWidth[i])
-                                    == USE_PREF_SIZE)
-                                   ? 0
-                                   : boundedSize(columnPrefWidth[i], columnMinWidth[i], columnPrefWidth[i])
-                                 : columnPrefWidth[i];
-         }
-
-         columnPrefWidth[i] = boundedSize(columnPrefWidth[i], columnMinWidth[i], columnPrefWidth[i]);
-         System.out.println("computeColumnMetrics: column " + i + ": h=" + columnWidths[i] + " min="
-                            + columnMinWidth[i] + " pref=" + columnPrefWidth[i]);
+//       System.out.println("computeColumnMetrics: column " + i + ": h=" + columnWidths[i] + " min="
+//                          + columnMinWidth[i] + " pref=" + columnPrefWidth[i]);
       }
    }
 
@@ -707,17 +554,7 @@ public class DefinitionPane extends Pane {
     */
    @Override
    protected double computeMinHeight(double width) {
-      computeGridMetrics();
-
-      if (getContentBias() == Orientation.HORIZONTAL) {
-         adjustColumnWidths(columnMinWidth, width);
-         computeRowMetrics(rowHeights.length, columnWidths);
-      }
-
-       addDefinitionTreeEdges();
-       return snapSpace(getInsets().getTop())
-             + (computeTotalHeight(rowMinHeight) + (rowMinHeight.length - 1) * snapSpace(getVgap()))
-             + snapSpace(getInsets().getBottom());
+      return computePrefHeight(width);
    }
 
    /**
@@ -730,17 +567,7 @@ public class DefinitionPane extends Pane {
     */
    @Override
    protected double computeMinWidth(double height) {
-      computeGridMetrics();
-
-      if (getContentBias() == Orientation.VERTICAL) {
-         adjustRowHeights(rowMinHeight, height);
-         computeColumnMetrics(columnWidths.length, rowHeights);
-      }
-
-       addDefinitionTreeEdges();
-       return snapSpace(getInsets().getLeft())
-             + (computeTotalWidth(columnMinWidth) + (columnMinWidth.length - 1) * snapSpace(getHgap()))
-             + snapSpace(getInsets().getRight());
+      return computePrefWidth(height);
    }
 
    /**
@@ -757,11 +584,12 @@ public class DefinitionPane extends Pane {
 
       if (getContentBias() == Orientation.HORIZONTAL) {
          adjustColumnWidths(columnPrefWidth, width);
-         computeRowMetrics(rowHeights.length, columnWidths);
+         computeRowMetrics(rowHeights.length, columnPrefWidth);
       }
 
-       addDefinitionTreeEdges();
-       return snapSpace(getInsets().getTop())
+      addDefinitionTreeEdges();
+
+      return snapSpace(getInsets().getTop())
              + (computeTotalHeight(rowPrefHeight) + (rowPrefHeight.length - 1) * snapSpace(getVgap()))
              + snapSpace(getInsets().getBottom());
    }
@@ -780,11 +608,12 @@ public class DefinitionPane extends Pane {
 
       if (getContentBias() == Orientation.VERTICAL) {
          adjustRowHeights(rowPrefHeight, height);
-         computeColumnMetrics(columnWidths.length, rowHeights);
+         computeColumnMetrics(columnPrefWidth.length, rowHeights);
       }
 
-       addDefinitionTreeEdges();
-       return snapSpace(getInsets().getLeft())
+      addDefinitionTreeEdges();
+
+      return snapSpace(getInsets().getLeft())
              + (computeTotalWidth(columnPrefWidth) + (columnPrefWidth.length - 1) * snapSpace(getHgap()))
              + snapSpace(getInsets().getRight());
    }
@@ -797,15 +626,14 @@ public class DefinitionPane extends Pane {
     * @param widths
     */
    private void computeRowMetrics(int numRows, double widths[]) {
-      rowMinHeight  = createDoubleArray(numRows, 0);
       rowPrefHeight = createDoubleArray(numRows, 0);
       rowHeights    = createDoubleArray(numRows, 0);
+      rowMaxY       = createDoubleArray(numRows, 0);
       rowBaseline   = createDoubleArray(numRows, 0);
 
       double snapvgap = snapSpace(getVgap());
 
       for (int i = 0; i < numRows; i++) {
-         boolean    computeMin  = true;
          boolean    computePref = true;
          List<Node> startNodes  = new ArrayList<>();
          List<Node> endNodes    = new ArrayList<>();
@@ -837,7 +665,7 @@ public class DefinitionPane extends Pane {
          rowBaseline[i] = getMaxAreaBaselineOffset(baselineNodes, margins);
          baselineNodes.clear();
 
-         if (computeMin || computePref || (rowVPos == VPos.BASELINE)) {
+         if (computePref || (rowVPos == VPos.BASELINE)) {
 
             // compute from content
             for (int j = 0; j < endNodes.size(); j++) {
@@ -879,41 +707,11 @@ public class DefinitionPane extends Pane {
 
                   rowPrefHeight[i] = Math.max(rowPrefHeight[i], preferredHeight);
                }
-
-               if (computeMin) {
-                  double minimumHeight = computeChildMinAreaHeight(child, margin, widths[colIndex]);
-
-                  if (rowspan > 1) {
-                     double h = 0.0f;
-
-                     for (int k = rowIndex; k < rowIndex + rowspan - 1; k++) {
-                        h += rowMinHeight[k];
-                     }
-
-                     minimumHeight -= h + ((rowspan - 1) * snapvgap);
-                  } else if (rowVPos == VPos.BASELINE) {
-                     minimumHeight = rowBaseline[i] + (minimumHeight - child.getBaselineOffset() - top);
-                  }
-
-                  rowMinHeight[i] = Math.max(rowMinHeight[i], minimumHeight);
-               }
             }
          }
 
-         if (rowMinHeight[i] == USE_PREF_SIZE) {
-
-            // RT-20573 Use the bounded size if the pref has not been set
-            rowMinHeight[i] = (rowPrefHeight[i] == 0)
-                              ? (boundedSize(rowPrefHeight[i], rowMinHeight[i], rowPrefHeight[i])
-                                 == USE_PREF_SIZE)
-                                ? 0
-                                : boundedSize(rowPrefHeight[i], rowMinHeight[i], rowPrefHeight[i])
-                              : rowPrefHeight[i];
-         }
-
-         rowPrefHeight[i] = boundedSize(rowPrefHeight[i], rowMinHeight[i], rowPrefHeight[i]);
-         System.out.println("computeRowMetrics: row " + i + ": h=" + rowHeights[i] + " min="
-                            + rowMinHeight[i] + " pref=" + rowPrefHeight[i]);
+//       System.out.println("computeRowMetrics: row " + i + ": h=" + rowHeights[i] + " min="
+//                          + rowMinHeight[i] + " pref=" + rowPrefHeight[i]);
       }
    }
 
@@ -1036,6 +834,7 @@ public class DefinitionPane extends Pane {
    private Line createGridLine(double startX, double startY, double endX, double endY) {
       Line line = new Line();
 
+      line.setStrokeWidth(0.1);
       line.setStartX(startX);
       line.setStartY(startY);
       line.setEndX(endX);
@@ -1044,46 +843,6 @@ public class DefinitionPane extends Pane {
       line.setStrokeDashOffset(GRID_LINE_DASH);
 
       return line;
-   }
-
-   /**
-    * For debug purposes only: controls whether lines are displayed to show the defpane's rows and columns.
-    * Default is <code>false</code>.
-    *
-    * @return
-    */
-   public final BooleanProperty gridLinesVisibleProperty() {
-      if (gridLinesVisible == null) {
-         gridLinesVisible = new StyleableBooleanProperty() {
-            @Override
-            protected void invalidated() {
-               if (get()) {
-                  gridLines = new Group();
-                  gridLines.setManaged(false);
-                  getChildren().add(gridLines);
-               } else {
-                  getChildren().remove(gridLines);
-                  gridLines = null;
-               }
-
-               requestLayout();
-            }
-            @Override
-            public StyleableProperty getStyleableProperty() {
-               return DefinitionPane.StyleableProperties.GRID_LINES_VISIBLE;
-            }
-            @Override
-            public Object getBean() {
-               return DefinitionPane.this;
-            }
-            @Override
-            public String getName() {
-               return "gridLinesVisible";
-            }
-         };
-      }
-
-      return gridLinesVisible;
    }
 
    /**
@@ -1100,7 +859,7 @@ public class DefinitionPane extends Pane {
       List<Integer> adjusting = new ArrayList<>();
       List<Integer> adjusted  = new ArrayList<>();
 
-      for (int i = 0; i < columnWidths.length; i++) {
+      for (int i = 0; i < columnPrefWidth.length; i++) {
          if (shrinking) {
             adjusting.add(i);
          }
@@ -1119,13 +878,13 @@ public class DefinitionPane extends Pane {
             for (int i = 0; i < adjusting.size(); i++) {
                final int    index = adjusting.get(i);
                final double limit = (shrinking
-                                     ? columnMinWidth[index]
-                                     : columnPrefWidth[index]) - columnWidths[index];    // negative in shrinking case
+                                     ? columnPrefWidth[index]
+                                     : columnPrefWidth[index]) - columnPrefWidth[index];    // negative in shrinking case
                final double change = (Math.abs(limit) <= Math.abs(portion))
                                      ? limit
                                      : portion;
 
-               columnWidths[index] += change;
+               columnPrefWidth[index] += change;
 
                // if (parentNode.id.startsWith("debug.")) println("{if (shrinking) "vshrink" else "vgrow"}: {parentNode.id} portion({portion})=available({available})/({sizeof adjusting}) change={change}");
                available -= change;
@@ -1162,41 +921,17 @@ public class DefinitionPane extends Pane {
          }
       }
 
-      for (int i = 0; i < columnWidths.length; i++) {
-         columnWidths[i] = snapSpace(columnWidths[i]);
+      for (int i = 0; i < columnPrefWidth.length; i++) {
+         columnPrefWidth[i] = Math.ceil(columnPrefWidth[i]);
+
+         if (i == 0) {
+            columnMaxX[i] = columnPrefWidth[i];
+         } else {
+            columnMaxX[i] = columnMaxX[i - 1] + columnPrefWidth[i];
+         }
       }
 
       return available;    // might be negative in shrinking case
-   }
-
-   /**
-    * The width of the horizontal gaps between columns.
-    *
-    * @return
-    */
-   public final DoubleProperty hgapProperty() {
-      if (hgap == null) {
-         hgap = new StyleableDoubleProperty(0) {
-            @Override
-            public void invalidated() {
-               requestLayout();
-            }
-            @Override
-            public StyleableProperty getStyleableProperty() {
-               return DefinitionPane.StyleableProperties.HGAP;
-            }
-            @Override
-            public Object getBean() {
-               return DefinitionPane.this;
-            }
-            @Override
-            public String getName() {
-               return "hgap";
-            }
-         };
-      }
-
-      return hgap;
    }
 
    /**
@@ -1229,11 +964,11 @@ public class DefinitionPane extends Pane {
          columnTotal = adjustColumnWidths(columnPrefWidth, width);
       } else if (contentBias == Orientation.HORIZONTAL) {
          columnTotal = adjustColumnWidths(columnPrefWidth, width);
-         computeRowMetrics(rowHeights.length, columnWidths);
+         computeRowMetrics(rowHeights.length, columnPrefWidth);
          rowTotal = adjustRowHeights(rowPrefHeight, height);
       } else if (contentBias == Orientation.VERTICAL) {
          rowTotal = adjustRowHeights(rowPrefHeight, height);
-         computeColumnMetrics(columnWidths.length, rowHeights);
+         computeColumnMetrics(columnPrefWidth.length, rowHeights);
          columnTotal = adjustColumnWidths(columnPrefWidth, width);
       }
 
@@ -1251,7 +986,7 @@ public class DefinitionPane extends Pane {
             double areaX       = x;
 
             for (int j = 0; j < columnIndex; j++) {
-               areaX += columnWidths[j] + snaphgap;
+               areaX += columnPrefWidth[j] + snaphgap;
             }
 
             double areaY = y;
@@ -1260,10 +995,10 @@ public class DefinitionPane extends Pane {
                areaY += rowHeights[j] + snapvgap;
             }
 
-            double areaW = columnWidths[columnIndex];
+            double areaW = columnPrefWidth[columnIndex];
 
             for (int j = 2; j <= colspan; j++) {
-               areaW += columnWidths[columnIndex + j - 1] + snaphgap;
+               areaW += columnPrefWidth[columnIndex + j - 1] + snaphgap;
             }
 
             double areaH = rowHeights[rowIndex];
@@ -1283,8 +1018,8 @@ public class DefinitionPane extends Pane {
 
       edges.getChildren().clear();
       layoutGridLines(x, y, rowTotal, columnTotal);
-       addDefinitionTreeEdges();
-       performingLayout = false;
+      addDefinitionTreeEdges();
+      performingLayout = false;
    }
 
    /**
@@ -1297,9 +1032,14 @@ public class DefinitionPane extends Pane {
     * @param rowWidth
     */
    private void layoutGridLines(double x, double y, double columnHeight, double rowWidth) {
-      if (!isGridLinesVisible()) {
-         return;
-      }
+      x            = Math.ceil(x);
+      y            = Math.ceil(y);
+      columnHeight = Math.ceil(columnHeight);
+      rowWidth     = Math.ceil(rowWidth);
+      getChildren().remove(gridLines);
+      gridLines = new Group();
+      gridLines.setManaged(false);
+      getChildren().add(gridLines);
 
       if (!gridLines.getChildren().isEmpty()) {
          gridLines.getChildren().clear();
@@ -1309,16 +1049,16 @@ public class DefinitionPane extends Pane {
       double linex = x;
       double liney = y;
 
-      for (int i = 0; i <= columnWidths.length; i++) {
+      for (int i = 0; i <= columnPrefWidth.length; i++) {
          gridLines.getChildren().add(createGridLine(linex, liney, linex, liney + columnHeight));
 
-         if ((i > 0) && (i < columnWidths.length) && (getHgap() != 0)) {
+         if ((i > 0) && (i < columnPrefWidth.length) && (getHgap() != 0)) {
             linex += getHgap();
             gridLines.getChildren().add(createGridLine(linex, liney, linex, liney + columnHeight));
          }
 
-         if (i < columnWidths.length) {
-            linex += columnWidths[i];
+         if (i < columnPrefWidth.length) {
+            linex += columnPrefWidth[i];
          }
       }
 
@@ -1370,11 +1110,92 @@ public class DefinitionPane extends Pane {
     * @throws ContradictionException
     * @throws IOException
     */
-   private Node setupNode(DefinitionPart part, DefinitionTree definitionTree, DefinitionPartType partType)
+   private Node setupNode(final DefinitionPart part, DefinitionTree definitionTree,
+                          DefinitionPartType partType)
            throws IOException, ContradictionException {
-      Label partLabel = new Label(part.getText(definitionTree.getViewCoordinate()));
-
+      final Label partLabel = new Label(part.getText(definitionTree.getViewCoordinate()));
+      partLabel.setCursor(Cursor.OPEN_HAND);
       setWidthAndStyleClass(partLabel, partType);
+
+      partLabel.setOnDragDetected(new EventHandler<MouseEvent>() {
+         @Override
+         public void handle(MouseEvent event) {
+            System.out.println("OnDragDetected: " + partLabel.getText());
+            SnapshotParameters snapParams = new SnapshotParameters();
+
+            snapParams.setFill(Color.TRANSPARENT);
+            ImageView dragImageView = new ImageView();
+            dragImageView.setImage(partLabel.snapshot(snapParams, null));
+            dragImageView.setOpacity(0.5);
+            ((AnchorPane) partLabel.getScene().getRoot()).getChildren().add(dragImageView);
+
+            ((Node) event.getSource()).setCursor(Cursor.CLOSED_HAND);
+            Drag.startDrag(partLabel, part, dragImageView);
+            partLabel.startFullDrag();
+         }
+      });
+      partLabel.setOnMouseReleased(new EventHandler<MouseEvent>() {
+         @Override
+         public void handle(MouseEvent me) {
+            System.out.println("OnMouseReleased: " + partLabel.getText());
+            ((Node) me.getSource()).setCursor(Cursor.OPEN_HAND);
+            partLabel.getStyleClass().remove("dl-drag-accept");
+            if (Drag.getDragImageView() != null) {
+               Drag.getDragImageView().setVisible(false);
+                ((AnchorPane) partLabel.getScene().getRoot()).getChildren().remove(Drag.getDragImageView());
+               Drag.endDrag();
+            }
+         }
+      });
+      
+      partLabel.setOnMouseDragReleased(new EventHandler<MouseEvent>() {
+         @Override
+         public void handle(MouseEvent me) {
+            System.out.println("OnMouseDragReleased: " + partLabel.getText());
+            partLabel.getStyleClass().remove("dl-drag-accept");
+            ((Node) me.getSource()).setCursor(Cursor.OPEN_HAND);
+            if (Drag.getDragImageView() != null) {
+               Drag.getDragImageView().setVisible(false);
+                ((AnchorPane) partLabel.getScene().getRoot()).getChildren().remove(Drag.getDragImageView());
+               Drag.endDrag();
+            }
+         }
+      });
+
+      partLabel.setOnMouseDragEntered(new EventHandler<MouseDragEvent>() {
+
+          @Override
+          public void handle(MouseDragEvent t) {
+            System.out.println("OnMouseDragEntered: " + partLabel.getText());
+            if (t.getGestureSource() != t.getTarget()) {
+                partLabel.getStyleClass().add("dl-drag-accept");
+            }
+            
+          }
+          
+      });
+      
+      partLabel.setOnMouseDragExited(new EventHandler<MouseDragEvent>() {
+
+          @Override
+          public void handle(MouseDragEvent t) {
+            partLabel.getStyleClass().remove("dl-drag-accept");
+            System.out.println("OnMouseDragExited: " + partLabel.getText());
+          }
+          
+      });
+
+      
+      partLabel.setOnMouseDragged(new EventHandler<MouseEvent>() {
+         @Override
+         public void handle(MouseEvent event) {
+            if (Drag.getDragImageView() != null) {
+               Drag.getDragImageView().relocate(event.getSceneX(), event.getSceneY());
+            }
+
+            // event.consume();
+         }
+      });
 
       return partLabel;
    }
@@ -1428,105 +1249,12 @@ public class DefinitionPane extends Pane {
    }
 
    /**
-    * Method description
-    *
-    *
-    * @param value
-    * @param snapToPixel
-    *
-    * @return
-    */
-   static double snapPosition(double value, boolean snapToPixel) {
-      return snapToPixel
-             ? Math.round(value)
-             : value;
-   }
-
-   /**
-    * Method description
-    *
-    *
-    * @param value
-    * @param snapToPixel
-    *
-    * @return
-    */
-   static double snapSize(double value, boolean snapToPixel) {
-      return snapToPixel
-             ? Math.ceil(value)
-             : value;
-   }
-
-   /**
-    * Method description
-    *
-    *
-    * @param value
-    * @param snapToPixel
-    *
-    * @return
-    */
-   static double snapSpace(double value, boolean snapToPixel) {
-      return snapToPixel
-             ? Math.round(value)
-             : value;
-   }
-
-   /**
-    * Method description
-    *
-    *
-    * @param numbers
-    *
-    * @return
-    */
-   private static double sum(double[] numbers) {
-      double total = 0;
-
-      for (double n : numbers) {
-         total += n;
-      }
-
-      return total;
-   }
-
-   /**
     * Returns a string representation of this {@code DefinitionPane} object.
     * @return a string representation of this {@code DefinitionPane} object.
     */
    @Override
    public String toString() {
       return "Grid hgap=" + getHgap() + ", vgap=" + getVgap() + ", alignment=" + getAlignment();
-   }
-
-   /**
-    * The height of the vertical gaps between rows.
-    *
-    * @return
-    */
-   public final DoubleProperty vgapProperty() {
-      if (vgap == null) {
-         vgap = new StyleableDoubleProperty(0) {
-            @Override
-            public void invalidated() {
-               requestLayout();
-            }
-            @Override
-            public StyleableProperty getStyleableProperty() {
-               return DefinitionPane.StyleableProperties.VGAP;
-            }
-            @Override
-            public Object getBean() {
-               return DefinitionPane.this;
-            }
-            @Override
-            public String getName() {
-               return "vgap";
-            }
-         };
-      }
-
-      return vgap;
    }
 
    /**
@@ -1539,18 +1267,6 @@ public class DefinitionPane extends Pane {
       return (alignment == null)
              ? Pos.TOP_LEFT
              : alignment.get();
-   }
-
-   /**
-    * Method description
-    *
-    *
-    * @param columnIndex
-    *
-    * @return
-    */
-   private HPos getColumnHalignment(int columnIndex) {
-      return HPos.LEFT;
    }
 
    /**
@@ -1669,9 +1385,7 @@ public class DefinitionPane extends Pane {
     * @return
     */
    private double getHgap() {
-      return (hgap == null)
-             ? 0
-             : hgap.get();
+      return 0;
    }
 
    /**
@@ -1814,6 +1528,30 @@ public class DefinitionPane extends Pane {
    }
 
    /**
+    * Method description
+    *
+    *
+    * @param rowIndex
+    *
+    * @return
+    */
+   private double getRowAverage(int rowIndex) {
+      return (getRowStart(rowIndex) + getRowEnd(rowIndex)) / 2;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @param rowIndex
+    *
+    * @return
+    */
+   private double getRowEnd(int rowIndex) {
+      return rowMaxY[rowIndex];
+   }
+
+   /**
     * Returns the child's row index constraint if set.
     * @param child the child parentNode of a defpane
     * @return the row index for the child or null if no row index was set
@@ -1835,12 +1573,16 @@ public class DefinitionPane extends Pane {
     * Method description
     *
     *
+    * @param rowIndex
+    *
     * @return
     */
-   private double getVgap() {
-      return (vgap == null)
-             ? 0
-             : vgap.get();
+   private double getRowStart(int rowIndex) {
+      if (rowIndex == 0) {
+         return 0;
+      }
+
+      return rowMaxY[rowIndex - 1];
    }
 
    /**
@@ -1849,10 +1591,8 @@ public class DefinitionPane extends Pane {
     *
     * @return
     */
-   private boolean isGridLinesVisible() {
-      return (gridLinesVisible == null)
-             ? false
-             : gridLinesVisible.get();
+   private double getVgap() {
+      return 0;
    }
 
    /**
@@ -1868,9 +1608,10 @@ public class DefinitionPane extends Pane {
     */
    private boolean isOriginNodeOrDestinationNode(DefinitionPart defPart)
            throws ContradictionException, IOException {
-       if (defPart == null) {
-           return false;
-       }
+      if (defPart == null) {
+         return false;
+      }
+
       switch (defPart.getPartType(definitionTree.getViewCoordinate())) {
       case AND :
       case OR :
@@ -2039,7 +1780,9 @@ public class DefinitionPane extends Pane {
             case EXISTENTIAL_RESTRICTION :
                node = setupNodeTextFromNid2(
                   part, definitionTree, partType,
-                  (Node) FXMLLoader.load(getClass().getResource("/org/ihtsdo/ttk/pl/fx/concept/details/fxml/ExistentialRestriction.fxml")));
+                  (Node) FXMLLoader.load(
+                     getClass().getResource(
+                        "/org/ihtsdo/ttk/pl/fx/concept/details/fxml/ExistentialRestriction.fxml")));
 
                break;
 
@@ -2064,7 +1807,8 @@ public class DefinitionPane extends Pane {
                break;
 
             case NECESSARY_SET :
-               node = FXMLLoader.load(getClass().getResource("/org/ihtsdo/ttk/pl/fx/concept/details/fxml/NecessarySet.fxml"));
+               node = FXMLLoader.load(
+                  getClass().getResource("/org/ihtsdo/ttk/pl/fx/concept/details/fxml/NecessarySet.fxml"));
 
                break;
 
@@ -2074,7 +1818,8 @@ public class DefinitionPane extends Pane {
                break;
 
             case SUFFICIENT_SET :
-               node = FXMLLoader.load(getClass().getResource("/org/ihtsdo/ttk/pl/fx/concept/details/fxml/SufficientSet.fxml"));
+               node = FXMLLoader.load(
+                  getClass().getResource("/org/ihtsdo/ttk/pl/fx/concept/details/fxml/SufficientSet.fxml"));
 
                break;
 
@@ -2086,12 +1831,15 @@ public class DefinitionPane extends Pane {
             case UNIVERSAL_RESTRICTION :
                node = setupNodeTextFromNid2(
                   part, definitionTree, partType,
-                  (Node) FXMLLoader.load(getClass().getResource("/org/ihtsdo/ttk/pl/fx/concept/details/fxml/ExistentialRestriction.fxml")));
+                  (Node) FXMLLoader.load(
+                     getClass().getResource(
+                        "/org/ihtsdo/ttk/pl/fx/concept/details/fxml/ExistentialRestriction.fxml")));
 
                break;
 
             case ROLE_GROUP :
-               node = FXMLLoader.load(getClass().getResource("/org/ihtsdo/ttk/pl/fx/concept/details/fxml/RoleGroup.fxml"));
+               node = FXMLLoader.load(
+                  getClass().getResource("/org/ihtsdo/ttk/pl/fx/concept/details/fxml/RoleGroup.fxml"));
 
                break;
 
@@ -2186,16 +1934,6 @@ public class DefinitionPane extends Pane {
     * Method description
     *
     *
-    * @param value
-    */
-   public final void setVgap(double value) {
-      vgapProperty().set(value);
-   }
-
-   /**
-    * Method description
-    *
-    *
     * @param partLabel
     * @param partType
     */
@@ -2203,82 +1941,5 @@ public class DefinitionPane extends Pane {
       partLabel.setMaxWidth(NODE_WIDTH);
       partLabel.getStyleClass().add(partType.getCssStyleClass());
       setMargin(partLabel, standardInset);
-   }
-
-   /**
-    *
-    *                         Stylesheet Handling
-    *
-    */
-
-   /**
-    * Super-lazy instantiation pattern from Bill Pugh.
-    * @treatAsPrivate implementation detail
-    */
-   private static class StyleableProperties {
-
-      /** Field description */
-      private static final StyleableProperty<DefinitionPane, Boolean> GRID_LINES_VISIBLE =
-         new StyleableProperty<DefinitionPane, Boolean>("-fx-grid-lines-visible",
-                               BooleanConverter.getInstance(), Boolean.FALSE) {
-         @Override
-         public boolean isSettable(DefinitionPane node) {
-            return (node.gridLinesVisibleProperty() == null) ||!node.gridLinesVisibleProperty().isBound();
-         }
-         @Override
-         public WritableValue<Boolean> getWritableValue(DefinitionPane node) {
-            return node.gridLinesVisibleProperty();
-         }
-      };
-
-      /** Field description */
-      private static final StyleableProperty<DefinitionPane, Number> HGAP =
-         new StyleableProperty<DefinitionPane, Number>("-fx-hgap", SizeConverter.getInstance(), 0.0) {
-         @Override
-         public boolean isSettable(DefinitionPane node) {
-            return (node.hgapProperty() == null) ||!node.hgapProperty().isBound();
-         }
-         @Override
-         public WritableValue<Number> getWritableValue(DefinitionPane node) {
-            return node.hgapProperty();
-         }
-      };
-
-      /** Field description */
-      private static final StyleableProperty<DefinitionPane, Pos> ALIGNMENT =
-         new StyleableProperty<DefinitionPane, Pos>("-fx-alignment", new EnumConverter<Pos>(Pos.class),
-                               Pos.TOP_LEFT) {
-         @Override
-         public boolean isSettable(DefinitionPane node) {
-            return (node.alignmentProperty() == null) ||!node.alignmentProperty().isBound();
-         }
-         @Override
-         public WritableValue<Pos> getWritableValue(DefinitionPane node) {
-            return node.alignmentProperty();
-         }
-      };
-
-      /** Field description */
-      private static final StyleableProperty<DefinitionPane, Number> VGAP =
-         new StyleableProperty<DefinitionPane, Number>("-fx-vgap", SizeConverter.getInstance(), 0.0) {
-         @Override
-         public boolean isSettable(DefinitionPane node) {
-            return (node.vgapProperty() == null) ||!node.vgapProperty().isBound();
-         }
-         @Override
-         public WritableValue<Number> getWritableValue(DefinitionPane node) {
-            return node.vgapProperty();
-         }
-      };
-
-      /** Field description */
-      private static final List<StyleableProperty> STYLEABLES;
-
-      static {
-         final List<StyleableProperty> styleables = new ArrayList<>(Region.impl_CSS_STYLEABLES());
-
-         Collections.addAll(styleables, GRID_LINES_VISIBLE, HGAP, ALIGNMENT, VGAP);
-         STYLEABLES = Collections.unmodifiableList(styleables);
-      }
    }
 }
