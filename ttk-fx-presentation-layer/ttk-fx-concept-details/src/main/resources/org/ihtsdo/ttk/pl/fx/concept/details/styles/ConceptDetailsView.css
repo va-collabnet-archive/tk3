@@ -94,6 +94,21 @@ root {
     -fx-wrap-text: true;
     -fx-text-alignment:left;
 }
+
+.dl-concept-reference-primitive:focused {
+    -fx-border-color: red;
+}
+.dl-concept-reference-defined:focused {
+    -fx-border-color: red;
+}
+
+.dl-concept-reference-primitive .dl-drag-accept {
+    -fx-background-color: turquoise;
+}
+.dl-concept-reference-defined .dl-drag-accept {
+    -fx-background-color: turquoise;
+}
+
 .dl-field-substution {
     
 }
