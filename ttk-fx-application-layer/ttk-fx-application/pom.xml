@@ -10,7 +10,7 @@
         <version>3.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-fx-application</artifactId>
-    <name>${branch}:L5: FX Application Layer: Isaac</name>
+    <name>${branch}:L4: FX Application Layer: Isaac</name>
     <packaging>jar</packaging>
     
     <organization>

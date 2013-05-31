@@ -7,7 +7,7 @@
         <version>3.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>nbm-ttk</artifactId>
-    <name>${branch}:L4: Netbeans Modules</name>
+    <name>${branch}:NBM: Netbeans Modules</name>
     <url>http://maven.apache.org</url>
     <packaging>pom</packaging> 
     <properties>

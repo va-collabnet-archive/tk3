@@ -8,7 +8,7 @@
   </parent>
   <groupId>org.ihtsdo.ttk</groupId>
   <artifactId>ttk-lookup</artifactId>
-  <name>${branch}:L2: Service Layer: Lookup</name>
+  <name>${branch}:L2: Service Layer: Lookup service</name>
   <url>http://maven.apache.org</url>
     <build>
         <plugins>

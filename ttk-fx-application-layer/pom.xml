@@ -8,7 +8,7 @@
     </parent>
     <artifactId>ttk-fx-application-layer</artifactId>
     <packaging>pom</packaging>
-    <name>${branch}:L5: FX Application Layer</name>
+    <name>${branch}:L4: FX Application Layer</name>
     <modules>
         <module>ttk-fx-application</module>
     </modules>

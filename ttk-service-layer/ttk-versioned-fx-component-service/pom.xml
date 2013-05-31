@@ -7,7 +7,7 @@
         <version>3.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-versioned-fx-component-service</artifactId>
-    <name>${branch}:L2: Service Layer: API with JavaFX properties</name>
+    <name>${branch}:L2: Service Layer: Versioned FX component service</name>
     <description>Service that provides Concepts and Concept Components that are based on the 
         JavaFX Property Architecture: https://wikis.oracle.com/display/OpenJDK/JavaFX+Property+Architecture
     </description>

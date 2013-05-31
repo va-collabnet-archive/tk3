@@ -8,7 +8,7 @@
         <version>3.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>osgi-ttk</artifactId>
-    <name>${branch}:L4: OSGi Modules</name>
+    <name>${branch}:OSGi: OSGi Modules</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

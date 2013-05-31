@@ -40,7 +40,7 @@ the specific language governing permissions and limitations under the License. -
     </distributionManagement>
   	
     <properties>
-        <branch>ttk 3.1.1</branch>
+        <branch>ttk</branch>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <drools.version>5.5.0.Final</drools.version>
         <jbpm.version>5.4.0.Final</jbpm.version>
@@ -380,11 +380,11 @@ the specific language governing permissions and limitations under the License. -
     <modules>
         <module>ttk-persistence-layer</module>
         <module>ttk-business-logic-layer</module>
-        <module>ttk-api-layer</module>
+        <module>ttk-service-layer</module>
         <module>ttk-fx-presentation-layer</module>
+        <module>ttk-fx-application-layer</module>
         <module>nbm-ttk</module>
         <module>osgi-ttk</module>
-        <module>ttk-fx-application-layer</module>
     </modules>
     <profiles>
         <profile>
