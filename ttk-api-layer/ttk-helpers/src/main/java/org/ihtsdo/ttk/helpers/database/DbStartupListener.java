@@ -84,7 +84,7 @@ public class DbStartupListener extends TimerTask {
             }
          }).start();
       }
-      TtkTimer.schedule(this, 10000, 2000);
+      TtkTimer.schedule(this, 200, 200);
    }
 
    /**
