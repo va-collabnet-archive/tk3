@@ -38,6 +38,7 @@ import org.ihtsdo.ttk.lookup.TtkEnvironment;
 
 
 import java.io.IOException;
+import javafx.application.Platform;
 
 
 /**
@@ -85,4 +86,9 @@ public class IsaacApp extends Application {
       init(primaryStage);
       primaryStage.show();
    }
+
+    @Override
+    public void stop() throws Exception {
+       System.exit(0);
+    }
 }
