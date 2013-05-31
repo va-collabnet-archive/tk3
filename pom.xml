@@ -197,6 +197,11 @@ the specific language governing permissions and limitations under the License. -
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>ch.syabru.maven.plugins</groupId>
+                    <artifactId>maven-timemachine-plugin</artifactId>
+                    <version>1.0.0</version>
+                </plugin>                
                 <plugin> <!-- required since nbm-plugin 3.0-->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -246,6 +251,10 @@ the specific language governing permissions and limitations under the License. -
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>ch.syabru.maven.plugins</groupId>
+                <artifactId>maven-timemachine-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -381,7 +390,7 @@ the specific language governing permissions and limitations under the License. -
         <profile>
             <id>java8</id>
             <properties>
-                  <compileSource>1.8</compileSource>
+                <compileSource>1.8</compileSource>
             </properties>
             <dependencyManagement>
                 <dependencies>
