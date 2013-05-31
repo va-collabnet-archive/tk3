@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -374,5 +375,15 @@ public class Position implements PositionBI, Serializable {
         }
 
         return checkSubsequentOrEqualToOrigins(path.getOrigins(), time, pathId);
+    }
+
+    @Override
+    public Map<Long, ? extends PositionBI> getIntersections() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Collection<? extends PositionBI> getBarriers() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

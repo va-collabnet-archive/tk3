@@ -424,6 +424,8 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
     public TkConcept getEConcept(Concept c) throws IOException {
         TkConcept ec = new TkConcept();
         AtomicBoolean changed = new AtomicBoolean(false);
+        ec.setAnnotationIndexStyleRefex(c.isAnnotationIndex());
+        ec.setAnnotationStyleRefex(c.isAnnotationStyleRefex());
 
         ec.setPrimordialUuid(c.getPrimUuid());
         ec.setConceptAttributes(processConceptAttributes(c, changed));
