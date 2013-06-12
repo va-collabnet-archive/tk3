@@ -18,7 +18,7 @@
             <exclusions>
                 <exclusion>
                     <groupId>${project.groupId}</groupId>
-                    <artifactId>ttk-api</artifactId>
+                    <artifactId>ttk-versioned-component-service</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>${project.groupId}</groupId>
@@ -30,7 +30,7 @@
                 </exclusion>
                 <exclusion>
                     <groupId>${project.groupId}</groupId>
-                    <artifactId>ttk-api-with-fx-properties</artifactId>
+                    <artifactId>ttk-versioned-component-service</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>${project.groupId}</groupId>
@@ -70,6 +70,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>ttk-lucene-nbm</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ttk-javafx-nbm</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

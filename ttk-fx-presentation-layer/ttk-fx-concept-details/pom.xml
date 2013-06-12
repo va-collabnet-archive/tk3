@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ttk-api-with-fx-properties</artifactId>
+            <artifactId>ttk-versioned-fx-component-service</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

@@ -51,7 +51,7 @@
         </dependency>
         <dependency>
             <groupId>org.ihtsdo.ttk</groupId>
-            <artifactId>ttk-api</artifactId>
+            <artifactId>ttk-versioned-component-service</artifactId>
             <type>jar</type>
             <version>${project.version}</version>
         </dependency>

@@ -33,7 +33,7 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>ttk-api</artifactId>
+      <artifactId>ttk-versioned-component-service</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

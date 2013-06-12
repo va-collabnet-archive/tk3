@@ -19,7 +19,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
-            <artifactId>ttk-api</artifactId>
+            <artifactId>ttk-versioned-component-service</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -43,7 +43,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ttk-api-with-fx-properties</artifactId>
+            <artifactId>ttk-versioned-fx-component-service</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
