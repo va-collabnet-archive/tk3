@@ -15,10 +15,19 @@
  */
 package org.ihtsdo.ttk.services.action.terminology;
 
+import org.ihtsdo.ttk.services.action.AbstractTtkSourceTargetAction;
+import org.ihtsdo.ttk.services.action.ActionContextBI;
+
+
 /**
  *
  * @author kec
  */
-public class TerminologyMove {
+public class TerminologyMove extends AbstractTtkSourceTargetAction {
+
+	public TerminologyMove(ActionContextBI sourceContext, ActionContextBI targetContext) {
+		super("move", "move terminology element to this location, and retire from source location", 
+			   sourceContext, targetContext);
+	}
     
 }

@@ -22,7 +22,6 @@ package org.ihtsdo.ttk.services.action;
 
 import org.drools.runtime.rule.FactHandle;
 import org.drools.KnowledgeBase;
-import org.drools.KnowledgeBaseConfiguration;
 import org.drools.KnowledgeBaseFactory;
 import org.drools.runtime.KnowledgeSessionConfiguration;
 import org.drools.runtime.StatefulKnowledgeSession;

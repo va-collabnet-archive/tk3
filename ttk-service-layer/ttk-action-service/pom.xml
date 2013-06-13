@@ -31,11 +31,15 @@
     </dependencies>
     <profiles>
         <profile>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <id>java7</id>
             <dependencies>
                 <dependency>
                     <groupId>com.oracle</groupId>
                     <artifactId>jfxrt</artifactId>
+                    <version>${javafx.version}</version>
                 </dependency>
             </dependencies>              
         </profile>

@@ -15,10 +15,19 @@
  */
 package org.ihtsdo.ttk.services.action.terminology;
 
+import org.ihtsdo.ttk.services.action.AbstractTtkSourceTargetAction;
+import org.ihtsdo.ttk.services.action.ActionContextBI;
+
+
 /**
  *
  * @author kec
  */
-public class TerminologyCopy {
+public class TerminologyCopy extends AbstractTtkSourceTargetAction {
+
+	public TerminologyCopy(ActionContextBI sourceContext, ActionContextBI targetContext) {
+		super("copy", "copy terminology element to this location", 
+				sourceContext, targetContext);
+	}
     
 }

@@ -54,7 +54,7 @@ the specific language governing permissions and limitations under the License. -
         <maven-jxr-plugin.version>2.2</maven-jxr-plugin.version>
         <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
         <maven-project-info-reports-plugin.version>2.2</maven-project-info-reports-plugin.version>
-        <maven-javadoc-plugin.version>2.7</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
         <maven-plugin-plugin.version>2.6</maven-plugin-plugin.version>
         <maven-surefire-report-plugin.version>2.6</maven-surefire-report-plugin.version>
         <netbeans-platform-version>RELEASE73</netbeans-platform-version>
@@ -258,7 +258,6 @@ the specific language governing permissions and limitations under the License. -
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
                 <configuration>
                     <!-- to have the jar plugin pickup the nbm generated manifest -->
                     <useDefaultManifestFile>true</useDefaultManifestFile>
@@ -276,7 +275,6 @@ the specific language governing permissions and limitations under the License. -
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9</version>
                 <configuration>
                     <doclet>ydoc.doclets.YStandard</doclet>
                     <docletPath>${yDoc.path}/lib/ydoc.jar:${yDoc.path}/lib/styleed.jar:${yDoc.path}/resources</docletPath>
@@ -311,7 +309,7 @@ the specific language governing permissions and limitations under the License. -
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-javadoc-plugin</artifactId>
-                            <version>2.7</version>
+                            <version>${maven-javadoc-plugin.version}</version>
                         </plugin>
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>

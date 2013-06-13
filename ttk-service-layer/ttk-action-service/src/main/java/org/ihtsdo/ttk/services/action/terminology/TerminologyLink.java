@@ -15,10 +15,18 @@
  */
 package org.ihtsdo.ttk.services.action.terminology;
 
+import org.ihtsdo.ttk.services.action.AbstractTtkSourceTargetAction;
+import org.ihtsdo.ttk.services.action.ActionContextBI;
+
 /**
  *
  * @author kec
  */
-public class TerminologyLink {
+public class TerminologyLink extends AbstractTtkSourceTargetAction {
+
+	public TerminologyLink(ActionContextBI sourceContext, ActionContextBI targetContext) {
+		super("link", "link terminology element to this location", 
+				sourceContext, targetContext);
+	}
     
 }
