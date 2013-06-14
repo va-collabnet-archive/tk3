@@ -1,31 +1,31 @@
 //created on: Jun 11, 2013
-package org.ihtsdo.ttk.services.action
+package org.ihtsdo.ttk.services.action;
 
 //list any import classes here.
 import javafx.scene.input.MouseEvent;
-import org.ihtsdo.ttk.services.action.drools.EntryPoints;
+import org.ihtsdo.ttk.services.action.drools.SourceContext;
+import org.ihtsdo.ttk.services.action.drools.TargetContext;
 import org.ihtsdo.ttk.services.action.terminology.TerminologyMove;
 import org.ihtsdo.ttk.services.action.terminology.TerminologyCopy;
+import org.ihtsdo.ttk.services.action.terminology.TerminologyLink;
 
 //declare any global variables here
-
-
 
 
 
 rule "Generate contextual drag actions after mouse pressed"
 
     when
-    	MouseEvent(eventType == MouseEvent.MOUSE_PRESSED) from entry-point "user-events";
-    	$targetContext: TargetContext();
-    	$sourceContext: SourceContext();
+       MouseEvent(eventType == MouseEvent.MOUSE_PRESSED) from entry-point "user-events";
+       $targetContext: TargetContext();
+       $sourceContext: SourceContext();
      then
-    	$targetContext.getContextualActions().add(new TerminologyCopy($sourceContext.getActionContext(), 
-    															 $targetContext.getActionContext()));
-    	$targetContext.getContextualActions().add(new TerminologyMove($sourceContext.getActionContext(),
-    															 $targetContext.getActionContext()));     
-    	$targetContext.getContextualActions().add(new TerminologyLink($sourceContext.getActionContext(),
-    															 $targetContext.getActionContext()));
+       $targetContext.getContextualActions().add(new TerminologyCopy($sourceContext.getActionContext(), 
+                                                  $targetContext.getActionContext()));
+       $targetContext.getContextualActions().add(new TerminologyMove($sourceContext.getActionContext(),
+                                                  $targetContext.getActionContext()));     
+       $targetContext.getContextualActions().add(new TerminologyLink($sourceContext.getActionContext(),
+     $targetContext.getActionContext()));
         
 
 end
@@ -34,10 +34,10 @@ rule "Clear contextual drag actions after mouse released"
     //include attributes such as "salience" here...
     // Would be nice to use a constant instead of a string: EntryPoints.USER_EVENTS
     when
-    	MouseEvent(eventType == MouseEvent.MOUSE_RELEASED) from entry-point "user-events";
-    	$targetContext: TargetContext();
-    	
+       MouseEvent(eventType == MouseEvent.MOUSE_RELEASED) from entry-point "user-events";
+       $targetContext: TargetContext();
+       
     then
-    	$targetContext.getContextualActions().clear();
+       $targetContext.getContextualActions().clear();
 
 end
