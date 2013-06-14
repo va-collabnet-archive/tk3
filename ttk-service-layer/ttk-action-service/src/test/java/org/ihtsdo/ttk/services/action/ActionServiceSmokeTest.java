@@ -20,6 +20,10 @@ package org.ihtsdo.ttk.services.action;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.drools.builder.KnowledgeBuilder;
+import org.drools.builder.KnowledgeBuilderFactory;
+import org.drools.builder.ResourceType;
+import org.drools.io.ResourceFactory;
 import org.drools.runtime.rule.FactHandle;
 import org.drools.KnowledgeBase;
 import org.drools.KnowledgeBaseFactory;
@@ -27,6 +31,7 @@ import org.drools.runtime.KnowledgeSessionConfiguration;
 import org.drools.runtime.StatefulKnowledgeSession;
 import org.drools.runtime.conf.ClockTypeOption;
 import org.drools.runtime.rule.WorkingMemoryEntryPoint;
+import org.ihtsdo.ttk.services.action.drools.EntryPoints;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -94,12 +99,23 @@ public class ActionServiceSmokeTest {
    @Before
    public void setUp() {
        
-      KnowledgeBase kbase = KnowledgeBaseFactory.newKnowledgeBase();
+	  KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder(); 
+	  kbuilder.add( ResourceFactory.newClassPathResource( "org/ihtsdo/ttk/services/action/ActionRules.drl", getClass() ),
+              ResourceType.DRL );
+
+	  if (kbuilder.hasErrors()) {
+		  throw new RuntimeException(kbuilder.getErrors().toString());
+	  }
+		  
+	  KnowledgeBase kbase = KnowledgeBaseFactory.newKnowledgeBase();
+	  kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
+	  
       KnowledgeSessionConfiguration config = KnowledgeBaseFactory.newKnowledgeSessionConfiguration();
       config.setOption( ClockTypeOption.get("realtime") );
 
       ksession = kbase.newStatefulKnowledgeSession(config, null);
-      uiEventStream = ksession.getWorkingMemoryEntryPoint("UI Event Stream");
+      uiEventStream = ksession.getWorkingMemoryEntryPoint(EntryPoints.USER_EVENTS);
+      
    }
 
    /**
