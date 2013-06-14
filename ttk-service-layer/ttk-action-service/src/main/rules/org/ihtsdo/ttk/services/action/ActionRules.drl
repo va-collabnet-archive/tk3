@@ -16,7 +16,7 @@ import org.ihtsdo.ttk.services.action.terminology.TerminologyCopy;
 rule "Generate contextual drag actions after mouse pressed"
 
     when
-    	MouseEvent(eventType == MouseEvent.MOUSE_PRESSED) from entry-point EntryPoints.USER_EVENTS;
+    	MouseEvent(eventType == MouseEvent.MOUSE_PRESSED) from entry-point "user-events";
     	$targetContext: TargetContext();
     	$sourceContext: SourceContext();
      then
@@ -32,8 +32,9 @@ end
 
 rule "Clear contextual drag actions after mouse released"
     //include attributes such as "salience" here...
+    // Would be nice to use a constant instead of a string: EntryPoints.USER_EVENTS
     when
-    	MouseEvent(eventType == MouseEvent.MOUSE_RELEASED) from entry-point EntryPoints.USER_EVENTS;
+    	MouseEvent(eventType == MouseEvent.MOUSE_RELEASED) from entry-point "user-events";
     	$targetContext: TargetContext();
     	
     then
