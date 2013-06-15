@@ -23,8 +23,8 @@ import org.ihtsdo.ttk.preferences.PreferenceWithDefaultEnumBI;
  *
  * @author kec
  */
-public class QueueType extends PreferenceObject {
-    enum Fields implements PreferenceWithDefaultEnumBI {
+public class QueueType implements PreferenceObject {
+    enum Fields implements PreferenceWithDefaultEnumBI<Types> {
         QUEUE_TYPE;
 
         @Override
@@ -38,7 +38,6 @@ public class QueueType extends PreferenceObject {
     private Types type;
     
     public QueueType(EnumBasedPreferences preferences) {
-        super(preferences);
         type = (Types) preferences.getEnum(Fields.QUEUE_TYPE);
     }
     

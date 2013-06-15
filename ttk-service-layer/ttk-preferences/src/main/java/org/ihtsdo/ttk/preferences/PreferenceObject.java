@@ -19,15 +19,7 @@ package org.ihtsdo.ttk.preferences;
  *
  * @author kec
  */
-public abstract class PreferenceObject {
+public interface PreferenceObject {
 
-    public PreferenceObject() {
-    }
-     
-    public PreferenceObject(EnumBasedPreferences preferences) {
-    }
-    public final void export(EnumBasedPreferences preferences) {
-        exportFields(preferences);
-    }
-    protected abstract void exportFields(EnumBasedPreferences preferences);
+    void exportFields(EnumBasedPreferences preferences);
 }

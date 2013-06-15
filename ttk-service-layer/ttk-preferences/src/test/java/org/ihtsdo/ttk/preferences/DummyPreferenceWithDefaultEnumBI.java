@@ -15,13 +15,25 @@
  */
 package org.ihtsdo.ttk.preferences;
 
-
 /**
- *
- * @author kec
- * @param <T>  The type of the default value.
+ * Test implementation of {@link PreferenceWithDefaultEnumBI}.
+ * @author ocarlsen
  */
-public interface PreferenceWithDefaultEnumBI<T> {
-    T getDefaultValue();
-    String name();
+class DummyPreferenceWithDefaultEnumBI<T> implements PreferenceWithDefaultEnumBI<T> {
+
+    private final T defaultValue;
+
+    DummyPreferenceWithDefaultEnumBI(T defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    @Override
+    public T getDefaultValue() {
+        return defaultValue;
+    }
+
+    @Override
+    public String name() {
+        return defaultValue.toString();
+    }
 }

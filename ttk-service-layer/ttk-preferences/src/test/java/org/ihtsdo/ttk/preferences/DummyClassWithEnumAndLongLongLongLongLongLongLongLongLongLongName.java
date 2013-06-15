@@ -15,13 +15,12 @@
  */
 package org.ihtsdo.ttk.preferences;
 
-
 /**
- *
- * @author kec
- * @param <T>  The type of the default value.
+ * Dummy class with {@link Enum} and long name for testing.
+ * @author ocarlsen
  */
-public interface PreferenceWithDefaultEnumBI<T> {
-    T getDefaultValue();
-    String name();
+class DummyClassWithEnumAndLongLongLongLongLongLongLongLongLongLongName {
+    enum Fields {
+        JUNK;
+    }
 }

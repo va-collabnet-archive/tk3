@@ -32,7 +32,7 @@ import java.util.Objects;
  *
  * @author kec
  */
-public class QueueName extends PreferenceObject {
+public class QueueName implements PreferenceObject {
     private String name;
 
     public QueueName() {
@@ -40,7 +40,6 @@ public class QueueName extends PreferenceObject {
     }
 
     public QueueName(EnumBasedPreferences preferences) {
-        super(preferences);
         this.name = preferences.get(Fields.QUEUE_NAME);
     }
 

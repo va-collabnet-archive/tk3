@@ -18,19 +18,18 @@
 
 package org.ihtsdo.ttk.preferences;
 
-//~--- non-JDK imports --------------------------------------------------------
+import static org.ihtsdo.ttk.properties.appinfo.AppInfoProperties.ARTIFACT_ID;
+import static org.ihtsdo.ttk.properties.appinfo.AppInfoProperties.GROUP_ID;
+import static org.ihtsdo.ttk.properties.appinfo.AppInfoProperties.VERSION;
 
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 import java.io.OutputStream;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
@@ -39,157 +38,203 @@ import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 
 /**
+ * A wrapper around the Java {@link Preferences} which allows a "prefixing"
+ * of user preferences to allow different hierarchical trees of preferences.
+ * This allows different WB versions and/or different WB users to have
+ * their own preferences without interfering with each other.
  *
  * @author kec
+ * @author ocarlsen
  */
 public class EnumBasedPreferences {
-    private Preferences preferences;
-    private String      appPrefix;
 
-    enum FIELDS { CLASS_NAME }
+    private Preferences preferences;
+    private String appPrefix;
+
+    enum Fields {
+        CLASS_NAME
+    }
 
     /**
-     *
-     * @param appPrefix Of the form "/" + &lt;app node name&gt;
+     * Create an EnumBasedPreferences with the specified appPrefix.
+     * Otherwise, different WB versions and/or different WB users will
+     * overwrite the preferences of the previous version/user.
+     * @param appPrefix A unique string to disambiguate subtrees of preferences.
      */
     public EnumBasedPreferences(String appPrefix) {
-        this.appPrefix   = appPrefix;
+        this.appPrefix = appPrefix;
         this.preferences = Preferences.userRoot().node(appPrefix);
     }
 
     private EnumBasedPreferences(EnumBasedPreferences enumPref, Preferences preferences) {
-        this.appPrefix   = enumPref.appPrefix;
+        this.appPrefix = enumPref.appPrefix;
         this.preferences = preferences;
     }
 
     public void flush() throws BackingStoreException {
-        preferences.flush();
+        Preferences.userRoot().flush();
     }
 
     public void sync() throws BackingStoreException {
-        preferences.sync();
-    }
-
-    public Enum getEnum(PreferenceWithDefaultEnumBI key) {
-        return valueOf(key.getDefaultValue().getClass(),
-                       preferences.get(EnumPropertyKeyHelper.getKeyString(key), 
-                ((Enum) key.getDefaultValue()).name()));
+        Preferences.userRoot().sync();
     }
 
     public void putEnum(PreferenceWithDefaultEnumBI key, Enum value) {
-        put(key, value.name());
+        EnumBasedPreferences enumNode = getNode(key);
+        enumNode.preferences.put(key.name(), value.name());
     }
 
-    public void put(PreferenceWithDefaultEnumBI key, String value) {
-        preferences.put(EnumPropertyKeyHelper.getKeyString(key), value);
+    public Enum getEnum(PreferenceWithDefaultEnumBI key) {
+        EnumBasedPreferences enumNode = getNode(key);
+        Enum defaultValue = (Enum) key.getDefaultValue();
+        String name = enumNode.preferences.get(key.name(), defaultValue.name());
+        return Enum.valueOf(defaultValue.getClass(), name);
     }
+
+    public void write(PreferenceObject preference) {
+        preference.exportFields(this);
+    }
+    public void put(PreferenceWithDefaultEnumBI key, String value) {
+        EnumBasedPreferences enumNode = getNode(key);
+        enumNode.preferences.put(key.name(), value);
+    }
+
+//  public <T extends Enum<T>> void put(Class<T> key, String value) {
+//      preferences.put(EnumPropertyKeyHelper.getKeyString(key), value);
+//  }
 
     public String get(PreferenceWithDefaultEnumBI key) {
-        return preferences.get(EnumPropertyKeyHelper.getKeyString(key), (String) key.getDefaultValue());
+        EnumBasedPreferences enumNode = getNode(key);
+        return enumNode.preferences.get(key.name(), (String) key.getDefaultValue());
     }
 
-    public <T extends Enum<T>> void put(Class<T> key, String value) {
-        preferences.put(EnumPropertyKeyHelper.getKeyString(key), value);
-    }
-
-    public <T extends Enum<T>> String get(Class<T> key, String value) {
-        return preferences.get(EnumPropertyKeyHelper.getKeyString(key), value);
-    }
+//    public <T extends Enum<T>> String get(Class<T> key, String value) {
+//        return preferences.get(EnumPropertyKeyHelper.getKeyString(key), value);
+//    }
 
     public void remove(PreferenceWithDefaultEnumBI key) {
-        preferences.remove(EnumPropertyKeyHelper.getKeyString(key));
+        EnumBasedPreferences enumNode = getNode(key);
+        enumNode.preferences.remove(key.name());
     }
 
-    public <T extends Enum<T>> void remove(Class<T> key) {
-        preferences.remove(EnumPropertyKeyHelper.getKeyString(key));
-    }
+//    public <T extends Enum<T>> void remove(Class<T> key) {
+//        preferences.remove(EnumPropertyKeyHelper.getKeyString(key));
+//    }
 
     public void clear() throws BackingStoreException {
         preferences.clear();
     }
 
     public void putInt(PreferenceWithDefaultEnumBI key, int value) {
-        preferences.putInt(EnumPropertyKeyHelper.getKeyString(key), value);
+        EnumBasedPreferences enumNode = getNode(key);
+        enumNode.preferences.putInt(key.name(), value);
     }
 
-    public <T extends Enum<T>> void putInt(Class<T> key, int value) {
-        preferences.putInt(EnumPropertyKeyHelper.getKeyString(key), value);
-    }
+//    public <T extends Enum<T>> void putInt(Class<T> key, int value) {
+//        preferences.putInt(EnumPropertyKeyHelper.getKeyString(key), value);
+//    }
 
     public int getInt(PreferenceWithDefaultEnumBI key) {
-        return preferences.getInt(EnumPropertyKeyHelper.getKeyString(key), (Integer) key.getDefaultValue());
+        EnumBasedPreferences enumNode = getNode(key);
+        return enumNode.preferences.getInt(key.name(), (Integer) key.getDefaultValue());
     }
 
-    public <T extends Enum<T>> int getInt(Class<T> key, int value) {
-        return preferences.getInt(EnumPropertyKeyHelper.getKeyString(key), value);
-    }
+//    public <T extends Enum<T>> int getInt(Class<T> key, int value) {
+//        return preferences.getInt(EnumPropertyKeyHelper.getKeyString(key), value);
+//    }
 
     public void putLong(PreferenceWithDefaultEnumBI key, long value) {
-        preferences.putLong(EnumPropertyKeyHelper.getKeyString(key), value);
+        EnumBasedPreferences enumNode = getNode(key);
+        enumNode.preferences.putLong(key.name(), value);
     }
 
-    public <T extends Enum<T>> void putLong(Class<T> key, long value) {
-        preferences.putLong(EnumPropertyKeyHelper.getKeyString(key), value);
-    }
+//    public <T extends Enum<T>> void putLong(Class<T> key, long value) {
+//        preferences.putLong(EnumPropertyKeyHelper.getKeyString(key), value);
+//    }
 
     public long getLong(PreferenceWithDefaultEnumBI key) {
-        return preferences.getLong(EnumPropertyKeyHelper.getKeyString(key), (Long) key.getDefaultValue());
+        EnumBasedPreferences enumNode = getNode(key);
+        return enumNode.preferences.getLong(key.name(), (Long) key.getDefaultValue());
     }
 
-    public <T extends Enum<T>> long getLong(Class<T> key, long value) {
-        return preferences.getLong(EnumPropertyKeyHelper.getKeyString(key), value);
-    }
+//    public <T extends Enum<T>> long getLong(Class<T> key, long value) {
+//        return preferences.getLong(EnumPropertyKeyHelper.getKeyString(key), value);
+//    }
 
     public void putBoolean(PreferenceWithDefaultEnumBI key, boolean value) {
-        preferences.putBoolean(EnumPropertyKeyHelper.getKeyString(key), value);
+        EnumBasedPreferences enumNode = getNode(key);
+        enumNode.preferences.putBoolean(key.name(), value);
     }
 
-    public <T extends Enum<T>> void putBoolean(Class<T> key, boolean value) {
-        preferences.putBoolean(EnumPropertyKeyHelper.getKeyString(key), value);
-    }
+//    public <T extends Enum<T>> void putBoolean(Class<T> key, boolean value) {
+//        preferences.putBoolean(EnumPropertyKeyHelper.getKeyString(key), value);
+//    }
 
     public boolean getBoolean(PreferenceWithDefaultEnumBI key) {
-        return preferences.getBoolean(EnumPropertyKeyHelper.getKeyString(key), (Boolean) key.getDefaultValue());
+        EnumBasedPreferences enumNode = getNode(key);
+        return enumNode.preferences.getBoolean(key.name(), (Boolean) key.getDefaultValue());
     }
 
-    public <T extends Enum<T>> boolean getBoolean(Class<T> key, boolean value) {
-        return preferences.getBoolean(EnumPropertyKeyHelper.getKeyString(key), value);
-    }
+//    public <T extends Enum<T>> boolean getBoolean(Class<T> key, boolean value) {
+//        return preferences.getBoolean(EnumPropertyKeyHelper.getKeyString(key), value);
+//    }
 
-    public <T extends Enum<T>> void putList(PreferenceWithDefaultEnumBI key, List<? extends PreferenceObject> value) {
+    public void putList(PreferenceWithDefaultEnumBI key, List<? extends PreferenceObject> value) {
+        // Need to erase existing list if it exists...
+        EnumBasedPreferences enumNode = getNode(key);
+        int oldCount = enumNode.preferences.getInt(key.name(), 0);
+        for (int i = 0; i < oldCount; i++) {
+            String indexNodeKey = Integer.toString(i);
+            EnumBasedPreferences indexNode = enumNode.childNode(indexNodeKey);
+            try {
+                indexNode.removeNode();
+            } catch (BackingStoreException ex) {
+                Logger.getLogger(EnumBasedPreferences.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
+        
         int count = value.size();
 
-        this.putInt(key, count);
+        enumNode.preferences.putInt(key.name(), count);
 
         for (int i = 0; i < count; i++) {
-            String               itemNodeKey = EnumPropertyKeyHelper.getKeyString(key) + "." + i;
-            PreferenceObject     item        = value.get(i);
-            EnumBasedPreferences itemNode    = childNode(itemNodeKey);
-
-            itemNode.preferences.put(EnumPropertyKeyHelper.getKeyString(FIELDS.CLASS_NAME), item.getClass().getName());
-            item.export(itemNode);
+            String indexNodeKey = Integer.toString(i);
+            PreferenceObject item = value.get(i);
+            EnumBasedPreferences indexNode = enumNode.childNode(indexNodeKey);
+            String fieldsNodeKey = EnumPropertyKeyHelper.getKeyString(Fields.CLASS_NAME);
+            EnumBasedPreferences fieldsNode = indexNode.childNode(fieldsNodeKey);
+            fieldsNode.preferences.put(Fields.CLASS_NAME.name(), item.getClass().getName());
+            item.exportFields(indexNode);
         }
     }
 
     public List<? extends PreferenceObject> getList(PreferenceWithDefaultEnumBI key) {
-        int                    count = getInt(key);
-        List<PreferenceObject> list  = new ArrayList<>(count);
+        EnumBasedPreferences enumNode = getNode(key);
+        String keyString = key.name();
+        int count = enumNode.preferences.getInt(keyString,
+                (Integer) key.getDefaultValue());
 
+        List<PreferenceObject> list = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
             try {
-                String               itemNodeKey = EnumPropertyKeyHelper.getKeyString(key) + "." + i;
-                EnumBasedPreferences itemNode    = childNode(itemNodeKey);
-                String               className   =
-                    itemNode.preferences.get(EnumPropertyKeyHelper.getKeyString(FIELDS.CLASS_NAME), "");
-                Class                itemClass   = Class.forName(className);
-                Constructor          constructor = itemClass.getConstructor(EnumBasedPreferences.class);
-                PreferenceObject     item        = (PreferenceObject) constructor.newInstance(itemNode);
+                String indexNodeKey = Integer.toString(i);
+                EnumBasedPreferences indexNode = enumNode.childNode(indexNodeKey);
+                String fieldsNodeKey = EnumPropertyKeyHelper.getKeyString(Fields.CLASS_NAME);
+                EnumBasedPreferences fieldsNode = indexNode.childNode(fieldsNodeKey);
+                String className = fieldsNode.preferences.get(Fields.CLASS_NAME.name(), "");
+
+                // Instantiate class.
+                Class itemClass = Class.forName(className);
+                Constructor constructor = itemClass.getConstructor(EnumBasedPreferences.class);
+                PreferenceObject item = (PreferenceObject) constructor.newInstance(indexNode);
 
                 list.add(item);
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
                      | InvocationTargetException | NoSuchMethodException | SecurityException
                      | ClassNotFoundException ex) {
-            Logger.getLogger(EnumBasedPreferences.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EnumBasedPreferences.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -197,52 +242,58 @@ public class EnumBasedPreferences {
     }
 
     public void putFloat(PreferenceWithDefaultEnumBI key, float value) {
-        preferences.putFloat(EnumPropertyKeyHelper.getKeyString(key), value);
+        EnumBasedPreferences enumNode = getNode(key);
+        enumNode.preferences.putFloat(key.name(), value);
     }
 
-    public <T extends Enum<T>> void putFloat(Class<T> key, float value) {
-        preferences.putFloat(EnumPropertyKeyHelper.getKeyString(key), value);
-    }
+//    public <T extends Enum<T>> void putFloat(Class<T> key, float value) {
+//        preferences.putFloat(EnumPropertyKeyHelper.getKeyString(key), value);
+//    }
 
     public float getFloat(PreferenceWithDefaultEnumBI key) {
-        return preferences.getFloat(EnumPropertyKeyHelper.getKeyString(key), (Float) key.getDefaultValue());
+        EnumBasedPreferences enumNode = getNode(key);
+        return enumNode.preferences.getFloat(key.name(), (Float) key.getDefaultValue());
     }
 
-    public <T extends Enum<T>> float getFloat(Class<T> key, float value) {
-        return preferences.getFloat(EnumPropertyKeyHelper.getKeyString(key), value);
-    }
+//    public <T extends Enum<T>> float getFloat(Class<T> key, float value) {
+//        return preferences.getFloat(EnumPropertyKeyHelper.getKeyString(key), value);
+//    }
 
     public void putDouble(PreferenceWithDefaultEnumBI key, double value) {
-        preferences.putDouble(EnumPropertyKeyHelper.getKeyString(key), value);
+        EnumBasedPreferences enumNode = getNode(key);
+        enumNode.preferences.putDouble(key.name(), value);
     }
 
-    public <T extends Enum<T>> void putDouble(Class<T> key, double value) {
-        preferences.putDouble(EnumPropertyKeyHelper.getKeyString(key), value);
-    }
+//    public <T extends Enum<T>> void putDouble(Class<T> key, double value) {
+//        preferences.putDouble(EnumPropertyKeyHelper.getKeyString(key), value);
+//    }
 
     public double getDouble(PreferenceWithDefaultEnumBI key) {
-        return preferences.getDouble(EnumPropertyKeyHelper.getKeyString(key), (Double) key.getDefaultValue());
+        EnumBasedPreferences enumNode = getNode(key);
+        return enumNode.preferences.getDouble(key.name(), (Double) key.getDefaultValue());
     }
 
-    public <T extends Enum<T>> double getDouble(Class<T> key, double value) {
-        return preferences.getDouble(EnumPropertyKeyHelper.getKeyString(key), value);
-    }
+//    public <T extends Enum<T>> double getDouble(Class<T> key, double value) {
+//        return preferences.getDouble(EnumPropertyKeyHelper.getKeyString(key), value);
+//    }
 
     public void putByteArray(PreferenceWithDefaultEnumBI key, byte[] value) {
-        preferences.putByteArray(EnumPropertyKeyHelper.getKeyString(key), value);
+        EnumBasedPreferences enumNode = getNode(key);
+        enumNode.preferences.putByteArray(key.name(), value);
     }
 
-    public <T extends Enum<T>> void putByteArray(Class<T> key, byte[] value) {
-        preferences.putByteArray(EnumPropertyKeyHelper.getKeyString(key), value);
-    }
+//    public <T extends Enum<T>> void putByteArray(Class<T> key, byte[] value) {
+//        preferences.putByteArray(EnumPropertyKeyHelper.getKeyString(key), value);
+//    }
 
     public byte[] getByteArray(PreferenceWithDefaultEnumBI key) {
-        return preferences.getByteArray(EnumPropertyKeyHelper.getKeyString(key), (byte[]) key.getDefaultValue());
+        EnumBasedPreferences enumNode = getNode(key);
+        return enumNode.preferences.getByteArray(key.name(), (byte[]) key.getDefaultValue());
     }
 
-    public <T extends Enum<T>> byte[] getByteArray(Class<T> key, byte[] value) {
-        return preferences.getByteArray(EnumPropertyKeyHelper.getKeyString(key), value);
-    }
+//    public <T extends Enum<T>> byte[] getByteArray(Class<T> key, byte[] value) {
+//        return preferences.getByteArray(EnumPropertyKeyHelper.getKeyString(key), value);
+//    }
 
     public String[] keys() throws BackingStoreException {
         return preferences.keys();
@@ -257,7 +308,7 @@ public class EnumBasedPreferences {
     }
 
     public EnumBasedPreferences node(String pathName) {
-        if (pathName.startsWith("/") &&!pathName.startsWith(appPrefix)) {
+        if (pathName.startsWith("/") && !pathName.startsWith(appPrefix)) {
             pathName = appPrefix + pathName;
         }
 
@@ -265,7 +316,7 @@ public class EnumBasedPreferences {
     }
 
     public boolean nodeExists(String pathName) throws BackingStoreException {
-        if (pathName.startsWith("/") &&!pathName.startsWith(appPrefix)) {
+        if (pathName.startsWith("/") && !pathName.startsWith(appPrefix)) {
             pathName = appPrefix + pathName;
         }
 
@@ -317,31 +368,42 @@ public class EnumBasedPreferences {
         preferences.exportSubtree(os);
     }
 
-    public EnumBasedPreferences appNodeForPackage(Class<?> c) {
-        return new EnumBasedPreferences(this, preferences.node(nodeName(c, true)));
-    }
-
-    public EnumBasedPreferences appNodeForClass(Class<?> c) {
-        return new EnumBasedPreferences(this, preferences.node(nodeName(c, false)));
-    }
-
     public EnumBasedPreferences childNode(String name) {
         return new EnumBasedPreferences(this, preferences.node(preferences.absolutePath() + "/" + name));
     }
 
-    private String nodeName(Class c, boolean packageOnly) {
-        String nodeName = c.getName();
-
-        if (packageOnly) {
-            int lastDot = nodeName.lastIndexOf('.');
-
-            nodeName = nodeName.substring(0, lastDot);
-        }
-
-        return appPrefix + "/" + nodeName.replace('.', '/');
+    private EnumBasedPreferences getNode(PreferenceWithDefaultEnumBI key) {
+        String enumNodeKey = EnumPropertyKeyHelper.getKeyString(key);
+        EnumBasedPreferences enumNode = childNode(enumNodeKey);
+        return enumNode;
     }
 
-    private Enum valueOf(Class enumTypeClass, String defaultName) {
-        return Enum.valueOf(enumTypeClass, get(enumTypeClass, defaultName));
+    /**
+     * Compute an 'app prefix' to be used as the root of the user preference hierarchy.
+     * @param groupId The Maven ${groupId} property.
+     * @param artifactId The Maven ${artifactId} property.
+     * @param version The Maven ${version} property.
+     * @param userName The name of the workbench user whose preferences will be accessed.
+     * @return A String to pass into the {@link EnumBasedPreferences} constructor.
+     */
+    public static String getDefaultAppPrefix(String groupId, String artifactId, String version, String userName) {
+        return groupId + ";" + artifactId + ";" + version + ";" + userName;
+    }
+    
+    
+    /**
+     * Gets the default app prefix from the specified {@link Properties} object,
+     * using the {@code GROUP_ID}, {@code ARTIFACT_ID}, and {@code VERSION} constants
+     * as keys.  
+     *
+     * @param appInfoProperties the app info properties
+     * @param userName the user name
+     * @return the default app prefix
+     */
+    public static String getDefaultAppPrefix(Properties appInfoProperties, String userName) {
+        String groupId = appInfoProperties.getProperty(GROUP_ID);
+        String artifactId = appInfoProperties.getProperty(ARTIFACT_ID);
+        String version = appInfoProperties.getProperty(VERSION);
+        return getDefaultAppPrefix(groupId, artifactId, version, userName);
     }
 }

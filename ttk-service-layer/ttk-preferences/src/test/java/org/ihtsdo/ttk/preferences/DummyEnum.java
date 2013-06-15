@@ -17,11 +17,13 @@ package org.ihtsdo.ttk.preferences;
 
 
 /**
+ * Dummy {@link Enum} for testing.
  *
- * @author kec
- * @param <T>  The type of the default value.
+ * @author ocarlsen
  */
-public interface PreferenceWithDefaultEnumBI<T> {
-    T getDefaultValue();
-    String name();
+enum DummyEnum {
+
+    JUNK1,
+    JUNK2;
+
 }

@@ -33,17 +33,16 @@ import java.util.List;
  *
  * @author kec
  */
-public class QueueList extends PreferenceObject {
-    List<QueuePreferences> queueList = new ArrayList();
+public class QueueList implements PreferenceObject {
+    List<QueuePreferences> queuePreferences = new ArrayList();
 
     public QueueList() {}
 
     public QueueList(EnumBasedPreferences preferences) {
-        super(preferences);
-        queueList = (List<QueuePreferences>) preferences.getList(Fields.QUEUE_LIST);
+        queuePreferences = (List<QueuePreferences>) preferences.getList(Fields.QUEUE_LIST);
     }
 
-    public enum Fields implements PreferenceWithDefaultEnumBI {
+    public enum Fields implements PreferenceWithDefaultEnumBI<Object> {
         QUEUE_LIST;
 
         @Override
@@ -54,15 +53,15 @@ public class QueueList extends PreferenceObject {
 
     @Override
     public String toString() {
-        return "QueueList: " + queueList;
+        return "QueueList: " + queuePreferences;
     }
 
-    public List<QueuePreferences> getQueueList() {
-        return queueList;
+    public List<QueuePreferences> getQueuePreferences() {
+        return queuePreferences;
     }
 
     @Override
-    protected void exportFields(EnumBasedPreferences preferences) {
-        preferences.putList(Fields.QUEUE_LIST, queueList);
+    public void exportFields(EnumBasedPreferences preferences) {
+        preferences.putList(Fields.QUEUE_LIST, queuePreferences);
     }
 }

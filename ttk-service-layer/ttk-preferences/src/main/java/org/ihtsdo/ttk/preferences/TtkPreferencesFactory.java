@@ -15,13 +15,26 @@
  */
 package org.ihtsdo.ttk.preferences;
 
+import java.io.File;
+import java.util.prefs.Preferences;
+import java.util.prefs.PreferencesFactory;
 
 /**
  *
  * @author kec
- * @param <T>  The type of the default value.
  */
-public interface PreferenceWithDefaultEnumBI<T> {
-    T getDefaultValue();
-    String name();
+public class TtkPreferencesFactory implements PreferencesFactory {
+    static final File systemRoot = new File(System.getProperty("java.util.prefs.systemRoot"));
+    static final File userRoot = new File(System.getProperty("java.util.prefs.userRoot"));
+    
+    @Override
+    public Preferences systemRoot() {
+        return new TtkPreferencesProvider(systemRoot); 
+    }
+
+    @Override
+    public Preferences userRoot() {
+        return new TtkPreferencesProvider(userRoot); 
+    }
+    
 }
