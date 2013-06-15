@@ -44,9 +44,9 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>org.ihtsdo.ttk</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>ttk-lookup</artifactId>
-            <version>3.1.1-SNAPSHOT</version>
+            <version>${project.version}</version>
             <type>jar</type>
         </dependency>
     </dependencies>
