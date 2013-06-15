@@ -18,8 +18,7 @@ declare Event
     @role( event )
 end
 
-
-//Rules
+// Rules
 rule "mouse pressed"
 
     when
