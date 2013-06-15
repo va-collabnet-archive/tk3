@@ -51,6 +51,18 @@
         </dependency>
         <dependency>
             <groupId>org.ihtsdo.ttk</groupId>
+            <artifactId>ttk-action-service</artifactId>
+            <type>jar</type>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ihtsdo.ttk</groupId>
+            <artifactId>ttk-authentication-authorization-service</artifactId>
+            <type>jar</type>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ihtsdo.ttk</groupId>
             <artifactId>ttk-versioned-component-service</artifactId>
             <type>jar</type>
             <version>${project.version}</version>
@@ -58,43 +70,43 @@
         <dependency>
             <groupId>org.ihtsdo.ttk</groupId>
             <artifactId>ttk-fx-pl-helper</artifactId>
-             <type>jar</type>
+            <type>jar</type>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.ihtsdo.ttk</groupId>
             <artifactId>ttk-fx-multiparent-taxonomy</artifactId>
             <type>jar</type>
-             <version>${project.version}</version>
-       </dependency>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.ihtsdo.ttk</groupId>
             <artifactId>ttk-fx-concept-details</artifactId>
             <type>jar</type>
-             <version>${project.version}</version>
-       </dependency>
-       <dependency>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.ihtsdo.ttk</groupId>
             <artifactId>ttk-fugue-icons</artifactId>
-             <type>jar</type>
+            <type>jar</type>
             <version>${project.version}</version>
         </dependency>
-       <dependency>
+        <dependency>
             <groupId>org.ihtsdo.ttk</groupId>
             <artifactId>ttk-diagona-icons</artifactId>
-             <type>jar</type>
+            <type>jar</type>
             <version>${project.version}</version>
         </dependency>
-       <dependency>
+        <dependency>
             <groupId>org.ihtsdo.ttk</groupId>
             <artifactId>ttk-flag-icons</artifactId>
-             <type>jar</type>
+            <type>jar</type>
             <version>${project.version}</version>
         </dependency>
-       <dependency>
+        <dependency>
             <groupId>org.ihtsdo.ttk</groupId>
             <artifactId>ttk-silk-icons</artifactId>
-             <type>jar</type>
+            <type>jar</type>
             <version>${project.version}</version>
         </dependency>
         <dependency>

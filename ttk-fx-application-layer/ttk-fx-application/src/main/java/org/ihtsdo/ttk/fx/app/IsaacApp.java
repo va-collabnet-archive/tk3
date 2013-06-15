@@ -20,8 +20,6 @@ package org.ihtsdo.ttk.fx.app;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import com.javafx.experiments.scenicview.ScenicView;
-
 import javafx.application.Application;
 
 import javafx.fxml.FXMLLoader;
@@ -31,15 +29,21 @@ import javafx.scene.layout.Pane;
 
 import javafx.stage.Stage;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.Factory;
+
 import org.ihtsdo.ttk.lookup.Looker;
 import org.ihtsdo.ttk.lookup.TtkEnvironment;
 
 //~--- JDK imports ------------------------------------------------------------
 
-
 import java.io.IOException;
-import javafx.application.Platform;
-
+import org.ihtsdo.ttk.services.action.ActionService;
 
 /**
  *
@@ -55,10 +59,10 @@ public class IsaacApp extends Application {
     *
     * @throws IOException
     */
-   private void init(Stage primaryStage) throws IOException {
+   private void setupStage(Stage primaryStage) throws IOException {
       Pane isaacPane = (Pane) FXMLLoader.load(getClass().getResource("/fxml/Isaac.fxml"));
 
-      //ScenicView.show(isaacPane);
+      // ScenicView.show(isaacPane);
       primaryStage.setScene(new Scene(isaacPane));
    }
 
@@ -69,8 +73,37 @@ public class IsaacApp extends Application {
     * @param args
     */
    public static void main(String[] args) {
+
+      Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
+
+      SecurityUtils.setSecurityManager(factory.getInstance());
+
+      Subject currentUser = SecurityUtils.getSubject();
+      Session session     = currentUser.getSession();
+
+      session.setAttribute("someKey", "aValue");
+
+      if (!currentUser.isAuthenticated()) {
+
+         // collect user principals and credentials in a gui specific manner
+         // such as username/password html form, X509 certificate, OpenID, etc.
+         // We'll use the username/password example here since it is the most common.
+         UsernamePasswordToken token = new UsernamePasswordToken("root", "secret");
+
+         // this is all you have to do to support 'remember me' (no config - built in!):
+         token.setRememberMe(true);
+         currentUser.login(token);
+      }
+
       launch(args);
    }
+
+   @Override
+    public void init() throws Exception {
+        ActionService.start();
+        Looker.lookup(TtkEnvironment.class).setUseFxWorkers(true);
+        
+    }
 
    /**
     * Method description
@@ -82,13 +115,18 @@ public class IsaacApp extends Application {
     */
    @Override
    public void start(Stage primaryStage) throws Exception {
-      Looker.lookup(TtkEnvironment.class).setUseFxWorkers(true);
-      init(primaryStage);
+      setupStage(primaryStage);
       primaryStage.show();
    }
 
-    @Override
-    public void stop() throws Exception {
-       System.exit(0);
-    }
+   /**
+    * Method description
+    *
+    *
+    * @throws Exception
+    */
+   @Override
+   public void stop() throws Exception {
+      System.exit(0);
+   }
 }
