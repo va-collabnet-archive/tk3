@@ -266,6 +266,7 @@ public class DefinitionPane extends Pane {
                   Path   path      = new Path();
 
                   path.getElements().add(new MoveTo(startX, startY));
+                  path.getElements().add(new LineTo(startX, endY));
                   path.getElements().add(new LineTo(endX, endY));
                   edges.getChildren().add(path);
                }
@@ -1011,7 +1012,7 @@ public class DefinitionPane extends Pane {
 
             // System.out.println("layoutNode("+child.toString()+" row/span="+rowIndex+"/"+rowspan+" col/span="+columnIndex+"/"+colspan+" area="+areaX+","+areaY+" "+areaW+"x"+areaH+""+" rowBaseline="+rowBaseline[rowIndex]);
             layoutInArea(child, areaX, areaY, areaW, areaH, rowBaseline[rowIndex], margin,
-                         shouldColumnFillWidth(columnIndex), shouldRowFillHeight(rowIndex), HPos.LEFT,
+                         true, true, HPos.LEFT,
                          VPos.CENTER);
          }
       }
@@ -1113,89 +1114,11 @@ public class DefinitionPane extends Pane {
    private Node setupNode(final DefinitionPart part, DefinitionTree definitionTree,
                           DefinitionPartType partType)
            throws IOException, ContradictionException {
-      final Label partLabel = new Label(part.getText(definitionTree.getViewCoordinate()));
-      partLabel.setCursor(Cursor.OPEN_HAND);
+      final ContextualDragAndDropNode partLabel = 
+              new ContextualDragAndDropNode(part.getText(definitionTree.getViewCoordinate()), 
+              part, partType);
       setWidthAndStyleClass(partLabel, partType);
 
-      partLabel.setOnDragDetected(new EventHandler<MouseEvent>() {
-         @Override
-         public void handle(MouseEvent event) {
-            System.out.println("OnDragDetected: " + partLabel.getText());
-            SnapshotParameters snapParams = new SnapshotParameters();
-
-            snapParams.setFill(Color.TRANSPARENT);
-            ImageView dragImageView = new ImageView();
-            dragImageView.setImage(partLabel.snapshot(snapParams, null));
-            dragImageView.setOpacity(0.5);
-            ((AnchorPane) partLabel.getScene().getRoot()).getChildren().add(dragImageView);
-
-            ((Node) event.getSource()).setCursor(Cursor.CLOSED_HAND);
-            Drag.startDrag(partLabel, part, dragImageView);
-            partLabel.startFullDrag();
-         }
-      });
-      partLabel.setOnMouseReleased(new EventHandler<MouseEvent>() {
-         @Override
-         public void handle(MouseEvent me) {
-            System.out.println("OnMouseReleased: " + partLabel.getText());
-            ((Node) me.getSource()).setCursor(Cursor.OPEN_HAND);
-            partLabel.getStyleClass().remove("dl-drag-accept");
-            if (Drag.getDragImageView() != null) {
-               Drag.getDragImageView().setVisible(false);
-                ((AnchorPane) partLabel.getScene().getRoot()).getChildren().remove(Drag.getDragImageView());
-               Drag.endDrag();
-            }
-         }
-      });
-      
-      partLabel.setOnMouseDragReleased(new EventHandler<MouseEvent>() {
-         @Override
-         public void handle(MouseEvent me) {
-            System.out.println("OnMouseDragReleased: " + partLabel.getText());
-            partLabel.getStyleClass().remove("dl-drag-accept");
-            ((Node) me.getSource()).setCursor(Cursor.OPEN_HAND);
-            if (Drag.getDragImageView() != null) {
-               Drag.getDragImageView().setVisible(false);
-                ((AnchorPane) partLabel.getScene().getRoot()).getChildren().remove(Drag.getDragImageView());
-               Drag.endDrag();
-            }
-         }
-      });
-
-      partLabel.setOnMouseDragEntered(new EventHandler<MouseDragEvent>() {
-
-          @Override
-          public void handle(MouseDragEvent t) {
-            System.out.println("OnMouseDragEntered: " + partLabel.getText());
-            if (t.getGestureSource() != t.getTarget()) {
-                partLabel.getStyleClass().add("dl-drag-accept");
-            }
-            
-          }
-          
-      });
-      
-      partLabel.setOnMouseDragExited(new EventHandler<MouseDragEvent>() {
-
-          @Override
-          public void handle(MouseDragEvent t) {
-            partLabel.getStyleClass().remove("dl-drag-accept");
-            System.out.println("OnMouseDragExited: " + partLabel.getText());
-          }
-          
-      });
-
-      
-      partLabel.setOnMouseDragged(new EventHandler<MouseEvent>() {
-         @Override
-         public void handle(MouseEvent event) {
-            if (Drag.getDragImageView() != null) {
-               Drag.getDragImageView().relocate(event.getSceneX(), event.getSceneY());
-            }
-
-            // event.consume();
-         }
-      });
 
       return partLabel;
    }
@@ -1224,29 +1147,6 @@ public class DefinitionPane extends Pane {
       return partLabel;
    }
 
-   /**
-    * Method description
-    *
-    *
-    * @param columnIndex
-    *
-    * @return
-    */
-   private boolean shouldColumnFillWidth(int columnIndex) {
-      return true;
-   }
-
-   /**
-    * Method description
-    *
-    *
-    * @param rowIndex
-    *
-    * @return
-    */
-   private boolean shouldRowFillHeight(int rowIndex) {
-      return true;
-   }
 
    /**
     * Returns a string representation of this {@code DefinitionPane} object.

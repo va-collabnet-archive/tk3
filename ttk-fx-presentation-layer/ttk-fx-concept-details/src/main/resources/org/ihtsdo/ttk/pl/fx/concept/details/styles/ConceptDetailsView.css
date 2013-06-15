@@ -134,6 +134,10 @@ root {
 .dl-role-group {
     
 }
+.dl-drop-disclosure {
+    -fx-background-color: orange;
+    
+}
 
 .dl-unknown {
         -fx-background-color: red;
