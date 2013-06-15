@@ -2,6 +2,7 @@
 package org.ihtsdo.ttk.services.action;
 
 //list any import classes here.
+import javafx.event.Event;
 import javafx.scene.input.MouseEvent;
 import org.ihtsdo.ttk.services.action.drools.SourceContext;
 import org.ihtsdo.ttk.services.action.drools.TargetContext;
@@ -11,33 +12,41 @@ import org.ihtsdo.ttk.services.action.terminology.TerminologyLink;
 
 //declare any global variables here
 
+rule "mouse pressed"
+
+    when
+       Event(eventType == MouseEvent.MOUSE_PRESSED) from entry-point "user-events";
+     then
+       System.out.println("Mouse pressed");
+  
+end
 
 
 rule "Generate contextual drag actions after mouse pressed"
 
     when
-       MouseEvent(eventType == MouseEvent.MOUSE_PRESSED) from entry-point "user-events";
+       Event(eventType == MouseEvent.MOUSE_PRESSED) from entry-point "user-events";
        $targetContext: TargetContext();
        $sourceContext: SourceContext();
      then
+       System.out.println("Adding actions");
        $targetContext.getContextualActions().add(new TerminologyCopy($sourceContext.getActionContext(), 
-                                                  $targetContext.getActionContext()));
+                                                    $targetContext.getActionContext()));
        $targetContext.getContextualActions().add(new TerminologyMove($sourceContext.getActionContext(),
-                                                  $targetContext.getActionContext()));     
+                                                    $targetContext.getActionContext()));     
        $targetContext.getContextualActions().add(new TerminologyLink($sourceContext.getActionContext(),
-     $targetContext.getActionContext()));
-        
-
+                                                    $targetContext.getActionContext()));
+  
 end
 
 rule "Clear contextual drag actions after mouse released"
-    //include attributes such as "salience" here...
     // Would be nice to use a constant instead of a string: EntryPoints.USER_EVENTS
     when
-       MouseEvent(eventType == MouseEvent.MOUSE_RELEASED) from entry-point "user-events";
+       Event(eventType == MouseEvent.MOUSE_RELEASED) from entry-point "user-events";
        $targetContext: TargetContext();
        
     then
+       System.out.println("clearing actions");
        $targetContext.getContextualActions().clear();
 
 end

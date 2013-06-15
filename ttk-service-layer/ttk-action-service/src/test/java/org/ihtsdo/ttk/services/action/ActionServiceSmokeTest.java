@@ -20,6 +20,9 @@ package org.ihtsdo.ttk.services.action;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javafx.event.Event;
+import javafx.scene.input.MouseEvent;
+
 import org.drools.builder.KnowledgeBuilder;
 import org.drools.builder.KnowledgeBuilderFactory;
 import org.drools.builder.ResourceType;
@@ -32,6 +35,8 @@ import org.drools.runtime.StatefulKnowledgeSession;
 import org.drools.runtime.conf.ClockTypeOption;
 import org.drools.runtime.rule.WorkingMemoryEntryPoint;
 import org.ihtsdo.ttk.services.action.drools.EntryPoints;
+import org.ihtsdo.ttk.services.action.drools.SourceContext;
+import org.ihtsdo.ttk.services.action.drools.TargetContext;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -74,21 +79,32 @@ public class ActionServiceSmokeTest {
     *
     */
    @Test
-   public void testCheese() {
+   public void testDrools() {
 
-      // Insert fact
-      Cheese     stilton       = new Cheese("stilton");
-      FactHandle stiltonHandle = ksession.insert(stilton);
-
-      // delete fact
-      ksession.retract(stiltonHandle);
-
-      // update example
-      stiltonHandle = ksession.insert(stilton);
-      stilton.setPrice(100);
-      ksession.update(stiltonHandle, stilton);
+	      // Insert facts
+	  SourceContext source = new SourceContext(null);
+      FactHandle sourceHandle = ksession.insert(source);
+	  TargetContext target = new TargetContext(null);
+      FactHandle targetHandle = ksession.insert(target);
+	  TargetContext target2 = new TargetContext(null);
+      FactHandle targetHandle2 = ksession.insert(target2);
+	   
+	         
+      Event clickEvent = new Event(MouseEvent.MOUSE_PRESSED);
+      uiEventStream.insert(clickEvent);
+      ksession.fireAllRules();
       
-      uiEventStream.insert("UI Event");
+      System.out.println(target.getContextualActions());
+      System.out.println(target2.getContextualActions());
+      
+      Event releaseEvent = new Event(MouseEvent.MOUSE_RELEASED);
+      uiEventStream.insert(releaseEvent);
+      ksession.fireAllRules();
+      
+      System.out.println(target.getContextualActions());
+      System.out.println(target2.getContextualActions());
+      
+      
       
    }
 
