@@ -23,5 +23,11 @@ public class IconHelper {
         Image icon = new Image(image, false);
         return icon;
     }
+    public static ImageView setupImageView(String image) {
+        Image icon = new Image(image, false);
+        ImageView iv = new ImageView();
+        iv.setImage(icon);
+        return iv;
+    }
 
 }
