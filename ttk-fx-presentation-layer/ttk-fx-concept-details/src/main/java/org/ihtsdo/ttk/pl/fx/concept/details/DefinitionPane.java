@@ -36,14 +36,10 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 
-import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -87,14 +83,15 @@ import java.io.IOException;
 
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.input.MouseDragEvent;
-import javafx.scene.layout.AnchorPane;
+import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.pl.fx.helper.Drag;
+import org.ihtsdo.ttk.services.action.InterfaceContext;
 
 /**
  *
@@ -165,6 +162,7 @@ public class DefinitionPane extends Pane {
 
    /** Field description */
    private DefinitionTree definitionTree;
+   private EditCoordinate editCoordinate;
 
    /** Field description */
    private ObjectProperty<Pos> alignment;
@@ -189,6 +187,8 @@ public class DefinitionPane extends Pane {
 
    /** Field description */
    private double[] columnMaxX;
+   
+   EnumSet<InterfaceContext> contextSet;
 
    {
       getStyleClass().add("dl-grid");
@@ -204,6 +204,7 @@ public class DefinitionPane extends Pane {
     */
    public DefinitionPane() {
       super();
+      this.contextSet = EnumSet.of(InterfaceContext.CONCEPT_DETAILS_PANEL, InterfaceContext.CONCEPT_DEFINITION_PANEL);
       setOnDragOver(new EventHandler<DragEvent>() {
          @Override
          public void handle(DragEvent event) {
@@ -1116,7 +1117,7 @@ public class DefinitionPane extends Pane {
            throws IOException, ContradictionException {
       final ContextualDragAndDropNode partLabel = 
               new ContextualDragAndDropNode(part.getText(definitionTree.getViewCoordinate()), 
-              part, partType);
+              part, partType, contextSet, definitionTree.getViewCoordinate(), editCoordinate);
       setWidthAndStyleClass(partLabel, partType);
 
 
@@ -1630,7 +1631,8 @@ public class DefinitionPane extends Pane {
     * @throws ContradictionException
     * @throws IOException
     */
-   public void setDefinitionTree(DefinitionTree definitionTree) throws ContradictionException, IOException {
+   public void setDefinitionTree(DefinitionTree definitionTree, EditCoordinate editCoordinate) throws ContradictionException, IOException {
+      this.editCoordinate = editCoordinate;
       this.definitionTree = definitionTree;
       this.getChildren().clear();
       this.edges.getChildren().clear();

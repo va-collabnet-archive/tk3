@@ -20,7 +20,6 @@ package org.ihtsdo.ttk.pl.fx.concept.details;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import com.javafx.experiments.scenicview.ScenicView;
 import javafx.application.Platform;
 
 import javafx.beans.value.ChangeListener;
@@ -53,14 +52,19 @@ import java.io.IOException;
 import java.net.URL;
 
 import java.util.ResourceBundle;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
+import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
 import org.ihtsdo.ttk.logic.DefinitionTree;
+import org.ihtsdo.ttk.services.aa.SessionAttributeKeys;
+import org.ihtsdo.ttk.services.aa.SessionAttributes;
 
 /**
  *
@@ -95,13 +99,22 @@ public class ConceptDetailsViewController
    private void changeConcept(FxConcept contextConcept) {
       if (contextConcept != null) {
           try {
+              
+              UUID[] userUuidArray = (UUID[]) Looker.lookup(SessionAttributes.class).get(SessionAttributeKeys.USER_UUID_ARRAY);
+              int authorNid = Ts.get().getNidForUuids(userUuidArray);
+              UUID[] moduleUuids = (UUID[]) Looker.lookup(SessionAttributes.class).get(SessionAttributeKeys.EDIT_MODULE_UUID_ARRAY);
+              int moduleNid = Ts.get().getNidForUuids(moduleUuids);
+              NidSetBI editPathNidSet = Ts.getGlobalSnapshot().getViewCoordinate().getPositionSet().getViewPathNidSet();
+              // TODO how to specify the module nid? Should it be dynamic? Drools should specify the module nid in the action?
+              
+              EditCoordinate editCoordinate = new EditCoordinate(authorNid, moduleNid, editPathNidSet);
               //System.out.println(contextConcept.toXml());
               //System.out.println(Ts.get().getConcept(contextConcept.getPrimordialUuid()).toLongString());
               ConceptVersionBI concept = Ts.getGlobalSnapshot().getConceptVersion(contextConcept.getConceptReference().getNid());
               DefinitionTree dt = new DefinitionTree(concept, DescriptionLogicBinding.EL_PLUS_PLUS.getNid());
               //System.out.println(dt.dfsPrint());
              textField.setText(contextConcept.toString());
-             definitionPane.setDefinitionTree(dt);
+             definitionPane.setDefinitionTree(dt, editCoordinate);
           } catch (IOException | ContradictionException ex) {
               Logger.getLogger(ConceptDetailsViewController.class.getName()).log(Level.SEVERE, null, ex);
           }

@@ -20,11 +20,10 @@ package org.ihtsdo.ttk.pl.fx.concept.details;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import javafx.animation.ScaleTransition;
-import javafx.animation.ScaleTransitionBuilder;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
-import javafx.animation.TranslateTransitionBuilder;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+
+import javafx.collections.ObservableList;
 
 import javafx.event.EventHandler;
 
@@ -32,6 +31,7 @@ import javafx.geometry.Point2D;
 
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -41,23 +41,32 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import javafx.util.Duration;
-
+import org.ihtsdo.ttk.api.ComponentVersionBI;
+import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
+import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.logic.DefinitionPart;
 import org.ihtsdo.ttk.logic.DefinitionPartType;
+import org.ihtsdo.ttk.lookup.Looker;
 import org.ihtsdo.ttk.pl.fx.helper.Drag;
+import org.ihtsdo.ttk.services.action.ActionBI;
+import org.ihtsdo.ttk.services.action.ActionContextBI;
+import org.ihtsdo.ttk.services.action.ActionServiceBI;
+import org.ihtsdo.ttk.services.action.InterfaceContext;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Collections;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.WeakHashMap;
 
 /**
  *
  * @author kec
  */
-public class ContextualDragAndDropNode extends Label {
+public class ContextualDragAndDropNode extends Label implements ActionContextBI {
 
    /** Field description */
    private static Set<ContextualDragAndDropNode> contextualNodeSet =
@@ -68,6 +77,9 @@ public class ContextualDragAndDropNode extends Label {
 
    /** Field description */
    double yTranslation = 40;
+
+   /** Field description */
+   UUID actionContextUuid = UUID.randomUUID();
 
    /** Field description */
    DefinitionPart part;
@@ -81,15 +93,33 @@ public class ContextualDragAndDropNode extends Label {
    /** Field description */
    TaskBarTransition growTransition;
 
+   /** Field description */
+   EnumSet<InterfaceContext> contextSet;
+
+   /** Field description */
+   ViewCoordinate viewCoordinate;
+
+   /** Field description */
+   EditCoordinate editCoordinate;
+
+   /** Field description */
+   ObservableList<ActionBI> contextualActions;
+
    /**
     * Constructs ...
     *
     *
     * @param part
     * @param partType
+    * @param contextSet
+    * @param vc
+    * @param ec
     */
-   public ContextualDragAndDropNode(DefinitionPart part, DefinitionPartType partType) {
-      setup(part, partType);
+   public ContextualDragAndDropNode(DefinitionPart part, DefinitionPartType partType,
+                                    EnumSet<InterfaceContext> contextSet, ViewCoordinate vc,
+                                    EditCoordinate ec) {
+      setup(part, partType, contextSet, vc, ec);
+
    }
 
    /**
@@ -99,10 +129,15 @@ public class ContextualDragAndDropNode extends Label {
     * @param text
     * @param part
     * @param partType
+    * @param contextSet
+    * @param vc
+    * @param ec
     */
-   public ContextualDragAndDropNode(String text, DefinitionPart part, DefinitionPartType partType) {
+   public ContextualDragAndDropNode(String text, DefinitionPart part, DefinitionPartType partType,
+                                    EnumSet<InterfaceContext> contextSet, ViewCoordinate vc,
+                                    EditCoordinate ec) {
       super(text);
-      setup(part, partType);
+      setup(part, partType, contextSet, vc, ec);
    }
 
    /**
@@ -113,11 +148,15 @@ public class ContextualDragAndDropNode extends Label {
     * @param graphic
     * @param part
     * @param partType
+    * @param contextSet
+    * @param vc
+    * @param ec
     */
    public ContextualDragAndDropNode(String text, Node graphic, DefinitionPart part,
-                                    DefinitionPartType partType) {
+                                    DefinitionPartType partType, EnumSet<InterfaceContext> contextSet,
+                                    ViewCoordinate vc, EditCoordinate ec) {
       super(text, graphic);
-      setup(part, partType);
+      setup(part, partType, contextSet, vc, ec);
    }
 
    /**
@@ -140,14 +179,13 @@ public class ContextualDragAndDropNode extends Label {
          if (this.getScene() != null) {
             ((AnchorPane) getScene().getRoot()).getChildren().add(dropNode);
             dropNode.setVisible(true);
-            
 
             Point2D scenePt = getParent().localToScene(this.getBoundsInParent().getMinX()
                                  - dropNode.getWidth(), this.getBoundsInParent().getMinY());
 
             dropNode.relocate(scenePt.getX(), scenePt.getY());
-            growTransition = new TaskBarTransition(xTranslation, yTranslation, 
-                    scenePt.getX(), scenePt.getY(), dropNode);
+            growTransition = new TaskBarTransition(xTranslation, yTranslation, scenePt.getX(),
+                scenePt.getY(), dropNode);
          }
       }
    }
@@ -158,15 +196,23 @@ public class ContextualDragAndDropNode extends Label {
     *
     * @param part
     * @param partType
+    * @param contextSet
+    * @param vc
+    * @param ec
     */
-   private void setup(DefinitionPart part, DefinitionPartType partType) {
-      this.part     = part;
-      this.partType = partType;
+   private void setup(DefinitionPart part, DefinitionPartType partType, EnumSet<InterfaceContext> contextSet,
+                      ViewCoordinate vc, EditCoordinate ec) {
+      this.part       = part;
+      this.partType   = partType;
+      this.contextSet = contextSet.clone();
+      this.contextSet.add(InterfaceContext.COMPONENT_PANEL);
+      this.viewCoordinate = vc;
+      this.editCoordinate = ec;
+      this.setId(actionContextUuid.toString());
       setCursor(Cursor.OPEN_HAND);
       dropNode = new Rectangle(0, 0, 10, 10);
       dropNode.setOpacity(0.5);
       dropNode.getStyleClass().add("dl-drop-disclosure");
-
       contextualNodeSet.add(this);
       setOnDragDetected(new EventHandler<MouseEvent>() {
          @Override
@@ -218,6 +264,7 @@ public class ContextualDragAndDropNode extends Label {
             if (t.getGestureSource() != t.getTarget()) {
                getStyleClass().add("dl-drag-accept");
             }
+
             growTransition.grow();
             growTransition.play();
          }
@@ -242,5 +289,105 @@ public class ContextualDragAndDropNode extends Label {
             // event.consume();
          }
       });
+      sceneProperty().addListener(new ChangeListener<Scene>() {
+         @Override
+         public void changed(ObservableValue<? extends Scene> ov, Scene oldValue, Scene newValue) {
+            if (newValue == null) {
+               contextualActions = null;
+               Looker.lookup(ActionServiceBI.class).retractTargetContext(ContextualDragAndDropNode.this);
+            } else {
+               contextualActions =
+                  Looker.lookup(ActionServiceBI.class).insertTargetContext(ContextualDragAndDropNode.this);
+            }
+         }
+      });
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public UUID getActionContextUuid() {
+      return this.actionContextUuid;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public ComponentVersionBI getComponentForContext() {
+      return part.getRefexVersion();
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public EditCoordinate getEditCoordinate() {
+      return this.editCoordinate;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public EnumSet<InterfaceContext> getInterfaceContextSet() {
+      return contextSet;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public List<ActionContextBI> getLinkedContexts() {
+      return Collections.EMPTY_LIST;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public ViewCoordinate getViewCoordinate() {
+      return this.viewCoordinate;
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public boolean hasFocus() {
+      return hasFocus();
+   }
+
+   /**
+    * Method description
+    *
+    *
+    * @return
+    */
+   @Override
+   public boolean isSelected() {
+      return isSelected();
    }
 }
