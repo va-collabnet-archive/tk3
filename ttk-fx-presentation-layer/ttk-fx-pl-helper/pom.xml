@@ -30,6 +30,12 @@
             <artifactId>ttk-action-service</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.ihtsdo.ttk</groupId>
+            <artifactId>ttk-authentication-authorization-service</artifactId>
+            <type>jar</type>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>
