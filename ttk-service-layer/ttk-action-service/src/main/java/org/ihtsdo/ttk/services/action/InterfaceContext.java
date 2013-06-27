@@ -21,15 +21,14 @@ package org.ihtsdo.ttk.services.action;
  */
 public enum InterfaceContext {
     PANEL,
+    COMPONENT_PANEL,
     SEARCH_PANEL,
     REFSET_SPEC_PANEL,
-    CONCEPT_EDIT_PANEL,
+    CONCEPT_DEFINITION_PANEL,
     ADJUDICATE_PANEL,
     TAXONOMY_PANEL,
     CONCEPT_DETAILS_PANEL,
     MENU,
     FILE_MENU,
     TASK_MENU,
-    
-    
 }

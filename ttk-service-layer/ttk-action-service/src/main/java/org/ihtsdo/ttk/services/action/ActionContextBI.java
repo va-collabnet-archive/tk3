@@ -27,7 +27,7 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
  * @author kec
  */
 public interface ActionContextBI {
-    UUID getId();
+    UUID getActionContextUuid();
     ComponentVersionBI getComponentForContext();
     EnumSet<InterfaceContext> getInterfaceContextSet();
     ViewCoordinate getViewCoordinate();
@@ -35,7 +35,9 @@ public interface ActionContextBI {
     /** not so sure about this one */
     List<ActionContextBI> getLinkedContexts();
     
+    /** not so sure about this one, as it changes, and drools may not know... */
     boolean hasFocus();
+    /** not so sure about this one, as it changes, and drools may not know... */
     boolean isSelected();
     
 }
