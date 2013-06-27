@@ -39,10 +39,14 @@ import org.apache.shiro.util.Factory;
 
 import org.ihtsdo.ttk.lookup.Looker;
 import org.ihtsdo.ttk.lookup.TtkEnvironment;
-
+import org.ihtsdo.ttk.services.aa.SessionAttributeKeys;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import java.util.UUID;
+import org.ihtsdo.ttk.api.metadata.binding.Snomed;
+import org.ihtsdo.ttk.api.metadata.binding.TermAux;
+import org.ihtsdo.ttk.services.aa.SessionAttributes;
 import org.ihtsdo.ttk.services.action.ActionService;
 
 /**
@@ -81,7 +85,7 @@ public class IsaacApp extends Application {
       Subject currentUser = SecurityUtils.getSubject();
       Session session     = currentUser.getSession();
 
-      session.setAttribute("someKey", "aValue");
+      
 
       if (!currentUser.isAuthenticated()) {
 
@@ -95,6 +99,15 @@ public class IsaacApp extends Application {
          currentUser.login(token);
       }
 
+      if (currentUser.isAuthenticated()) {
+         // TODO somehow associate the user UUID with the subject
+          SessionAttributes.get().put(SessionAttributeKeys.USER_UUID_ARRAY, TermAux.USER.getUuids());
+          SessionAttributes.get().put(SessionAttributeKeys.EDIT_MODULE_UUID_ARRAY, Snomed.CORE_MODULE.getUuids());
+ 
+      } else {
+          System.out.println("User is not authenticated");
+          System.exit(0);
+      }
       launch(args);
    }
 
