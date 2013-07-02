@@ -216,7 +216,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
         int nid = (Integer) idObj;
         ComponentBI component = Ts.get().getComponent(nid);
         if (component != null) {
-            return component.getPrimUuid().toString();
+            return component.getPrimordialUuid().toString();
         }
         List<UUID> uuids = Ts.get().getUuidsForNid(nid);
         if (uuids.size() == 1) {
@@ -351,7 +351,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
         }
         if (this.properties.get(ComponentProperty.STATUS_ID) != null) {
             setStatusUuid(Ts.get().getComponent(
-                    (Integer) this.properties.get(ComponentProperty.STATUS_ID)).getPrimUuid());
+                    (Integer) this.properties.get(ComponentProperty.STATUS_ID)).getPrimordialUuid());
         }
     }
 

@@ -72,9 +72,9 @@ public class RelationshipCAB extends CreateOrAmendBlueprint {
             TkRelationshipType relationshipType,
             IdDirective idDirective)
             throws IOException, InvalidCAB, ContradictionException {
-        this(Ts.get().getComponent(sourceNid).getPrimUuid(),
-                Ts.get().getComponent(typeNid).getPrimUuid(),
-                Ts.get().getComponent(targetNid).getPrimUuid(),
+        this(Ts.get().getComponent(sourceNid).getPrimordialUuid(),
+                Ts.get().getComponent(typeNid).getPrimordialUuid(),
+                Ts.get().getComponent(targetNid).getPrimordialUuid(),
                 group, null, relationshipType, null, null,
                 idDirective, RefexDirective.EXCLUDE);
     }
@@ -143,9 +143,9 @@ public class RelationshipCAB extends CreateOrAmendBlueprint {
             IdDirective idDirective,
             RefexDirective refexDirective) 
             throws IOException, InvalidCAB, ContradictionException {
-        this(Ts.get().getComponent(sourceNid).getPrimUuid(),
-                Ts.get().getComponent(typeNid).getPrimUuid(),
-                Ts.get().getComponent(targetNid).getPrimUuid(),
+        this(Ts.get().getComponent(sourceNid).getPrimordialUuid(),
+                Ts.get().getComponent(typeNid).getPrimordialUuid(),
+                Ts.get().getComponent(targetNid).getPrimordialUuid(),
                 group, null, relationshipType, relationshipVersion, 
                 viewCoordinate,
                 idDirective, 

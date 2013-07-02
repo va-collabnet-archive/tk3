@@ -148,7 +148,7 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
         setComponentUuidNoRecompute(componentUuid);
 
         if (idDirective == IdDirective.PRESERVE && componentVersion != null) {
-            setComponentUuidNoRecompute(componentVersion.getPrimUuid());
+            setComponentUuidNoRecompute(componentVersion.getPrimordialUuid());
         } else if (idDirective == IdDirective.GENERATE_RANDOM) {
             setComponentUuidNoRecompute(UUID.randomUUID());
         } else if ((cv instanceof ConceptVersionBI)
@@ -156,7 +156,7 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
             setComponentUuidNoRecompute(UUID.randomUUID());
         } else if ((cv instanceof ConceptVersionBI)
                 && (idDirective == IdDirective.PRESERVE_CONCEPT_REST_HASH)) {
-            setComponentUuidNoRecompute(componentVersion.getPrimUuid());
+            setComponentUuidNoRecompute(componentVersion.getPrimordialUuid());
         }
 
         getAnnotationBlueprintsFromOriginal();
@@ -388,7 +388,7 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
 
             case PRESERVE:
                 if (cv != null) {
-                    return cv.getPrimUuid();
+                    return cv.getPrimordialUuid();
                 }
         }
 
@@ -428,7 +428,7 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
         ComponentBI component = Ts.get().getComponent(componentNid);
 
         if (component != null) {
-            return component.getPrimUuid().toString();
+            return component.getPrimordialUuid().toString();
         }
 
         List<UUID> uuids = Ts.get().getUuidsForNid(componentNid);
@@ -460,7 +460,7 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
                 return uuid.toString();
             }
 
-            return Ts.get().getComponent(uuid).getPrimUuid().toString();
+            return Ts.get().getComponent(uuid).getPrimordialUuid().toString();
         }
 
         return uuid.toString();

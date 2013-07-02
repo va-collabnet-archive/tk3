@@ -57,7 +57,7 @@ public class ConceptAttributeAB extends CreateOrAmendBlueprint {
     public ConceptAttributeAB(
             int conceptNid, boolean defined, RefexDirective refexDirective)
             throws IOException, InvalidCAB, ContradictionException {
-        this(Ts.get().getComponent(conceptNid).getPrimUuid(),
+        this(Ts.get().getComponent(conceptNid).getPrimordialUuid(),
                 defined, null, null, refexDirective, IdDirective.PRESERVE);
     }
 
@@ -85,7 +85,7 @@ public class ConceptAttributeAB extends CreateOrAmendBlueprint {
             ViewCoordinate viewCoordinate, RefexDirective refexDirective, 
             IdDirective idDirective) 
             throws IOException, InvalidCAB, ContradictionException {
-        this(Ts.get().getComponent(conceptNid).getPrimUuid(),
+        this(Ts.get().getComponent(conceptNid).getPrimordialUuid(),
                 defined, conceptAttributeVersion, viewCoordinate, refexDirective, idDirective);
     }
 

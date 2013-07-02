@@ -55,7 +55,7 @@ public interface ComponentBI {
     *
     * @return the primordial if known. The IUnknown UUID (00000000-0000-0000-C000-000000000046) if not known.
     */
-   UUID getPrimUuid();
+   UUID getPrimordialUuid();
 
    Collection<? extends RefexChronicleBI<?>> getRefexMembers(int refsetNid) throws IOException;
 

@@ -67,8 +67,8 @@ public class MediaCAB extends CreateOrAmendBlueprint {
             int conceptNid, int typeNid, String format, String textDescription,
             byte[] dataBytes, IdDirective idDirective)
             throws IOException, InvalidCAB, ContradictionException {
-        this(Ts.get().getComponent(conceptNid).getPrimUuid(),
-                Ts.get().getComponent(typeNid).getPrimUuid(),
+        this(Ts.get().getComponent(conceptNid).getPrimordialUuid(),
+                Ts.get().getComponent(typeNid).getPrimordialUuid(),
                 format, textDescription, dataBytes, idDirective);
     }
 
@@ -124,8 +124,8 @@ public class MediaCAB extends CreateOrAmendBlueprint {
             IdDirective idDirective,
             RefexDirective refexDirective)
             throws IOException, InvalidCAB, ContradictionException {
-        this(Ts.get().getComponent(conceptNid).getPrimUuid(),
-                Ts.get().getComponent(typeNid).getPrimUuid(),
+        this(Ts.get().getComponent(conceptNid).getPrimordialUuid(),
+                Ts.get().getComponent(typeNid).getPrimordialUuid(),
                 format, textDescription, dataBytes, mediaVersion, viewCoordinate,
                 idDirective, refexDirective);
     }

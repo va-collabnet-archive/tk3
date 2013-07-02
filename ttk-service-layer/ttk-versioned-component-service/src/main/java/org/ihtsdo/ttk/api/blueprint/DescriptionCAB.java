@@ -74,8 +74,8 @@ public class DescriptionCAB extends CreateOrAmendBlueprint {
             boolean initialCaseSignificant, 
             IdDirective idDirective)
             throws IOException, InvalidCAB, ContradictionException {
-        this(Ts.get().getComponent(conceptNid).getPrimUuid(),
-                Ts.get().getComponent(typeNid).getPrimUuid(),
+        this(Ts.get().getComponent(conceptNid).getPrimordialUuid(),
+                Ts.get().getComponent(typeNid).getPrimordialUuid(),
                 langCode, text, initialCaseSignificant, idDirective);
     }
 
@@ -134,8 +134,8 @@ public class DescriptionCAB extends CreateOrAmendBlueprint {
             IdDirective idDirective,
             RefexDirective refexDirective) 
             throws IOException, InvalidCAB, ContradictionException {
-        this(Ts.get().getComponent(conceptNid).getPrimUuid(),
-                Ts.get().getComponent(typeNid).getPrimUuid(),
+        this(Ts.get().getComponent(conceptNid).getPrimordialUuid(),
+                Ts.get().getComponent(typeNid).getPrimordialUuid(),
                 langCode, text, initialCaseSignificant, descriptionVersion, 
                 viewCoordinate,
                 idDirective, refexDirective);

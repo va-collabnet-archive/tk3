@@ -2,6 +2,7 @@ package org.ihtsdo.ttk.api.concept;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.io.DataOutput;
 import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
@@ -23,6 +24,8 @@ import java.util.Collection;
 import org.ihtsdo.ttk.api.ProcessComponentChronicleBI;
 
 public interface ConceptChronicleBI extends ComponentChronicleBI<ConceptVersionBI> {
+    
+   void writeExternal(DataOutput out) throws IOException;
    void cancel() throws IOException;
 
    boolean commit(ChangeSetGenerationPolicy changeSetPolicy,

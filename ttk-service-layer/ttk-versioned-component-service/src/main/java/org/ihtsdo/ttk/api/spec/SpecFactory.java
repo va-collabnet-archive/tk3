@@ -17,12 +17,12 @@ public class SpecFactory {
         ConceptVersionBI cv = Ts.get().getConceptVersion(vc, concept.getNid());
         try {
             return new ConceptSpec(cv.getDescriptionsActive().iterator().next().getText(),
-                    concept.getPrimUuid());
+                    concept.getPrimordialUuid());
         } catch (ContradictionException ex) {
             for (DescriptionChronicleBI desc : concept.getDescs()) {
                 for (DescriptionVersionBI dv : desc.getVersions(vc)) {
                     return new ConceptSpec(dv.getText(),
-                            concept.getPrimUuid());
+                            concept.getPrimordialUuid());
                 }
             }
             throw new IOException("No current description for: " + cv);
@@ -32,11 +32,11 @@ public class SpecFactory {
     public static ConceptSpec get(ConceptVersionBI concept) throws IOException {
         try {
             return new ConceptSpec(concept.getDescriptionsActive().iterator().next().getText(),
-                    concept.getPrimUuid());
+                    concept.getPrimordialUuid());
         } catch (ContradictionException ex) {
             return new ConceptSpec(
                     concept.getDescs().iterator().next().getVersions().iterator().next().getText(),
-                    concept.getPrimUuid());
+                    concept.getPrimordialUuid());
         }
     }
 
