@@ -22,7 +22,7 @@ package org.ihtsdo.ttk.helpers.econcept.transfrom;
 import org.ihtsdo.ttk.api.country.COUNTRY_CODE;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
 import org.ihtsdo.ttk.api.lang.LanguageCode;
-import org.ihtsdo.ttk.dto.TkConcept;
+import org.ihtsdo.ttk.dto.TtkConcept;
 import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributes;
 import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributesRevision;
 import org.ihtsdo.ttk.dto.component.description.TkDescription;
@@ -154,7 +154,7 @@ public class EConceptToRF2UuidTransformer implements EConceptTransformerBI {
    }
 
    @Override
-   public void process(TkConcept c) throws Exception {
+   public void process(TtkConcept c) throws Exception {
       TkConceptAttributes ca = c.getConceptAttributes();
 
       processConceptAttribute(ca);
