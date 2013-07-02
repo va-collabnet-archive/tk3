@@ -24,7 +24,7 @@ import org.ihtsdo.ttk.api.blueprint.ConceptCB;
 import org.ihtsdo.ttk.api.lang.LanguageCode;
 import org.ihtsdo.ttk.api.spec.ConceptSpec;
 import org.ihtsdo.ttk.api.uuid.UuidT5Generator;
-import org.ihtsdo.ttk.dto.DtoBuilder;
+import org.ihtsdo.ttk.dto.UuidDtoBuilder;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -145,7 +145,7 @@ public class Taxonomy {
    }
 
    public void exportEConcept(DataOutputStream out) throws Exception {
-      DtoBuilder dtoBuilder = new DtoBuilder(System.currentTimeMillis(),
+      UuidDtoBuilder dtoBuilder = new UuidDtoBuilder(System.currentTimeMillis(),
                                  authorSpec.getUuids()[0],
                                  pathSpec.getUuids()[0],
                                  moduleSpec.getUuids()[0]);
