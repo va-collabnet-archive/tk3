@@ -10,6 +10,8 @@
     <packaging>pom</packaging>
     <name>${branch}:L2: Service Layer</name>
     <modules>
+        <module>ttk-action-service</module>
+        <module>ttk-authentication-authorization-service</module>
         <module>ttk-versioned-component-service</module>
         <module>ttk-versioned-fx-component-service</module>
         <module>ttk-auxiliary-taxonomies</module>
@@ -21,9 +23,9 @@
         <module>ttk-mojo</module>
         <module>ttk-preferences</module>
         <module>ttk-services</module>
-    <module>ttk-query-service</module>
-    <module>ttk-synchronization-service</module>
-  </modules>
+        <module>ttk-query-service</module>
+        <module>ttk-synchronization-service</module>
+    </modules>
     <profiles>
         <profile>
             <id>metrics</id>
