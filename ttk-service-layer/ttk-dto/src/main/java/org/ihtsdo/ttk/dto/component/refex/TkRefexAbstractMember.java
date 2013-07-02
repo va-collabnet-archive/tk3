@@ -37,8 +37,8 @@ public abstract class TkRefexAbstractMember<V extends TkRevision> extends TkComp
 
    public TkRefexAbstractMember(RefexVersionBI another) throws IOException {
       super(another);
-      this.componentUuid = Ts.get().getComponent(another.getReferencedComponentNid()).getPrimUuid();
-      this.refexExtensionUuid    = Ts.get().getComponent(another.getRefexExtensionNid()).getPrimUuid();
+      this.componentUuid = Ts.get().getComponent(another.getReferencedComponentNid()).getPrimordialUuid();
+      this.refexExtensionUuid    = Ts.get().getComponent(another.getRefexExtensionNid()).getPrimordialUuid();
    }
 
    public TkRefexAbstractMember(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {

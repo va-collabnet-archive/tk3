@@ -7,7 +7,7 @@ import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.id.IdBI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.uuid.UuidFactory;
-import org.ihtsdo.ttk.dto.TkConcept;
+import org.ihtsdo.ttk.dto.TtkConcept;
 import org.ihtsdo.ttk.dto.component.identifier.IDENTIFIER_PART_TYPES;
 import org.ihtsdo.ttk.dto.component.identifier.TkIdentifier;
 import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierLong;
@@ -112,7 +112,7 @@ nextId:
       Collection<? extends RefexChronicleBI<?>> anotherAnnotations = another.getAnnotations();
 
       processAnnotations(anotherAnnotations);
-      this.primordialUuid = another.getPrimUuid();
+      this.primordialUuid = another.getPrimordialUuid();
    }
 
    /**
@@ -249,7 +249,7 @@ nextId:
          this.annotations = new ArrayList<>(annotations.size());
 
          for (RefexChronicleBI<?> r : annotations) {
-            this.annotations.add(TkConcept.convertRefex(r));
+            this.annotations.add(TtkConcept.convertRefex(r));
          }
       }
    }
@@ -434,20 +434,20 @@ nextId:
       buff.append(super.toString());
 
       if ((annotations != null) && (annotations.size() > 0)) {
-         buff.append("\n" + TkConcept.PADDING);
+         buff.append("\n" + TtkConcept.PADDING);
 
          for (int i = 0; i < depth; i++) {
-            buff.append(TkConcept.PADDING);
+            buff.append(TtkConcept.PADDING);
          }
 
          buff.append("annotations:\n");
 
          for (TkRefexAbstractMember m : this.annotations) {
-            buff.append(TkConcept.PADDING);
-            buff.append(TkConcept.PADDING);
+            buff.append(TtkConcept.PADDING);
+            buff.append(TtkConcept.PADDING);
 
             for (int i = 0; i < depth; i++) {
-               buff.append(TkConcept.PADDING);
+               buff.append(TtkConcept.PADDING);
             }
 
             buff.append(m);
@@ -456,14 +456,14 @@ nextId:
       }
 
       if ((revisions != null) && (revisions.size() > 0)) {
-         buff.append("\n" + TkConcept.PADDING + "revisions:\n");
+         buff.append("\n" + TtkConcept.PADDING + "revisions:\n");
 
          for (TkRevision r : this.revisions) {
-            buff.append(TkConcept.PADDING);
-            buff.append(TkConcept.PADDING);
+            buff.append(TtkConcept.PADDING);
+            buff.append(TtkConcept.PADDING);
 
             for (int i = 0; i < depth; i++) {
-               buff.append(TkConcept.PADDING);
+               buff.append(TtkConcept.PADDING);
             }
 
             buff.append(r);

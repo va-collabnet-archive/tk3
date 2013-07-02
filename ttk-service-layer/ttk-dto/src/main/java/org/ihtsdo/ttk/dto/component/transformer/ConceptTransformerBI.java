@@ -15,12 +15,12 @@
  */
 package org.ihtsdo.ttk.dto.component.transformer;
 
-import org.ihtsdo.ttk.dto.TkConcept;
+import org.ihtsdo.ttk.dto.TtkConcept;
 
 /**
  *
  * @author kec
  */
 public interface ConceptTransformerBI {
-   TkConcept transform(TkConcept input);
+   TtkConcept transform(TtkConcept input);
 }

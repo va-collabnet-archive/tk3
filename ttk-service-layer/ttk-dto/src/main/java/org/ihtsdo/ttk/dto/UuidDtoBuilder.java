@@ -66,7 +66,7 @@ import java.util.UUID;
  *
  * @authorUuid kec
  */
-public class DtoBuilder {
+public class UuidDtoBuilder {
 
    /** Field description */
    long time;
@@ -87,7 +87,7 @@ public class DtoBuilder {
     * @param authorUuid
     * @param pathUuid
     */
-   public DtoBuilder(long time, UUID authorUuid, UUID pathUuid, UUID moduleUuid) {
+   public UuidDtoBuilder(long time, UUID authorUuid, UUID pathUuid, UUID moduleUuid) {
       this.time   = time;
       this.authorUuid = authorUuid;
       this.pathUuid   = pathUuid;
@@ -106,9 +106,9 @@ public class DtoBuilder {
     * @throws IOException
     * @throws InvalidCAB
     */
-   public TkConcept construct(ConceptCB blueprint)
+   public TtkConcept construct(ConceptCB blueprint)
            throws IOException, InvalidCAB, ContradictionException {
-      TkConcept newC = new TkConcept();
+      TtkConcept newC = new TtkConcept();
 
       newC.setAnnotationStyleRefex(blueprint.isAnnotationRefexExtensionIdentity());
       newC.setPrimordialUuid(blueprint.getComponentUuid());
@@ -158,7 +158,7 @@ public class DtoBuilder {
     * @throws IOException
     * @throws InvalidCAB
     */
-   private void construct(ConceptAttributeAB blueprint, TkConcept c)
+   private void construct(ConceptAttributeAB blueprint, TtkConcept c)
            throws IOException, InvalidCAB, ContradictionException {
       TkConceptAttributes ca = new TkConceptAttributes();
 
@@ -188,7 +188,7 @@ public class DtoBuilder {
     * @throws IOException
     * @throws InvalidCAB
     */
-   private void construct(DescriptionCAB blueprint, TkConcept c)
+   private void construct(DescriptionCAB blueprint, TtkConcept c)
            throws IOException, InvalidCAB, ContradictionException {
       TkDescription d = new TkDescription();
 
@@ -222,7 +222,7 @@ public class DtoBuilder {
     * @throws IOException
     * @throws InvalidCAB
     */
-   private void construct(MediaCAB blueprint, TkConcept c)
+   private void construct(MediaCAB blueprint, TtkConcept c)
            throws IOException, InvalidCAB, ContradictionException {
       TkMedia img = new TkMedia();
 
@@ -278,7 +278,7 @@ public class DtoBuilder {
     * @throws IOException
     * @throws InvalidCAB
     */
-   private void construct(RelationshipCAB blueprint, TkConcept c)
+   private void construct(RelationshipCAB blueprint, TtkConcept c)
            throws IOException, InvalidCAB, ContradictionException {
       TkRelationship r = new TkRelationship();
 

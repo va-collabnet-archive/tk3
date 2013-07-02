@@ -39,7 +39,7 @@ public abstract class TkIdentifier extends TkRevision {
 
    public TkIdentifier(IdBI id) throws IOException {
       super(id);
-      this.authorityUuid = Ts.get().getComponent(id.getAuthorityNid()).getPrimUuid();
+      this.authorityUuid = Ts.get().getComponent(id.getAuthorityNid()).getPrimordialUuid();
    }
 
    public TkIdentifier(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {

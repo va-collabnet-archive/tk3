@@ -74,7 +74,7 @@ import javax.xml.bind.annotation.*;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "concept")
-public class TkConcept {
+public class TtkConcept {
 
    /** Field description */
    public static final String PADDING = "     ";
@@ -123,7 +123,7 @@ public class TkConcept {
     * Constructs ...
     *
     */
-   public TkConcept() {
+   public TtkConcept() {
       super();
    }
 
@@ -135,7 +135,7 @@ public class TkConcept {
     *
     * @throws IOException
     */
-   public TkConcept(ConceptChronicleBI c) throws IOException {
+   public TtkConcept(ConceptChronicleBI c) throws IOException {
       annotationStyleRefex      = c.isAnnotationStyleRefex();
       annotationIndexStyleRefex = c.isAnnotationIndex();
       conceptAttributes         = new TkConceptAttributes(c.getConAttrs());
@@ -188,7 +188,7 @@ public class TkConcept {
     * @throws ClassNotFoundException
     * @throws IOException
     */
-   public TkConcept(DataInput in) throws IOException, ClassNotFoundException {
+   public TtkConcept(DataInput in) throws IOException, ClassNotFoundException {
       super();
       readExternal(in);
    }
@@ -200,7 +200,7 @@ public class TkConcept {
     * @param another
     * @param transformer
     */
-   public TkConcept(TkConcept another, ComponentTransformerBI transformer) {
+   public TtkConcept(TtkConcept another, ComponentTransformerBI transformer) {
       super();
       this.annotationStyleRefex = transformer.transform(another.annotationStyleRefex, another,
           ComponentFields.ANNOTATION_REFEX);
@@ -307,8 +307,8 @@ public class TkConcept {
          return false;
       }
 
-      if (TkConcept.class.isAssignableFrom(obj.getClass())) {
-         TkConcept another = (TkConcept) obj;
+      if (TtkConcept.class.isAssignableFrom(obj.getClass())) {
+         TtkConcept another = (TtkConcept) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class

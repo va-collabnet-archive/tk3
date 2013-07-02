@@ -50,10 +50,10 @@ public abstract class TkRevision implements ExternalStampBI {
 
     public TkRevision(ComponentVersionBI another) throws IOException {
         super();
-        this.statusUuid = Ts.get().getComponent(another.getStatusNid()).getPrimUuid();
-        this.authorUuid = Ts.get().getComponent(another.getAuthorNid()).getPrimUuid();
-        this.pathUuid   = Ts.get().getComponent(another.getPathNid()).getPrimUuid();
-        this.moduleUuid = Ts.get().getComponent(another.getModuleNid()).getPrimUuid();
+        this.statusUuid = Ts.get().getComponent(another.getStatusNid()).getPrimordialUuid();
+        this.authorUuid = Ts.get().getComponent(another.getAuthorNid()).getPrimordialUuid();
+        this.pathUuid   = Ts.get().getComponent(another.getPathNid()).getPrimordialUuid();
+        this.moduleUuid = Ts.get().getComponent(another.getModuleNid()).getPrimordialUuid();
         assert pathUuid != null : another;
         assert authorUuid != null : another;
         assert statusUuid != null : another;
@@ -63,10 +63,10 @@ public abstract class TkRevision implements ExternalStampBI {
 
     public TkRevision(IdBI id) throws IOException {
         super();
-        this.authorUuid = Ts.get().getComponent(id.getAuthorNid()).getPrimUuid();
-        this.pathUuid   = Ts.get().getComponent(id.getPathNid()).getPrimUuid();
-        this.statusUuid = Ts.get().getComponent(id.getStatusNid()).getPrimUuid();
-        this.moduleUuid = Ts.get().getComponent(id.getModuleNid()).getPrimUuid();
+        this.authorUuid = Ts.get().getComponent(id.getAuthorNid()).getPrimordialUuid();
+        this.pathUuid   = Ts.get().getComponent(id.getPathNid()).getPrimordialUuid();
+        this.statusUuid = Ts.get().getComponent(id.getStatusNid()).getPrimordialUuid();
+        this.moduleUuid = Ts.get().getComponent(id.getModuleNid()).getPrimordialUuid();
         this.time       = id.getTime();
         assert pathUuid != null : id;
         assert authorUuid != null : id;
