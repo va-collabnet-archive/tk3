@@ -492,7 +492,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             return construct(blueprint);
         } else {
             Concept concept = Bdb.getConceptForComponent(cc.getNid());
-            if (concept.isCanceled() || concept.getPrimUuid().toString().length() == 0
+            if (concept.isCanceled() || concept.getPrimordialUuid().toString().length() == 0
                     || concept.getConAttrs().getVersions().isEmpty()) {
                 return construct(blueprint);
             } else {

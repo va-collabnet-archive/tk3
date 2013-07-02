@@ -973,7 +973,7 @@ public class Bdb {
 
     public static UUID getPrimUuidForConcept(int cNid) throws IOException {
         assert cNid == Bdb.getConceptNid(cNid) : " Not a concept nid: " + cNid;
-        return conceptDb.getConcept(cNid).getPrimUuid();
+        return conceptDb.getConcept(cNid).getPrimordialUuid();
     }
 
     public static UUID getPrimUuidForComponent(int nid) throws IOException {
@@ -982,7 +982,7 @@ public class Bdb {
         Concept c = Concept.get(cNid);
         ComponentChronicleBI<?> component = c.getComponent(nid);
         if (component != null) {
-            return component.getPrimUuid();
+            return component.getPrimordialUuid();
         }
         String warning = "Can't find component: " + nid + " in concept: " + c.toLongString();
         AceLog.getAppLog().warning(warning);

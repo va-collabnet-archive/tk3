@@ -38,7 +38,7 @@ import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 import org.ihtsdo.ttk.concept.cc.termstore.TerminologySnapshot;
 import org.ihtsdo.ttk.concept.cc.termstore.Termstore;
 import org.ihtsdo.ttk.concept.cs.CsProperty;
-import org.ihtsdo.ttk.dto.TkConcept;
+import org.ihtsdo.ttk.dto.TtkConcept;
 import org.ihtsdo.ttk.fx.FxComponentReference;
 import org.ihtsdo.ttk.fx.concept.FxConcept;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
@@ -228,7 +228,7 @@ public class BdbTerminologyStore extends Termstore {
                System.out.print(conceptsRead + "-");
 
                while (true) {
-                  TkConcept eConcept = new TkConcept(in);
+                  TtkConcept eConcept = new TtkConcept(in);
                   int       read     = conceptsRead.incrementAndGet();
 
                   if (read % 100 == 0) {
@@ -643,7 +643,7 @@ public class BdbTerminologyStore extends Termstore {
       ComponentChronicleBI<?> c = getComponent(nid);
 
       if (c != null) {
-         return c.getPrimUuid();
+         return c.getPrimordialUuid();
       }
 
       return UUID.fromString("00000000-0000-0000-C000-000000000046");
@@ -720,7 +720,7 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    private static class ConceptConverter implements Runnable {
-      TkConcept                                 eConcept   = null;
+      TtkConcept                                 eConcept   = null;
       Throwable                                 exception  = null;
       Concept                                   newConcept = null;
       AtomicInteger                             conceptsProcessed;
@@ -770,7 +770,7 @@ public class BdbTerminologyStore extends Termstore {
        *
        * @see org.ihtsdo.db.bdb.I_ProcessEConcept#setEConcept(org.ihtsdo.etypes .EConcept)
        */
-      public void setEConcept(TkConcept eConcept) throws Throwable {
+      public void setEConcept(TtkConcept eConcept) throws Throwable {
          if (exception != null) {
             throw exception;
          }
