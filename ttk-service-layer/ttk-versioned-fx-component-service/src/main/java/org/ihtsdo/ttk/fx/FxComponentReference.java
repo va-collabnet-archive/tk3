@@ -56,8 +56,8 @@ public class FxComponentReference implements Externalizable {
 
    public FxComponentReference(ConceptVersionBI concept) throws IOException, ContradictionException {
       nid  = concept.getNid();
-      uuidMsb = concept.getPrimUuid().getMostSignificantBits();
-      uuidLsb = concept.getPrimUuid().getLeastSignificantBits();
+      uuidMsb = concept.getPrimordialUuid().getMostSignificantBits();
+      uuidLsb = concept.getPrimordialUuid().getLeastSignificantBits();
       text = concept.getPreferredDescription().getText();
    }
 
@@ -76,8 +76,8 @@ public class FxComponentReference implements Externalizable {
       ComponentVersionBI component = ss.getComponentVersion(nid);
 
       if (component != null) {
-        uuidMsb = component.getPrimUuid().getMostSignificantBits();
-        uuidLsb = component.getPrimUuid().getLeastSignificantBits();
+        uuidMsb = component.getPrimordialUuid().getMostSignificantBits();
+        uuidLsb = component.getPrimordialUuid().getLeastSignificantBits();
 
          if (component instanceof ConceptVersionBI) {
             text = ((ConceptVersionBI) component).getPreferredDescription().getText();

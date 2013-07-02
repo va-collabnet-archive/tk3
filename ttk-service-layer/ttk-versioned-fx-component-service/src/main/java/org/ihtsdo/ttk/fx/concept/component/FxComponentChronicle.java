@@ -62,7 +62,7 @@ public abstract class FxComponentChronicle<V extends FxComponentVersion, T exten
            throws IOException, ContradictionException {
       super();
       this.concept                 = concept;
-      this.primordialComponentUuid = another.getPrimUuid();
+      this.primordialComponentUuid = another.getPrimordialUuid();
       this.componentNid            = another.getNid();
 
       Collection<? extends IdBI> anotherAdditionalIds = another.getAdditionalIds();

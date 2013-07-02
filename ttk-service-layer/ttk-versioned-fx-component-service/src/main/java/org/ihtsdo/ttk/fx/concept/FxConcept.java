@@ -117,7 +117,7 @@ public class FxConcept implements Serializable {
       this.refexPolicy        = refexPolicy;
       this.relationshipPolicy = relationshipPolicy;
       this.viewCoordinateUuid = ss.getViewCoordinate().getVcUuid();
-      this.conceptReference   = new FxComponentReference(c.getPrimUuid(), c.getNid(),
+      this.conceptReference   = new FxComponentReference(c.getPrimordialUuid(), c.getNid(),
           ss.getConceptForNid(c.getNid()).getPreferredDescription().getText());
       this.conceptAttributes = new FxConceptAttributesChronicle(ss, this, c.getConAttrs());
       this.primordialUuid    = conceptAttributes.getPrimordialComponentUuid();
