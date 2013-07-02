@@ -92,7 +92,7 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
     
     public static String getUUID(int nid) throws IOException {
     	ComponentBI cbi = Ts.get().getComponent(nid);
-    	UUID uuid = cbi.getPrimUuid();
+    	UUID uuid = cbi.getPrimordialUuid();
     	if(uuid == null) {
     		throw new RuntimeException("Unable to find UUID for nid "+nid);
     	}
