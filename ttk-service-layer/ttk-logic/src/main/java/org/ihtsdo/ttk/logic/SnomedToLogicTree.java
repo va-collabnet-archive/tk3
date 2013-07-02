@@ -102,7 +102,7 @@ public class SnomedToLogicTree extends LogicBlueprintBuilder implements ProcessU
     * @throws InvalidCAB
     */
    public void convert(ConceptVersionBI cv) throws IOException, ContradictionException, InvalidCAB {
-      setConceptUuid(cv.getPrimUuid());
+      setConceptUuid(cv.getPrimordialUuid());
 
       RefexCAB root    = newNode(DescriptionLogicBinding.DEFINITION_ROOT);
       boolean  defined = (cv.getConceptAttributesActive() != null)
