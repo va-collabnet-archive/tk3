@@ -5,7 +5,7 @@ package org.ihtsdo.ttk.dto.component.attribute;
 import org.ihtsdo.ttk.api.conattr.ConceptAttributeChronicleBI;
 import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.dto.component.TkComponent;
+import org.ihtsdo.ttk.dto.component.TtkComponent;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -20,7 +20,7 @@ import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
 @XmlRootElement(name="attributes")
-public class TkConceptAttributes extends TkComponent<TkConceptAttributesRevision> {
+public class TkConceptAttributes extends TtkComponent<TkConceptAttributesRevision> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------

@@ -6,7 +6,7 @@ import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_string.RefexNidNidStringVersionBI;
 import org.ihtsdo.ttk.dto.UtfHelper;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public class TkRefexUuidUuidStringRevision extends TkRevision {
+public class TkRefexUuidUuidStringRevision extends TtkRevision {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------

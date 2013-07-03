@@ -5,7 +5,7 @@ package org.ihtsdo.ttk.dto.component.refex.type_long;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_long.RefexLongVersionBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
 
@@ -111,7 +111,7 @@ public class TkRefexLongMember extends TkRefexAbstractMember<TkRefexLongRevision
    }
 
    @Override
-   public TkRevision makeTransform(ComponentTransformerBI transformer) {
+   public TtkRevision makeTransform(ComponentTransformerBI transformer) {
       return new TkRefexLongMember(this, transformer);
    }
 

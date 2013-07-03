@@ -5,8 +5,8 @@ package org.ihtsdo.ttk.dto.component.refex;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.dto.component.TkComponent;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkComponent;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public abstract class TkRefexAbstractMember<V extends TkRevision> extends TkComponent<V> {
+public abstract class TkRefexAbstractMember<V extends TtkRevision> extends TtkComponent<V> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------

@@ -3,7 +3,7 @@ package org.ihtsdo.ttk.dto.component.identifier;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.ttk.api.id.UuidIdBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -102,7 +102,7 @@ public class TkIdentifierUuid extends TkIdentifier {
    }
 
    @Override
-   public TkRevision makeTransform(ComponentTransformerBI transformer) {
+   public TtkRevision makeTransform(ComponentTransformerBI transformer) {
       return new TkIdentifierUuid(this, transformer);
    }
 

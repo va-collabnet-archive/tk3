@@ -4,7 +4,7 @@ package org.ihtsdo.ttk.dto.component.media;
 
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.media.MediaVersionBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -17,7 +17,7 @@ import java.util.UUID;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public class TkMediaRevision extends TkRevision {
+public class TkMediaRevision extends TtkRevision {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -90,7 +90,7 @@ public class TkMediaRevision extends TkRevision {
    }
 
    @Override
-   public TkRevision makeTransform(ComponentTransformerBI transformer) {
+   public TtkRevision makeTransform(ComponentTransformerBI transformer) {
       return new TkMediaRevision(this, transformer);
    }
 

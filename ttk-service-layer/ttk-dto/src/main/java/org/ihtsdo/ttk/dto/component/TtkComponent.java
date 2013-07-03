@@ -56,7 +56,7 @@ import javax.xml.bind.annotation.*;
  * @author         Enter your name here...    
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public abstract class TkComponent<V extends TkRevision> extends TkRevision {
+public abstract class TtkComponent<V extends TtkRevision> extends TtkRevision {
 
    /** Field description */
    private static final long serialVersionUID = 1;
@@ -84,7 +84,7 @@ public abstract class TkComponent<V extends TkRevision> extends TkRevision {
     * Constructs ...
     *
     */
-   public TkComponent() {
+   public TtkComponent() {
       super();
    }
 
@@ -96,7 +96,7 @@ public abstract class TkComponent<V extends TkRevision> extends TkRevision {
     *
     * @throws IOException
     */
-   public TkComponent(ComponentVersionBI another) throws IOException {
+   public TtkComponent(ComponentVersionBI another) throws IOException {
       super(another);
 
       Collection<? extends IdBI> anotherAdditionalIds = another.getAdditionalIds();
@@ -125,7 +125,7 @@ nextId:
     * @throws ClassNotFoundException
     * @throws IOException
     */
-   public TkComponent(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
+   public TtkComponent(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super();
       readExternal(in, dataVersion);
    }
@@ -137,7 +137,7 @@ nextId:
     * @param another
     * @param transformer
     */
-   public TkComponent(TkComponent<V> another, ComponentTransformerBI transformer) {
+   public TtkComponent(TtkComponent<V> another, ComponentTransformerBI transformer) {
       super(another, transformer);
 
       if (another.additionalIds != null) {
@@ -184,8 +184,8 @@ nextId:
          return false;
       }
 
-      if (TkComponent.class.isAssignableFrom(obj.getClass())) {
-         TkComponent<?> another = (TkComponent<?>) obj;
+      if (TtkComponent.class.isAssignableFrom(obj.getClass())) {
+         TtkComponent<?> another = (TtkComponent<?>) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
@@ -458,7 +458,7 @@ nextId:
       if ((revisions != null) && (revisions.size() > 0)) {
          buff.append("\n" + TtkConcept.PADDING + "revisions:\n");
 
-         for (TkRevision r : this.revisions) {
+         for (TtkRevision r : this.revisions) {
             buff.append(TtkConcept.PADDING);
             buff.append(TtkConcept.PADDING);
 
@@ -584,7 +584,7 @@ nextId:
     *
     * @return
     */
-   public abstract List<? extends TkRevision> getRevisionList();
+   public abstract List<? extends TtkRevision> getRevisionList();
 
    /**
     * Method description
@@ -634,7 +634,7 @@ nextId:
     * @return
     */
    public int getVersionCount() {
-      List<? extends TkRevision> extraVersions = getRevisionList();
+      List<? extends TtkRevision> extraVersions = getRevisionList();
 
       if (extraVersions == null) {
          return 1;

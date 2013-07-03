@@ -7,7 +7,7 @@ import org.ihtsdo.ttk.api.id.IdBI;
 import org.ihtsdo.ttk.api.id.LongIdBI;
 import org.ihtsdo.ttk.api.id.StringIdBI;
 import org.ihtsdo.ttk.api.id.UuidIdBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -24,7 +24,7 @@ import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public abstract class TkIdentifier extends TkRevision {
+public abstract class TkIdentifier extends TtkRevision {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------

@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 import org.ihtsdo.ttk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayVersionBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
@@ -36,7 +36,7 @@ import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
  *
  * @see TkConcept
  */
-public class TkRefexArrayOfByteArrayRevision extends TkRevision {
+public class TkRefexArrayOfByteArrayRevision extends TtkRevision {
 
     /**
      * The Constant serialVersionUID, used to prevent the class from computing

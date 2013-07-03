@@ -3,7 +3,7 @@ package org.ihtsdo.ttk.dto.component.refex.type_int;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.ttk.api.refex.type_int.RefexIntVersionBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public class TkRefexIntRevision extends TkRevision {
+public class TkRefexIntRevision extends TtkRevision {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------

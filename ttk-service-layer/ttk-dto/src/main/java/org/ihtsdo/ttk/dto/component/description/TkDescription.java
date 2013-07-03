@@ -7,7 +7,7 @@ import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.description.DescriptionChronicleBI;
 import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
 import org.ihtsdo.ttk.dto.UtfHelper;
-import org.ihtsdo.ttk.dto.component.TkComponent;
+import org.ihtsdo.ttk.dto.component.TtkComponent;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "description")
-public class TkDescription extends TkComponent<TkDescriptionRevision> {
+public class TkDescription extends TtkComponent<TkDescriptionRevision> {
     public static final long serialVersionUID = 1;
     @XmlAttribute
     public UUID              conceptUuid;

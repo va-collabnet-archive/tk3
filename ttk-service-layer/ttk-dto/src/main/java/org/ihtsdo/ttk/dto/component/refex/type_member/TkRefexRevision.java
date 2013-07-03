@@ -2,7 +2,7 @@ package org.ihtsdo.ttk.dto.component.refex.type_member;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -13,7 +13,7 @@ import java.io.IOException;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public class TkRefexRevision extends TkRevision {
+public class TkRefexRevision extends TtkRevision {
    public static final long serialVersionUID = 1;
 
    //~--- constructors --------------------------------------------------------
@@ -61,7 +61,7 @@ public class TkRefexRevision extends TkRevision {
    }
 
    @Override
-   public TkRevision makeTransform(ComponentTransformerBI transformer) {
+   public TtkRevision makeTransform(ComponentTransformerBI transformer) {
       return new TkRefexRevision(this, transformer);
    }
 

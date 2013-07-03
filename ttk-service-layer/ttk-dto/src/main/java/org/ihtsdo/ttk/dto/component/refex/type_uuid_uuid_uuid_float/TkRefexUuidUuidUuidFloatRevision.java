@@ -6,11 +6,11 @@ import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_float
    .RefexNidNidNidFloatVersionBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-import static org.ihtsdo.ttk.dto.component.TkRevision.informAboutUuid;
+import static org.ihtsdo.ttk.dto.component.TtkRevision.informAboutUuid;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class TkRefexUuidUuidUuidFloatRevision extends TkRevision {
+public class TkRefexUuidUuidUuidFloatRevision extends TtkRevision {
    public static final long serialVersionUID = 1;
    @XmlAttribute
    public UUID              uuid1;

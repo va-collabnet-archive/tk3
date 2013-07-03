@@ -3,7 +3,7 @@ package org.ihtsdo.ttk.dto.component.refex.type_boolean;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanVersionBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public class TkRefexBooleanRevision extends TkRevision {
+public class TkRefexBooleanRevision extends TtkRevision {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------

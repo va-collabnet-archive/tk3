@@ -6,7 +6,7 @@ import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
 
@@ -97,7 +97,7 @@ public class TkRefexMember extends TkRefexAbstractMember<TkRefexRevision> {
    }
 
    @Override
-   public TkRevision makeTransform(ComponentTransformerBI transformer) {
+   public TtkRevision makeTransform(ComponentTransformerBI transformer) {
       return new TkRefexMember(this, transformer);
    }
 

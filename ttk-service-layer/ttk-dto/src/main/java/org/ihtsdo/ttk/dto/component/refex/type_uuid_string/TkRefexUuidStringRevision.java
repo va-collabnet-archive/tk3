@@ -3,7 +3,7 @@ package org.ihtsdo.ttk.dto.component.refex.type_uuid_string;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.ttk.dto.UtfHelper;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -19,7 +19,7 @@ import org.ihtsdo.ttk.api.refex.type_nid_string.RefexNidStringVersionBI;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public class TkRefexUuidStringRevision extends TkRevision {
+public class TkRefexUuidStringRevision extends TtkRevision {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------

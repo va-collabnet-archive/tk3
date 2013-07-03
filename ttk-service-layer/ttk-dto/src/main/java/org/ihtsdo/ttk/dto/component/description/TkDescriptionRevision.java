@@ -4,7 +4,7 @@ package org.ihtsdo.ttk.dto.component.description;
 
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -19,7 +19,7 @@ import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
 @XmlRootElement(name="description-revision")
-public class TkDescriptionRevision extends TkRevision {
+public class TkDescriptionRevision extends TtkRevision {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------

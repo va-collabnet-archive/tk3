@@ -29,7 +29,7 @@ import org.ihtsdo.ttk.api.blueprint.MediaCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.blueprint.RelationshipCAB;
-import org.ihtsdo.ttk.dto.component.TkComponent;
+import org.ihtsdo.ttk.dto.component.TtkComponent;
 import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributes;
 import org.ihtsdo.ttk.dto.component.description.TkDescription;
 import org.ihtsdo.ttk.dto.component.media.TkMedia;
@@ -256,7 +256,7 @@ public class UuidDtoBuilder {
     * @throws IOException
     * @throws InvalidCAB
     */
-   private void construct(RefexCAB blueprint, TkComponent component)
+   private void construct(RefexCAB blueprint, TtkComponent component)
            throws IOException, InvalidCAB, ContradictionException {
       TkRefexAbstractMember annot = createRefex(blueprint);
 

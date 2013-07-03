@@ -13,7 +13,7 @@ import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-import static org.ihtsdo.ttk.dto.component.TkRevision.informAboutUuid;
+import static org.ihtsdo.ttk.dto.component.TtkRevision.informAboutUuid;
 
 //~--- JDK imports ------------------------------------------------------------
 

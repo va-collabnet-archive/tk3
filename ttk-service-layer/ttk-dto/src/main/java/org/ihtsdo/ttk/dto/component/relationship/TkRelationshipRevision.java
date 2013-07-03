@@ -5,7 +5,7 @@ package org.ihtsdo.ttk.dto.component.relationship;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -20,7 +20,7 @@ import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
 @XmlRootElement(name="relationship-revision")
-public class TkRelationshipRevision extends TkRevision {
+public class TkRelationshipRevision extends TtkRevision {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------

@@ -9,7 +9,7 @@ import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.media.MediaChronicleBI;
 import org.ihtsdo.ttk.api.media.MediaVersionBI;
-import org.ihtsdo.ttk.dto.component.TkComponent;
+import org.ihtsdo.ttk.dto.component.TtkComponent;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -21,7 +21,7 @@ import java.util.*;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public class TkMedia extends TkComponent<TkMediaRevision> {
+public class TkMedia extends TtkComponent<TkMediaRevision> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------

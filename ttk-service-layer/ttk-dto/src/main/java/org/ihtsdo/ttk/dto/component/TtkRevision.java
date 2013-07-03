@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public abstract class TkRevision implements ExternalStampBI {
+public abstract class TtkRevision implements ExternalStampBI {
     @SuppressWarnings("unused")
 	private static final long serialVersionUID      = 1;
     public static UUID        unspecifiedUserUuid   = UUID.fromString("f7495b58-6630-3499-a44e-2052b5fcf06c");
@@ -44,11 +44,11 @@ public abstract class TkRevision implements ExternalStampBI {
     @XmlAttribute
     public UUID               moduleUuid;
 
-    public TkRevision() {
+    public TtkRevision() {
         super();
     }
 
-    public TkRevision(ComponentVersionBI another) throws IOException {
+    public TtkRevision(ComponentVersionBI another) throws IOException {
         super();
         this.statusUuid = Ts.get().getComponent(another.getStatusNid()).getPrimordialUuid();
         this.authorUuid = Ts.get().getComponent(another.getAuthorNid()).getPrimordialUuid();
@@ -61,7 +61,7 @@ public abstract class TkRevision implements ExternalStampBI {
         this.time = another.getTime();
     }
 
-    public TkRevision(IdBI id) throws IOException {
+    public TtkRevision(IdBI id) throws IOException {
         super();
         this.authorUuid = Ts.get().getComponent(id.getAuthorNid()).getPrimordialUuid();
         this.pathUuid   = Ts.get().getComponent(id.getPathNid()).getPrimordialUuid();
@@ -74,7 +74,7 @@ public abstract class TkRevision implements ExternalStampBI {
         assert moduleUuid != null : id;
     }
 
-    public TkRevision(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
+    public TtkRevision(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
         super();
         readExternal(in, dataVersion);
         assert pathUuid != null : this;
@@ -83,7 +83,7 @@ public abstract class TkRevision implements ExternalStampBI {
         assert moduleUuid != null : this;
     }
 
-    public TkRevision(TkRevision another, ComponentTransformerBI transformer) {
+    public TtkRevision(TtkRevision another, ComponentTransformerBI transformer) {
         super();
         this.statusUuid = transformer.transform(another.statusUuid, another, ComponentFields.STATUS_UUID);
         this.authorUuid = transformer.transform(another.authorUuid, another, ComponentFields.AUTHOR_UUID);
@@ -112,8 +112,8 @@ public abstract class TkRevision implements ExternalStampBI {
             return false;
         }
 
-        if (TkRevision.class.isAssignableFrom(obj.getClass())) {
-            TkRevision another = (TkRevision) obj;
+        if (TtkRevision.class.isAssignableFrom(obj.getClass())) {
+            TtkRevision another = (TtkRevision) obj;
 
             // =========================================================
             // Compare properties of 'this' class to the 'another' class
@@ -201,7 +201,7 @@ public abstract class TkRevision implements ExternalStampBI {
                     sb.append(" ");
                 }
             } catch (IOException ex) {
-                Logger.getLogger(TkRevision.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TtkRevision.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -210,7 +210,7 @@ public abstract class TkRevision implements ExternalStampBI {
         return sb;
     }
 
-    public abstract TkRevision makeTransform(ComponentTransformerBI transformer);
+    public abstract TtkRevision makeTransform(ComponentTransformerBI transformer);
 
     public void readExternal(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
         pathUuid   = new UUID(in.readLong(), in.readLong());

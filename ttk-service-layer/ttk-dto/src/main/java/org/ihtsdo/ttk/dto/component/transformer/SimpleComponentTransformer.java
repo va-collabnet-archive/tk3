@@ -20,7 +20,7 @@ package org.ihtsdo.ttk.dto.component.transformer;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -43,7 +43,7 @@ public class SimpleComponentTransformer implements ComponentTransformerBI {
     }
 
     @Override
-    public UUID transform(UUID input, TkRevision revision, ComponentFields field) {
+    public UUID transform(UUID input, TtkRevision revision, ComponentFields field) {
         if (fieldsToConvert.contains(field)) {
             if (uuidMap.containsKey(input)) {
                 return uuidMap.get(input);
@@ -54,7 +54,7 @@ public class SimpleComponentTransformer implements ComponentTransformerBI {
     }
 
     @Override
-    public String transform(String input, TkRevision revision, ComponentFields field) {
+    public String transform(String input, TtkRevision revision, ComponentFields field) {
         if (fieldsToConvert.contains(field)) {
             throw new UnsupportedOperationException();
         }
@@ -63,7 +63,7 @@ public class SimpleComponentTransformer implements ComponentTransformerBI {
     }
 
     @Override
-    public int transform(int input, TkRevision revision, ComponentFields field) {
+    public int transform(int input, TtkRevision revision, ComponentFields field) {
         if (fieldsToConvert.contains(field)) {
             throw new UnsupportedOperationException();
         }
@@ -72,7 +72,7 @@ public class SimpleComponentTransformer implements ComponentTransformerBI {
     }
 
     @Override
-    public long transform(long input, TkRevision revision, ComponentFields field) {
+    public long transform(long input, TtkRevision revision, ComponentFields field) {
         if (fieldsToConvert.contains(field)) {
             throw new UnsupportedOperationException();
         }
@@ -81,7 +81,7 @@ public class SimpleComponentTransformer implements ComponentTransformerBI {
     }
 
     @Override
-    public float transform(float input, TkRevision revision, ComponentFields field) {
+    public float transform(float input, TtkRevision revision, ComponentFields field) {
         if (fieldsToConvert.contains(field)) {
             throw new UnsupportedOperationException();
         }
@@ -90,7 +90,7 @@ public class SimpleComponentTransformer implements ComponentTransformerBI {
     }
 
     @Override
-    public boolean transform(boolean input, TkRevision revision, ComponentFields field) {
+    public boolean transform(boolean input, TtkRevision revision, ComponentFields field) {
         if (fieldsToConvert.contains(field)) {
             throw new UnsupportedOperationException();
         }
@@ -99,7 +99,7 @@ public class SimpleComponentTransformer implements ComponentTransformerBI {
     }
 
     @Override
-    public byte[] transform(byte[] input, TkRevision component, ComponentFields field) {
+    public byte[] transform(byte[] input, TtkRevision component, ComponentFields field) {
         if (fieldsToConvert.contains(field)) {
             throw new UnsupportedOperationException();
         }
@@ -108,7 +108,7 @@ public class SimpleComponentTransformer implements ComponentTransformerBI {
     }
 
     @Override
-    public byte[][] transform(byte[][] input, TkRevision component, ComponentFields field) {
+    public byte[][] transform(byte[][] input, TtkRevision component, ComponentFields field) {
         if (fieldsToConvert.contains(field)) {
             throw new UnsupportedOperationException();
         }

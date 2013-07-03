@@ -20,7 +20,7 @@ package org.ihtsdo.ttk.dto.component.transformer;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -32,23 +32,23 @@ import org.ihtsdo.ttk.dto.TtkConcept;
  * @author kec
  */
 public interface ComponentTransformerBI {
-    UUID transform(UUID input, TkRevision component, ComponentFields field);
+    UUID transform(UUID input, TtkRevision component, ComponentFields field);
     
     UUID transform(UUID input, TtkConcept concept, ComponentFields field);
 
-    String transform(String input, TkRevision component, ComponentFields field);
+    String transform(String input, TtkRevision component, ComponentFields field);
 
-    int transform(int input, TkRevision component, ComponentFields field);
+    int transform(int input, TtkRevision component, ComponentFields field);
 
-    long transform(long input, TkRevision component, ComponentFields field);
+    long transform(long input, TtkRevision component, ComponentFields field);
 
-    float transform(float input, TkRevision component, ComponentFields field);
+    float transform(float input, TtkRevision component, ComponentFields field);
 
-    boolean transform(boolean input, TkRevision component, ComponentFields field);
+    boolean transform(boolean input, TtkRevision component, ComponentFields field);
     
     boolean transform(boolean input, TtkConcept concept, ComponentFields field);
     
-    byte[][] transform(byte[][] input, TkRevision component, ComponentFields field);
+    byte[][] transform(byte[][] input, TtkRevision component, ComponentFields field);
     
-    byte[] transform(byte[] input, TkRevision component, ComponentFields field);
+    byte[] transform(byte[] input, TtkRevision component, ComponentFields field);
 }

@@ -3,7 +3,7 @@ package org.ihtsdo.ttk.dto.component.identifier;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.ttk.api.id.LongIdBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -95,7 +95,7 @@ public class TkIdentifierLong extends TkIdentifier {
    }
 
    @Override
-   public TkRevision makeTransform(ComponentTransformerBI transformer) {
+   public TtkRevision makeTransform(ComponentTransformerBI transformer) {
       return new TkIdentifierLong(this, transformer);
    }
 

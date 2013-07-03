@@ -3,7 +3,7 @@ package org.ihtsdo.ttk.dto.component.attribute;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -17,7 +17,7 @@ import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
 @XmlRootElement(name="attributes-revision")
-public class TkConceptAttributesRevision extends TkRevision {
+public class TkConceptAttributesRevision extends TtkRevision {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------

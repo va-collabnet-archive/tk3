@@ -22,7 +22,7 @@ import org.ihtsdo.ttk.api.refex.type_nid_nid_string.RefexNidNidStringVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_string.RefexNidStringVersionBI;
 import org.ihtsdo.ttk.api.refex.type_string.RefexStringVersionBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipChronicleBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributes;
 import org.ihtsdo.ttk.dto.component.description.TkDescription;
 import org.ihtsdo.ttk.dto.component.media.TkMedia;
@@ -586,7 +586,7 @@ public class TtkConcept {
 
       buff.append(this.getClass().getSimpleName());
       buff.append(": \n   primordial UUID: ");
-      buff.append(TkRevision.informAboutUuid(this.primordialUuid));
+      buff.append(TtkRevision.informAboutUuid(this.primordialUuid));
       buff.append(": \n   annotation refex: ");
       buff.append(this.annotationStyleRefex);
       buff.append(": \n   indexed annotation: ");

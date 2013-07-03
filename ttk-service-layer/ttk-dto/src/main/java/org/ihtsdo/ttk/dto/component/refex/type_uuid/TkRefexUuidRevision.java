@@ -4,7 +4,7 @@ package org.ihtsdo.ttk.dto.component.refex.type_uuid;
 
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -18,7 +18,7 @@ import org.ihtsdo.ttk.api.refex.type_nid.RefexNidVersionBI;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public class TkRefexUuidRevision extends TkRevision {
+public class TkRefexUuidRevision extends TtkRevision {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------

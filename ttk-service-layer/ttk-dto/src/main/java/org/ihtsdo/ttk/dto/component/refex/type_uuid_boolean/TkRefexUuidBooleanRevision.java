@@ -5,7 +5,7 @@ package org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.refex.type_nid_boolean.RefexNidBooleanVersionBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @version        Enter version here..., 13/03/27
  * @author         Enter your name here...    
  */
-public class TkRefexUuidBooleanRevision extends TkRevision {
+public class TkRefexUuidBooleanRevision extends TtkRevision {
 
    /** Field description */
    public static final long serialVersionUID = 1;
