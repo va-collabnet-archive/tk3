@@ -9,30 +9,30 @@ import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.uuid.UuidFactory;
 import org.ihtsdo.ttk.dto.TtkConcept;
 import org.ihtsdo.ttk.dto.component.identifier.IDENTIFIER_PART_TYPES;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifier;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierLong;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierString;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierUuid;
-import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
-import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TkRefexArrayOfByteArrayMember;
-import org.ihtsdo.ttk.dto.component.refex.type_boolean.TkRefexBooleanMember;
-import org.ihtsdo.ttk.dto.component.refex.type_int.TkRefexIntMember;
-import org.ihtsdo.ttk.dto.component.refex.type_long.TkRefexLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_member.TkRefexMember;
-import org.ihtsdo.ttk.dto.component.refex.type_string.TkRefexStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid.TkRefexUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TkRefexUuidBooleanMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TkRefexUuidFloatMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_int.TkRefexUuidIntMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_long.TkRefexUuidLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TkRefexUuidStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid.TkRefexUuidUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_string.TkRefexUuidUuidStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TkRefexUuidUuidUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float.TkRefexUuidUuidUuidFloatMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int.TkRefexUuidUuidUuidIntMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long.TkRefexUuidUuidUuidLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TkRefexUuidUuidUuidStringMember;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifier;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierLong;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierString;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierUuid;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMember;
+import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TtkRefexArrayOfByteArrayMember;
+import org.ihtsdo.ttk.dto.component.refex.type_boolean.TtkRefexBooleanMember;
+import org.ihtsdo.ttk.dto.component.refex.type_int.TtkRefexIntMember;
+import org.ihtsdo.ttk.dto.component.refex.type_long.TtkRefexLongMember;
+import org.ihtsdo.ttk.dto.component.refex.type_member.TtkRefexMember;
+import org.ihtsdo.ttk.dto.component.refex.type_string.TtkRefexStringMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid.TtkRefexUuidMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TtkRefexUuidBooleanMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TtkRefexUuidFloatMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_int.TtkRefexUuidIntMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_long.TtkRefexUuidLongMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TtkRefexUuidStringMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid.TtkRefexUuidUuidMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_string.TtkRefexUuidUuidStringMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TtkRefexUuidUuidUuidMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float.TtkRefexUuidUuidUuidFloatMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int.TtkRefexUuidUuidUuidIntMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long.TtkRefexUuidUuidUuidLongMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TtkRefexUuidUuidUuidStringMember;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
@@ -64,12 +64,12 @@ public abstract class TtkComponent<V extends TtkRevision> extends TtkRevision {
    /** Field description */
    @XmlElementWrapper(name = "additional-ids")
    @XmlElement(name = "id")
-   public List<TkIdentifier> additionalIds;
+   public List<TtkIdentifier> additionalIds;
 
    /** Field description */
    @XmlElementWrapper(name = "annotations")
    @XmlElement(name = "refex")
-   public List<TkRefexAbstractMember<?>> annotations;
+   public List<TtkRefexAbstractMember<?>> annotations;
 
    /** Field description */
    @XmlAttribute
@@ -105,7 +105,7 @@ public abstract class TtkComponent<V extends TtkRevision> extends TtkRevision {
          this.additionalIds = new ArrayList<>(anotherAdditionalIds.size());
 nextId:
          for (IdBI id : anotherAdditionalIds) {
-            this.additionalIds.add((TkIdentifier) TkIdentifier.convertId(id));
+            this.additionalIds.add((TtkIdentifier) TtkIdentifier.convertId(id));
          }
       }
 
@@ -143,16 +143,16 @@ nextId:
       if (another.additionalIds != null) {
          this.additionalIds = new ArrayList<>(another.additionalIds.size());
 
-         for (TkIdentifier id : another.additionalIds) {
-            this.additionalIds.add((TkIdentifier) id.makeTransform(transformer));
+         for (TtkIdentifier id : another.additionalIds) {
+            this.additionalIds.add((TtkIdentifier) id.makeTransform(transformer));
          }
       }
 
       if (another.annotations != null) {
          this.annotations = new ArrayList<>(another.annotations.size());
 
-         for (TkRefexAbstractMember<?> r : another.annotations) {
-            this.annotations.add((TkRefexAbstractMember<?>) r.makeTransform(transformer));
+         for (TtkRefexAbstractMember<?> r : another.annotations) {
+            this.annotations.add((TtkRefexAbstractMember<?>) r.makeTransform(transformer));
          }
       }
 
@@ -279,17 +279,17 @@ nextId:
          for (int i = 0; i < idVersionCount; i++) {
             switch (IDENTIFIER_PART_TYPES.readType(in)) {
             case LONG :
-               additionalIds.add(new TkIdentifierLong(in, dataVersion));
+               additionalIds.add(new TtkIdentifierLong(in, dataVersion));
 
                break;
 
             case STRING :
-               additionalIds.add(new TkIdentifierString(in, dataVersion));
+               additionalIds.add(new TtkIdentifierString(in, dataVersion));
 
                break;
 
             case UUID :
-               additionalIds.add(new TkIdentifierUuid(in, dataVersion));
+               additionalIds.add(new TtkIdentifierUuid(in, dataVersion));
 
                break;
 
@@ -311,97 +311,97 @@ nextId:
 
             switch (type) {
             case CID :
-               annotations.add(new TkRefexUuidMember(in, dataVersion));
+               annotations.add(new TtkRefexUuidMember(in, dataVersion));
 
                break;
 
             case CID_CID :
-               annotations.add(new TkRefexUuidUuidMember(in, dataVersion));
+               annotations.add(new TtkRefexUuidUuidMember(in, dataVersion));
 
                break;
 
             case MEMBER :
-               annotations.add(new TkRefexMember(in, dataVersion));
+               annotations.add(new TtkRefexMember(in, dataVersion));
 
                break;
 
             case CID_CID_CID :
-               annotations.add(new TkRefexUuidUuidUuidMember(in, dataVersion));
+               annotations.add(new TtkRefexUuidUuidUuidMember(in, dataVersion));
 
                break;
 
             case CID_CID_STR :
-               annotations.add(new TkRefexUuidUuidStringMember(in, dataVersion));
+               annotations.add(new TtkRefexUuidUuidStringMember(in, dataVersion));
 
                break;
 
             case INT :
-               annotations.add(new TkRefexIntMember(in, dataVersion));
+               annotations.add(new TtkRefexIntMember(in, dataVersion));
 
                break;
 
             case STR :
-               annotations.add(new TkRefexStringMember(in, dataVersion));
+               annotations.add(new TtkRefexStringMember(in, dataVersion));
 
                break;
 
             case CID_INT :
-               annotations.add(new TkRefexUuidIntMember(in, dataVersion));
+               annotations.add(new TtkRefexUuidIntMember(in, dataVersion));
 
                break;
 
             case BOOLEAN :
-               annotations.add(new TkRefexBooleanMember(in, dataVersion));
+               annotations.add(new TtkRefexBooleanMember(in, dataVersion));
 
                break;
 
             case CID_FLOAT :
-               annotations.add(new TkRefexUuidFloatMember(in, dataVersion));
+               annotations.add(new TtkRefexUuidFloatMember(in, dataVersion));
 
                break;
 
             case CID_LONG :
-               annotations.add(new TkRefexUuidLongMember(in, dataVersion));
+               annotations.add(new TtkRefexUuidLongMember(in, dataVersion));
 
                break;
 
             case CID_STR :
-               annotations.add(new TkRefexUuidStringMember(in, dataVersion));
+               annotations.add(new TtkRefexUuidStringMember(in, dataVersion));
 
                break;
 
             case LONG :
-               annotations.add(new TkRefexLongMember(in, dataVersion));
+               annotations.add(new TtkRefexLongMember(in, dataVersion));
 
                break;
 
             case ARRAY_BYTEARRAY :
-               annotations.add(new TkRefexArrayOfByteArrayMember(in, dataVersion));
+               annotations.add(new TtkRefexArrayOfByteArrayMember(in, dataVersion));
 
                break;
 
             case CID_CID_CID_FLOAT :
-               annotations.add(new TkRefexUuidUuidUuidFloatMember(in, dataVersion));
+               annotations.add(new TtkRefexUuidUuidUuidFloatMember(in, dataVersion));
 
                break;
 
             case CID_CID_CID_INT :
-               annotations.add(new TkRefexUuidUuidUuidIntMember(in, dataVersion));
+               annotations.add(new TtkRefexUuidUuidUuidIntMember(in, dataVersion));
 
                break;
 
             case CID_CID_CID_LONG :
-               annotations.add(new TkRefexUuidUuidUuidLongMember(in, dataVersion));
+               annotations.add(new TtkRefexUuidUuidUuidLongMember(in, dataVersion));
 
                break;
 
             case CID_CID_CID_STRING :
-               annotations.add(new TkRefexUuidUuidUuidStringMember(in, dataVersion));
+               annotations.add(new TtkRefexUuidUuidUuidStringMember(in, dataVersion));
 
                break;
 
             case CID_BOOLEAN :
-               annotations.add(new TkRefexUuidBooleanMember(in, dataVersion));
+               annotations.add(new TtkRefexUuidBooleanMember(in, dataVersion));
 
                break;
 
@@ -421,7 +421,7 @@ nextId:
    public String toString() {
       int depth = 1;
 
-      if (this instanceof TkRefexAbstractMember) {
+      if (this instanceof TtkRefexAbstractMember) {
          depth = 2;
       }
 
@@ -442,7 +442,7 @@ nextId:
 
          buff.append("annotations:\n");
 
-         for (TkRefexAbstractMember m : this.annotations) {
+         for (TtkRefexAbstractMember m : this.annotations) {
             buff.append(TtkConcept.PADDING);
             buff.append(TtkConcept.PADDING);
 
@@ -494,7 +494,7 @@ nextId:
          assert additionalIds.size() < 500 : "additionalIds is: " + additionalIds.size();
          out.writeShort(additionalIds.size());
 
-         for (TkIdentifier idv : additionalIds) {
+         for (TtkIdentifier idv : additionalIds) {
             idv.getIdType().writeType(out);
             idv.writeExternal(out);
          }
@@ -506,7 +506,7 @@ nextId:
          assert annotations.size() < 500 : "annotation count is: " + annotations.size();
          out.writeShort(annotations.size());
 
-         for (TkRefexAbstractMember<?> r : annotations) {
+         for (TtkRefexAbstractMember<?> r : annotations) {
             r.getType().writeType(out);
             r.writeExternal(out);
          }
@@ -519,7 +519,7 @@ nextId:
     *
     * @return
     */
-   public List<TkIdentifier> getAdditionalIdComponents() {
+   public List<TtkIdentifier> getAdditionalIdComponents() {
       return additionalIds;
    }
 
@@ -529,7 +529,7 @@ nextId:
     *
     * @return
     */
-   public List<TkRefexAbstractMember<?>> getAnnotations() {
+   public List<TtkRefexAbstractMember<?>> getAnnotations() {
       return annotations;
    }
 
@@ -539,8 +539,8 @@ nextId:
     *
     * @return
     */
-   public List<TkIdentifier> getEIdentifiers() {
-      List<TkIdentifier> ids;
+   public List<TtkIdentifier> getEIdentifiers() {
+      List<TtkIdentifier> ids;
 
       if (additionalIds != null) {
          ids = new ArrayList<>(additionalIds.size() + 1);
@@ -549,7 +549,7 @@ nextId:
          ids = new ArrayList<>(1);
       }
 
-      ids.add(new TkIdentifierUuid(this.primordialUuid));
+      ids.add(new TtkIdentifierUuid(this.primordialUuid));
 
       return ids;
    }
@@ -614,8 +614,8 @@ nextId:
       uuids.add(primordialUuid);
 
       if (additionalIds != null) {
-         for (TkIdentifier idv : additionalIds) {
-            if (TkIdentifierUuid.class.isAssignableFrom(idv.getClass())) {
+         for (TtkIdentifier idv : additionalIds) {
+            if (TtkIdentifierUuid.class.isAssignableFrom(idv.getClass())) {
                uuids.add((UUID) idv.getDenotation());
             } else {
                uuids.add(UuidFactory.getUuidFromAlternateId(idv.authorityUuid,
@@ -649,7 +649,7 @@ nextId:
     *
     * @param additionalIdComponents
     */
-   public void setAdditionalIdComponents(List<TkIdentifier> additionalIdComponents) {
+   public void setAdditionalIdComponents(List<TtkIdentifier> additionalIdComponents) {
       this.additionalIds = additionalIdComponents;
    }
 
@@ -659,7 +659,7 @@ nextId:
     *
     * @param annotations
     */
-   public void setAnnotations(List<TkRefexAbstractMember<?>> annotations) {
+   public void setAnnotations(List<TtkRefexAbstractMember<?>> annotations) {
       this.annotations = annotations;
    }
 

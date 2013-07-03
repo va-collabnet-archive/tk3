@@ -23,30 +23,30 @@ import org.ihtsdo.ttk.api.refex.type_nid_string.RefexNidStringVersionBI;
 import org.ihtsdo.ttk.api.refex.type_string.RefexStringVersionBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipChronicleBI;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
-import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributes;
-import org.ihtsdo.ttk.dto.component.description.TkDescription;
-import org.ihtsdo.ttk.dto.component.media.TkMedia;
-import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
-import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TkRefexArrayOfByteArrayMember;
-import org.ihtsdo.ttk.dto.component.refex.type_boolean.TkRefexBooleanMember;
-import org.ihtsdo.ttk.dto.component.refex.type_int.TkRefexIntMember;
-import org.ihtsdo.ttk.dto.component.refex.type_long.TkRefexLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_member.TkRefexMember;
-import org.ihtsdo.ttk.dto.component.refex.type_string.TkRefexStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid.TkRefexUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TkRefexUuidBooleanMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TkRefexUuidFloatMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_int.TkRefexUuidIntMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_long.TkRefexUuidLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TkRefexUuidStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid.TkRefexUuidUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_string.TkRefexUuidUuidStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TkRefexUuidUuidUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float.TkRefexUuidUuidUuidFloatMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int.TkRefexUuidUuidUuidIntMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long.TkRefexUuidUuidUuidLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TkRefexUuidUuidUuidStringMember;
-import org.ihtsdo.ttk.dto.component.relationship.TkRelationship;
+import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributes;
+import org.ihtsdo.ttk.dto.component.description.TtkDescription;
+import org.ihtsdo.ttk.dto.component.media.TtkMedia;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMember;
+import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TtkRefexArrayOfByteArrayMember;
+import org.ihtsdo.ttk.dto.component.refex.type_boolean.TtkRefexBooleanMember;
+import org.ihtsdo.ttk.dto.component.refex.type_int.TtkRefexIntMember;
+import org.ihtsdo.ttk.dto.component.refex.type_long.TtkRefexLongMember;
+import org.ihtsdo.ttk.dto.component.refex.type_member.TtkRefexMember;
+import org.ihtsdo.ttk.dto.component.refex.type_string.TtkRefexStringMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid.TtkRefexUuidMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TtkRefexUuidBooleanMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TtkRefexUuidFloatMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_int.TtkRefexUuidIntMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_long.TtkRefexUuidLongMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TtkRefexUuidStringMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid.TtkRefexUuidUuidMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_string.TtkRefexUuidUuidStringMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TtkRefexUuidUuidUuidMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float.TtkRefexUuidUuidUuidFloatMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int.TtkRefexUuidUuidUuidIntMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long.TtkRefexUuidUuidUuidLongMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TtkRefexUuidUuidUuidStringMember;
+import org.ihtsdo.ttk.dto.component.relationship.TtkRelationship;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
@@ -93,17 +93,17 @@ public class TtkConcept {
    protected boolean annotationIndexStyleRefex = false;
 
    /** Field description */
-   protected TkConceptAttributes conceptAttributes;
+   protected TtkConceptAttributes conceptAttributes;
 
    /** Field description */
    @XmlElementWrapper(name = "description-collection")
    @XmlElement(name = "description")
-   protected List<TkDescription> descriptions;
+   protected List<TtkDescription> descriptions;
 
    /** Field description */
    @XmlElementWrapper(name = "media-collection")
    @XmlElement(name = "media")
-   protected List<TkMedia> media;
+   protected List<TtkMedia> media;
 
    /** Field description */
    @XmlAttribute
@@ -112,12 +112,12 @@ public class TtkConcept {
    /** Field description */
    @XmlElementWrapper(name = "refex-member-collection")
    @XmlElement(name = "refex")
-   protected List<TkRefexAbstractMember<?>> refsetMembers;
+   protected List<TtkRefexAbstractMember<?>> refsetMembers;
 
    /** Field description */
    @XmlElementWrapper(name = "relationship-collection")
    @XmlElement(name = "relationship")
-   protected List<TkRelationship> relationships;
+   protected List<TtkRelationship> relationships;
 
    /**
     * Constructs ...
@@ -138,24 +138,24 @@ public class TtkConcept {
    public TtkConcept(ConceptChronicleBI c) throws IOException {
       annotationStyleRefex      = c.isAnnotationStyleRefex();
       annotationIndexStyleRefex = c.isAnnotationIndex();
-      conceptAttributes         = new TkConceptAttributes(c.getConAttrs());
+      conceptAttributes         = new TtkConceptAttributes(c.getConAttrs());
       primordialUuid            = conceptAttributes.primordialUuid;
       relationships             = new ArrayList<>(c.getRelationshipsOutgoing().size());
 
       for (RelationshipChronicleBI rel : c.getRelationshipsOutgoing()) {
-         relationships.add(new TkRelationship(rel));
+         relationships.add(new TtkRelationship(rel));
       }
 
       descriptions = new ArrayList<>(c.getDescs().size());
 
       for (DescriptionChronicleBI desc : c.getDescs()) {
-         descriptions.add(new TkDescription(desc));
+         descriptions.add(new TtkDescription(desc));
       }
 
       media = new ArrayList<>(c.getMedia().size());
 
       for (MediaChronicleBI mediaChronicle : c.getMedia()) {
-         TkMedia tkMedia = new TkMedia(mediaChronicle);
+         TtkMedia tkMedia = new TtkMedia(mediaChronicle);
 
          media.add(tkMedia);
       }
@@ -167,7 +167,7 @@ public class TtkConcept {
             refsetMembers = new ArrayList<>(members.size());
 
             for (RefexChronicleBI m : members) {
-               TkRefexAbstractMember<?> member = convertRefex(m);
+               TtkRefexAbstractMember<?> member = convertRefex(m);
 
                if (member != null) {
                   refsetMembers.add(member);
@@ -214,7 +214,7 @@ public class TtkConcept {
       if (another.descriptions != null) {
          this.descriptions = new ArrayList<>(another.descriptions.size());
 
-         for (TkDescription d : another.descriptions) {
+         for (TtkDescription d : another.descriptions) {
             this.descriptions.add(d.makeTransform(transformer));
          }
       }
@@ -222,7 +222,7 @@ public class TtkConcept {
       if (another.media != null) {
          this.media = new ArrayList<>(another.media.size());
 
-         for (TkMedia d : another.media) {
+         for (TtkMedia d : another.media) {
             this.media.add(d.makeTransform(transformer));
          }
       }
@@ -233,15 +233,15 @@ public class TtkConcept {
       if (another.refsetMembers != null) {
          this.refsetMembers = new ArrayList<>(another.refsetMembers.size());
 
-         for (TkRefexAbstractMember<?> d : another.refsetMembers) {
-            this.refsetMembers.add((TkRefexAbstractMember<?>) d.makeTransform(transformer));
+         for (TtkRefexAbstractMember<?> d : another.refsetMembers) {
+            this.refsetMembers.add((TtkRefexAbstractMember<?>) d.makeTransform(transformer));
          }
       }
 
       if (another.relationships != null) {
          this.relationships = new ArrayList<>(another.relationships.size());
 
-         for (TkRelationship d : another.relationships) {
+         for (TtkRelationship d : another.relationships) {
             this.relationships.add(d.makeTransform(transformer));
          }
       }
@@ -257,35 +257,35 @@ public class TtkConcept {
     *
     * @throws IOException
     */
-   public static TkRefexAbstractMember<?> convertRefex(RefexChronicleBI<?> m) throws IOException {
+   public static TtkRefexAbstractMember<?> convertRefex(RefexChronicleBI<?> m) throws IOException {
       if (m.getPrimordialVersion() instanceof RefexNidNidNidVersionBI) {
-         return new TkRefexUuidUuidUuidMember((RefexNidNidNidVersionBI) m);
+         return new TtkRefexUuidUuidUuidMember((RefexNidNidNidVersionBI) m);
       } else if (m.getPrimordialVersion() instanceof RefexNidNidStringVersionBI) {
-         return new TkRefexUuidUuidStringMember(m);
+         return new TtkRefexUuidUuidStringMember(m);
       } else if (m.getPrimordialVersion() instanceof RefexNidNidVersionBI) {
-         return new TkRefexUuidUuidMember(m);
+         return new TtkRefexUuidUuidMember(m);
       } else if (m.getPrimordialVersion() instanceof RefexNidFloatVersionBI) {
-         return new TkRefexUuidFloatMember(m);
+         return new TtkRefexUuidFloatMember(m);
       } else if (m.getPrimordialVersion() instanceof RefexNidIntVersionBI) {
-         return new TkRefexUuidIntMember(m);
+         return new TtkRefexUuidIntMember(m);
       } else if (m.getPrimordialVersion() instanceof RefexNidLongVersionBI) {
-         return new TkRefexUuidLongMember(m);
+         return new TtkRefexUuidLongMember(m);
       } else if (m.getPrimordialVersion() instanceof RefexNidStringVersionBI) {
-         return new TkRefexUuidStringMember(m);
+         return new TtkRefexUuidStringMember(m);
       } else if (m.getPrimordialVersion() instanceof RefexNidVersionBI) {
-         return new TkRefexUuidMember(m);
+         return new TtkRefexUuidMember(m);
       } else if (m.getPrimordialVersion() instanceof RefexIntVersionBI) {
-         return new TkRefexIntMember(m);
+         return new TtkRefexIntMember(m);
       } else if (m.getPrimordialVersion() instanceof RefexStringVersionBI) {
-         return new TkRefexStringMember(m);
+         return new TtkRefexStringMember(m);
       } else if (m.getPrimordialVersion() instanceof RefexLongVersionBI) {
-         return new TkRefexLongMember(m);
+         return new TtkRefexLongMember(m);
       } else if (m.getPrimordialVersion() instanceof RefexBooleanVersionBI) {
-         return new TkRefexBooleanMember(m);
+         return new TtkRefexBooleanMember(m);
       } else if (m.getPrimordialVersion() instanceof RefexArrayOfBytearrayVersionBI) {
-         return new TkRefexArrayOfByteArrayMember(m);
+         return new TtkRefexArrayOfByteArrayMember(m);
       } else if (m.getPrimordialVersion() instanceof RefexMemberVersionBI) {
-         return new TkRefexMember(m);
+         return new TtkRefexMember(m);
       } else {
          throw new UnsupportedOperationException("Cannot handle: " + m);
       }
@@ -401,7 +401,7 @@ public class TtkConcept {
       }
 
       if (readDataVersion == 1) {
-         conceptAttributes = new TkConceptAttributes(in, readDataVersion);
+         conceptAttributes = new TtkConceptAttributes(in, readDataVersion);
          primordialUuid    = conceptAttributes.getPrimordialComponentUuid();
       } else {
          primordialUuid = new UUID(in.readLong(), in.readLong());
@@ -409,7 +409,7 @@ public class TtkConcept {
          int attributeCount = in.readByte();
 
          if (attributeCount == 1) {
-            conceptAttributes = new TkConceptAttributes(in, readDataVersion);
+            conceptAttributes = new TtkConceptAttributes(in, readDataVersion);
          }
       }
 
@@ -419,7 +419,7 @@ public class TtkConcept {
          descriptions = new ArrayList<>(descCount);
 
          for (int i = 0; i < descCount; i++) {
-            descriptions.add(new TkDescription(in, readDataVersion));
+            descriptions.add(new TtkDescription(in, readDataVersion));
          }
       }
 
@@ -429,7 +429,7 @@ public class TtkConcept {
          relationships = new ArrayList<>(relCount);
 
          for (int i = 0; i < relCount; i++) {
-            relationships.add(new TkRelationship(in, readDataVersion));
+            relationships.add(new TtkRelationship(in, readDataVersion));
          }
       }
 
@@ -439,7 +439,7 @@ public class TtkConcept {
          media = new ArrayList<>(imgCount);
 
          for (int i = 0; i < imgCount; i++) {
-            media.add(new TkMedia(in, readDataVersion));
+            media.add(new TtkMedia(in, readDataVersion));
          }
       }
 
@@ -453,97 +453,97 @@ public class TtkConcept {
 
             switch (type) {
             case CID :
-               refsetMembers.add(new TkRefexUuidMember(in, readDataVersion));
+               refsetMembers.add(new TtkRefexUuidMember(in, readDataVersion));
 
                break;
 
             case CID_CID :
-               refsetMembers.add(new TkRefexUuidUuidMember(in, readDataVersion));
+               refsetMembers.add(new TtkRefexUuidUuidMember(in, readDataVersion));
 
                break;
 
             case MEMBER :
-               refsetMembers.add(new TkRefexMember(in, readDataVersion));
+               refsetMembers.add(new TtkRefexMember(in, readDataVersion));
 
                break;
 
             case CID_CID_CID :
-               refsetMembers.add(new TkRefexUuidUuidUuidMember(in, readDataVersion));
+               refsetMembers.add(new TtkRefexUuidUuidUuidMember(in, readDataVersion));
 
                break;
 
             case CID_CID_STR :
-               refsetMembers.add(new TkRefexUuidUuidStringMember(in, readDataVersion));
+               refsetMembers.add(new TtkRefexUuidUuidStringMember(in, readDataVersion));
 
                break;
 
             case INT :
-               refsetMembers.add(new TkRefexIntMember(in, readDataVersion));
+               refsetMembers.add(new TtkRefexIntMember(in, readDataVersion));
 
                break;
 
             case STR :
-               refsetMembers.add(new TkRefexStringMember(in, readDataVersion));
+               refsetMembers.add(new TtkRefexStringMember(in, readDataVersion));
 
                break;
 
             case CID_INT :
-               refsetMembers.add(new TkRefexUuidIntMember(in, readDataVersion));
+               refsetMembers.add(new TtkRefexUuidIntMember(in, readDataVersion));
 
                break;
 
             case BOOLEAN :
-               refsetMembers.add(new TkRefexBooleanMember(in, readDataVersion));
+               refsetMembers.add(new TtkRefexBooleanMember(in, readDataVersion));
 
                break;
 
             case CID_FLOAT :
-               refsetMembers.add(new TkRefexUuidFloatMember(in, readDataVersion));
+               refsetMembers.add(new TtkRefexUuidFloatMember(in, readDataVersion));
 
                break;
 
             case CID_LONG :
-               refsetMembers.add(new TkRefexUuidLongMember(in, readDataVersion));
+               refsetMembers.add(new TtkRefexUuidLongMember(in, readDataVersion));
 
                break;
 
             case CID_STR :
-               refsetMembers.add(new TkRefexUuidStringMember(in, readDataVersion));
+               refsetMembers.add(new TtkRefexUuidStringMember(in, readDataVersion));
 
                break;
 
             case LONG :
-               refsetMembers.add(new TkRefexLongMember(in, readDataVersion));
+               refsetMembers.add(new TtkRefexLongMember(in, readDataVersion));
 
                break;
 
             case ARRAY_BYTEARRAY :
-               refsetMembers.add(new TkRefexArrayOfByteArrayMember(in, readDataVersion));
+               refsetMembers.add(new TtkRefexArrayOfByteArrayMember(in, readDataVersion));
 
                break;
 
             case CID_CID_CID_FLOAT :
-               refsetMembers.add(new TkRefexUuidUuidUuidFloatMember(in, dataVersion));
+               refsetMembers.add(new TtkRefexUuidUuidUuidFloatMember(in, dataVersion));
 
                break;
 
             case CID_CID_CID_INT :
-               refsetMembers.add(new TkRefexUuidUuidUuidIntMember(in, dataVersion));
+               refsetMembers.add(new TtkRefexUuidUuidUuidIntMember(in, dataVersion));
 
                break;
 
             case CID_CID_CID_LONG :
-               refsetMembers.add(new TkRefexUuidUuidUuidLongMember(in, dataVersion));
+               refsetMembers.add(new TtkRefexUuidUuidUuidLongMember(in, dataVersion));
 
                break;
 
             case CID_CID_CID_STRING :
-               refsetMembers.add(new TkRefexUuidUuidUuidStringMember(in, dataVersion));
+               refsetMembers.add(new TtkRefexUuidUuidUuidStringMember(in, dataVersion));
 
                break;
 
             case CID_BOOLEAN :
-               refsetMembers.add(new TkRefexUuidBooleanMember(in, dataVersion));
+               refsetMembers.add(new TtkRefexUuidBooleanMember(in, dataVersion));
 
                break;
 
@@ -606,7 +606,7 @@ public class TtkConcept {
       if (this.descriptions == null) {
          buff.append(PADDING + "none\n");
       } else {
-         for (TkDescription d : this.descriptions) {
+         for (TtkDescription d : this.descriptions) {
             buff.append(PADDING);
             buff.append(d);
             buff.append("\n");
@@ -618,7 +618,7 @@ public class TtkConcept {
       if (this.relationships == null) {
          buff.append(PADDING + "none\n");
       } else {
-         for (TkRelationship r : this.relationships) {
+         for (TtkRelationship r : this.relationships) {
             buff.append(PADDING);
             buff.append(r);
             buff.append("\n");
@@ -630,7 +630,7 @@ public class TtkConcept {
       if (this.refsetMembers == null) {
          buff.append(PADDING + "none\n");
       } else {
-         for (TkRefexAbstractMember<?> r : this.refsetMembers) {
+         for (TtkRefexAbstractMember<?> r : this.refsetMembers) {
             buff.append(PADDING);
             buff.append(r);
             buff.append("\n");
@@ -642,7 +642,7 @@ public class TtkConcept {
       if (this.media == null) {
          buff.append(PADDING + "none");
       } else {
-         for (TkMedia m : this.media) {
+         for (TtkMedia m : this.media) {
             buff.append(PADDING);
             buff.append(m);
             buff.append("\n");
@@ -682,7 +682,7 @@ public class TtkConcept {
       } else {
          out.writeInt(descriptions.size());
 
-         for (TkDescription d : descriptions) {
+         for (TtkDescription d : descriptions) {
             d.writeExternal(out);
          }
       }
@@ -692,7 +692,7 @@ public class TtkConcept {
       } else {
          out.writeInt(relationships.size());
 
-         for (TkRelationship r : relationships) {
+         for (TtkRelationship r : relationships) {
             r.writeExternal(out);
          }
       }
@@ -702,7 +702,7 @@ public class TtkConcept {
       } else {
          out.writeInt(media.size());
 
-         for (TkMedia img : media) {
+         for (TtkMedia img : media) {
             img.writeExternal(out);
          }
       }
@@ -712,7 +712,7 @@ public class TtkConcept {
       } else {
          out.writeInt(refsetMembers.size());
 
-         for (TkRefexAbstractMember<?> r : refsetMembers) {
+         for (TtkRefexAbstractMember<?> r : refsetMembers) {
             r.getType().writeType(out);
             r.writeExternal(out);
          }
@@ -728,7 +728,7 @@ public class TtkConcept {
     *
     * @return
     */
-   public TkConceptAttributes getConceptAttributes() {
+   public TtkConceptAttributes getConceptAttributes() {
       return conceptAttributes;
    }
 
@@ -738,7 +738,7 @@ public class TtkConcept {
     *
     * @return
     */
-   public List<TkDescription> getDescriptions() {
+   public List<TtkDescription> getDescriptions() {
       if (descriptions == null) {
          descriptions = new ArrayList<>();
       }
@@ -752,7 +752,7 @@ public class TtkConcept {
     *
     * @return
     */
-   public List<TkMedia> getMedia() {
+   public List<TtkMedia> getMedia() {
       if (media == null) {
          media = new ArrayList<>();
       }
@@ -776,7 +776,7 @@ public class TtkConcept {
     *
     * @return
     */
-   public List<TkRefexAbstractMember<?>> getRefsetMembers() {
+   public List<TtkRefexAbstractMember<?>> getRefsetMembers() {
       if (refsetMembers == null) {
          refsetMembers = new ArrayList<>();
       }
@@ -790,7 +790,7 @@ public class TtkConcept {
     *
     * @return
     */
-   public List<TkRelationship> getRelationships() {
+   public List<TtkRelationship> getRelationships() {
       if (relationships == null) {
          relationships = new ArrayList<>();
       }
@@ -844,7 +844,7 @@ public class TtkConcept {
     *
     * @param conceptAttributes
     */
-   public void setConceptAttributes(TkConceptAttributes conceptAttributes) {
+   public void setConceptAttributes(TtkConceptAttributes conceptAttributes) {
       this.conceptAttributes = conceptAttributes;
    }
 
@@ -854,7 +854,7 @@ public class TtkConcept {
     *
     * @param descriptions
     */
-   public void setDescriptions(List<TkDescription> descriptions) {
+   public void setDescriptions(List<TtkDescription> descriptions) {
       this.descriptions = descriptions;
    }
 
@@ -864,7 +864,7 @@ public class TtkConcept {
     *
     * @param images
     */
-   public void setImages(List<TkMedia> images) {
+   public void setImages(List<TtkMedia> images) {
       this.media = images;
    }
 
@@ -884,7 +884,7 @@ public class TtkConcept {
     *
     * @param refsetMembers
     */
-   public void setRefsetMembers(List<TkRefexAbstractMember<?>> refsetMembers) {
+   public void setRefsetMembers(List<TtkRefexAbstractMember<?>> refsetMembers) {
       this.refsetMembers = refsetMembers;
    }
 
@@ -894,7 +894,7 @@ public class TtkConcept {
     *
     * @param relationships
     */
-   public void setRelationships(List<TkRelationship> relationships) {
+   public void setRelationships(List<TtkRelationship> relationships) {
       this.relationships = relationships;
    }
 }
