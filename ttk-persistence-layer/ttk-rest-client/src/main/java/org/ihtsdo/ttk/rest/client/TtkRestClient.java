@@ -43,7 +43,7 @@ import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.ttk.concept.cc.concept.NidDataInMemory;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
@@ -430,7 +430,7 @@ public class TtkRestClient extends Termstore {
 
    @Override
    public boolean hasConcept(int cNid) throws IOException {
-      if (Concept.getIfInMap(cNid) != null) {
+      if (ConceptChronicle.getIfInMap(cNid) != null) {
          return true;
       }
 
