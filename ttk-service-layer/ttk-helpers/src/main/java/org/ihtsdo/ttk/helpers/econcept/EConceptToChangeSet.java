@@ -28,7 +28,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.ihtsdo.ttk.dto.TtkConcept;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 
 /**
  * Convert eConcept files to change set files, using the current time as the commit time for the change set.
@@ -79,7 +79,7 @@ public class EConceptToChangeSet {
          try {
             while (true) {
                long      time     = System.currentTimeMillis();
-               TtkConcept eConcept = new TtkConcept(in);
+               TtkConceptChronicle eConcept = new TtkConceptChronicle(in);
                int       read     = conceptsRead.incrementAndGet();
 
                dos.writeLong(time);

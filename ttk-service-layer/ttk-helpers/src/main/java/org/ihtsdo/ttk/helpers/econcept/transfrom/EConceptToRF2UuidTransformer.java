@@ -22,13 +22,13 @@ package org.ihtsdo.ttk.helpers.econcept.transfrom;
 import org.ihtsdo.ttk.api.country.COUNTRY_CODE;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
 import org.ihtsdo.ttk.api.lang.LanguageCode;
-import org.ihtsdo.ttk.dto.TtkConcept;
-import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributes;
-import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributesRevision;
-import org.ihtsdo.ttk.dto.component.description.TkDescription;
-import org.ihtsdo.ttk.dto.component.description.TkDescriptionRevision;
-import org.ihtsdo.ttk.dto.component.relationship.TkRelationship;
-import org.ihtsdo.ttk.dto.component.relationship.TkRelationshipRevision;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
+import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesChronicle;
+import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesRevision;
+import org.ihtsdo.ttk.dto.component.description.TtkDescriptionChronicle;
+import org.ihtsdo.ttk.dto.component.description.TtkDescriptionRevision;
+import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipChronicle;
+import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -154,19 +154,19 @@ public class EConceptToRF2UuidTransformer implements EConceptTransformerBI {
    }
 
    @Override
-   public void process(TtkConcept c) throws Exception {
-      TkConceptAttributes ca = c.getConceptAttributes();
+   public void process(TtkConceptChronicle c) throws Exception {
+      TtkConceptAttributesChronicle ca = c.getConceptAttributes();
 
       processConceptAttribute(ca);
 
       if (c.getDescriptions() != null) {
-         for (TkDescription d : c.getDescriptions()) {
+         for (TtkDescriptionChronicle d : c.getDescriptions()) {
             processDescription(d);
          }
       }
 
       if (c.getRelationships() != null) {
-         for (TkRelationship r : c.getRelationships()) {
+         for (TtkRelationshipChronicle r : c.getRelationships()) {
             processRelationship(r);
          }
       }
@@ -174,7 +174,7 @@ public class EConceptToRF2UuidTransformer implements EConceptTransformerBI {
       throw new UnsupportedOperationException("Not supported yet.");
    }
 
-   private void processConceptAttribute(TkConceptAttributes ca) throws IOException {
+   private void processConceptAttribute(TtkConceptAttributesChronicle ca) throws IOException {
       if (ca != null) {
          for (ConceptsFileFields field : ConceptsFileFields.values()) {
             switch (field) {
@@ -206,7 +206,7 @@ public class EConceptToRF2UuidTransformer implements EConceptTransformerBI {
          }
 
          if (ca.revisions != null) {
-            for (TkConceptAttributesRevision car : ca.revisions) {
+            for (TtkConceptAttributesRevision car : ca.revisions) {
                for (ConceptsFileFields field : ConceptsFileFields.values()) {
                   switch (field) {
                   case ACTIVE :
@@ -240,7 +240,7 @@ public class EConceptToRF2UuidTransformer implements EConceptTransformerBI {
       }
    }
 
-   private void processDescription(TkDescription desc) throws IOException {
+   private void processDescription(TtkDescriptionChronicle desc) throws IOException {
       if (desc != null) {
          for (DescriptionsFileFields field : DescriptionsFileFields.values()) {
             switch (field) {
@@ -292,7 +292,7 @@ public class EConceptToRF2UuidTransformer implements EConceptTransformerBI {
          }
 
          if (desc.revisions != null) {
-            for (TkDescriptionRevision descr : desc.revisions) {
+            for (TtkDescriptionRevision descr : desc.revisions) {
                for (DescriptionsFileFields field : DescriptionsFileFields.values()) {
                   switch (field) {
                   case ACTIVE :
@@ -346,7 +346,7 @@ public class EConceptToRF2UuidTransformer implements EConceptTransformerBI {
       }
    }
 
-   private void processRelationship(TkRelationship r) throws IOException {
+   private void processRelationship(TtkRelationshipChronicle r) throws IOException {
       if (r != null) {
          for (RelationshipsFileFields field : RelationshipsFileFields.values()) {
             switch (field) {
@@ -403,7 +403,7 @@ public class EConceptToRF2UuidTransformer implements EConceptTransformerBI {
          }
 
          if (r.revisions != null) {
-            for (TkRelationshipRevision rv : r.revisions) {
+            for (TtkRelationshipRevision rv : r.revisions) {
                for (RelationshipsFileFields field : RelationshipsFileFields.values()) {
                   switch (field) {
                   case ACTIVE :

@@ -16,7 +16,7 @@
 package org.ihtsdo.ttk.helpers.econcept.transfrom;
 
 import java.io.IOException;
-import org.ihtsdo.ttk.dto.TtkConcept;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 
 /**
  *
@@ -25,7 +25,7 @@ import org.ihtsdo.ttk.dto.TtkConcept;
 public interface EConceptTransformerBI {
     
     
-    public void process(TtkConcept c) throws Exception;
+    public void process(TtkConceptChronicle c) throws Exception;
     
     public void close() throws IOException;
     
