@@ -25,7 +25,7 @@ import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.ComponentBI;
 import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
-import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -52,7 +52,7 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.concept.OFFSETS;
 import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
 import org.ihtsdo.ttk.fx.progress.AggregateProgressItem;
@@ -144,10 +144,10 @@ public class Bdb {
     public static int getCachePercent() {
         return Bdb.mutable.bdbEnv.getMutableConfig().getCachePercent();
     }
-    static ConcurrentSkipListSet<Concept> annotationConcepts = new ConcurrentSkipListSet<>();
+    static ConcurrentSkipListSet<ConceptChronicle> annotationConcepts = new ConcurrentSkipListSet<>();
 
     public static void xrefAnnotation(RefexChronicleBI annotation) throws IOException {
-        Concept refexConcept = Concept.get(annotation.getRefexExtensionNid());
+        ConceptChronicle refexConcept = ConceptChronicle.get(annotation.getRefexExtensionNid());
         if (refexConcept.isAnnotationIndex()) {
             if (refexConcept.addMemberNid(annotation.getNid())) {
                 annotationConcepts.add(refexConcept);
@@ -574,7 +574,7 @@ public class Bdb {
                     P.s = ts;
                 }
                 Looker.add(ts, UUID.randomUUID(), "Embedded BdbTerminologyStore");
-                Concept.reset();
+                ConceptChronicle.reset();
 
                 ReferenceConcepts.reset();
                 String versionString = getProperty(G_VERSION);
@@ -701,7 +701,7 @@ public class Bdb {
         return conceptDb;
     }
 
-    public static void addAsAnnotations(List<TkRefexAbstractMember<?>> members) throws Exception {
+    public static void addAsAnnotations(List<TtkRefexAbstractMemberChronicle<?>> members) throws Exception {
         conceptDb.iterateConceptDataInParallel(new AnnotationAdder(members));
     }
 
@@ -712,12 +712,12 @@ public class Bdb {
         return nidCidMapDb.getCNid(componentNid);
     }
 
-    public static Concept getConceptForComponent(int componentNid) throws IOException {
+    public static ConceptChronicle getConceptForComponent(int componentNid) throws IOException {
         int cNid = Bdb.getConceptNid(componentNid);
         if (cNid == Integer.MAX_VALUE) {
             return null;
         }
-        return Concept.get(cNid);
+        return ConceptChronicle.get(cNid);
     }
 
     public static UuidToNidMapBdb getUuidsToNidMap() {
@@ -741,8 +741,8 @@ public class Bdb {
             activity.setProgressInfoUpper("Database sync to disk...");
 
             /*
-             * try { Concept pathOrigins =
-             * getConceptDb().getConcept(RefsetAuxiliary.Concept.REFSET_PATH_ORIGINS.localize().getNid()); if
+             * try { ConceptChronicle pathOrigins =
+             * getConceptDb().getConcept(RefsetAuxiliary.ConceptChronicle.REFSET_PATH_ORIGINS.localize().getNid()); if
              * (pathOrigins != null) { AceLog.getAppLog().info("Refset origins:\n\n" +
              * pathOrigins.toLongString()); } } catch (Exception e) {
              * AceLog.getAppLog().alertAndLogException(e); }
@@ -881,7 +881,7 @@ public class Bdb {
         stampDb = null;
         uuidsToNidMapDb = null;
 
-        Concept.reset();
+        ConceptChronicle.reset();
         AceLog.getAppLog().info("bdb close finished.");
     }
 
@@ -910,7 +910,7 @@ public class Bdb {
             return null;
         }
 
-        Concept c = Bdb.getConceptDb().getConcept(cNid);
+        ConceptChronicle c = Bdb.getConceptDb().getConcept(cNid);
         if (cNid == nid) {
             return c;
         }
@@ -979,7 +979,7 @@ public class Bdb {
     public static UUID getPrimUuidForComponent(int nid) throws IOException {
         int cNid = Bdb.getConceptNid(nid);
         assert cNid != Integer.MAX_VALUE : "No cNid for nid: " + nid;
-        Concept c = Concept.get(cNid);
+        ConceptChronicle c = ConceptChronicle.get(cNid);
         ComponentChronicleBI<?> component = c.getComponent(nid);
         if (component != null) {
             return component.getPrimordialUuid();
@@ -993,7 +993,7 @@ public class Bdb {
         return cNid == Bdb.getConceptNid(cNid);
     }
 
-    public static Concept getConcept(int cNid) throws IOException {
+    public static ConceptChronicle getConcept(int cNid) throws IOException {
         assert cNid == Bdb.getConceptNid(cNid) :
                 " Not a concept nid: " + cNid
                 + " Bdb cNid:" + Bdb.getConceptNid(cNid) + " max nid: "

@@ -31,14 +31,14 @@ import org.ihtsdo.ttk.bdb.temp.AceLog;
 import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.change.LastChange;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 import org.ihtsdo.ttk.concept.cc.termstore.TerminologySnapshot;
 import org.ihtsdo.ttk.concept.cc.termstore.Termstore;
 import org.ihtsdo.ttk.concept.cs.CsProperty;
-import org.ihtsdo.ttk.dto.TtkConcept;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 import org.ihtsdo.ttk.fx.FxComponentReference;
 import org.ihtsdo.ttk.fx.concept.FxConcept;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
@@ -130,7 +130,7 @@ public class BdbTerminologyStore extends Termstore {
 
    @Override
    public void commit(ConceptChronicleBI cc) throws IOException {
-      BdbCommitManager.commit((Concept) cc, ChangeSetPolicy.MUTABLE_ONLY,
+      BdbCommitManager.commit((ConceptChronicle) cc, ChangeSetPolicy.MUTABLE_ONLY,
                               ChangeSetWriterThreading.SINGLE_THREAD);
    }
 
@@ -143,7 +143,7 @@ public class BdbTerminologyStore extends Termstore {
    public boolean commit(ConceptChronicleBI cc, ChangeSetPolicy changeSetPolicy,
                          ChangeSetWriterThreading changeSetWriterThreading)
            throws IOException {
-      return BdbCommitManager.commit((Concept) cc, changeSetPolicy, changeSetWriterThreading);
+      return BdbCommitManager.commit((ConceptChronicle) cc, changeSetPolicy, changeSetWriterThreading);
    }
 
    @Override
@@ -151,7 +151,7 @@ public class BdbTerminologyStore extends Termstore {
       boolean forgotten = BdbCommitManager.forget(attr);
 
       if (forgotten) {
-         Bdb.getConceptDb().forget((Concept) attr.getEnclosingConcept());
+         Bdb.getConceptDb().forget((ConceptChronicle) attr.getEnclosingConcept());
       }
 
       return forgotten;
@@ -228,7 +228,7 @@ public class BdbTerminologyStore extends Termstore {
                System.out.print(conceptsRead + "-");
 
                while (true) {
-                  TtkConcept eConcept = new TtkConcept(in);
+                  TtkConceptChronicle eConcept = new TtkConceptChronicle(in);
                   int       read     = conceptsRead.incrementAndGet();
 
                   if (read % 100 == 0) {
@@ -720,9 +720,9 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    private static class ConceptConverter implements Runnable {
-      TtkConcept                                 eConcept   = null;
+      TtkConceptChronicle                                 eConcept   = null;
       Throwable                                 exception  = null;
-      Concept                                   newConcept = null;
+      ConceptChronicle                                   newConcept = null;
       AtomicInteger                             conceptsProcessed;
       LinkedBlockingQueue<ConceptConverter>     converters;
       ConcurrentSkipListSet<ConceptChronicleBI> indexedAnnotationConcepts;
@@ -742,7 +742,7 @@ public class BdbTerminologyStore extends Termstore {
          }
 
          try {
-            newConcept = Concept.get(eConcept, indexedAnnotationConcepts);
+            newConcept = ConceptChronicle.get(eConcept, indexedAnnotationConcepts);
 
             if (newConcept != null) {
                assert newConcept.readyToWrite();
@@ -770,7 +770,7 @@ public class BdbTerminologyStore extends Termstore {
        *
        * @see org.ihtsdo.db.bdb.I_ProcessEConcept#setEConcept(org.ihtsdo.etypes .EConcept)
        */
-      public void setEConcept(TtkConcept eConcept) throws Throwable {
+      public void setEConcept(TtkConceptChronicle eConcept) throws Throwable {
          if (exception != null) {
             throw exception;
          }

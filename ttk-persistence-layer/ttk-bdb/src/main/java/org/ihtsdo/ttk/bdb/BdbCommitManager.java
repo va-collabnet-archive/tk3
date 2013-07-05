@@ -34,7 +34,7 @@ import org.ihtsdo.ttk.concept.cc.change.BdbCommitSequence;
 import org.ihtsdo.ttk.concept.cc.change.LastChange;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.IdentifierSet;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.description.Description;
 import org.ihtsdo.ttk.concept.cc.description.DescriptionRevision;
 import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
@@ -78,7 +78,7 @@ public class BdbCommitManager {
             return;
         }
 
-        Concept concept = (Concept) igcd;
+        ConceptChronicle concept = (ConceptChronicle) igcd;
 
         LastChange.touch(concept);
         GlobalPropertyChange.firePropertyChange(TerminologyStoreDI.CONCEPT_EVENT.ADD_UNCOMMITTED, null, concept);
@@ -113,7 +113,7 @@ public class BdbCommitManager {
 
 
     public static void addUncommittedNoChecks(ConceptChronicleBI concept) {
-        Concept c = (Concept) concept;
+        ConceptChronicle c = (ConceptChronicle) concept;
 
         c.modified();
         LastChange.touch(c);
@@ -121,7 +121,7 @@ public class BdbCommitManager {
         if (c.isUncommitted()) {
             uncommittedCNidsNoChecks.setMember(c.getNid());
          } else {
-            c = (Concept) concept;
+            c = (ConceptChronicle) concept;
 
             removeUncommitted(c);
         }
@@ -144,7 +144,7 @@ public class BdbCommitManager {
                         Set<Integer> cNidSet = new HashSet<>();
 
                         while (uncommittedCNidsItr.next()) {
-                            cNidSet.addAll(Concept.get(uncommittedCNidsItr.nid()).getConceptNidsAffectedByCommit());
+                            cNidSet.addAll(ConceptChronicle.get(uncommittedCNidsItr.nid()).getConceptNidsAffectedByCommit());
 
                             if (AceLog.getAppLog().isLoggable(Level.FINE)) {
                                 AceLog.getAppLog().fine(
@@ -156,7 +156,7 @@ public class BdbCommitManager {
 
                         while (uncommittedCNidsNoChecksItr.next()) {
                             cNidSet.addAll(
-                                    Concept.get(uncommittedCNidsNoChecksItr.nid()).getConceptNidsAffectedByCommit());
+                                    ConceptChronicle.get(uncommittedCNidsNoChecksItr.nid()).getConceptNidsAffectedByCommit());
 
                             if (AceLog.getAppLog().isLoggable(Level.FINE)) {
                                 AceLog.getAppLog().fine(
@@ -205,7 +205,7 @@ public class BdbCommitManager {
                         if (performCommit) {
                             lastCommit = Bdb.gVersion.incrementAndGet();
                             if (Bdb.annotationConcepts != null) {
-                                for (Concept annotationConcept : Bdb.annotationConcepts) {
+                                for (ConceptChronicle annotationConcept : Bdb.annotationConcepts) {
                                     dbWriterService.execute(new ConceptWriter(annotationConcept));
                                 }
                                 Bdb.annotationConcepts.clear();
@@ -215,7 +215,7 @@ public class BdbCommitManager {
                             while (uncommittedCNidItr.next()) {
                                 
                                     int cnid = uncommittedCNidItr.nid();
-                                    Concept c = Concept.get(cnid);
+                                    ConceptChronicle c = ConceptChronicle.get(cnid);
 
                                     c.modified(lastCommit);
                                 
@@ -288,7 +288,7 @@ public class BdbCommitManager {
         return false;
     }
 
-    public static boolean commit(Concept c, ChangeSetPolicy changeSetPolicy,
+    public static boolean commit(ConceptChronicle c, ChangeSetPolicy changeSetPolicy,
             ChangeSetWriterThreading changeSetWriterThreading) {
         if ((uncommittedCNids.cardinality() == 1) && (uncommittedCNidsNoChecks.cardinality() == 1)
                 && uncommittedCNids.isMember(c.getNid()) && uncommittedCNidsNoChecks.isMember(c.getNid())) {
@@ -317,7 +317,7 @@ public class BdbCommitManager {
             if (performCommit) {
                 BdbCommitSequence.nextSequence();
 
-                for (Concept annotationConcept : Bdb.annotationConcepts) {
+                for (ConceptChronicle annotationConcept : Bdb.annotationConcepts) {
                     dbWriterService.execute(new ConceptWriter(annotationConcept));
                 }
 
@@ -380,7 +380,7 @@ public class BdbCommitManager {
     }
 
     public static boolean forget(ConceptAttributeVersionBI attr) throws IOException {
-        Concept c = Bdb.getConcept(attr.getConceptNid());
+        ConceptChronicle c = Bdb.getConcept(attr.getConceptNid());
       ConceptAttributes a = (ConceptAttributes) attr;
 
         if ((a.getTime() != Long.MAX_VALUE) && (a.getTime() != Long.MIN_VALUE)) {
@@ -419,7 +419,7 @@ public class BdbCommitManager {
 
    public static void forget(DescriptionVersionBI desc) throws IOException {
       Description d = (Description) desc;
-        Concept c = Bdb.getConcept(d.getConceptNid());
+        ConceptChronicle c = Bdb.getConcept(d.getConceptNid());
 
         if (d.getTime() != Long.MAX_VALUE) {
 
@@ -460,11 +460,11 @@ public class BdbCommitManager {
    @SuppressWarnings("unchecked")
    public static void forget(RefexChronicleBI extension) throws IOException {
       RefexMember m         = (RefexMember) extension;
-      Concept      c         = Bdb.getConcept(m.getRefexExtensionNid());
+      ConceptChronicle      c         = Bdb.getConcept(m.getRefexExtensionNid());
       ComponentBI  component = Bdb.getComponent(m.getReferencedComponentNid());
 
-        if (component instanceof Concept) {
-            component = ((Concept) component).getConAttrs();
+        if (component instanceof ConceptChronicle) {
+            component = ((ConceptChronicle) component).getConAttrs();
         }
 
         ConceptComponent comp = (ConceptComponent) component;
@@ -513,14 +513,14 @@ public class BdbCommitManager {
 
 
    public static void forget(ConceptChronicleBI concept) throws IOException {
-      Concept c = (Concept) concept;
+      ConceptChronicle c = (ConceptChronicle) concept;
 
         c.cancel();
     }
 
 
    public static void forget(RelationshipVersionBI rel) throws IOException {
-      Concept      c = Bdb.getConcept(rel.getOriginNid());
+      ConceptChronicle      c = Bdb.getConcept(rel.getOriginNid());
       Relationship r = (Relationship) rel;
 
         if (r.getTime() != Long.MAX_VALUE) {
@@ -563,7 +563,7 @@ public class BdbCommitManager {
 
         while (idItr.next()) {
             try {
-                Concept c = Concept.get(idItr.nid());
+                ConceptChronicle c = ConceptChronicle.get(idItr.nid());
 
                 if (c.isCanceled()) {
                     forget(c);
@@ -613,7 +613,7 @@ public class BdbCommitManager {
         }
     }
 
-    public static void removeUncommitted(final Concept concept) {
+    public static void removeUncommitted(final ConceptChronicle concept) {
         if (uncommittedCNids.isMember(concept.getNid())) {
             uncommittedCNids.setNotMember(concept.getNid());
         }
@@ -658,7 +658,7 @@ public class BdbCommitManager {
         }
     }
 
-    private static void writeUncommitted(Concept c) throws InterruptedException {
+    private static void writeUncommitted(ConceptChronicle c) throws InterruptedException {
         if (c != null) {
             dbWriterPermit.acquire();
             dbWriterService.execute(new SetNidsForCid(c));
@@ -677,19 +677,19 @@ public class BdbCommitManager {
         return lastCommit;
     }
 
-    public static Set<Concept> getUncommitted() {
+    public static Set<ConceptChronicle> getUncommitted() {
         try {
-            Set<Concept> returnSet = new HashSet<>();
+            Set<ConceptChronicle> returnSet = new HashSet<>();
             NidBitSetItrBI cNidItr = uncommittedCNids.iterator();
 
             while (cNidItr.next()) {
-                returnSet.add(Concept.get(cNidItr.nid()));
+                returnSet.add(ConceptChronicle.get(cNidItr.nid()));
             }
 
             cNidItr = uncommittedCNidsNoChecks.iterator();
 
             while (cNidItr.next()) {
-                returnSet.add(Concept.get(cNidItr.nid()));
+                returnSet.add(ConceptChronicle.get(cNidItr.nid()));
             }
 
             return returnSet;
@@ -732,10 +732,10 @@ public class BdbCommitManager {
 
     private static class ConceptWriter implements Runnable {
 
-        private Concept c;
+        private ConceptChronicle c;
 
         //~--- constructors -----------------------------------------------------
-        public ConceptWriter(Concept c) {
+        public ConceptWriter(ConceptChronicle c) {
             super();
             assert c.readyToWrite();
             this.c = c;
@@ -764,10 +764,10 @@ public class BdbCommitManager {
 
     private static class SetNidsForCid implements Runnable {
 
-        Concept concept;
+        ConceptChronicle concept;
 
         //~--- constructors -----------------------------------------------------
-        public SetNidsForCid(Concept concept) {
+        public SetNidsForCid(ConceptChronicle concept) {
             super();
             this.concept = concept;
         }

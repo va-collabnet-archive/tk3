@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 
 /**
@@ -346,7 +346,7 @@ public class NidCNidMapBdb extends ComponentBdb {
         super.sync();
     }
 
-    public void updateOutgoingRelationshipData(Concept concept) throws IOException {
+    public void updateOutgoingRelationshipData(ConceptChronicle concept) throws IOException {
         int cNid          = concept.getNid();
         int mapIndex      = (cNid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
         int nidIndexInMap = ((cNid - Integer.MIN_VALUE) % NID_CNID_MAP_SIZE);

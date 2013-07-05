@@ -22,13 +22,13 @@ import org.ihtsdo.ttk.concept.cc.component.MediaBinder;
 import org.ihtsdo.ttk.concept.cc.component.RefexMemberBinder;
 import org.ihtsdo.ttk.concept.cc.component.RelationshipBinder;
 import org.ihtsdo.ttk.concept.cc.component.Revision;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.concept.I_ManageConceptData;
 import org.ihtsdo.ttk.concept.cc.concept.IntSetBinder;
 import org.ihtsdo.ttk.concept.cc.concept.OFFSETS;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 
-public class ConceptBinder extends TupleBinding<Concept> {
+public class ConceptBinder extends TupleBinding<ConceptChronicle> {
 
     public static final byte[] zeroOutputArray;
 
@@ -39,7 +39,7 @@ public class ConceptBinder extends TupleBinding<Concept> {
     }
 
     @Override
-    public Concept entryToObject(TupleInput input) {
+    public ConceptChronicle entryToObject(TupleInput input) {
         /*
          * We don't retrieve the entire concept. Instead we just retrieve lists
          * of concept components on demand. See getList in ConceptData.
@@ -48,7 +48,7 @@ public class ConceptBinder extends TupleBinding<Concept> {
     }
 
     @Override
-    public void objectToEntry(Concept concept, TupleOutput finalOutput) {
+    public void objectToEntry(ConceptChronicle concept, TupleOutput finalOutput) {
 
         try {
             long dataVersion = concept.getDataVersion();

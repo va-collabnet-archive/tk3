@@ -34,7 +34,7 @@ import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
 import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributesRevision;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.description.Description;
 import org.ihtsdo.ttk.concept.cc.description.DescriptionRevision;
 import org.ihtsdo.ttk.concept.cc.media.Media;
@@ -196,7 +196,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         RelationshipChronicleBI relc = getRel(blueprint);
 
         if (relc == null) {
-            Concept c = (Concept) P.s.getConcept(blueprint.getSourceNid());
+            ConceptChronicle c = (ConceptChronicle) P.s.getConcept(blueprint.getSourceNid());
             Relationship r = new Relationship();
             Bdb.gVersion.incrementAndGet();
             r.enclosingConceptNid = c.getNid();
@@ -316,7 +316,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
 
         if (desc == null) {
             int conceptNid = blueprint.getConceptNid();
-            Concept c = (Concept) P.s.getConcept(blueprint.getConceptNid());
+            ConceptChronicle c = (ConceptChronicle) P.s.getConcept(blueprint.getConceptNid());
             Description d = new Description();
             Bdb.gVersion.incrementAndGet();
             d.enclosingConceptNid = c.getNid();
@@ -411,7 +411,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         MediaChronicleBI imgC = getMedia(blueprint);
 
         if (imgC == null) {
-            Concept c = (Concept) P.s.getConcept(blueprint.getConceptNid());
+            ConceptChronicle c = (ConceptChronicle) P.s.getConcept(blueprint.getConceptNid());
             Media img = new Media();
             Bdb.gVersion.incrementAndGet();
             img.enclosingConceptNid = c.getNid();
@@ -491,7 +491,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         if (cc == null) {
             return construct(blueprint);
         } else {
-            Concept concept = Bdb.getConceptForComponent(cc.getNid());
+            ConceptChronicle concept = Bdb.getConceptForComponent(cc.getNid());
             if (concept.isCanceled() || concept.getPrimordialUuid().toString().length() == 0
                     || concept.getConAttrs().getVersions().isEmpty()) {
                 return construct(blueprint);
@@ -508,7 +508,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
 
         int cNid = Bdb.uuidToNid(blueprint.getComponentUuid());
         Bdb.getNidCNidMap().setCNidForNid(cNid, cNid);
-        Concept newC = Concept.get(cNid);
+        ConceptChronicle newC = ConceptChronicle.get(cNid);
         newC.setAnnotationStyleRefex(blueprint.isAnnotationRefexExtensionIdentity());
 
         ConceptAttributes a = null;

@@ -27,7 +27,7 @@ import org.ihtsdo.ttk.api.refex.type_nid_long.RefexNidLongVersionBI;
 import org.ihtsdo.ttk.concept.cc.Path;
 import org.ihtsdo.ttk.concept.cc.Position;
 import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.refex.type_nid.NidMember;
 import org.ihtsdo.ttk.concept.cc.refex.type_nid_int.NidIntMember;
@@ -52,8 +52,8 @@ public class BdbPathManager {
 //   private RefsetHelperGetter       helperGetter = new RefsetHelperGetter();
     protected PathBI editPath;
     ConcurrentHashMap<Integer, PathBI> pathMap;
-    private Concept pathRefsetConcept;
-    private Concept refsetPathOriginsConcept;
+    private ConceptChronicle pathRefsetConcept;
+    private ConceptChronicle refsetPathOriginsConcept;
 
     //~--- constructors --------------------------------------------------------
     private BdbPathManager() throws IOException {
@@ -145,7 +145,7 @@ public class BdbPathManager {
 //                                         path.getConceptNid(), EConcept.REFSET_TYPES.CID_INT, propMap,
 //                                         config);
 //
-//         Concept pathOriginRefConcept = getRefsetPathOriginsConcept();
+//         ConceptChronicle pathOriginRefConcept = getRefsetPathOriginsConcept();
 //
 //         BdbCommitManager.addUncommittedNoChecks(pathOriginRefConcept);
 //         pathMap.put(path.getConceptNid(), (Path) path);
@@ -288,7 +288,7 @@ public class BdbPathManager {
     private List<PositionBI> getPathOriginsWithDepth(int nid, int depth) throws IOException {
         try {
             ArrayList<PositionBI> result = new ArrayList<>();
-            Concept pathConcept = Bdb.getConceptDb().getConcept(nid);
+            ConceptChronicle pathConcept = Bdb.getConceptDb().getConcept(nid);
 
             for (RefexChronicleBI<?> extPart : pathConcept.getRefexMembers(ReferenceConcepts.REFSET_PATH_ORIGINS.getNid())) {
                 if (extPart == null) {
@@ -314,7 +314,7 @@ public class BdbPathManager {
                                             "\n\n****************************************\nDepth limit exceeded. Path concept: \n"
                                             + pathConcept.toLongString() + "\n\n extensionPart: \n\n"
                                             + extPart.toString() + "\n\n origin refset: \n\n"
-                                            + Concept.get(extPart.getRefexExtensionNid()).toLongString()
+                                            + ConceptChronicle.get(extPart.getRefexExtensionNid()).toLongString()
                                             + "\n-------------------------------------------\n\n"));
                                 } else {
                                     result.add(new Position(conceptExtension.getLong1(),
@@ -344,7 +344,7 @@ public class BdbPathManager {
                                             "\n\n****************************************\nDepth limit exceeded. Path concept: \n"
                                             + pathConcept.toLongString() + "\n\n extensionPart: \n\n"
                                             + extPart.toString() + "\n\n origin refset: \n\n"
-                                            + Concept.get(extPart.getRefexExtensionNid()).toLongString()
+                                            + ConceptChronicle.get(extPart.getRefexExtensionNid()).toLongString()
                                             + "\n-------------------------------------------\n\n"));
                                 } else {
                                     result.add(new Position(ThinVersionHelper.convert(conceptExtension.getInt1()),
@@ -364,7 +364,7 @@ public class BdbPathManager {
         }
     }
 
-    private Concept getPathRefsetConcept() throws IOException {
+    private ConceptChronicle getPathRefsetConcept() throws IOException {
         if (pathRefsetConcept == null) {
             pathRefsetConcept = Bdb.getConceptDb().getConcept(ReferenceConcepts.REFSET_PATHS.getNid());
         }
@@ -372,9 +372,9 @@ public class BdbPathManager {
         return pathRefsetConcept;
     }
 
-    private Concept getRefsetPathOriginsConcept() throws IOException {
+    private ConceptChronicle getRefsetPathOriginsConcept() throws IOException {
         if (this.refsetPathOriginsConcept == null) {
-            this.refsetPathOriginsConcept = Concept.get(ReferenceConcepts.REFSET_PATH_ORIGINS.getNid());
+            this.refsetPathOriginsConcept = ConceptChronicle.get(ReferenceConcepts.REFSET_PATH_ORIGINS.getNid());
         }
 
         return refsetPathOriginsConcept;

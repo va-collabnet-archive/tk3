@@ -23,7 +23,7 @@ import org.ihtsdo.ttk.bdb.ComponentBdb;
 import org.ihtsdo.ttk.bdb.id.NidCNidMapBdb;
 import org.ihtsdo.ttk.concept.cc.component.IdentifierSet;
 import org.ihtsdo.ttk.concept.cc.component.IdentifierSetReadOnly;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.fx.progress.AggregateProgressItem;
 import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
 import org.ihtsdo.ttk.lookup.Looker;
@@ -92,7 +92,7 @@ public class ConceptBdb extends ComponentBdb {
     *
     * @throws IOException
     */
-   public void forget(Concept c) throws IOException {
+   public void forget(ConceptChronicle c) throws IOException {
       int cNid = c.getNid();
 
       try {
@@ -254,7 +254,7 @@ public class ConceptBdb extends ComponentBdb {
     *
     * @throws IOException
     */
-   public void writeConcept(Concept concept) throws IOException {
+   public void writeConcept(ConceptChronicle concept) throws IOException {
       if (concept.isCanceled()) {
          return;
       }
@@ -302,10 +302,10 @@ public class ConceptBdb extends ComponentBdb {
     *
     * @throws IOException
     */
-   public Concept getConcept(int cNid) throws IOException {
+   public ConceptChronicle getConcept(int cNid) throws IOException {
       assert cNid != Integer.MAX_VALUE;
 
-      return Concept.get(cNid);
+      return ConceptChronicle.get(cNid);
    }
 
    /**
@@ -400,8 +400,8 @@ public class ConceptBdb extends ComponentBdb {
     *
     * @throws IOException
     */
-   public Concept getWritableConcept(int cNid) throws IOException {
-      return Concept.get(cNid);
+   public ConceptChronicle getWritableConcept(int cNid) throws IOException {
+      return ConceptChronicle.get(cNid);
    }
 
    /**

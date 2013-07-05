@@ -16,7 +16,7 @@ import com.sleepycat.je.OperationStatus;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.bdb.temp.AceLog;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptVersion;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -317,7 +317,7 @@ public class ParallelConceptIterator implements Callable<Boolean>, ConceptFetche
      * @throws Exception
      */
     @Override
-    public Concept fetch() throws Exception {
+    public ConceptChronicle fetch() throws Exception {
         switch (fetchKind) {
             case ONE:
                 return fetchOne();
@@ -347,7 +347,7 @@ public class ParallelConceptIterator implements Callable<Boolean>, ConceptFetche
      */
     @Override
     public ConceptVersion fetch(ViewCoordinate vc) throws Exception {
-        Concept c = fetch();
+        ConceptChronicle c = fetch();
 
         if (c != null) {
             return c.getVersion(vc);
@@ -364,8 +364,8 @@ public class ParallelConceptIterator implements Callable<Boolean>, ConceptFetche
      *
      * @throws IOException
      */
-    private Concept fetchOne() throws IOException {
-        Concept c = Concept.getIfInMap(currentCNid);
+    private ConceptChronicle fetchOne() throws IOException {
+        ConceptChronicle c = ConceptChronicle.getIfInMap(currentCNid);
 
         if (c != null) {
             return c;
@@ -374,7 +374,7 @@ public class ParallelConceptIterator implements Callable<Boolean>, ConceptFetche
         roCursor.getCurrent(aKey, roFoundData, LockMode.READ_UNCOMMITTED);
         mutableCursor.getCurrent(aKey, mutableFoundData, LockMode.READ_UNCOMMITTED);
 
-        return Concept.get(currentCNid, roFoundData.getData(), mutableFoundData.getData());
+        return ConceptChronicle.get(currentCNid, roFoundData.getData(), mutableFoundData.getData());
     }
 
     /**
@@ -385,8 +385,8 @@ public class ParallelConceptIterator implements Callable<Boolean>, ConceptFetche
      *
      * @throws IOException
      */
-    private Concept fetchThree() throws IOException {
-        Concept c = Concept.getIfInMap(currentCNid);
+    private ConceptChronicle fetchThree() throws IOException {
+        ConceptChronicle c = ConceptChronicle.getIfInMap(currentCNid);
 
         if (c != null) {
             return c;
@@ -394,7 +394,7 @@ public class ParallelConceptIterator implements Callable<Boolean>, ConceptFetche
 
         mutableCursor.getCurrent(aKey, mutableFoundData, LockMode.READ_UNCOMMITTED);
 
-        return Concept.get(currentCNid, new byte[0], mutableFoundData.getData());
+        return ConceptChronicle.get(currentCNid, new byte[0], mutableFoundData.getData());
     }
 
     /**
@@ -405,8 +405,8 @@ public class ParallelConceptIterator implements Callable<Boolean>, ConceptFetche
      *
      * @throws IOException
      */
-    private Concept fetchTwo() throws IOException {
-        Concept c = Concept.getIfInMap(currentCNid);
+    private ConceptChronicle fetchTwo() throws IOException {
+        ConceptChronicle c = ConceptChronicle.getIfInMap(currentCNid);
 
         if (c != null) {
             return c;
@@ -414,7 +414,7 @@ public class ParallelConceptIterator implements Callable<Boolean>, ConceptFetche
 
         roCursor.getCurrent(aKey, roFoundData, LockMode.READ_UNCOMMITTED);
 
-        return Concept.get(currentCNid, roFoundData.getData(), new byte[0]);
+        return ConceptChronicle.get(currentCNid, roFoundData.getData(), new byte[0]);
     }
 
     /**

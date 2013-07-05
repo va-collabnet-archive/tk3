@@ -40,7 +40,7 @@ import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 
 /**
@@ -239,7 +239,7 @@ public class IndexCacheRecord {
         int[]                 originCNids  = getDestinationOriginNids();
 
         for (int originCNid : originCNids) {
-            Concept c = Concept.get(originCNid);
+            ConceptChronicle c = ConceptChronicle.get(originCNid);
 
             for (Relationship r : c.getRelationshipsOutgoing()) {
                 if (r.getDestinationNid() == cNid) {
@@ -372,9 +372,9 @@ public class IndexCacheRecord {
         if (data[DESTINATION_OFFSET_INDEX] > RELATIONSHIP_OFFSET) {
             for (RelationshipIndexRecord record : getRelationshipsRecord()) {
                 try {
-                    sb.append("  ").append(Concept.get(record.getTypeNid()).toString()).append(" [").append(
+                    sb.append("  ").append(ConceptChronicle.get(record.getTypeNid()).toString()).append(" [").append(
                         record.getDestinationNid()).append("]: ").append(
-                        Concept.get(record.getDestinationNid()).toString()).append(" [").append(
+                        ConceptChronicle.get(record.getDestinationNid()).toString()).append(" [").append(
                         record.getDestinationNid()).append("]\n");
                 } catch (IOException ex) {
                     Logger.getLogger(IndexCacheRecord.class.getName()).log(Level.SEVERE, null, ex);
@@ -386,7 +386,7 @@ public class IndexCacheRecord {
 
         for (int destinationOrigin : getDestinationOriginNids()) {
             try {
-                sb.append("  ").append(Concept.get(destinationOrigin).toString()).append(" [").append(
+                sb.append("  ").append(ConceptChronicle.get(destinationOrigin).toString()).append(" [").append(
                     destinationOrigin).append("]\n");;
             } catch (IOException ex) {
                 Logger.getLogger(IndexCacheRecord.class.getName()).log(Level.SEVERE, null, ex);
@@ -397,7 +397,7 @@ public class IndexCacheRecord {
 
         for (NidPairForRefex pair : getNidPairsForRefsets()) {
             try {
-                sb.append("  ").append(Concept.get(pair.getRefexNid()).toString()).append(" [").append(
+                sb.append("  ").append(ConceptChronicle.get(pair.getRefexNid()).toString()).append(" [").append(
                     pair.getRefexNid()).append("], memberNid: ").append(pair.getMemberNid()).append("\n");
             } catch (IOException ex) {
                 Logger.getLogger(IndexCacheRecord.class.getName()).log(Level.SEVERE, null, ex);
