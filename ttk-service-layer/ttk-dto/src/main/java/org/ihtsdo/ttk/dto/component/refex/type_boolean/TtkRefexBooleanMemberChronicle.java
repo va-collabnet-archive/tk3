@@ -6,7 +6,7 @@ import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanVersionBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMember;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public class TtkRefexBooleanMember extends TtkRefexAbstractMember<TtkRefexBooleanRevision> {
+public class TtkRefexBooleanMemberChronicle extends TtkRefexAbstractMemberChronicle<TtkRefexBooleanRevision> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -29,11 +29,11 @@ public class TtkRefexBooleanMember extends TtkRefexAbstractMember<TtkRefexBoolea
 
    //~--- constructors --------------------------------------------------------
 
-   public TtkRefexBooleanMember() {
+   public TtkRefexBooleanMemberChronicle() {
       super();
    }
 
-   public TtkRefexBooleanMember(RefexChronicleBI another) throws IOException {
+   public TtkRefexBooleanMemberChronicle(RefexChronicleBI another) throws IOException {
       super((RefexVersionBI) another.getPrimordialVersion());
 
       Collection<? extends RefexBooleanVersionBI> refexes   = another.getVersions();
@@ -53,12 +53,12 @@ public class TtkRefexBooleanMember extends TtkRefexAbstractMember<TtkRefexBoolea
       }
    }
 
-   public TtkRefexBooleanMember(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
+   public TtkRefexBooleanMemberChronicle(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super();
       readExternal(in, dataVersion);
    }
 
-   public TtkRefexBooleanMember(TtkRefexBooleanMember another, ComponentTransformerBI transformer) {
+   public TtkRefexBooleanMemberChronicle(TtkRefexBooleanMemberChronicle another, ComponentTransformerBI transformer) {
       super(another, transformer);
       this.booleanValue = transformer.transform(another.booleanValue, another, ComponentFields.REFEX_BOOLEAN1);
    }
@@ -81,8 +81,8 @@ public class TtkRefexBooleanMember extends TtkRefexAbstractMember<TtkRefexBoolea
          return false;
       }
 
-      if (TtkRefexBooleanMember.class.isAssignableFrom(obj.getClass())) {
-         TtkRefexBooleanMember another = (TtkRefexBooleanMember) obj;
+      if (TtkRefexBooleanMemberChronicle.class.isAssignableFrom(obj.getClass())) {
+         TtkRefexBooleanMemberChronicle another = (TtkRefexBooleanMemberChronicle) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
@@ -110,8 +110,8 @@ public class TtkRefexBooleanMember extends TtkRefexAbstractMember<TtkRefexBoolea
    }
 
    @Override
-   public TtkRefexBooleanMember makeTransform(ComponentTransformerBI transformer) {
-      return new TtkRefexBooleanMember(this, transformer);
+   public TtkRefexBooleanMemberChronicle makeTransform(ComponentTransformerBI transformer) {
+      return new TtkRefexBooleanMemberChronicle(this, transformer);
    }
 
    @Override

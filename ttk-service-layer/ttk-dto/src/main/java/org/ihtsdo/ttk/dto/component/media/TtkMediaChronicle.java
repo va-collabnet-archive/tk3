@@ -9,7 +9,7 @@ import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.media.MediaChronicleBI;
 import org.ihtsdo.ttk.api.media.MediaVersionBI;
-import org.ihtsdo.ttk.dto.component.TtkComponent;
+import org.ihtsdo.ttk.dto.component.TtkComponentChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -21,7 +21,7 @@ import java.util.*;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public class TtkMedia extends TtkComponent<TtkMediaRevision> {
+public class TtkMediaChronicle extends TtkComponentChronicle<TtkMediaRevision> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -34,11 +34,11 @@ public class TtkMedia extends TtkComponent<TtkMediaRevision> {
 
    //~--- constructors --------------------------------------------------------
 
-   public TtkMedia() {
+   public TtkMediaChronicle() {
       super();
    }
 
-   public TtkMedia(MediaChronicleBI another) throws IOException {
+   public TtkMediaChronicle(MediaChronicleBI another) throws IOException {
       super(another.getPrimordialVersion());
 
       Collection<? extends MediaVersionBI> media        = another.getVersions();
@@ -63,12 +63,12 @@ public class TtkMedia extends TtkComponent<TtkMediaRevision> {
       }
    }
 
-   public TtkMedia(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
+   public TtkMediaChronicle(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super();
       readExternal(in, dataVersion);
    }
 
-   public TtkMedia(TtkMedia another, ComponentTransformerBI transformer) {
+   public TtkMediaChronicle(TtkMediaChronicle another, ComponentTransformerBI transformer) {
       super(another, transformer);
 
          this.conceptUuid     = transformer.transform(another.conceptUuid, another, ComponentFields.MEDIA_ENCLOSING_CONCEPT_UUID);
@@ -96,8 +96,8 @@ public class TtkMedia extends TtkComponent<TtkMediaRevision> {
          return false;
       }
 
-      if (TtkMedia.class.isAssignableFrom(obj.getClass())) {
-         TtkMedia another = (TtkMedia) obj;
+      if (TtkMediaChronicle.class.isAssignableFrom(obj.getClass())) {
+         TtkMediaChronicle another = (TtkMediaChronicle) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
@@ -147,8 +147,8 @@ public class TtkMedia extends TtkComponent<TtkMediaRevision> {
    }
 
    @Override
-   public TtkMedia makeTransform(ComponentTransformerBI transformer) {
-      return new TtkMedia(this, transformer);
+   public TtkMediaChronicle makeTransform(ComponentTransformerBI transformer) {
+      return new TtkMediaChronicle(this, transformer);
    }
 
    @Override

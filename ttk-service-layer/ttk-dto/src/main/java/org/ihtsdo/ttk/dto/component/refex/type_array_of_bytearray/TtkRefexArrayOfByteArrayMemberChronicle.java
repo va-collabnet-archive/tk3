@@ -22,9 +22,9 @@ import java.io.IOException;
 import java.util.*;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayVersionBI;
-import org.ihtsdo.ttk.dto.TtkConcept;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMember;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
@@ -37,7 +37,7 @@ import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
  *
  * @see TkConcept
  */
-public class TtkRefexArrayOfByteArrayMember extends TtkRefexAbstractMember<TtkRefexArrayOfByteArrayRevision> {
+public class TtkRefexArrayOfByteArrayMemberChronicle extends TtkRefexAbstractMemberChronicle<TtkRefexArrayOfByteArrayRevision> {
 
     /**
      * The Constant serialVersionUID, used to prevent the class from computing
@@ -55,7 +55,7 @@ public class TtkRefexArrayOfByteArrayMember extends TtkRefexAbstractMember<TtkRe
     /**
      * Instantiates a new TK Refex Array of Byte Array Member.
      */
-    public TtkRefexArrayOfByteArrayMember() {
+    public TtkRefexArrayOfByteArrayMemberChronicle() {
         super();
     }
 
@@ -67,7 +67,7 @@ public class TtkRefexArrayOfByteArrayMember extends TtkRefexAbstractMember<TtkRe
      * this TK Refex Array of Byte Array Member
      * @throws IOException signals that an I/O exception has occurred
      */
-    public TtkRefexArrayOfByteArrayMember(RefexChronicleBI refexChronicle) throws IOException {
+    public TtkRefexArrayOfByteArrayMemberChronicle(RefexChronicleBI refexChronicle) throws IOException {
         this((RefexArrayOfBytearrayVersionBI) refexChronicle.getPrimordialVersion());
     }
 
@@ -82,7 +82,7 @@ public class TtkRefexArrayOfByteArrayMember extends TtkRefexAbstractMember<TtkRe
      * included or not
      * @throws IOException signals that an I/O exception has occurred
      */
-    public TtkRefexArrayOfByteArrayMember(RefexArrayOfBytearrayVersionBI refexArrayOfBytearrayVersion) throws IOException {
+    public TtkRefexArrayOfByteArrayMemberChronicle(RefexArrayOfBytearrayVersionBI refexArrayOfBytearrayVersion) throws IOException {
         super(refexArrayOfBytearrayVersion);
         
             Collection<? extends RefexArrayOfBytearrayVersionBI> refexes = refexArrayOfBytearrayVersion.getVersions();
@@ -120,7 +120,7 @@ public class TtkRefexArrayOfByteArrayMember extends TtkRefexAbstractMember<TtkRe
      * @throws IOException signals that an I/O exception has occurred
      * @throws ClassNotFoundException indicates a specified class was not found
      */
-    public TtkRefexArrayOfByteArrayMember(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
+    public TtkRefexArrayOfByteArrayMemberChronicle(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
         super();
         readExternal(in, dataVersion);
     }
@@ -139,7 +139,7 @@ public class TtkRefexArrayOfByteArrayMember extends TtkRefexAbstractMember<TtkRe
      * @param mapAll set to <code>true</code> to map all the uuids in this TK
      * Refex Array of Byte Array Member based on the conversion map
      */
-    public TtkRefexArrayOfByteArrayMember(TtkRefexArrayOfByteArrayMember another, ComponentTransformerBI transformer) {
+    public TtkRefexArrayOfByteArrayMemberChronicle(TtkRefexArrayOfByteArrayMemberChronicle another, ComponentTransformerBI transformer) {
         super(another, transformer);
         this.arrayOfByteArray1 = transformer.transform(another.arrayOfByteArray1, another, ComponentFields.REFEX_ARRAY_OF_BYTEARRAY);
     }
@@ -161,8 +161,8 @@ public class TtkRefexArrayOfByteArrayMember extends TtkRefexAbstractMember<TtkRe
             return false;
         }
 
-        if (TtkRefexArrayOfByteArrayMember.class.isAssignableFrom(obj.getClass())) {
-            TtkRefexArrayOfByteArrayMember another = (TtkRefexArrayOfByteArrayMember) obj;
+        if (TtkRefexArrayOfByteArrayMemberChronicle.class.isAssignableFrom(obj.getClass())) {
+            TtkRefexArrayOfByteArrayMemberChronicle another = (TtkRefexArrayOfByteArrayMemberChronicle) obj;
 
             // =========================================================
             // Compare properties of 'this' class to the 'another' class
@@ -201,8 +201,8 @@ public class TtkRefexArrayOfByteArrayMember extends TtkRefexAbstractMember<TtkRe
      * @return the converted TK Refex Array of Byte Array Member
      */
     @Override
-    public TtkRefexArrayOfByteArrayMember makeTransform(ComponentTransformerBI transformer) {
-        return new TtkRefexArrayOfByteArrayMember(this, transformer);
+    public TtkRefexArrayOfByteArrayMemberChronicle makeTransform(ComponentTransformerBI transformer) {
+        return new TtkRefexArrayOfByteArrayMemberChronicle(this, transformer);
     }
 
     /**

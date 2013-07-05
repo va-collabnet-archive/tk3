@@ -1,13 +1,14 @@
-package org.ihtsdo.ttk.dto.component.refex.type_string;
+package org.ihtsdo.ttk.dto.component.refex.type_int;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.refex.type_string.RefexStringVersionBI;
-import org.ihtsdo.ttk.dto.UtfHelper;
+import org.ihtsdo.ttk.api.refex.type_int.RefexIntVersionBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMember;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -20,48 +21,49 @@ import javax.xml.bind.annotation.XmlAttribute;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public class TtkRefexStringMember extends TtkRefexAbstractMember<TtkRefexStringRevision> {
+public class TtkRefexIntMemberChronicle extends TtkRefexAbstractMemberChronicle<TtkRefexIntRevision> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
 
    @XmlAttribute
-   public String string1;
+   public int int1;
 
    //~--- constructors --------------------------------------------------------
 
-   public TtkRefexStringMember() {
+   public TtkRefexIntMemberChronicle() {
       super();
    }
 
-   public TtkRefexStringMember(RefexChronicleBI another) throws IOException {
+   public TtkRefexIntMemberChronicle(RefexChronicleBI another) throws IOException {
       super((RefexVersionBI) another.getPrimordialVersion());
 
-      Collection<? extends RefexStringVersionBI> refexes   = another.getVersions();
+      TerminologyStoreDI                      ts        = Ts.get();
+      Collection<? extends RefexIntVersionBI> refexes   = another.getVersions();
       int                                     partCount = refexes.size();
-      Iterator<? extends RefexStringVersionBI>   itr       = refexes.iterator();
-      RefexStringVersionBI                       rv        = itr.next();
+      Iterator<? extends RefexIntVersionBI>   itr       = refexes.iterator();
+      RefexIntVersionBI                       rv        = itr.next();
 
-      this.string1 = rv.getString1();
+      this.int1 = rv.getInt1();
 
       if (partCount > 1) {
          revisions = new ArrayList<>(partCount - 1);
 
          while (itr.hasNext()) {
             rv = itr.next();
-            revisions.add(new TtkRefexStringRevision(rv));
+            revisions.add(new TtkRefexIntRevision(rv));
          }
       }
    }
 
-   public TtkRefexStringMember(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
+   public TtkRefexIntMemberChronicle(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super();
       readExternal(in, dataVersion);
    }
 
-   public TtkRefexStringMember(TtkRefexStringMember another, ComponentTransformerBI transformer) {
+   public TtkRefexIntMemberChronicle(TtkRefexIntMemberChronicle another, ComponentTransformerBI transformer) {
       super(another, transformer);
-      this.string1 = transformer.transform(another.string1, another, ComponentFields.REFEX_STRING1);
+      this.int1 = transformer.transform(another.int1, another, ComponentFields.REFEX_INTEGER1);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -69,8 +71,8 @@ public class TtkRefexStringMember extends TtkRefexAbstractMember<TtkRefexStringR
    /**
     * Compares this object to the specified object. The result is <tt>true</tt>
     * if and only if the argument is not <tt>null</tt>, is a
-    * <tt>ERefsetStrMember</tt> object, and contains the same values, field by field,
-    * as this <tt>ERefsetStrMember</tt>.
+    * <tt>ERefsetIntMember</tt> object, and contains the same values, field by field,
+    * as this <tt>ERefsetIntMember</tt>.
     *
     * @param obj the object to compare with.
     * @return <code>true</code> if the objects are the same;
@@ -82,14 +84,25 @@ public class TtkRefexStringMember extends TtkRefexAbstractMember<TtkRefexStringR
          return false;
       }
 
-      if (TtkRefexStringMember.class.isAssignableFrom(obj.getClass())) {
-         TtkRefexStringMember another = (TtkRefexStringMember) obj;
+      if (TtkRefexIntMemberChronicle.class.isAssignableFrom(obj.getClass())) {
+         TtkRefexIntMemberChronicle another = (TtkRefexIntMemberChronicle) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
          // =========================================================
-         // Compare strValue
-         if (!this.string1.equals(another.string1)) {
+         // Compare intValue
+         if (this.int1 != another.int1) {
+            return false;
+         }
+
+         // Compare extraVersions
+         if (this.revisions == null) {
+            if (another.revisions == null) {             // Equal!
+            } else if (another.revisions.isEmpty()) {    // Equal!
+            } else {
+               return false;
+            }
+         } else if (!this.revisions.equals(another.revisions)) {
             return false;
          }
 
@@ -101,9 +114,9 @@ public class TtkRefexStringMember extends TtkRefexAbstractMember<TtkRefexStringR
    }
 
    /**
-    * Returns a hash code for this <code>ERefsetStrMember</code>.
+    * Returns a hash code for this <code>ERefsetIntMember</code>.
     *
-    * @return a hash code value for this <tt>ERefsetStrMember</tt>.
+    * @return a hash code value for this <tt>ERefsetIntMember</tt>.
     */
    @Override
    public int hashCode() {
@@ -111,14 +124,14 @@ public class TtkRefexStringMember extends TtkRefexAbstractMember<TtkRefexStringR
    }
 
    @Override
-   public TtkRefexStringMember makeTransform(ComponentTransformerBI transformer) {
-      return new TtkRefexStringMember(this, transformer);
+   public TtkRefexIntMemberChronicle makeTransform(ComponentTransformerBI transformer) {
+      return new TtkRefexIntMemberChronicle(this, transformer);
    }
 
    @Override
-   public final void readExternal(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
+   public void readExternal(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super.readExternal(in, dataVersion);
-      string1 = UtfHelper.readUtfV6(in, dataVersion);
+      int1 = in.readInt();
 
       int versionSize = in.readInt();
 
@@ -126,7 +139,7 @@ public class TtkRefexStringMember extends TtkRefexAbstractMember<TtkRefexStringR
          revisions = new ArrayList<>(versionSize);
 
          for (int i = 0; i < versionSize; i++) {
-            revisions.add(new TtkRefexStringRevision(in, dataVersion));
+            revisions.add(new TtkRefexIntRevision(in, dataVersion));
          }
       }
    }
@@ -139,9 +152,9 @@ public class TtkRefexStringMember extends TtkRefexAbstractMember<TtkRefexStringR
       StringBuilder buff = new StringBuilder();
 
       buff.append(this.getClass().getSimpleName()).append(": ");
-      buff.append(" str:");
-      buff.append("'").append(this.string1).append("'");
-      buff.append("; ");
+      buff.append(" int: ");
+      buff.append(this.int1);
+      buff.append(" ");
       buff.append(super.toString());
 
       return buff.toString();
@@ -150,14 +163,14 @@ public class TtkRefexStringMember extends TtkRefexAbstractMember<TtkRefexStringR
    @Override
    public void writeExternal(DataOutput out) throws IOException {
       super.writeExternal(out);
-      UtfHelper.writeUtf(out, string1);
+      out.writeInt(int1);
 
       if (revisions == null) {
          out.writeInt(0);
       } else {
          out.writeInt(revisions.size());
 
-         for (TtkRefexStringRevision rmv : revisions) {
+         for (TtkRefexIntRevision rmv : revisions) {
             rmv.writeExternal(out);
          }
       }
@@ -165,23 +178,23 @@ public class TtkRefexStringMember extends TtkRefexAbstractMember<TtkRefexStringR
 
    //~--- get methods ---------------------------------------------------------
 
-   @Override
-   public List<TtkRefexStringRevision> getRevisionList() {
-      return revisions;
+   public int getIntValue() {
+      return int1;
    }
 
-   public String getString1() {
-      return string1;
+   @Override
+   public List<TtkRefexIntRevision> getRevisionList() {
+      return revisions;
    }
 
    @Override
    public ToolkitRefexType getType() {
-      return ToolkitRefexType.STR;
+      return ToolkitRefexType.INT;
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setString1(String string1) {
-      this.string1 = string1;
+   public void setIntValue(int intValue) {
+      this.int1 = intValue;
    }
 }

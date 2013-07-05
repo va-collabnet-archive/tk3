@@ -8,7 +8,7 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMember;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -21,20 +21,20 @@ import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public class TtkRefexMember extends TtkRefexAbstractMember<TtkRefexRevision> {
+public class TtkRefexMemberChronicle extends TtkRefexAbstractMemberChronicle<TtkRefexRevision> {
    public static final long serialVersionUID = 1;
 
    //~--- constructors --------------------------------------------------------
 
-   public TtkRefexMember() {
+   public TtkRefexMemberChronicle() {
       super();
    }
 
-   public TtkRefexMember(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
+   public TtkRefexMemberChronicle(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super();
       readExternal(in, dataVersion);
    }
-   public TtkRefexMember(RefexChronicleBI another) throws IOException {
+   public TtkRefexMemberChronicle(RefexChronicleBI another) throws IOException {
       super((RefexVersionBI) another.getPrimordialVersion());
 
       Collection<? extends RefexNidNidNidVersionBI> refexes   = another.getVersions();
@@ -52,7 +52,7 @@ public class TtkRefexMember extends TtkRefexAbstractMember<TtkRefexRevision> {
       }
    }
 
-   public TtkRefexMember(TtkRefexMember another, ComponentTransformerBI transformer) {
+   public TtkRefexMemberChronicle(TtkRefexMemberChronicle another, ComponentTransformerBI transformer) {
       super(another, transformer);
    }
 
@@ -74,7 +74,7 @@ public class TtkRefexMember extends TtkRefexAbstractMember<TtkRefexRevision> {
          return false;
       }
 
-      if (TtkRefexMember.class.isAssignableFrom(obj.getClass())) {
+      if (TtkRefexMemberChronicle.class.isAssignableFrom(obj.getClass())) {
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
@@ -98,7 +98,7 @@ public class TtkRefexMember extends TtkRefexAbstractMember<TtkRefexRevision> {
 
    @Override
    public TtkRevision makeTransform(ComponentTransformerBI transformer) {
-      return new TtkRefexMember(this, transformer);
+      return new TtkRefexMemberChronicle(this, transformer);
    }
 
    @Override

@@ -36,5 +36,10 @@
       <artifactId>ttk-versioned-component-service</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>ttk-lookup</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

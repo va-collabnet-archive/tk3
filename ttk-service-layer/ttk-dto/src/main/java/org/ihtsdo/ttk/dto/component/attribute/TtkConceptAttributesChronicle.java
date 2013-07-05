@@ -5,7 +5,7 @@ package org.ihtsdo.ttk.dto.component.attribute;
 import org.ihtsdo.ttk.api.conattr.ConceptAttributeChronicleBI;
 import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.dto.component.TtkComponent;
+import org.ihtsdo.ttk.dto.component.TtkComponentChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -20,7 +20,7 @@ import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
 @XmlRootElement(name="attributes")
-public class TtkConceptAttributes extends TtkComponent<TtkConceptAttributesRevision> {
+public class TtkConceptAttributesChronicle extends TtkComponentChronicle<TtkConceptAttributesRevision> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -30,11 +30,11 @@ public class TtkConceptAttributes extends TtkComponent<TtkConceptAttributesRevis
 
    //~--- constructors --------------------------------------------------------
 
-   public TtkConceptAttributes() {
+   public TtkConceptAttributesChronicle() {
       super();
    }
 
-   public TtkConceptAttributes(ConceptAttributeChronicleBI another) throws IOException {
+   public TtkConceptAttributesChronicle(ConceptAttributeChronicleBI another) throws IOException {
       super(another.getPrimordialVersion());
 
       Collection<? extends ConceptAttributeVersionBI> versions = another.getVersions();
@@ -57,12 +57,12 @@ public class TtkConceptAttributes extends TtkComponent<TtkConceptAttributesRevis
       another.getAnnotationsActive(vc, refexNid, null);
    }
 
-   public TtkConceptAttributes(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
+   public TtkConceptAttributesChronicle(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super();
       readExternal(in, dataVersion);
    }
 
-   public TtkConceptAttributes(TtkConceptAttributes another, ComponentTransformerBI transformer) {
+   public TtkConceptAttributesChronicle(TtkConceptAttributesChronicle another, ComponentTransformerBI transformer) {
       super(another, transformer);
       this.defined = transformer.transform(another.defined, another, ComponentFields.ATTRIBUTE_DEFINED);
    }
@@ -85,8 +85,8 @@ public class TtkConceptAttributes extends TtkComponent<TtkConceptAttributesRevis
          return false;
       }
 
-      if (TtkConceptAttributes.class.isAssignableFrom(obj.getClass())) {
-         TtkConceptAttributes another = (TtkConceptAttributes) obj;
+      if (TtkConceptAttributesChronicle.class.isAssignableFrom(obj.getClass())) {
+         TtkConceptAttributesChronicle another = (TtkConceptAttributesChronicle) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
@@ -114,8 +114,8 @@ public class TtkConceptAttributes extends TtkComponent<TtkConceptAttributesRevis
    }
 
    @Override
-   public TtkConceptAttributes makeTransform(ComponentTransformerBI transformer) {
-      return new TtkConceptAttributes(this, transformer);
+   public TtkConceptAttributesChronicle makeTransform(ComponentTransformerBI transformer) {
+      return new TtkConceptAttributesChronicle(this, transformer);
    }
 
    @Override

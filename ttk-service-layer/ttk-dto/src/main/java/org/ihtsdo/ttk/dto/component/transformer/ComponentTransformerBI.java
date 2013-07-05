@@ -25,7 +25,7 @@ import org.ihtsdo.ttk.dto.component.TtkRevision;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
-import org.ihtsdo.ttk.dto.TtkConcept;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 
 /**
  *
@@ -34,7 +34,7 @@ import org.ihtsdo.ttk.dto.TtkConcept;
 public interface ComponentTransformerBI {
     UUID transform(UUID input, TtkRevision component, ComponentFields field);
     
-    UUID transform(UUID input, TtkConcept concept, ComponentFields field);
+    UUID transform(UUID input, TtkConceptChronicle concept, ComponentFields field);
 
     String transform(String input, TtkRevision component, ComponentFields field);
 
@@ -46,7 +46,7 @@ public interface ComponentTransformerBI {
 
     boolean transform(boolean input, TtkRevision component, ComponentFields field);
     
-    boolean transform(boolean input, TtkConcept concept, ComponentFields field);
+    boolean transform(boolean input, TtkConceptChronicle concept, ComponentFields field);
     
     byte[][] transform(byte[][] input, TtkRevision component, ComponentFields field);
     

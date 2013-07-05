@@ -6,7 +6,7 @@ import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.relationship.RelationshipChronicleBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
-import org.ihtsdo.ttk.dto.component.TtkComponent;
+import org.ihtsdo.ttk.dto.component.TtkComponentChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -21,7 +21,7 @@ import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
 @XmlRootElement(name="relationship")
-public class TtkRelationship extends TtkComponent<TtkRelationshipRevision> {
+public class TtkRelationshipChronicle extends TtkComponentChronicle<TtkRelationshipRevision> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -41,11 +41,11 @@ public class TtkRelationship extends TtkComponent<TtkRelationshipRevision> {
 
    //~--- constructors --------------------------------------------------------
 
-   public TtkRelationship() {
+   public TtkRelationshipChronicle() {
       super();
    }
 
-   public TtkRelationship(RelationshipChronicleBI rel) throws IOException {
+   public TtkRelationshipChronicle(RelationshipChronicleBI rel) throws IOException {
       super(rel.getPrimordialVersion());
 
       Collection<? extends RelationshipVersionBI> rels      = rel.getVersions();
@@ -74,12 +74,12 @@ public class TtkRelationship extends TtkComponent<TtkRelationshipRevision> {
       }
    }
 
-   public TtkRelationship(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
+   public TtkRelationshipChronicle(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super();
       readExternal(in, dataVersion);
    }
 
-   public TtkRelationship(TtkRelationship another, ComponentTransformerBI transformer) {
+   public TtkRelationshipChronicle(TtkRelationshipChronicle another, ComponentTransformerBI transformer) {
       super(another, transformer); 
 
          this.c1Uuid             = transformer.transform(another.c1Uuid, another, ComponentFields.RELATIONSHIP_ORIGIN_UUID);
@@ -108,8 +108,8 @@ public class TtkRelationship extends TtkComponent<TtkRelationshipRevision> {
          return false;
       }
 
-      if (TtkRelationship.class.isAssignableFrom(obj.getClass())) {
-         TtkRelationship another = (TtkRelationship) obj;
+      if (TtkRelationshipChronicle.class.isAssignableFrom(obj.getClass())) {
+         TtkRelationshipChronicle another = (TtkRelationshipChronicle) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
@@ -162,8 +162,8 @@ public class TtkRelationship extends TtkComponent<TtkRelationshipRevision> {
    }
 
    @Override
-   public TtkRelationship makeTransform(ComponentTransformerBI transformer) {
-      return new TtkRelationship(this, transformer);
+   public TtkRelationshipChronicle makeTransform(ComponentTransformerBI transformer) {
+      return new TtkRelationshipChronicle(this, transformer);
    }
 
    @Override

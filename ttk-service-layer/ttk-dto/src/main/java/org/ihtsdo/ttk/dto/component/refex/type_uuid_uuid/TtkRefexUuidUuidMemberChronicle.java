@@ -1,4 +1,4 @@
-package org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid;
+package org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -6,9 +6,9 @@ import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
+import org.ihtsdo.ttk.api.refex.type_nid_nid.RefexNidNidVersionBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMember;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public class TtkRefexUuidUuidUuidMember extends TtkRefexAbstractMember<TtkRefexUuidUuidUuidRevision> {
+public class TtkRefexUuidUuidMemberChronicle extends TtkRefexAbstractMemberChronicle<TtkRefexUuidUuidRevision> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -30,48 +30,44 @@ public class TtkRefexUuidUuidUuidMember extends TtkRefexAbstractMember<TtkRefexU
    public UUID uuid1;
    @XmlAttribute
    public UUID uuid2;
-   @XmlAttribute
-   public UUID uuid3;
 
    //~--- constructors --------------------------------------------------------
 
-   public TtkRefexUuidUuidUuidMember() {
+   public TtkRefexUuidUuidMemberChronicle() {
       super();
    }
 
-   public TtkRefexUuidUuidUuidMember(RefexChronicleBI another) throws IOException {
+   public TtkRefexUuidUuidMemberChronicle(RefexChronicleBI another) throws IOException {
       super((RefexVersionBI) another.getPrimordialVersion());
 
-      TerminologyStoreDI                               ts        = Ts.get();
-      Collection<? extends RefexNidNidNidVersionBI> refexes   = another.getVersions();
-      int                                              partCount = refexes.size();
-      Iterator<? extends RefexNidNidNidVersionBI>   itr       = refexes.iterator();
-      RefexNidNidNidVersionBI                       rv        = itr.next();
+      TerminologyStoreDI                           ts        = Ts.get();
+      Collection<? extends RefexNidNidVersionBI> rels      = another.getVersions();
+      int                                          partCount = rels.size();
+      Iterator<? extends RefexNidNidVersionBI>   relItr    = rels.iterator();
+      RefexNidNidVersionBI                       rv        = relItr.next();
 
       this.uuid1 = ts.getUuidPrimordialForNid(rv.getNid1());
       this.uuid2 = ts.getUuidPrimordialForNid(rv.getNid2());
-      this.uuid3 = ts.getUuidPrimordialForNid(rv.getNid3());
 
       if (partCount > 1) {
          revisions = new ArrayList<>(partCount - 1);
 
-         while (itr.hasNext()) {
-            rv = itr.next();
-            revisions.add(new TtkRefexUuidUuidUuidRevision(rv));
+         while (relItr.hasNext()) {
+            rv = relItr.next();
+            revisions.add(new TtkRefexUuidUuidRevision(rv));
          }
       }
    }
 
-   public TtkRefexUuidUuidUuidMember(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
+   public TtkRefexUuidUuidMemberChronicle(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super();
       readExternal(in, dataVersion);
    }
 
-   public TtkRefexUuidUuidUuidMember(TtkRefexUuidUuidUuidMember another, ComponentTransformerBI transformer) {
+   public TtkRefexUuidUuidMemberChronicle(TtkRefexUuidUuidMemberChronicle another, ComponentTransformerBI transformer) {
       super(another, transformer);
       this.uuid1 = transformer.transform(another.uuid1, another, ComponentFields.REFEX_COMPONENT_1_UUID);
       this.uuid2 = transformer.transform(another.uuid2, another, ComponentFields.REFEX_COMPONENT_2_UUID);
-      this.uuid3 = transformer.transform(another.uuid3, another, ComponentFields.REFEX_COMPONENT_3_UUID);
    }
 
    //~--- methods -------------------------------------------------------------
@@ -79,8 +75,8 @@ public class TtkRefexUuidUuidUuidMember extends TtkRefexAbstractMember<TtkRefexU
    /**
     * Compares this object to the specified object. The result is <tt>true</tt>
     * if and only if the argument is not <tt>null</tt>, is a
-    * <tt>ERefsetCidCidCidMember</tt> object, and contains the same values, field by field,
-    * as this <tt>ERefsetCidCidCidMember</tt>.
+    * <tt>ERefsetCidCidMember</tt> object, and contains the same values, field by field,
+    * as this <tt>ERefsetCidCidMember</tt>.
     *
     * @param obj the object to compare with.
     * @return <code>true</code> if the objects are the same;
@@ -92,8 +88,8 @@ public class TtkRefexUuidUuidUuidMember extends TtkRefexAbstractMember<TtkRefexU
          return false;
       }
 
-      if (TtkRefexUuidUuidUuidMember.class.isAssignableFrom(obj.getClass())) {
-         TtkRefexUuidUuidUuidMember another = (TtkRefexUuidUuidUuidMember) obj;
+      if (TtkRefexUuidUuidMemberChronicle.class.isAssignableFrom(obj.getClass())) {
+         TtkRefexUuidUuidMemberChronicle another = (TtkRefexUuidUuidMemberChronicle) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
@@ -108,11 +104,6 @@ public class TtkRefexUuidUuidUuidMember extends TtkRefexAbstractMember<TtkRefexU
             return false;
          }
 
-         // Compare c3Uuid
-         if (!this.uuid3.equals(another.uuid3)) {
-            return false;
-         }
-
          // Compare their parents
          return super.equals(obj);
       }
@@ -121,9 +112,9 @@ public class TtkRefexUuidUuidUuidMember extends TtkRefexAbstractMember<TtkRefexU
    }
 
    /**
-    * Returns a hash code for this <code>ERefsetCidCidCidMember</code>.
+    * Returns a hash code for this <code>ERefsetCidCidMember</code>.
     *
-    * @return a hash code value for this <tt>ERefsetCidCidCidMember</tt>.
+    * @return a hash code value for this <tt>ERefsetCidCidMember</tt>.
     */
    @Override
    public int hashCode() {
@@ -131,8 +122,8 @@ public class TtkRefexUuidUuidUuidMember extends TtkRefexAbstractMember<TtkRefexU
    }
 
    @Override
-   public TtkRefexUuidUuidUuidMember makeTransform(ComponentTransformerBI transformer) {
-      return new TtkRefexUuidUuidUuidMember(this, transformer);
+   public TtkRefexUuidUuidMemberChronicle makeTransform(ComponentTransformerBI transformer) {
+      return new TtkRefexUuidUuidMemberChronicle(this, transformer);
    }
 
    @Override
@@ -140,7 +131,6 @@ public class TtkRefexUuidUuidUuidMember extends TtkRefexAbstractMember<TtkRefexU
       super.readExternal(in, dataVersion);
       uuid1 = new UUID(in.readLong(), in.readLong());
       uuid2 = new UUID(in.readLong(), in.readLong());
-      uuid3 = new UUID(in.readLong(), in.readLong());
 
       int versionSize = in.readInt();
 
@@ -148,7 +138,7 @@ public class TtkRefexUuidUuidUuidMember extends TtkRefexAbstractMember<TtkRefexU
          revisions = new ArrayList<>(versionSize);
 
          for (int i = 0; i < versionSize; i++) {
-            revisions.add(new TtkRefexUuidUuidUuidRevision(in, dataVersion));
+            revisions.add(new TtkRefexUuidUuidRevision(in, dataVersion));
          }
       }
    }
@@ -165,8 +155,6 @@ public class TtkRefexUuidUuidUuidMember extends TtkRefexAbstractMember<TtkRefexU
       buff.append(informAboutUuid(this.uuid1));
       buff.append(" c2:");
       buff.append(informAboutUuid(this.uuid2));
-      buff.append(" c3:");
-      buff.append(informAboutUuid(this.uuid3));
       buff.append(" ");
       buff.append(super.toString());
 
@@ -180,15 +168,13 @@ public class TtkRefexUuidUuidUuidMember extends TtkRefexAbstractMember<TtkRefexU
       out.writeLong(uuid1.getLeastSignificantBits());
       out.writeLong(uuid2.getMostSignificantBits());
       out.writeLong(uuid2.getLeastSignificantBits());
-      out.writeLong(uuid3.getMostSignificantBits());
-      out.writeLong(uuid3.getLeastSignificantBits());
 
       if (revisions == null) {
          out.writeInt(0);
       } else {
          out.writeInt(revisions.size());
 
-         for (TtkRefexUuidUuidUuidRevision rmv : revisions) {
+         for (TtkRefexUuidUuidRevision rmv : revisions) {
             rmv.writeExternal(out);
          }
       }
@@ -204,18 +190,14 @@ public class TtkRefexUuidUuidUuidMember extends TtkRefexAbstractMember<TtkRefexU
       return uuid2;
    }
 
-   public UUID getUuid3() {
-      return uuid3;
-   }
-
    @Override
-   public List<TtkRefexUuidUuidUuidRevision> getRevisionList() {
+   public List<TtkRefexUuidUuidRevision> getRevisionList() {
       return revisions;
    }
 
    @Override
    public ToolkitRefexType getType() {
-      return ToolkitRefexType.CID_CID_CID;
+      return ToolkitRefexType.CID_CID;
    }
 
    //~--- set methods ---------------------------------------------------------
@@ -226,9 +208,5 @@ public class TtkRefexUuidUuidUuidMember extends TtkRefexAbstractMember<TtkRefexU
 
    public void setUuid2(UUID uuid2) {
       this.uuid2 = uuid2;
-   }
-
-   public void setUuid3(UUID uuid3) {
-      this.uuid3 = uuid3;
    }
 }

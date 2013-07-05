@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 International Health Terminology Standards Development Organisation.
+ * Copyright 2013 International Health Terminology Standards Development Organisation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.ttk.dto.component.transformer;
+package org.ihtsdo.ttk.dto.chronicle.reader;
 
-import org.ihtsdo.ttk.dto.TtkConceptChronicle;
+import org.ihtsdo.ttk.dto.chronicle.ChronicleReader;
 
 /**
  *
  * @author kec
  */
-public interface ConceptTransformerBI {
-   TtkConceptChronicle transform(TtkConceptChronicle input);
+public class InternalChronicleReader extends ChronicleReader {
+    
 }

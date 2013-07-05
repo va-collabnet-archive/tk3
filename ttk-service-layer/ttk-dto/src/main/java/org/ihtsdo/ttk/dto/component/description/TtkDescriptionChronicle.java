@@ -7,7 +7,7 @@ import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.description.DescriptionChronicleBI;
 import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
 import org.ihtsdo.ttk.dto.UtfHelper;
-import org.ihtsdo.ttk.dto.component.TtkComponent;
+import org.ihtsdo.ttk.dto.component.TtkComponentChronicle;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "description")
-public class TtkDescription extends TtkComponent<TtkDescriptionRevision> {
+public class TtkDescriptionChronicle extends TtkComponentChronicle<TtkDescriptionRevision> {
     public static final long serialVersionUID = 1;
     @XmlAttribute
     public UUID              conceptUuid;
@@ -36,11 +36,11 @@ public class TtkDescription extends TtkComponent<TtkDescriptionRevision> {
     @XmlAttribute
     public UUID              typeUuid;
 
-    public TtkDescription() {
+    public TtkDescriptionChronicle() {
         super();
     }
 
-    public TtkDescription(DescriptionChronicleBI desc) throws IOException {
+    public TtkDescriptionChronicle(DescriptionChronicleBI desc) throws IOException {
         super(desc.getPrimordialVersion());
 
         Collection<? extends DescriptionVersionBI> versions  = desc.getVersions();
@@ -69,12 +69,12 @@ public class TtkDescription extends TtkComponent<TtkDescriptionRevision> {
         }
     }
 
-    public TtkDescription(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
+    public TtkDescriptionChronicle(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
         super();
         readExternal(in, dataVersion);
     }
 
-    public TtkDescription(TtkDescription another, ComponentTransformerBI transformer) {
+    public TtkDescriptionChronicle(TtkDescriptionChronicle another, ComponentTransformerBI transformer) {
         super(another, transformer);
         this.initialCaseSignificant = transformer.transform(another.initialCaseSignificant, another,
                 ComponentFields.DESCRIPTION_INITIAL_CASE_SIGNIFICANT);
@@ -101,8 +101,8 @@ public class TtkDescription extends TtkComponent<TtkDescriptionRevision> {
             return false;
         }
 
-        if (TtkDescription.class.isAssignableFrom(obj.getClass())) {
-            TtkDescription another = (TtkDescription) obj;
+        if (TtkDescriptionChronicle.class.isAssignableFrom(obj.getClass())) {
+            TtkDescriptionChronicle another = (TtkDescriptionChronicle) obj;
 
             // =========================================================
             // Compare properties of 'this' class to the 'another' class
@@ -140,8 +140,8 @@ public class TtkDescription extends TtkComponent<TtkDescriptionRevision> {
     }
 
     @Override
-    public TtkDescription makeTransform(ComponentTransformerBI transformer) {
-        return new TtkDescription(this, transformer);
+    public TtkDescriptionChronicle makeTransform(ComponentTransformerBI transformer) {
+        return new TtkDescriptionChronicle(this, transformer);
     }
 
     @Override

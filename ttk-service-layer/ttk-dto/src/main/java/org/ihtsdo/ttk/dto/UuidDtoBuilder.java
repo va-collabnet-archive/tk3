@@ -29,31 +29,31 @@ import org.ihtsdo.ttk.api.blueprint.MediaCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.blueprint.RelationshipCAB;
-import org.ihtsdo.ttk.dto.component.TtkComponent;
-import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributes;
-import org.ihtsdo.ttk.dto.component.description.TtkDescription;
-import org.ihtsdo.ttk.dto.component.media.TtkMedia;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMember;
-import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TtkRefexArrayOfByteArrayMember;
-import org.ihtsdo.ttk.dto.component.refex.type_boolean.TtkRefexBooleanMember;
-import org.ihtsdo.ttk.dto.component.refex.type_int.TtkRefexIntMember;
-import org.ihtsdo.ttk.dto.component.refex.type_long.TtkRefexLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_member.TtkRefexMember;
-import org.ihtsdo.ttk.dto.component.refex.type_string.TtkRefexStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid.TtkRefexUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TtkRefexUuidBooleanMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TtkRefexUuidFloatMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_int.TtkRefexUuidIntMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_long.TtkRefexUuidLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TtkRefexUuidStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid.TtkRefexUuidUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_string.TtkRefexUuidUuidStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TtkRefexUuidUuidUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float.TtkRefexUuidUuidUuidFloatMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int.TtkRefexUuidUuidUuidIntMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long.TtkRefexUuidUuidUuidLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TtkRefexUuidUuidUuidStringMember;
-import org.ihtsdo.ttk.dto.component.relationship.TtkRelationship;
+import org.ihtsdo.ttk.dto.component.TtkComponentChronicle;
+import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesChronicle;
+import org.ihtsdo.ttk.dto.component.description.TtkDescriptionChronicle;
+import org.ihtsdo.ttk.dto.component.media.TtkMediaChronicle;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TtkRefexArrayOfByteArrayMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_boolean.TtkRefexBooleanMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_int.TtkRefexIntMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_long.TtkRefexLongMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_member.TtkRefexMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_string.TtkRefexStringMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid.TtkRefexUuidMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TtkRefexUuidBooleanMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TtkRefexUuidFloatMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_int.TtkRefexUuidIntMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_long.TtkRefexUuidLongMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TtkRefexUuidStringMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid.TtkRefexUuidUuidMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_string.TtkRefexUuidUuidStringMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TtkRefexUuidUuidUuidMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float.TtkRefexUuidUuidUuidFloatMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int.TtkRefexUuidUuidUuidIntMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long.TtkRefexUuidUuidUuidLongMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TtkRefexUuidUuidUuidStringMemberChronicle;
+import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -106,9 +106,9 @@ public class UuidDtoBuilder {
     * @throws IOException
     * @throws InvalidCAB
     */
-   public TtkConcept construct(ConceptCB blueprint)
+   public TtkConceptChronicle construct(ConceptCB blueprint)
            throws IOException, InvalidCAB, ContradictionException {
-      TtkConcept newC = new TtkConcept();
+      TtkConceptChronicle newC = new TtkConceptChronicle();
 
       newC.setAnnotationStyleRefex(blueprint.isAnnotationRefexExtensionIdentity());
       newC.setPrimordialUuid(blueprint.getComponentUuid());
@@ -158,9 +158,9 @@ public class UuidDtoBuilder {
     * @throws IOException
     * @throws InvalidCAB
     */
-   private void construct(ConceptAttributeAB blueprint, TtkConcept c)
+   private void construct(ConceptAttributeAB blueprint, TtkConceptChronicle c)
            throws IOException, InvalidCAB, ContradictionException {
-      TtkConceptAttributes ca = new TtkConceptAttributes();
+      TtkConceptAttributesChronicle ca = new TtkConceptAttributesChronicle();
 
       ca.primordialUuid = c.primordialUuid;
       ca.defined        = blueprint.defined;
@@ -188,9 +188,9 @@ public class UuidDtoBuilder {
     * @throws IOException
     * @throws InvalidCAB
     */
-   private void construct(DescriptionCAB blueprint, TtkConcept c)
+   private void construct(DescriptionCAB blueprint, TtkConceptChronicle c)
            throws IOException, InvalidCAB, ContradictionException {
-      TtkDescription d = new TtkDescription();
+      TtkDescriptionChronicle d = new TtkDescriptionChronicle();
 
       d.primordialUuid = blueprint.getComponentUuid();
       d.conceptUuid    = c.primordialUuid;
@@ -222,9 +222,9 @@ public class UuidDtoBuilder {
     * @throws IOException
     * @throws InvalidCAB
     */
-   private void construct(MediaCAB blueprint, TtkConcept c)
+   private void construct(MediaCAB blueprint, TtkConceptChronicle c)
            throws IOException, InvalidCAB, ContradictionException {
-      TtkMedia img = new TtkMedia();
+      TtkMediaChronicle img = new TtkMediaChronicle();
 
       img.primordialUuid  = blueprint.getComponentUuid();
       img.conceptUuid     = c.primordialUuid;
@@ -256,9 +256,9 @@ public class UuidDtoBuilder {
     * @throws IOException
     * @throws InvalidCAB
     */
-   private void construct(RefexCAB blueprint, TtkComponent component)
+   private void construct(RefexCAB blueprint, TtkComponentChronicle component)
            throws IOException, InvalidCAB, ContradictionException {
-      TtkRefexAbstractMember annot = createRefex(blueprint);
+      TtkRefexAbstractMemberChronicle annot = createRefex(blueprint);
 
       component.getAnnotations().add(annot);
 
@@ -278,9 +278,9 @@ public class UuidDtoBuilder {
     * @throws IOException
     * @throws InvalidCAB
     */
-   private void construct(RelationshipCAB blueprint, TtkConcept c)
+   private void construct(RelationshipCAB blueprint, TtkConceptChronicle c)
            throws IOException, InvalidCAB, ContradictionException {
-      TtkRelationship r = new TtkRelationship();
+      TtkRelationshipChronicle r = new TtkRelationshipChronicle();
 
       r.primordialUuid     = blueprint.getComponentUuid();
       r.c1Uuid             = c.getPrimordialUuid();
@@ -314,11 +314,11 @@ public class UuidDtoBuilder {
     * @throws IOException
     * @throws InvalidCAB
     */
-   private TtkRefexAbstractMember createRefex(RefexCAB blueprint)
+   private TtkRefexAbstractMemberChronicle createRefex(RefexCAB blueprint)
            throws IOException, InvalidCAB, ContradictionException {
       switch (blueprint.getMemberType()) {
       case ARRAY_BYTEARRAY :
-         TtkRefexArrayOfByteArrayMember rm1 = new TtkRefexArrayOfByteArrayMember();
+         TtkRefexArrayOfByteArrayMemberChronicle rm1 = new TtkRefexArrayOfByteArrayMemberChronicle();
 
          rm1.arrayOfByteArray1 = blueprint.getArrayOfByteArray();
          setStandardFields(rm1, blueprint);
@@ -326,7 +326,7 @@ public class UuidDtoBuilder {
          return rm1;
 
       case BOOLEAN :
-         TtkRefexBooleanMember rm2 = new TtkRefexBooleanMember();
+         TtkRefexBooleanMemberChronicle rm2 = new TtkRefexBooleanMemberChronicle();
 
          rm2.booleanValue = blueprint.getBoolean(ComponentProperty.BOOLEAN_EXTENSION_1);
          setStandardFields(rm2, blueprint);
@@ -334,7 +334,7 @@ public class UuidDtoBuilder {
          return rm2;
 
       case CID :
-         TtkRefexUuidMember rm3 = new TtkRefexUuidMember();
+         TtkRefexUuidMemberChronicle rm3 = new TtkRefexUuidMemberChronicle();
 
          rm3.uuid1 = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_1_ID);
          setStandardFields(rm3, blueprint);
@@ -342,7 +342,7 @@ public class UuidDtoBuilder {
          return rm3;
 
       case CID_CID :
-         TtkRefexUuidUuidMember rm4 = new TtkRefexUuidUuidMember();
+         TtkRefexUuidUuidMemberChronicle rm4 = new TtkRefexUuidUuidMemberChronicle();
 
          rm4.uuid1 = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_1_ID);
          rm4.uuid2 = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_2_ID);
@@ -351,7 +351,7 @@ public class UuidDtoBuilder {
          return rm4;
 
       case CID_CID_CID :
-         TtkRefexUuidUuidUuidMember rm5 = new TtkRefexUuidUuidUuidMember();
+         TtkRefexUuidUuidUuidMemberChronicle rm5 = new TtkRefexUuidUuidUuidMemberChronicle();
 
          rm5.uuid1 = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_1_ID);
          rm5.uuid2 = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_2_ID);
@@ -361,7 +361,7 @@ public class UuidDtoBuilder {
          return rm5;
 
       case CID_CID_CID_FLOAT :
-         TtkRefexUuidUuidUuidFloatMember rm6 = new TtkRefexUuidUuidUuidFloatMember();
+         TtkRefexUuidUuidUuidFloatMemberChronicle rm6 = new TtkRefexUuidUuidUuidFloatMemberChronicle();
 
          rm6.uuid1  = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_1_ID);
          rm6.uuid2  = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_2_ID);
@@ -372,7 +372,7 @@ public class UuidDtoBuilder {
          return rm6;
 
       case CID_CID_CID_INT :
-         TtkRefexUuidUuidUuidIntMember rm7 = new TtkRefexUuidUuidUuidIntMember();
+         TtkRefexUuidUuidUuidIntMemberChronicle rm7 = new TtkRefexUuidUuidUuidIntMemberChronicle();
 
          rm7.uuid1 = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_1_ID);
          rm7.uuid2 = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_2_ID);
@@ -383,7 +383,7 @@ public class UuidDtoBuilder {
          return rm7;
 
       case CID_CID_CID_LONG :
-         TtkRefexUuidUuidUuidLongMember rm8 = new TtkRefexUuidUuidUuidLongMember();
+         TtkRefexUuidUuidUuidLongMemberChronicle rm8 = new TtkRefexUuidUuidUuidLongMemberChronicle();
 
          rm8.uuid1 = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_1_ID);
          rm8.uuid2 = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_2_ID);
@@ -394,7 +394,7 @@ public class UuidDtoBuilder {
          return rm8;
 
       case CID_CID_CID_STRING :
-         TtkRefexUuidUuidUuidStringMember rm9 = new TtkRefexUuidUuidUuidStringMember();
+         TtkRefexUuidUuidUuidStringMemberChronicle rm9 = new TtkRefexUuidUuidUuidStringMemberChronicle();
 
          rm9.uuid1   = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_1_ID);
          rm9.uuid2   = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_2_ID);
@@ -405,7 +405,7 @@ public class UuidDtoBuilder {
          return rm9;
 
       case CID_BOOLEAN :
-         TtkRefexUuidBooleanMember rm9b = new TtkRefexUuidBooleanMember();
+         TtkRefexUuidBooleanMemberChronicle rm9b = new TtkRefexUuidBooleanMemberChronicle();
 
          rm9b.uuid1    = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_1_ID);
          rm9b.boolean1 = blueprint.getBoolean(ComponentProperty.BOOLEAN_EXTENSION_1);
@@ -413,7 +413,7 @@ public class UuidDtoBuilder {
          return rm9b;
 
       case CID_CID_STR :
-         TtkRefexUuidUuidStringMember rm10 = new TtkRefexUuidUuidStringMember();
+         TtkRefexUuidUuidStringMemberChronicle rm10 = new TtkRefexUuidUuidStringMemberChronicle();
 
          rm10.uuid1   = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_1_ID);
          rm10.uuid2   = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_2_ID);
@@ -423,7 +423,7 @@ public class UuidDtoBuilder {
          return rm10;
 
       case CID_FLOAT :
-         TtkRefexUuidFloatMember rm11 = new TtkRefexUuidFloatMember();
+         TtkRefexUuidFloatMemberChronicle rm11 = new TtkRefexUuidFloatMemberChronicle();
 
          rm11.uuid1  = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_1_ID);
          rm11.float1 = blueprint.getFloat(ComponentProperty.FLOAT_EXTENSION_1);
@@ -432,7 +432,7 @@ public class UuidDtoBuilder {
          return rm11;
 
       case CID_INT :
-         TtkRefexUuidIntMember rm12 = new TtkRefexUuidIntMember();
+         TtkRefexUuidIntMemberChronicle rm12 = new TtkRefexUuidIntMemberChronicle();
 
          rm12.uuid1 = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_1_ID);
          rm12.int1  = blueprint.getInt(ComponentProperty.INTEGER_EXTENSION_1);
@@ -441,7 +441,7 @@ public class UuidDtoBuilder {
          return rm12;
 
       case CID_LONG :
-         TtkRefexUuidLongMember rm13 = new TtkRefexUuidLongMember();
+         TtkRefexUuidLongMemberChronicle rm13 = new TtkRefexUuidLongMemberChronicle();
 
          rm13.uuid1 = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_1_ID);
          rm13.long1 = blueprint.getLong(ComponentProperty.LONG_EXTENSION_1);
@@ -450,7 +450,7 @@ public class UuidDtoBuilder {
          return rm13;
 
       case CID_STR :
-         TtkRefexUuidStringMember rm14 = new TtkRefexUuidStringMember();
+         TtkRefexUuidStringMemberChronicle rm14 = new TtkRefexUuidStringMemberChronicle();
 
          rm14.uuid1   = blueprint.getUuid(ComponentProperty.COMPONENT_EXTENSION_1_ID);
          rm14.string1 = blueprint.getString(ComponentProperty.STRING_EXTENSION_1);
@@ -459,7 +459,7 @@ public class UuidDtoBuilder {
          return rm14;
 
       case INT :
-         TtkRefexIntMember rm15 = new TtkRefexIntMember();
+         TtkRefexIntMemberChronicle rm15 = new TtkRefexIntMemberChronicle();
 
          rm15.int1 = blueprint.getInt(ComponentProperty.INTEGER_EXTENSION_1);
          setStandardFields(rm15, blueprint);
@@ -467,7 +467,7 @@ public class UuidDtoBuilder {
          return rm15;
 
       case LONG :
-         TtkRefexLongMember rm16 = new TtkRefexLongMember();
+         TtkRefexLongMemberChronicle rm16 = new TtkRefexLongMemberChronicle();
 
          rm16.long1 = blueprint.getLong(ComponentProperty.LONG_EXTENSION_1);
          setStandardFields(rm16, blueprint);
@@ -475,14 +475,14 @@ public class UuidDtoBuilder {
          return rm16;
 
       case MEMBER :
-         TtkRefexMember rm17 = new TtkRefexMember();
+         TtkRefexMemberChronicle rm17 = new TtkRefexMemberChronicle();
 
          setStandardFields(rm17, blueprint);
 
          return rm17;
 
       case STR :
-         TtkRefexStringMember rm18 = new TtkRefexStringMember();
+         TtkRefexStringMemberChronicle rm18 = new TtkRefexStringMemberChronicle();
 
          rm18.string1 = blueprint.getString(ComponentProperty.STRING_EXTENSION_1);
          setStandardFields(rm18, blueprint);
@@ -504,7 +504,7 @@ public class UuidDtoBuilder {
     *
     * @throws IOException
     */
-   private void setStandardFields(TtkRefexAbstractMember rm1, RefexCAB blueprint) throws IOException {
+   private void setStandardFields(TtkRefexAbstractMemberChronicle rm1, RefexCAB blueprint) throws IOException {
       rm1.primordialUuid     = blueprint.getMemberUUID();
       rm1.componentUuid      = blueprint.getComponentUuid();
       rm1.refexExtensionUuid = blueprint.getRefexCollectionUuid();

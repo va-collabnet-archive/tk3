@@ -5,7 +5,7 @@ package org.ihtsdo.ttk.dto.component.refex;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.dto.component.TtkComponent;
+import org.ihtsdo.ttk.dto.component.TtkComponentChronicle;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public abstract class TtkRefexAbstractMember<V extends TtkRevision> extends TtkComponent<V> {
+public abstract class TtkRefexAbstractMemberChronicle<V extends TtkRevision> extends TtkComponentChronicle<V> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -31,22 +31,22 @@ public abstract class TtkRefexAbstractMember<V extends TtkRevision> extends TtkC
 
    //~--- constructors --------------------------------------------------------
 
-   public TtkRefexAbstractMember() {
+   public TtkRefexAbstractMemberChronicle() {
       super();
    }
 
-   public TtkRefexAbstractMember(RefexVersionBI another) throws IOException {
+   public TtkRefexAbstractMemberChronicle(RefexVersionBI another) throws IOException {
       super(another);
       this.componentUuid = Ts.get().getComponent(another.getReferencedComponentNid()).getPrimordialUuid();
       this.refexExtensionUuid    = Ts.get().getComponent(another.getRefexExtensionNid()).getPrimordialUuid();
    }
 
-   public TtkRefexAbstractMember(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
+   public TtkRefexAbstractMemberChronicle(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super();
       readExternal(in, dataVersion);
    }
 
-   public TtkRefexAbstractMember(TtkRefexAbstractMember another, ComponentTransformerBI transformer) {
+   public TtkRefexAbstractMemberChronicle(TtkRefexAbstractMemberChronicle another, ComponentTransformerBI transformer) {
       super(another, transformer);
 
          this.componentUuid = transformer.transform(another.componentUuid, another, ComponentFields.REFEX_REFERENCED_COMPONENT_UUID);
@@ -71,8 +71,8 @@ public abstract class TtkRefexAbstractMember<V extends TtkRevision> extends TtkC
          return false;
       }
 
-      if (TtkRefexAbstractMember.class.isAssignableFrom(obj.getClass())) {
-         TtkRefexAbstractMember<?> another = (TtkRefexAbstractMember<?>) obj;
+      if (TtkRefexAbstractMemberChronicle.class.isAssignableFrom(obj.getClass())) {
+         TtkRefexAbstractMemberChronicle<?> another = (TtkRefexAbstractMemberChronicle<?>) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class

@@ -9,7 +9,7 @@ import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_float
    .RefexNidNidNidFloatVersionBI;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMember;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
@@ -25,8 +25,8 @@ import java.util.*;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class TtkRefexUuidUuidUuidFloatMember
-        extends TtkRefexAbstractMember<TtkRefexUuidUuidUuidFloatRevision> {
+public class TtkRefexUuidUuidUuidFloatMemberChronicle
+        extends TtkRefexAbstractMemberChronicle<TtkRefexUuidUuidUuidFloatRevision> {
    public static final long serialVersionUID = 1;
    @XmlAttribute
    public UUID              uuid1;
@@ -37,11 +37,11 @@ public class TtkRefexUuidUuidUuidFloatMember
    @XmlAttribute
    public float             float1;
 
-   public TtkRefexUuidUuidUuidFloatMember() {
+   public TtkRefexUuidUuidUuidFloatMemberChronicle() {
       super();
    }
 
-   public TtkRefexUuidUuidUuidFloatMember(RefexChronicleBI another)
+   public TtkRefexUuidUuidUuidFloatMemberChronicle(RefexChronicleBI another)
            throws IOException {
       super((RefexVersionBI) another.getPrimordialVersion());
 
@@ -69,14 +69,14 @@ public class TtkRefexUuidUuidUuidFloatMember
       }
    }
 
-   public TtkRefexUuidUuidUuidFloatMember(DataInput in, int dataVersion)
+   public TtkRefexUuidUuidUuidFloatMemberChronicle(DataInput in, int dataVersion)
            throws IOException, ClassNotFoundException {
       super();
       readExternal(in, dataVersion);
    }
 
-   public TtkRefexUuidUuidUuidFloatMember(
-           TtkRefexUuidUuidUuidFloatMember another,
+   public TtkRefexUuidUuidUuidFloatMemberChronicle(
+           TtkRefexUuidUuidUuidFloatMemberChronicle another,
            ComponentTransformerBI transformer) {
       super(another, transformer);
       this.uuid1 =
@@ -107,10 +107,10 @@ public class TtkRefexUuidUuidUuidFloatMember
          return false;
       }
 
-      if (TtkRefexUuidUuidUuidFloatMember.class.isAssignableFrom(
+      if (TtkRefexUuidUuidUuidFloatMemberChronicle.class.isAssignableFrom(
               obj.getClass())) {
-         TtkRefexUuidUuidUuidFloatMember another =
-            (TtkRefexUuidUuidUuidFloatMember) obj;
+         TtkRefexUuidUuidUuidFloatMemberChronicle another =
+            (TtkRefexUuidUuidUuidFloatMemberChronicle) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
@@ -152,9 +152,9 @@ public class TtkRefexUuidUuidUuidFloatMember
    }
 
    @Override
-   public TtkRefexUuidUuidUuidFloatMember makeTransform(
+   public TtkRefexUuidUuidUuidFloatMemberChronicle makeTransform(
            ComponentTransformerBI transformer) {
-      return new TtkRefexUuidUuidUuidFloatMember(this, transformer);
+      return new TtkRefexUuidUuidUuidFloatMemberChronicle(this, transformer);
    }
 
    @Override

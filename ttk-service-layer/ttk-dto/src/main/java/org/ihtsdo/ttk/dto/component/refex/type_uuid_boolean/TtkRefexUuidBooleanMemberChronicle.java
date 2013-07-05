@@ -10,7 +10,7 @@ import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_boolean.RefexNidBooleanVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_string.RefexNidStringVersionBI;
 import org.ihtsdo.ttk.dto.UtfHelper;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMember;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
@@ -23,21 +23,21 @@ import java.io.IOException;
 import java.util.*;
 
 import javax.xml.bind.annotation.XmlAttribute;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TtkRefexUuidUuidUuidStringMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TtkRefexUuidUuidUuidStringMemberChronicle;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TtkRefexUuidUuidUuidStringRevision;
 
-public class TtkRefexUuidBooleanMember extends TtkRefexAbstractMember<TtkRefexUuidBooleanRevision> {
+public class TtkRefexUuidBooleanMemberChronicle extends TtkRefexAbstractMemberChronicle<TtkRefexUuidBooleanRevision> {
    public static final long serialVersionUID = 1;
    @XmlAttribute
    public UUID              uuid1;
    @XmlAttribute
    public Boolean           boolean1;
 
-   public TtkRefexUuidBooleanMember() {
+   public TtkRefexUuidBooleanMemberChronicle() {
       super();
    }
 
-   public TtkRefexUuidBooleanMember(RefexChronicleBI another) throws IOException {
+   public TtkRefexUuidBooleanMemberChronicle(RefexChronicleBI another) throws IOException {
       super((RefexVersionBI) another.getPrimordialVersion());
 
       TerminologyStoreDI                             ts        = Ts.get();
@@ -59,12 +59,12 @@ public class TtkRefexUuidBooleanMember extends TtkRefexAbstractMember<TtkRefexUu
       }
    }
 
-   public TtkRefexUuidBooleanMember(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
+   public TtkRefexUuidBooleanMemberChronicle(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super();
       readExternal(in, dataVersion);
    }
 
-   public TtkRefexUuidBooleanMember(TtkRefexUuidBooleanMember another, ComponentTransformerBI transformer) {
+   public TtkRefexUuidBooleanMemberChronicle(TtkRefexUuidBooleanMemberChronicle another, ComponentTransformerBI transformer) {
       super(another, transformer);
       this.uuid1    = transformer.transform(another.uuid1, another, ComponentFields.REFEX_COMPONENT_1_UUID);
       this.boolean1 = transformer.transform(another.boolean1, another, ComponentFields.REFEX_STRING1);
@@ -86,8 +86,8 @@ public class TtkRefexUuidBooleanMember extends TtkRefexAbstractMember<TtkRefexUu
          return false;
       }
 
-      if (TtkRefexUuidBooleanMember.class.isAssignableFrom(obj.getClass())) {
-         TtkRefexUuidBooleanMember another = (TtkRefexUuidBooleanMember) obj;
+      if (TtkRefexUuidBooleanMemberChronicle.class.isAssignableFrom(obj.getClass())) {
+         TtkRefexUuidBooleanMemberChronicle another = (TtkRefexUuidBooleanMemberChronicle) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
@@ -120,8 +120,8 @@ public class TtkRefexUuidBooleanMember extends TtkRefexAbstractMember<TtkRefexUu
    }
 
    @Override
-   public TtkRefexUuidBooleanMember makeTransform(ComponentTransformerBI transformer) {
-      return new TtkRefexUuidBooleanMember(this, transformer);
+   public TtkRefexUuidBooleanMemberChronicle makeTransform(ComponentTransformerBI transformer) {
+      return new TtkRefexUuidBooleanMemberChronicle(this, transformer);
    }
 
    @Override

@@ -27,7 +27,7 @@ import org.ihtsdo.ttk.dto.component.TtkRevision;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.UUID;
-import org.ihtsdo.ttk.dto.TtkConcept;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 
 /**
  *
@@ -117,7 +117,7 @@ public class SimpleComponentTransformer implements ComponentTransformerBI {
     }
 
     @Override
-    public UUID transform(UUID input, TtkConcept concept, ComponentFields field) {
+    public UUID transform(UUID input, TtkConceptChronicle concept, ComponentFields field) {
         if (fieldsToConvert.contains(field)) {
             if (uuidMap.containsKey(input)) {
                 return uuidMap.get(input);
@@ -128,7 +128,7 @@ public class SimpleComponentTransformer implements ComponentTransformerBI {
     }
 
     @Override
-    public boolean transform(boolean input, TtkConcept concept, ComponentFields field) {
+    public boolean transform(boolean input, TtkConceptChronicle concept, ComponentFields field) {
         if (fieldsToConvert.contains(field)) {
             throw new UnsupportedOperationException();
         }

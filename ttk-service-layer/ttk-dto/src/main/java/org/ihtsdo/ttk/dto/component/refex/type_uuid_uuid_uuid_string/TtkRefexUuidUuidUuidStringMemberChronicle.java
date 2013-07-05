@@ -10,7 +10,7 @@ import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_string
    .RefexNidNidNidStringVersionBI;
 import org.ihtsdo.ttk.dto.UtfHelper;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMember;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
@@ -26,8 +26,8 @@ import java.util.*;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
-public class TtkRefexUuidUuidUuidStringMember
-        extends TtkRefexAbstractMember<TtkRefexUuidUuidUuidStringRevision> {
+public class TtkRefexUuidUuidUuidStringMemberChronicle
+        extends TtkRefexAbstractMemberChronicle<TtkRefexUuidUuidUuidStringRevision> {
    public static final long serialVersionUID = 1;
    @XmlAttribute
    public UUID              uuid1;
@@ -38,11 +38,11 @@ public class TtkRefexUuidUuidUuidStringMember
    @XmlAttribute
    public String            string1;
 
-   public TtkRefexUuidUuidUuidStringMember() {
+   public TtkRefexUuidUuidUuidStringMemberChronicle() {
       super();
    }
 
-   public TtkRefexUuidUuidUuidStringMember(RefexChronicleBI another)
+   public TtkRefexUuidUuidUuidStringMemberChronicle(RefexChronicleBI another)
            throws IOException {
       super((RefexVersionBI) another.getPrimordialVersion());
 
@@ -69,14 +69,14 @@ public class TtkRefexUuidUuidUuidStringMember
       }
    }
 
-   public TtkRefexUuidUuidUuidStringMember(DataInput in, int dataVersion)
+   public TtkRefexUuidUuidUuidStringMemberChronicle(DataInput in, int dataVersion)
            throws IOException, ClassNotFoundException {
       super();
       readExternal(in, dataVersion);
    }
 
-   public TtkRefexUuidUuidUuidStringMember(
-           TtkRefexUuidUuidUuidStringMember another,
+   public TtkRefexUuidUuidUuidStringMemberChronicle(
+           TtkRefexUuidUuidUuidStringMemberChronicle another,
            ComponentTransformerBI transformer) {
       super(another, transformer);
       this.uuid1 =
@@ -107,10 +107,10 @@ public class TtkRefexUuidUuidUuidStringMember
          return false;
       }
 
-      if (TtkRefexUuidUuidUuidStringMember.class.isAssignableFrom(
+      if (TtkRefexUuidUuidUuidStringMemberChronicle.class.isAssignableFrom(
               obj.getClass())) {
-         TtkRefexUuidUuidUuidStringMember another =
-            (TtkRefexUuidUuidUuidStringMember) obj;
+         TtkRefexUuidUuidUuidStringMemberChronicle another =
+            (TtkRefexUuidUuidUuidStringMemberChronicle) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
@@ -152,9 +152,9 @@ public class TtkRefexUuidUuidUuidStringMember
    }
 
    @Override
-   public TtkRefexUuidUuidUuidStringMember makeTransform(
+   public TtkRefexUuidUuidUuidStringMemberChronicle makeTransform(
            ComponentTransformerBI transformer) {
-      return new TtkRefexUuidUuidUuidStringMember(this, transformer);
+      return new TtkRefexUuidUuidUuidStringMemberChronicle(this, transformer);
    }
 
    @Override

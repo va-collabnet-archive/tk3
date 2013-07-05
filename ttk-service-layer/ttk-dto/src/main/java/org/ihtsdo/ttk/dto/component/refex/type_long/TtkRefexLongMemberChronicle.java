@@ -7,7 +7,7 @@ import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_long.RefexLongVersionBI;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMember;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-public class TtkRefexLongMember extends TtkRefexAbstractMember<TtkRefexLongRevision> {
+public class TtkRefexLongMemberChronicle extends TtkRefexAbstractMemberChronicle<TtkRefexLongRevision> {
    public static final long serialVersionUID = 1;
 
    //~--- fields --------------------------------------------------------------
@@ -30,11 +30,11 @@ public class TtkRefexLongMember extends TtkRefexAbstractMember<TtkRefexLongRevis
 
    //~--- constructors --------------------------------------------------------
 
-   public TtkRefexLongMember() {
+   public TtkRefexLongMemberChronicle() {
       super();
    }
 
-   public TtkRefexLongMember(RefexChronicleBI another) throws IOException {
+   public TtkRefexLongMemberChronicle(RefexChronicleBI another) throws IOException {
       super((RefexVersionBI) another.getPrimordialVersion());
 
       Collection<? extends RefexLongVersionBI> refexes   = another.getVersions();
@@ -54,12 +54,12 @@ public class TtkRefexLongMember extends TtkRefexAbstractMember<TtkRefexLongRevis
       }
    }
 
-   public TtkRefexLongMember(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
+   public TtkRefexLongMemberChronicle(DataInput in, int dataVersion) throws IOException, ClassNotFoundException {
       super();
       readExternal(in, dataVersion);
    }
 
-   public TtkRefexLongMember(TtkRefexLongMember another, ComponentTransformerBI transformer) {
+   public TtkRefexLongMemberChronicle(TtkRefexLongMemberChronicle another, ComponentTransformerBI transformer) {
       super(another, transformer);
       this.long1 = transformer.transform(another.long1, another, ComponentFields.REFEX_LONG1);
    }
@@ -82,8 +82,8 @@ public class TtkRefexLongMember extends TtkRefexAbstractMember<TtkRefexLongRevis
          return false;
       }
 
-      if (TtkRefexLongMember.class.isAssignableFrom(obj.getClass())) {
-         TtkRefexLongMember another = (TtkRefexLongMember) obj;
+      if (TtkRefexLongMemberChronicle.class.isAssignableFrom(obj.getClass())) {
+         TtkRefexLongMemberChronicle another = (TtkRefexLongMemberChronicle) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class
@@ -112,7 +112,7 @@ public class TtkRefexLongMember extends TtkRefexAbstractMember<TtkRefexLongRevis
 
    @Override
    public TtkRevision makeTransform(ComponentTransformerBI transformer) {
-      return new TtkRefexLongMember(this, transformer);
+      return new TtkRefexLongMemberChronicle(this, transformer);
    }
 
    @Override
