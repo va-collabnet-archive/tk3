@@ -78,20 +78,20 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
 
    //~--- constructors --------------------------------------------------------
 
-   public ConceptDataSimpleReference(Concept enclosingConcept) throws IOException {
+   public ConceptDataSimpleReference(ConceptChronicle enclosingConcept) throws IOException {
       super(P.s.getConceptDataFetcher(enclosingConcept.getNid()));
       assert enclosingConcept != null : "enclosing concept cannot be null.";
       this.enclosingConcept = enclosingConcept;
    }
 
-   public ConceptDataSimpleReference(Concept enclosingConcept, byte[] roBytes, byte[] mutableBytes)
+   public ConceptDataSimpleReference(ConceptChronicle enclosingConcept, byte[] roBytes, byte[] mutableBytes)
            throws IOException {
       super(new NidDataInMemory(roBytes, mutableBytes));
       assert enclosingConcept != null : "enclosing concept cannot be null.";
       this.enclosingConcept = enclosingConcept;
    }
 
-   public ConceptDataSimpleReference(Concept enclosingConcept, NidDataInMemory data)
+   public ConceptDataSimpleReference(ConceptChronicle enclosingConcept, NidDataInMemory data)
            throws IOException {
       super(data);
       assert enclosingConcept != null : "enclosing concept cannot be null.";
@@ -378,7 +378,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
                if (cc.getTime() == Long.MIN_VALUE) {
                   toRemove.add(cc);
                   cc.clearVersions();
-                  Concept.componentsCRHM.remove(cc.getNid());
+                  ConceptChronicle.componentsCRHM.remove(cc.getNid());
                } else {
                   if (cc.revisions != null) {
                      List<Revision<?, ?>> revisionToRemove = new ArrayList<>();
@@ -406,7 +406,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
 
    private void removeRefsetReferences(ConceptComponent<?, ?> cc) throws IOException {
       for (RefexChronicleBI<?> rc : cc.getRefsetMembers()) {
-         Concept      refsetCon = Concept.get(rc.getRefexExtensionNid());
+         ConceptChronicle      refsetCon = ConceptChronicle.get(rc.getRefexExtensionNid());
          RefexMember rm        = (RefexMember) rc;
 
          rm.primordialStamp = -1;
@@ -692,7 +692,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
 
    private <C extends ConceptComponent<V, C>,
             V extends Revision<V, C>> ArrayList<C> getList(ConceptComponentBinder<V, C> binder,
-               OFFSETS offset, Concept enclosingConcept)
+               OFFSETS offset, ConceptChronicle enclosingConcept)
            throws IOException {
       binder.setupBinder(enclosingConcept);
 
@@ -734,7 +734,7 @@ public class ConceptDataSimpleReference extends ConceptDataManager {
    }
 
    private Collection<RefexMember<?, ?>> getList(RefexMemberBinder binder, OFFSETS offset,
-           Concept enclosingConcept)
+           ConceptChronicle enclosingConcept)
            throws IOException {
       binder.setupBinder(enclosingConcept);
 

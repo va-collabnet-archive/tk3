@@ -31,8 +31,8 @@ import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayAnalogBI;
 import org.ihtsdo.ttk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayVersionBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TkRefexArrayOfByteArrayRevision;
-import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TkRefexArrayOfByteArrayMember;
+import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TtkRefexArrayOfByteArrayRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TtkRefexArrayOfByteArrayMemberChronicle;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 import org.ihtsdo.ttk.api.uuid.UuidT5Generator;
 
@@ -69,14 +69,14 @@ public class ArrayOfByteArrayMember extends RefexMember<ArrayOfByteArrayRevision
         super(enclosingConceptNid, input);
     }
 
-    public ArrayOfByteArrayMember(TkRefexArrayOfByteArrayMember refsetMember, int enclosingConceptNid) throws IOException {
+    public ArrayOfByteArrayMember(TtkRefexArrayOfByteArrayMemberChronicle refsetMember, int enclosingConceptNid) throws IOException {
         super(refsetMember, enclosingConceptNid);
         arrayOfByteArray = refsetMember.getArrayOfByteArray1();
 
         if (refsetMember.getRevisionList() != null) {
             revisions = new RevisionSet(primordialStamp);
 
-            for (TkRefexArrayOfByteArrayRevision eVersion : refsetMember.getRevisionList()) {
+            for (TtkRefexArrayOfByteArrayRevision eVersion : refsetMember.getRevisionList()) {
                 revisions.add(new ArrayOfByteArrayRevision(eVersion, this));
             }
         }
@@ -280,13 +280,13 @@ public class ArrayOfByteArrayMember extends RefexMember<ArrayOfByteArrayRevision
         }
 
         @Override
-        public TkRefexArrayOfByteArrayMember getERefsetMember() throws IOException {
-            return new TkRefexArrayOfByteArrayMember(this);
+        public TtkRefexArrayOfByteArrayMemberChronicle getERefsetMember() throws IOException {
+            return new TtkRefexArrayOfByteArrayMemberChronicle(this);
         }
 
         @Override
-        public TkRefexArrayOfByteArrayRevision getERefsetRevision() throws IOException {
-            return new TkRefexArrayOfByteArrayRevision(this);
+        public TtkRefexArrayOfByteArrayRevision getERefsetRevision() throws IOException {
+            return new TtkRefexArrayOfByteArrayRevision(this);
         }
 
         //~--- set methods ------------------------------------------------------

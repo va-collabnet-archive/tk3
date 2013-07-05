@@ -8,7 +8,7 @@ import com.sleepycat.bind.tuple.TupleOutput;
 import org.ihtsdo.cern.colt.list.IntArrayList;
 
 
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
@@ -19,8 +19,8 @@ import org.ihtsdo.ttk.api.PositionSetBI;
 import org.ihtsdo.ttk.api.Precedence;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.description.DescriptionAnalogBI;
-import org.ihtsdo.ttk.dto.component.description.TkDescription;
-import org.ihtsdo.ttk.dto.component.description.TkDescriptionRevision;
+import org.ihtsdo.ttk.dto.component.description.TtkDescriptionChronicle;
+import org.ihtsdo.ttk.dto.component.description.TtkDescriptionRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -60,11 +60,11 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
         super();
     }
 
-    public Description(Concept enclosingConcept, TupleInput input) throws IOException {
+    public Description(ConceptChronicle enclosingConcept, TupleInput input) throws IOException {
         super(enclosingConcept.getNid(), input);
     }
 
-    public Description(TkDescription eDesc, Concept enclosingConcept) throws IOException {
+    public Description(TtkDescriptionChronicle eDesc, ConceptChronicle enclosingConcept) throws IOException {
         super(eDesc, enclosingConcept.getNid());
         initialCaseSignificant = eDesc.isInitialCaseSignificant();
         lang = eDesc.getLang();
@@ -75,7 +75,7 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
         if (eDesc.getRevisionList() != null) {
             revisions = new RevisionSet<>(primordialStamp);
 
-            for (TkDescriptionRevision edv : eDesc.getRevisionList()) {
+            for (TtkDescriptionRevision edv : eDesc.getRevisionList()) {
                 
                     revisions.add(new DescriptionRevision(edv, this));
                 
@@ -306,7 +306,7 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
     }
 
     //~--- get methods ---------------------------------------------------------
-    public Concept getConcept() {
+    public ConceptChronicle getConcept() {
         return getEnclosingConcept();
     }
 

@@ -13,6 +13,7 @@ import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.RelAssertionType;
 import org.ihtsdo.ttk.api.PositionBI;
 import java.io.DataInputStream;
+import java.io.DataOutput;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -66,25 +67,26 @@ import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.ttk.api.relationship.group.RelGroupChronicleBI;
 import org.ihtsdo.ttk.api.relationship.group.RelGroupVersionBI;
 import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRfx;
-import org.ihtsdo.ttk.dto.TkConcept;
-import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributes;
-import org.ihtsdo.ttk.dto.component.description.TkDescription;
-import org.ihtsdo.ttk.dto.component.media.TkMedia;
-import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
-import org.ihtsdo.ttk.dto.component.relationship.TkRelationship;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
+import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesChronicle;
+import org.ihtsdo.ttk.dto.component.description.TtkDescriptionChronicle;
+import org.ihtsdo.ttk.dto.component.media.TtkMediaChronicle;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
+import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipChronicle;
 import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.ttk.concept.cc.DataMarker;
 
-public class Concept implements ConceptChronicleBI, Comparable<Concept> {
-
-    protected static final Logger logger = Logger.getLogger(Concept.class.getName());
+public class ConceptChronicle implements ConceptChronicleBI, Comparable<ConceptChronicle> {
+    
+    protected static final Logger logger = Logger.getLogger(ConceptChronicle.class.getName());
     public static ReferenceType refType = ReferenceType.WEAK;
     private static int fsXmlDescNid = Integer.MIN_VALUE;
     private static int fsDescNid = Integer.MIN_VALUE;
     public static ConcurrentReferenceHashMap<Integer, Object> componentsCRHM;
-    public static ConcurrentReferenceHashMap<Integer, Concept> conceptsCRHM;
+    public static ConcurrentReferenceHashMap<Integer, ConceptChronicle> conceptsCRHM;
     private static NidSet rf1LangRefexNidSet;
     private static NidSet rf2LangRefexNidSet;
-    private static List<TkRefexAbstractMember<?>> unresolvedAnnotations;
+    private static List<TtkRefexAbstractMemberChronicle<?>> unresolvedAnnotations;
 
     //~--- static initializers -------------------------------------------------
     static {
@@ -102,7 +104,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     Precedence precedencePolicy;
 
     //~--- constructors --------------------------------------------------------
-    private Concept(int nid) throws IOException {
+    private ConceptChronicle(int nid) throws IOException {
         super();
         assert nid != Integer.MAX_VALUE : "nid == Integer.MAX_VALUE";
         this.nid = nid;
@@ -123,7 +125,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         }
     }
 
-    private Concept(int nid, NidDataInMemory conceptData) throws IOException {
+    private ConceptChronicle(int nid, NidDataInMemory conceptData) throws IOException {
         super();
         assert nid != Integer.MAX_VALUE : "nid == Integer.MAX_VALUE";
         this.nid = nid;
@@ -144,6 +146,20 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         }
     }
 
+    public static final int DATA_VERSION = 0;
+    @Override
+    public void writeExternal(DataOutput out) throws IOException {
+        if (canceled) {
+            throw new UnsupportedOperationException();
+        }
+        DataMarker.CONCEPT.writeMarker(out);
+        out.writeInt(DATA_VERSION);
+        out.writeInt(nid);
+        out.writeBoolean(data.isAnnotationStyleRefex());
+        out.writeBoolean(data.isAnnotationIndex());
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+
     /**
      * For use in testing/test cases only.
      *
@@ -153,7 +169,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
      * @param mutableBytes
      * @throws IOException
      */
-    protected Concept(int nid, byte[] roBytes, byte[] mutableBytes) throws IOException {
+    protected ConceptChronicle(int nid, byte[] roBytes, byte[] mutableBytes) throws IOException {
         this.nid = nid;
         this.hashCode = Hashcode.compute(nid);
         data = new ConceptDataSimpleReference(this, roBytes, mutableBytes);
@@ -214,7 +230,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     @Override
-    public int compareTo(Concept o) {
+    public int compareTo(ConceptChronicle o) {
         return getNid() - o.getNid();
     }
 
@@ -263,8 +279,8 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             return false;
         }
 
-        if (Concept.class.isAssignableFrom(obj.getClass())) {
-            Concept another = (Concept) obj;
+        if (ConceptChronicle.class.isAssignableFrom(obj.getClass())) {
+            ConceptChronicle another = (ConceptChronicle) obj;
 
             return nid == another.nid;
         }
@@ -333,13 +349,13 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         return cab;
     }
 
-    public static Concept mergeAndWrite(TkConcept eConcept, Set<ConceptChronicleBI> indexedAnnotationConcepts)
+    public static ConceptChronicle mergeAndWrite(TtkConceptChronicle eConcept, Set<ConceptChronicleBI> indexedAnnotationConcepts)
             throws IOException {
         int conceptNid = P.s.getNidForUuids(eConcept.getPrimordialUuid());
 
         assert conceptNid != Integer.MAX_VALUE : "no conceptNid for uuids";
 
-        Concept c = get(conceptNid);
+        ConceptChronicle c = get(conceptNid);
 
         mergeWithEConcept(eConcept, c, true, indexedAnnotationConcepts);
         P.s.addUncommittedNoChecks(c);
@@ -348,14 +364,14 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private static Concept mergeWithEConcept(TkConcept eConcept, Concept c, boolean updateLucene,
+    private static ConceptChronicle mergeWithEConcept(TtkConceptChronicle eConcept, ConceptChronicle c, boolean updateLucene,
             Set<ConceptChronicleBI> indexedAnnotationConcepts)
             throws IOException {
         if (c.isAnnotationStyleRefex() == false) {
             c.setAnnotationStyleRefex(eConcept.isAnnotationStyleRefex());
         }
 
-        TkConceptAttributes eAttr = eConcept.getConceptAttributes();
+        TtkConceptAttributesChronicle eAttr = eConcept.getConceptAttributes();
 
         if (eAttr != null) {
             if (c.getConceptAttributes() == null) {
@@ -373,7 +389,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             } else {
                 Set<Integer> currentDNids = c.data.getDescNids();
 
-                for (TkDescription ed : eConcept.getDescriptions()) {
+                for (TtkDescriptionChronicle ed : eConcept.getDescriptions()) {
                     int dNid = P.s.getNidForUuids(ed.primordialUuid);
 
                     if (currentDNids.contains(dNid)) {
@@ -397,7 +413,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             } else {
                 Set<Integer> currentSrcRelNids = c.data.getSrcRelNids();
 
-                for (TkRelationship er : eConcept.getRelationships()) {
+                for (TtkRelationshipChronicle er : eConcept.getRelationships()) {
                     int rNid = P.s.getNidForUuids(er.primordialUuid);
 
                     if (currentSrcRelNids.contains(rNid)) {
@@ -417,7 +433,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
             } else {
                 Set<Integer> currentImageNids = c.data.getImageNids();
 
-                for (TkMedia eImg : eConcept.getMedia()) {
+                for (TtkMediaChronicle eImg : eConcept.getMedia()) {
                     int iNid = P.s.getNidForUuids(eImg.primordialUuid);
 
                     if (currentImageNids.contains(iNid)) {
@@ -433,13 +449,13 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
         if ((eConcept.getRefsetMembers() != null) && !eConcept.getRefsetMembers().isEmpty()) {
             if (c.isAnnotationStyleRefex()) {
-                for (TkRefexAbstractMember<?> er : eConcept.getRefsetMembers()) {
+                for (TtkRefexAbstractMemberChronicle<?> er : eConcept.getRefsetMembers()) {
                     ConceptComponent cc;
                     Object referencedComponent = P.s.getComponent(er.getComponentUuid());
 
                     if (referencedComponent != null) {
-                        if (referencedComponent instanceof Concept) {
-                            cc = ((Concept) referencedComponent).getConceptAttributes();
+                        if (referencedComponent instanceof ConceptChronicle) {
+                            cc = ((ConceptChronicle) referencedComponent).getConceptAttributes();
                         } else {
                             cc = (ConceptComponent) referencedComponent;
                         }
@@ -462,7 +478,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
                 } else {
                     Set<Integer> currentMemberNids = c.data.getMemberNids();
 
-                    for (TkRefexAbstractMember<?> er : eConcept.getRefsetMembers()) {
+                    for (TtkRefexAbstractMemberChronicle<?> er : eConcept.getRefsetMembers()) {
                         int rNid = P.s.getNidForUuids(er.primordialUuid);
                         RefexMember<?, ?> r = c.getRefsetMember(rNid);
 
@@ -487,7 +503,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         data.modified(sequence);
     }
 
-    private static Concept populateFromEConcept(TkConcept eConcept, Concept c) throws IOException {
+    private static ConceptChronicle populateFromEConcept(TtkConceptChronicle eConcept, ConceptChronicle c) throws IOException {
         if (eConcept.getConceptAttributes() != null) {
             setAttributesFromEConcept(c, eConcept.getConceptAttributes());
         }
@@ -558,15 +574,15 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     public static void resolveUnresolvedAnnotations(Set<ConceptChronicleBI> indexedAnnotationConcepts) throws IOException {
-        List<TkRefexAbstractMember<?>> cantResolve = new ArrayList<>();
+        List<TtkRefexAbstractMemberChronicle<?>> cantResolve = new ArrayList<>();
 
-        for (TkRefexAbstractMember<?> er : unresolvedAnnotations) {
+        for (TtkRefexAbstractMemberChronicle<?> er : unresolvedAnnotations) {
             ConceptComponent cc;
             Object referencedComponent = P.s.getComponent(er.getComponentUuid());
 
             if (referencedComponent != null) {
-                if (referencedComponent instanceof Concept) {
-                    cc = ((Concept) referencedComponent).getConceptAttributes();
+                if (referencedComponent instanceof ConceptChronicle) {
+                    cc = ((ConceptChronicle) referencedComponent).getConceptAttributes();
                 } else {
                     cc = (ConceptComponent) referencedComponent;
                 }
@@ -683,17 +699,17 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     //~--- get methods ---------------------------------------------------------
-    public static Concept get(InputStream is) throws IOException {
+    public static ConceptChronicle get(InputStream is) throws IOException {
         DataInputStream dis = new DataInputStream(is);
         int nid = dis.readInt();
 
         assert nid != Integer.MAX_VALUE : "nid == Integer.MAX_VALUE";
 
-        Concept c = conceptsCRHM.get(nid);
+        ConceptChronicle c = conceptsCRHM.get(nid);
         NidDataInMemory ndim = new NidDataInMemory(is);
 
         if (c == null) {
-            Concept newC = new Concept(nid, ndim);
+            ConceptChronicle newC = new ConceptChronicle(nid, ndim);
 
             c = conceptsCRHM.putIfAbsent(nid, newC);
 
@@ -705,20 +721,18 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         return c;
     }
 
-    public static Concept get(int nid) throws IOException {
+    public static ConceptChronicle get(int nid) throws IOException {
         assert nid != Integer.MAX_VALUE : "nid == Integer.MAX_VALUE";
 
-        boolean newConcept = false;
-        Concept c = conceptsCRHM.get(nid);
+        ConceptChronicle c = conceptsCRHM.get(nid);
 
         if (c == null) {
-            Concept newC = new Concept(nid);
+            ConceptChronicle newC = new ConceptChronicle(nid);
 
             c = conceptsCRHM.putIfAbsent(nid, newC);
 
             if (c == null) {
                 c = newC;
-                newConcept = true;
             }
         }
 
@@ -727,7 +741,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         return c;
     }
 
-    public static Concept get(TkConcept eConcept, Set<ConceptChronicleBI> indexedAnnotationConcepts)
+    public static ConceptChronicle get(TtkConceptChronicle eConcept, Set<ConceptChronicleBI> indexedAnnotationConcepts)
             throws IOException {
         int conceptNid;
         if (P.s.hasUuid(eConcept.getPrimordialUuid())) {
@@ -741,7 +755,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         P.s.setConceptNidForNid(conceptNid, conceptNid);
         assert conceptNid != Integer.MAX_VALUE : "no conceptNid for uuids";
 
-        Concept c = get(conceptNid);
+        ConceptChronicle c = get(conceptNid);
 
         // return populateFromEConcept(eConcept, c);
         try {
@@ -754,13 +768,13 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         return null;
     }
 
-    public static Concept get(int nid, byte[] roBytes, byte[] mutableBytes) throws IOException {
+    public static ConceptChronicle get(int nid, byte[] roBytes, byte[] mutableBytes) throws IOException {
         assert nid != Integer.MAX_VALUE : "nid == Integer.MAX_VALUE";
 
-        Concept c = conceptsCRHM.get(nid);
+        ConceptChronicle c = conceptsCRHM.get(nid);
 
         if (c == null) {
-            Concept newC = new Concept(nid, roBytes, mutableBytes);
+            ConceptChronicle newC = new ConceptChronicle(nid, roBytes, mutableBytes);
 
             c = conceptsCRHM.putIfAbsent(nid, newC);
 
@@ -1134,7 +1148,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     @Override
-    public Concept getEnclosingConcept() {
+    public ConceptChronicle getEnclosingConcept() {
         return this;
     }
 
@@ -1154,7 +1168,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         return data.getRefsetMembers();
     }
 
-    public static Concept getIfInMap(int nid) {
+    public static ConceptChronicle getIfInMap(int nid) {
         return conceptsCRHM.get(nid);
     }
 
@@ -1263,10 +1277,10 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
     }
 
     @Override
-    public UUID getPrimUuid() {
+    public UUID getPrimordialUuid() {
         try {
             if (getConceptAttributes() != null) {
-                return getConceptAttributes().getPrimUuid();
+                return getConceptAttributes().getPrimordialUuid();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -1515,12 +1529,12 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
      * @return
      * @throws IOException
      */
-    public static Concept getTempConcept(TkConcept eConcept) throws IOException {
+    public static ConceptChronicle getTempConcept(TtkConceptChronicle eConcept) throws IOException {
         int conceptNid = P.s.getNidForUuids(eConcept.getConceptAttributes().getPrimordialComponentUuid());
 
         assert conceptNid != Integer.MAX_VALUE : "no conceptNid for uuids";
 
-        return populateFromEConcept(eConcept, new Concept(conceptNid));
+        return populateFromEConcept(eConcept, new ConceptChronicle(conceptNid));
     }
 
     public String getText() {
@@ -1725,11 +1739,11 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         return canceled;
     }
 
-    public boolean isParentOf(Concept child, ViewCoordinate vc) throws IOException, ContradictionException {
+    public boolean isParentOf(ConceptChronicle child, ViewCoordinate vc) throws IOException, ContradictionException {
         return Ts.get().isKindOf(child.nid, nid, vc);
     }
 
-    public boolean isParentOfOrEqualTo(Concept child, ViewCoordinate vc)
+    public boolean isParentOfOrEqualTo(ConceptChronicle child, ViewCoordinate vc)
             throws IOException, ContradictionException {
         if (child == this) {
             return true;
@@ -1757,7 +1771,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         data.setAnnotationStyleRefset(annotationStyleRefset);
     }
 
-    private static void setAttributesFromEConcept(Concept c, TkConceptAttributes eAttr) throws IOException {
+    private static void setAttributesFromEConcept(ConceptChronicle c, TtkConceptAttributesChronicle eAttr) throws IOException {
         assert eAttr != null;
 
         ConceptAttributes attr = new ConceptAttributes(eAttr, c);
@@ -1775,16 +1789,16 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         data.set(attributes);
     }
 
-    private static void setDescriptionsFromEConcept(TkConcept eConcept, Concept c) throws IOException {
-        for (TkDescription eDesc : eConcept.getDescriptions()) {
+    private static void setDescriptionsFromEConcept(TtkConceptChronicle eConcept, ConceptChronicle c) throws IOException {
+        for (TtkDescriptionChronicle eDesc : eConcept.getDescriptions()) {
             Description desc = new Description(eDesc, c);
 
             c.data.add(desc);
         }
     }
 
-    private static void setImagesFromEConcept(TkConcept eConcept, Concept c) throws IOException {
-        for (TkMedia eImage : eConcept.getMedia()) {
+    private static void setImagesFromEConcept(TtkConceptChronicle eConcept, ConceptChronicle c) throws IOException {
+        for (TtkMediaChronicle eImage : eConcept.getMedia()) {
             Media img = new Media(eImage, c);
 
             c.data.add(img);
@@ -1799,16 +1813,16 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
         data.setLastWrite(version);
     }
 
-    private static void setRefsetMembersFromEConcept(TkConcept eConcept, Concept c) throws IOException {
-        for (TkRefexAbstractMember<?> eRefsetMember : eConcept.getRefsetMembers()) {
+    private static void setRefsetMembersFromEConcept(TtkConceptChronicle eConcept, ConceptChronicle c) throws IOException {
+        for (TtkRefexAbstractMemberChronicle<?> eRefsetMember : eConcept.getRefsetMembers()) {
             RefexMember<?, ?> refsetMember = RefexMemberFactory.create(eRefsetMember, c.getConceptNid());
 
             c.data.add(refsetMember);
         }
     }
 
-    private static void setRelationshipsFromEConcept(TkConcept eConcept, Concept c) throws IOException {
-        for (TkRelationship eRel : eConcept.getRelationships()) {
+    private static void setRelationshipsFromEConcept(TtkConceptChronicle eConcept, ConceptChronicle c) throws IOException {
+        for (TtkRelationshipChronicle eRel : eConcept.getRelationships()) {
             Relationship rel = new Relationship(eRel, c);
 
             c.data.getSourceRels().add(rel);
@@ -1835,7 +1849,7 @@ public class Concept implements ConceptChronicleBI, Comparable<Concept> {
 
             if (percentageUsed > 0.85) {
                 for (int cNid : conceptsCRHM.keySet()) {
-                    Concept c = conceptsCRHM.get(cNid);
+                    ConceptChronicle c = conceptsCRHM.get(cNid);
 
                     if (c != null) {
                         c.diet();

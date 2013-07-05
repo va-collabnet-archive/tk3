@@ -16,8 +16,8 @@ import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_nid.RefexNidNidNidAnalogBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TkRefexUuidUuidUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TkRefexUuidUuidUuidRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TtkRefexUuidUuidUuidMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TtkRefexUuidUuidUuidRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -51,7 +51,7 @@ public class NidNidNidMember extends RefexMember<NidNidNidRevision, NidNidNidMem
         super(enclosingConceptNid, input);
     }
 
-    public NidNidNidMember(TkRefexUuidUuidUuidMember refsetMember, int enclosingConceptNid) throws IOException {
+    public NidNidNidMember(TtkRefexUuidUuidUuidMemberChronicle refsetMember, int enclosingConceptNid) throws IOException {
         super(refsetMember, enclosingConceptNid);
         c1Nid = P.s.getNidForUuids(refsetMember.getUuid1());
         c2Nid = P.s.getNidForUuids(refsetMember.getUuid2());
@@ -60,7 +60,7 @@ public class NidNidNidMember extends RefexMember<NidNidNidRevision, NidNidNidMem
         if (refsetMember.getRevisionList() != null) {
             revisions = new RevisionSet<>(primordialStamp);
 
-            for (TkRefexUuidUuidUuidRevision eVersion : refsetMember.getRevisionList()) {
+            for (TtkRefexUuidUuidUuidRevision eVersion : refsetMember.getRevisionList()) {
                 revisions.add(new NidNidNidRevision(eVersion, this));
             }
         }
@@ -319,13 +319,13 @@ public class NidNidNidMember extends RefexMember<NidNidNidRevision, NidNidNidMem
         }
 
         @Override
-        public TkRefexUuidUuidUuidMember getERefsetMember() throws IOException {
-            return new TkRefexUuidUuidUuidMember(this);
+        public TtkRefexUuidUuidUuidMemberChronicle getERefsetMember() throws IOException {
+            return new TtkRefexUuidUuidUuidMemberChronicle(this);
         }
 
         @Override
-        public TkRefexUuidUuidUuidRevision getERefsetRevision() throws IOException {
-            return new TkRefexUuidUuidUuidRevision(this);
+        public TtkRefexUuidUuidUuidRevision getERefsetRevision() throws IOException {
+            return new TtkRefexUuidUuidUuidRevision(this);
         }
 
         //~--- set methods ------------------------------------------------------

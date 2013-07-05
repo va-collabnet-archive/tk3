@@ -3,7 +3,7 @@ package org.ihtsdo.ttk.concept.cc.relationship.group;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.helpers.uuid.Type5UuidFactory;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.PositionBI;
@@ -38,7 +38,7 @@ public class RelGroupChronicle implements RelGroupChronicleBI {
 
    //~--- constructors --------------------------------------------------------
 
-   public RelGroupChronicle(Concept c, int relGroup, Collection<RelationshipChronicleBI> rels)
+   public RelGroupChronicle(ConceptChronicle c, int relGroup, Collection<RelationshipChronicleBI> rels)
            throws IOException {
       super();
       this.relGroup   = relGroup;
@@ -46,7 +46,7 @@ public class RelGroupChronicle implements RelGroupChronicleBI {
 
       try {
          uuid = Type5UuidFactory.get(Type5UuidFactory.REL_GROUP_NAMESPACE,
-                                     c.getPrimUuid().toString() + relGroup);
+                                     c.getPrimordialUuid().toString() + relGroup);
       } catch (NoSuchAlgorithmException e) {
          throw new IOException(e);
       }
@@ -154,8 +154,8 @@ public class RelGroupChronicle implements RelGroupChronicleBI {
    }
 
    @Override
-   public Concept getEnclosingConcept() {
-      return (Concept) rels.iterator().next().getEnclosingConcept();
+   public ConceptChronicle getEnclosingConcept() {
+      return (ConceptChronicle) rels.iterator().next().getEnclosingConcept();
    }
 
    @Override
@@ -180,7 +180,7 @@ public class RelGroupChronicle implements RelGroupChronicleBI {
    }
 
    @Override
-   public UUID getPrimUuid() {
+   public UUID getPrimordialUuid() {
       if (uuid == null) {
          return UUID.fromString("00000000-0000-0000-C000-000000000046");
       }

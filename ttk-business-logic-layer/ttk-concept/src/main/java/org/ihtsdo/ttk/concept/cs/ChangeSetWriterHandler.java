@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
@@ -94,7 +94,7 @@ public class ChangeSetWriterHandler implements Runnable, ProcessUnfetchedConcept
    public void processUnfetchedConceptData(int cNid, ConceptFetcherBI fcfc) throws Exception {
       if (cNidsToWrite.isMember(cNid)) {
          processedChangedCount.incrementAndGet();
-         Concept c = (Concept) fcfc.fetch();
+         ConceptChronicle c = (ConceptChronicle) fcfc.fetch();
          for (ChangeSetGeneratorBI writer : writerListForHandler) {
             writer.setPolicy(changeSetPolicy);
             writer.writeChanges(c, commitTime);

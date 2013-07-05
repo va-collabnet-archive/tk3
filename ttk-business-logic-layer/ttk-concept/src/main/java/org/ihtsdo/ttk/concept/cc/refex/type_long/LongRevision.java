@@ -17,7 +17,7 @@ import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_long.RefexLongAnalogBI;
-import org.ihtsdo.ttk.dto.component.refex.type_long.TkRefexLongRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_long.TtkRefexLongRevision;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
 
 public class LongRevision extends RefexRevision<LongRevision, LongMember>
@@ -35,7 +35,7 @@ public class LongRevision extends RefexRevision<LongRevision, LongMember>
       longValue = primoridalMember.getLong1();
    }
 
-   public LongRevision(TkRefexLongRevision eVersion, LongMember member) throws IOException {
+   public LongRevision(TtkRefexLongRevision eVersion, LongMember member) throws IOException {
       super(eVersion, member);
       this.longValue = eVersion.getLongValue();
    }

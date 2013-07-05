@@ -327,8 +327,8 @@ public class RelGroupVersion implements RelGroupVersionBI {
    }
 
    @Override
-   public UUID getPrimUuid() {
-      return rg.getPrimUuid();
+   public UUID getPrimordialUuid() {
+      return rg.getPrimordialUuid();
    }
 
    @Override

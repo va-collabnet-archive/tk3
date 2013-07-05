@@ -16,8 +16,8 @@ import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.refex.type_nid_long.RefexNidLongAnalogBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_long.TkRefexUuidLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_long.TkRefexUuidLongRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_long.TtkRefexUuidLongMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_long.TtkRefexUuidLongRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -51,7 +51,7 @@ public class NidLongMember extends RefexMember<NidLongRevision, NidLongMember>
       super(enclosingConceptNid, input);
    }
 
-   public NidLongMember(TkRefexUuidLongMember refsetMember, int enclosingConceptNid) throws IOException {
+   public NidLongMember(TtkRefexUuidLongMemberChronicle refsetMember, int enclosingConceptNid) throws IOException {
       super(refsetMember, enclosingConceptNid);
       c1Nid     = P.s.getNidForUuids(refsetMember.getUuid1());
       longValue = refsetMember.getLong1();
@@ -59,7 +59,7 @@ public class NidLongMember extends RefexMember<NidLongRevision, NidLongMember>
       if (refsetMember.getRevisionList() != null) {
          revisions = new RevisionSet<>(primordialStamp);
 
-         for (TkRefexUuidLongRevision eVersion : refsetMember.getRevisionList()) {
+         for (TtkRefexUuidLongRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new NidLongRevision(eVersion, this));
          }
       }
@@ -296,13 +296,13 @@ public class NidLongMember extends RefexMember<NidLongRevision, NidLongMember>
       }
 
       @Override
-      public TkRefexUuidLongMember getERefsetMember() throws IOException {
-         return new TkRefexUuidLongMember(this);
+      public TtkRefexUuidLongMemberChronicle getERefsetMember() throws IOException {
+         return new TtkRefexUuidLongMemberChronicle(this);
       }
 
       @Override
-      public TkRefexUuidLongRevision getERefsetRevision() throws IOException {
-         return new TkRefexUuidLongRevision(this);
+      public TtkRefexUuidLongRevision getERefsetRevision() throws IOException {
+         return new TtkRefexUuidLongRevision(this);
       }
 
       @Override

@@ -21,9 +21,9 @@ import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string
-   .TkRefexUuidUuidUuidStringMember;
+   .TtkRefexUuidUuidUuidStringMemberChronicle;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string
-   .TkRefexUuidUuidUuidStringRevision;
+   .TtkRefexUuidUuidUuidStringRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -55,7 +55,7 @@ public class NidNidNidStringMember
       super(enclosingConceptNid, input);
    }
 
-   public NidNidNidStringMember(TkRefexUuidUuidUuidStringMember refsetMember,
+   public NidNidNidStringMember(TtkRefexUuidUuidUuidStringMemberChronicle refsetMember,
                                int enclosingConceptNid)
            throws IOException {
       super(refsetMember, enclosingConceptNid);
@@ -67,7 +67,7 @@ public class NidNidNidStringMember
       if (refsetMember.getRevisionList() != null) {
          revisions = new RevisionSet<>(primordialStamp);
 
-         for (TkRefexUuidUuidUuidStringRevision eVersion :
+         for (TtkRefexUuidUuidUuidStringRevision eVersion :
                  refsetMember.getRevisionList()) {
             revisions.add(new NidNidNidStringRevision(eVersion, this));
          }
@@ -321,15 +321,15 @@ public class NidNidNidStringMember
       }
 
       @Override
-      public TkRefexUuidUuidUuidStringMember getERefsetMember()
+      public TtkRefexUuidUuidUuidStringMemberChronicle getERefsetMember()
               throws IOException {
-         return new TkRefexUuidUuidUuidStringMember(this);
+         return new TtkRefexUuidUuidUuidStringMemberChronicle(this);
       }
 
       @Override
-      public TkRefexUuidUuidUuidStringRevision getERefsetRevision()
+      public TtkRefexUuidUuidUuidStringRevision getERefsetRevision()
               throws IOException {
-         return new TkRefexUuidUuidUuidStringRevision(this);
+         return new TtkRefexUuidUuidUuidStringRevision(this);
       }
 
       @Override

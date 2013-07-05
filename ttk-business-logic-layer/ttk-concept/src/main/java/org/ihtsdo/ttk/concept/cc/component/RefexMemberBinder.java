@@ -8,7 +8,7 @@ import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
 
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.concept.I_BindConceptComponents;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -36,12 +36,12 @@ public class RefexMemberBinder extends TupleBinding<Collection<RefexMember<?, ?>
    //~--- fields --------------------------------------------------------------
 
    RefexMemberFactory                    factory = new RefexMemberFactory();
-   private Concept                        enclosingConcept;
+   private ConceptChronicle                        enclosingConcept;
    private Collection<RefexMember<?, ?>> refsetMemberList;
 
    //~--- constructors --------------------------------------------------------
 
-   public RefexMemberBinder(Concept concept) {
+   public RefexMemberBinder(ConceptChronicle concept) {
       this.enclosingConcept = concept;
    }
 
@@ -76,14 +76,14 @@ public class RefexMemberBinder extends TupleBinding<Collection<RefexMember<?, ?>
 
          input.reset();
 
-         Object component = Concept.componentsCRHM.get(nid);
+         Object component = ConceptChronicle.componentsCRHM.get(nid);
 
          if ((component == null) || (component instanceof RefexMember)) {
             RefexMember<?, ?> refsetMember = (RefexMember<?, ?>) component;
 
             if ((refsetMember != null) && (refsetMember.getTime() == Long.MIN_VALUE)) {
                refsetMember = null;
-               Concept.componentsCRHM.remove(nid);
+               ConceptChronicle.componentsCRHM.remove(nid);
             }
 
             if ((nidToRefsetMemberMap != null) && nidToRefsetMemberMap.containsKey(nid)) {
@@ -91,7 +91,7 @@ public class RefexMemberBinder extends TupleBinding<Collection<RefexMember<?, ?>
                   refsetMember = nidToRefsetMemberMap.get(nid);
 
                   RefexMember<?, ?> oldMember = (RefexMember<?,
-                                                    ?>) Concept.componentsCRHM.putIfAbsent(nid, refsetMember);
+                                                    ?>) ConceptChronicle.componentsCRHM.putIfAbsent(nid, refsetMember);
 
                   if (oldMember != null) {
                      refsetMember = oldMember;
@@ -110,7 +110,7 @@ public class RefexMemberBinder extends TupleBinding<Collection<RefexMember<?, ?>
 
                      if (refsetMember.getTime() != Long.MIN_VALUE) {
                         RefexMember<?, ?> oldMember = (RefexMember<?,
-                                                          ?>) Concept.componentsCRHM.putIfAbsent(nid,
+                                                          ?>) ConceptChronicle.componentsCRHM.putIfAbsent(nid,
                                                              refsetMember);
 
                         if (oldMember != null) {
@@ -189,20 +189,20 @@ public class RefexMemberBinder extends TupleBinding<Collection<RefexMember<?, ?>
    }
 
    @Override
-   public void setupBinder(Concept enclosingConcept) {
+   public void setupBinder(ConceptChronicle enclosingConcept) {
       this.enclosingConcept = enclosingConcept;
    }
 
    //~--- get methods ---------------------------------------------------------
 
    @Override
-   public Concept getEnclosingConcept() {
+   public ConceptChronicle getEnclosingConcept() {
       return enclosingConcept;
    }
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setEnclosingConcept(Concept enclosingConcept) {
+   public void setEnclosingConcept(ConceptChronicle enclosingConcept) {
       this.enclosingConcept = enclosingConcept;
    }
 

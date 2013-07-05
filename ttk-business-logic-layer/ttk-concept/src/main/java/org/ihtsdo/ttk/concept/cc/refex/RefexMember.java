@@ -22,9 +22,9 @@ import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexAnalogBI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -59,7 +59,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
         super(enclosingConceptNid, input);
     }
 
-    public RefexMember(TkRefexAbstractMember<?> refsetMember, int enclosingConceptNid) throws IOException {
+    public RefexMember(TtkRefexAbstractMemberChronicle<?> refsetMember, int enclosingConceptNid) throws IOException {
         super(refsetMember, enclosingConceptNid);
         refexExtensionNid = P.s.getNidForUuids(refsetMember.refexExtensionUuid);
         referencedComponentNid = P.s.getNidForUuids(refsetMember.getComponentUuid());
@@ -483,11 +483,11 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
             return (RefexAnalogBI<R>) cv;
         }
 
-        public TkRefexAbstractMember<?> getERefsetMember() throws IOException {
+        public TtkRefexAbstractMemberChronicle<?> getERefsetMember() throws IOException {
             throw new UnsupportedOperationException("subclass must override");
         }
 
-        public TkRevision getERefsetRevision() throws IOException {
+        public TtkRevision getERefsetRevision() throws IOException {
             throw new UnsupportedOperationException("subclass must override");
         }
 

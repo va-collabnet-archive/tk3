@@ -16,7 +16,7 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_int.RefexIntAnalogBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_int.TkRefexIntRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_int.TtkRefexIntRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -41,7 +41,7 @@ public class IntRevision extends RefexRevision<IntRevision, IntMember>
       intValue = primoridalMember.getInt1();
    }
 
-   public IntRevision(TkRefexIntRevision eVersion, IntMember member) throws IOException {
+   public IntRevision(TtkRefexIntRevision eVersion, IntMember member) throws IOException {
       super(eVersion, member);
       this.intValue = eVersion.getIntValue();
    }

@@ -16,8 +16,8 @@ import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.refex.RefexAnalogBI;
 import org.ihtsdo.ttk.api.refex.type_long.RefexLongAnalogBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_member.TkRefexMember;
-import org.ihtsdo.ttk.dto.component.refex.type_member.TkRefexRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_member.TtkRefexMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_member.TtkRefexRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -45,13 +45,13 @@ public class MembershipMember extends RefexMember<MembershipRevision, Membership
       super(enclosingConceptNid, input);
    }
 
-   public MembershipMember(TkRefexMember refsetMember, int enclosingConceptNid) throws IOException {
+   public MembershipMember(TtkRefexMemberChronicle refsetMember, int enclosingConceptNid) throws IOException {
       super(refsetMember, enclosingConceptNid);
 
       if (refsetMember.getRevisionList() != null) {
          revisions = new RevisionSet<>(primordialStamp);
 
-         for (TkRefexRevision eVersion : refsetMember.getRevisionList()) {
+         for (TtkRefexRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new MembershipRevision(eVersion, this));
          }
       }
@@ -231,13 +231,13 @@ public class MembershipMember extends RefexMember<MembershipRevision, Membership
       }
 
       @Override
-      public TkRefexMember getERefsetMember() throws IOException {
-         return new TkRefexMember(this);
+      public TtkRefexMemberChronicle getERefsetMember() throws IOException {
+         return new TtkRefexMemberChronicle(this);
       }
 
       @Override
-      public TkRefexRevision getERefsetRevision() throws IOException {
-         return new TkRefexRevision(this);
+      public TtkRefexRevision getERefsetRevision() throws IOException {
+         return new TtkRefexRevision(this);
       }
    }
 }

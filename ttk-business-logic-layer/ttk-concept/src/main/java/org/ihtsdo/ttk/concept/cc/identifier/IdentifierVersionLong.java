@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent.IDENTIFIER_PART_TYPES;
 import org.ihtsdo.ttk.api.id.LongIdBI;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierLong;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierLong;
 
 public class IdentifierVersionLong extends IdentifierVersion implements LongIdBI {
    private long longDenotation;
@@ -20,7 +20,7 @@ public class IdentifierVersionLong extends IdentifierVersion implements LongIdBI
       super();
    }
 
-   public IdentifierVersionLong(TkIdentifierLong idv) throws IOException {
+   public IdentifierVersionLong(TtkIdentifierLong idv) throws IOException {
       super(idv);
       longDenotation = idv.getDenotation();
    }

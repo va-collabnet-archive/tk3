@@ -12,7 +12,7 @@ import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.refex.type_array_of_bytearray.ArrayOfByteArrayMember;
 import org.ihtsdo.ttk.concept.cc.refex.type_boolean.BooleanMember;
 import org.ihtsdo.ttk.concept.cc.refex.type_int.IntMember;
@@ -32,26 +32,26 @@ import org.ihtsdo.ttk.concept.cc.refex.type_nid_nid_nid_string.NidNidNidStringMe
 import org.ihtsdo.ttk.concept.cc.refex.type_nid_nid_string.NidNidStringMember;
 import org.ihtsdo.ttk.concept.cc.refex.type_nid_string.NidStringMember;
 import org.ihtsdo.ttk.concept.cc.refex.type_string.StringMember;
-import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
-import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TkRefexArrayOfByteArrayMember;
-import org.ihtsdo.ttk.dto.component.refex.type_boolean.TkRefexBooleanMember;
-import org.ihtsdo.ttk.dto.component.refex.type_int.TkRefexIntMember;
-import org.ihtsdo.ttk.dto.component.refex.type_long.TkRefexLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_member.TkRefexMember;
-import org.ihtsdo.ttk.dto.component.refex.type_string.TkRefexStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid.TkRefexUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TkRefexUuidBooleanMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TkRefexUuidFloatMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_int.TkRefexUuidIntMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_long.TkRefexUuidLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TkRefexUuidStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid.TkRefexUuidUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_string.TkRefexUuidUuidStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TkRefexUuidUuidUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float.TkRefexUuidUuidUuidFloatMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int.TkRefexUuidUuidUuidIntMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long.TkRefexUuidUuidUuidLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TkRefexUuidUuidUuidStringMember;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TtkRefexArrayOfByteArrayMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_boolean.TtkRefexBooleanMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_int.TtkRefexIntMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_long.TtkRefexLongMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_member.TtkRefexMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_string.TtkRefexStringMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid.TtkRefexUuidMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TtkRefexUuidBooleanMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TtkRefexUuidFloatMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_int.TtkRefexUuidIntMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_long.TtkRefexUuidLongMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TtkRefexUuidStringMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid.TtkRefexUuidUuidMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_string.TtkRefexUuidUuidStringMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TtkRefexUuidUuidUuidMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float.TtkRefexUuidUuidUuidFloatMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int.TtkRefexUuidUuidUuidIntMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long.TtkRefexUuidUuidUuidLongMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TtkRefexUuidUuidUuidStringMemberChronicle;
 
 import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_FLOAT;
 import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_INT;
@@ -103,66 +103,66 @@ public class RefexMemberFactory {
     *
     * @throws IOException
     */
-   public static RefexMember<?, ?> create(TkRefexAbstractMember<?> refsetMember, int enclosingConceptNid)
+   public static RefexMember<?, ?> create(TtkRefexAbstractMemberChronicle<?> refsetMember, int enclosingConceptNid)
            throws IOException {
       switch (refsetMember.getType()) {
       case BOOLEAN :
-         return new BooleanMember((TkRefexBooleanMember) refsetMember, enclosingConceptNid);
+         return new BooleanMember((TtkRefexBooleanMemberChronicle) refsetMember, enclosingConceptNid);
 
       case CID :
-         return new NidMember((TkRefexUuidMember) refsetMember, enclosingConceptNid);
+         return new NidMember((TtkRefexUuidMemberChronicle) refsetMember, enclosingConceptNid);
 
       case CID_CID :
-         return new NidNidMember((TkRefexUuidUuidMember) refsetMember, enclosingConceptNid);
+         return new NidNidMember((TtkRefexUuidUuidMemberChronicle) refsetMember, enclosingConceptNid);
 
       case CID_CID_CID :
-         return new NidNidNidMember((TkRefexUuidUuidUuidMember) refsetMember, enclosingConceptNid);
+         return new NidNidNidMember((TtkRefexUuidUuidUuidMemberChronicle) refsetMember, enclosingConceptNid);
 
       case CID_CID_STR :
-         return new NidNidStringMember((TkRefexUuidUuidStringMember) refsetMember, enclosingConceptNid);
+         return new NidNidStringMember((TtkRefexUuidUuidStringMemberChronicle) refsetMember, enclosingConceptNid);
 
       case CID_INT :
-         return new NidIntMember((TkRefexUuidIntMember) refsetMember, enclosingConceptNid);
+         return new NidIntMember((TtkRefexUuidIntMemberChronicle) refsetMember, enclosingConceptNid);
 
       case CID_STR :
-         return new NidStringMember((TkRefexUuidStringMember) refsetMember, enclosingConceptNid);
+         return new NidStringMember((TtkRefexUuidStringMemberChronicle) refsetMember, enclosingConceptNid);
 
       case INT :
-         return new IntMember((TkRefexIntMember) refsetMember, enclosingConceptNid);
+         return new IntMember((TtkRefexIntMemberChronicle) refsetMember, enclosingConceptNid);
 
       case CID_FLOAT :
-         return new NidFloatMember((TkRefexUuidFloatMember) refsetMember, enclosingConceptNid);
+         return new NidFloatMember((TtkRefexUuidFloatMemberChronicle) refsetMember, enclosingConceptNid);
 
       case MEMBER :
-         return new MembershipMember((TkRefexMember) refsetMember, enclosingConceptNid);
+         return new MembershipMember((TtkRefexMemberChronicle) refsetMember, enclosingConceptNid);
 
       case STR :
-         return new StringMember((TkRefexStringMember) refsetMember, enclosingConceptNid);
+         return new StringMember((TtkRefexStringMemberChronicle) refsetMember, enclosingConceptNid);
 
       case CID_LONG :
-         return new NidLongMember((TkRefexUuidLongMember) refsetMember, enclosingConceptNid);
+         return new NidLongMember((TtkRefexUuidLongMemberChronicle) refsetMember, enclosingConceptNid);
 
       case LONG :
-         return new LongMember((TkRefexLongMember) refsetMember, enclosingConceptNid);
+         return new LongMember((TtkRefexLongMemberChronicle) refsetMember, enclosingConceptNid);
 
       case ARRAY_BYTEARRAY :
-         return new ArrayOfByteArrayMember((TkRefexArrayOfByteArrayMember) refsetMember, enclosingConceptNid);
+         return new ArrayOfByteArrayMember((TtkRefexArrayOfByteArrayMemberChronicle) refsetMember, enclosingConceptNid);
 
       case CID_CID_CID_FLOAT :
-         return new NidNidNidFloatMember((TkRefexUuidUuidUuidFloatMember) refsetMember, enclosingConceptNid);
+         return new NidNidNidFloatMember((TtkRefexUuidUuidUuidFloatMemberChronicle) refsetMember, enclosingConceptNid);
 
       case CID_CID_CID_INT :
-         return new NidNidNidIntMember((TkRefexUuidUuidUuidIntMember) refsetMember, enclosingConceptNid);
+         return new NidNidNidIntMember((TtkRefexUuidUuidUuidIntMemberChronicle) refsetMember, enclosingConceptNid);
 
       case CID_CID_CID_LONG :
-         return new NidNidNidLongMember((TkRefexUuidUuidUuidLongMember) refsetMember, enclosingConceptNid);
+         return new NidNidNidLongMember((TtkRefexUuidUuidUuidLongMemberChronicle) refsetMember, enclosingConceptNid);
 
       case CID_CID_CID_STRING :
-         return new NidNidNidStringMember((TkRefexUuidUuidUuidStringMember) refsetMember,
+         return new NidNidNidStringMember((TtkRefexUuidUuidUuidStringMemberChronicle) refsetMember,
                                           enclosingConceptNid);
 
       case CID_BOOLEAN :
-         return new NidBooleanMember((TkRefexUuidBooleanMember) refsetMember, enclosingConceptNid);
+         return new NidBooleanMember((TtkRefexUuidBooleanMemberChronicle) refsetMember, enclosingConceptNid);
 
       default :
          throw new UnsupportedOperationException("Can't handle member type: " + refsetMember.getType());
@@ -338,7 +338,7 @@ public class RefexMemberFactory {
     */
    public static RefexMember<?, ?> reCreate(RefexCAB blueprint, RefexMember<?, ?> member, EditCoordinate ec)
            throws IOException, InvalidCAB {
-      Concept refexColCon = (Concept) P.s.getConcept(blueprint.getRefexCollectionNid());
+      ConceptChronicle refexColCon = (ConceptChronicle) P.s.getConcept(blueprint.getRefexCollectionNid());
 
       member.refexExtensionNid = refexColCon.getNid();
       member.nid               = P.s.getNidForUuids(blueprint.getMemberUUID());

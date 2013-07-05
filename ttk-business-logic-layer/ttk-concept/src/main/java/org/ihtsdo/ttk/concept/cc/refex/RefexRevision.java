@@ -6,7 +6,7 @@ import com.sleepycat.bind.tuple.TupleInput;
 import org.ihtsdo.ttk.concept.cc.component.Revision;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.refex.RefexAnalogBI;
-import org.ihtsdo.ttk.dto.component.TkRevision;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -36,7 +36,7 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
         super(statusAtPositionNid, primordialComponent);
     }
 
-    public RefexRevision(TkRevision eVersion, C member)  throws IOException{
+    public RefexRevision(TtkRevision eVersion, C member)  throws IOException{
         super(P.s.getNidForUuids(eVersion.getStatusUuid()), eVersion.getTime(), P.s.getNidForUuids(eVersion.getAuthorUuid()),
                  P.s.getNidForUuids(eVersion.getModuleUuid()), P.s.getNidForUuids(eVersion.getPathUuid()),  member);
     }

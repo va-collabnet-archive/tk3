@@ -1,7 +1,7 @@
 package org.ihtsdo.ttk.concept.cs.econcept;
 
 //~--- non-JDK imports --------------------------------------------------------
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent.IDENTIFIER_PART_TYPES;
 import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
@@ -15,15 +15,15 @@ import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
 import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
-import org.ihtsdo.ttk.dto.component.TkComponent;
-import org.ihtsdo.ttk.dto.component.TkRevision;
-import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributes;
-import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributesRevision;
-import org.ihtsdo.ttk.dto.component.description.TkDescription;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifier;
-import org.ihtsdo.ttk.dto.component.media.TkMedia;
-import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
-import org.ihtsdo.ttk.dto.component.relationship.TkRelationship;
+import org.ihtsdo.ttk.dto.component.TtkComponentChronicle;
+import org.ihtsdo.ttk.dto.component.TtkRevision;
+import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesChronicle;
+import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesRevision;
+import org.ihtsdo.ttk.dto.component.description.TtkDescriptionChronicle;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifier;
+import org.ihtsdo.ttk.dto.component.media.TtkMediaChronicle;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
+import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -43,13 +43,13 @@ import org.ihtsdo.ttk.api.id.StringIdBI;
 import org.ihtsdo.ttk.api.id.UuidIdBI;
 import org.ihtsdo.ttk.concept.cs.ChangeSetLogger;
 import org.ihtsdo.ttk.concept.cs.ComputeEConceptForChangeSetI;
-import org.ihtsdo.ttk.dto.TkConcept;
-import org.ihtsdo.ttk.dto.component.description.TkDescriptionRevision;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierLong;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierString;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierUuid;
-import org.ihtsdo.ttk.dto.component.media.TkMediaRevision;
-import org.ihtsdo.ttk.dto.component.relationship.TkRelationshipRevision;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
+import org.ihtsdo.ttk.dto.component.description.TtkDescriptionRevision;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierLong;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierString;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierUuid;
+import org.ihtsdo.ttk.dto.component.media.TtkMediaRevision;
+import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipRevision;
 
 public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
 
@@ -94,8 +94,8 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
     }
 
     //~--- methods -------------------------------------------------------------
-    private TkConceptAttributes processConceptAttributes(Concept c, AtomicBoolean changed) throws IOException {
-        TkConceptAttributes eca = null;
+    private TtkConceptAttributesChronicle processConceptAttributes(ConceptChronicle c, AtomicBoolean changed) throws IOException {
+        TtkConceptAttributesChronicle eca = null;
 
         for (ConceptAttributes.Version v : c.getConceptAttributes().getVersions()) {
             if (v.stampIsInRange(minSapNid, maxSapNid) && (v.getTime() != Long.MIN_VALUE)
@@ -104,11 +104,11 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
 
                 if ((commitSapNids == null) || commitSapNids.contains(v.getStamp())) {
                     if (eca == null) {
-                        eca = new TkConceptAttributes();
+                        eca = new TtkConceptAttributesChronicle();
                         eca.setDefined(v.isDefined());
                         setupFirstVersion(eca, v);
                     } else {
-                        TkConceptAttributesRevision ecv = new TkConceptAttributesRevision();
+                        TtkConceptAttributesRevision ecv = new TtkConceptAttributesRevision();
 
                         ecv.setDefined(v.isDefined());
                         setupRevision(eca, v, ecv);
@@ -120,11 +120,11 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
         return eca;
     }
 
-    private List<TkDescription> processDescriptions(Concept c, AtomicBoolean changed) throws IOException {
-        List<TkDescription> eDescriptions = new ArrayList<>(c.getDescriptions().size());
+    private List<TtkDescriptionChronicle> processDescriptions(ConceptChronicle c, AtomicBoolean changed) throws IOException {
+        List<TtkDescriptionChronicle> eDescriptions = new ArrayList<>(c.getDescriptions().size());
 
         for (Description d : c.getDescriptions()) {
-            TkDescription ecd = null;
+            TtkDescriptionChronicle ecd = null;
 
             for (Description.Version v : d.getVersions()) {
                 if (v.stampIsInRange(minSapNid, maxSapNid) && (v.getTime() != Long.MIN_VALUE)
@@ -133,7 +133,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
 
                     if ((commitSapNids == null) || commitSapNids.contains(v.getStamp())) {
                         if (ecd == null) {
-                            ecd = new TkDescription();
+                            ecd = new TtkDescriptionChronicle();
                             eDescriptions.add(ecd);
                             ecd.setConceptUuid(P.s.getUuidPrimordialForNid(v.getConceptNid()));
                             ecd.setInitialCaseSignificant(v.isInitialCaseSignificant());
@@ -142,7 +142,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
                             ecd.setTypeUuid(P.s.getUuidPrimordialForNid(v.getTypeNid()));
                             setupFirstVersion(ecd, v);
                         } else {
-                            TkDescriptionRevision ecv = new TkDescriptionRevision();
+                            TtkDescriptionRevision ecv = new TtkDescriptionRevision();
 
                             ecv.setInitialCaseSignificant(v.isInitialCaseSignificant());
                             ecv.setLang(v.getLang());
@@ -158,11 +158,11 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
         return eDescriptions;
     }
 
-    private List<TkMedia> processMedia(Concept c, AtomicBoolean changed) throws IOException {
-        List<TkMedia> eImages = new ArrayList<>();
+    private List<TtkMediaChronicle> processMedia(ConceptChronicle c, AtomicBoolean changed) throws IOException {
+        List<TtkMediaChronicle> eImages = new ArrayList<>();
 
         for (Media img : c.getImages()) {
-            TkMedia eImg = null;
+            TtkMediaChronicle eImg = null;
 
             for (Media.Version v : img.getVersions()) {
                 if (v.stampIsInRange(minSapNid, maxSapNid) && (v.getTime() != Long.MIN_VALUE)
@@ -171,7 +171,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
                         changed.set(true);
 
                         if (eImg == null) {
-                            eImg = new TkMedia();
+                            eImg = new TtkMediaChronicle();
                             eImages.add(eImg);
                             eImg.setConceptUuid(P.s.getUuidPrimordialForNid(v.getConceptNid()));
                             eImg.setFormat(v.getFormat());
@@ -180,7 +180,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
                             eImg.setTypeUuid(P.s.getUuidPrimordialForNid(v.getTypeNid()));
                             setupFirstVersion(eImg, v);
                         } else {
-                            TkMediaRevision eImgR = new TkMediaRevision();
+                            TtkMediaRevision eImgR = new TtkMediaRevision();
 
                             eImgR.setTextDescription(v.getTextDescription());
                             eImgR.setTypeUuid(P.s.getUuidPrimordialForNid(v.getTypeNid()));
@@ -194,14 +194,14 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
         return eImages;
     }
 
-    private List<TkRefexAbstractMember<?>> processRefsetMembers(Concept c, AtomicBoolean changed)
+    private List<TtkRefexAbstractMemberChronicle<?>> processRefsetMembers(ConceptChronicle c, AtomicBoolean changed)
             throws IOException {
-        List<TkRefexAbstractMember<?>> eRefsetMembers = new ArrayList<>(c.getRefsetMembers().size());
+        List<TtkRefexAbstractMemberChronicle<?>> eRefsetMembers = new ArrayList<>(c.getRefsetMembers().size());
         Collection<RefexMember<?, ?>> membersToRemove = new ArrayList<>();
 
         for (RefexMember<?, ?> member : c.getRefsetMembers()) {
-            TkRefexAbstractMember<?> eMember = null;
-            Concept concept = (Concept) P.s.getConceptForNid(member.getReferencedComponentNid());
+            TtkRefexAbstractMemberChronicle<?> eMember = null;
+            ConceptChronicle concept = (ConceptChronicle) P.s.getConceptForNid(member.getReferencedComponentNid());
 
             if ((concept != null) && !concept.isCanceled()) {
                 for (RefexMember<?, ?>.Version v : member.getVersions()) {
@@ -222,7 +222,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
                                     ChangeSetLogger.logger.log(Level.WARNING, "Failed in getting Concept for: " + member.toString() + " and " + v.toString(), e);
                                 }
                             } else {
-                                TkRevision eRevision = v.getERefsetRevision();
+                                TtkRevision eRevision = v.getERefsetRevision();
 
                                 setupRevision(eMember, v, eRevision);
                             }
@@ -242,11 +242,11 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
         return eRefsetMembers;
     }
 
-    private List<TkRelationship> processRelationships(Concept c, AtomicBoolean changed) throws IOException {
-        List<TkRelationship> rels = new ArrayList<>(c.getRelationshipsOutgoing().size());
+    private List<TtkRelationshipChronicle> processRelationships(ConceptChronicle c, AtomicBoolean changed) throws IOException {
+        List<TtkRelationshipChronicle> rels = new ArrayList<>(c.getRelationshipsOutgoing().size());
 
         for (Relationship r : c.getRelationshipsOutgoing()) {
-            TkRelationship ecr = null;
+            TtkRelationshipChronicle ecr = null;
 
             for (Relationship.Version v : r.getVersions()) {
                 if (v.stampIsInRange(minSapNid, maxSapNid) && (v.getTime() != Long.MIN_VALUE)
@@ -256,7 +256,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
                             changed.set(true);
 
                             if (ecr == null) {
-                                ecr = new TkRelationship();
+                                ecr = new TtkRelationshipChronicle();
                                 rels.add(ecr);
                                 ecr.setC1Uuid(P.s.getUuidPrimordialForNid(v.getC1Nid()));
                                 ecr.setC2Uuid(P.s.getUuidPrimordialForNid(v.getC2Nid()));
@@ -266,7 +266,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
                                 ecr.setTypeUuid(P.s.getUuidPrimordialForNid(v.getTypeNid()));
                                 setupFirstVersion(ecr, v);
                             } else {
-                                TkRelationshipRevision ecv = new TkRelationshipRevision();
+                                TtkRelationshipRevision ecv = new TtkRelationshipRevision();
 
                                 ecv.setCharacteristicUuid(P.s.getUuidPrimordialForNid(v.getCharacteristicNid()));
                                 ecv.setRefinabilityUuid(P.s.getUuidPrimordialForNid(v.getRefinabilityNid()));
@@ -289,8 +289,8 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
     }
 
     @SuppressWarnings("unchecked")
-    private void setupFirstVersion(TkComponent ec, ConceptComponent<?, ?>.Version v) throws IOException {
-        ec.primordialUuid = v.getPrimUuid();
+    private void setupFirstVersion(TtkComponentChronicle ec, ConceptComponent<?, ?>.Version v) throws IOException {
+        ec.primordialUuid = v.getPrimordialUuid();
         ec.setPathUuid(P.s.getUuidPrimordialForNid(v.getPathNid()));
         ec.setStatusUuid(P.s.getUuidPrimordialForNid(v.getStatusNid()));
         ec.setAuthorUuid(P.s.getUuidPrimordialForNid(v.getAuthorNid()));
@@ -298,16 +298,16 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
 
         if (v.getAdditionalIdentifierParts() != null) {
             for (IdentifierVersion idv : v.getAdditionalIdentifierParts()) {
-                TkIdentifier eIdv = null;
+                TtkIdentifier eIdv = null;
 
                 if ((idv.getStamp() >= minSapNid) && (idv.getStamp() <= maxSapNid)
                         && (v.getTime() != Long.MIN_VALUE) && (v.getTime() != Long.MAX_VALUE)) {
                     if (IdentifierVersionLong.class.isAssignableFrom(idv.getClass())) {
-                        eIdv = new TkIdentifierLong();
+                        eIdv = new TtkIdentifierLong();
                     } else if (IdentifierVersionString.class.isAssignableFrom(idv.getClass())) {
-                        eIdv = new TkIdentifierString();
+                        eIdv = new TtkIdentifierString();
                     } else if (IdentifierVersionUuid.class.isAssignableFrom(idv.getClass())) {
-                        eIdv = new TkIdentifierUuid();
+                        eIdv = new TtkIdentifierUuid();
                     }
 
                     eIdv.setDenotation(idv.getDenotation());
@@ -321,19 +321,19 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
         }
 
         if (v.getAnnotations() != null) {
-            HashMap<UUID, TkRefexAbstractMember<?>> annotationMap = new HashMap<>();
+            HashMap<UUID, TtkRefexAbstractMemberChronicle<?>> annotationMap = new HashMap<>();
 
             if (ec.getAnnotations() != null) {
-                for (TkRefexAbstractMember<?> member :
-                        (Collection<TkRefexAbstractMember<?>>) ec.getAnnotations()) {
+                for (TtkRefexAbstractMemberChronicle<?> member :
+                        (Collection<TtkRefexAbstractMemberChronicle<?>>) ec.getAnnotations()) {
                     annotationMap.put(member.getPrimordialComponentUuid(), member);
                 }
             }
 
             for (RefexMember<?, ?> member : (Collection<RefexMember<?, ?>>) v.getAnnotations()) {
-                TkRefexAbstractMember<?> eMember = null;
-                Concept concept =
-                        (Concept) P.s.getConceptForNid(member.getReferencedComponentNid());
+                TtkRefexAbstractMemberChronicle<?> eMember = null;
+                ConceptChronicle concept =
+                        (ConceptChronicle) P.s.getConceptForNid(member.getReferencedComponentNid());
 
                 if ((concept != null) && !concept.isCanceled()) {
                     for (RefexMember<?, ?>.Version mv : member.getVersions()) {
@@ -352,7 +352,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
                                         setupFirstVersion(eMember, mv);
                                     }
                                 } else {
-                                    TkRevision eRevision = mv.getERefsetRevision();
+                                    TtkRevision eRevision = mv.getERefsetRevision();
 
                                     setupRevision(eMember, mv, eRevision);
                                 }
@@ -367,24 +367,24 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
             for (IdentifierVersion idv : v.getAdditionalIdentifierParts()) {
                 if (idv.stampIsInRange(minSapNid, maxSapNid)) {
                     if (ec.getAdditionalIdComponents() == null) {
-                        ec.setAdditionalIdComponents(new ArrayList<TkIdentifier>());
+                        ec.setAdditionalIdComponents(new ArrayList<TtkIdentifier>());
                     }
 
                     Object denotation = idv.getDenotation();
 
                     switch (IDENTIFIER_PART_TYPES.getType(denotation.getClass())) {
                         case LONG:
-                            ec.additionalIds.add(new TkIdentifierLong((LongIdBI) idv));
+                            ec.additionalIds.add(new TtkIdentifierLong((LongIdBI) idv));
 
                             break;
 
                         case STRING:
-                            ec.additionalIds.add(new TkIdentifierString((StringIdBI) idv));
+                            ec.additionalIds.add(new TtkIdentifierString((StringIdBI) idv));
 
                             break;
 
                         case UUID:
-                            ec.additionalIds.add(new TkIdentifierUuid((UuidIdBI) idv));
+                            ec.additionalIds.add(new TtkIdentifierUuid((UuidIdBI) idv));
 
                             break;
 
@@ -397,7 +397,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
     }
 
     @SuppressWarnings("unchecked")
-    private void setupRevision(TkComponent ec, ConceptComponent.Version v, TkRevision ev) throws IOException {
+    private void setupRevision(TtkComponentChronicle ec, ConceptComponent.Version v, TtkRevision ev) throws IOException {
         if (ec.revisions == null) {
             ec.revisions = new ArrayList();
         }
@@ -418,16 +418,16 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
     //~--- get methods ---------------------------------------------------------
 
     /*
-     * (non-Javadoc) @see org.ihtsdo.cs.ComputeEConceptForChangeSetI#getEConcept(org.ihtsdo.concept .Concept)
+     * (non-Javadoc) @see org.ihtsdo.cs.ComputeEConceptForChangeSetI#getEConcept(org.ihtsdo.concept .ConceptChronicle)
      */
     @Override
-    public TkConcept getEConcept(Concept c) throws IOException {
-        TkConcept ec = new TkConcept();
+    public TtkConceptChronicle getEConcept(ConceptChronicle c) throws IOException {
+        TtkConceptChronicle ec = new TtkConceptChronicle();
         AtomicBoolean changed = new AtomicBoolean(false);
         ec.setAnnotationIndexStyleRefex(c.isAnnotationIndex());
         ec.setAnnotationStyleRefex(c.isAnnotationStyleRefex());
 
-        ec.setPrimordialUuid(c.getPrimUuid());
+        ec.setPrimordialUuid(c.getPrimordialUuid());
         ec.setConceptAttributes(processConceptAttributes(c, changed));
         ec.setDescriptions(processDescriptions(c, changed));
         ec.setRelationships(processRelationships(c, changed));

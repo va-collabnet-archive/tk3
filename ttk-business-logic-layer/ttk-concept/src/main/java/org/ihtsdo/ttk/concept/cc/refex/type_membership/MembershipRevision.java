@@ -14,7 +14,7 @@ import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_member.TkRefexRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_member.TtkRefexRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -33,7 +33,7 @@ public class MembershipRevision extends RefexRevision<MembershipRevision, Member
       super(statusAtPositionNid, primoridalMember);
    }
 
-   public MembershipRevision(TkRefexRevision eVersion, MembershipMember member) throws IOException {
+   public MembershipRevision(TtkRefexRevision eVersion, MembershipMember member) throws IOException {
       super(eVersion, member);
    }
 

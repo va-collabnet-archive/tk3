@@ -16,8 +16,8 @@ import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.refex.type_string.RefexStringAnalogBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_string.TkRefexStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_string.TkRefexStringRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_string.TtkRefexStringMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_string.TtkRefexStringRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -49,14 +49,14 @@ public class StringMember extends RefexMember<StringRevision, StringMember>
       super(enclosingConceptNid, input);
    }
 
-   public StringMember(TkRefexStringMember refsetMember, int enclosingConceptNid) throws IOException {
+   public StringMember(TtkRefexStringMemberChronicle refsetMember, int enclosingConceptNid) throws IOException {
       super(refsetMember, enclosingConceptNid);
       stringValue = refsetMember.getString1();
 
       if (refsetMember.getRevisionList() != null) {
          revisions = new RevisionSet<>(primordialStamp);
 
-         for (TkRefexStringRevision eVersion : refsetMember.getRevisionList()) {
+         for (TtkRefexStringRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new StringRevision(eVersion, this));
          }
       }
@@ -249,13 +249,13 @@ public class StringMember extends RefexMember<StringRevision, StringMember>
       }
 
       @Override
-      public TkRefexStringMember getERefsetMember() throws IOException {
-         return new TkRefexStringMember(this);
+      public TtkRefexStringMemberChronicle getERefsetMember() throws IOException {
+         return new TtkRefexStringMemberChronicle(this);
       }
 
       @Override
-      public TkRefexStringRevision getERefsetRevision() throws IOException {
-         return new TkRefexStringRevision(this);
+      public TtkRefexStringRevision getERefsetRevision() throws IOException {
+         return new TtkRefexStringRevision(this);
       }
 
       @Override

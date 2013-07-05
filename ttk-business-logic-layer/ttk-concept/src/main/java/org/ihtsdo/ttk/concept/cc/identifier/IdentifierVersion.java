@@ -12,7 +12,7 @@ import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.api.id.IdBI;
 
 //import org.ihtsdo.db.bdb.Bdb;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifier;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifier;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -33,7 +33,7 @@ public abstract class IdentifierVersion implements IdBI {
       super();
    }
 
-   protected IdentifierVersion(TkIdentifier idv) throws IOException {
+   protected IdentifierVersion(TtkIdentifier idv) throws IOException {
       super();
       this.stamp = P.s.getStamp(P.s.getNidForUuids(idv.getStatusUuid()), idv.getTime(),
                                     P.s.getNidForUuids(idv.getAuthorUuid()),

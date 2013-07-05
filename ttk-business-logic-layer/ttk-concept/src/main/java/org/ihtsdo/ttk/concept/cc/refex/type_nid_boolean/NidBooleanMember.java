@@ -17,7 +17,7 @@ import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TkRefexUuidFloatMember;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TtkRefexUuidFloatMemberChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -27,8 +27,8 @@ import java.io.IOException;
 
 import java.util.*;
 import org.ihtsdo.ttk.api.refex.type_nid_boolean.RefexNidBooleanVersionBI;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TkRefexUuidBooleanMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TkRefexUuidBooleanRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TtkRefexUuidBooleanMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TtkRefexUuidBooleanRevision;
 
 /**
  * Class description
@@ -80,7 +80,7 @@ public class NidBooleanMember extends RefexMember<NidBooleanRevision, NidBoolean
     *
     * @throws IOException
     */
-   public NidBooleanMember(TkRefexUuidBooleanMember refsetMember, int enclosingConceptNid) throws IOException {
+   public NidBooleanMember(TtkRefexUuidBooleanMemberChronicle refsetMember, int enclosingConceptNid) throws IOException {
       super(refsetMember, enclosingConceptNid);
       c1Nid      = P.s.getNidForUuids(refsetMember.getUuid1());
       boolean1 = refsetMember.boolean1;
@@ -88,7 +88,7 @@ public class NidBooleanMember extends RefexMember<NidBooleanRevision, NidBoolean
       if (refsetMember.getRevisionList() != null) {
          revisions = new RevisionSet<>(primordialStamp);
 
-         for (TkRefexUuidBooleanRevision eVersion : refsetMember.getRevisionList()) {
+         for (TtkRefexUuidBooleanRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new NidBooleanRevision(eVersion, this));
          }
       }
@@ -490,8 +490,8 @@ public class NidBooleanMember extends RefexMember<NidBooleanRevision, NidBoolean
        * @throws IOException
        */
       @Override
-      public TkRefexUuidFloatMember getERefsetMember() throws IOException {
-         return new TkRefexUuidFloatMember(this);
+      public TtkRefexUuidFloatMemberChronicle getERefsetMember() throws IOException {
+         return new TtkRefexUuidFloatMemberChronicle(this);
       }
 
       /**
@@ -503,8 +503,8 @@ public class NidBooleanMember extends RefexMember<NidBooleanRevision, NidBoolean
        * @throws IOException
        */
       @Override
-      public TkRefexUuidBooleanRevision getERefsetRevision() throws IOException {
-         return new TkRefexUuidBooleanRevision(this);
+      public TtkRefexUuidBooleanRevision getERefsetRevision() throws IOException {
+         return new TtkRefexUuidBooleanRevision(this);
       }
 
       /**

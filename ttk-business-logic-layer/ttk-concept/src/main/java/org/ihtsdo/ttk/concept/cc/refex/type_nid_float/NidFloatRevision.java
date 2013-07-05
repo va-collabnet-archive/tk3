@@ -18,9 +18,9 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_float.RefexNidFloatAnalogBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TkRefexUuidFloatMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TkRefexUuidFloatRevision;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TtkRefexUuidFloatMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TtkRefexUuidFloatRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -48,7 +48,7 @@ public class NidFloatRevision extends RefexRevision<NidFloatRevision, NidFloatMe
       floatValue = primoridalMember.getFloatValue();
    }
 
-   public NidFloatRevision(TkRefexUuidFloatRevision eVersion, NidFloatMember member) throws IOException {
+   public NidFloatRevision(TtkRefexUuidFloatRevision eVersion, NidFloatMember member) throws IOException {
       super(eVersion, member);
       c1Nid      = P.s.getNidForUuids(eVersion.getUuid1());
       floatValue = eVersion.getFloat1();

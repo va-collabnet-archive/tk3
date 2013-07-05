@@ -2,6 +2,7 @@ package org.ihtsdo.ttk.concept.cc.concept;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.io.DataOutput;
 import org.ihtsdo.ttk.api.constraint.RelConstraintIncoming;
 import org.ihtsdo.ttk.api.constraint.ConstraintBI;
 import org.ihtsdo.ttk.api.constraint.RelConstraint;
@@ -67,7 +68,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
    //~--- fields --------------------------------------------------------------
 
-   private Concept        concept;
+   private ConceptChronicle        concept;
    NidListBI              fsnOrder;
    NidListBI              preferredOrder;
    NidListBI              synonymOrder;
@@ -75,7 +76,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
    //~--- constructors --------------------------------------------------------
 
-   public ConceptVersion(Concept concept, ViewCoordinate coordinate) {
+   public ConceptVersion(ConceptChronicle concept, ViewCoordinate coordinate) {
       super();
 
       if (concept == null) {
@@ -85,6 +86,11 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
       this.concept = concept;
       this.vc      = new ViewCoordinate(UUID.randomUUID(), coordinate.getName() + " clone", coordinate);
    }
+
+    @Override
+    public void writeExternal(DataOutput out) throws IOException {
+        concept.writeExternal(out);
+    }
 
    //~--- methods -------------------------------------------------------------
 
@@ -580,7 +586,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
             }
          }
       } catch (ContradictionException ex) {
-         Concept.logger.log(Level.SEVERE, "Contradiction exception.", ex);
+         ConceptChronicle.logger.log(Level.SEVERE, "Contradiction exception.", ex);
       }
 
       return pathList;
@@ -622,8 +628,8 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    }
 
    @Override
-   public UUID getPrimUuid() {
-      return concept.getPrimUuid();
+   public UUID getPrimordialUuid() {
+      return concept.getPrimordialUuid();
    }
 
    @Override

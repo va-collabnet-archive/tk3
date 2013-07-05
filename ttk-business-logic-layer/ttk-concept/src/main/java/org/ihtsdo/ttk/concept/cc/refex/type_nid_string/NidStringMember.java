@@ -16,8 +16,8 @@ import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.refex.type_nid_string.RefexNidStringAnalogBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TkRefexUuidStringMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TkRefexUuidStringRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TtkRefexUuidStringMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TtkRefexUuidStringRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -51,7 +51,7 @@ public class NidStringMember extends RefexMember<NidStringRevision, NidStringMem
       super(enclosingConceptNid, input);
    }
 
-   public NidStringMember(TkRefexUuidStringMember refsetMember, int enclosingConceptNid) throws IOException {
+   public NidStringMember(TtkRefexUuidStringMemberChronicle refsetMember, int enclosingConceptNid) throws IOException {
       super(refsetMember, enclosingConceptNid);
       c1Nid    = P.s.getNidForUuids(refsetMember.getUuid1());
       string1 = refsetMember.getString1();
@@ -59,7 +59,7 @@ public class NidStringMember extends RefexMember<NidStringRevision, NidStringMem
       if (refsetMember.getRevisionList() != null) {
          revisions = new RevisionSet<>(primordialStamp);
 
-         for (TkRefexUuidStringRevision eVersion : refsetMember.getRevisionList()) {
+         for (TtkRefexUuidStringRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new NidStringRevision(eVersion, this));
          }
       }
@@ -286,13 +286,13 @@ public class NidStringMember extends RefexMember<NidStringRevision, NidStringMem
       }
 
       @Override
-      public TkRefexUuidStringMember getERefsetMember() throws IOException {
-         return new TkRefexUuidStringMember(this);
+      public TtkRefexUuidStringMemberChronicle getERefsetMember() throws IOException {
+         return new TtkRefexUuidStringMemberChronicle(this);
       }
 
       @Override
-      public TkRefexUuidStringRevision getERefsetRevision() throws IOException {
-         return new TkRefexUuidStringRevision(this);
+      public TtkRefexUuidStringRevision getERefsetRevision() throws IOException {
+         return new TtkRefexUuidStringRevision(this);
       }
 
       @Override

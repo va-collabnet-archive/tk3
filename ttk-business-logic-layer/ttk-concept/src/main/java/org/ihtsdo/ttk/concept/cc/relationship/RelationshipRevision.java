@@ -21,7 +21,7 @@ import org.ihtsdo.ttk.api.TkRelationshipType;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.api.blueprint.RefexDirective;
-import org.ihtsdo.ttk.dto.component.relationship.TkRelationshipRevision;
+import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipRevision;
 
 public class RelationshipRevision extends Revision<RelationshipRevision, Relationship>
         implements RelationshipAnalogBI<RelationshipRevision> {
@@ -56,7 +56,7 @@ public class RelationshipRevision extends Revision<RelationshipRevision, Relatio
         this.typeNid = another.typeNid;
     }
 
-    public RelationshipRevision(TkRelationshipRevision erv, Relationship primordialRel) throws IOException {
+    public RelationshipRevision(TtkRelationshipRevision erv, Relationship primordialRel) throws IOException {
         super(P.s.getNidForUuids(erv.getStatusUuid()), erv.getTime(), P.s.getNidForUuids(erv.getAuthorUuid()),
                 P.s.getNidForUuids(erv.getModuleUuid()), P.s.getNidForUuids(erv.getPathUuid()), primordialRel);
         this.characteristicNid = P.s.getNidForUuids(erv.getCharacteristicUuid());

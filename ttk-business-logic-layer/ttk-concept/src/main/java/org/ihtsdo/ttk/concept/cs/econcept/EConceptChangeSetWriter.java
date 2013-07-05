@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.helpers.econcept.transfrom.EConceptTransformerBI;
 import org.ihtsdo.ttk.helpers.io.FileIO;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
@@ -23,7 +23,7 @@ import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.concept.cs.ChangeSetLogger;
 import org.ihtsdo.ttk.concept.cs.ComputeEConceptForChangeSetI;
 import org.ihtsdo.ttk.concept.cs.CsProperty;
-import org.ihtsdo.ttk.dto.TkConcept;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 
 public class EConceptChangeSetWriter implements ChangeSetGeneratorBI {
 
@@ -157,11 +157,11 @@ public class EConceptChangeSetWriter implements ChangeSetGeneratorBI {
             throws IOException {
         assert time != Long.MAX_VALUE;
         assert time != Long.MIN_VALUE;
-        Concept c = (Concept) igcd;
+        ConceptChronicle c = (ConceptChronicle) igcd;
         if (c.isCanceled()) {
             ChangeSetLogger.logger.log(Level.INFO, "Writing canceled concept suppressed: {0}", c.toLongString());
         } else {
-            TkConcept eC = null;
+            TtkConceptChronicle eC = null;
             long start = System.currentTimeMillis();
             try {
                 eC = computer.getEConcept(c);

@@ -19,9 +19,9 @@ import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int
-   .TkRefexUuidUuidUuidIntMember;
+   .TtkRefexUuidUuidUuidIntMemberChronicle;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int
-   .TkRefexUuidUuidUuidIntRevision;
+   .TtkRefexUuidUuidUuidIntRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -53,7 +53,7 @@ public class NidNidNidIntMember
       super(enclosingConceptNid, input);
    }
 
-   public NidNidNidIntMember(TkRefexUuidUuidUuidIntMember refsetMember,
+   public NidNidNidIntMember(TtkRefexUuidUuidUuidIntMemberChronicle refsetMember,
                              int enclosingConceptNid)
            throws IOException {
       super(refsetMember, enclosingConceptNid);
@@ -65,7 +65,7 @@ public class NidNidNidIntMember
       if (refsetMember.getRevisionList() != null) {
          revisions = new RevisionSet<>(primordialStamp);
 
-         for (TkRefexUuidUuidUuidIntRevision eVersion :
+         for (TtkRefexUuidUuidUuidIntRevision eVersion :
                  refsetMember.getRevisionList()) {
             revisions.add(new NidNidNidIntRevision(eVersion, this));
          }
@@ -320,15 +320,15 @@ public class NidNidNidIntMember
       }
 
       @Override
-      public TkRefexUuidUuidUuidIntMember getERefsetMember()
+      public TtkRefexUuidUuidUuidIntMemberChronicle getERefsetMember()
               throws IOException {
-         return new TkRefexUuidUuidUuidIntMember(this);
+         return new TtkRefexUuidUuidUuidIntMemberChronicle(this);
       }
 
       @Override
-      public TkRefexUuidUuidUuidIntRevision getERefsetRevision()
+      public TtkRefexUuidUuidUuidIntRevision getERefsetRevision()
               throws IOException {
-         return new TkRefexUuidUuidUuidIntRevision(this);
+         return new TtkRefexUuidUuidUuidIntRevision(this);
       }
 
       @Override

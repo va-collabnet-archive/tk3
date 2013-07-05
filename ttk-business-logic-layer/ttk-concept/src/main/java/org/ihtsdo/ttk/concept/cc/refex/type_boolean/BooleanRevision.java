@@ -16,7 +16,7 @@ import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanAnalogBI;
-import org.ihtsdo.ttk.dto.component.refex.type_boolean.TkRefexBooleanRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_boolean.TtkRefexBooleanRevision;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -42,7 +42,7 @@ public class BooleanRevision extends RefexRevision<BooleanRevision, BooleanMembe
       this.booleanValue = primoridalMember.getBoolean1();
    }
 
-   public BooleanRevision(TkRefexBooleanRevision eVersion, BooleanMember booleanMember) throws IOException {
+   public BooleanRevision(TtkRefexBooleanRevision eVersion, BooleanMember booleanMember) throws IOException {
       super(eVersion, booleanMember);
       this.booleanValue = eVersion.isBooleanValue();
    }

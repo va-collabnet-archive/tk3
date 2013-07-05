@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent.IDENTIFIER_PART_TYPES;
 import org.ihtsdo.ttk.api.id.UuidIdBI;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierUuid;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierUuid;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -24,7 +24,7 @@ public class IdentifierVersionUuid extends IdentifierVersion implements UuidIdBI
       super();
    }
 
-   public IdentifierVersionUuid(TkIdentifierUuid idv) throws IOException {
+   public IdentifierVersionUuid(TtkIdentifierUuid idv) throws IOException {
       super(idv);
       msb = idv.getDenotation().getMostSignificantBits();
       lsb = idv.getDenotation().getLeastSignificantBits();

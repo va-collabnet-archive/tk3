@@ -28,7 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMemberFactory;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
@@ -78,7 +78,7 @@ public class AnnotationWriter {
 
          input.reset();
 
-         RefexMember<?, ?> refsetMember = (RefexMember<?, ?>) Concept.componentsCRHM.get(nid);
+         RefexMember<?, ?> refsetMember = (RefexMember<?, ?>) ConceptChronicle.componentsCRHM.get(nid);
 
          if (refsetMember == null) {
             try {
@@ -86,7 +86,7 @@ public class AnnotationWriter {
 
                if (refsetMember.getTime() != Long.MIN_VALUE) {
                   RefexMember<?, ?> oldMember = (RefexMember<?,
-                                                   ?>) Concept.componentsCRHM.putIfAbsent(nid, refsetMember);
+                                                   ?>) ConceptChronicle.componentsCRHM.putIfAbsent(nid, refsetMember);
 
                   if (oldMember != null) {
                      refsetMember = oldMember;

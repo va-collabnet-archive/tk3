@@ -7,7 +7,7 @@ import com.sleepycat.bind.tuple.TupleOutput;
 import org.ihtsdo.cern.colt.list.IntArrayList;
 
 
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
@@ -21,8 +21,8 @@ import org.ihtsdo.ttk.api.conattr.ConceptAttributeAnalogBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributes;
-import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributesRevision;
+import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesChronicle;
+import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -51,18 +51,18 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
         super();
     }
 
-    public ConceptAttributes(Concept enclosingConcept, TupleInput input) throws IOException {
+    public ConceptAttributes(ConceptChronicle enclosingConcept, TupleInput input) throws IOException {
         super(enclosingConcept.getNid(), input);
     }
 
-    public ConceptAttributes(TkConceptAttributes eAttr, Concept c) throws IOException {
+    public ConceptAttributes(TtkConceptAttributesChronicle eAttr, ConceptChronicle c) throws IOException {
         super(eAttr, c.getNid());
         defined = eAttr.isDefined();
 
         if (eAttr.getRevisionList() != null) {
             revisions = new RevisionSet(primordialStamp);
 
-            for (TkConceptAttributesRevision ear : eAttr.getRevisionList()) {
+            for (TtkConceptAttributesRevision ear : eAttr.getRevisionList()) {
                 revisions.add(new ConceptAttributesRevision(ear, this));
             }
         }

@@ -26,7 +26,7 @@ import org.ihtsdo.ttk.api.NidBitSetItrBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.component.IdentifierSet;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.description.Description;
 import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
 
@@ -48,7 +48,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class LuceneManager {
-    protected static final Logger              logger              = Logger.getLogger(Concept.class.getName());
+    protected static final Logger              logger              = Logger.getLogger(ConceptChronicle.class.getName());
     private static NidBitSetBI                 uncommittedDescNids = new IdentifierSet();
     protected static DescriptionIndexGenerator descIndexer         = null;
     public final static Version                version             = Version.LUCENE_40;
@@ -71,7 +71,7 @@ public abstract class LuceneManager {
         luceneWriterService.execute(new DescLuceneWriter(descNidsToCommit));
     }
 
-    public static void commitDescriptionsToLucene(Concept c) throws InterruptedException, IOException {
+    public static void commitDescriptionsToLucene(ConceptChronicle c) throws InterruptedException, IOException {
         luceneWriterPermit.acquire();
 
         IdentifierSet descNidsToCommit = new IdentifierSet();

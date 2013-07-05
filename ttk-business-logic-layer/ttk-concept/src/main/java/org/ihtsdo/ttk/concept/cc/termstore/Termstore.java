@@ -60,7 +60,7 @@ import org.ihtsdo.ttk.concept.cc.Position;
 import org.ihtsdo.ttk.concept.cc.PositionSetReadOnly;
 import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
 import org.ihtsdo.ttk.concept.cc.change.LastChange;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptVersion;
 import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
 import org.ihtsdo.ttk.concept.cc.lucene.SearchResult;
@@ -206,7 +206,7 @@ public abstract class Termstore implements PersistentStoreI {
             sb.append("' ");
             sb.append(cNid);
             sb.append(" ");
-            sb.append(cc.getPrimUuid());
+            sb.append(cc.getPrimordialUuid());
          } else {
             ComponentBI component = Ts.get().getComponent(nid);
 
@@ -221,7 +221,7 @@ public abstract class Termstore implements PersistentStoreI {
             sb.append("' ");
             sb.append(nid);
             sb.append(" ");
-            sb.append(component.getPrimUuid());
+            sb.append(component.getPrimordialUuid());
          }
       } catch (IOException ex) {
          Logger.getLogger(Termstore.class.getName()).log(Level.SEVERE, null, ex);
@@ -594,8 +594,8 @@ public abstract class Termstore implements PersistentStoreI {
            throws IOException, ContradictionException {
       ComponentBI component = getComponent(nid);
 
-      if (Concept.class.isAssignableFrom(component.getClass())) {
-         return new ConceptVersion((Concept) component, coordinate);
+      if (ConceptChronicle.class.isAssignableFrom(component.getClass())) {
+         return new ConceptVersion((ConceptChronicle) component, coordinate);
       }
 
       return ((ComponentChronicleBI<?>) component).getVersion(coordinate);
@@ -710,7 +710,7 @@ public abstract class Termstore implements PersistentStoreI {
     */
    @Override
    public ConceptChronicleBI getConcept(int cNid) throws IOException {
-      return Concept.get(cNid);
+      return ConceptChronicle.get(cNid);
    }
 
    /**
@@ -755,9 +755,9 @@ public abstract class Termstore implements PersistentStoreI {
     * @throws IOException
     */
    @Override
-   public Concept getConceptFromAlternateId(int authorityNid, String altId) throws IOException {
+   public ConceptChronicle getConceptFromAlternateId(int authorityNid, String altId) throws IOException {
       try {
-         return Concept.get(
+         return ConceptChronicle.get(
              P.s.getNidForUuids(Type5UuidFactory.get(P.s.getUuidPrimordialForNid(authorityNid), altId)));
       } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
          throw new RuntimeException(ex);
@@ -778,7 +778,7 @@ public abstract class Termstore implements PersistentStoreI {
    @Override
    public ConceptChronicleBI getConceptFromAlternateId(UUID authorityUuid, String altId) throws IOException {
       try {
-         return Concept.get(P.s.getNidForUuids(Type5UuidFactory.get(authorityUuid, altId)));
+         return ConceptChronicle.get(P.s.getNidForUuids(Type5UuidFactory.get(authorityUuid, altId)));
       } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
          throw new RuntimeException(ex);
       }
@@ -813,7 +813,7 @@ public abstract class Termstore implements PersistentStoreI {
     */
    @Override
    public ConceptVersionBI getConceptVersion(ViewCoordinate c, int cNid) throws IOException {
-      return new ConceptVersion(Concept.get(cNid), c);
+      return new ConceptVersion(ConceptChronicle.get(cNid), c);
    }
 
    /**
@@ -847,7 +847,7 @@ public abstract class Termstore implements PersistentStoreI {
    @Override
    public ConceptVersion getConceptVersionFromAlternateId(ViewCoordinate vc, int authorityNid, String altId)
            throws IOException {
-      Concept c = getConceptFromAlternateId(authorityNid, altId);
+      ConceptChronicle c = getConceptFromAlternateId(authorityNid, altId);
 
       return new ConceptVersion(c, vc);
    }
@@ -867,7 +867,7 @@ public abstract class Termstore implements PersistentStoreI {
    @Override
    public ConceptVersion getConceptVersionFromAlternateId(ViewCoordinate vc, UUID authorityUuid, String altId)
            throws IOException {
-      Concept c = (Concept) getConceptFromAlternateId(authorityUuid, altId);
+      ConceptChronicle c = (ConceptChronicle) getConceptFromAlternateId(authorityUuid, altId);
 
       return new ConceptVersion(c, vc);
    }

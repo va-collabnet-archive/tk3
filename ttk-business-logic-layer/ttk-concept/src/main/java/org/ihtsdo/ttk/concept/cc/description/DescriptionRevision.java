@@ -14,7 +14,7 @@ import org.ihtsdo.ttk.api.blueprint.DescriptionCAB;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.description.DescriptionAnalogBI;
-import org.ihtsdo.ttk.dto.component.description.TkDescriptionRevision;
+import org.ihtsdo.ttk.dto.component.description.TtkDescriptionRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -71,7 +71,7 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
       super(statusAtPositionNid, primoridalMember);
    }
 
-   public DescriptionRevision(TkDescriptionRevision edv, Description primoridalMember)
+   public DescriptionRevision(TtkDescriptionRevision edv, Description primoridalMember)
            throws IOException {
       super(P.s.getNidForUuids(edv.getStatusUuid()),edv.getTime(), P.s.getNidForUuids(edv.getAuthorUuid()),
               P.s.getNidForUuids(edv.getModuleUuid()), P.s.getNidForUuids(edv.getPathUuid()),primoridalMember);

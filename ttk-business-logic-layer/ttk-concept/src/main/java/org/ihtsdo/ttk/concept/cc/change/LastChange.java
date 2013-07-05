@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.helpers.concurrency.ConcurrentReentrantLocks;
 import org.ihtsdo.ttk.api.TermChangeListener;
 
@@ -136,7 +136,7 @@ public class LastChange {
       suspended = true;
    }
 
-   public static void touch(Concept c) {
+   public static void touch(ConceptChronicle c) {
       if (suspended) {
          return;
       }

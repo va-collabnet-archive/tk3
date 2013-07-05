@@ -17,7 +17,7 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_nid.RefexNidNidNidAnalogBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TkRefexUuidUuidUuidRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TtkRefexUuidUuidUuidRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -47,7 +47,7 @@ public class NidNidNidRevision extends RefexRevision<NidNidNidRevision, NidNidNi
       c3Nid = primoridalMember.getC3Nid();
    }
 
-   public NidNidNidRevision(TkRefexUuidUuidUuidRevision eVersion, NidNidNidMember member) throws IOException {
+   public NidNidNidRevision(TtkRefexUuidUuidUuidRevision eVersion, NidNidNidMember member) throws IOException {
       super(eVersion, member);
       c1Nid = P.s.getNidForUuids(eVersion.getUuid1());
       c2Nid = P.s.getNidForUuids(eVersion.getUuid2());

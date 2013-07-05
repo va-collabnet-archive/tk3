@@ -16,8 +16,8 @@ import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.refex.type_int.RefexIntAnalogBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_int.TkRefexIntMember;
-import org.ihtsdo.ttk.dto.component.refex.type_int.TkRefexIntRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_int.TtkRefexIntMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_int.TtkRefexIntRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -49,14 +49,14 @@ public class IntMember extends RefexMember<IntRevision, IntMember>
       super(enclosingConceptNid, input);
    }
 
-   public IntMember(TkRefexIntMember refsetMember, int enclosingConceptNid) throws IOException {
+   public IntMember(TtkRefexIntMemberChronicle refsetMember, int enclosingConceptNid) throws IOException {
       super(refsetMember, enclosingConceptNid);
       int1 = refsetMember.getIntValue();
 
       if (refsetMember.getRevisionList() != null) {
          revisions = new RevisionSet<>(primordialStamp);
 
-         for (TkRefexIntRevision eVersion : refsetMember.getRevisionList()) {
+         for (TtkRefexIntRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new IntRevision(eVersion, this));
          }
       }
@@ -251,13 +251,13 @@ public class IntMember extends RefexMember<IntRevision, IntMember>
       }
 
       @Override
-      public TkRefexIntMember getERefsetMember() throws IOException {
-         return new TkRefexIntMember(this);
+      public TtkRefexIntMemberChronicle getERefsetMember() throws IOException {
+         return new TtkRefexIntMemberChronicle(this);
       }
 
       @Override
-      public TkRefexIntRevision getERefsetRevision() throws IOException {
-         return new TkRefexIntRevision(this);
+      public TtkRefexIntRevision getERefsetRevision() throws IOException {
+         return new TtkRefexIntRevision(this);
       }
 
       @Override

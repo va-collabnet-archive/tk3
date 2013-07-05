@@ -18,7 +18,7 @@ import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float
-   .TkRefexUuidUuidUuidFloatRevision;
+   .TtkRefexUuidUuidUuidFloatRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -49,7 +49,7 @@ public class NidNidNidFloatRevision
       float1 = primoridalMember.getFloat1();
    }
 
-   public NidNidNidFloatRevision(TkRefexUuidUuidUuidFloatRevision eVersion,
+   public NidNidNidFloatRevision(TtkRefexUuidUuidUuidFloatRevision eVersion,
                                  NidNidNidFloatMember member)
            throws IOException {
       super(eVersion, member);

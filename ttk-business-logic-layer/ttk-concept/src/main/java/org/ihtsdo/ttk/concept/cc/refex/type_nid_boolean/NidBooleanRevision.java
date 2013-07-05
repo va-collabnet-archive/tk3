@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.util.*;
 import org.ihtsdo.ttk.api.refex.type_nid_boolean.RefexNidBooleanAnalogBI;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TkRefexUuidBooleanRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TtkRefexUuidBooleanRevision;
 
 public class NidBooleanRevision extends RefexRevision<NidBooleanRevision, NidBooleanMember>
         implements RefexNidBooleanAnalogBI<NidBooleanRevision> {
@@ -45,7 +45,7 @@ public class NidBooleanRevision extends RefexRevision<NidBooleanRevision, NidBoo
       boolean1 = primoridalMember.getBoolean1();
    }
 
-   public NidBooleanRevision(TkRefexUuidBooleanRevision eVersion, NidBooleanMember member) throws IOException {
+   public NidBooleanRevision(TtkRefexUuidBooleanRevision eVersion, NidBooleanMember member) throws IOException {
       super(eVersion, member);
       nid1      = P.s.getNidForUuids(eVersion.getUuid1());
       boolean1 = eVersion.boolean1;

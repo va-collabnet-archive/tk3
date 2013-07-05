@@ -19,8 +19,8 @@ import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.refex.type_nid.RefexNidAnalogBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid.TkRefexUuidMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid.TkRefexUuidRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid.TtkRefexUuidMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid.TtkRefexUuidRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -53,14 +53,14 @@ public class NidMember extends RefexMember<NidRevision, NidMember>
       super(enclosingConceptNid, input);
    }
 
-   public NidMember(TkRefexUuidMember refsetMember, int enclosingConceptNid) throws IOException {
+   public NidMember(TtkRefexUuidMemberChronicle refsetMember, int enclosingConceptNid) throws IOException {
       super(refsetMember, enclosingConceptNid);
       c1Nid = P.s.getNidForUuids(refsetMember.getUuid1());
 
       if (refsetMember.getRevisionList() != null) {
          revisions = new RevisionSet<>(primordialStamp);
 
-         for (TkRefexUuidRevision eVersion : refsetMember.getRevisionList()) {
+         for (TtkRefexUuidRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new NidRevision(eVersion, this));
          }
       }
@@ -278,13 +278,13 @@ public class NidMember extends RefexMember<NidRevision, NidMember>
       }
 
       @Override
-      public TkRefexUuidMember getERefsetMember() throws IOException {
-         return new TkRefexUuidMember(this);
+      public TtkRefexUuidMemberChronicle getERefsetMember() throws IOException {
+         return new TtkRefexUuidMemberChronicle(this);
       }
 
       @Override
-      public TkRefexUuidRevision getERefsetRevision() throws IOException {
-         return new TkRefexUuidRevision(this);
+      public TtkRefexUuidRevision getERefsetRevision() throws IOException {
+         return new TtkRefexUuidRevision(this);
       }
 
       @Override

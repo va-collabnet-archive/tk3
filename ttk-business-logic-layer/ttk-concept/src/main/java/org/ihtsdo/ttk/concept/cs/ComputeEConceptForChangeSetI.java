@@ -2,11 +2,11 @@ package org.ihtsdo.ttk.concept.cs;
 
 import java.io.IOException;
 
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
-import org.ihtsdo.ttk.dto.TkConcept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 
 public interface ComputeEConceptForChangeSetI {
 
-	public TkConcept getEConcept(Concept c) throws IOException;
+	public TtkConceptChronicle getEConcept(ConceptChronicle c) throws IOException;
 
 }

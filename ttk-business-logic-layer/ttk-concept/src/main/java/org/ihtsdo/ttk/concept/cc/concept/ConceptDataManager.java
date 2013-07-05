@@ -45,7 +45,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
    protected long                lastChange         = Long.MIN_VALUE;
    protected long                lastWrite          = Long.MIN_VALUE;
    protected long                lastExtinctRemoval = Long.MIN_VALUE;
-   protected Concept             enclosingConcept;
+   protected ConceptChronicle             enclosingConcept;
    protected ConceptDataFetcherI nidData;
 
    //~--- constructors --------------------------------------------------------
@@ -164,7 +164,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
       assert P.s.getConceptForNid(rel.nid) != null :
              "No concept for component: " + rel.nid + "\nsourceConcept: "
              + this.enclosingConcept.toLongString() + "\ndestConcept: "
-             + Concept.get(rel.getDestinationNid()).toLongString();
+             + ConceptChronicle.get(rel.getDestinationNid()).toLongString();
       P.s.addRelOrigin(rel.getDestinationNid(), rel.getOriginNid());
       getSrcRelNids().add(rel.nid);
       modified();
@@ -259,7 +259,7 @@ public abstract class ConceptDataManager implements I_ManageConceptData {
       List<Relationship> destRels = new ArrayList<>();
 
       for (int originNid : P.s.getDestRelOriginNids(enclosingConcept.getNid(), allowedTypes)) {
-         Concept c = (Concept) P.s.getConceptForNid(originNid);
+         ConceptChronicle c = (ConceptChronicle) P.s.getConceptForNid(originNid);
 
          if (c != null) {
             for (Relationship r : c.getRelationshipsOutgoing()) {

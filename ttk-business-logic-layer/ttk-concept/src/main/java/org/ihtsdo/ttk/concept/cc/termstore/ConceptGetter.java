@@ -18,7 +18,7 @@ package org.ihtsdo.ttk.concept.cc.termstore;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
 import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
@@ -47,7 +47,7 @@ class ConceptGetter implements ProcessUnfetchedConceptDataBI {
     @Override
     public void processUnfetchedConceptData(int cNid, ConceptFetcherBI fcfc) throws Exception {
         if (cNids.isMember(cNid)) {
-            Concept c = (Concept) fcfc.fetch();
+            ConceptChronicle c = (ConceptChronicle) fcfc.fetch();
             conceptMap.put(cNid, c);
         }
     }

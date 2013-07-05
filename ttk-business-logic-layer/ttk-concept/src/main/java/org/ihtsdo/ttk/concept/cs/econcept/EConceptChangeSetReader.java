@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.Set;
 import java.util.logging.Level;
 
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
 import org.ihtsdo.ttk.concept.cc.P;
@@ -20,7 +20,7 @@ import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.concept.cs.ChangeSetLogger;
 import org.ihtsdo.ttk.concept.cs.ChangeSetReaderI;
 import org.ihtsdo.ttk.concept.cs.CsProperty;
-import org.ihtsdo.ttk.dto.TkConcept;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 
 public class EConceptChangeSetReader implements ChangeSetReaderI {
 
@@ -80,7 +80,7 @@ public class EConceptChangeSetReader implements ChangeSetReaderI {
         }
         while ((nextCommitTime() <= endTime) && (nextCommitTime() != Long.MAX_VALUE)) {
             try {
-                TkConcept eConcept = new TkConcept(dataStream);
+                TtkConceptChronicle eConcept = new TtkConceptChronicle(dataStream);
                 if (csreOut != null) {
                     csreOut.append("\n*******************************\n");
                     csreOut.append(TimeHelper.formatDateForFile(nextCommitTime()));
@@ -125,7 +125,7 @@ public class EConceptChangeSetReader implements ChangeSetReaderI {
                 throw new IOException(e);
             }
         }
-        Concept.resolveUnresolvedAnnotations(indexedAnnotationConcepts);
+        ConceptChronicle.resolveUnresolvedAnnotations(indexedAnnotationConcepts);
         ChangeSetLogger.logger.log(
                 Level.INFO, "Change set {0} contains {1}" + " change objects. " + "\n unvalidated objects: {2}\n imported concepts: {3}", new Object[]{changeSetFile.getName(), count, unvalidated, conceptCount});
 
@@ -136,7 +136,7 @@ public class EConceptChangeSetReader implements ChangeSetReaderI {
         readUntil(Long.MAX_VALUE, indexedAnnotationConcepts);
     }
 
-    private Concept commitEConcept(TkConcept eConcept, long time, Set<ConceptChronicleBI> indexedAnnotationConcepts) throws IOException,
+    private ConceptChronicle commitEConcept(TtkConceptChronicle eConcept, long time, Set<ConceptChronicleBI> indexedAnnotationConcepts) throws IOException,
             ClassNotFoundException {
         if (noCommit) {
             return null;
@@ -148,19 +148,19 @@ public class EConceptChangeSetReader implements ChangeSetReaderI {
                 csrcOut.append(TimeHelper.formatDateForFile(time));
                 csrcOut.append("\n********** before ***********\n");
 
-                Concept before = Concept.get(P.s.getNidForUuids(eConcept.getPrimordialUuid()));
+                ConceptChronicle before = ConceptChronicle.get(P.s.getNidForUuids(eConcept.getPrimordialUuid()));
                 csrcOut.append(before.toLongString());
                 csrcOut.flush();
-                Concept after = Concept.mergeAndWrite(eConcept, indexedAnnotationConcepts);
+                ConceptChronicle after = ConceptChronicle.mergeAndWrite(eConcept, indexedAnnotationConcepts);
                 csrcOut.append("\n----------- after  -----------\n");
                 csrcOut.append(after.toLongString());
                 return after;
             } else {
                 if (!fileContentMerged) {
                     int conceptNid = P.s.getNidForUuids(eConcept.getPrimordialUuid());
-                    long lastChange = Concept.get(conceptNid).getData().getLastChange();
+                    long lastChange = ConceptChronicle.get(conceptNid).getData().getLastChange();
 
-                    Concept mergedConcept = Concept.mergeAndWrite(eConcept, indexedAnnotationConcepts);
+                    ConceptChronicle mergedConcept = ConceptChronicle.mergeAndWrite(eConcept, indexedAnnotationConcepts);
 
                     if (mergedConcept.getData().getLastChange() != lastChange) {
                         fileContentMerged = true;
@@ -168,7 +168,7 @@ public class EConceptChangeSetReader implements ChangeSetReaderI {
 
                     return mergedConcept;
                 } else {
-                    return Concept.mergeAndWrite(eConcept, indexedAnnotationConcepts);
+                    return ConceptChronicle.mergeAndWrite(eConcept, indexedAnnotationConcepts);
                 }
             }
         } catch (Exception e) {

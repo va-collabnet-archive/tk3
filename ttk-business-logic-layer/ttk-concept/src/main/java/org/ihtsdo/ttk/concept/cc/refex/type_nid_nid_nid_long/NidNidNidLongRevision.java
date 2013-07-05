@@ -18,7 +18,7 @@ import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long
-   .TkRefexUuidUuidUuidLongRevision;
+   .TtkRefexUuidUuidUuidLongRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -49,7 +49,7 @@ public class NidNidNidLongRevision
       long1 = primoridalMember.getLong1();
    }
 
-   public NidNidNidLongRevision(TkRefexUuidUuidUuidLongRevision eVersion,
+   public NidNidNidLongRevision(TtkRefexUuidUuidUuidLongRevision eVersion,
                                  NidNidNidLongMember member)
            throws IOException {
       super(eVersion, member);

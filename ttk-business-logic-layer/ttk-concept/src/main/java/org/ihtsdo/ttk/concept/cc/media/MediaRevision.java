@@ -14,7 +14,7 @@ import org.ihtsdo.ttk.concept.cc.component.Revision;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.media.MediaVersionBI;
-import org.ihtsdo.ttk.dto.component.media.TkMediaRevision;
+import org.ihtsdo.ttk.dto.component.media.TtkMediaRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -50,7 +50,7 @@ public class MediaRevision extends Revision<MediaRevision, Media>
       this.typeNid         = another.typeNid;
    }
 
-   public MediaRevision(TkMediaRevision eiv, Media primoridalMember) throws IOException {
+   public MediaRevision(TtkMediaRevision eiv, Media primoridalMember) throws IOException {
       super(P.s.getNidForUuids(eiv.getStatusUuid()), eiv.getTime(), P.s.getNidForUuids(eiv.getAuthorUuid()),
             P.s.getNidForUuids(eiv.getModuleUuid()), P.s.getNidForUuids(eiv.getPathUuid()), primoridalMember);
       this.textDescription = eiv.getTextDescription();

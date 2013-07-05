@@ -15,8 +15,8 @@ import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.refex.type_long.RefexLongAnalogBI;
-import org.ihtsdo.ttk.dto.component.refex.type_long.TkRefexLongMember;
-import org.ihtsdo.ttk.dto.component.refex.type_long.TkRefexLongRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_long.TtkRefexLongMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_long.TtkRefexLongRevision;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
@@ -49,14 +49,14 @@ public class LongMember extends RefexMember<LongRevision, LongMember>
       super(enclosingConceptNid, input);
    }
 
-   public LongMember(TkRefexLongMember refsetMember, int enclosingConceptNid) throws IOException {
+   public LongMember(TtkRefexLongMemberChronicle refsetMember, int enclosingConceptNid) throws IOException {
       super(refsetMember, enclosingConceptNid);
       longValue = refsetMember.getLongValue();
 
       if (refsetMember.getRevisionList() != null) {
          revisions = new RevisionSet<>(primordialStamp);
 
-         for (TkRefexLongRevision eVersion : refsetMember.getRevisionList()) {
+         for (TtkRefexLongRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new LongRevision(eVersion, this));
          }
       }
@@ -249,13 +249,13 @@ public class LongMember extends RefexMember<LongRevision, LongMember>
       }
 
       @Override
-      public TkRefexLongMember getERefsetMember() throws IOException {
-         return new TkRefexLongMember(this);
+      public TtkRefexLongMemberChronicle getERefsetMember() throws IOException {
+         return new TtkRefexLongMemberChronicle(this);
       }
 
       @Override
-      public TkRefexLongRevision getERefsetRevision() throws IOException {
-         return new TkRefexLongRevision(this);
+      public TtkRefexLongRevision getERefsetRevision() throws IOException {
+         return new TtkRefexLongRevision(this);
       }
 
       @Override

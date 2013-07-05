@@ -25,7 +25,7 @@ import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptVersion;
 import org.ihtsdo.ttk.fx.FxComponentReference;
 import org.ihtsdo.ttk.fx.concept.FxConcept;
@@ -596,7 +596,7 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     */
    @Override
    public ConceptVersionBI getConceptForNid(int nid) throws IOException {
-      return new ConceptVersion((Concept) store.getConceptForNid(nid), vc);
+      return new ConceptVersion((ConceptChronicle) store.getConceptForNid(nid), vc);
    }
 
    /**
@@ -637,7 +637,7 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     */
    @Override
    public ConceptVersionBI getConceptVersion(Collection<UUID> uuids) throws IOException {
-      return new ConceptVersion((Concept) store.getConcept(store.getNidForUuids(uuids)), vc);
+      return new ConceptVersion((ConceptChronicle) store.getConcept(store.getNidForUuids(uuids)), vc);
    }
 
    /**
@@ -667,7 +667,7 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     */
    @Override
    public ConceptVersionBI getConceptVersion(int cNid) throws IOException {
-      return new ConceptVersion((Concept) store.getConcept(cNid), vc);
+      return new ConceptVersion((ConceptChronicle) store.getConcept(cNid), vc);
    }
 
    /**
@@ -682,7 +682,7 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     */
    @Override
    public ConceptVersionBI getConceptVersion(UUID... uuids) throws IOException {
-      return new ConceptVersion((Concept) store.getConcept(store.getNidForUuids(uuids)), vc);
+      return new ConceptVersion((ConceptChronicle) store.getConcept(store.getNidForUuids(uuids)), vc);
    }
 
    /**

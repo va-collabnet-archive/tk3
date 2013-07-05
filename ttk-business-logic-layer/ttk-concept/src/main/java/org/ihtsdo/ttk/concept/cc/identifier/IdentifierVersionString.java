@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent.IDENTIFIER_PART_TYPES;
 import org.ihtsdo.ttk.api.id.StringIdBI;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierString;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierString;
 
 public class IdentifierVersionString extends IdentifierVersion implements StringIdBI {
 
@@ -19,7 +19,7 @@ public class IdentifierVersionString extends IdentifierVersion implements String
         super();
     }
 
-    public IdentifierVersionString(TkIdentifierString idv) throws IOException {
+    public IdentifierVersionString(TtkIdentifierString idv) throws IOException {
         super(idv);
         stringDenotation = idv.getDenotation();
     }

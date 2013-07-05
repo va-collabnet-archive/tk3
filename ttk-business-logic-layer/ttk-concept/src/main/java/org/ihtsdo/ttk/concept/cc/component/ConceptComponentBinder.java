@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.concept.I_BindConceptComponents;
 
 import com.sleepycat.bind.tuple.TupleBinding;
@@ -24,7 +24,7 @@ public class ConceptComponentBinder<V extends Revision<V, C>, C extends ConceptC
 
     private static final int maxReadOnlyStatusAtPositionId =
             P.s.getMaxReadOnlyStamp();
-    private Concept enclosingConcept;
+    private ConceptChronicle enclosingConcept;
     private ArrayList<C> readOnlyConceptComponentList;
     private ComponentFactory<V, C> factory;
     private AtomicInteger componentsEncountered;
@@ -71,16 +71,16 @@ public class ConceptComponentBinder<V extends Revision<V, C>, C extends ConceptC
             int nid = input.readInt();
             // we have to put it back so the component can read it again...
             input.reset();
-            C conceptComponent = (C) Concept.componentsCRHM.get(nid);
+            C conceptComponent = (C) ConceptChronicle.componentsCRHM.get(nid);
             if (conceptComponent != null && conceptComponent.getTime() == Long.MIN_VALUE) {
                 conceptComponent = null;
-                Concept.componentsCRHM.remove(nid);
+                ConceptChronicle.componentsCRHM.remove(nid);
             }
             if (nidToConceptComponentMap != null
                     && nidToConceptComponentMap.containsKey(nid)) {
                 if (conceptComponent == null) {
                     conceptComponent = nidToConceptComponentMap.get(nid);
-                    C oldComponent = (C) Concept.componentsCRHM.putIfAbsent(conceptComponent.nid, conceptComponent);
+                    C oldComponent = (C) ConceptChronicle.componentsCRHM.putIfAbsent(conceptComponent.nid, conceptComponent);
                     if (oldComponent != null) {
                         conceptComponent = oldComponent;
                         if (nidToConceptComponentMap != null) {
@@ -98,7 +98,7 @@ public class ConceptComponentBinder<V extends Revision<V, C>, C extends ConceptC
                     if (conceptComponent == null) {
                         conceptComponent = factory.create(enclosingConcept, input);
                         if (conceptComponent.getTime() != Long.MIN_VALUE) {
-                            C oldComponent = (C) Concept.componentsCRHM.putIfAbsent(conceptComponent.nid, conceptComponent);
+                            C oldComponent = (C) ConceptChronicle.componentsCRHM.putIfAbsent(conceptComponent.nid, conceptComponent);
                             if (oldComponent != null) {
                                 conceptComponent = oldComponent;
                                 if (nidToConceptComponentMap != null) {
@@ -150,12 +150,12 @@ public class ConceptComponentBinder<V extends Revision<V, C>, C extends ConceptC
     }
 
     @Override
-    public Concept getEnclosingConcept() {
+    public ConceptChronicle getEnclosingConcept() {
         return enclosingConcept;
     }
 
     @Override
-    public void setupBinder(Concept enclosingConcept) {
+    public void setupBinder(ConceptChronicle enclosingConcept) {
         this.enclosingConcept = enclosingConcept;
         this.readOnlyConceptComponentList = null;
     }

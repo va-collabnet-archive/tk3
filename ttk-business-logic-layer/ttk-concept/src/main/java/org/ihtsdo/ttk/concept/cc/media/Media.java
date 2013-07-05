@@ -7,7 +7,7 @@ import com.sleepycat.bind.tuple.TupleOutput;
 import org.ihtsdo.cern.colt.list.IntArrayList;
 
 
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
@@ -18,8 +18,8 @@ import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.PositionSetBI;
 import org.ihtsdo.ttk.api.Precedence;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.dto.component.media.TkMedia;
-import org.ihtsdo.ttk.dto.component.media.TkMediaRevision;
+import org.ihtsdo.ttk.dto.component.media.TtkMediaChronicle;
+import org.ihtsdo.ttk.dto.component.media.TtkMediaRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -51,11 +51,11 @@ public class Media extends ConceptComponent<MediaRevision, Media>
         super();
     }
 
-    public Media(Concept enclosingConcept, TupleInput input) throws IOException {
+    public Media(ConceptChronicle enclosingConcept, TupleInput input) throws IOException {
         super(enclosingConcept.getNid(), input);
     }
 
-    public Media(TkMedia eMedia, Concept enclosingConcept) throws IOException {
+    public Media(TtkMediaChronicle eMedia, ConceptChronicle enclosingConcept) throws IOException {
         super(eMedia, enclosingConcept.getNid());
         image = eMedia.getDataBytes();
         format = eMedia.getFormat();
@@ -66,7 +66,7 @@ public class Media extends ConceptComponent<MediaRevision, Media>
         if (eMedia.getRevisionList() != null) {
             revisions = new RevisionSet<>(primordialStamp);
 
-            for (TkMediaRevision eiv : eMedia.getRevisionList()) {
+            for (TtkMediaRevision eiv : eMedia.getRevisionList()) {
                 revisions.add(new MediaRevision(eiv, this));
             }
         }

@@ -15,8 +15,8 @@ import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.refex.type_nid_float.RefexNidFloatAnalogBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TkRefexUuidFloatMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TkRefexUuidFloatRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TtkRefexUuidFloatMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TtkRefexUuidFloatRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -51,7 +51,7 @@ public class NidFloatMember extends RefexMember<NidFloatRevision, NidFloatMember
       super(enclosingConceptNid, input);
    }
 
-   public NidFloatMember(TkRefexUuidFloatMember refsetMember, int enclosingConceptNid) throws IOException {
+   public NidFloatMember(TtkRefexUuidFloatMemberChronicle refsetMember, int enclosingConceptNid) throws IOException {
       super(refsetMember, enclosingConceptNid);
       c1Nid      = P.s.getNidForUuids(refsetMember.getUuid1());
       floatValue = refsetMember.getFloatValue();
@@ -59,7 +59,7 @@ public class NidFloatMember extends RefexMember<NidFloatRevision, NidFloatMember
       if (refsetMember.getRevisionList() != null) {
          revisions = new RevisionSet<>(primordialStamp);
 
-         for (TkRefexUuidFloatRevision eVersion : refsetMember.getRevisionList()) {
+         for (TtkRefexUuidFloatRevision eVersion : refsetMember.getRevisionList()) {
             revisions.add(new NidFloatRevision(eVersion, this));
          }
       }
@@ -292,13 +292,13 @@ public class NidFloatMember extends RefexMember<NidFloatRevision, NidFloatMember
       }
 
       @Override
-      public TkRefexUuidFloatMember getERefsetMember() throws IOException {
-         return new TkRefexUuidFloatMember(this);
+      public TtkRefexUuidFloatMemberChronicle getERefsetMember() throws IOException {
+         return new TtkRefexUuidFloatMemberChronicle(this);
       }
 
       @Override
-      public TkRefexUuidFloatRevision getERefsetRevision() throws IOException {
-         return new TkRefexUuidFloatRevision(this);
+      public TtkRefexUuidFloatRevision getERefsetRevision() throws IOException {
+         return new TtkRefexUuidFloatRevision(this);
       }
 
       @Override

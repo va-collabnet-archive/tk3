@@ -30,7 +30,7 @@ import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayAnalogBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
-import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TkRefexArrayOfByteArrayRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TtkRefexArrayOfByteArrayRevision;
 import org.ihtsdo.ttk.api.uuid.UuidT5Generator;
 
 /**
@@ -65,7 +65,7 @@ public class ArrayOfByteArrayRevision extends RefexRevision<ArrayOfByteArrayRevi
       this.arrayOfByteArray = another.getArrayOfByteArray();
    }
 
-   public ArrayOfByteArrayRevision(TkRefexArrayOfByteArrayRevision eVersion, ArrayOfByteArrayMember another) throws IOException {
+   public ArrayOfByteArrayRevision(TtkRefexArrayOfByteArrayRevision eVersion, ArrayOfByteArrayMember another) throws IOException {
       super(eVersion, another);
       this.arrayOfByteArray = eVersion.getArrayOfByteArray1();
    }

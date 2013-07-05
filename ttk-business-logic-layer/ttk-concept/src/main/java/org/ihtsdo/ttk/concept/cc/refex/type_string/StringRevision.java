@@ -16,7 +16,7 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_string.RefexStringAnalogBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_string.TkRefexStringRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_string.TtkRefexStringRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -41,7 +41,7 @@ public class StringRevision extends RefexRevision<StringRevision, StringMember>
       stringValue = another.getString1();
    }
 
-   public StringRevision(TkRefexStringRevision eVersion, StringMember primoridalMember) throws IOException {
+   public StringRevision(TtkRefexStringRevision eVersion, StringMember primoridalMember) throws IOException {
       super(eVersion, primoridalMember);
       this.stringValue = eVersion.getString1();
    }

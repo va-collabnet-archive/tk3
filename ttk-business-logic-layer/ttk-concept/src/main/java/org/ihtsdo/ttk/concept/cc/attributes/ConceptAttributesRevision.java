@@ -23,7 +23,7 @@ import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexDirective;
-import org.ihtsdo.ttk.dto.component.attribute.TkConceptAttributesRevision;
+import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesRevision;
 
 public class ConceptAttributesRevision extends Revision<ConceptAttributesRevision, ConceptAttributes>
         implements ConceptAttributeAnalogBI<ConceptAttributesRevision> {  
@@ -36,7 +36,7 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
       this.defined = another.isDefined();
    }
 
-   public ConceptAttributesRevision(TkConceptAttributesRevision another, ConceptAttributes primoridalMember) throws IOException{
+   public ConceptAttributesRevision(TtkConceptAttributesRevision another, ConceptAttributes primoridalMember) throws IOException{
       super(P.s.getNidForUuids(another.getStatusUuid()), another.getTime(), P.s.getNidForUuids(another.getAuthorUuid()),
             P.s.getNidForUuids(another.getModuleUuid()), P.s.getNidForUuids(another.getPathUuid()), primoridalMember);
       this.defined = another.isDefined();

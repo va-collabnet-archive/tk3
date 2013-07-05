@@ -15,7 +15,7 @@ import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
 import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
@@ -334,7 +334,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
       return primordialComponent.getRefexMembersActive(xyz);
    }
 
-   public Concept getEnclosingConcept() {
+   public ConceptChronicle getEnclosingConcept() {
       return primordialComponent.getEnclosingConcept();
    }
 
@@ -368,8 +368,8 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
    }
 
    @Override
-   public UUID getPrimUuid() {
-      return primordialComponent.getPrimUuid();
+   public UUID getPrimordialUuid() {
+      return primordialComponent.getPrimordialUuid();
    }
 
    @Override

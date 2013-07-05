@@ -21,9 +21,9 @@ import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float
-   .TkRefexUuidUuidUuidFloatMember;
+   .TtkRefexUuidUuidUuidFloatMemberChronicle;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float
-   .TkRefexUuidUuidUuidFloatRevision;
+   .TtkRefexUuidUuidUuidFloatRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -55,7 +55,7 @@ public class NidNidNidFloatMember
       super(enclosingConceptNid, input);
    }
 
-   public NidNidNidFloatMember(TkRefexUuidUuidUuidFloatMember refsetMember,
+   public NidNidNidFloatMember(TtkRefexUuidUuidUuidFloatMemberChronicle refsetMember,
                                int enclosingConceptNid)
            throws IOException {
       super(refsetMember, enclosingConceptNid);
@@ -67,7 +67,7 @@ public class NidNidNidFloatMember
       if (refsetMember.getRevisionList() != null) {
          revisions = new RevisionSet<>(primordialStamp);
 
-         for (TkRefexUuidUuidUuidFloatRevision eVersion :
+         for (TtkRefexUuidUuidUuidFloatRevision eVersion :
                  refsetMember.getRevisionList()) {
             revisions.add(new NidNidNidFloatRevision(eVersion, this));
          }
@@ -321,15 +321,15 @@ public class NidNidNidFloatMember
       }
 
       @Override
-      public TkRefexUuidUuidUuidFloatMember getERefsetMember()
+      public TtkRefexUuidUuidUuidFloatMemberChronicle getERefsetMember()
               throws IOException {
-         return new TkRefexUuidUuidUuidFloatMember(this);
+         return new TtkRefexUuidUuidUuidFloatMemberChronicle(this);
       }
 
       @Override
-      public TkRefexUuidUuidUuidFloatRevision getERefsetRevision()
+      public TtkRefexUuidUuidUuidFloatRevision getERefsetRevision()
               throws IOException {
-         return new TkRefexUuidUuidUuidFloatRevision(this);
+         return new TtkRefexUuidUuidUuidFloatRevision(this);
       }
 
       @Override

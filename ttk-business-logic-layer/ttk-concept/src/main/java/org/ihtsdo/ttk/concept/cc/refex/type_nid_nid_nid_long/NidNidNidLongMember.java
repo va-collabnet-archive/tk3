@@ -21,9 +21,9 @@ import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long
-   .TkRefexUuidUuidUuidLongMember;
+   .TtkRefexUuidUuidUuidLongMemberChronicle;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long
-   .TkRefexUuidUuidUuidLongRevision;
+   .TtkRefexUuidUuidUuidLongRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -55,7 +55,7 @@ public class NidNidNidLongMember
       super(enclosingConceptNid, input);
    }
 
-   public NidNidNidLongMember(TkRefexUuidUuidUuidLongMember refsetMember,
+   public NidNidNidLongMember(TtkRefexUuidUuidUuidLongMemberChronicle refsetMember,
                                int enclosingConceptNid)
            throws IOException {
       super(refsetMember, enclosingConceptNid);
@@ -67,7 +67,7 @@ public class NidNidNidLongMember
       if (refsetMember.getRevisionList() != null) {
          revisions = new RevisionSet<>(primordialStamp);
 
-         for (TkRefexUuidUuidUuidLongRevision eVersion :
+         for (TtkRefexUuidUuidUuidLongRevision eVersion :
                  refsetMember.getRevisionList()) {
             revisions.add(new NidNidNidLongRevision(eVersion, this));
          }
@@ -321,15 +321,15 @@ public class NidNidNidLongMember
       }
 
       @Override
-      public TkRefexUuidUuidUuidLongMember getERefsetMember()
+      public TtkRefexUuidUuidUuidLongMemberChronicle getERefsetMember()
               throws IOException {
-         return new TkRefexUuidUuidUuidLongMember(this);
+         return new TtkRefexUuidUuidUuidLongMemberChronicle(this);
       }
 
       @Override
-      public TkRefexUuidUuidUuidLongRevision getERefsetRevision()
+      public TtkRefexUuidUuidUuidLongRevision getERefsetRevision()
               throws IOException {
-         return new TkRefexUuidUuidUuidLongRevision(this);
+         return new TtkRefexUuidUuidUuidLongRevision(this);
       }
 
       @Override

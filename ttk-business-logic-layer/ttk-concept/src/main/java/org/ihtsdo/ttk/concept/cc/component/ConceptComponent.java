@@ -26,7 +26,7 @@ import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.Position;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.identifier.IdentifierVersion;
 import org.ihtsdo.ttk.concept.cc.identifier.IdentifierVersionLong;
 import org.ihtsdo.ttk.concept.cc.identifier.IdentifierVersionString;
@@ -34,12 +34,12 @@ import org.ihtsdo.ttk.concept.cc.identifier.IdentifierVersionUuid;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMemberFactory;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
-import org.ihtsdo.ttk.dto.component.TkComponent;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifier;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierLong;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierString;
-import org.ihtsdo.ttk.dto.component.identifier.TkIdentifierUuid;
-import org.ihtsdo.ttk.dto.component.refex.TkRefexAbstractMember;
+import org.ihtsdo.ttk.dto.component.TtkComponentChronicle;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifier;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierLong;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierString;
+import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierUuid;
+import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
 import org.ihtsdo.ttk.helpers.uuid.Type3UuidFactory;
 import org.ihtsdo.ttk.helpers.uuid.Type5UuidFactory;
@@ -181,7 +181,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
      *
      * @throws IOException
      */
-    protected ConceptComponent(TkComponent<?> eComponent, int enclosingConceptNid) throws IOException {
+    protected ConceptComponent(TtkComponentChronicle<?> eComponent, int enclosingConceptNid) throws IOException {
         super();
         assert eComponent != null;
         
@@ -222,7 +222,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         if (eComponent.getAnnotations() != null) {
             this.annotations = new ConcurrentSkipListSet<>();
             
-            for (TkRefexAbstractMember<?> eAnnot : eComponent.getAnnotations()) {
+            for (TtkRefexAbstractMemberChronicle<?> eAnnot : eComponent.getAnnotations()) {
                 RefexMember<?, ?> annot = RefexMemberFactory.create(eAnnot, enclosingConceptNid);
                 
                 this.annotations.add(annot);
@@ -358,7 +358,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
         
         boolean returnValue = additionalIdVersions.add(srcId);
-        Concept c = getEnclosingConcept();
+        ConceptChronicle c = getEnclosingConcept();
         
         c.modified();
         
@@ -453,7 +453,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         assert r != null;
         
         boolean returnValue;
-        Concept c = getEnclosingConcept();
+        ConceptChronicle c = getEnclosingConcept();
         
         assert c != null : "Can't find concept for: " + r;
         
@@ -759,20 +759,20 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
      *
      * @throws IOException
      */
-    public final void convertId(List<TkIdentifier> list) throws IOException {
+    public final void convertId(List<TtkIdentifier> list) throws IOException {
         if ((list == null) || list.isEmpty()) {
             return;
         }
         
         additionalIdVersions = new ArrayList<>(list.size());
         
-        for (TkIdentifier idv : list) {
+        for (TtkIdentifier idv : list) {
             try {
                 Object denotation = idv.getDenotation();
                 
                 switch (IDENTIFIER_PART_TYPES.getType(denotation.getClass())) {
                     case LONG:
-                        additionalIdVersions.add(new IdentifierVersionLong((TkIdentifierLong) idv));
+                        additionalIdVersions.add(new IdentifierVersionLong((TtkIdentifierLong) idv));
                         
                         if (idv.authorityUuid.equals(snomedAuthorityUuid)) {
                             P.s.put(Type3UuidFactory.fromSNOMED(idv.getDenotation().toString()), nid);
@@ -783,13 +783,13 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
                         break;
                     
                     case STRING:
-                        additionalIdVersions.add(new IdentifierVersionString((TkIdentifierString) idv));
+                        additionalIdVersions.add(new IdentifierVersionString((TtkIdentifierString) idv));
                         P.s.put(Type5UuidFactory.get(idv.getAuthorityUuid(), idv.getDenotation().toString()), nid);
                         
                         break;
                     
                     case UUID:
-                        additionalIdVersions.add(new IdentifierVersionUuid((TkIdentifierUuid) idv));
+                        additionalIdVersions.add(new IdentifierVersionUuid((TtkIdentifierUuid) idv));
                         P.s.put(Type5UuidFactory.get(idv.getAuthorityUuid(), idv.getDenotation().toString()), nid);
                         
                         break;
@@ -969,8 +969,8 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
                 this.annotations.addAll(anotherAnnotationMap.values());
                 
                 for (RefexMember refsetMember : anotherAnnotationMap.values()) {
-                    Concept refsetConcept =
-                            (Concept) Ts.get().getConceptForNid(refsetMember.getRefexExtensionNid());
+                    ConceptChronicle refsetConcept =
+                            (ConceptChronicle) Ts.get().getConceptForNid(refsetMember.getRefexExtensionNid());
                     
                     if (refsetConcept.isAnnotationIndex()) {
                         refsetConcept.getData().getMemberNids().add(refsetMember.getNid());
@@ -990,7 +990,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         try {
             if (enclosingConceptNid != Integer.MIN_VALUE) {
                 if ((P.s != null) && P.s.hasConcept(enclosingConceptNid)) {
-                    Concept c = (Concept) P.s.getConcept(enclosingConceptNid);
+                    ConceptChronicle c = (ConceptChronicle) P.s.getConcept(enclosingConceptNid);
                     
                     if (c != null) {
                         c.modified();
@@ -1929,9 +1929,9 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
      *
      * @return
      */
-    public Concept getEnclosingConcept() {
+    public ConceptChronicle getEnclosingConcept() {
         try {
-            return Concept.get(enclosingConceptNid);
+            return ConceptChronicle.get(enclosingConceptNid);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -2094,7 +2094,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
      * @return
      */
     @Override
-    public UUID getPrimUuid() {
+    public UUID getPrimordialUuid() {
         return new UUID(primordialMsb, primordialLsb);
     }
 
@@ -2159,8 +2159,8 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         
         ComponentBI component = this;
         
-        if (component instanceof Concept) {
-            component = ((Concept) component).getConceptAttributes();
+        if (component instanceof ConceptChronicle) {
+            component = ((ConceptChronicle) component).getConceptAttributes();
         }
         
         ComponentChronicleBI<?> cc = (ComponentChronicleBI<?>) component;
@@ -3085,7 +3085,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
          *
          * @return
          */
-        public Concept getEnclosingConcept() {
+        public ConceptChronicle getEnclosingConcept() {
             return ConceptComponent.this.getEnclosingConcept();
         }
 
@@ -3170,7 +3170,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
          * @return
          */
         @Override
-        public UUID getPrimUuid() {
+        public UUID getPrimordialUuid() {
             return new UUID(primordialMsb, primordialLsb);
         }
 

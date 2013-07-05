@@ -16,8 +16,8 @@ import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanAnalogBI;
 import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanVersionBI;
-import org.ihtsdo.ttk.dto.component.refex.type_boolean.TkRefexBooleanMember;
-import org.ihtsdo.ttk.dto.component.refex.type_boolean.TkRefexBooleanRevision;
+import org.ihtsdo.ttk.dto.component.refex.type_boolean.TtkRefexBooleanMemberChronicle;
+import org.ihtsdo.ttk.dto.component.refex.type_boolean.TtkRefexBooleanRevision;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
@@ -38,14 +38,14 @@ public class BooleanMember extends RefexMember<BooleanRevision, BooleanMember>
         super(enclosingConceptNid, input);
     }
 
-    public BooleanMember(TkRefexBooleanMember refsetMember, int enclosingConceptNid) throws IOException {
+    public BooleanMember(TtkRefexBooleanMemberChronicle refsetMember, int enclosingConceptNid) throws IOException {
         super(refsetMember, enclosingConceptNid);
         booleanValue = refsetMember.getBooleanValue();
 
         if (refsetMember.getRevisionList() != null) {
             revisions = new RevisionSet(primordialStamp);
 
-            for (TkRefexBooleanRevision eVersion : refsetMember.getRevisionList()) {
+            for (TtkRefexBooleanRevision eVersion : refsetMember.getRevisionList()) {
                 revisions.add(new BooleanRevision(eVersion, this));
             }
         }
@@ -242,13 +242,13 @@ public class BooleanMember extends RefexMember<BooleanRevision, BooleanMember>
         }
 
         @Override
-        public TkRefexBooleanMember getERefsetMember() throws IOException {
-            return new TkRefexBooleanMember(this);
+        public TtkRefexBooleanMemberChronicle getERefsetMember() throws IOException {
+            return new TtkRefexBooleanMemberChronicle(this);
         }
 
         @Override
-        public TkRefexBooleanRevision getERefsetRevision() throws IOException {
-            return new TkRefexBooleanRevision(this);
+        public TtkRefexBooleanRevision getERefsetRevision() throws IOException {
+            return new TtkRefexBooleanRevision(this);
         }
 
         @Override

@@ -16,7 +16,7 @@ import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
-import org.ihtsdo.ttk.concept.cc.concept.Concept;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
@@ -28,8 +28,8 @@ import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
 import org.ihtsdo.ttk.api.TkRelationshipType;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.api.blueprint.RefexDirective;
-import org.ihtsdo.ttk.dto.component.relationship.TkRelationship;
-import org.ihtsdo.ttk.dto.component.relationship.TkRelationshipRevision;
+import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipChronicle;
+import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 
 public class Relationship extends ConceptComponent<RelationshipRevision, Relationship>
@@ -71,11 +71,11 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
       super();
    }
 
-   public Relationship(Concept enclosingConcept, TupleInput input) throws IOException {
+   public Relationship(ConceptChronicle enclosingConcept, TupleInput input) throws IOException {
       super(enclosingConcept.getNid(), input);
    }
 
-   public Relationship(TkRelationship eRel, Concept enclosingConcept) throws IOException {
+   public Relationship(TtkRelationshipChronicle eRel, ConceptChronicle enclosingConcept) throws IOException {
       super(eRel, enclosingConcept.getNid());
       c2Nid = P.s.getNidForUuids(eRel.getC2Uuid());
       characteristicNid = P.s.getNidForUuids(eRel.getCharacteristicUuid());
@@ -87,7 +87,7 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
       if (eRel.getRevisionList() != null) {
          revisions = new RevisionSet<>(primordialStamp);
 
-         for (TkRelationshipRevision erv : eRel.getRevisionList()) {
+         for (TtkRelationshipRevision erv : eRel.getRevisionList()) {
             revisions.add(new RelationshipRevision(erv, this));
          }
       }
@@ -647,8 +647,8 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
          return getCv().getRefinabilityNid();
       }
 
-      public Concept getType() throws IOException {
-         return (Concept) P.s.getConcept(getTypeNid());
+      public ConceptChronicle getType() throws IOException {
+         return (ConceptChronicle) P.s.getConcept(getTypeNid());
       }
 
       @Override
