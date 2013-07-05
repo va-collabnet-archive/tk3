@@ -15,7 +15,7 @@ import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.TerminologySnapshotDI;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.dto.TtkConcept;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -170,7 +170,7 @@ public class FxConceptResource {
          c = ts.getConcept(Integer.parseInt(id));
       }
 
-      final TtkConcept econ = new TtkConcept(c);
+      final TtkConceptChronicle econ = new TtkConceptChronicle(c);
 
       return new StreamingOutput() {
          @Override

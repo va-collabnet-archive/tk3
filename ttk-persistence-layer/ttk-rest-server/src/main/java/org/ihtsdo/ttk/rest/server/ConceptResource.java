@@ -19,7 +19,7 @@ import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.dto.TtkConcept;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 
@@ -71,14 +71,14 @@ public class ConceptResource {
     @GET
     @Path("{id}")
     @Produces("application/xml")
-    public TtkConcept getConceptXml(@PathParam("id") String id) throws IOException {
+    public TtkConceptChronicle getConceptXml(@PathParam("id") String id) throws IOException {
         ConceptChronicleBI c;
         if (id.length() == 36) {
             c = ts.getConcept(UUID.fromString(id));
         } else {
             c = ts.getConcept(Integer.parseInt(id));
         }
-        return new TtkConcept(c);
+        return new TtkConceptChronicle(c);
     }
 
     @GET
@@ -118,7 +118,7 @@ public class ConceptResource {
         } else {
             c = ts.getConcept(Integer.parseInt(id));
         }
-        final TtkConcept econ = new TtkConcept(c);
+        final TtkConceptChronicle econ = new TtkConceptChronicle(c);
         return new StreamingOutput() {
 
             @Override
