@@ -119,7 +119,7 @@ public class FxConcept implements Serializable {
       this.viewCoordinateUuid = ss.getViewCoordinate().getVcUuid();
       this.conceptReference   = new FxComponentReference(c.getPrimordialUuid(), c.getNid(),
           ss.getConceptForNid(c.getNid()).getPreferredDescription().getText());
-      this.conceptAttributes = new FxConceptAttributesChronicle(ss, this, c.getConAttrs());
+      this.conceptAttributes = new FxConceptAttributesChronicle(ss, this, c.getConceptAttributes());
       this.primordialUuid    = conceptAttributes.getPrimordialComponentUuid();
 
       switch (relationshipPolicy) {
@@ -153,9 +153,9 @@ public class FxConcept implements Serializable {
       }
 
       _descriptions =
-         FXCollections.observableArrayList(new ArrayList<FxDescriptionChronicle>(c.getDescs().size()));
+         FXCollections.observableArrayList(new ArrayList<FxDescriptionChronicle>(c.getDescriptions().size()));
 
-      for (DescriptionChronicleBI desc : c.getDescs()) {
+      for (DescriptionChronicleBI desc : c.getDescriptions()) {
          FxDescriptionChronicle dc = new FxDescriptionChronicle(ss, this, desc);
 
          if (!dc.getVersions().isEmpty()) {
