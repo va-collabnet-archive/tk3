@@ -1,7 +1,5 @@
 package org.ihtsdo.ttk.concept.cc.concept;
 
-import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
-
 
 public interface I_BindConceptComponents {
 

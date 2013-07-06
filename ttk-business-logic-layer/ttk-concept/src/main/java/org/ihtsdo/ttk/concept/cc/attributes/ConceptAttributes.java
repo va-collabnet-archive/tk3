@@ -20,7 +20,6 @@ import org.ihtsdo.ttk.api.Precedence;
 import org.ihtsdo.ttk.api.conattr.ConceptAttributeAnalogBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesChronicle;
 import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
@@ -36,6 +35,7 @@ import org.ihtsdo.ttk.api.blueprint.ConceptAttributeAB;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexDirective;
+import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 
 public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevision, ConceptAttributes>
         implements ConceptAttributeAnalogBI<ConceptAttributesRevision> {
@@ -51,11 +51,11 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
         super();
     }
 
-    public ConceptAttributes(ConceptChronicle enclosingConcept, TupleInput input) throws IOException {
+    public ConceptAttributes(ConceptChronicleBI enclosingConcept, TupleInput input) throws IOException {
         super(enclosingConcept.getNid(), input);
     }
 
-    public ConceptAttributes(TtkConceptAttributesChronicle eAttr, ConceptChronicle c) throws IOException {
+    public ConceptAttributes(TtkConceptAttributesChronicle eAttr, ConceptChronicleBI c) throws IOException {
         super(eAttr, c.getNid());
         defined = eAttr.isDefined();
 

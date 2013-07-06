@@ -348,7 +348,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    @Override
    public int getAuthorNid() {
       try {
-         return getConAttrs().getAuthorNid();
+         return getConceptAttributes().getAuthorNid();
       } catch (IOException e) {
          throw new RuntimeException(e);
       }
@@ -365,7 +365,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    }
 
    @Override
-   public ConceptAttributeVersionBI getConAttrs() throws IOException {
+   public ConceptAttributeVersionBI getConceptAttributes() throws IOException {
       return concept.getConceptAttributes();
    }
 
@@ -450,7 +450,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    }
 
    @Override
-   public Collection<? extends DescriptionChronicleBI> getDescs() throws IOException {
+   public Collection<? extends DescriptionChronicleBI> getDescriptions() throws IOException {
       return concept.getDescriptions();
    }
 
@@ -458,7 +458,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    public Collection<? extends DescriptionVersionBI> getDescriptionsActive() throws IOException {
       Collection<DescriptionVersionBI> returnValues = new ArrayList<>();
 
-      for (DescriptionChronicleBI desc : getDescs()) {
+      for (DescriptionChronicleBI desc : getDescriptions()) {
          returnValues.addAll(desc.getVersions(vc));
       }
 
@@ -533,7 +533,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    @Override
    public int getModuleNid() {
       try {
-         return getConAttrs().getModuleNid();
+         return getConceptAttributes().getModuleNid();
       } catch (IOException e) {
          throw new RuntimeException(e);
       }
@@ -595,7 +595,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    @Override
    public int getPathNid() {
       try {
-         return getConAttrs().getPathNid();
+         return getConceptAttributes().getPathNid();
       } catch (IOException e) {
          throw new RuntimeException(e);
       }
@@ -1035,7 +1035,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    @Override
    public int getStatusNid() {
       try {
-         return getConAttrs().getStatusNid();
+         return getConceptAttributes().getStatusNid();
       } catch (IOException e) {
          throw new RuntimeException(e);
       }
@@ -1056,7 +1056,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    @Override
    public long getTime() {
       try {
-         return getConAttrs().getTime();
+         return getConceptAttributes().getTime();
       } catch (IOException e) {
          throw new RuntimeException(e);
       }

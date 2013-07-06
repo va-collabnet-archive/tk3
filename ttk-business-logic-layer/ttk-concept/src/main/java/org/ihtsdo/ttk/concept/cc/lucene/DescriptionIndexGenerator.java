@@ -29,7 +29,7 @@ public class DescriptionIndexGenerator extends IndexGenerator {
     public void processUnfetchedConceptData(int cNid, ConceptFetcherBI fetcher) throws Exception {
         conceptCounter++;
 
-        for (DescriptionChronicleBI d : fetcher.fetch().getDescs()) {
+        for (DescriptionChronicleBI d : fetcher.fetch().getDescriptions()) {
             writer.addDocument(createDoc(d));
             descCounter++;
 

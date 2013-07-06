@@ -32,13 +32,13 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.lang.LanguageCode;
 import org.ihtsdo.ttk.api.blueprint.DescriptionCAB;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexDirective;
+import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 
 public class Description extends ConceptComponent<DescriptionRevision, Description>
         implements DescriptionAnalogBI<DescriptionRevision> {
@@ -60,11 +60,11 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
         super();
     }
 
-    public Description(ConceptChronicle enclosingConcept, TupleInput input) throws IOException {
+    public Description(ConceptChronicleBI enclosingConcept, TupleInput input) throws IOException {
         super(enclosingConcept.getNid(), input);
     }
 
-    public Description(TtkDescriptionChronicle eDesc, ConceptChronicle enclosingConcept) throws IOException {
+    public Description(TtkDescriptionChronicle eDesc, ConceptChronicleBI enclosingConcept) throws IOException {
         super(eDesc, enclosingConcept.getNid());
         initialCaseSignificant = eDesc.isInitialCaseSignificant();
         lang = eDesc.getLang();

@@ -788,12 +788,12 @@ public class ConceptChronicle implements ConceptChronicleBI, Comparable<ConceptC
 
     @Override
     public Collection<? extends IdBI> getAdditionalIds() throws IOException {
-        return getConAttrs().getAdditionalIds();
+        return getConceptAttributes().getAdditionalIds();
     }
 
     @Override
     public Collection<? extends IdBI> getAllIds() throws IOException {
-        return getConAttrs().getAllIds();
+        return getConceptAttributes().getAllIds();
     }
 
     public Collection<Integer> getAllNids() throws IOException {
@@ -885,9 +885,14 @@ public class ConceptChronicle implements ConceptChronicleBI, Comparable<ConceptC
         return data.getComponent(nid);
     }
 
+    
     @Override
-    public ConceptAttributeChronicleBI getConAttrs() throws IOException {
-        return getConceptAttributes();
+    public ConceptAttributes getConceptAttributes() throws IOException {
+        if (data != null) {
+            return data.getConceptAttributes();
+        }
+
+        return null;
     }
 
     public Collection<ConceptAttributes.Version> getConceptAttrVersions(NidSetBI allowedStatus,
@@ -903,14 +908,6 @@ public class ConceptChronicle implements ConceptChronicleBI, Comparable<ConceptC
                 contradictionMgr));
 
         return versions;
-    }
-
-    public ConceptAttributes getConceptAttributes() throws IOException {
-        if (data != null) {
-            return data.getConceptAttributes();
-        }
-
-        return null;
     }
 
     public ArrayList<ConceptAttributes> getConceptAttributesList() throws IOException {
@@ -1053,8 +1050,8 @@ public class ConceptChronicle implements ConceptChronicleBI, Comparable<ConceptC
                     return result;
                 }
 
-                if ((getDescs() != null) && (getDescs().size() > 0)) {
-                    return (Version) getDescs().iterator().next().getVersions().iterator().next();
+                if ((getDescriptions() != null) && (getDescriptions().size() > 0)) {
+                    return (Version) getDescriptions().iterator().next().getVersions().iterator().next();
                 }
 
                 return null;
@@ -1126,6 +1123,7 @@ public class ConceptChronicle implements ConceptChronicleBI, Comparable<ConceptC
         return versions;
     }
 
+    @Override
     public Collection<Description> getDescriptions() throws IOException {
         if (isCanceled()) {
             return new ConcurrentSkipListSet<>(new ComponentComparator());
@@ -1134,10 +1132,6 @@ public class ConceptChronicle implements ConceptChronicleBI, Comparable<ConceptC
         return data.getDescriptions();
     }
 
-    @Override
-    public Collection<? extends DescriptionChronicleBI> getDescs() throws IOException {
-        return getDescriptions();
-    }
 
     public Collection<Relationship> getDestRels(NidSetBI allowedTypes) throws IOException {
         if (isCanceled()) {
@@ -1731,7 +1725,7 @@ public class ConceptChronicle implements ConceptChronicleBI, Comparable<ConceptC
 
     public boolean isCanceled() throws IOException {
         if (!canceled) {
-            if ((getConAttrs() != null) && (getConAttrs().getPrimordialVersion().getTime() == Long.MIN_VALUE)) {
+            if ((getConceptAttributes() != null) && (getConceptAttributes().getPrimordialVersion().getTime() == Long.MIN_VALUE)) {
                 canceled = true;
             }
         }

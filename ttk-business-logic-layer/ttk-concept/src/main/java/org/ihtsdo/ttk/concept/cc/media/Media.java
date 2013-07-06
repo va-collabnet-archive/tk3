@@ -34,6 +34,7 @@ import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.MediaCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexDirective;
+import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 
 public class Media extends ConceptComponent<MediaRevision, Media>
         implements MediaVersionFacade {
@@ -51,11 +52,11 @@ public class Media extends ConceptComponent<MediaRevision, Media>
         super();
     }
 
-    public Media(ConceptChronicle enclosingConcept, TupleInput input) throws IOException {
+    public Media(ConceptChronicleBI enclosingConcept, TupleInput input) throws IOException {
         super(enclosingConcept.getNid(), input);
     }
 
-    public Media(TtkMediaChronicle eMedia, ConceptChronicle enclosingConcept) throws IOException {
+    public Media(TtkMediaChronicle eMedia, ConceptChronicleBI enclosingConcept) throws IOException {
         super(eMedia, enclosingConcept.getNid());
         image = eMedia.getDataBytes();
         format = eMedia.getFormat();

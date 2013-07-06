@@ -28,6 +28,7 @@ import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
 import org.ihtsdo.ttk.api.TkRelationshipType;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.api.blueprint.RefexDirective;
+import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipChronicle;
 import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipRevision;
 import org.ihtsdo.ttk.api.hash.Hashcode;
@@ -71,11 +72,11 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
       super();
    }
 
-   public Relationship(ConceptChronicle enclosingConcept, TupleInput input) throws IOException {
+   public Relationship(ConceptChronicleBI enclosingConcept, TupleInput input) throws IOException {
       super(enclosingConcept.getNid(), input);
    }
 
-   public Relationship(TtkRelationshipChronicle eRel, ConceptChronicle enclosingConcept) throws IOException {
+   public Relationship(TtkRelationshipChronicle eRel, ConceptChronicleBI enclosingConcept) throws IOException {
       super(eRel, enclosingConcept.getNid());
       c2Nid = P.s.getNidForUuids(eRel.getC2Uuid());
       characteristicNid = P.s.getNidForUuids(eRel.getCharacteristicUuid());

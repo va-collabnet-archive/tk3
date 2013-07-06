@@ -183,7 +183,7 @@ public class RefexMemberFactory {
     * @throws IOException
     */
    @SuppressWarnings("rawtypes")
-   public RefexMember create(int nid, int typeToken, int enclosingConceptNid, TupleInput input)
+   public static RefexMember create(int nid, int typeToken, int enclosingConceptNid, TupleInput input)
            throws IOException {
       ToolkitRefexType memberType = ToolkitRefexType.getFromToken(typeToken);
 
