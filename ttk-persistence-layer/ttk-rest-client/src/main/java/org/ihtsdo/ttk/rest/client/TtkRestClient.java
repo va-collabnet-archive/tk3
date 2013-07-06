@@ -49,7 +49,7 @@ import org.ihtsdo.ttk.concept.cc.concept.NidDataInMemory;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 import org.ihtsdo.ttk.concept.cc.termstore.Termstore;
 import org.ihtsdo.ttk.fx.FxComponentReference;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
@@ -187,44 +187,44 @@ public class TtkRestClient extends Termstore {
       throw new UnsupportedOperationException("Not supported yet.");
    }
 
-   private FxConcept getFxConcept(UUID conceptUUID, UUID vcUuid) {
+   private FxConceptChronicle getFxConcept(UUID conceptUUID, UUID vcUuid) {
       WebResource    r        = restClient.resource(serverUrlStr + "fx-concept/" + conceptUUID + "/"
                                    + vcUuid);
       ClientResponse response = r.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
 
-      return response.getEntity(FxConcept.class);
+      return response.getEntity(FxConceptChronicle.class);
    }
 
    @Override
-   public FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc)
+   public FxConceptChronicle getFxConcept(UUID conceptUUID, ViewCoordinate vc)
            throws IOException, ContradictionException {
       return getFxConcept(conceptUUID, vc.getVcUuid());
    }
 
    @Override
-   public FxConcept getFxConcept(FxComponentReference ref, UUID vcUuid, VersionPolicy versionPolicy,
+   public FxConceptChronicle getFxConcept(FxComponentReference ref, UUID vcUuid, VersionPolicy versionPolicy,
                                  RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
       return getFxConcept(ref.getUuid(), vcUuid, versionPolicy, refexPolicy, relationshipPolicy);
    }
 
    @Override
-   public FxConcept getFxConcept(FxComponentReference ref, ViewCoordinate vc, VersionPolicy versionPolicy,
+   public FxConceptChronicle getFxConcept(FxComponentReference ref, ViewCoordinate vc, VersionPolicy versionPolicy,
                                  RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
       return getFxConcept(ref, vc.getVcUuid(), versionPolicy, refexPolicy, relationshipPolicy);
    }
 
    @Override
-   public FxConcept getFxConcept(UUID conceptUUID, UUID vcUuid, VersionPolicy versionPolicy,
+   public FxConceptChronicle getFxConcept(UUID conceptUUID, UUID vcUuid, VersionPolicy versionPolicy,
                                  RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
       WebResource r = restClient.resource(serverUrlStr + "fx-concept/" + conceptUUID + "/" + vcUuid + "/"
                          + versionPolicy + "/" + refexPolicy + "/" + relationshipPolicy);
       ClientResponse response = r.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
 
-      return response.getEntity(FxConcept.class);
+      return response.getEntity(FxConceptChronicle.class);
    }
 
    @Override
-   public FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc, VersionPolicy versionPolicy,
+   public FxConceptChronicle getFxConcept(UUID conceptUUID, ViewCoordinate vc, VersionPolicy versionPolicy,
                                  RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy) {
       return getFxConcept(conceptUUID, vc.getVcUuid(), versionPolicy, refexPolicy, relationshipPolicy);
    }
