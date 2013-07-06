@@ -19,7 +19,7 @@ public class SpecFactory {
             return new ConceptSpec(cv.getDescriptionsActive().iterator().next().getText(),
                     concept.getPrimordialUuid());
         } catch (ContradictionException ex) {
-            for (DescriptionChronicleBI desc : concept.getDescs()) {
+            for (DescriptionChronicleBI desc : concept.getDescriptions()) {
                 for (DescriptionVersionBI dv : desc.getVersions(vc)) {
                     return new ConceptSpec(dv.getText(),
                             concept.getPrimordialUuid());
@@ -35,7 +35,7 @@ public class SpecFactory {
                     concept.getPrimordialUuid());
         } catch (ContradictionException ex) {
             return new ConceptSpec(
-                    concept.getDescs().iterator().next().getVersions().iterator().next().getText(),
+                    concept.getDescriptions().iterator().next().getVersions().iterator().next().getText(),
                     concept.getPrimordialUuid());
         }
     }

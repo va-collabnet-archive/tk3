@@ -42,7 +42,7 @@ public interface ConceptChronicleBI extends ComponentChronicleBI<ConceptVersionB
 
    //~--- get methods ---------------------------------------------------------
 
-   ConceptAttributeChronicleBI getConAttrs() throws IOException;
+   ConceptAttributeChronicleBI getConceptAttributes() throws IOException;
 
    RefexVersionBI<?> getCurrentRefsetMemberForComponent(ViewCoordinate vc, int componentNid)
            throws IOException;
@@ -65,7 +65,7 @@ public interface ConceptChronicleBI extends ComponentChronicleBI<ConceptVersionB
    public Collection<? extends RefexVersionBI<?>> getCurrentRefsetMembers(ViewCoordinate vc, Long cutoffTime)
            throws IOException;
 
-   Collection<? extends DescriptionChronicleBI> getDescs() throws IOException;
+   Collection<? extends DescriptionChronicleBI> getDescriptions() throws IOException;
 
    long getLastModificationSequence();
 

@@ -188,7 +188,7 @@ public class ConceptSpec implements SpecBI {
    private void validateDescription(ConceptChronicleBI local) throws IOException, ContradictionException {
       boolean found = false;
 
-      for (DescriptionChronicleBI desc : local.getDescs()) {
+      for (DescriptionChronicleBI desc : local.getDescriptions()) {
          for (DescriptionVersionBI descv : desc.getVersions()) {
             if (descv.getText().equals(description)) {
                found = true;
