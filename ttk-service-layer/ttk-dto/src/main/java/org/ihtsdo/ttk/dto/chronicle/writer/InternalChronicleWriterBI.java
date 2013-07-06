@@ -13,12 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.ttk.dto.chronicle;
+package org.ihtsdo.ttk.dto.chronicle.writer;
+
+import java.io.IOException;
+import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 
 /**
  *
  * @author kec
  */
-public class ChronicleReader {
+public interface InternalChronicleWriterBI {
+
+    void write(TtkConceptChronicle ttkConceptChronicle, long time) throws IOException;
+
+    void write(ConceptChronicleBI chronicleToWrite, long time) throws IOException;
     
+    void close() throws IOException;
 }

@@ -15,26 +15,19 @@
  */
 package org.ihtsdo.ttk.dto.chronicle.writer;
 
-import java.io.DataOutput;
 import java.io.IOException;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
-import org.ihtsdo.ttk.dto.chronicle.ChronicleWriter;
+import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 
 /**
  *
  * @author kec
  */
-public class ExternalChronicleWriter extends ChronicleWriter {
+public interface ExternalChronicleWriterBI {
 
-    public ExternalChronicleWriter(DataOutput out) {
-        super(out);
-    }
+    void write(TtkConceptChronicle ttkConceptChronicle, long time) throws IOException;
+
+    void write(ConceptChronicleBI chronicleToWrite, long time) throws IOException;
     
-    public void write(long time, ConceptChronicleBI conceptChronicle) throws IOException {
-        // find a way to write out in a sorted order based on 
-        // 1. nid
-        // 2. time
-        throw new UnsupportedOperationException();
-    }
-    
+    void close() throws IOException;
 }

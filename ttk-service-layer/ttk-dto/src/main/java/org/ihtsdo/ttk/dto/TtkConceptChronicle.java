@@ -138,7 +138,7 @@ public class TtkConceptChronicle {
    public TtkConceptChronicle(ConceptChronicleBI c) throws IOException {
       annotationStyleRefex      = c.isAnnotationStyleRefex();
       annotationIndexStyleRefex = c.isAnnotationIndex();
-      conceptAttributes         = new TtkConceptAttributesChronicle(c.getConAttrs());
+      conceptAttributes         = new TtkConceptAttributesChronicle(c.getConceptAttributes());
       primordialUuid            = conceptAttributes.primordialUuid;
       relationships             = new ArrayList<>(c.getRelationshipsOutgoing().size());
 
@@ -146,9 +146,9 @@ public class TtkConceptChronicle {
          relationships.add(new TtkRelationshipChronicle(rel));
       }
 
-      descriptions = new ArrayList<>(c.getDescs().size());
+      descriptions = new ArrayList<>(c.getDescriptions().size());
 
-      for (DescriptionChronicleBI desc : c.getDescs()) {
+      for (DescriptionChronicleBI desc : c.getDescriptions()) {
          descriptions.add(new TtkDescriptionChronicle(desc));
       }
 

@@ -15,12 +15,17 @@
  */
 package org.ihtsdo.ttk.dto.chronicle.reader;
 
-import org.ihtsdo.ttk.dto.chronicle.ChronicleReader;
+import java.io.IOException;
+import java.nio.file.Path;
+import org.ihtsdo.ttk.dto.chronicle.FileChronicleZipFSP;
 
 /**
  *
  * @author kec
  */
-public class InternalChronicleReader extends ChronicleReader {
+public class InternalChronicleReaderZipFSP extends FileChronicleZipFSP {
+    public InternalChronicleReaderZipFSP(Path chroniclePath) throws IOException {
+        super(chroniclePath, AccessType.OPEN);
+    }
     
 }
