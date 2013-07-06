@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ihtsdo.ttk.fx.FxTaxonomyReferenceWithConcept;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.relationship.FxRelationshipChronicle;
 import org.ihtsdo.ttk.fx.concept.component.relationship.FxRelationshipVersion;
 import org.ihtsdo.ttk.helpers.concurrency.FutureHelper;
@@ -48,7 +48,7 @@ public final class SimTreeCell extends TreeCell<FxTaxonomyReferenceWithConcept> 
     //~--- methods -------------------------------------------------------------
     private void openOrCloseParent(SimTreeItem treeItem) throws IOException, ContradictionException {
         FxTaxonomyReferenceWithConcept value = treeItem.getValue();
-        FxConcept c = value.getConcept();
+        FxConceptChronicle c = value.getConcept();
 
         if (c != null) {
             treeItem.setValue(null);

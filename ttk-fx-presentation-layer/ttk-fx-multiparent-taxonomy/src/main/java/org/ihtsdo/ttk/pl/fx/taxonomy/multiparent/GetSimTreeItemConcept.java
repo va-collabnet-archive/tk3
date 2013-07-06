@@ -11,7 +11,7 @@ import javafx.application.Platform;
 
 import org.ihtsdo.ttk.fx.FxComponentReference;
 import org.ihtsdo.ttk.fx.FxTaxonomyReferenceWithConcept;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.relationship.FxRelationshipChronicle;
 import org.ihtsdo.ttk.fx.concept.component.relationship.FxRelationshipVersion;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
@@ -36,7 +36,7 @@ class GetSimTreeItemConcept implements Callable<Boolean> {
    RelationshipPolicy     relationshipPolicy =
       RelationshipPolicy.ORIGINATING_AND_DESTINATION_TAXONOMY_RELATIONSHIPS;
    RefexPolicy refexPolicy = RefexPolicy.ANNOTATION_MEMBERS;
-   FxConcept   concept;
+   FxConceptChronicle   concept;
    SimTreeItem treeItem;
 
    public GetSimTreeItemConcept(SimTreeItem treeItem) {

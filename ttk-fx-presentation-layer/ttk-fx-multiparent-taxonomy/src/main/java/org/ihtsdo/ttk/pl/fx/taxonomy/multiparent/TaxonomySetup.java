@@ -42,7 +42,7 @@ import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.ttk.api.metadata.binding.Taxonomies;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
 import org.ihtsdo.ttk.fx.FxTaxonomyReferenceWithConcept;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
@@ -102,7 +102,7 @@ public class TaxonomySetup implements EventHandler<ActionEvent> {
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                if (newValue instanceof SimTreeItem) {
                   SimTreeItem simTreeItem = (SimTreeItem) newValue;
-                  FxConcept   concept     = simTreeItem.getValue().getConcept();
+                  FxConceptChronicle   concept     = simTreeItem.getValue().getConcept();
 
                   conceptService.setConceptUuid(simTreeItem.getValue().getConcept().getPrimordialUuid());
                   conceptService.setViewCoordinateUuid(concept.getViewCoordinateUuid());

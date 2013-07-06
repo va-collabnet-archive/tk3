@@ -27,7 +27,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 
 import org.ihtsdo.ttk.fx.FxTaxonomyReferenceWithConcept;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.context.TerminologyContext;
 
 /**
@@ -86,7 +86,7 @@ public class TaxonomyView extends TreeView<FxTaxonomyReferenceWithConcept>
       if (newValue == null) {
          context.getContextProperty().setValue(null);
       } else {
-         FxConcept value = newValue.getValue().getConcept();
+         FxConceptChronicle value = newValue.getValue().getConcept();
          context.getContextProperty().setValue(value);
       }
 
