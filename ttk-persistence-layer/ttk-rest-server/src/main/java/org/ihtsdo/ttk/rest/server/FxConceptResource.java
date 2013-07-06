@@ -7,7 +7,7 @@ package org.ihtsdo.ttk.rest.server;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
@@ -118,7 +118,7 @@ public class FxConceptResource {
    @GET
    @Path("{id}/{vcUuid}")
    @Produces("application/xml")
-   public FxConcept getConceptXml(@PathParam("id") String id, @PathParam("vcUuid") String vcUuid)
+   public FxConceptChronicle getConceptXml(@PathParam("id") String id, @PathParam("vcUuid") String vcUuid)
            throws IOException, ContradictionException {
       ConceptChronicleBI c;
 
@@ -131,14 +131,14 @@ public class FxConceptResource {
       ViewCoordinate        vc   = ts.getViewCoordinate(UUID.fromString(vcUuid));
       TerminologySnapshotDI snap = ts.getSnapshot(vc);
 
-      return new FxConcept(snap, c, VersionPolicy.ALL_VERSIONS, RefexPolicy.REFEX_MEMBERS,
+      return new FxConceptChronicle(snap, c, VersionPolicy.ALL_VERSIONS, RefexPolicy.REFEX_MEMBERS,
                            RelationshipPolicy.ORIGINATING_RELATIONSHIPS);
    }
 
    @GET
    @Path("{id}/{vcUuid}/{versionPolicy}/{refexPolicy}/{relationshipPolicy}")
    @Produces("application/xml")
-   public FxConcept getConceptXmlPerPolicy(@PathParam("id") String id, @PathParam("vcUuid") String vcUuid,
+   public FxConceptChronicle getConceptXmlPerPolicy(@PathParam("id") String id, @PathParam("vcUuid") String vcUuid,
            @PathParam("versionPolicy") VersionPolicy versionPolicy,
            @PathParam("refexPolicy") RefexPolicy refexPolicy,
            @PathParam("relationshipPolicy") RelationshipPolicy relationshipPolicy)
@@ -154,7 +154,7 @@ public class FxConceptResource {
       ViewCoordinate        vc   = ts.getViewCoordinate(UUID.fromString(vcUuid));
       TerminologySnapshotDI snap = ts.getSnapshot(vc);
 
-      return new FxConcept(snap, c, versionPolicy, refexPolicy, relationshipPolicy);
+      return new FxConceptChronicle(snap, c, versionPolicy, refexPolicy, relationshipPolicy);
    }
 
    @GET

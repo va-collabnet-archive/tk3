@@ -11,7 +11,7 @@ import java.util.UUID;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.StreamingOutput;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
@@ -61,7 +61,7 @@ public class ConceptResource {
             uuid = ts.getUuidPrimordialForNid(Integer.parseInt(id));
         }
         ViewCoordinate vc = StandardViewCoordinates.getSnomedInferredLatest();
-        FxConcept fxc = ts.getFxConcept(uuid, vc,
+        FxConceptChronicle fxc = ts.getFxConcept(uuid, vc,
                     VersionPolicy.ACTIVE_VERSIONS,
                     RefexPolicy.ANNOTATION_MEMBERS,
                     RelationshipPolicy.ORIGINATING_AND_DESTINATION_RELATIONSHIPS);
