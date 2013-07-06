@@ -10,7 +10,7 @@ package org.ihtsdo.ttk.pl.fx.helper;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
@@ -23,7 +23,7 @@ import java.util.UUID;
  *
  * @author kec
  */
-public class GetConceptService extends Service<FxConcept> {
+public class GetConceptService extends Service<FxConceptChronicle> {
    private VersionPolicy      versionPolicy      = VersionPolicy.ALL_VERSIONS;
    private RefexPolicy        refexPolicy        = RefexPolicy.REFEX_MEMBERS;
    private RelationshipPolicy relationshipPolicy =
@@ -32,7 +32,7 @@ public class GetConceptService extends Service<FxConcept> {
    private UUID viewCoordinateUuid;
 
    @Override
-   protected Task<FxConcept> createTask() {
+   protected Task<FxConceptChronicle> createTask() {
       return new GetConceptTask(conceptUuid, versionPolicy, refexPolicy, relationshipPolicy,
                                 viewCoordinateUuid);
    }

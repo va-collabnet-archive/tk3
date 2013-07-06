@@ -9,7 +9,7 @@ package org.ihtsdo.ttk.pl.fx.helper;
 
 import javafx.concurrent.Task;
 
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
@@ -23,7 +23,7 @@ import org.ihtsdo.ttk.fx.store.FxTs;
  *
  * @author kec
  */
-public class GetConceptTask extends Task<FxConcept> {
+public class GetConceptTask extends Task<FxConceptChronicle> {
    private VersionPolicy      versionPolicy      = VersionPolicy.ALL_VERSIONS;
    private RefexPolicy        refexPolicy        = RefexPolicy.REFEX_MEMBERS;
    private RelationshipPolicy relationshipPolicy =
@@ -43,7 +43,7 @@ public class GetConceptTask extends Task<FxConcept> {
    }
 
    @Override
-   public FxConcept call() throws Exception {
+   public FxConceptChronicle call() throws Exception {
       return FxTs.get().getFxConcept(conceptUuid, viewCoordinateUuid, versionPolicy,
           refexPolicy, relationshipPolicy);
    }
