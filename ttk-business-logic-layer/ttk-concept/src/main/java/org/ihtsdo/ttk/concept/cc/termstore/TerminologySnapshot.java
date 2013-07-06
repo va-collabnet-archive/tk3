@@ -28,7 +28,7 @@ import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptVersion;
 import org.ihtsdo.ttk.fx.FxComponentReference;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
@@ -726,11 +726,11 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     * @throws IOException
     */
    @Override
-   public FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc)
+   public FxConceptChronicle getFxConcept(UUID conceptUUID, ViewCoordinate vc)
            throws IOException, ContradictionException {
       ConceptVersionBI c = getConceptVersion(conceptUUID);
 
-      return new FxConcept(this, c, VersionPolicy.ACTIVE_VERSIONS, RefexPolicy.REFEX_MEMBERS,
+      return new FxConceptChronicle(this, c, VersionPolicy.ACTIVE_VERSIONS, RefexPolicy.REFEX_MEMBERS,
                            RelationshipPolicy.ORIGINATING_RELATIONSHIPS);
    }
 
@@ -748,7 +748,7 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     * @throws IOException
     */
    @Override
-   public FxConcept getFxConcept(FxComponentReference ref, RefexPolicy refexPolicy,
+   public FxConceptChronicle getFxConcept(FxComponentReference ref, RefexPolicy refexPolicy,
                                  RelationshipPolicy relationshipPolicy)
            throws IOException, ContradictionException {
       ConceptVersionBI c;
@@ -759,7 +759,7 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
          c = getConceptVersion(ref.getUuid());
       }
 
-      return new FxConcept(this, c, VersionPolicy.ACTIVE_VERSIONS, refexPolicy, relationshipPolicy);
+      return new FxConceptChronicle(this, c, VersionPolicy.ACTIVE_VERSIONS, refexPolicy, relationshipPolicy);
    }
 
    /**
@@ -776,12 +776,12 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     * @throws IOException
     */
    @Override
-   public FxConcept getFxConcept(UUID conceptUUID, RefexPolicy refexPolicy,
+   public FxConceptChronicle getFxConcept(UUID conceptUUID, RefexPolicy refexPolicy,
                                  RelationshipPolicy relationshipPolicy)
            throws IOException, ContradictionException {
       ConceptVersionBI c = getConceptVersion(conceptUUID);
 
-      return new FxConcept(this, c, VersionPolicy.ACTIVE_VERSIONS, refexPolicy, relationshipPolicy);
+      return new FxConceptChronicle(this, c, VersionPolicy.ACTIVE_VERSIONS, refexPolicy, relationshipPolicy);
    }
 
    /**
