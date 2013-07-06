@@ -54,6 +54,7 @@ import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.concept.OFFSETS;
+import org.ihtsdo.ttk.concept.cc.concept.TtkConceptChronicleConverter;
 import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
 import org.ihtsdo.ttk.fx.progress.AggregateProgressItem;
 import org.ihtsdo.ttk.lookup.properties.AllowItemCancel;
@@ -574,6 +575,8 @@ public class Bdb {
                     P.s = ts;
                 }
                 Looker.add(ts, UUID.randomUUID(), "Embedded BdbTerminologyStore");
+                Looker.add(new TtkConceptChronicleConverter(), 
+                        UUID.randomUUID(), "TtkConceptChronicle to ConceptChronicleDTO converter");
                 ConceptChronicle.reset();
 
                 ReferenceConcepts.reset();

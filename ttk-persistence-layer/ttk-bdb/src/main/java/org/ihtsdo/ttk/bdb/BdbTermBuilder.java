@@ -67,7 +67,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
     }
 
     public ConceptAttributes getConAttr(ConceptAttributeAB blueprint) throws IOException, InvalidCAB {
-        ConceptAttributes cac = (ConceptAttributes) P.s.getConcept(blueprint.getComponentUuid()).getConAttrs();
+        ConceptAttributes cac = (ConceptAttributes) P.s.getConcept(blueprint.getComponentUuid()).getConceptAttributes();
         if (cac == null) {
             throw new InvalidCAB("ConAttrAB can only be used for amendment, not creation."
                     + " Use ConceptCB instead. " + blueprint);
@@ -493,7 +493,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         } else {
             ConceptChronicle concept = Bdb.getConceptForComponent(cc.getNid());
             if (concept.isCanceled() || concept.getPrimordialUuid().toString().length() == 0
-                    || concept.getConAttrs().getVersions().isEmpty()) {
+                    || concept.getConceptAttributes().getVersions().isEmpty()) {
                 return construct(blueprint);
             } else {
                 throw new InvalidCAB(

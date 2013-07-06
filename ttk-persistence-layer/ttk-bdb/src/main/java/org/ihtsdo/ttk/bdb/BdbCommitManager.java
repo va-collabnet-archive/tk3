@@ -464,7 +464,7 @@ public class BdbCommitManager {
       ComponentBI  component = Bdb.getComponent(m.getReferencedComponentNid());
 
         if (component instanceof ConceptChronicle) {
-            component = ((ConceptChronicle) component).getConAttrs();
+            component = ((ConceptChronicle) component).getConceptAttributes();
         }
 
         ConceptComponent comp = (ConceptComponent) component;
