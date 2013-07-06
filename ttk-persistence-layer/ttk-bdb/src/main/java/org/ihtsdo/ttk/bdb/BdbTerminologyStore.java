@@ -40,7 +40,7 @@ import org.ihtsdo.ttk.concept.cc.termstore.Termstore;
 import org.ihtsdo.ttk.concept.cs.CsProperty;
 import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 import org.ihtsdo.ttk.fx.FxComponentReference;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
@@ -398,17 +398,17 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc)
+   public FxConceptChronicle getFxConcept(UUID conceptUUID, ViewCoordinate vc)
            throws IOException, ContradictionException {
       TerminologySnapshotDI ts = getSnapshot(vc);
       ConceptVersionBI      c  = ts.getConceptVersion(conceptUUID);
 
-      return new FxConcept(ts, c, VersionPolicy.ALL_VERSIONS, RefexPolicy.REFEX_MEMBERS,
+      return new FxConceptChronicle(ts, c, VersionPolicy.ALL_VERSIONS, RefexPolicy.REFEX_MEMBERS,
                            RelationshipPolicy.ORIGINATING_RELATIONSHIPS);
    }
 
    @Override
-   public FxConcept getFxConcept(FxComponentReference ref, UUID viewCoordinateUuid,
+   public FxConceptChronicle getFxConcept(FxComponentReference ref, UUID viewCoordinateUuid,
                                  VersionPolicy versionPolicy, RefexPolicy refexPolicy,
                                  RelationshipPolicy relationshipPolicy)
            throws IOException, ContradictionException {
@@ -421,11 +421,11 @@ public class BdbTerminologyStore extends Termstore {
          c = ts.getConceptVersion(ref.getUuid());
       }
 
-      return new FxConcept(ts, c, versionPolicy, refexPolicy, relationshipPolicy);
+      return new FxConceptChronicle(ts, c, versionPolicy, refexPolicy, relationshipPolicy);
    }
 
    @Override
-   public FxConcept getFxConcept(FxComponentReference ref, ViewCoordinate vc, VersionPolicy versionPolicy,
+   public FxConceptChronicle getFxConcept(FxComponentReference ref, ViewCoordinate vc, VersionPolicy versionPolicy,
                                  RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
            throws IOException, ContradictionException {
       TerminologySnapshotDI ts = getSnapshot(vc);
@@ -437,27 +437,27 @@ public class BdbTerminologyStore extends Termstore {
          c = ts.getConceptVersion(ref.getUuid());
       }
 
-      return new FxConcept(ts, c, versionPolicy, refexPolicy, relationshipPolicy);
+      return new FxConceptChronicle(ts, c, versionPolicy, refexPolicy, relationshipPolicy);
    }
 
    @Override
-   public FxConcept getFxConcept(UUID conceptUUID, UUID viewCoordinateUuid, VersionPolicy versionPolicy,
+   public FxConceptChronicle getFxConcept(UUID conceptUUID, UUID viewCoordinateUuid, VersionPolicy versionPolicy,
                                  RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
            throws IOException, ContradictionException {
       TerminologySnapshotDI ts = getSnapshot(getViewCoordinate(viewCoordinateUuid));
       ConceptVersionBI      c  = ts.getConceptVersion(conceptUUID);
 
-      return new FxConcept(ts, c, versionPolicy, refexPolicy, relationshipPolicy);
+      return new FxConceptChronicle(ts, c, versionPolicy, refexPolicy, relationshipPolicy);
    }
 
    @Override
-   public FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc, VersionPolicy versionPolicy,
+   public FxConceptChronicle getFxConcept(UUID conceptUUID, ViewCoordinate vc, VersionPolicy versionPolicy,
                                  RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
            throws IOException, ContradictionException {
       TerminologySnapshotDI ts = getSnapshot(vc);
       ConceptVersionBI      c  = ts.getConceptVersion(conceptUUID);
 
-      return new FxConcept(ts, c, versionPolicy, refexPolicy, relationshipPolicy);
+      return new FxConceptChronicle(ts, c, versionPolicy, refexPolicy, relationshipPolicy);
    }
 
    @Override
