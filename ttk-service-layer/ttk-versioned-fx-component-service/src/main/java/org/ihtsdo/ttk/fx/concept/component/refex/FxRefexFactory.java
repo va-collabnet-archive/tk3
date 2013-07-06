@@ -23,7 +23,7 @@ package org.ihtsdo.ttk.fx.concept.component.refex;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.TerminologySnapshotDI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.refex.type_array_of_bytearray.FxRefexArrayOfByteArrayChronicle;
 import org.ihtsdo.ttk.fx.concept.component.refex.type_boolean.FxRefexBooleanChronicle;
 import org.ihtsdo.ttk.fx.concept.component.refex.type_comp.FxRefexCompChronicle;
@@ -68,7 +68,7 @@ public class FxRefexFactory {
     * @throws ContradictionException
     * @throws IOException
     */
-   public static FxRefexChronicle make(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)
+   public static FxRefexChronicle make(TerminologySnapshotDI ss, FxConceptChronicle concept, RefexChronicleBI another)
            throws IOException, ContradictionException {
       switch (another.getRefexType()) {
       case ARRAY_BYTEARRAY :

@@ -7,7 +7,7 @@ import org.ihtsdo.ttk.api.TerminologySnapshotDI;
 import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayVersionBI;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.refex.FX_REFEX_TYPE;
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexChronicle;
 
@@ -50,7 +50,7 @@ public class FxRefexArrayOfByteArrayChronicle
     * @throws ContradictionException
     * @throws IOException
     */
-   public FxRefexArrayOfByteArrayChronicle(TerminologySnapshotDI ss, FxConcept concept,
+   public FxRefexArrayOfByteArrayChronicle(TerminologySnapshotDI ss, FxConceptChronicle concept,
        RefexChronicleBI another)
            throws IOException, ContradictionException {
       super(ss, concept, (RefexVersionBI) another.getPrimordialVersion());

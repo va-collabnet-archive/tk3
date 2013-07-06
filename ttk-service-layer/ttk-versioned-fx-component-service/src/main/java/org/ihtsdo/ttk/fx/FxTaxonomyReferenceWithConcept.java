@@ -23,7 +23,7 @@ package org.ihtsdo.ttk.fx;
 import javafx.beans.property.SimpleObjectProperty;
 
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.relationship.FxRelationshipVersion;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -37,7 +37,7 @@ import java.util.UUID;
  * @author kec
  */
 public class FxTaxonomyReferenceWithConcept {
-   private final SimpleObjectProperty<FxConcept>             conceptProperty             =
+   private final SimpleObjectProperty<FxConceptChronicle>             conceptProperty             =
       new SimpleObjectProperty<>();
    private final SimpleObjectProperty<FxRelationshipVersion> relationshipVersionProperty =
       new SimpleObjectProperty<>();
@@ -58,7 +58,7 @@ public class FxTaxonomyReferenceWithConcept {
       relationshipVersionProperty.set(rv);
    }
 
-   public SimpleObjectProperty<FxConcept> conceptProperty() {
+   public SimpleObjectProperty<FxConceptChronicle> conceptProperty() {
       return conceptProperty;
    }
 
@@ -89,7 +89,7 @@ public class FxTaxonomyReferenceWithConcept {
       return relationshipVersionProperty.get().typeReferenceProperty();
    }
 
-   public FxConcept getConcept() {
+   public FxConceptChronicle getConcept() {
       return conceptProperty.get();
    }
 
@@ -104,7 +104,7 @@ public class FxTaxonomyReferenceWithConcept {
       return relationshipVersionProperty.get().getTypeReference();
    }
 
-   public void setConcept(FxConcept concept) {
+   public void setConcept(FxConceptChronicle concept) {
       conceptProperty.set(concept);
    }
 

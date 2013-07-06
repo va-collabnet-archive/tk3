@@ -3,7 +3,7 @@ package org.ihtsdo.ttk.fx.concept.component.attribute;
 //~--- non-JDK imports --------------------------------------------------------
 
 
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.FxComponentChronicle;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.TerminologySnapshotDI;
@@ -26,7 +26,7 @@ public class FxConceptAttributesChronicle
       super();
    }
 
-   public FxConceptAttributesChronicle(TerminologySnapshotDI ss, FxConcept concept,
+   public FxConceptAttributesChronicle(TerminologySnapshotDI ss, FxConceptChronicle concept,
            ConceptAttributeChronicleBI another)
            throws IOException, ContradictionException {
       super(ss, concept, another.getPrimordialVersion());

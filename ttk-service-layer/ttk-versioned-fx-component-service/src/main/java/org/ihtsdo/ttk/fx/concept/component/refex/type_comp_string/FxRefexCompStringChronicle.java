@@ -4,7 +4,7 @@ package org.ihtsdo.ttk.fx.concept.component.refex.type_comp_string;
 
 import javafx.collections.FXCollections;
 
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.refex.FX_REFEX_TYPE;
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexChronicle;
 import org.ihtsdo.ttk.api.ContradictionException;
@@ -32,7 +32,7 @@ public class FxRefexCompStringChronicle
       super();
    }
 
-   public FxRefexCompStringChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)
+   public FxRefexCompStringChronicle(TerminologySnapshotDI ss, FxConceptChronicle concept, RefexChronicleBI another)
            throws IOException, ContradictionException {
       super(ss, concept, (RefexVersionBI) another.getPrimordialVersion());
    }

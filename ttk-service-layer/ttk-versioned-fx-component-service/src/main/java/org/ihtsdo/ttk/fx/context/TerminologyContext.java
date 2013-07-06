@@ -25,7 +25,7 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import javafx.scene.Node;
 
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.lookup.Looker;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -39,7 +39,7 @@ import java.util.UUID;
 public class TerminologyContext {
 
    /** Field description */
-   private final ObjectProperty<FxConcept> context = new SimpleObjectProperty<>(this, "context");
+   private final ObjectProperty<FxConceptChronicle> context = new SimpleObjectProperty<>(this, "context");
 
    /** Field description */
    private String contextName;
@@ -82,7 +82,7 @@ public class TerminologyContext {
     *
     * @return
     */
-   public FxConcept getContext() {
+   public FxConceptChronicle getContext() {
       return context.get();
    }
 
@@ -102,7 +102,7 @@ public class TerminologyContext {
     *
     * @return
     */
-   public ObjectProperty<FxConcept> getContextProperty() {
+   public ObjectProperty<FxConceptChronicle> getContextProperty() {
       return context;
    }
 

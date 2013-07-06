@@ -18,7 +18,7 @@ package org.ihtsdo.ttk.fx.store;
 import java.io.IOException;
 import java.util.UUID;
 import org.ihtsdo.ttk.fx.FxComponentReference;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
 import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
 import org.ihtsdo.ttk.api.ContradictionException;
@@ -31,12 +31,12 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
  */
 public interface FxTerminologySnapshotDI extends TerminologySnapshotDI {
    
-   FxConcept getFxConcept(UUID conceptUUID, ViewCoordinate vc) throws IOException, ContradictionException;
+   FxConceptChronicle getFxConcept(UUID conceptUUID, ViewCoordinate vc) throws IOException, ContradictionException;
 
-   FxConcept getFxConcept(FxComponentReference ref, RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
+   FxConceptChronicle getFxConcept(FxComponentReference ref, RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
            throws IOException, ContradictionException;
 
-   FxConcept getFxConcept(UUID conceptUUID, RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
+   FxConceptChronicle getFxConcept(UUID conceptUUID, RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
            throws IOException, ContradictionException;
 
     

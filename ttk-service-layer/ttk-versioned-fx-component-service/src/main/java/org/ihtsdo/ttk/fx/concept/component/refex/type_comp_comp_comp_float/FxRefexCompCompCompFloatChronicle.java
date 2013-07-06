@@ -2,7 +2,7 @@ package org.ihtsdo.ttk.fx.concept.component.refex.type_comp_comp_comp_float;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.refex.FX_REFEX_TYPE;
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexChronicle;
 import org.ihtsdo.ttk.api.ContradictionException;
@@ -29,7 +29,7 @@ public class FxRefexCompCompCompFloatChronicle
       super();
    }
 
-   public FxRefexCompCompCompFloatChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexChronicleBI another)
+   public FxRefexCompCompCompFloatChronicle(TerminologySnapshotDI ss, FxConceptChronicle concept, RefexChronicleBI another)
            throws IOException, ContradictionException {
       super(ss, concept, (RefexVersionBI) another.getPrimordialVersion());
    }

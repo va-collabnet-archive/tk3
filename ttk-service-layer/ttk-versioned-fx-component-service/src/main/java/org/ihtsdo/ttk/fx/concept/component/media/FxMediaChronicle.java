@@ -3,7 +3,7 @@ package org.ihtsdo.ttk.fx.concept.component.media;
 //~--- non-JDK imports --------------------------------------------------------
 
 
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.FxComponentChronicle;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.TerminologySnapshotDI;
@@ -31,7 +31,7 @@ public class FxMediaChronicle extends FxComponentChronicle<FxMediaVersion, Media
       super();
    }
 
-   public FxMediaChronicle(TerminologySnapshotDI ss, FxConcept concept, MediaChronicleBI another)
+   public FxMediaChronicle(TerminologySnapshotDI ss, FxConceptChronicle concept, MediaChronicleBI another)
            throws IOException, ContradictionException {
       super(ss, concept, another.getPrimordialVersion());
 

@@ -20,7 +20,7 @@ package org.ihtsdo.ttk.fx.concept.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.identifier.FxIdentifier;
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexChronicle;
 import org.ihtsdo.ttk.api.ComponentVersionBI;
@@ -89,7 +89,7 @@ public class FxComponentVersion<T extends FxComponentChronicle, V extends FxComp
    }
 
    @XmlTransient
-   public FxConcept getConcept() {
+   public FxConceptChronicle getConcept() {
       return this.chronicle.concept;
    }
 

@@ -6,7 +6,7 @@ import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.TerminologySnapshotDI;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.fx.FxComponentReference;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.FxComponentChronicle;
 import org.ihtsdo.ttk.fx.concept.component.FxComponentVersion;
 import org.ihtsdo.ttk.fx.concept.component.refex.type_array_of_bytearray.FxRefexArrayOfByteArrayChronicle;
@@ -90,7 +90,7 @@ public abstract class FxRefexChronicle<V extends FxComponentVersion, T extends R
     * @throws ContradictionException
     * @throws IOException
     */
-   public FxRefexChronicle(TerminologySnapshotDI ss, FxConcept concept, RefexVersionBI another)
+   public FxRefexChronicle(TerminologySnapshotDI ss, FxConceptChronicle concept, RefexVersionBI another)
            throws IOException, ContradictionException {
       super(ss, concept, another);
       this.referencedComponentReference      = new FxComponentReference(ss,

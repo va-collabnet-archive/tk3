@@ -56,7 +56,7 @@ import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexFactory;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement()
-public class FxConcept implements Serializable {
+public class FxConceptChronicle implements Serializable {
    public static final String                                            PADDING          = "     ";
    public static final long                                              serialVersionUID = 1;
    @XmlElementWrapper(name = "descriptionList")
@@ -99,7 +99,7 @@ public class FxConcept implements Serializable {
    @XmlElement()
    private VersionPolicy                                                 versionPolicy;
 
-   public FxConcept() {
+   public FxConceptChronicle() {
       super();
       _originRelationships      =
          FXCollections.observableArrayList(new ArrayList<FxRelationshipChronicle>(1));
@@ -110,7 +110,7 @@ public class FxConcept implements Serializable {
       _refsetMembers = FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?, ?>>(0));
    }
 
-   public FxConcept(TerminologySnapshotDI ss, ConceptChronicleBI c, VersionPolicy versionPolicy,
+   public FxConceptChronicle(TerminologySnapshotDI ss, ConceptChronicleBI c, VersionPolicy versionPolicy,
                     RefexPolicy refexPolicy, RelationshipPolicy relationshipPolicy)
            throws IOException, ContradictionException {
       this.versionPolicy      = versionPolicy;
@@ -354,7 +354,7 @@ NEXT_REL:
       return convertRefex(ss, this, m);
    }
 
-   public static FxRefexChronicle<?, ?> convertRefex(TerminologySnapshotDI ss, FxConcept concept,
+   public static FxRefexChronicle<?, ?> convertRefex(TerminologySnapshotDI ss, FxConceptChronicle concept,
        RefexChronicleBI<?> m)
            throws IOException, ContradictionException {
       return FxRefexFactory.make(ss, concept, m);
@@ -392,8 +392,8 @@ NEXT_REL:
          return false;
       }
 
-      if (FxConcept.class.isAssignableFrom(obj.getClass())) {
-         FxConcept another = (FxConcept) obj;
+      if (FxConceptChronicle.class.isAssignableFrom(obj.getClass())) {
+         FxConceptChronicle another = (FxConceptChronicle) obj;
 
          // =========================================================
          // Compare properties of 'this' class to the 'another' class

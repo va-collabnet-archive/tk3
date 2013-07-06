@@ -5,7 +5,7 @@ package org.ihtsdo.ttk.fx.concept.component;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.identifier.FxIdentifier;
 import org.ihtsdo.ttk.fx.concept.component.identifier.FxIdentifierUuid;
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexChronicle;
@@ -45,7 +45,7 @@ public abstract class FxComponentChronicle<V extends FxComponentVersion, T exten
       FXCollections.observableArrayList(new ArrayList<FxRefexChronicle<?, ?>>(0));
    private int               componentNid;
    @XmlTransient
-   protected FxConcept       concept;
+   protected FxConceptChronicle       concept;
    private UUID              primordialComponentUuid;
    @XmlElementWrapper(name = "versionList")
    @XmlElement()
@@ -58,7 +58,7 @@ public abstract class FxComponentChronicle<V extends FxComponentVersion, T exten
       this.versions = FXCollections.observableArrayList(new ArrayList<V>(1));
    }
 
-   public FxComponentChronicle(TerminologySnapshotDI ss, FxConcept concept, ComponentChronicleBI<T> another)
+   public FxComponentChronicle(TerminologySnapshotDI ss, FxConceptChronicle concept, ComponentChronicleBI<T> another)
            throws IOException, ContradictionException {
       super();
       this.concept                 = concept;
@@ -121,8 +121,8 @@ public abstract class FxComponentChronicle<V extends FxComponentVersion, T exten
    //~--- methods -------------------------------------------------------------
 
    public void beforeUnmarshal(Unmarshaller u, Object parent) {
-      if (parent instanceof FxConcept) {
-         this.concept = (FxConcept) parent;
+      if (parent instanceof FxConceptChronicle) {
+         this.concept = (FxConceptChronicle) parent;
       } else if (parent instanceof FxComponentChronicle) {
          this.concept = ((FxComponentChronicle) parent).getConcept();
       }
@@ -182,7 +182,7 @@ public abstract class FxComponentChronicle<V extends FxComponentVersion, T exten
       }
 
       for (RefexChronicleBI<?> r : refexesToProcess) {
-            FxRefexChronicle<?, ?> fxRefexMember = FxConcept.convertRefex(ss, concept, r);
+            FxRefexChronicle<?, ?> fxRefexMember = FxConceptChronicle.convertRefex(ss, concept, r);
             if (!fxRefexMember.getVersions().isEmpty()) {
                 this.refexes.add(fxRefexMember);
             }
@@ -210,20 +210,20 @@ public abstract class FxComponentChronicle<V extends FxComponentVersion, T exten
       buff.append(super.toString());
 
       if ((refexes != null) && (refexes.size() > 0)) {
-         buff.append("\n" + FxConcept.PADDING);
+         buff.append("\n" + FxConceptChronicle.PADDING);
 
          for (int i = 0; i < depth; i++) {
-            buff.append(FxConcept.PADDING);
+            buff.append(FxConceptChronicle.PADDING);
          }
 
          buff.append("annotations:\n");
 
          for (FxRefexChronicle m : this.refexes) {
-            buff.append(FxConcept.PADDING);
-            buff.append(FxConcept.PADDING);
+            buff.append(FxConceptChronicle.PADDING);
+            buff.append(FxConceptChronicle.PADDING);
 
             for (int i = 0; i < depth; i++) {
-               buff.append(FxConcept.PADDING);
+               buff.append(FxConceptChronicle.PADDING);
             }
 
             buff.append(m);
@@ -232,14 +232,14 @@ public abstract class FxComponentChronicle<V extends FxComponentVersion, T exten
       }
 
       if ((versions != null) && (versions.size() > 0)) {
-         buff.append("\n" + FxConcept.PADDING + "revisions:\n");
+         buff.append("\n" + FxConceptChronicle.PADDING + "revisions:\n");
 
          for (FxVersion r : this.versions) {
-            buff.append(FxConcept.PADDING);
-            buff.append(FxConcept.PADDING);
+            buff.append(FxConceptChronicle.PADDING);
+            buff.append(FxConceptChronicle.PADDING);
 
             for (int i = 0; i < depth; i++) {
-               buff.append(FxConcept.PADDING);
+               buff.append(FxConceptChronicle.PADDING);
             }
 
             buff.append(r);
@@ -260,7 +260,7 @@ public abstract class FxComponentChronicle<V extends FxComponentVersion, T exten
       return componentNid;
    }
 
-   public FxConcept getConcept() {
+   public FxConceptChronicle getConcept() {
       return concept;
    }
 

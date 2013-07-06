@@ -5,7 +5,7 @@ package org.ihtsdo.ttk.fx.concept.component.relationship;
 import javafx.beans.property.SimpleObjectProperty;
 
 import org.ihtsdo.ttk.fx.FxComponentReference;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.FxComponentChronicle;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.TerminologySnapshotDI;
@@ -36,7 +36,7 @@ public class FxRelationshipChronicle
       super();
    }
 
-   public FxRelationshipChronicle(TerminologySnapshotDI ss, FxConcept concept,
+   public FxRelationshipChronicle(TerminologySnapshotDI ss, FxConceptChronicle concept,
                                   RelationshipChronicleBI another)
            throws IOException, ContradictionException {
       super(ss, concept, another.getPrimordialVersion());
