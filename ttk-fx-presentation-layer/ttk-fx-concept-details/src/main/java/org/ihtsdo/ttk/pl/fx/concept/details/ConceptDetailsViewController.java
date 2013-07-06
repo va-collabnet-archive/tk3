@@ -37,7 +37,7 @@ import javafx.scene.control.TextField;
 import javafx.util.Callback;
 
 import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.fx.concept.FxConcept;
+import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.context.TerminologyContext;
 import org.ihtsdo.ttk.lookup.Looker;
 
@@ -71,7 +71,7 @@ import org.ihtsdo.ttk.services.aa.SessionAttributes;
  * @author kec
  */
 public class ConceptDetailsViewController
-        implements LookupListener, Initializable, ChangeListener<FxConcept> {
+        implements LookupListener, Initializable, ChangeListener<FxConceptChronicle> {
 
    /** Field description */
    @FXML                                        // fx:id="contextComboBox"
@@ -96,7 +96,7 @@ public class ConceptDetailsViewController
     *
     * @param contextConcept
     */
-   private void changeConcept(FxConcept contextConcept) {
+   private void changeConcept(FxConceptChronicle contextConcept) {
       if (contextConcept != null) {
           try {
               
@@ -132,8 +132,8 @@ public class ConceptDetailsViewController
     * @param newValue
     */
    @Override
-   public void changed(ObservableValue<? extends FxConcept> ov, FxConcept oldValue,
-                       final FxConcept newValue) {
+   public void changed(ObservableValue<? extends FxConceptChronicle> ov, FxConceptChronicle oldValue,
+                       final FxConceptChronicle newValue) {
       Platform.runLater(new Runnable() {
          @Override
          public void run() {
