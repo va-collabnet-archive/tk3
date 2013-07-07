@@ -74,6 +74,7 @@ import java.io.ObjectInputStream;
 import java.util.*;
 
 import javax.ws.rs.core.MediaType;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.fx.store.FxTs;
 
 /**
@@ -372,16 +373,16 @@ public class TtkRestClient extends Termstore {
    }
 
    @Override
-   public int getStamp(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+   public int getStamp(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       throw new UnsupportedOperationException("Not supported yet.");
    }
 
    @Override
-   public int getStatusNidForStamp(int sapNid) {
-      WebResource r      = restClient.resource(serverUrlStr + "sap/status/" + sapNid);
-      String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
+   public Status getStatusForStamp(int stamp) {
+      WebResource r      = restClient.resource(serverUrlStr + "stamp/status/" + stamp);
+      String      statusString = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
-      return Integer.parseInt(nidStr);
+      return Status.valueOf(statusString);
    }
 
    @Override
