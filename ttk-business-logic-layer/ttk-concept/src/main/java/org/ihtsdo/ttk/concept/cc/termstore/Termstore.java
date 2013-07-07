@@ -328,16 +328,12 @@ public abstract class Termstore implements PersistentStoreI {
       PositionSetBI positionSet       = new PositionSetReadOnly(viewPosition);
       EnumSet<Status>        allowedStatusNids = EnumSet.of(Status.ACTIVE);
 
-      NidSetBI isaTypeNids = new NidSet();
-
-      isaTypeNids.add(TermAux.IS_A.getLenient().getNid());
-
       ContradictionManagerBI contradictionManager = new IdentifyAllConflictStrategy();
       int                    languageNid          = SnomedMetadataRf2.US_ENGLISH_REFSET_RF2.getNid();
       int                    classifierNid        = ReferenceConcepts.SNOROCKET.getNid();
 
       return new ViewCoordinate(UUID.fromString("014ae770-b32a-11e1-afa6-0800200c9a66"), "meta-vc",
-                                Precedence.PATH, positionSet, allowedStatusNids, isaTypeNids,
+                                Precedence.PATH, positionSet, allowedStatusNids,
                                 contradictionManager, languageNid, classifierNid,
                                 RelAssertionType.INFERRED_THEN_STATED, null,
                                 ViewCoordinate.LANGUAGE_SORT.RF2_LANG_REFEX);

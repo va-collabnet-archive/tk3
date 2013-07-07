@@ -709,7 +709,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
       for (RelationshipChronicleBI rel : getRelationshipsIncoming()) {
          for (RelationshipVersionBI rv : rel.getVersions(vc)) {
-            if (vc.getIsaTypeNids().contains(rv.getTypeNid())) {
+            if (vc.getIsaNid() == rv.getTypeNid()) {
                returnValues.add(rv);
             }
          }
@@ -803,7 +803,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
       for (RelationshipChronicleBI rel : getRelationshipsIncoming()) {
          for (RelationshipVersionBI relv : rel.getVersions(vc)) {
-            if (vc.getIsaTypeNids().contains(relv.getTypeNid())) {
+            if (vc.getIsaNid() == relv.getTypeNid()) {
                ConceptVersionBI cv = P.s.getConceptVersion(vc, relv.getOriginNid());
 
                conceptSet.add(cv);
@@ -820,7 +820,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
       for (RelationshipChronicleBI rel : getRelationshipsIncoming()) {
          for (RelationshipVersionBI relv : rel.getVersions()) {
-            if (vc.getIsaTypeNids().contains(relv.getTypeNid())) {
+            if (vc.getIsaNid() == relv.getTypeNid()) {
                ConceptVersionBI cv = P.s.getConceptVersion(vc, relv.getOriginNid());
 
                conceptSet.add(cv);
@@ -892,7 +892,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
       for (RelationshipChronicleBI rel : getRelationshipsOutgoing()) {
          for (RelationshipVersionBI rv : rel.getVersions(vc)) {
-            if (vc.getIsaTypeNids().contains(rv.getTypeNid())) {
+            if (vc.getIsaNid() == rv.getTypeNid()) {
                returnValues.add(rv);
             }
          }
@@ -986,7 +986,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
       for (RelationshipChronicleBI rel : getRelationshipsOutgoing()) {
          for (RelationshipVersionBI relv : rel.getVersions(vc)) {
-            if (vc.getIsaTypeNids().contains(relv.getTypeNid())) {
+            if (vc.getIsaNid() == relv.getTypeNid()) {
                ConceptVersionBI cv = P.s.getConceptVersion(vc, relv.getDestinationNid());
 
                conceptSet.add(cv);
@@ -1003,7 +1003,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
       for (RelationshipChronicleBI rel : getRelationshipsOutgoing()) {
          for (RelationshipVersionBI relv : rel.getVersions()) {
-            if (vc.getIsaTypeNids().contains(relv.getTypeNid())) {
+            if (vc.getIsaNid() == relv.getTypeNid()) {
                ConceptVersionBI cv = P.s.getConceptVersion(vc, relv.getDestinationNid());
 
                conceptSet.add(cv);
@@ -1020,7 +1020,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
 
       for (RelationshipChronicleBI rel : getRelationshipsOutgoing()) {
          for (RelationshipVersionBI relv : rel.getVersions(vc)) {
-            if (vc.getIsaTypeNids().contains(relv.getTypeNid())) {
+            if (vc.getIsaNid() == relv.getTypeNid()) {
                nidList.put(relv.getDestinationNid(), relv.getDestinationNid());
             }
          }

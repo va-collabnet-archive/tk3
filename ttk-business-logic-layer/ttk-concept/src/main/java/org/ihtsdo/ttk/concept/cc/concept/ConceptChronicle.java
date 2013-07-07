@@ -1297,7 +1297,7 @@ public class ConceptChronicle implements ConceptChronicleBI, Comparable<ConceptC
             PositionSetBI positionSet)
             throws IOException {
         ViewCoordinate vc = new ViewCoordinate(UUID.randomUUID(), "getRefexSpecifiedDesc", Precedence.PATH,
-                positionSet, allowedStatus, null, new IdentifyAllConflictStrategy(),
+                positionSet, allowedStatus, new IdentifyAllConflictStrategy(),
                 Integer.MIN_VALUE, Integer.MIN_VALUE, RelAssertionType.STATED, langRefexOrder,
                 LANGUAGE_SORT.LANG_REFEX);
 
@@ -1436,7 +1436,7 @@ public class ConceptChronicle implements ConceptChronicleBI, Comparable<ConceptC
             PositionSetBI positionSet)
             throws IOException {
         ViewCoordinate vc = new ViewCoordinate(UUID.randomUUID(), "getRf2RefexSpecifiedDesc", Precedence.PATH,
-                positionSet, allowedStatus, null, new IdentifyAllConflictStrategy(),
+                positionSet, allowedStatus, new IdentifyAllConflictStrategy(),
                 Integer.MIN_VALUE, Integer.MIN_VALUE, RelAssertionType.STATED, langRefexOrder,
                 LANGUAGE_SORT.RF2_LANG_REFEX);
 
