@@ -135,7 +135,7 @@ public class SnomedToLogicTree extends LogicBlueprintBuilder implements ProcessU
          RefexCAB and = add(set, DescriptionLogicBinding.AND);
 
          for (RelationshipVersionBI rel : definingRels) {
-            if (vc.getIsaTypeNids().contains(rel.getTypeNid())) {
+            if (vc.getIsaNid() == rel.getTypeNid()) {
                add(and, DescriptionLogicBinding.CONCEPT_REFERENCE.getNid(), rel.getDestinationNid());
             } else if (rel.getGroup() == 0) {
                addExtensionalRole(and, rel.getTypeNid(), rel.getDestinationNid());
@@ -151,7 +151,7 @@ public class SnomedToLogicTree extends LogicBlueprintBuilder implements ProcessU
          }
       } else {
          for (RelationshipVersionBI rel : definingRels) {
-            if (vc.getIsaTypeNids().contains(rel.getTypeNid())) {
+            if (vc.getIsaNid() == rel.getTypeNid()) {
                add(set, DescriptionLogicBinding.CONCEPT_REFERENCE.getNid(), rel.getDestinationNid());
             } else {
                throw new InvalidCAB("Concept must have at least one is-a");
