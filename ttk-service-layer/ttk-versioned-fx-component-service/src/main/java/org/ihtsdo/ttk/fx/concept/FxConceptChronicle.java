@@ -217,7 +217,7 @@ public class FxConceptChronicle implements Serializable {
       _destinationRelationships =
          FXCollections.observableArrayList(new ArrayList<FxRelationshipChronicle>(relsIncoming.size()));
 
-      NidSetBI taxonomyTypes = ss.getViewCoordinate().getIsaTypeNids();
+      int isaNid = ss.getViewCoordinate().getIsaNid();
 
 NEXT_REL:
       for (RelationshipChronicleBI rel : relsIncoming) {
@@ -249,7 +249,7 @@ NEXT_REL:
          boolean foundType = false;
 
          for (RelationshipVersionBI rv : rel.getVersions(ss.getViewCoordinate())) {
-            if (taxonomyTypes.contains(rv.getTypeNid())) {
+            if (isaNid == rv.getTypeNid()) {
                foundType = true;
 
                break;
@@ -275,7 +275,7 @@ NEXT_REL:
                boolean foundType = false;
 
                for (RelationshipVersionBI rv : rel.getVersions(ss.getViewCoordinate())) {
-                  if (!taxonomyTypes.contains(rv.getTypeNid())) {
+                  if (isaNid != rv.getTypeNid()) {
                      foundType = true;
 
                      break;
@@ -311,14 +311,14 @@ NEXT_REL:
       _originRelationships = FXCollections.observableArrayList(
          new ArrayList<FxRelationshipChronicle>(c.getRelationshipsOutgoing().size()));
 
-      NidSetBI taxonomyTypes = ss.getViewCoordinate().getIsaTypeNids();
+      int isaNid = ss.getViewCoordinate().getIsaNid();
 
       for (RelationshipChronicleBI rel : c.getRelationshipsOutgoing()) {
          FxRelationshipChronicle          fxc      = new FxRelationshipChronicle(ss, this, rel);
          ArrayList<FxRelationshipVersion> toRemove = new ArrayList<>();
 
          for (FxRelationshipVersion fxv : fxc.getVersions()) {
-            if (!taxonomyTypes.contains(fxv.getTypeReference().getNid())) {
+            if (isaNid != fxv.getTypeReference().getNid()) {
                toRemove.add(fxv);
 
                break;
