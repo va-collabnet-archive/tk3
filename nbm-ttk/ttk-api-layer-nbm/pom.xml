@@ -94,6 +94,8 @@
                         <publicPackage>org.ihtsdo.ttk.logic.*</publicPackage>
                         <publicPackage>org.ihtsdo.ttk.lookup.*</publicPackage>
                         <publicPackage>org.ihtsdo.ttk.auxiliary.taxonomies.*</publicPackage>
+                        <publicPackage>javax.xml.bind.*</publicPackage>
+                        <publicPackage>javax.xml.stream.*</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>
