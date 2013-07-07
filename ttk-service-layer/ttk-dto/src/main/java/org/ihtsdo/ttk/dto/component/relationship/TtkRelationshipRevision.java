@@ -48,7 +48,7 @@ public class TtkRelationshipRevision extends TtkRevision {
       group              = rv.getGroup();
       typeUuid           = ts.getUuidPrimordialForNid(rv.getTypeNid());
       pathUuid           = ts.getUuidPrimordialForNid(rv.getPathNid());
-      statusUuid         = ts.getUuidPrimordialForNid(rv.getStatusNid());
+      status             = rv.getStatus();
       time               = rv.getTime();
    }
 

@@ -89,7 +89,7 @@ public class TtkIdentifierLong extends TtkIdentifier {
    @Override
    public int hashCode() {
       return Arrays.hashCode(new int[] {
-         (int) denotation, (int) (denotation >>> 32), statusUuid.hashCode(), pathUuid.hashCode(), (int) time,
+         (int) denotation, (int) (denotation >>> 32), status.hashCode(), pathUuid.hashCode(), (int) time,
          (int) (time >>> 32)
       });
    }

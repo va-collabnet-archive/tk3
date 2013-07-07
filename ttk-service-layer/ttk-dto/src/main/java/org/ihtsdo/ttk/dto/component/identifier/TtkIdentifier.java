@@ -113,7 +113,7 @@ public abstract class TtkIdentifier extends TtkRevision {
     */
    @Override
    public int hashCode() {
-      return Arrays.hashCode(new int[] { statusUuid.hashCode(), pathUuid.hashCode(), (int) time,
+      return Arrays.hashCode(new int[] { status.hashCode(), pathUuid.hashCode(), (int) time,
                                          (int) (time >>> 32) });
    }
 

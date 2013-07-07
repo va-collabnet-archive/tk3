@@ -123,6 +123,20 @@ public class ExternalChronicleWriterZip implements ExternalChronicleWriterBI {
             elapsed = System.currentTimeMillis() - startTime;
             System.out.println("Read " + entries.size() + " sorted entries in: " + elapsed + " ms");
             
+            
+            ExternalChronicleWriterXml xmlWriter = new ExternalChronicleWriterXml(Paths.get("target", "test.xml"));
+            startTime = System.currentTimeMillis();
+            elapsed = System.currentTimeMillis() - startTime;
+            System.out.println("Sorted " + entries.size() + " entries in: " + elapsed + " ms");
+            startTime = System.currentTimeMillis();
+            for (ZipEntry entry: entries) {
+                TtkConceptChronicle ttkConceptChronicle = reader.readEntry(entry);
+                xmlWriter.write(ttkConceptChronicle, startTime);
+            }
+            elapsed = System.currentTimeMillis() - startTime;
+            System.out.println("Read/wrote xml" + entries.size() + " sorted entries in: " + elapsed + " ms");
+            
+            
             startTime = System.currentTimeMillis();
             InternalChronicleWriterBI internalWriter = new InternalChronicleWriterZip(Paths.get("target", "test.icf"));
             for (ZipEntry entry: entries) {

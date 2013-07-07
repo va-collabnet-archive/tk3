@@ -232,7 +232,7 @@ nextId:
     */
    @Override
    public int hashCode() {
-      return Arrays.hashCode(new int[] { getPrimordialComponentUuid().hashCode(), statusUuid.hashCode(),
+      return Arrays.hashCode(new int[] { getPrimordialComponentUuid().hashCode(), status.hashCode(),
                                          pathUuid.hashCode(), (int) time, (int) (time >>> 32) });
    }
 

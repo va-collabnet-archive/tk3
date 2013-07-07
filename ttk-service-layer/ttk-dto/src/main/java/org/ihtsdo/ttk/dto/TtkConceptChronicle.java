@@ -60,8 +60,10 @@ import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_STRING;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.io.StringWriter;
 
 import java.util.*;
+import javax.xml.bind.JAXB;
 
 import javax.xml.bind.annotation.*;
 
@@ -80,7 +82,7 @@ public class TtkConceptChronicle {
    public static final String PADDING = "     ";
 
    /** Field description */
-   public static final int dataVersion = 9;
+   public static final int dataVersion = 10;
 
    /** Field description */
    public static final long serialVersionUID = 1;
@@ -90,6 +92,7 @@ public class TtkConceptChronicle {
    protected boolean annotationStyleRefex = false;
 
    /** Field description */
+   @XmlAttribute
    protected boolean annotationIndexStyleRefex = false;
 
    /** Field description */
@@ -896,5 +899,11 @@ public class TtkConceptChronicle {
     */
    public void setRelationships(List<TtkRelationshipChronicle> relationships) {
       this.relationships = relationships;
+   }
+   
+   public String toXml() {
+       StringWriter sw = new StringWriter();
+       JAXB.marshal(this, sw);
+       return sw.toString().substring("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>".length());
    }
 }

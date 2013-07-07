@@ -55,7 +55,7 @@ public class TtkDescriptionChronicle extends TtkComponentChronicle<TtkDescriptio
         text                   = part.getText();
         typeUuid               = ts.getUuidPrimordialForNid(part.getTypeNid());
         pathUuid               = ts.getUuidPrimordialForNid(part.getPathNid());
-        statusUuid             = ts.getUuidPrimordialForNid(part.getStatusNid());
+        status                 = part.getStatus();
         time                   = part.getTime();
 
         if (partCount > 1) {

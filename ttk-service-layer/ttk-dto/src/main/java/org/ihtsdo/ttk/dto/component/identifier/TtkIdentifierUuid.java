@@ -97,7 +97,7 @@ public class TtkIdentifierUuid extends TtkIdentifier {
     */
    @Override
    public int hashCode() {
-      return Arrays.hashCode(new int[] { denotation.hashCode(), statusUuid.hashCode(), pathUuid.hashCode(),
+      return Arrays.hashCode(new int[] { denotation.hashCode(), status.hashCode(), pathUuid.hashCode(),
                                          (int) time, (int) (time >>> 32) });
    }
 

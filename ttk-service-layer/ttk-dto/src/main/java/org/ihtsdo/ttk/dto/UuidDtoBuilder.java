@@ -164,7 +164,7 @@ public class UuidDtoBuilder {
 
       ca.primordialUuid = c.primordialUuid;
       ca.defined        = blueprint.defined;
-      ca.statusUuid     = blueprint.getStatusUuid();
+      ca.status     = blueprint.getStatus();
       ca.time           = time;
       ca.authorUuid     = authorUuid;
       ca.moduleUuid     = moduleUuid;
@@ -198,7 +198,7 @@ public class UuidDtoBuilder {
       d.setLang(blueprint.getLang());
       d.setText(blueprint.getText());
       d.setInitialCaseSignificant(blueprint.isInitialCaseSignificant());
-      d.statusUuid = blueprint.getStatusUuid();
+      d.status = blueprint.getStatus();
       d.time       = time;
       d.authorUuid = authorUuid;
       d.moduleUuid = moduleUuid;
@@ -232,7 +232,7 @@ public class UuidDtoBuilder {
       img.format          = blueprint.format;
       img.textDescription = blueprint.textDescription;
       img.typeUuid        = blueprint.getTypeUuid();
-      img.statusUuid      = blueprint.getStatusUuid();
+      img.status     = blueprint.getStatus();
       img.time            = time;
       img.authorUuid      = authorUuid;
       img.moduleUuid      = moduleUuid;
@@ -289,7 +289,7 @@ public class UuidDtoBuilder {
       r.group              = blueprint.getGroup();
       r.typeUuid           = blueprint.getTypeUuid();
       r.refinabilityUuid   = blueprint.getRefinabilityUuid();
-      r.statusUuid         = blueprint.getStatusUuid();
+      r.status         = blueprint.getStatus();
       r.time               = time;
       r.authorUuid         = authorUuid;
       r.moduleUuid         = moduleUuid;
@@ -508,7 +508,7 @@ public class UuidDtoBuilder {
       rm1.primordialUuid     = blueprint.getMemberUUID();
       rm1.componentUuid      = blueprint.getComponentUuid();
       rm1.refexExtensionUuid = blueprint.getRefexCollectionUuid();
-      rm1.statusUuid         = blueprint.getStatusUuid();
+      rm1.status         = blueprint.getStatus();
       rm1.time               = time;
       rm1.authorUuid         = authorUuid;
       rm1.moduleUuid         = moduleUuid;
