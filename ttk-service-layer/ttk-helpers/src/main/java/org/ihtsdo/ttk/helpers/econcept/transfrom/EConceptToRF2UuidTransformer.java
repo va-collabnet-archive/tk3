@@ -179,7 +179,7 @@ public class EConceptToRF2UuidTransformer implements EConceptTransformerBI {
          for (ConceptsFileFields field : ConceptsFileFields.values()) {
             switch (field) {
             case ACTIVE :
-               conceptsWriter.write(ca.getStatusUuid().toString() + "\t");
+               conceptsWriter.write(ca.getStatus().toString() + "\t");
 
                break;
 
@@ -210,7 +210,7 @@ public class EConceptToRF2UuidTransformer implements EConceptTransformerBI {
                for (ConceptsFileFields field : ConceptsFileFields.values()) {
                   switch (field) {
                   case ACTIVE :
-                     conceptsWriter.write(car.getStatusUuid().toString() + "\t");
+                     conceptsWriter.write(car.getStatus().toString() + "\t");
 
                      break;
 
@@ -245,7 +245,7 @@ public class EConceptToRF2UuidTransformer implements EConceptTransformerBI {
          for (DescriptionsFileFields field : DescriptionsFileFields.values()) {
             switch (field) {
             case ACTIVE :
-               descriptionsWriter.write(desc.getStatusUuid().toString() + "\t");
+               descriptionsWriter.write(desc.getStatus().toString() + "\t");
 
                break;
 
@@ -296,7 +296,7 @@ public class EConceptToRF2UuidTransformer implements EConceptTransformerBI {
                for (DescriptionsFileFields field : DescriptionsFileFields.values()) {
                   switch (field) {
                   case ACTIVE :
-                     descriptionsWriter.write(descr.getStatusUuid().toString() + "\t");
+                     descriptionsWriter.write(descr.getStatus().toString() + "\t");
 
                      break;
 
@@ -351,7 +351,7 @@ public class EConceptToRF2UuidTransformer implements EConceptTransformerBI {
          for (RelationshipsFileFields field : RelationshipsFileFields.values()) {
             switch (field) {
             case ACTIVE :
-               relationshipsWriter.write(r.getStatusUuid().toString() + "\t");
+               relationshipsWriter.write(r.getStatus().toString() + "\t");
 
                break;
 
@@ -407,7 +407,7 @@ public class EConceptToRF2UuidTransformer implements EConceptTransformerBI {
                for (RelationshipsFileFields field : RelationshipsFileFields.values()) {
                   switch (field) {
                   case ACTIVE :
-                     relationshipsWriter.write(rv.getStatusUuid().toString() + "\t");
+                     relationshipsWriter.write(rv.getStatus().toString() + "\t");
 
                      break;
 
