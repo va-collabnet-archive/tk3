@@ -7,7 +7,6 @@ import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.ContradictionManagerBI;
 import org.ihtsdo.ttk.api.NidList;
 import org.ihtsdo.ttk.api.NidListBI;
-import org.ihtsdo.ttk.api.NidSet;
 import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.PositionBI;
 import org.ihtsdo.ttk.api.PositionSet;
@@ -30,13 +29,14 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.UUID;
 import org.ihtsdo.ttk.api.Status;
+import org.ihtsdo.ttk.api.metadata.binding.Snomed;
+import org.ihtsdo.ttk.api.spec.ValidationException;
 
 public class ViewCoordinate implements Externalizable {
    private long                   lastModSequence = Long.MIN_VALUE;
    private EnumSet<Status>        allowedStatus;
    private int                    classifierNid;
    private ContradictionManagerBI contradictionManager;
-   private NidSetBI               isaTypeNids;
    private NidListBI              langPrefList;
    private LANGUAGE_SORT          langSort;
    private int                    languageNid;
@@ -46,10 +46,12 @@ public class ViewCoordinate implements Externalizable {
    private RelAssertionType       relAssertionType;
    private UUID                   vcUuid;
    private ViewCoordinate         vcWithAllStatusValues;    // transient
+   
+   private static int isaNid = 0;
 
    //~--- constructors --------------------------------------------------------
 
-   public ViewCoordinate() {
+   public ViewCoordinate() throws ValidationException {
       super();
    }
 
@@ -65,10 +67,6 @@ public class ViewCoordinate implements Externalizable {
 
       if (another.allowedStatus != null) {
          this.allowedStatus = another.allowedStatus.clone();
-      }
-
-      if (another.isaTypeNids != null) {
-         this.isaTypeNids = new NidSet(another.isaTypeNids.getSetValues());
       }
 
       this.contradictionManager = another.contradictionManager;
@@ -91,7 +89,7 @@ public class ViewCoordinate implements Externalizable {
    }
 
    public ViewCoordinate(UUID vcUuid, String name, Precedence precedence, PositionSetBI positionSet,
-                         EnumSet<Status> allowedStatusNids, NidSetBI isaTypeNids,
+                         EnumSet<Status> allowedStatus,
                          ContradictionManagerBI contradictionManager, int languageNid, int classifierNid,
                          RelAssertionType relAssertionType, NidListBI langPrefList, LANGUAGE_SORT langSort) {
       super();
@@ -105,12 +103,8 @@ public class ViewCoordinate implements Externalizable {
          this.positionSet = new PositionSet(positionSet);
       }
 
-      if (allowedStatusNids != null) {
-         this.allowedStatus = allowedStatusNids.clone();
-      }
-
-      if (isaTypeNids != null) {
-         this.isaTypeNids = new NidSet(isaTypeNids.getSetValues());
+      if (allowedStatus != null) {
+         this.allowedStatus = allowedStatus.clone();
       }
 
       this.contradictionManager = contradictionManager;
@@ -172,10 +166,6 @@ public class ViewCoordinate implements Externalizable {
             return false;
          }
 
-         if (!testEquals(isaTypeNids, another.isaTypeNids)) {
-            return false;
-         }
-
          if (!testEquals(contradictionManager, another.contradictionManager)) {
             return false;
          }
@@ -227,16 +217,7 @@ public class ViewCoordinate implements Externalizable {
 
       classifierNid        = ts.getNidForUuids((UUID) in.readObject());
       contradictionManager = (ContradictionManagerBI) in.readObject();
-      Object readObject           = in.readObject();
-
-      if (readObject == null) {
-         isaTypeNids = null;
-      } else {
-         isaTypeNids = new NidSet();
-         isaTypeNids.addAll(ts.getNidCollection((Collection<UUID>) readObject));
-      }
-
-      readObject = in.readObject();
+      Object readObject = in.readObject();
 
       if (readObject == null) {
          langPrefList = null;
@@ -320,8 +301,6 @@ public class ViewCoordinate implements Externalizable {
       } else {
          sb.append(statusStr.substring(0, 50)).append("...");
       }
-
-      sb.append(" \nisaTypes: ").append(isaTypeNids);
       sb.append(" \ncontradiction: ").append(contradictionManager);
       getConceptText(sb.append(" \nlanguage: "), snap, languageNid);
       getConceptText(sb.append(" \nclassifier: "), snap, classifierNid);
@@ -340,12 +319,6 @@ public class ViewCoordinate implements Externalizable {
 
       out.writeObject(ts.getUuidPrimordialForNid(classifierNid));
       out.writeObject(contradictionManager);
-
-      if (isaTypeNids == null) {
-         out.writeObject(null);
-      } else {
-         out.writeObject(ts.getUuidCollection(isaTypeNids.getAsSet()));
-      }
 
       if (langPrefList == null) {
          out.writeObject(null);
@@ -401,8 +374,17 @@ public class ViewCoordinate implements Externalizable {
       return contradictionManager;
    }
 
-   public NidSetBI getIsaTypeNids() {
-      return isaTypeNids;
+   public int getIsaNid() {
+       if (isaNid == 0) {
+           try {
+               isaNid = Snomed.IS_A.getNid();
+           } catch (ValidationException ex) {
+              throw new RuntimeException(ex);
+           } catch (IOException ex) {
+              throw new RuntimeException(ex);
+           }
+       }
+      return isaNid;
    }
 
    public NidListBI getLangPrefList() {

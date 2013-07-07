@@ -40,8 +40,6 @@ public class StandardViewCoordinates {
                               Long.MAX_VALUE);
 
       snomedVc.setPositionSet(new PositionSet(snomedPosition));
-      snomedVc.getIsaTypeNids().add(Snomed.IS_A.getLenient().getNid());
-      snomedVc.getIsaTypeNids().add(TermAux.IS_A.getLenient().getNid());
       snomedVc.setRelAssertionType(RelAssertionType.INFERRED);
 
       return snomedVc;
@@ -54,8 +52,6 @@ public class StandardViewCoordinates {
                               Long.MAX_VALUE);
 
       snomedVc.setPositionSet(new PositionSet(snomedPosition));
-      snomedVc.getIsaTypeNids().add(Snomed.IS_A.getLenient().getNid());
-      snomedVc.getIsaTypeNids().add(TermAux.IS_A.getLenient().getNid());
       snomedVc.setRelAssertionType(RelAssertionType.STATED);
 
       return snomedVc;
@@ -69,8 +65,6 @@ public class StandardViewCoordinates {
                               Long.MAX_VALUE);
 
       snomedVc.setPositionSet(new PositionSet(snomedPosition));
-      snomedVc.getIsaTypeNids().add(Snomed.IS_A.getLenient().getNid());
-      snomedVc.getIsaTypeNids().add(TermAux.IS_A.getLenient().getNid());
       snomedVc.setRelAssertionType(RelAssertionType.INFERRED_THEN_STATED);
 
       return snomedVc;
