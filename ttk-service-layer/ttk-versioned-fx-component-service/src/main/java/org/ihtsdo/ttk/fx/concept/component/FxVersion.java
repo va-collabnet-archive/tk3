@@ -35,6 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.bind.annotation.XmlSeeAlso;
+import org.ihtsdo.ttk.api.Status;
 
 @XmlSeeAlso( {
    FxConceptAttributesVersion.class, FxDescriptionVersion.class, FxIdentifier.class,
@@ -54,8 +55,8 @@ public abstract class FxVersion implements Serializable {
    private SimpleObjectProperty<FxComponentReference> moduleReferenceProperty;
    private FxComponentReference                       pathReference;
    private SimpleObjectProperty<FxComponentReference> pathReferenceProperty;
-   private FxComponentReference                       statusReference;
-   private SimpleObjectProperty<FxComponentReference> statusReferenceProperty;
+   private Status                                     status;
+   private SimpleObjectProperty<Status>               statusProperty;
    private UUID                                       viewCoordinateUuid;
 
    public FxVersion() {
@@ -65,13 +66,13 @@ public abstract class FxVersion implements Serializable {
    public FxVersion(TerminologySnapshotDI ss, ComponentVersionBI another)
            throws IOException, ContradictionException {
       super();
-      statusReference         = new FxComponentReference(ss.getConceptForNid(another.getStatusNid()));
+      status                  = another.getStatus();
       fxTime                  = new FxTime(another.getTime());
       authorReference         = new FxComponentReference(ss.getConceptForNid(another.getAuthorNid()));
       moduleReference         = new FxComponentReference(ss.getConceptForNid(another.getModuleNid()));
       pathReference           = new FxComponentReference(ss.getConceptForNid(another.getPathNid()));
       viewCoordinateUuid = ss.getViewCoordinate().getVcUuid();
-      assert statusReference != null: "statusReference is null";
+      assert status != null: "status is null";
       assert fxTime != null: "fxTime is null";
       assert authorReference != null: "authorReference is null";
       assert moduleReference != null: "moduleReference is null";
@@ -81,7 +82,7 @@ public abstract class FxVersion implements Serializable {
 
    public FxVersion(TerminologySnapshotDI ss, IdBI id) throws IOException, ContradictionException {
       super();
-      statusReference         = new FxComponentReference(ss.getConceptVersion(id.getStatusNid()));
+      status                  = id.getStatus();
       fxTime                  = new FxTime(id.getTime());
       authorReference         = new FxComponentReference(ss.getConceptVersion(id.getAuthorNid()));
       moduleReference         = new FxComponentReference(ss.getConceptVersion(id.getPathNid()));
@@ -175,12 +176,12 @@ public abstract class FxVersion implements Serializable {
     *
     * @see org.ihtsdo.etypes.I_VersionExternal#getPathReference()
     */
-   public SimpleObjectProperty<FxComponentReference> statusReferenceProperty() {
-      if (statusReferenceProperty == null) {
-         statusReferenceProperty = new SimpleObjectProperty<>(this, "status", statusReference);
+   public SimpleObjectProperty<Status> statusReferenceProperty() {
+      if (statusProperty == null) {
+         statusProperty = new SimpleObjectProperty<>(this, "status", status);
       }
 
-      return statusReferenceProperty;
+      return statusProperty;
    }
 
    /**
@@ -191,7 +192,7 @@ public abstract class FxVersion implements Serializable {
       StringBuilder buff = new StringBuilder();
 
       buff.append(" s:");
-      buff.append(getStatusReference());
+      buff.append(getStatus());
       buff.append(" t: ");
       buff.append(getFxTime());
       buff.append(" a:");
@@ -227,11 +228,10 @@ public abstract class FxVersion implements Serializable {
              ? pathReference
              : pathReferenceProperty.get();
    }
-
-   public FxComponentReference getStatusReference() {
-      return (statusReferenceProperty == null)
-             ? statusReference
-             : statusReferenceProperty.get();
+   public Status getStatus() {
+      return (statusProperty == null)
+             ? status
+             : statusProperty.get();
    }
 
    public UUID getViewCoordinateUuid() {
@@ -270,11 +270,11 @@ public abstract class FxVersion implements Serializable {
       }
    }
 
-   public void setStatusReference(FxComponentReference statusReference) {
-      if (statusReferenceProperty == null) {
-         this.statusReference = statusReference;
+   public void setStatus(Status status) {
+      if (statusProperty == null) {
+         this.status = status;
       } else {
-         statusReferenceProperty.set(statusReference);
+         statusProperty.set(status);
       }
    }
 
