@@ -20,7 +20,7 @@ import org.ihtsdo.ttk.dto.component.media.TtkMediaRevision;
 
 import java.util.Collection;
 import java.util.Set;
-import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
@@ -51,7 +51,7 @@ public class MediaRevision extends Revision<MediaRevision, Media>
    }
 
    public MediaRevision(TtkMediaRevision eiv, Media primoridalMember) throws IOException {
-      super(P.s.getNidForUuids(eiv.getStatusUuid()), eiv.getTime(), P.s.getNidForUuids(eiv.getAuthorUuid()),
+      super(eiv.getStatus(), eiv.getTime(), P.s.getNidForUuids(eiv.getAuthorUuid()),
             P.s.getNidForUuids(eiv.getModuleUuid()), P.s.getNidForUuids(eiv.getPathUuid()), primoridalMember);
       this.textDescription = eiv.getTextDescription();
       this.typeNid         = P.s.getNidForUuids(eiv.getTypeUuid());
@@ -63,9 +63,9 @@ public class MediaRevision extends Revision<MediaRevision, Media>
       this.typeNid         = input.readInt();
    }
 
-   protected MediaRevision(MediaVersionBI another, int statusNid, long time, int authorNid,
+   protected MediaRevision(MediaVersionBI another, Status status, long time, int authorNid,
            int moduleNid, int pathNid, Media primoridalMember) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
+      super(status, time, authorNid, moduleNid, pathNid, primoridalMember);
       this.textDescription = another.getTextDescription();
       this.typeNid         = another.getTypeNid();
    }
@@ -95,9 +95,9 @@ public class MediaRevision extends Revision<MediaRevision, Media>
    }
 
    @Override
-   public MediaRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+   public MediaRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
-         this.setStatusNid(statusNid);
+         this.setStatus(status);
          this.setAuthorNid(authorNid);
 
          return this;
@@ -105,7 +105,7 @@ public class MediaRevision extends Revision<MediaRevision, Media>
 
       MediaRevision newR;
 
-      newR = new MediaRevision(this.primordialComponent, statusNid, time, authorNid,
+      newR = new MediaRevision(this.primordialComponent, status, time, authorNid,
               moduleNid, pathNid,this.primordialComponent);
       this.primordialComponent.addRevision(newR);
 
@@ -243,7 +243,7 @@ public class MediaRevision extends Revision<MediaRevision, Media>
     * @see org.dwfa.vodb.types.I_ImagePart#hasNewData(org.dwfa.vodb.types.ThinImagePart)
     */
    public boolean hasNewData(MediaRevision another) {
-      return ((this.getPathNid() != another.getPathNid()) || (this.getStatusNid() != another.getStatusNid())
+      return ((this.getPathNid() != another.getPathNid()) || (this.getStatus() != another.getStatus())
               || ((this.textDescription.equals(another.getTextDescription()) == false)
                   || (this.typeNid != another.getTypeNid())));
    }

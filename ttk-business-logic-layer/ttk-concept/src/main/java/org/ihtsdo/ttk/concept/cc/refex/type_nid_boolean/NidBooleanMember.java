@@ -159,7 +159,7 @@ public class NidBooleanMember extends RefexMember<NidBooleanRevision, NidBoolean
     */
    @Override
    public NidBooleanRevision makeAnalog() {
-      return new NidBooleanRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(),
+      return new NidBooleanRevision(getStatus(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(),
                                     this);
    }
 
@@ -176,8 +176,8 @@ public class NidBooleanMember extends RefexMember<NidBooleanRevision, NidBoolean
     * @return
     */
    @Override
-   public NidBooleanRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-      NidBooleanRevision newR = new NidBooleanRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
+   public NidBooleanRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+      NidBooleanRevision newR = new NidBooleanRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);
 

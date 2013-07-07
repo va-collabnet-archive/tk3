@@ -100,14 +100,14 @@ public class NidStringMember extends RefexMember<NidStringRevision, NidStringMem
 
    @Override
    public NidStringRevision makeAnalog() {
-      NidStringRevision newR = new NidStringRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
+      NidStringRevision newR = new NidStringRevision(getStatus(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
 
       return newR;
    }
 
    @Override
-   public NidStringRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-      NidStringRevision newR = new NidStringRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
+   public NidStringRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+      NidStringRevision newR = new NidStringRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);
 

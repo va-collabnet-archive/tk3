@@ -25,6 +25,7 @@ import org.ihtsdo.ttk.concept.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 import org.ihtsdo.ttk.fx.store.FxTerminologyStoreDI;
 import org.ihtsdo.ttk.api.NidSetBI;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.cs.ChangeSetPolicy;
@@ -37,7 +38,7 @@ import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
  */
 public interface PersistentStoreI extends TerminologyStoreDI, FxTerminologyStoreDI {
 
-    int getStamp(int statusNid, long time, int authorNid, int moduleNid, int pathNid);
+    int getStamp(Status status, long time, int authorNid, int moduleNid, int pathNid);
 
     int getMaxReadOnlyStamp();
 

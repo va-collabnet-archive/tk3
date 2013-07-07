@@ -120,15 +120,15 @@ public class ArrayOfByteArrayMember extends RefexMember<ArrayOfByteArrayRevision
 
     @Override
     public ArrayOfByteArrayRevision makeAnalog() {
-        ArrayOfByteArrayRevision newR = new ArrayOfByteArrayRevision(getStatusNid(), getTime(),
+        ArrayOfByteArrayRevision newR = new ArrayOfByteArrayRevision(getStatus(), getTime(),
                 getAuthorNid(), getModuleNid(), getPathNid(), this);
 
         return newR;
     }
     
     @Override
-    public ArrayOfByteArrayRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-        ArrayOfByteArrayRevision newR = new ArrayOfByteArrayRevision(statusNid, time,
+    public ArrayOfByteArrayRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+        ArrayOfByteArrayRevision newR = new ArrayOfByteArrayRevision(status, time,
                 authorNid, moduleNid, pathNid, this);
 
         addRevision(newR);

@@ -24,6 +24,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.refex.type_nid_boolean.RefexNidBooleanAnalogBI;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TtkRefexUuidBooleanRevision;
@@ -57,16 +58,16 @@ public class NidBooleanRevision extends RefexRevision<NidBooleanRevision, NidBoo
       boolean1 = input.readBoolean();
    }
 
-   public NidBooleanRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, 
+   public NidBooleanRevision(Status status, long time, int authorNid, int moduleNid, int pathNid, 
                            NidBooleanMember primoridalMember) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
+      super(status, time, authorNid, moduleNid, pathNid, primoridalMember);
       nid1      = primoridalMember.getC1Nid();
       boolean1 = primoridalMember.getBoolean1();
    }
 
-   protected NidBooleanRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
+   protected NidBooleanRevision(Status status, long time, int authorNid, int moduleNid, int pathNid,
                               NidBooleanRevision another) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
+      super(status, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       nid1      = another.nid1;
       boolean1 = another.boolean1;
    }
@@ -101,20 +102,20 @@ public class NidBooleanRevision extends RefexRevision<NidBooleanRevision, NidBoo
 
    @Override
    public NidBooleanRevision makeAnalog() {
-      return new NidBooleanRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
+      return new NidBooleanRevision(getStatus(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
    }
 
    @Override
-   public NidBooleanRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+   public NidBooleanRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
-         this.setStatusNid(statusNid);
+         this.setStatus(status);
          this.setAuthorNid(authorNid);
          this.setModuleNid(moduleNid);
 
          return this;
       }
 
-      NidBooleanRevision newR = new NidBooleanRevision(statusNid, time, authorNid, moduleNid, pathNid,this);
+      NidBooleanRevision newR = new NidBooleanRevision(status, time, authorNid, moduleNid, pathNid,this);
 
       primordialComponent.addRevision(newR);
 

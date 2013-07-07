@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.lang.LanguageCode;
 import org.ihtsdo.ttk.api.blueprint.DescriptionCAB;
@@ -145,10 +146,10 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
     }
 
     @Override
-    public DescriptionRevision makeAnalog(int statusNid,long time, int authorNid, int moduleNid, int pathNid) {
+    public DescriptionRevision makeAnalog(Status status, long time, int authorNid, int moduleNid, int pathNid) {
         DescriptionRevision newR;
 
-        newR = new DescriptionRevision(this, statusNid, time, authorNid,
+        newR = new DescriptionRevision(this, status, time, authorNid,
                 moduleNid, pathNid, this);
         addRevision(newR);
 
@@ -408,14 +409,14 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
     public List<Description.Version> getVersions(ViewCoordinate c) {
         List<Version> returnTuples = new ArrayList<>(2);
 
-        computer.addSpecifiedVersions(c.getAllowedStatusNids(), (NidSetBI) null, c.getPositionSet(),
+        computer.addSpecifiedVersions(c.getAllowedStatus(), (NidSetBI) null, c.getPositionSet(),
                 returnTuples, getVersions(), c.getPrecedence(),
                 c.getContradictionManager());
 
         return returnTuples;
     }
 
-    public List<Description.Version> getVersions(NidSetBI allowedStatus, NidSetBI allowedTypes,
+    public List<Description.Version> getVersions(EnumSet<Status> allowedStatus, NidSetBI allowedTypes,
             PositionSetBI viewPositions, Precedence precedence, ContradictionManagerBI contradictionMgr) {
         List<Version> returnTuples = new ArrayList<>(2);
 
@@ -474,8 +475,8 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
         }
 
         @Override
-        public DescriptionRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-            return getCv().makeAnalog(statusNid, time, authorNid, moduleNid, pathNid);
+        public DescriptionRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+            return getCv().makeAnalog(status, time, authorNid, moduleNid, pathNid);
         }
 
         @Override

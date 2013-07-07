@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.Set;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexDirective;
@@ -37,7 +37,7 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
     }
 
     public RefexRevision(TtkRevision eVersion, C member)  throws IOException{
-        super(P.s.getNidForUuids(eVersion.getStatusUuid()), eVersion.getTime(), P.s.getNidForUuids(eVersion.getAuthorUuid()),
+        super(eVersion.getStatus(), eVersion.getTime(), P.s.getNidForUuids(eVersion.getAuthorUuid()),
                  P.s.getNidForUuids(eVersion.getModuleUuid()), P.s.getNidForUuids(eVersion.getPathUuid()),  member);
     }
 
@@ -45,8 +45,8 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
         super(input, primordialComponent);
     }
 
-    public RefexRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, C primordialComponent) {
-        super(statusNid, time, authorNid, moduleNid, pathNid, primordialComponent);
+    public RefexRevision(Status status, long time, int authorNid, int moduleNid, int pathNid, C primordialComponent) {
+        super(status, time, authorNid, moduleNid, pathNid, primordialComponent);
     }
 
     //~--- methods -------------------------------------------------------------

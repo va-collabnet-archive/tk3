@@ -12,6 +12,7 @@ import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.concept.cc.refex.type_long.LongMember.Version;
 import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
@@ -45,13 +46,13 @@ public class LongRevision extends RefexRevision<LongRevision, LongMember>
       longValue = input.readLong();
    }
 
-   public LongRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, LongMember primoridalMember) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
+   public LongRevision(Status status, long time, int authorNid, int moduleNid, int pathNid, LongMember primoridalMember) {
+      super(status, time, authorNid, moduleNid, pathNid, primoridalMember);
       longValue = primoridalMember.getLong1();
    }
 
-   protected LongRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, LongRevision another) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
+   protected LongRevision(Status status, long time, int authorNid, int moduleNid, int pathNid, LongRevision another) {
+      super(status, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       longValue = another.longValue;
    }
 
@@ -85,19 +86,19 @@ public class LongRevision extends RefexRevision<LongRevision, LongMember>
 
    @Override
    public LongRevision makeAnalog() {
-      return new LongRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
+      return new LongRevision(getStatus(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
    }
    
    @Override
-   public LongRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+   public LongRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
        if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
-         this.setStatusNid(statusNid);
+         this.setStatus(status);
          this.setAuthorNid(authorNid);
          this.setModuleNid(moduleNid);
 
          return this;
       }
-      LongRevision newR = new LongRevision(statusNid, time, authorNid,
+      LongRevision newR = new LongRevision(status, time, authorNid,
               moduleNid, pathNid, this);
 
       primordialComponent.addRevision(newR);

@@ -19,6 +19,7 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 
 import java.util.Collection;
 import java.util.Set;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
@@ -31,13 +32,13 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
 
    //~--- constructors --------------------------------------------------------
    public ConceptAttributesRevision(ConceptAttributeAnalogBI another, ConceptAttributes primoridalMember) {
-      super(another.getStatusNid(), another.getTime(), another.getAuthorNid(), another.getModuleNid(),
+      super(another.getStatus(), another.getTime(), another.getAuthorNid(), another.getModuleNid(),
               another.getPathNid(), primoridalMember);
       this.defined = another.isDefined();
    }
 
    public ConceptAttributesRevision(TtkConceptAttributesRevision another, ConceptAttributes primoridalMember) throws IOException{
-      super(P.s.getNidForUuids(another.getStatusUuid()), another.getTime(), P.s.getNidForUuids(another.getAuthorUuid()),
+      super(another.getStatus(), another.getTime(), P.s.getNidForUuids(another.getAuthorUuid()),
             P.s.getNidForUuids(another.getModuleUuid()), P.s.getNidForUuids(another.getPathUuid()), primoridalMember);
       this.defined = another.isDefined();
    }
@@ -51,14 +52,14 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
       defined = input.readBoolean();
    }
 
-   public ConceptAttributesRevision(int statusNid, long time, int authorNid,
+   public ConceptAttributesRevision(Status status, long time, int authorNid,
                                     int moduleNid, int pathNid, ConceptAttributes primoridalMember) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
+      super(status, time, authorNid, moduleNid, pathNid, primoridalMember);
    }
    
-   public ConceptAttributesRevision(ConceptAttributeAnalogBI another, int statusNid, long time, int authorNid,
+   public ConceptAttributesRevision(ConceptAttributeAnalogBI another, Status status, long time, int authorNid,
                                     int moduleNid, int pathNid, ConceptAttributes primoridalMember) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
+      super(status, time, authorNid, moduleNid, pathNid, primoridalMember);
       this.defined = another.isDefined();
    }
 
@@ -90,9 +91,9 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
    }
 
    @Override
-   public ConceptAttributesRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+   public ConceptAttributesRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
-         this.setStatusNid(statusNid);
+         this.setStatus(status);
          this.setAuthorNid(authorNid);
          this.setModuleNid(moduleNid);
          return this;
@@ -100,7 +101,7 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
 
       ConceptAttributesRevision newR;
 
-      newR = new ConceptAttributesRevision(this, statusNid, time, authorNid, pathNid,
+      newR = new ConceptAttributesRevision(this, status, time, authorNid, pathNid,
               moduleNid, this.primordialComponent);
       this.primordialComponent.addRevision(newR);
 

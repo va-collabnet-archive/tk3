@@ -114,15 +114,14 @@ public class NidNidNidStringMember
 
    @Override
    public NidNidNidStringRevision makeAnalog() {
-      return new NidNidNidStringRevision(getStatusNid(), getTime(),
+      return new NidNidNidStringRevision(getStatus(), getTime(),
                                         getAuthorNid(), getModuleNid(),
                                         getPathNid(), this);
    }
 
    @Override
-   public NidNidNidStringRevision makeAnalog(int statusNid, long time,
-           int authorNid, int moduleNid, int pathNid) {
-      NidNidNidStringRevision newR = new NidNidNidStringRevision(statusNid, time,
+   public NidNidNidStringRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+      NidNidNidStringRevision newR = new NidNidNidStringRevision(status, time,
                                        authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);

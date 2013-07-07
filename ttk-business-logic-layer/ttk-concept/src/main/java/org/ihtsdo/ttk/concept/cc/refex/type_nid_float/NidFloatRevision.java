@@ -11,15 +11,12 @@ import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_float.RefexNidFloatAnalogBI;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TtkRefexUuidFloatMemberChronicle;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TtkRefexUuidFloatRevision;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -29,6 +26,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.concept.cc.P;
 
 public class NidFloatRevision extends RefexRevision<NidFloatRevision, NidFloatMember>
@@ -60,16 +58,16 @@ public class NidFloatRevision extends RefexRevision<NidFloatRevision, NidFloatMe
       floatValue = input.readFloat();
    }
 
-   public NidFloatRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
+   public NidFloatRevision(Status status, long time, int authorNid, int moduleNid, int pathNid,
                            NidFloatMember primoridalMember) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
+      super(status, time, authorNid, moduleNid, pathNid, primoridalMember);
       c1Nid      = primoridalMember.getC1Nid();
       floatValue = primoridalMember.getFloatValue();
    }
 
-   protected NidFloatRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
+   protected NidFloatRevision(Status status, long time, int authorNid, int moduleNid, int pathNid,
                               NidFloatRevision another) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
+      super(status, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       c1Nid      = another.c1Nid;
       floatValue = another.floatValue;
    }
@@ -104,20 +102,20 @@ public class NidFloatRevision extends RefexRevision<NidFloatRevision, NidFloatMe
 
    @Override
    public NidFloatRevision makeAnalog() {
-      return new NidFloatRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
+      return new NidFloatRevision(getStatus(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
    }
 
    @Override
-   public NidFloatRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+   public NidFloatRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
-         this.setStatusNid(statusNid);
+         this.setStatus(status);
          this.setAuthorNid(authorNid);
          this.setModuleNid(moduleNid);
 
          return this;
       }
 
-      NidFloatRevision newR = new NidFloatRevision(statusNid, time, authorNid, moduleNid, pathNid,this);
+      NidFloatRevision newR = new NidFloatRevision(status, time, authorNid, moduleNid, pathNid,this);
 
       primordialComponent.addRevision(newR);
 

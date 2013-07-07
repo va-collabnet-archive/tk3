@@ -100,14 +100,14 @@ public class NidLongMember extends RefexMember<NidLongRevision, NidLongMember>
 
    @Override
    public NidLongRevision makeAnalog() {
-      NidLongRevision newR = new NidLongRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
+      NidLongRevision newR = new NidLongRevision(getStatus(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
 
       return newR;
    }
 
    @Override
-   public NidLongRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-      NidLongRevision newR = new NidLongRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
+   public NidLongRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+      NidLongRevision newR = new NidLongRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);
 

@@ -27,6 +27,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.ihtsdo.ttk.api.Status;
 
 public class NidNidNidLongRevision
         extends RefexRevision<NidNidNidLongRevision, NidNidNidLongMember>
@@ -68,20 +69,20 @@ public class NidNidNidLongRevision
       long1 = input.readLong();
    }
 
-   public NidNidNidLongRevision(int statusNid, long time, int authorNid,
+   public NidNidNidLongRevision(Status status, long time, int authorNid,
                                  int moduleNid, int pathNid,
                                  NidNidNidLongMember primoridalMember) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
+      super(status, time, authorNid, moduleNid, pathNid, primoridalMember);
       nid1  = primoridalMember.getNid1();
       nid2  = primoridalMember.getNid2();
       nid3  = primoridalMember.getNid3();
       long1 = primoridalMember.getLong1();
    }
 
-   protected NidNidNidLongRevision(int statusNid, long time, int authorNid,
+   protected NidNidNidLongRevision(Status status, long time, int authorNid,
                                     int moduleNid, int pathNid,
                                     NidNidNidLongRevision another) {
-      super(statusNid, time, authorNid, moduleNid, pathNid,
+      super(status, time, authorNid, moduleNid, pathNid,
             another.primordialComponent);
       nid1  = another.nid1;
       nid2  = another.nid2;
@@ -123,23 +124,22 @@ public class NidNidNidLongRevision
 
    @Override
    public NidNidNidLongRevision makeAnalog() {
-      return new NidNidNidLongRevision(getStatusNid(), getTime(),
+      return new NidNidNidLongRevision(getStatus(), getTime(),
                                         getAuthorNid(), getModuleNid(),
                                         getPathNid(), this);
    }
 
    @Override
-   public NidNidNidLongRevision makeAnalog(int statusNid, long time,
-           int authorNid, int moduleNid, int pathNid) {
+   public NidNidNidLongRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
-         this.setStatusNid(statusNid);
+         this.setStatus(status);
          this.setAuthorNid(authorNid);
          this.setModuleNid(moduleNid);
 
          return this;
       }
 
-      NidNidNidLongRevision newR = new NidNidNidLongRevision(statusNid, time,
+      NidNidNidLongRevision newR = new NidNidNidLongRevision(status, time,
                                        authorNid, moduleNid, pathNid, this);
 
       primordialComponent.addRevision(newR);

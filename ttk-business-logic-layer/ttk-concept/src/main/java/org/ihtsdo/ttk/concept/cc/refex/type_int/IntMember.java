@@ -97,14 +97,14 @@ public class IntMember extends RefexMember<IntRevision, IntMember>
 
    @Override
    public IntRevision makeAnalog() {
-      IntRevision newR = new IntRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(),  this);
+      IntRevision newR = new IntRevision(getStatus(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(),  this);
 
       return newR;
    }
 
    @Override
-   public IntRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-      IntRevision newR = new IntRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
+   public IntRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+      IntRevision newR = new IntRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);
 

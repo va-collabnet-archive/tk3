@@ -25,6 +25,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.ihtsdo.ttk.api.Status;
 
 public class StringRevision extends RefexRevision<StringRevision, StringMember>
         implements RefexStringAnalogBI<StringRevision> {
@@ -51,13 +52,13 @@ public class StringRevision extends RefexRevision<StringRevision, StringMember>
       stringValue = input.readString();
    }
 
-   public StringRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, StringMember another) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, another);
+   public StringRevision(Status status, long time, int authorNid, int moduleNid, int pathNid, StringMember another) {
+      super(status, time, authorNid, moduleNid, pathNid, another);
       stringValue = another.getString1();
    }
 
-   protected StringRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, StringRevision another) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
+   protected StringRevision(Status status, long time, int authorNid, int moduleNid, int pathNid, StringRevision another) {
+      super(status, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       stringValue = another.stringValue;
    }
 
@@ -91,20 +92,20 @@ public class StringRevision extends RefexRevision<StringRevision, StringMember>
 
    @Override
    public StringRevision makeAnalog() {
-      return new StringRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
+      return new StringRevision(getStatus(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
    }
 
    @Override
-   public StringRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+   public StringRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
-         this.setStatusNid(statusNid);
+         this.setStatus(status);
          this.setAuthorNid(authorNid);
          this.setModuleNid(moduleNid);
 
          return this;
       }
 
-      StringRevision newR = new StringRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
+      StringRevision newR = new StringRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       primordialComponent.addRevision(newR);
 

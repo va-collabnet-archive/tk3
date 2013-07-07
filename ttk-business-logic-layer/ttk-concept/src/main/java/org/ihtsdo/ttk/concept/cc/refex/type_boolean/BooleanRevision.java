@@ -26,6 +26,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.ihtsdo.ttk.api.Status;
 
 public class BooleanRevision extends RefexRevision<BooleanRevision, BooleanMember>
         implements RefexBooleanAnalogBI<BooleanRevision> {
@@ -52,15 +53,15 @@ public class BooleanRevision extends RefexRevision<BooleanRevision, BooleanMembe
       booleanValue = input.readBoolean();
    }
 
-   protected BooleanRevision(int statusNid, long time, int authorNid, int moduleNid,
+   protected BooleanRevision(Status status, long time, int authorNid, int moduleNid,
            int pathNid, BooleanMember primoridalMember) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
+      super(status, time, authorNid, moduleNid, pathNid, primoridalMember);
       this.booleanValue = primoridalMember.getBoolean1();
    }
 
-   protected BooleanRevision(int statusNid, long time, int authorNid, int moduleNid,
+   protected BooleanRevision(Status status, long time, int authorNid, int moduleNid,
            int pathNid, BooleanRevision another) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
+      super(status, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       this.booleanValue = another.getBooleanValue();
    }
 
@@ -94,21 +95,20 @@ public class BooleanRevision extends RefexRevision<BooleanRevision, BooleanMembe
 
    @Override
    public BooleanRevision makeAnalog() {
-      return new BooleanRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(),  this);
+      return new BooleanRevision(getStatus(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(),  this);
    }
 
    @Override
-   public BooleanRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid,
-           int pathNid) {
+   public BooleanRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
-         this.setStatusNid(statusNid);
+         this.setStatus(status);
          this.setAuthorNid(authorNid);
          this.setModuleNid(moduleNid);
 
          return this;
       }
 
-      BooleanRevision newR = new BooleanRevision(statusNid, time, authorNid,
+      BooleanRevision newR = new BooleanRevision(status, time, authorNid,
               moduleNid, pathNid, this);
 
       primordialComponent.addRevision(newR);

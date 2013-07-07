@@ -11,6 +11,6 @@ public interface MediaVersionFacade
     void setTextDescription(String desc) throws PropertyVetoException;
     
     @Override
-    MediaRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid);
+    MediaRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid);
     
 }

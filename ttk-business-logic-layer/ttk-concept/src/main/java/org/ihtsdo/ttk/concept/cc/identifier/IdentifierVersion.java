@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Date;
 import java.util.Set;
+import org.ihtsdo.ttk.api.Status;
 
 public abstract class IdentifierVersion implements IdBI {
    protected int authorityNid;
@@ -35,7 +36,7 @@ public abstract class IdentifierVersion implements IdBI {
 
    protected IdentifierVersion(TtkIdentifier idv) throws IOException {
       super();
-      this.stamp = P.s.getStamp(P.s.getNidForUuids(idv.getStatusUuid()), idv.getTime(),
+      this.stamp = P.s.getStamp(idv.getStatus(), idv.getTime(),
                                     P.s.getNidForUuids(idv.getAuthorUuid()),
                                     P.s.getNidForUuids(idv.getModuleUuid()),
                                     P.s.getNidForUuids(idv.getPathUuid()));
@@ -48,14 +49,14 @@ public abstract class IdentifierVersion implements IdBI {
       authorityNid = input.readInt();
    }
 
-   protected IdentifierVersion(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
+   protected IdentifierVersion(Status status, long time, int authorNid, int moduleNid, int pathNid,
                                IdentifierVersion idVersion) {
-      this(statusNid, time, authorNid, moduleNid, pathNid, idVersion.authorityNid);
+      this(status, time, authorNid, moduleNid, pathNid, idVersion.authorityNid);
    }
 
-   protected IdentifierVersion(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
+   protected IdentifierVersion(Status status, long time, int authorNid, int moduleNid, int pathNid,
                                int authorityNid) {
-      this.stamp     = P.s.getStamp(statusNid, time, authorNid, moduleNid, pathNid);
+      this.stamp     = P.s.getStamp(status, time, authorNid, moduleNid, pathNid);
       this.authorityNid = authorityNid;
    }
 
@@ -107,7 +108,7 @@ public abstract class IdentifierVersion implements IdBI {
       ConceptComponent.addNidToBuffer(buf, authorityNid);
       buf.append(" stamp:").append(stamp);
       buf.append(" s:");
-      ConceptComponent.addNidToBuffer(buf, getStatusNid());
+      buf.append(getStatus());
       buf.append(" t:");
 
       if (getTime() == Long.MAX_VALUE) {
@@ -143,7 +144,6 @@ public abstract class IdentifierVersion implements IdBI {
       HashSet<Integer> allNids = new HashSet<>();
 
       allNids.add(authorityNid);
-      allNids.add(getStatusNid());
       allNids.add(getAuthorNid());
       allNids.add(getModuleNid());
       allNids.add(getPathNid());
@@ -181,8 +181,8 @@ public abstract class IdentifierVersion implements IdBI {
    }
 
    @Override
-   public int getStatusNid() {
-      return P.s.getStatusNidForStamp(stamp);
+   public Status getStatus() {
+      return P.s.getStatusForStamp(stamp);
    }
 
    @Override
@@ -211,6 +211,6 @@ public abstract class IdentifierVersion implements IdBI {
          throw new UnsupportedOperationException("Time alreay committed.");
       }
 
-      this.stamp = P.s.getStamp(getStatusNid(), time, getAuthorNid(), getModuleNid(), getPathNid());
+      this.stamp = P.s.getStamp(getStatus(), time, getAuthorNid(), getModuleNid(), getPathNid());
    }
 }

@@ -7,7 +7,6 @@ import com.sleepycat.bind.tuple.TupleOutput;
 import org.ihtsdo.cern.colt.list.IntArrayList;
 
 
-import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
@@ -29,6 +28,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
@@ -133,10 +133,10 @@ public class Media extends ConceptComponent<MediaRevision, Media>
     }
 
     @Override
-    public MediaRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+    public MediaRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
         MediaRevision newR;
 
-        newR = new MediaRevision(this, statusNid, time, authorNid, moduleNid, pathNid, this);
+        newR = new MediaRevision(this, status, time, authorNid, moduleNid, pathNid, this);
         addRevision(newR);
 
         return newR;
@@ -387,14 +387,14 @@ public class Media extends ConceptComponent<MediaRevision, Media>
     public List<Media.Version> getVersions(ViewCoordinate c) {
         List<Version> returnTuples = new ArrayList<>(2);
 
-        computer.addSpecifiedVersions(c.getAllowedStatusNids(), (NidSetBI) null, c.getPositionSet(),
+        computer.addSpecifiedVersions(c.getAllowedStatus(), (NidSetBI) null, c.getPositionSet(),
                 returnTuples, getVersions(), c.getPrecedence(),
                 c.getContradictionManager());
 
         return returnTuples;
     }
 
-    public Collection<Media.Version> getVersions(NidSetBI allowedStatus, NidSetBI allowedTypes,
+    public Collection<Media.Version> getVersions(EnumSet<Status> allowedStatus, NidSetBI allowedTypes,
             PositionSetBI viewPositions, Precedence precedence, ContradictionManagerBI contradictionMgr) {
         List<Version> returnTuples = new ArrayList<>(2);
 
@@ -446,8 +446,8 @@ public class Media extends ConceptComponent<MediaRevision, Media>
         }
 
         @Override
-        public MediaRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-            return (MediaRevision) getCv().makeAnalog(statusNid, time, authorNid, moduleNid, pathNid);
+        public MediaRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+            return (MediaRevision) getCv().makeAnalog(status, time, authorNid, moduleNid, pathNid);
         }
 
         @Override

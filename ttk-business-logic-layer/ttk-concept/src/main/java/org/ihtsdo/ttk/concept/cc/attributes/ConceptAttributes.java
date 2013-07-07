@@ -7,7 +7,6 @@ import com.sleepycat.bind.tuple.TupleOutput;
 import org.ihtsdo.cern.colt.list.IntArrayList;
 
 
-import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
@@ -31,6 +30,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.blueprint.ConceptAttributeAB;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
@@ -72,23 +72,6 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
     @Override
     protected void addComponentNids(Set<Integer> allNids) {
         // nothing to add
-    }
-
-    public void addTuples(NidSetBI allowedStatus, PositionBI viewPosition, List<Version> returnTuples,
-            Precedence precedencePolicy, ContradictionManagerBI contradictionManager) {
-        computer.addSpecifiedVersions(allowedStatus, viewPosition, returnTuples, getVersions(),
-                precedencePolicy, contradictionManager);
-    }
-
-    public void addTuples(NidSetBI allowedStatus, PositionSetBI positionSet,
-            List< ConceptAttributeAnalogBI> returnTuples, Precedence precedencePolicy,
-            ContradictionManagerBI contradictionManager, long time)
-            throws IOException {
-        List<Version> returnList = new ArrayList<>();
-
-        computer.addSpecifiedVersions(allowedStatus, null, positionSet, returnList, getVersions(),
-                precedencePolicy, contradictionManager, time);
-        returnTuples.addAll(returnList);
     }
 
     @Override
@@ -133,10 +116,10 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
     }
 
     @Override
-    public ConceptAttributesRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+    public ConceptAttributesRevision makeAnalog(Status status, long time, int authorNid, int moduleNid, int pathNid) {
         ConceptAttributesRevision newR;
 
-        newR = new ConceptAttributesRevision(this, statusNid, time, authorNid, moduleNid, pathNid, this);
+        newR = new ConceptAttributesRevision(this, status, time, authorNid, moduleNid, pathNid, this);
         addRevision(newR);
 
         return newR;
@@ -276,25 +259,6 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
         return this;
     }
 
-    public List<Version> getTuples(NidSetBI allowedStatus, PositionBI viewPosition,
-            Precedence precedencePolicy, ContradictionManagerBI contradictionManager) {
-        List<Version> returnList = new ArrayList<>();
-
-        addTuples(allowedStatus, viewPosition, returnList, precedencePolicy, contradictionManager);
-
-        return returnList;
-    }
-
-    public List<Version> getTuples(NidSetBI allowedStatus, PositionSetBI viewPositionSet,
-            Precedence precedencePolicy, ContradictionManagerBI contradictionManager) {
-        List<Version> returnList = new ArrayList<>();
-
-        computer.addSpecifiedVersions(allowedStatus, viewPositionSet, returnList, getVersions(),
-                precedencePolicy, contradictionManager);
-
-        return returnList;
-    }
-
     @Override
     public IntArrayList getVariableVersionNids() {
         return new IntArrayList(2);
@@ -357,14 +321,14 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
     public List<ConceptAttributes.Version> getVersions(ViewCoordinate c) {
         List<Version> returnTuples = new ArrayList<>(2);
 
-        computer.addSpecifiedVersions(c.getAllowedStatusNids(), (NidSetBI) null, c.getPositionSet(),
+        computer.addSpecifiedVersions(c.getAllowedStatus(), (NidSetBI) null, c.getPositionSet(),
                 returnTuples, getVersions(), c.getPrecedence(),
                 c.getContradictionManager());
 
         return returnTuples;
     }
 
-    public Collection<Version> getVersions(NidSetBI allowedStatus, PositionSetBI viewPositions,
+    public Collection<Version> getVersions(EnumSet<Status> allowedStatus, PositionSetBI viewPositions,
             Precedence precedence, ContradictionManagerBI contradictionMgr) {
         List<Version> returnTuples = new ArrayList<>(2);
 
@@ -416,8 +380,8 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
         }
 
         @Override
-        public ConceptAttributesRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-            return getCv().makeAnalog(statusNid, time, authorNid, moduleNid, pathNid);
+        public ConceptAttributesRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+            return getCv().makeAnalog(status, time, authorNid, moduleNid, pathNid);
         }
 
         @Override

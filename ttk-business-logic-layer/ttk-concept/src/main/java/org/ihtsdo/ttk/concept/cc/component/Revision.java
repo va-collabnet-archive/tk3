@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.ttk.api.Status;
 
 public abstract class Revision<V extends Revision<V, C>, C extends ConceptComponent<V, C>>
         implements ComponentVersionBI, AnalogBI, AnalogGeneratorBI<V> {
@@ -70,9 +71,9 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
       assert stamp != 0;
    }
 
-   public Revision(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
+   public Revision(Status status, long time, int authorNid, int moduleNid, int pathNid,
                    C primordialComponent) {
-      this.stamp = P.s.getStamp(statusNid, time, authorNid, moduleNid, pathNid);
+      this.stamp = P.s.getStamp(status, time, authorNid, moduleNid, pathNid);
       assert stamp != 0;
       this.primordialComponent = primordialComponent;
       primordialComponent.clearVersions();
@@ -92,8 +93,8 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
    abstract protected void addComponentNids(Set<Integer> allNids);
 
    @Override
-   public boolean addLongId(Long longId, int authorityNid, int statusNid, EditCoordinate ec, long time) {
-      return primordialComponent.addLongId(longId, authorityNid, statusNid, ec, time);
+   public boolean addLongId(Long longId, int authorityNid, org.ihtsdo.ttk.api.Status status, EditCoordinate ec, long time) {
+      return primordialComponent.addLongId(longId, authorityNid, status, ec, time);
    }
 
    protected String assertionString() {
@@ -143,7 +144,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
     * @return
     */
    @Override
-   public abstract V makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid);
+   public abstract V makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid);
 
    protected void modified() {
       if (primordialComponent != null) {
@@ -178,8 +179,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
       buf.append(stamp);
 
       try {
-         buf.append(" s:");
-         ConceptComponent.addNidToBuffer(buf, getStatusNid());
+         buf.append(" s:").append(getStatus());
          buf.append(" t: ");
          buf.append(TimeHelper.formatDate(getTime()));
          buf.append(" a:");
@@ -264,7 +264,6 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
       HashSet<Integer> allNids = new HashSet<>();
 
       allNids.add(primordialComponent.nid);
-      allNids.add(getStatusNid());
       allNids.add(getAuthorNid());
       allNids.add(getPathNid());
       addComponentNids(allNids);
@@ -392,8 +391,8 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
    }
 
    @Override
-   public int getStatusNid() {
-      return P.s.getStatusNidForStamp(stamp);
+   public Status getStatus() {
+      return P.s.getStatusForStamp(stamp);
    }
 
    @Override
@@ -423,16 +422,6 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
    }
 
    @Override
-   public boolean isActive(NidSetBI allowedStatusNids) {
-      return allowedStatusNids.contains(getStatusNid());
-   }
-
-   @Override
-   public boolean isActive(ViewCoordinate vc) {
-      return isActive(vc.getAllowedStatusNids());
-   }
-
-   @Override
    public boolean isBaselineGeneration() {
       return stamp <= P.s.getMaxReadOnlyStamp();
    }
@@ -441,6 +430,11 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
    public boolean isUncommitted() {
       return getTime() == Long.MAX_VALUE;
    }
+
+    @Override
+    public boolean isActive() throws IOException {
+        return getStatus() == Status.ACTIVE;
+    }
 
    //~--- set methods ---------------------------------------------------------
 
@@ -452,7 +446,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
       }
 
       if (authorNid != getPathNid()) {
-         this.stamp = P.s.getStamp(getStatusNid(), Long.MAX_VALUE, authorNid, getModuleNid(),
+         this.stamp = P.s.getStamp(getStatus(), Long.MAX_VALUE, authorNid, getModuleNid(),
                                          getPathNid());
          modified();
       }
@@ -466,7 +460,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
       }
 
       try {
-         this.stamp = P.s.getStamp(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), moduleNid,
+         this.stamp = P.s.getStamp(getStatus(), Long.MAX_VALUE, getAuthorNid(), moduleNid,
                                          getPathNid());
       } catch (Exception e) {
          throw new RuntimeException();
@@ -487,23 +481,23 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
                  + "Use makeAnalog instead.");
       }
 
-      this.stamp = P.s.getStamp(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), getModuleNid(), pathId);
+      this.stamp = P.s.getStamp(getStatus(), Long.MAX_VALUE, getAuthorNid(), getModuleNid(), pathId);
    }
 
-   public void setStatusAtPosition(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-      this.stamp = P.s.getStamp(statusNid, time, authorNid, moduleNid, pathNid);
+   public void setStatusAtPosition(Status status, long time, int authorNid, int moduleNid, int pathNid) {
+      this.stamp = P.s.getStamp(status, time, authorNid, moduleNid, pathNid);
       modified();
    }
 
    @Override
-   public final void setStatusNid(int statusNid) {
+   public final void setStatus(org.ihtsdo.ttk.api.Status nid) {
       if (getTime() != Long.MAX_VALUE) {
          throw new UnsupportedOperationException("Cannot change status if time != Long.MAX_VALUE; "
                  + "Use makeAnalog instead.");
       }
 
       try {
-         this.stamp = P.s.getStamp(statusNid, Long.MAX_VALUE, getAuthorNid(), getModuleNid(),
+         this.stamp = P.s.getStamp(nid, Long.MAX_VALUE, getAuthorNid(), getModuleNid(),
                                          getPathNid());
       } catch (Exception e) {
          throw new RuntimeException();
@@ -521,7 +515,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
 
       if (time != getTime()) {
          try {
-            this.stamp = P.s.getStamp(getStatusNid(), time, getAuthorNid(), getModuleNid(),
+            this.stamp = P.s.getStamp(getStatus(), time, getAuthorNid(), getModuleNid(),
                                             getPathNid());
          } catch (Exception e) {
             throw new RuntimeException();

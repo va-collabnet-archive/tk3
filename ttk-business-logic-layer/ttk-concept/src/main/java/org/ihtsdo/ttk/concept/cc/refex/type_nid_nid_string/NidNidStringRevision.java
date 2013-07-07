@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.*;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.cern.colt.list.IntArrayList;
+import org.ihtsdo.ttk.api.Status;
 
 public class NidNidStringRevision extends RefexRevision<NidNidStringRevision, NidNidStringMember>
         implements RefexNidNidStringAnalogBI<NidNidStringRevision> {
@@ -60,17 +61,17 @@ public class NidNidStringRevision extends RefexRevision<NidNidStringRevision, Ni
       string1 = input.readString();
    }
 
-   public NidNidStringRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
+   public NidNidStringRevision(Status status, long time, int authorNid, int moduleNid, int pathNid,
                             NidNidStringMember primoridalMember) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
+      super(status, time, authorNid, moduleNid, pathNid, primoridalMember);
       c1Nid    = primoridalMember.getC1Nid();
       c2Nid    = primoridalMember.getC2Nid();
       string1 = primoridalMember.getString1();
    }
 
-   protected NidNidStringRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
+   protected NidNidStringRevision(Status status, long time, int authorNid, int moduleNid, int pathNid,
                                NidNidStringRevision another) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
+      super(status, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       c1Nid    = another.c1Nid;
       c2Nid    = another.c2Nid;
       string1 = another.string1;
@@ -109,20 +110,20 @@ public class NidNidStringRevision extends RefexRevision<NidNidStringRevision, Ni
 
    @Override
    public NidNidStringRevision makeAnalog() {
-      return new NidNidStringRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
+      return new NidNidStringRevision(getStatus(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
    }
 
    @Override
-   public NidNidStringRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+   public NidNidStringRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
-         this.setStatusNid(statusNid);
+         this.setStatus(status);
          this.setAuthorNid(authorNid);
          this.setModuleNid(moduleNid);
 
          return this;
       }
 
-      NidNidStringRevision newR = new NidNidStringRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
+      NidNidStringRevision newR = new NidNidStringRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       primordialComponent.addRevision(newR);
 

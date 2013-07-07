@@ -292,7 +292,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
     private void setupFirstVersion(TtkComponentChronicle ec, ConceptComponent<?, ?>.Version v) throws IOException {
         ec.primordialUuid = v.getPrimordialUuid();
         ec.setPathUuid(P.s.getUuidPrimordialForNid(v.getPathNid()));
-        ec.setStatusUuid(P.s.getUuidPrimordialForNid(v.getStatusNid()));
+        ec.setStatus(v.getStatus());
         ec.setAuthorUuid(P.s.getUuidPrimordialForNid(v.getAuthorNid()));
         ec.setTime(v.getTime());
 
@@ -313,7 +313,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
                     eIdv.setDenotation(idv.getDenotation());
                     eIdv.setAuthorityUuid(P.s.getUuidPrimordialForNid(idv.getAuthorityNid()));
                     eIdv.setPathUuid(P.s.getUuidPrimordialForNid(idv.getPathNid()));
-                    eIdv.setStatusUuid(P.s.getUuidPrimordialForNid(idv.getStatusNid()));
+                    eIdv.setStatus(idv.getStatus());
                     eIdv.setAuthorUuid(P.s.getUuidPrimordialForNid(idv.getAuthorNid()));
                     eIdv.setTime(idv.getTime());
                 }
@@ -403,7 +403,7 @@ public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
         }
 
         ev.setPathUuid(P.s.getUuidPrimordialForNid(v.getPathNid()));
-        ev.setStatusUuid(P.s.getUuidPrimordialForNid(v.getStatusNid()));
+        ev.setStatus(v.getStatus());
         ev.setAuthorUuid(P.s.getUuidPrimordialForNid(v.getAuthorNid()));
         ev.setTime(v.getTime());
         ec.revisions.add(ev);

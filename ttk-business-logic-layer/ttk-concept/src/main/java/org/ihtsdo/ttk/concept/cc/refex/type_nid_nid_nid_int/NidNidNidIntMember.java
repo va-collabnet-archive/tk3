@@ -112,15 +112,14 @@ public class NidNidNidIntMember
 
    @Override
    public NidNidNidIntRevision makeAnalog() {
-      return new NidNidNidIntRevision(getStatusNid(), getTime(),
+      return new NidNidNidIntRevision(getStatus(), getTime(),
                                       getAuthorNid(), getModuleNid(),
                                       getPathNid(), this);
    }
 
    @Override
-   public NidNidNidIntRevision makeAnalog(int statusNid, long time,
-           int authorNid, int moduleNid, int pathNid) {
-      NidNidNidIntRevision newR = new NidNidNidIntRevision(statusNid, time,
+   public NidNidNidIntRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+      NidNidNidIntRevision newR = new NidNidNidIntRevision(status, time,
                                      authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);

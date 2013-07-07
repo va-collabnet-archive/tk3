@@ -27,6 +27,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.ihtsdo.ttk.api.Status;
 
 public class NidNidNidStringRevision
         extends RefexRevision<NidNidNidStringRevision, NidNidNidStringMember>
@@ -68,20 +69,20 @@ public class NidNidNidStringRevision
       string1 = input.readString();
    }
 
-   public NidNidNidStringRevision(int statusNid, long time, int authorNid,
+   public NidNidNidStringRevision(Status status, long time, int authorNid,
                                  int moduleNid, int pathNid,
                                  NidNidNidStringMember primoridalMember) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
+      super(status, time, authorNid, moduleNid, pathNid, primoridalMember);
       nid1  = primoridalMember.getNid1();
       nid2  = primoridalMember.getNid2();
       nid3  = primoridalMember.getNid3();
       string1 = primoridalMember.getString1();
    }
 
-   protected NidNidNidStringRevision(int statusNid, long time, int authorNid,
+   protected NidNidNidStringRevision(Status status, long time, int authorNid,
                                     int moduleNid, int pathNid,
                                     NidNidNidStringRevision another) {
-      super(statusNid, time, authorNid, moduleNid, pathNid,
+      super(status, time, authorNid, moduleNid, pathNid,
             another.primordialComponent);
       nid1  = another.nid1;
       nid2  = another.nid2;
@@ -123,23 +124,22 @@ public class NidNidNidStringRevision
 
    @Override
    public NidNidNidStringRevision makeAnalog() {
-      return new NidNidNidStringRevision(getStatusNid(), getTime(),
+      return new NidNidNidStringRevision(getStatus(), getTime(),
                                         getAuthorNid(), getModuleNid(),
                                         getPathNid(), this);
    }
 
    @Override
-   public NidNidNidStringRevision makeAnalog(int statusNid, long time,
-           int authorNid, int moduleNid, int pathNid) {
+   public NidNidNidStringRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
-         this.setStatusNid(statusNid);
+         this.setStatus(status);
          this.setAuthorNid(authorNid);
          this.setModuleNid(moduleNid);
 
          return this;
       }
 
-      NidNidNidStringRevision newR = new NidNidNidStringRevision(statusNid, time,
+      NidNidNidStringRevision newR = new NidNidNidStringRevision(status, time,
                                        authorNid, moduleNid, pathNid, this);
 
       primordialComponent.addRevision(newR);

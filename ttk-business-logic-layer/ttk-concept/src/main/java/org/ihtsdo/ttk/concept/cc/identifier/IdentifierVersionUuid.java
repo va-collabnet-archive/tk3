@@ -13,6 +13,7 @@ import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierUuid;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
+import org.ihtsdo.ttk.api.Status;
 
 public class IdentifierVersionUuid extends IdentifierVersion implements UuidIdBI {
    private long lsb;
@@ -36,16 +37,16 @@ public class IdentifierVersionUuid extends IdentifierVersion implements UuidIdBI
       lsb = input.readLong();
    }
 
-   public IdentifierVersionUuid(int statusNid, long time, int authorNid, int moduleNid,
+   public IdentifierVersionUuid(Status status, long time, int authorNid, int moduleNid,
            int pathNid, int authorityNid, UUID uuid) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, authorityNid);
+      super(status, time, authorNid, moduleNid, pathNid, authorityNid);
       msb = uuid.getMostSignificantBits();
       lsb = uuid.getLeastSignificantBits();
    }
 
-   public IdentifierVersionUuid(IdentifierVersionUuid another,int statusNid, long time,
+   public IdentifierVersionUuid(IdentifierVersionUuid another, Status status, long time,
            int authorNid, int moduleNid, int pathNid) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, another.authorityNid);
+      super(status, time, authorNid, moduleNid, pathNid, another.authorityNid);
       msb = another.msb;
       lsb = another.lsb;
    }

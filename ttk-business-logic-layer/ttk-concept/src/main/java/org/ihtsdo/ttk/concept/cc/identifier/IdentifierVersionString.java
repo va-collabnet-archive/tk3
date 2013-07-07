@@ -4,6 +4,7 @@ package org.ihtsdo.ttk.concept.cc.identifier;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 import java.io.IOException;
+import org.ihtsdo.ttk.api.Status;
 
 
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent.IDENTIFIER_PART_TYPES;
@@ -29,16 +30,16 @@ public class IdentifierVersionString extends IdentifierVersion implements String
         stringDenotation = input.readString();
     }
 
-    public IdentifierVersionString(IdentifierVersionString another, int statusNid, long time,int authorNid,
+    public IdentifierVersionString(IdentifierVersionString another, Status status, long time,int authorNid,
            int moduleNid, int pathNid) {
-        super(statusNid, time, authorNid, moduleNid, pathNid, another.authorityNid);
+        super(status, time, authorNid, moduleNid, pathNid, another.authorityNid);
         stringDenotation = (String) another.getDenotation();
     }
 
-    public IdentifierVersionString(int statusNid, long time,int authorNid,
+    public IdentifierVersionString(Status status, long time,int authorNid,
            int moduleNid, int pathNid, String denotation,
             int authorityNid) {
-        super(statusNid, time, authorNid, moduleNid, pathNid, authorityNid);
+        super(status, time, authorNid, moduleNid, pathNid, authorityNid);
         stringDenotation = denotation;
     }
 

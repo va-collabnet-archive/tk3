@@ -357,7 +357,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
     public List<RefexMember<R, C>.Version> getVersions(ViewCoordinate c) {
         List<RefexMember<R, C>.Version> returnTuples = new ArrayList<>(2);
 
-        getVersionComputer().addSpecifiedVersions(c.getAllowedStatusNids(), (NidSetBI) null,
+        getVersionComputer().addSpecifiedVersions(c.getAllowedStatus(), (NidSetBI) null,
                 c.getPositionSet(), returnTuples, getVersions(), c.getPrecedence(),
                 c.getContradictionManager());
 
@@ -367,7 +367,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
     public List<RefexMember<R, C>.Version> getVersions(ViewCoordinate c, long time) {
         List<RefexMember<R, C>.Version> returnTuples = new ArrayList<>(2);
 
-        getVersionComputer().addSpecifiedVersions(c.getAllowedStatusNids(), (NidSetBI) null,
+        getVersionComputer().addSpecifiedVersions(c.getAllowedStatus(), (NidSetBI) null,
                 c.getPositionSet(), returnTuples, getVersions(), c.getPrecedence(),
                 c.getContradictionManager(), time);
 
@@ -443,8 +443,8 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
 
  
         @Override
-        public R makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-            return getCv().makeAnalog(statusNid, time, authorNid, moduleNid, pathNid);
+        public R makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+            return getCv().makeAnalog(status, time, authorNid, moduleNid, pathNid);
         }
 
         @Override

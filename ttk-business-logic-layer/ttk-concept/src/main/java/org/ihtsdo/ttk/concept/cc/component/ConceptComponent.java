@@ -58,6 +58,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.ttk.api.Status;
 
 /**
  * Class description
@@ -378,11 +379,11 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
      * @return
      */
     @Override
-    public boolean addLongId(Long longId, int authorityNid, int statusNid, EditCoordinate ec, long time) {
+    public boolean addLongId(Long longId, int authorityNid, Status status, EditCoordinate ec, long time) {
         IdentifierVersionLong v = null;
         
         for (int path : ec.getEditPaths().getSetValues()) {
-            v = new IdentifierVersionLong(statusNid, time, ec.getAuthorNid(), ec.getModuleNid(), path,
+            v = new IdentifierVersionLong(status, time, ec.getAuthorNid(), ec.getModuleNid(), path,
                     authorityNid, longId);
         }
         
@@ -497,9 +498,9 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
      *
      * @return
      */
-    public boolean addStringId(String stringId, int authorityNid, int statusNid, long time, int authorNid,
+    public boolean addStringId(String stringId, int authorityNid, Status status, long time, int authorNid,
             int moduleNid, int pathNid) {
-        IdentifierVersionString v = new IdentifierVersionString(statusNid, time, authorNid, moduleNid, pathNid,
+        IdentifierVersionString v = new IdentifierVersionString(status, time, authorNid, moduleNid, pathNid,
                 stringId, authorityNid);
         
         return addIdVersion(v);
@@ -542,9 +543,9 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
      *
      * @return
      */
-    public boolean addUuidId(UUID uuidId, int authorityNid, int statusNid, long time, int authorNid,
+    public boolean addUuidId(UUID uuidId, int authorityNid, Status status, long time, int authorNid,
             int moduleNid, int pathNid) {
-        IdentifierVersionUuid v = new IdentifierVersionUuid(statusNid, time, authorNid, moduleNid, pathNid,
+        IdentifierVersionUuid v = new IdentifierVersionUuid(status, time, authorNid, moduleNid, pathNid,
                 authorityNid, uuidId);
         
         return addIdVersion(v);
@@ -874,7 +875,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
                 if (!cv.isBaselineGeneration() && (cv.getPathNid() != pathNid)
                         && (cv.getTime() != Long.MAX_VALUE)) {
                     changed = true;
-                    cv.makeAnalog(cv.getStatusNid(), Long.MAX_VALUE, ec.getModuleNid(), ec.getAuthorNid(),
+                    cv.makeAnalog(cv.getStatus(), Long.MAX_VALUE, ec.getModuleNid(), ec.getAuthorNid(),
                             pathNid);
                 }
             }
@@ -883,7 +884,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
             
             if (versions.size() > 0) {
                 for (Version cv : resolution) {
-                    cv.makeAnalog(cv.getStatusNid(), Long.MAX_VALUE, ec.getModuleNid(), ec.getAuthorNid(),
+                    cv.makeAnalog(cv.getStatus(), Long.MAX_VALUE, ec.getModuleNid(), ec.getAuthorNid(),
                             pathNid);
                     changed = true;
                 }
@@ -1157,12 +1158,12 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
      * @param pathNid
      * @param moduleNid
      */
-    public final void resetUncommitted(int statusNid, int authorNid, int pathNid, int moduleNid) {
+    public final void resetUncommitted(Status status, int authorNid, int pathNid, int moduleNid) {
         if (getTime() != Long.MIN_VALUE) {
             throw new UnsupportedOperationException("Cannot resetUncommitted if time != Long.MIN_VALUE");
         }
         
-        this.primordialStamp = P.s.getStamp(statusNid, Long.MAX_VALUE, authorNid, moduleNid, pathNid);
+        this.primordialStamp = P.s.getStamp(status, Long.MAX_VALUE, authorNid, moduleNid, pathNid);
         assert primordialStamp != 0 : "Processing nid: " + enclosingConceptNid;
         this.getEnclosingConcept().setIsCanceled(false);
         this.clearVersions();
@@ -1229,7 +1230,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         if (primordialStamp > 0) {
             try {
                 buf.append(" s:");
-                ConceptComponent.addNidToBuffer(buf, getStatusNid());
+                buf.append(getStatus());
                 buf.append(" t: ");
                 buf.append(TimeHelper.formatDate(getTime()));
                 buf.append(" ");
@@ -1402,7 +1403,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
                         return true;
                     }
                     
-                    if (v1.getStatusNid() != v2.getStatusNid()) {
+                    if (v1.getStatus() != v2.getStatus()) {
                         return false;
                     }
                     
@@ -1432,7 +1433,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
                 for (Version v2 : versions2) {
                     if (v1 == v2) {
                         foundCount++;
-                    } else if (v1.getStatusNid() != v2.getStatusNid()) {
+                    } else if (v1.getStatus() != v2.getStatus()) {
                         continue;
                     } else if (v1.getTime() != v2.getTime()) {
                         continue;
@@ -1566,7 +1567,6 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         HashSet<Integer> allNids = new HashSet<>();
         
         allNids.add(nid);
-        allNids.add(getStatusNid());
         allNids.add(getAuthorNid());
         allNids.add(getPathNid());
         
@@ -1586,7 +1586,6 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         HashSet<Integer> allNids = new HashSet<>();
         
         allNids.add(nid);
-        allNids.add(getStatusNid());
         allNids.add(getAuthorNid());
         allNids.add(getPathNid());
         addComponentNids(allNids);
@@ -1999,7 +1998,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         List<RefexVersionBI<?>> returnValues = new ArrayList<>(refexes.size());
         ViewCoordinate allStatus = xyz.getVcWithAllStatusValues();
         
-        allStatus.setAllowedStatusNids(null);
+        allStatus.setAllowedStatus(null);
         
         for (RefexChronicleBI<?> refex : refexes) {
             for (RefexVersionBI<?> version : refex.getVersions(allStatus)) {
@@ -2258,8 +2257,8 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
      * @return
      */
     @Override
-    public final int getStatusNid() {
-        return P.s.getStatusNidForStamp(primordialStamp);
+    public final Status getStatus() {
+        return P.s.getStatusForStamp(primordialStamp);
     }
 
     /**
@@ -2439,32 +2438,6 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
      * Method description
      *
      *
-     * @param allowedStatusNids
-     *
-     * @return
-     */
-    @Override
-    public boolean isActive(NidSetBI allowedStatusNids) {
-        return allowedStatusNids.contains(getStatusNid());
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @param vc
-     *
-     * @return
-     */
-    @Override
-    public boolean isActive(ViewCoordinate vc) {
-        return isActive(vc.getAllowedStatusNids());
-    }
-
-    /**
-     * Method description
-     *
-     *
      * @return
      */
     @Override
@@ -2486,6 +2459,10 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         
         return primordialSapNid == -1;
     }
+        @Override
+        public boolean isActive() {
+            return getStatus() == Status.ACTIVE;
+        }
 
     /**
      * Method description
@@ -2540,7 +2517,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
         
         if (authorNid != getAuthorNid()) {
-            this.primordialStamp = P.s.getStamp(getStatusNid(), Long.MAX_VALUE, authorNid, getModuleNid(),
+            this.primordialStamp = P.s.getStamp(getStatus(), Long.MAX_VALUE, authorNid, getModuleNid(),
                     getPathNid());
             assert primordialStamp != 0 : "Processing nid: " + enclosingConceptNid;
             modified();
@@ -2561,7 +2538,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
         
         if (moduleId != this.getModuleNid()) {
-            this.primordialStamp = P.s.getStamp(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), moduleId,
+            this.primordialStamp = P.s.getStamp(getStatus(), Long.MAX_VALUE, getAuthorNid(), moduleId,
                     getPathNid());
             assert primordialStamp != 0 : "Processing nid: " + enclosingConceptNid;
         }
@@ -2599,7 +2576,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
         
         if (pathId != getPathNid()) {
-            this.primordialStamp = P.s.getStamp(getStatusNid(), Long.MAX_VALUE, getAuthorNid(), getModuleNid(),
+            this.primordialStamp = P.s.getStamp(getStatus(), Long.MAX_VALUE, getAuthorNid(), getModuleNid(),
                     pathId);
             assert primordialStamp != 0 : "Processing nid: " + enclosingConceptNid;
             modified();
@@ -2636,14 +2613,14 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
      * @param statusId
      */
     @Override
-    public final void setStatusNid(int statusId) {
+    public final void setStatus(Status status) {
         if (getTime() != Long.MAX_VALUE) {
             throw new UnsupportedOperationException(
                     "Cannot change status if time != Long.MAX_VALUE; Use makeAnalog instead.");
         }
         
-        if (statusId != this.getStatusNid()) {
-            this.primordialStamp = P.s.getStamp(statusId, Long.MAX_VALUE, getAuthorNid(), getModuleNid(),
+        if (status != this.getStatus()) {
+            this.primordialStamp = P.s.getStamp(status, Long.MAX_VALUE, getAuthorNid(), getModuleNid(),
                     getPathNid());
             assert primordialStamp != 0 : "Processing nid: " + enclosingConceptNid;
         }
@@ -2663,7 +2640,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         }
         
         if (time != getTime()) {
-            this.primordialStamp = P.s.getStamp(getStatusNid(), time, getAuthorNid(), getModuleNid(),
+            this.primordialStamp = P.s.getStamp(getStatus(), time, getAuthorNid(), getModuleNid(),
                     getPathNid());
             assert primordialStamp != 0 : "Processing nid: " + enclosingConceptNid;
         }
@@ -2692,6 +2669,11 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         public Version(ComponentVersionBI cv) {
             super();
             this.cv = cv;
+        }
+        
+        @Override
+        public boolean isActive() {
+            return cv.getStatus() == Status.ACTIVE;
         }
 
         /**
@@ -2722,8 +2704,8 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
          *
          * @return
          */
-        public boolean addLongId(Long longId, int authorityNid, int statusNid, EditCoordinate ec, long time) {
-            return ConceptComponent.this.addLongId(longId, authorityNid, statusNid, ec, time);
+        public boolean addLongId(Long longId, int authorityNid, Status status, EditCoordinate ec, long time) {
+            return ConceptComponent.this.addLongId(longId, authorityNid, status, ec, time);
         }
 
 //
@@ -3210,7 +3192,7 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
          */
         public R getRevision() {
             if (cv == ConceptComponent.this) {
-                return makeAnalog(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid());
+                return makeAnalog(getStatus(), getTime(), getAuthorNid(), getModuleNid(), getPathNid());
             }
             
             return (R) cv;
@@ -3234,8 +3216,8 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
          * @return
          */
         @Override
-        public int getStatusNid() {
-            return cv.getStatusNid();
+        public Status getStatus() {
+            return cv.getStatus();
         }
 
         /**
@@ -3307,40 +3289,6 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
         @Override
         public boolean hasCurrentRefexMember(ViewCoordinate xyz, int refsetNid) throws IOException {
             return ConceptComponent.this.hasCurrentRefexMember(xyz, refsetNid);
-        }
-
-//    @Override
-//    public boolean hasExtensions() throws IOException {
-//        return ConceptComponent.this.hasExtensions();
-//    }
-        /**
-         * Method description
-         *
-         *
-         * @param allowedStatusNids
-         *
-         * @return
-         *
-         * @throws IOException
-         */
-        @Override
-        public boolean isActive(NidSetBI allowedStatusNids) throws IOException {
-            return cv.isActive(allowedStatusNids);
-        }
-
-        /**
-         * Method description
-         *
-         *
-         * @param vc
-         *
-         * @return
-         *
-         * @throws IOException
-         */
-        @Override
-        public boolean isActive(ViewCoordinate vc) throws IOException {
-            return isActive(vc.getAllowedStatusNids());
         }
 
         /**
@@ -3421,8 +3369,8 @@ public abstract class ConceptComponent<R extends Revision<R, C>, C extends Conce
          *
          * @throws PropertyVetoException
          */
-        public void setStatusNid(int statusNid) throws PropertyVetoException {
-            ((AnalogBI) cv).setStatusNid(statusNid);
+        public void setStatus(Status status) throws PropertyVetoException {
+            ((AnalogBI) cv).setStatus(status);
         }
 
         /**

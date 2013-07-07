@@ -100,12 +100,12 @@ public class NidFloatMember extends RefexMember<NidFloatRevision, NidFloatMember
 
    @Override
    public NidFloatRevision makeAnalog() {
-      return new NidFloatRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
+      return new NidFloatRevision(getStatus(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(), this);
    }
 
    @Override
-   public NidFloatRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-      NidFloatRevision newR = new NidFloatRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
+   public NidFloatRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+      NidFloatRevision newR = new NidFloatRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);
 

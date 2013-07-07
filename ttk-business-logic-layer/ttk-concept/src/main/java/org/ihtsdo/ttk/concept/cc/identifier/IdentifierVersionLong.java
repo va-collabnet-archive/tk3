@@ -5,6 +5,7 @@ package org.ihtsdo.ttk.concept.cc.identifier;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 import java.io.IOException;
+import org.ihtsdo.ttk.api.Status;
 
 
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent.IDENTIFIER_PART_TYPES;
@@ -30,9 +31,9 @@ public class IdentifierVersionLong extends IdentifierVersion implements LongIdBI
       longDenotation = input.readLong();
    }
    
-   public IdentifierVersionLong(int statusNid, long time, int authorNid, int moduleNid,
+   public IdentifierVersionLong(Status status, long time, int authorNid, int moduleNid,
            int pathNid, int authorityNid, long denotation) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, authorityNid);
+      super(status, time, authorNid, moduleNid, pathNid, authorityNid);
    }
 
    //~--- methods -------------------------------------------------------------

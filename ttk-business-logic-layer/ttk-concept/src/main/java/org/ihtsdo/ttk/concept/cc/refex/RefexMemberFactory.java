@@ -9,7 +9,6 @@ import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
@@ -371,7 +370,7 @@ public class RefexMemberFactory {
 
       for (int i = 0; i < ec.getEditPaths().size(); i++) {
          if (i == 0) {
-            member.setSTAMP(P.s.getStamp(blueprint.getInt(ComponentProperty.STATUS_ID), Long.MAX_VALUE,
+            member.setSTAMP(P.s.getStamp(blueprint.getStatus(), Long.MAX_VALUE,
                 ec.getAuthorNid(), ec.getModuleNid(), ec.getEditPaths().getSetValues()[i]));
             member.setPrimordialUuid(blueprint.getMemberUUID());
 
@@ -381,7 +380,7 @@ public class RefexMemberFactory {
                throw new InvalidCAB("RefexAmendmentSpec: " + blueprint, ex);
             }
          } else {
-            member.makeAnalog(blueprint.getInt(ComponentProperty.STATUS_ID), Long.MAX_VALUE, ec.getAuthorNid(),
+            member.makeAnalog(blueprint.getStatus(), Long.MAX_VALUE, ec.getAuthorNid(),
                               ec.getModuleNid(), ec.getEditPaths().getSetValues()[i]);
          }
       }

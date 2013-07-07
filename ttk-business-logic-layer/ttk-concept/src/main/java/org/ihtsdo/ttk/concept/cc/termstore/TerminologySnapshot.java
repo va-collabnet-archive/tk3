@@ -47,6 +47,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import org.ihtsdo.ttk.api.Status;
 
 /**
  * Class description
@@ -968,8 +969,8 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     * @return
     */
    @Override
-   public int getStatusNidForStamp(int sapNid) {
-      return store.getStatusNidForStamp(sapNid);
+   public Status getStatusForStamp(int stamp) {
+      return store.getStatusForStamp(stamp);
    }
 
    /**

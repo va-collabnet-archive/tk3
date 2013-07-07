@@ -18,6 +18,7 @@ import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.cern.colt.list.IntArrayList;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.RelationshipCAB;
@@ -182,9 +183,8 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
    }
 
    @Override
-   public RelationshipRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid,
-           int pathNid) {
-      RelationshipRevision newR = new RelationshipRevision(this, statusNid, time, authorNid, moduleNid,
+   public RelationshipRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+      RelationshipRevision newR = new RelationshipRevision(this, status, time, authorNid, moduleNid,
                                      pathNid, this);
 
       addRevision(newR);
@@ -483,7 +483,7 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
       return returnValues;
    }
 
-   public Collection<Relationship.Version> getVersions(NidSetBI allowedStatus, NidSetBI allowedTypes,
+   public Collection<Relationship.Version> getVersions(EnumSet<Status> allowedStatus, NidSetBI allowedTypes,
            PositionSetBI viewPositions, Precedence precedence, ContradictionManagerBI contradictionMgr) {
       List<Version> returnTuples = new ArrayList<>(2);
 
@@ -593,9 +593,8 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
       }
 
       @Override
-      public RelationshipRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid,
-              int pathNid) {
-         return (RelationshipRevision) getCv().makeAnalog(statusNid, time, authorNid, moduleNid, pathNid);
+      public RelationshipRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+         return (RelationshipRevision) getCv().makeAnalog(status, time, authorNid, moduleNid, pathNid);
       }
 
       @Override

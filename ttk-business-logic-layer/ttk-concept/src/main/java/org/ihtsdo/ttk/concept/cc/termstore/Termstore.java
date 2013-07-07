@@ -52,7 +52,6 @@ import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
 import org.ihtsdo.ttk.api.conflict.IdentifyAllConflictStrategy;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRfx;
 import org.ihtsdo.ttk.api.metadata.binding.TermAux;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.Path;
@@ -81,6 +80,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
 
 /**
@@ -326,10 +326,7 @@ public abstract class Termstore implements PersistentStoreI {
       PathBI        viewPath          = new Path(TermAux.WB_AUX_PATH.getLenient().getNid(), null);
       PositionBI    viewPosition      = new Position(Long.MAX_VALUE, viewPath);
       PositionSetBI positionSet       = new PositionSetReadOnly(viewPosition);
-      NidSet        allowedStatusNids = new NidSet();
-
-      allowedStatusNids.add(TermAux.CURRENT.getLenient().getNid());
-      allowedStatusNids.add(SnomedMetadataRfx.getSTATUS_CURRENT_NID());
+      EnumSet<Status>        allowedStatusNids = EnumSet.of(Status.ACTIVE);
 
       NidSetBI isaTypeNids = new NidSet();
 
@@ -997,7 +994,7 @@ public abstract class Termstore implements PersistentStoreI {
     */
    @Override
    public int getStamp(ExternalStampBI version) throws IOException {
-      return getStamp(getNidForUuids(version.getStatusUuid()), version.getTime(),
+      return getStamp(version.getStatus(), version.getTime(),
                       getNidForUuids(version.getAuthorUuid()), getNidForUuids(version.getModuleUuid()),
                       getNidForUuids(version.getPathUuid()));
    }

@@ -114,15 +114,14 @@ public class NidNidNidFloatMember
 
    @Override
    public NidNidNidFloatRevision makeAnalog() {
-      return new NidNidNidFloatRevision(getStatusNid(), getTime(),
+      return new NidNidNidFloatRevision(getStatus(), getTime(),
                                         getAuthorNid(), getModuleNid(),
                                         getPathNid(), this);
    }
 
    @Override
-   public NidNidNidFloatRevision makeAnalog(int statusNid, long time,
-           int authorNid, int moduleNid, int pathNid) {
-      NidNidNidFloatRevision newR = new NidNidNidFloatRevision(statusNid, time,
+   public NidNidNidFloatRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+      NidNidNidFloatRevision newR = new NidNidNidFloatRevision(status, time,
                                        authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);

@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.api.blueprint.RefexDirective;
 import org.ihtsdo.ttk.concept.cc.P;
@@ -73,7 +73,7 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
 
    public DescriptionRevision(TtkDescriptionRevision edv, Description primoridalMember)
            throws IOException {
-      super(P.s.getNidForUuids(edv.getStatusUuid()),edv.getTime(), P.s.getNidForUuids(edv.getAuthorUuid()),
+      super(edv.getStatus(),edv.getTime(), P.s.getNidForUuids(edv.getAuthorUuid()),
               P.s.getNidForUuids(edv.getModuleUuid()), P.s.getNidForUuids(edv.getPathUuid()),primoridalMember);
       initialCaseSignificant = edv.isInitialCaseSignificant();
       lang                   = edv.getLang();
@@ -100,9 +100,9 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
       typeNid                = input.readInt();
    }
 
-   protected DescriptionRevision(DescriptionVersionBI another, int statusNid, long time,
+   protected DescriptionRevision(DescriptionVersionBI another, Status status, long time,
            int authorNid, int moduleNid, int pathNid, Description primoridalMember) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
+      super(status, time, authorNid, moduleNid, pathNid, primoridalMember);
       this.text                   = another.getText();
       this.typeNid                = another.getTypeNid();
       this.lang                   = another.getLang();
@@ -151,9 +151,9 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
    }
 
    @Override
-   public DescriptionRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+   public DescriptionRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
-         this.setStatusNid(statusNid);
+         this.setStatus(status);
          this.setAuthorNid(authorNid);
          this.setModuleNid(moduleNid);
 
@@ -162,7 +162,7 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
 
       DescriptionRevision newR;
 
-      newR = new DescriptionRevision(this.primordialComponent, statusNid, time, authorNid,
+      newR = new DescriptionRevision(this.primordialComponent, status, time, authorNid,
                                      moduleNid, pathNid,this.primordialComponent);
       this.primordialComponent.addRevision(newR);
 

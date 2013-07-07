@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.api.blueprint.RefexDirective;
 
@@ -41,7 +42,7 @@ public class RelGroupVersion implements RelGroupVersionBI {
    private int                 moduleNid;
    private int                 pathNid;
    private RelGroupChronicleBI rg;
-   private int                 statusNid;
+   private Status                 status;
 
    //~--- constructors --------------------------------------------------------
 
@@ -79,7 +80,7 @@ public class RelGroupVersion implements RelGroupVersionBI {
             time      = relV.getTime();
             authorNid = relV.getAuthorNid();
             pathNid   = relV.getPathNid();
-            statusNid = relV.getStatusNid();
+            status = relV.getStatus();
             moduleNid = relV.getModuleNid();
          }
       }
@@ -91,7 +92,7 @@ public class RelGroupVersion implements RelGroupVersionBI {
                   time      = relV.getTime();
                   authorNid = relV.getAuthorNid();
                   pathNid   = relV.getPathNid();
-                  statusNid = relV.getStatusNid();
+                  status = relV.getStatus();
                   moduleNid = relV.getModuleNid();
                }
             }
@@ -143,7 +144,7 @@ public class RelGroupVersion implements RelGroupVersionBI {
          if (coordinate != null) {
             for (RelationshipVersionBI rv : relc.getVersions(coordinate)) {
                if ((rv.getGroup() == rg.getRelGroup())
-                       && coordinate.getAllowedStatusNids().contains(rv.getStatusNid())) {
+                       && coordinate.getAllowedStatus().contains(rv.getStatus())) {
                   results.add(rv);
                }
             }
@@ -275,7 +276,7 @@ public class RelGroupVersion implements RelGroupVersionBI {
 
             if (rv != null) {
                if ((rv.getGroup() == rg.getRelGroup())
-                       && coordinate.getAllowedStatusNids().contains(rv.getStatusNid())) {
+                       && coordinate.getAllowedStatus().contains(rv.getStatus())) {
                   results.add(rv);
                }
             }
@@ -362,8 +363,8 @@ public class RelGroupVersion implements RelGroupVersionBI {
    }
 
    @Override
-   public int getStatusNid() {
-      return statusNid;
+   public Status getStatus() {
+      return status;
    }
 
    @Override
@@ -401,18 +402,9 @@ public class RelGroupVersion implements RelGroupVersionBI {
       throw new UnsupportedOperationException("Not supported yet.");
    }
 
+   @Override
    public boolean isActive() throws IOException {
-      return isActive(coordinate);
-   }
-
-   @Override
-   public boolean isActive(NidSetBI allowedStatusNids) {
-      return allowedStatusNids.contains(statusNid);
-   }
-
-   @Override
-   public boolean isActive(ViewCoordinate vc) throws IOException {
-      return vc.getAllowedStatusNids().contains(statusNid);
+      return coordinate.getAllowedStatus().contains(status);
    }
 
    @Override

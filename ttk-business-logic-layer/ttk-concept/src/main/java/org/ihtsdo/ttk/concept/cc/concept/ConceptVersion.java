@@ -59,9 +59,11 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.api.blueprint.RefexDirective;
+import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
 
 public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersion> {
    private static NidSetBI classifierCharacteristics;
@@ -499,7 +501,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    public DescriptionVersionBI getFullySpecifiedDescription() throws IOException, ContradictionException {
       setupFsnOrder();
 
-      return concept.getDesc(fsnOrder, vc.getLangPrefList(), vc.getAllowedStatusNids(), vc.getPositionSet(),
+      return concept.getDesc(fsnOrder, vc.getLangPrefList(), vc.getAllowedStatus(), vc.getPositionSet(),
                              LANGUAGE_SORT_PREF.getPref(vc.getLangSort()), vc.getPrecedence(),
                              vc.getContradictionManager());
    }
@@ -622,7 +624,7 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    public DescriptionVersionBI getPreferredDescription() throws IOException, ContradictionException {
       setupPreferredOrder();
 
-      return concept.getDesc(preferredOrder, vc.getLangPrefList(), vc.getAllowedStatusNids(),
+      return concept.getDesc(preferredOrder, vc.getLangPrefList(), vc.getAllowedStatus(),
                              vc.getPositionSet(), LANGUAGE_SORT_PREF.getPref(vc.getLangSort()),
                              vc.getPrecedence(), vc.getContradictionManager());
    }
@@ -1033,9 +1035,9 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
    }
 
    @Override
-   public int getStatusNid() {
+   public Status getStatus() {
       try {
-         return getConceptAttributes().getStatusNid();
+         return getConceptAttributes().getStatus();
       } catch (IOException e) {
          throw new RuntimeException(e);
       }
@@ -1166,46 +1168,13 @@ public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersi
          return true;
       } catch (ContradictionException ex) {
          for (ConceptAttributeVersionBI version : concept.getConceptAttributes().getVersions(vc)) {
-            if (vc.getAllowedStatusNids().contains(version.getStatusNid())) {
+            if (vc.getAllowedStatus().contains(version.getStatus())) {
                return true;
             }
          }
       }
 
       return false;
-   }
-
-   @Override
-   public boolean isActive(NidSetBI allowedStatusNids) throws IOException {
-      ViewCoordinate tempVc = new ViewCoordinate(UUID.randomUUID(), "isActive temp", vc);
-
-      tempVc.getAllowedStatusNids().clear();
-      tempVc.getAllowedStatusNids().addAll(allowedStatusNids.getSetValues());
-
-      try {
-         if (concept.getConceptAttributes().getVersion(tempVc) == null) {
-            return false;
-         }
-
-         if ((allowedStatusNids == null) || (allowedStatusNids.size() == 0)) {
-            return true;
-         }
-
-         return allowedStatusNids.contains(getConceptAttributesActive().getStatusNid());
-      } catch (ContradictionException ex) {
-         for (ConceptAttributeVersionBI version : concept.getConceptAttributes().getVersions(tempVc)) {
-            if (allowedStatusNids.contains(version.getStatusNid())) {
-               return true;
-            }
-         }
-      }
-
-      return false;
-   }
-
-   @Override
-   public boolean isActive(ViewCoordinate vc) throws IOException {
-      return isActive(vc.getAllowedStatusNids());
    }
 
    @Override

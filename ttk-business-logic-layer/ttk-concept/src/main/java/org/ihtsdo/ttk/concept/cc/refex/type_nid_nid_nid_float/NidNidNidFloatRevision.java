@@ -27,6 +27,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.ihtsdo.ttk.api.Status;
 
 public class NidNidNidFloatRevision
         extends RefexRevision<NidNidNidFloatRevision, NidNidNidFloatMember>
@@ -68,20 +69,20 @@ public class NidNidNidFloatRevision
       float1 = input.readFloat();
    }
 
-   public NidNidNidFloatRevision(int statusNid, long time, int authorNid,
+   public NidNidNidFloatRevision(Status status, long time, int authorNid,
                                  int moduleNid, int pathNid,
                                  NidNidNidFloatMember primoridalMember) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
+      super(status, time, authorNid, moduleNid, pathNid, primoridalMember);
       nid1  = primoridalMember.getNid1();
       nid2  = primoridalMember.getNid2();
       nid3  = primoridalMember.getNid3();
       float1 = primoridalMember.getFloat1();
    }
 
-   protected NidNidNidFloatRevision(int statusNid, long time, int authorNid,
+   protected NidNidNidFloatRevision(Status status, long time, int authorNid,
                                     int moduleNid, int pathNid,
                                     NidNidNidFloatRevision another) {
-      super(statusNid, time, authorNid, moduleNid, pathNid,
+      super(status, time, authorNid, moduleNid, pathNid,
             another.primordialComponent);
       nid1  = another.nid1;
       nid2  = another.nid2;
@@ -123,23 +124,22 @@ public class NidNidNidFloatRevision
 
    @Override
    public NidNidNidFloatRevision makeAnalog() {
-      return new NidNidNidFloatRevision(getStatusNid(), getTime(),
+      return new NidNidNidFloatRevision(getStatus(), getTime(),
                                         getAuthorNid(), getModuleNid(),
                                         getPathNid(), this);
    }
 
    @Override
-   public NidNidNidFloatRevision makeAnalog(int statusNid, long time,
-           int authorNid, int moduleNid, int pathNid) {
+   public NidNidNidFloatRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
-         this.setStatusNid(statusNid);
+         this.setStatus(status);
          this.setAuthorNid(authorNid);
          this.setModuleNid(moduleNid);
 
          return this;
       }
 
-      NidNidNidFloatRevision newR = new NidNidNidFloatRevision(statusNid, time,
+      NidNidNidFloatRevision newR = new NidNidNidFloatRevision(status, time,
                                        authorNid, moduleNid, pathNid, this);
 
       primordialComponent.addRevision(newR);

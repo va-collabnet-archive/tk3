@@ -26,6 +26,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.concept.cc.P;
 
 public class NidStringRevision extends RefexRevision<NidStringRevision, NidStringMember>
@@ -57,15 +58,15 @@ public class NidStringRevision extends RefexRevision<NidStringRevision, NidStrin
       strValue = input.readString();
    }
 
-   public NidStringRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid,
+   public NidStringRevision(Status status, long time, int authorNid, int moduleNid, int pathNid,
                          NidStringMember primoridalMember) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
+      super(status, time, authorNid, moduleNid, pathNid, primoridalMember);
       c1Nid    = primoridalMember.getC1Nid();
       strValue = primoridalMember.getString1();
    }
 
-   protected NidStringRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, NidStringRevision another) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
+   protected NidStringRevision(Status status, long time, int authorNid, int moduleNid, int pathNid, NidStringRevision another) {
+      super(status, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       c1Nid    = another.c1Nid;
       strValue = another.strValue;
    }
@@ -100,20 +101,20 @@ public class NidStringRevision extends RefexRevision<NidStringRevision, NidStrin
 
    @Override
    public NidStringRevision makeAnalog() {
-      return new NidStringRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(),  this);
+      return new NidStringRevision(getStatus(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(),  this);
    }
 
    @Override
-   public NidStringRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+   public NidStringRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
-         this.setStatusNid(statusNid);
+         this.setStatus(status);
          this.setAuthorNid(authorNid);
          this.setModuleNid(moduleNid);
 
          return this;
       }
 
-      NidStringRevision newR = new NidStringRevision(statusNid, time, authorNid, moduleNid, pathNid,this);
+      NidStringRevision newR = new NidStringRevision(status, time, authorNid, moduleNid, pathNid,this);
 
       primordialComponent.addRevision(newR);
 

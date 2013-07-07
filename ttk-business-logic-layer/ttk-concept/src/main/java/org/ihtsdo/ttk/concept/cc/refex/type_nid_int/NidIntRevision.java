@@ -12,6 +12,7 @@ import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
@@ -49,16 +50,16 @@ public class NidIntRevision extends RefexRevision<NidIntRevision, NidIntMember>
         intValue = input.readInt();
     }
 
-    protected NidIntRevision(int statusNid, long time, int authorNid, int moduleNid, int pathNid, 
+    protected NidIntRevision(Status status, long time, int authorNid, int moduleNid, int pathNid, 
                             NidIntMember primoridalMember) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, primoridalMember);
+      super(status, time, authorNid, moduleNid, pathNid, primoridalMember);
       c1Nid    = primoridalMember.getC1Nid();
       intValue = primoridalMember.getInt1();
    }
 
-   protected NidIntRevision(int statusNid, long time, int authorNid, int moduleNid,
+   protected NidIntRevision(Status status, long time, int authorNid, int moduleNid,
            int pathNid, NidIntRevision another) {
-      super(statusNid, time, authorNid, moduleNid, pathNid, another.primordialComponent);
+      super(status, time, authorNid, moduleNid, pathNid, another.primordialComponent);
       c1Nid    = another.c1Nid;
       intValue = another.intValue;
    }
@@ -92,20 +93,20 @@ public class NidIntRevision extends RefexRevision<NidIntRevision, NidIntMember>
 
     @Override
     public NidIntRevision makeAnalog() {
-        return new NidIntRevision(getStatusNid(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(),  this);
+        return new NidIntRevision(getStatus(), getTime(), getAuthorNid(), getModuleNid(), getPathNid(),  this);
     }
 
     @Override
-    public NidIntRevision makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+    public NidIntRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
         if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
-         this.setStatusNid(statusNid);
+         this.setStatus(status);
          this.setAuthorNid(authorNid);
          this.setModuleNid(moduleNid);
 
             return this;
         }
 
-        NidIntRevision newR = new NidIntRevision(statusNid, time, authorNid, moduleNid, pathNid, this);
+        NidIntRevision newR = new NidIntRevision(status, time, authorNid, moduleNid, pathNid, this);
 
         primordialComponent.addRevision(newR);
 
