@@ -161,7 +161,7 @@ public class RelationshipIndexRecord implements Iterable<RelationshipIndexRecord
 
    boolean isActiveTaxonomyRelationship(ViewCoordinate vc, RelativePositionComputerBI computer)
            throws IOException, ContradictionException {
-      if (vc.getIsaTypeNids().contains(getTypeNid())) {
+      if (vc.getIsaNid() == getTypeNid()) {
          int           stampIndex = offset + DESTINATION_NID_OFFSET + 1;
          int           recordEnd  = offset + data[offset + RECORD_LENGTH_OFFSET];
          List<Integer> inferredStamps     = new ArrayList<>();
