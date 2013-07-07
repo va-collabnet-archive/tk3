@@ -10,14 +10,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 
 /**
  *
  * @author kec
  */
-@Path("/sap")
-public class SapResource {
+@Path("/stamp")
+public class StampResource {
 
     @Context
     PersistentStoreI ts;
@@ -25,7 +26,7 @@ public class SapResource {
     @GET
     @Path("/read-only-max")
     @Produces("text/plain")
-    public String getRoMaxSap() throws IOException {
+    public String getRoMaxStamp() throws IOException {
         return Integer.toString(ts.getMaxReadOnlyStamp());
     }
     @GET
@@ -49,8 +50,8 @@ public class SapResource {
     @GET
     @Path("/status/{id}")
     @Produces("text/plain")
-    public String getStatusNid(@PathParam("id") String id) throws IOException {
-        return Integer.toString(ts.getStatusNidForStamp(Integer.parseInt(id)));
+    public String getStatus(@PathParam("id") String id) throws IOException {
+        return ts.getStatusForStamp(Integer.parseInt(id)).name();
     }
     @GET
     @Path("/module/{id}")
