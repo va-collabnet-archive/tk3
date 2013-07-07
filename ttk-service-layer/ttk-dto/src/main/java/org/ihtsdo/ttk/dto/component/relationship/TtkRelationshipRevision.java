@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.ihtsdo.ttk.api.metadata.binding.Snomed;
+import org.ihtsdo.ttk.api.metadata.binding.TermAux;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
@@ -128,6 +130,9 @@ public class TtkRelationshipRevision extends TtkRevision {
       refinabilityUuid   = new UUID(in.readLong(), in.readLong());
       group              = in.readInt();
       typeUuid           = new UUID(in.readLong(), in.readLong());
+      if (typeUuid.equals(TermAux.IS_A.getUuids()[0])) {
+          typeUuid = Snomed.IS_A.getUuids()[0];
+      }
    }
 
    /**
