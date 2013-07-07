@@ -130,7 +130,7 @@ public class ConceptAttributeAB extends CreateOrAmendBlueprint {
      * @throws IOException signals that an I/O exception has occurred
      */
     public boolean validate(ConceptAttributeVersionBI conceptAttributeVersion) throws IOException {
-        if (conceptAttributeVersion.getStatusNid() != getStatusNid()) {
+        if (conceptAttributeVersion.getStatus() != getStatus()) {
             return false;
         }
         if (conceptAttributeVersion.getNid() != getComponentNid()) {

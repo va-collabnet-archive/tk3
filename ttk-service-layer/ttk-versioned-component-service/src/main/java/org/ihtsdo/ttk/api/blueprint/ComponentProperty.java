@@ -44,7 +44,12 @@ public enum ComponentProperty {
     * Identifier of the status concept for this refex version,
     * either represented as a UUID or a nid.
     */
-   STATUS_ID, TIME_IN_MS, AUTHOR_ID, MODULE_ID, PATH_ID,
+   TIME_IN_MS, AUTHOR_ID, MODULE_ID, PATH_ID,
+   
+   /**
+    * Enumerated status type. 
+    */
+   STATUS,
 
    /**
     *

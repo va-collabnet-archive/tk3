@@ -27,11 +27,13 @@ import java.io.ObjectOutput;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.UUID;
+import org.ihtsdo.ttk.api.Status;
 
 public class ViewCoordinate implements Externalizable {
    private long                   lastModSequence = Long.MIN_VALUE;
-   private NidSetBI               allowedStatusNids;
+   private EnumSet<Status>        allowedStatus;
    private int                    classifierNid;
    private ContradictionManagerBI contradictionManager;
    private NidSetBI               isaTypeNids;
@@ -61,8 +63,8 @@ public class ViewCoordinate implements Externalizable {
          this.positionSet = new PositionSet(another.positionSet);
       }
 
-      if (another.allowedStatusNids != null) {
-         this.allowedStatusNids = new NidSet(another.allowedStatusNids.getSetValues());
+      if (another.allowedStatus != null) {
+         this.allowedStatus = another.allowedStatus.clone();
       }
 
       if (another.isaTypeNids != null) {
@@ -89,7 +91,7 @@ public class ViewCoordinate implements Externalizable {
    }
 
    public ViewCoordinate(UUID vcUuid, String name, Precedence precedence, PositionSetBI positionSet,
-                         NidSetBI allowedStatusNids, NidSetBI isaTypeNids,
+                         EnumSet<Status> allowedStatusNids, NidSetBI isaTypeNids,
                          ContradictionManagerBI contradictionManager, int languageNid, int classifierNid,
                          RelAssertionType relAssertionType, NidListBI langPrefList, LANGUAGE_SORT langSort) {
       super();
@@ -104,7 +106,7 @@ public class ViewCoordinate implements Externalizable {
       }
 
       if (allowedStatusNids != null) {
-         this.allowedStatusNids = new NidSet(allowedStatusNids.getSetValues());
+         this.allowedStatus = allowedStatusNids.clone();
       }
 
       if (isaTypeNids != null) {
@@ -166,7 +168,7 @@ public class ViewCoordinate implements Externalizable {
             return false;
          }
 
-         if (!testEquals(allowedStatusNids, another.allowedStatusNids)) {
+         if (!testEquals(allowedStatus, another.allowedStatus)) {
             return false;
          }
 
@@ -221,18 +223,11 @@ public class ViewCoordinate implements Externalizable {
 
       lastModSequence = in.readLong();
 
-      Object readObject = in.readObject();
-
-      if (readObject == null) {
-         allowedStatusNids = null;
-      } else {
-         allowedStatusNids = new NidSet();
-         allowedStatusNids.addAll(ts.getNidCollection((Collection<UUID>) readObject));
-      }
+      allowedStatus = (EnumSet<Status>) in.readObject();
 
       classifierNid        = ts.getNidForUuids((UUID) in.readObject());
       contradictionManager = (ContradictionManagerBI) in.readObject();
-      readObject           = in.readObject();
+      Object readObject           = in.readObject();
 
       if (readObject == null) {
          isaTypeNids = null;
@@ -314,8 +309,8 @@ public class ViewCoordinate implements Externalizable {
 
       String statusStr = "all";
 
-      if (allowedStatusNids != null) {
-         statusStr = allowedStatusNids.toString();
+      if (allowedStatus != null) {
+         statusStr = allowedStatus.toString();
       }
 
       sb.append(" \nallowedStatus: ");
@@ -341,11 +336,7 @@ public class ViewCoordinate implements Externalizable {
 
       out.writeLong(lastModSequence);
 
-      if (allowedStatusNids == null) {
-         out.writeObject(null);
-      } else {
-         out.writeObject(ts.getUuidCollection(allowedStatusNids.getAsSet()));
-      }
+      out.writeObject(allowedStatus);
 
       out.writeObject(ts.getUuidPrimordialForNid(classifierNid));
       out.writeObject(contradictionManager);
@@ -373,8 +364,8 @@ public class ViewCoordinate implements Externalizable {
 
    //~--- get methods ---------------------------------------------------------
 
-   public NidSetBI getAllowedStatusNids() {
-      return allowedStatusNids;
+   public EnumSet<Status> getAllowedStatus() {
+      return allowedStatus;
    }
 
    public int getClassifierNid() {
@@ -453,7 +444,7 @@ public class ViewCoordinate implements Externalizable {
    public ViewCoordinate getVcWithAllStatusValues() {
       if (vcWithAllStatusValues == null) {
          vcWithAllStatusValues                   = new ViewCoordinate(this);
-         vcWithAllStatusValues.allowedStatusNids = null;
+         vcWithAllStatusValues.allowedStatus = null;
       }
 
       return vcWithAllStatusValues;
@@ -461,9 +452,9 @@ public class ViewCoordinate implements Externalizable {
 
    //~--- set methods ---------------------------------------------------------
 
-   public void setAllowedStatusNids(NidSetBI allowedStatusNids) {
+   public void setAllowedStatus(EnumSet<Status> allowedStatus) {
       this.lastModSequence   = Ts.get().getSequence();
-      this.allowedStatusNids = allowedStatusNids;
+      this.allowedStatus = allowedStatus;
    }
 
    public void setClassifierNid(int classifierNid) {

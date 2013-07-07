@@ -111,7 +111,7 @@ public interface TerminologyDI {
 
    Set<PositionBI> getPositionSet(Set<Integer> sapNids) throws IOException;
 
-   int getStatusNidForStamp(int sapNid);
+    Status getStatusForStamp(int stamp);
 
    long getTimeForStamp(int sapNid);
    

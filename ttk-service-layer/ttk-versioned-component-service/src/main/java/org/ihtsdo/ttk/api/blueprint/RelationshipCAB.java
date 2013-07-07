@@ -462,7 +462,7 @@ public class RelationshipCAB extends CreateOrAmendBlueprint {
      * @throws IOException signals that an I/O exception has occurred
      */
     public boolean validate(RelationshipVersionBI relationshipVersion) throws IOException {
-        if (relationshipVersion.getStatusNid() != getStatusNid()) {
+        if (relationshipVersion.getStatus() != getStatus()) {
             return false;
         }
         if (relationshipVersion.getNid() != getComponentNid()) {

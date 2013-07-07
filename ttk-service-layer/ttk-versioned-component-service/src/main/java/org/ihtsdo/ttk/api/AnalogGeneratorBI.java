@@ -2,5 +2,5 @@ package org.ihtsdo.ttk.api;
 
 public interface AnalogGeneratorBI <T extends AnalogBI> {
 
-	T makeAnalog(int statusNid, long time, int authorNid, int moduleNid, int pathNid);
+	T makeAnalog(Status status, long time, int authorNid, int moduleNid, int pathNid);
 }

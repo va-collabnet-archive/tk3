@@ -27,6 +27,7 @@ import java.util.UUID;
 import org.ihtsdo.ttk.api.AnalogBI;
 import org.ihtsdo.ttk.api.ComponentBI;
 import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.TerminologyBuilderBI;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
@@ -40,7 +41,7 @@ import static org.ihtsdo.ttk.api.blueprint.ComponentProperty.MODULE_ID;
 import static org.ihtsdo.ttk.api.blueprint.ComponentProperty.PATH_ID;
 import static org.ihtsdo.ttk.api.blueprint.ComponentProperty.REFERENCED_COMPONENT_ID;
 import static org.ihtsdo.ttk.api.blueprint.ComponentProperty.REFEX_EXTENSION_ID;
-import static org.ihtsdo.ttk.api.blueprint.ComponentProperty.STATUS_ID;
+import static org.ihtsdo.ttk.api.blueprint.ComponentProperty.STATUS;
 import static org.ihtsdo.ttk.api.blueprint.ComponentProperty.TIME_IN_MS;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRfx;
@@ -134,7 +135,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
             for (ComponentProperty prop : ComponentProperty.values()) {
                 switch (prop) {
                     case COMPONENT_ID:
-                    case STATUS_ID:
+                    case STATUS:
                     case REFEX_EXTENSION_ID:
                     case REFERENCED_COMPONENT_ID:
                         break;
@@ -344,44 +345,16 @@ public class RefexCAB extends CreateOrAmendBlueprint {
         this.memberType = memberType;
         this.properties.put(ComponentProperty.REFERENCED_COMPONENT_ID, referencedComponentUuid);
         this.properties.put(ComponentProperty.REFEX_EXTENSION_ID, collectionNid);
-        this.properties.put(ComponentProperty.STATUS_ID,
+        this.properties.put(ComponentProperty.STATUS,
                 SnomedMetadataRfx.getSTATUS_CURRENT_NID());
         if (getMemberUUID() != null) {
             this.properties.put(ComponentProperty.COMPONENT_ID, memberUuid);
         }
-        if (this.properties.get(ComponentProperty.STATUS_ID) != null) {
-            setStatusUuid(Ts.get().getComponent(
-                    (Integer) this.properties.get(ComponentProperty.STATUS_ID)).getPrimordialUuid());
+        if (this.properties.get(ComponentProperty.STATUS) != null) {
+            setStatus( (Status) this.properties.get(ComponentProperty.STATUS));
         }
     }
 
-    /**
-     *
-     */
-    @Override
-    public void setCurrent() {
-        super.setCurrent();
-        try {
-            this.properties.put(ComponentProperty.STATUS_ID,
-                    Ts.get().getNidForUuids(super.getStatusUuid()));
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    /**
-     *
-     */
-    @Override
-    public void setRetired() {
-        super.setRetired();
-        try {
-            this.properties.put(ComponentProperty.STATUS_ID,
-                    Ts.get().getNidForUuids(super.getStatusUuid()));
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
 
     /**
      * Sets the uuid for the referenced component associated with this refex blueprint.
@@ -497,7 +470,6 @@ public class RefexCAB extends CreateOrAmendBlueprint {
     public Object put(ComponentProperty key, UUID uuidValue) {
         assert key == ComponentProperty.COMPONENT_ID
                 || key == ComponentProperty.ENCLOSING_CONCEPT_ID
-                || key == ComponentProperty.STATUS_ID
                 || key == ComponentProperty.AUTHOR_ID
                 || key == ComponentProperty.MODULE_ID
                 || key == ComponentProperty.PATH_ID
@@ -691,8 +663,8 @@ public class RefexCAB extends CreateOrAmendBlueprint {
                     RefexFloatAnalogBI<?> floatPart = (RefexFloatAnalogBI<?>) refexAnalog;
                     floatPart.setFloat1((Float.parseFloat(entry.getValue().toString())));
                     break;
-                case STATUS_ID:
-                    ((AnalogBI) refexAnalog).setStatusNid(getInt(ComponentProperty.STATUS_ID));
+                case STATUS:
+                    ((AnalogBI) refexAnalog).setStatus(getStatus());
                     break;
                 case TIME_IN_MS:
                     ((AnalogBI) refexAnalog).setTime((Long) entry.getValue());
@@ -779,7 +751,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
                     break;
                 case ENCLOSING_CONCEPT_ID:
                 // Not setable 
-                case STATUS_ID:
+                case STATUS:
                 case TIME_IN_MS:
                 case AUTHOR_ID:
                 case MODULE_ID:
@@ -878,8 +850,8 @@ public class RefexCAB extends CreateOrAmendBlueprint {
                         return false;
                     }
                     break;
-                case STATUS_ID:
-                    if (getInt(STATUS_ID) != refexVersion.getStatusNid()) {
+                case STATUS:
+                    if (getStatus() != refexVersion.getStatus()) {
                         return false;
                     }
                     break;

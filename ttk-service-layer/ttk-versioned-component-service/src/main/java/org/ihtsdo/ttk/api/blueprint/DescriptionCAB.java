@@ -375,7 +375,7 @@ public class DescriptionCAB extends CreateOrAmendBlueprint {
      * @throws IOException signals that an I/O exception has occurred
      */
     public boolean validate(DescriptionVersionBI descriptionVersion) throws IOException {
-        if (descriptionVersion.getStatusNid() != getStatusNid()) {
+        if (descriptionVersion.getStatus() != getStatus()) {
             return false;
         }
         if (descriptionVersion.getNid() != getComponentNid()) {

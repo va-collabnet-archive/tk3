@@ -332,7 +332,7 @@ public class MediaCAB extends CreateOrAmendBlueprint {
      * @throws IOException signals that an I/O exception has occurred
      */
     public boolean validate(MediaVersionBI mediaVersion) throws IOException {
-        if (mediaVersion.getStatusNid() != getStatusNid()) {
+        if (mediaVersion.getStatus() != getStatus()) {
             return false;
         }
         if (mediaVersion.getNid() != getComponentNid()) {

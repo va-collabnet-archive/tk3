@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 International Health Terminology Standards Development Organisation.
+ * Copyright 2013 International Health Terminology Standards Development Organisation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,24 +19,6 @@ package org.ihtsdo.ttk.api;
  *
  * @author kec
  */
-public class VersionPoint implements VersionPointBI {
-    private int stamp;
-
-    public VersionPoint(int stamp) {
-        this.stamp = stamp;
-    }
-
-    @Override
-    public long getTime() {
-        return Ts.get().getTimeForStamp(stamp);
-    }
-
-    @Override
-    public int getPathNid() {
-        return Ts.get().getPathNidForStamp(stamp);
-    }
-
-    public Status getStatus() {
-        return Ts.get().getStatusForStamp(stamp);
-    }
+public enum Status {
+    ACTIVE, INACTIVE
 }

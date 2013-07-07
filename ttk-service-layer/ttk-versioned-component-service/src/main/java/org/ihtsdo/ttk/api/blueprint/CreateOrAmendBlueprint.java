@@ -47,6 +47,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.ttk.api.Status;
 
 /**
  * The Class CreateOrAmendBlueprint contains methods for creating a terminology generic blueprint. This
@@ -61,14 +62,6 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
 
     protected EnumMap<ComponentProperty, Object> properties =
             new EnumMap<>(ComponentProperty.class);
-    /**
-     * Field description
-     */
-    private static UUID currentStatusUuid = null;
-    /**
-     * Field description
-     */
-    private static UUID retiredStatusUuid = null;
     /**
      * Field description
      */
@@ -136,15 +129,11 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
             ViewCoordinate viewCoordinate, IdDirective idDirective,
             RefexDirective refexDirective)
             throws IOException, InvalidCAB, ContradictionException {
-        if (currentStatusUuid == null || retiredStatusUuid == null) {
-            currentStatusUuid = SnomedMetadataRf2.ACTIVE_VALUE_RF2.getUuids()[0];
-            retiredStatusUuid = SnomedMetadataRf2.INACTIVE_VALUE_RF2.getUuids()[0];
-        }
         this.idDirective = idDirective;
         this.refexDirective = refexDirective;
         this.cv = componentVersion;
         this.vc = viewCoordinate;
-        setStatusUuid(currentStatusUuid);
+        setStatus(Status.ACTIVE);
         setComponentUuidNoRecompute(componentUuid);
 
         if (idDirective == IdDirective.PRESERVE && componentVersion != null) {
@@ -467,22 +456,12 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
     }
 
     /**
-     * Gets the nid of the status associated with this component blueprint.
+     * Gets the Enumerated status type associated with this component blueprint.
      *
-     * @return the nid of the status associated with this component blueprint
-     * @throws IOException signals that an I/O exception has occurred
+     * @return the Status associated with this component blueprint
      */
-    public int getStatusNid() throws IOException {
-        return getInt(ComponentProperty.STATUS_ID);
-    }
-
-    /**
-     * Gets the uuid of the status associated with this component blueprint.
-     *
-     * @return the uuid of the status associated with this component blueprint
-     */
-    public UUID getStatusUuid() {
-        return getUuid(ComponentProperty.STATUS_ID);
+    public Status getStatus() {
+        return (Status) properties.get(ComponentProperty.STATUS);
     }
 
     /**
@@ -515,14 +494,14 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
      * Sets this component blueprint's status to active.
      */
     public void setCurrent() {
-        properties.put(ComponentProperty.STATUS_ID, currentStatusUuid);
+        properties.put(ComponentProperty.STATUS, Status.ACTIVE);
     }
 
     /**
      * Sets this component blueprint's status to retired.
      */
     public void setRetired() {
-        properties.put(ComponentProperty.STATUS_ID, retiredStatusUuid);
+        properties.put(ComponentProperty.STATUS, Status.INACTIVE);
     }
 
     /**
@@ -530,8 +509,8 @@ public abstract class CreateOrAmendBlueprint implements PropertyChangeListener {
      *
      * @param statusUuid the uuid of the status associated with this component blueprint
      */
-    public final void setStatusUuid(UUID statusUuid) {
-        properties.put(ComponentProperty.STATUS_ID, statusUuid);
+    public final void setStatus(Status status) {
+        properties.put(ComponentProperty.STATUS, status);
     }
 
     /**

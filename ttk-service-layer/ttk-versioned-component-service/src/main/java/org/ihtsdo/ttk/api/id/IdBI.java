@@ -20,6 +20,7 @@ package org.ihtsdo.ttk.api.id;
 import java.io.IOException;
 
 import java.util.Set;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.VersionPointBI;
 
 /**
@@ -37,7 +38,7 @@ public interface IdBI extends VersionPointBI {
 
    int getStamp();
 
-   int getStatusNid();
+   Status getStatus();
    
    int getModuleNid();
 }

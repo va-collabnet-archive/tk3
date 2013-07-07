@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public interface ExternalStampBI {
 
-    UUID getStatusUuid();
+    Status getStatus();
     long getTime();
     UUID getAuthorUuid();
     UUID getModuleUuid();

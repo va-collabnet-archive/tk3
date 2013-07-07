@@ -33,11 +33,7 @@ public interface ComponentVersionBI extends ComponentBI, VersionPointBI {
 
    int getStamp();
 
-   int getStatusNid();
-
-   boolean isActive(NidSetBI allowedStatusNids) throws IOException;
-
-   boolean isActive(ViewCoordinate vc) throws IOException;
+   Status getStatus();
    
    public boolean isUncommitted();
    
@@ -79,4 +75,6 @@ public interface ComponentVersionBI extends ComponentBI, VersionPointBI {
     CreateOrAmendBlueprint makeBlueprint(ViewCoordinate viewCoordinate, 
             IdDirective idDirective, RefexDirective refexDirective)
             throws IOException, ContradictionException, InvalidCAB;
+    
+    boolean isActive() throws IOException;
 }
