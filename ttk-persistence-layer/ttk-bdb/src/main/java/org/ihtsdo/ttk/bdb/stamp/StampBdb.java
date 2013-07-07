@@ -13,6 +13,7 @@ import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
 import java.io.IOException;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -20,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.bdb.Bdb;
 import org.ihtsdo.ttk.bdb.ComponentBdb;
 import org.ihtsdo.ttk.bdb.temp.AceLog;
@@ -79,7 +81,7 @@ public class StampBdb extends ComponentBdb {
 
             for (int i = min; i < sequence.get(); i++) {
                mutableArray.commitTimes[getMutableIndex(i)] = Long.MIN_VALUE;
-               stampToIntMap.put(getStatusNid(i), Long.MIN_VALUE, getAuthorNid(i), getModuleNid(i),
+               stampToIntMap.put(getStatus(i), Long.MIN_VALUE, getAuthorNid(i), getModuleNid(i),
                                  getPathNid(i), i);
             }
 
@@ -129,7 +131,7 @@ public class StampBdb extends ComponentBdb {
          try {
             for (int stamp : uncomittedStampEntries.values()) {
                mutableArray.commitTimes[getMutableIndex(stamp)] = time;
-               stampToIntMap.put(getStatusNid(stamp), time, getAuthorNid(stamp), getModuleNid(stamp),
+               stampToIntMap.put(getStatus(stamp), time, getAuthorNid(stamp), getModuleNid(stamp),
                                  getPathNid(stamp), stamp);
                committedStamps.add(stamp);
             }
@@ -178,7 +180,7 @@ public class StampBdb extends ComponentBdb {
 
          for (int i = 0; i < readOnlySize; i++) {
             if (readOnlyArray.commitTimes[i] != 0) {
-               stampToIntMap.put(readOnlyArray.statusNids[i], readOnlyArray.commitTimes[i],
+               stampToIntMap.put(readOnlyArray.getStatus(i), readOnlyArray.commitTimes[i],
                                  readOnlyArray.authorNids[i], readOnlyArray.moduleNids[i],
                                  readOnlyArray.pathNids[i], i);
             }
@@ -192,13 +194,11 @@ public class StampBdb extends ComponentBdb {
             assert i < mutableArray.commitTimes.length :
                    " mutableIndex: " + mutableIndex + " commitTimes.length: "
                    + mutableArray.commitTimes.length;
-            assert i < mutableArray.statusNids.length :
-                   " mutableIndex: " + mutableIndex + " statusNids.length: " + mutableArray.statusNids.length;
             assert i < mutableArray.pathNids.length :
                    " mutableIndex: " + mutableIndex + " pathNids.length: " + mutableArray.pathNids.length;
 
             if (mutableArray.commitTimes[i] != 0) {
-               stampToIntMap.put(mutableArray.statusNids[i], mutableArray.commitTimes[i],
+               stampToIntMap.put(mutableArray.getStatus(i), mutableArray.commitTimes[i],
                                  mutableArray.authorNids[i], mutableArray.moduleNids[i],
                                  mutableArray.pathNids[i], mutableIndex);
             }
@@ -323,7 +323,7 @@ public class StampBdb extends ComponentBdb {
    }
 
    public PositionBI getPosition(int stamp) throws IOException {
-      int  status;
+      Status  status;
       int  author;
       int  pathNid;
       long time;
@@ -331,14 +331,14 @@ public class StampBdb extends ComponentBdb {
       if (stamp < readOnlyArray.getSize()) {
          pathNid = readOnlyArray.pathNids[stamp];
          time    = readOnlyArray.commitTimes[stamp];
-         status  = readOnlyArray.statusNids[stamp];
+         status  = readOnlyArray.getStatus(stamp);
          author  = readOnlyArray.authorNids[stamp];
       } else {
          int mutableIndex = getMutableIndex(stamp);
 
          pathNid = mutableArray.pathNids[mutableIndex];
          time    = mutableArray.commitTimes[mutableIndex];
-         status  = mutableArray.statusNids[mutableIndex];
+         status  = mutableArray.getStatus(mutableIndex);
          author  = mutableArray.authorNids[mutableIndex];
       }
 
@@ -362,13 +362,13 @@ public class StampBdb extends ComponentBdb {
    }
 
    public int getStamp(Stamp tsp) {
-      return getStamp(tsp.getStatusNid(), tsp.getTime(), tsp.getAuthorNid(), tsp.getModuleNid(),
+      return getStamp(tsp.getStatus(), tsp.getTime(), tsp.getAuthorNid(), tsp.getModuleNid(),
                        tsp.getPathNid());
    }
 
-   public int getStamp(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+   public int getStamp(Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if (time == Long.MAX_VALUE) {
-         UncommittedStatusForPath usp = new UncommittedStatusForPath(statusNid, authorNid,
+         UncommittedStatusForPath usp = new UncommittedStatusForPath(status, authorNid,
                                            moduleNid, pathNid);
 
          if (uncomittedStampEntries.containsKey(usp)) {
@@ -384,7 +384,9 @@ public class StampBdb extends ComponentBdb {
                int stamp = sequence.getAndIncrement();
 
                mutableArray.setSize(getMutableIndex(stamp) + 1);
-               mutableArray.statusNids[getMutableIndex(stamp)]  = statusNid;
+               if (status == Status.ACTIVE) {
+                mutableArray.activeStatus.set(getMutableIndex(stamp));
+               }
                mutableArray.commitTimes[getMutableIndex(stamp)] = time;
                mutableArray.authorNids[getMutableIndex(stamp)]  = authorNid;
                mutableArray.moduleNids[getMutableIndex(stamp)]  = moduleNid;
@@ -399,10 +401,10 @@ public class StampBdb extends ComponentBdb {
          }
       }
 
-      if (stampToIntMap.containsKey(statusNid, time, authorNid, moduleNid, pathNid)) {
+      if (stampToIntMap.containsKey(status, time, authorNid, moduleNid, pathNid)) {
          hits.incrementAndGet();
 
-         return stampToIntMap.get(statusNid, time, authorNid, moduleNid, pathNid);
+         return stampToIntMap.get(status, time, authorNid, moduleNid, pathNid);
       }
 
       expandPermit.acquireUninterruptibly();
@@ -410,21 +412,23 @@ public class StampBdb extends ComponentBdb {
       try {
 
          // Try one last time...
-         if (stampToIntMap.containsKey(statusNid, time, authorNid, moduleNid, pathNid)) {
+         if (stampToIntMap.containsKey(status, time, authorNid, moduleNid, pathNid)) {
             hits.incrementAndGet();
 
-            return stampToIntMap.get(statusNid, time, authorNid, moduleNid, pathNid);
+            return stampToIntMap.get(status, time, authorNid, moduleNid, pathNid);
          }
 
          int statusAtPositionNid = sequence.getAndIncrement();
 
          mutableArray.setSize(getMutableIndex(statusAtPositionNid) + 1);
-         mutableArray.statusNids[getMutableIndex(statusAtPositionNid)]  = statusNid;
+         if (status == Status.ACTIVE) {
+            mutableArray.activeStatus.set(getMutableIndex(statusAtPositionNid));
+         }
          mutableArray.authorNids[getMutableIndex(statusAtPositionNid)]  = authorNid;
          mutableArray.pathNids[getMutableIndex(statusAtPositionNid)]    = pathNid;
          mutableArray.moduleNids[getMutableIndex(statusAtPositionNid)]  = moduleNid;
          mutableArray.commitTimes[getMutableIndex(statusAtPositionNid)] = time;
-         stampToIntMap.put(statusNid, time, authorNid, moduleNid, pathNid, statusAtPositionNid);
+         stampToIntMap.put(status, time, authorNid, moduleNid, pathNid, statusAtPositionNid);
          misses.incrementAndGet();
 
          return statusAtPositionNid;
@@ -454,15 +458,21 @@ public class StampBdb extends ComponentBdb {
       return specifiedSapNids;
    }
 
-   public int getStatusNid(int stamp) {
+   public Status getStatus(int stamp) {
       if (stamp < 0) {
-         return Integer.MIN_VALUE;
+         return null;
       }
 
       if (stamp < readOnlyArray.getSize()) {
-         return readOnlyArray.statusNids[stamp];
+          if (readOnlyArray.activeStatus.get(stamp)) {
+              return Status.ACTIVE;
+          }
+          return Status.INACTIVE;
       } else {
-         return mutableArray.statusNids[getMutableIndex(stamp)];
+          if (mutableArray.activeStatus.get(getMutableIndex(stamp))) {
+              return Status.ACTIVE;
+          }
+          return Status.INACTIVE;
       }
    }
 
@@ -492,7 +502,10 @@ public class StampBdb extends ComponentBdb {
          PositionArrays pa     = new PositionArrays(length);
 
          for (int i = 0; i < length; i++) {
-            pa.statusNids[i]  = input.readInt();
+             boolean active = input.readBoolean();
+             if (active) {
+                 pa.activeStatus.set(i);
+             }
             pa.authorNids[i]  = input.readInt();
             pa.pathNids[i]    = input.readInt();
             pa.moduleNids[i]  = input.readInt();
@@ -510,7 +523,7 @@ public class StampBdb extends ComponentBdb {
          output.writeInt(pa.pathNids.length);
 
          for (int i = 0; i < pa.pathNids.length; i++) {
-            output.writeInt(pa.statusNids[i]);
+            output.writeBoolean(pa.activeStatus.get(i));
             output.writeInt(pa.authorNids[i]);
             output.writeInt(pa.pathNids[i]);
             output.writeInt(pa.moduleNids[i]);
@@ -526,12 +539,12 @@ public class StampBdb extends ComponentBdb {
       long[] commitTimes;
       int[]  moduleNids;
       int[]  pathNids;
-      int[]  statusNids;
+      BitSet  activeStatus;
 
       //~--- constructors -----------------------------------------------------
 
       public PositionArrays() {
-         statusNids  = new int[MIN_ARRAY_SIZE];
+         activeStatus  = new BitSet(MIN_ARRAY_SIZE);
          authorNids  = new int[MIN_ARRAY_SIZE];
          pathNids    = new int[MIN_ARRAY_SIZE];
          moduleNids  = new int[MIN_ARRAY_SIZE];
@@ -540,7 +553,7 @@ public class StampBdb extends ComponentBdb {
       }
 
       public PositionArrays(int size) {
-         statusNids  = new int[size];
+         activeStatus  = new BitSet(size);
          authorNids  = new int[size];
          pathNids    = new int[size];
          moduleNids  = new int[size];
@@ -550,18 +563,21 @@ public class StampBdb extends ComponentBdb {
 
       //~--- methods ----------------------------------------------------------
 
+      private Status getStatus(int index) {
+          if (activeStatus.get(index)) {
+              return Status.ACTIVE;
+          }
+          return Status.INACTIVE;
+      }
       private void ensureCapacity(int size) {
+          // activeStatus will grow automatically. 
          if (size > getCapacity()) {
             int   newCapacity    = pathNids.length + MIN_ARRAY_SIZE;
-            int[] tempStatusNids = new int[newCapacity];
 
-            System.arraycopy(statusNids, 0, tempStatusNids, 0, statusNids.length);
-            statusNids = tempStatusNids;
+            int[] tempAuthorNids = new int[newCapacity];
 
-            int[] tempAuthorhNids = new int[newCapacity];
-
-            System.arraycopy(authorNids, 0, tempAuthorhNids, 0, authorNids.length);
-            authorNids = tempAuthorhNids;
+            System.arraycopy(authorNids, 0, tempAuthorNids, 0, authorNids.length);
+            authorNids = tempAuthorNids;
 
             int[] tempPathNids = new int[newCapacity];
 

@@ -79,7 +79,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             RefexCAB blueprint) throws InvalidCAB, IOException, ContradictionException {
         for (int pathNid : ec.getEditPaths().getSetValues()) {
             RefexRevision refexRevision =
-                    member.makeAnalog(blueprint.getInt(ComponentProperty.STATUS_ID),
+                    member.makeAnalog(blueprint.getStatus(),
                     Long.MAX_VALUE,
                     ec.getAuthorNid(),
                     ec.getModuleNid(),
@@ -216,13 +216,13 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             for (int p : ec.getEditPaths().getSetValues()) {
                 if (r.primordialStamp == Integer.MIN_VALUE) {
                     r.primordialStamp =
-                            Bdb.getStampDb().getStamp(blueprint.getStatusNid(), Long.MAX_VALUE,
+                            Bdb.getStampDb().getStamp(blueprint.getStatus(), Long.MAX_VALUE,
                             ec.getAuthorNid(), ec.getModuleNid(), p);
                 } else {
                     if (r.revisions == null) {
                         r.revisions = new RevisionSet(r.primordialStamp);
                     }
-                    r.revisions.add((RelationshipRevision) r.makeAnalog(blueprint.getStatusNid(),
+                    r.revisions.add((RelationshipRevision) r.makeAnalog(blueprint.getStatus(),
                             Long.MAX_VALUE,
                             ec.getAuthorNid(),
                             ec.getModuleNid(),
@@ -239,7 +239,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         } else {
             Relationship r = (Relationship) relc;
             for (int p : ec.getEditPaths().getSetValues()) {
-                RelationshipRevision rv = r.makeAnalog(blueprint.getStatusNid(),
+                RelationshipRevision rv = r.makeAnalog(blueprint.getStatus(),
                         Long.MAX_VALUE,
                         ec.getAuthorNid(),
                         ec.getModuleNid(),
@@ -331,13 +331,13 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             for (int p : ec.getEditPaths().getSetValues()) {
                 if (d.primordialStamp == Integer.MIN_VALUE) {
                     d.primordialStamp =
-                            Bdb.getStampDb().getStamp(blueprint.getStatusNid(), Long.MAX_VALUE, ec.getAuthorNid(),
+                            Bdb.getStampDb().getStamp(blueprint.getStatus(), Long.MAX_VALUE, ec.getAuthorNid(),
                             ec.getModuleNid(), p);
                 } else {
                     if (d.revisions == null) {
                         d.revisions = new RevisionSet(d.primordialStamp);
                     }
-                    d.revisions.add((DescriptionRevision) d.makeAnalog(blueprint.getStatusNid(),
+                    d.revisions.add((DescriptionRevision) d.makeAnalog(blueprint.getStatus(),
                             Long.MAX_VALUE,
                             ec.getAuthorNid(),
                             ec.getModuleNid(),
@@ -354,7 +354,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         } else {
             Description d = (Description) desc;
             for (int p : ec.getEditPaths().getSetValues()) {
-                DescriptionRevision dr = d.makeAnalog(blueprint.getStatusNid(),
+                DescriptionRevision dr = d.makeAnalog(blueprint.getStatus(),
                         Long.MAX_VALUE,
                         ec.getAuthorNid(),
                         ec.getModuleNid(),
@@ -426,13 +426,13 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             for (int p : ec.getEditPaths().getSetValues()) {
                 if (img.primordialStamp == Integer.MIN_VALUE) {
                     img.primordialStamp =
-                            Bdb.getStampDb().getStamp(blueprint.getStatusNid(), Long.MAX_VALUE, ec.getAuthorNid(),
+                            Bdb.getStampDb().getStamp(blueprint.getStatus(), Long.MAX_VALUE, ec.getAuthorNid(),
                             ec.getModuleNid(), p);
                 } else {
                     if (img.revisions == null) {
                         img.revisions = new RevisionSet(img.primordialStamp);
                     }
-                    img.revisions.add((MediaRevision) img.makeAnalog(blueprint.getStatusNid(),
+                    img.revisions.add((MediaRevision) img.makeAnalog(blueprint.getStatus(),
                             Long.MAX_VALUE,
                             ec.getAuthorNid(),
                             ec.getModuleNid(),
@@ -449,7 +449,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         } else {
             Media img = (Media) imgC;
             for (int p : ec.getEditPaths().getSetValues()) {
-                MediaRevision imgR = img.makeAnalog(blueprint.getStatusNid(),
+                MediaRevision imgR = img.makeAnalog(blueprint.getStatus(),
                         Long.MAX_VALUE,
                         ec.getAuthorNid(),
                         ec.getModuleNid(),
@@ -520,7 +520,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
         } else if (newC.isCanceled()) {
             a = newC.getConceptAttributes();
             for (int pathNid : ec.getEditPaths().getSetValues()) {
-                a.resetUncommitted(blueprint.getStatusNid(), ec.getAuthorNid(), pathNid, ec.getModuleNid());
+                a.resetUncommitted(blueprint.getStatus(), ec.getAuthorNid(), pathNid, ec.getModuleNid());
             }
             a.nid = cNid;
             a.enclosingConceptNid = cNid;
@@ -536,13 +536,13 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
             if (primoridal) {
                 primoridal = false;
                 a.primordialStamp =
-                        Bdb.getStampDb().getStamp(blueprint.getStatusNid(), Long.MAX_VALUE, ec.getAuthorNid(),
+                        Bdb.getStampDb().getStamp(blueprint.getStatus(), Long.MAX_VALUE, ec.getAuthorNid(),
                             ec.getModuleNid(), p);
             } else {
                 if (a.revisions == null) {
                     a.revisions = new RevisionSet(a.primordialStamp);
                 }
-                a.revisions.add((ConceptAttributesRevision) a.makeAnalog(blueprint.getStatusNid(),
+                a.revisions.add((ConceptAttributesRevision) a.makeAnalog(blueprint.getStatus(),
                         Long.MAX_VALUE,
                         ec.getAuthorNid(),
                         ec.getModuleNid(),
@@ -594,7 +594,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
                     cac.revisions =
                             new RevisionSet(cac.primordialStamp);
                 }
-                ConceptAttributesRevision r = (ConceptAttributesRevision) cac.makeAnalog(blueprint.getStatusNid(),
+                ConceptAttributesRevision r = (ConceptAttributesRevision) cac.makeAnalog(blueprint.getStatus(),
                         Long.MAX_VALUE,
                         ec.getAuthorNid(),
                         ec.getModuleNid(),
@@ -624,7 +624,7 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
                     cac.revisions =
                             new RevisionSet(cac.primordialStamp);
                 }
-                ConceptAttributesRevision r = (ConceptAttributesRevision) cac.makeAnalog(blueprint.getStatusNid(),
+                ConceptAttributesRevision r = (ConceptAttributesRevision) cac.makeAnalog(blueprint.getStatus(),
                         Long.MAX_VALUE,
                         ec.getAuthorNid(),
                         ec.getModuleNid(),

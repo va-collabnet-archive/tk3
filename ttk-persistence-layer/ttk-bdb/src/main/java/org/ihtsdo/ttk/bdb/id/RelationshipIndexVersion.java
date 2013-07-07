@@ -18,6 +18,7 @@
 
 package org.ihtsdo.ttk.bdb.id;
 
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.Ts;
 
 /**
@@ -63,8 +64,8 @@ public class RelationshipIndexVersion {
       return stamp;
    }
 
-   public int getStatusNid() {
-      return Ts.get().getStatusNidForStamp(stamp);
+   public Status getStatus() {
+      return Ts.get().getStatusForStamp(stamp);
    }
 
    public long getTime() {

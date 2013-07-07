@@ -250,7 +250,7 @@ public class RelationshipIndexRecord implements Iterable<RelationshipIndexRecord
                  }
 
                  if (latestStamp != null) {
-                    if (vc.getAllowedStatusNids().contains(latestStamp.getStatusNid())) {
+                    if (vc.getAllowedStatus().contains(latestStamp.getStatus())) {
                        return true;
                     }
                  }

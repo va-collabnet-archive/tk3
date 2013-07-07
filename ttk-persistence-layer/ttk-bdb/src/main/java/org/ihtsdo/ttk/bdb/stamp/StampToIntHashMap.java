@@ -4,6 +4,7 @@ package org.ihtsdo.ttk.bdb.stamp;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
+import org.ihtsdo.ttk.api.Status;
 
 public class StampToIntHashMap {
    private static final int defaultCapacity = 277;
@@ -58,16 +59,16 @@ public class StampToIntHashMap {
 
    //~--- methods -------------------------------------------------------------
 
-   public boolean containsKey(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-      return map.containsKey(new Stamp(statusNid, time, authorNid, moduleNid, pathNid));
+   public boolean containsKey(Status status, long time, int authorNid, int moduleNid, int pathNid) {
+      return map.containsKey(new Stamp(status, time, authorNid, moduleNid, pathNid));
    }
 
    public boolean put(Stamp tsp, int statusAtPositionNid) {
       return map.put(tsp, statusAtPositionNid) == null;
    }
 
-   public boolean put(int statusNid, long time, int authorNid, int moduleNid, int pathNid, int statusAtPositionNid) {
-      return put(new Stamp(statusNid, time, authorNid, moduleNid, pathNid), statusAtPositionNid);
+   public boolean put(Status status, long time, int authorNid, int moduleNid, int pathNid, int statusAtPositionNid) {
+      return put(new Stamp(status, time, authorNid, moduleNid, pathNid), statusAtPositionNid);
    }
 
    private void setup(int initialCapacity) {
@@ -84,7 +85,7 @@ public class StampToIntHashMap {
       return map.get(tsp);
    }
 
-   public int get(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-      return map.get(new Stamp(statusNid, time, authorNid, moduleNid, pathNid));
+   public int get(Status status, long time, int authorNid, int moduleNid, int pathNid) {
+      return map.get(new Stamp(status, time, authorNid, moduleNid, pathNid));
    }
 }

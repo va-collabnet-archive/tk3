@@ -48,7 +48,9 @@ import org.ihtsdo.ttk.bdb.temp.ComputationCanceled;
 import org.ihtsdo.ttk.bdb.temp.ConsoleActivityViewer;
 import org.ihtsdo.ttk.bdb.temp.I_ShowActivity;
 import org.ihtsdo.ttk.api.ExternalStampBI;
+import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.ttk.bdb.stamp.Stamp;
 import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
@@ -164,8 +166,8 @@ public class Bdb {
         return stampDb.getPathNid(sapNid);
     }
 
-    static int getStatusNidForSapNid(int sapNid) {
-        return stampDb.getStatusNid(sapNid);
+    static Status getStatusForStamp(int stamp) {
+        return stampDb.getStatus(stamp);
     }
 
     static int getModuleNidForSapNid(int sapNid) {
@@ -652,7 +654,7 @@ public class Bdb {
     private static ConcurrentHashMap<String, Integer> stampCache = new ConcurrentHashMap<>();
 
     public static int getStamp(ExternalStampBI version) {
-        assert version.getStatusUuid() != null : "Status is null; was it initialized?";
+        assert version.getStatus() != null : "Status is null; was it initialized?";
         assert version.getTime() != 0 : "Time is 0; was it initialized?";
         assert version.getAuthorUuid() != null : "Author is null; was it initialized?";
         assert version.getModuleUuid() != null : "Module is null; was it initialized?";
@@ -661,7 +663,7 @@ public class Bdb {
         if (version.getTime() == Long.MIN_VALUE) {
             return -1;
         }
-        String stampKey = "" + version.getStatusUuid()
+        String stampKey = "" + version.getStatus()
                 + version.getTime()
                 + version.getAuthorUuid()
                 + version.getModuleUuid()
@@ -671,7 +673,7 @@ public class Bdb {
             return stamp;
         }
         stamp = stampDb.getStamp(
-                uuidToNid(version.getStatusUuid()),
+                version.getStatus(),
                 version.getTime(),
                 uuidToNid(version.getAuthorUuid()),
                 uuidToNid(version.getModuleUuid()),
@@ -684,14 +686,14 @@ public class Bdb {
         return stamp;
     }
 
-    public static int getStamp(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
+    public static int getStamp(Status status, long time, int authorNid, int moduleNid, int pathNid) {
         assert time != 0 : "Time is 0; was it initialized?";
-        assert statusNid != Integer.MIN_VALUE : "Status is Integer.MIN_VALUE; was it initialized?";
+        assert status != null : "Status is null; was it initialized?";
         assert pathNid != Integer.MIN_VALUE : "Path is Integer.MIN_VALUE; was it initialized?";
         if (time == Long.MIN_VALUE) {
             return -1;
         }
-        return stampDb.getStamp(statusNid, time, authorNid, moduleNid, pathNid);
+        return stampDb.getStamp(status, time, authorNid, moduleNid, pathNid);
     }
 
     public static StampBdb getStampDb() {

@@ -58,6 +58,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.ttk.api.Status;
 
 public class BdbTerminologyStore extends Termstore {
    private static ViewCoordinate metadataVC = null;
@@ -614,13 +615,13 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public int getStamp(int statusNid, long time, int authorNid, int moduleNid, int pathNid) {
-      return Bdb.getStampDb().getStamp(statusNid, time, authorNid, moduleNid, pathNid);
+   public int getStamp(Status status, long time, int authorNid, int moduleNid, int pathNid) {
+      return Bdb.getStampDb().getStamp(status, time, authorNid, moduleNid, pathNid);
    }
 
    @Override
-   public int getStatusNidForStamp(int sapNid) {
-      return Bdb.getStatusNidForSapNid(sapNid);
+   public Status getStatusForStamp(int stamp) {
+      return Bdb.getStatusForStamp(stamp);
    }
 
    @Override
