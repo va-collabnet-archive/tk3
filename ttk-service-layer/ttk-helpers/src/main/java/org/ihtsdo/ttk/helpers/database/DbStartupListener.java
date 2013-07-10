@@ -34,6 +34,7 @@ import org.ihtsdo.ttk.lookup.TermstoreLatch;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -57,6 +58,7 @@ public class DbStartupListener extends TimerTask {
    
    boolean embedded;
 
+   Path[] initFiles;
 
    /**
     * Constructs ...
@@ -64,16 +66,28 @@ public class DbStartupListener extends TimerTask {
     *
     * @param handlers
     */
-   public DbStartupListener(boolean embedded, EventHandler<ActionEvent>... handlers) {
+   public DbStartupListener(boolean embedded, 
+           EventHandler<ActionEvent>... handlers) {
+      this(embedded, null, handlers);
+   }
+   public DbStartupListener(boolean embedded, Path[] initFiles, 
+           EventHandler<ActionEvent>... handlers) {
       this.handlers = handlers;
       this.embedded = embedded;
+      this.initFiles = initFiles;
       if (startupInitiated.compareAndSet(false, true)) {
          new Thread(new Runnable() {
             @Override
             public void run() {
                try {
                    if (DbStartupListener.this.embedded) {
-                        Ts.setupEmbedded();
+                       if (DbStartupListener.this.initFiles != null) {
+                           Ts.setupEmbedded();
+                           Ts.get().loadEconFiles(DbStartupListener.this.initFiles);
+                       } else {
+                           Ts.setupEmbedded();
+                       }
+                        
                    } else {
                         Ts.setupClient();
                         Looker.lookup(TermstoreLatch.class).openLatch();
