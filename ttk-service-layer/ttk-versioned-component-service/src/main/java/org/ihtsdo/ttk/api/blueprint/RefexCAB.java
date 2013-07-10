@@ -346,7 +346,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
         this.properties.put(ComponentProperty.REFERENCED_COMPONENT_ID, referencedComponentUuid);
         this.properties.put(ComponentProperty.REFEX_EXTENSION_ID, collectionNid);
         this.properties.put(ComponentProperty.STATUS,
-                SnomedMetadataRfx.getSTATUS_CURRENT_NID());
+                Status.ACTIVE);
         if (getMemberUUID() != null) {
             this.properties.put(ComponentProperty.COMPONENT_ID, memberUuid);
         }

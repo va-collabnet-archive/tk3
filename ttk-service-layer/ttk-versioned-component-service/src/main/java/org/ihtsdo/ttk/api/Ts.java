@@ -1,6 +1,7 @@
 package org.ihtsdo.ttk.api;
 
 import java.lang.reflect.Method;
+import java.nio.file.Path;
 
 /**
  * Ts is short for Terminology store...
