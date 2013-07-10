@@ -37,7 +37,8 @@ public class BdbSingleton extends SingletonTypeInjectableProvider<Context, Persi
             } else {
                 Ts.setup(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS, directory);
 
-                File[] econFiles = new File[]{new File("/Users/kec/NetBeansProjects/eConcept.jbin")};
+                File[] econFiles = new File[]{new File("/Users/kec/NetBeansProjects/econ/eConcept.econ"),
+                    new File("/Users/kec/NetBeansProjects/econ/DescriptionLogicMetadata.econ")};
 
                 Ts.get().loadEconFiles(econFiles);
                 System.out.println("Finished load of eConcept.jbin");
@@ -58,7 +59,11 @@ public class BdbSingleton extends SingletonTypeInjectableProvider<Context, Persi
 
     //~--- methods -------------------------------------------------------------
     @PreDestroy
-    public void close() throws Exception {
-        Ts.close(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS);
+    public void close() {
+        try {
+            Ts.close(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS);
+        } catch (Exception ex) {
+            Logger.getLogger(BdbSingleton.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
