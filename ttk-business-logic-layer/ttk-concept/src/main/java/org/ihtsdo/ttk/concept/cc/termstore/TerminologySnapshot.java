@@ -42,6 +42,7 @@ import java.beans.VetoableChangeListener;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import java.util.Collection;
 import java.util.Map;
@@ -395,6 +396,11 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     */
    @Override
    public void loadEconFiles(File[] econFiles) throws Exception {
+      store.loadEconFiles(econFiles);
+   }
+
+   @Override
+   public void loadEconFiles(Path[] econFiles) throws Exception {
       store.loadEconFiles(econFiles);
    }
 

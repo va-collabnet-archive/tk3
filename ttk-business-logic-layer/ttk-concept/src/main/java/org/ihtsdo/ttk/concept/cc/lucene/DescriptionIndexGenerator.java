@@ -20,6 +20,7 @@ public class DescriptionIndexGenerator extends IndexGenerator {
     private int descCounter      = 0;
     private int conceptCounter   = 0;
     private int feedbackInterval = 1000;
+    public static boolean consoleFeedback = false;
 
     public DescriptionIndexGenerator(IndexWriter writer) throws IOException {
         super(writer);
@@ -33,7 +34,7 @@ public class DescriptionIndexGenerator extends IndexGenerator {
             writer.addDocument(createDoc(d));
             descCounter++;
 
-            if (descCounter % feedbackInterval == 0) {
+            if (consoleFeedback && descCounter % feedbackInterval == 0) {
                 System.out.print(".");
                 lineCounter++;
 
