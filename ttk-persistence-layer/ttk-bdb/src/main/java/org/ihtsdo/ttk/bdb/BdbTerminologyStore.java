@@ -52,6 +52,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.VetoableChangeListener;
 
 import java.io.*;
+import java.nio.file.Path;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -198,8 +199,18 @@ public class BdbTerminologyStore extends Termstore {
       Bdb.getConceptDb().iterateConceptDataInSequence(processor);
    }
 
+    @Override
+    public void loadEconFiles(Path[] econFiles) throws Exception {
+        File[] files = new File[econFiles.length];
+        for (int i = 0; i < files.length; i++) {
+            files[i] = econFiles[i].toFile();
+        }
+        loadEconFiles(files);
+    }
+
    @Override
    public void loadEconFiles(File[] econFiles) throws Exception {
+       boolean consoleFeedback = true;
       ThreadGroup loadBdbMultiDbThreadGroup = new ThreadGroup(this.getClass().getSimpleName()
                                                  + ".loadEconFiles threads");
       ExecutorService executors =
@@ -232,7 +243,7 @@ public class BdbTerminologyStore extends Termstore {
                   TtkConceptChronicle eConcept = new TtkConceptChronicle(in);
                   int       read     = conceptsRead.incrementAndGet();
 
-                  if (read % 100 == 0) {
+                  if (consoleFeedback && read % 100 == 0) {
                      if (read % 8000 == 0) {
                         System.out.println('.');
                         System.out.print(read + "-");
@@ -280,7 +291,23 @@ public class BdbTerminologyStore extends Termstore {
       } finally {
          executors.shutdown();
       }
-
+//      ViewCoordinate vc = StandardViewCoordinates.getSnomedInferredLatest();
+//
+//      vc.setRelAssertionType(RelAssertionType.STATED);
+//
+//      EditCoordinate ec = new EditCoordinate(TermAux.USER.getNid(), DescriptionLogicBinding.DL_MODULE.getNid(),
+//                             Snomed.SNOMED_RELEASE_PATH.getNid());
+//
+//      // Convert to new form.
+//      SnomedToLogicTree converter = new SnomedToLogicTree(vc, ec);
+//      long             time      = System.currentTimeMillis();
+//
+//      System.out.println(TimeHelper.formatDate(time));
+//      Ts.get().iterateConceptDataInParallel(converter);
+//      Ts.get().commit();
+//      System.out.println("Conversion time: "
+//                         + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
+      
       System.out.println("Starting db sync.");
       Bdb.sync();
       System.out.println("Finished db sync, starting generate lucene index.");
