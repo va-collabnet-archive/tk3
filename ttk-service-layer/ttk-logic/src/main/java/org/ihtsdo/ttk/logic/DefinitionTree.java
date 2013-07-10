@@ -139,6 +139,9 @@ public class DefinitionTree {
     */
    private void computeRowsAndColumns(DefinitionPart part, int row, int column)
            throws IOException, ValidationException, ContradictionException {
+      if (part == null) {
+          return;
+      }
       rows    = Math.max(rows, row);
       columns = Math.max(columns, column);
       part.setColumnIndex(column);
