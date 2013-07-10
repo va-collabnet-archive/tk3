@@ -63,6 +63,8 @@ public class ConceptDetailsSetup implements EventHandler<ActionEvent> {
    @Override
    public void handle(ActionEvent t) {
       try {
+            
+          
          Pane conceptDetailsPane = (Pane) FXMLLoader.load(
                                        getClass().getResource(
                                           "/org/ihtsdo/ttk/pl/fx/concept/details/fxml/ConceptDetailsView.fxml"));
@@ -70,6 +72,8 @@ public class ConceptDetailsSetup implements EventHandler<ActionEvent> {
          borderPane.setCenter(conceptDetailsPane);
       } catch (IOException ex) {
          Logger.getLogger(ConceptDetailsSetup.class.getName()).log(Level.SEVERE, null, ex);
-      }
+      } catch (Exception ex) {
+           Logger.getLogger(ConceptDetailsSetup.class.getName()).log(Level.SEVERE, null, ex);
+       }
    }
 }
