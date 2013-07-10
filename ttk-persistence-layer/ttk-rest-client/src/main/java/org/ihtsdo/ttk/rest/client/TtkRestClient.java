@@ -70,6 +70,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.nio.file.Path;
 
 import java.util.*;
 
@@ -128,7 +129,7 @@ public class TtkRestClient extends Termstore {
 
    @Override
    public int getAuthorNidForStamp(int sapNid) {
-      WebResource r      = restClient.resource(serverUrlStr + "sap/author/" + sapNid);
+      WebResource r      = restClient.resource(serverUrlStr + "stamp/author/" + sapNid);
       String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Integer.parseInt(nidStr);
@@ -248,7 +249,7 @@ public class TtkRestClient extends Termstore {
 
    @Override
    public int getMaxReadOnlyStamp() {
-      WebResource r      = restClient.resource(serverUrlStr + "sap/read-only-max");
+      WebResource r      = restClient.resource(serverUrlStr + "stamp/read-only-max");
       String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Integer.parseInt(nidStr);
@@ -261,7 +262,7 @@ public class TtkRestClient extends Termstore {
 
    @Override
    public int getModuleNidForStamp(int sapNid) {
-      WebResource r      = restClient.resource(serverUrlStr + "sap/module/" + sapNid);
+      WebResource r      = restClient.resource(serverUrlStr + "stamp/module/" + sapNid);
       String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Integer.parseInt(nidStr);
@@ -319,7 +320,7 @@ public class TtkRestClient extends Termstore {
 
    @Override
    public int getPathNidForStamp(int sapNid) {
-      WebResource r      = restClient.resource(serverUrlStr + "sap/path/" + sapNid);
+      WebResource r      = restClient.resource(serverUrlStr + "stamp/path/" + sapNid);
       String      nidStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Integer.parseInt(nidStr);
@@ -392,7 +393,7 @@ public class TtkRestClient extends Termstore {
 
    @Override
    public long getTimeForStamp(int sapNid) {
-      WebResource r       = restClient.resource(serverUrlStr + "sap/time/" + sapNid);
+      WebResource r       = restClient.resource(serverUrlStr + "stamp/time/" + sapNid);
       String      timeStr = r.accept(MediaType.TEXT_PLAIN).get(String.class);
 
       return Long.parseLong(timeStr);
@@ -594,6 +595,11 @@ public class TtkRestClient extends Termstore {
    public void loadEconFiles(File[] econFiles) throws Exception {
       throw new UnsupportedOperationException("Not supported yet.");
    }
+
+    @Override
+    public void loadEconFiles(Path[] econFiles) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
    @Override
    public void resetConceptNidForNid(int cNid, int nid) throws IOException {
