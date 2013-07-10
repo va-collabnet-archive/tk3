@@ -38,7 +38,17 @@
                         <artifactId>lucene-core</artifactId>
                         <version>${org.apache.lucene.version}</version>
                     </dependency>
-                </dependencies>
+                    <dependency>
+                        <groupId>org.apache.lucene</groupId>
+                        <artifactId>lucene-core</artifactId>
+                        <version>${org.apache.lucene.version}</version>
+                    </dependency>
+                 <dependency>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>jfxrt</artifactId>
+                    <version>${javafx.version}</version>
+                </dependency>
+               </dependencies>
                 <executions>
                     <execution>
                         <id>load-bdb</id>
