@@ -35,7 +35,6 @@ import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 public class InternalChronicleWriterZip implements InternalChronicleWriterBI {
 
     ZipOutputStream zos;
-    ByteArrayOutputStream baos = new ByteArrayOutputStream(10240);
 
     public InternalChronicleWriterZip(Path path) throws IOException {
         Files.deleteIfExists(path);
@@ -54,7 +53,8 @@ public class InternalChronicleWriterZip implements InternalChronicleWriterBI {
 
     @Override
     public void write(ConceptChronicleBI chronicleToWrite, long time) throws IOException {
-       DataOutputStream daos = new DataOutputStream(baos);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(10240);
+        DataOutputStream daos = new DataOutputStream(baos);
         chronicleToWrite.writeExternal(daos);
         String entryName = "c|"
                 + chronicleToWrite.getNid() + "|" + Long.toString(time);

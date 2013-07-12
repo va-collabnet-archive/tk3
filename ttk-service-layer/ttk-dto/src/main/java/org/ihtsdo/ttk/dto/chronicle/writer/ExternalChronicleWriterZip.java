@@ -34,14 +34,34 @@ import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.ttk.api.metadata.binding.Snomed;
+import org.ihtsdo.ttk.api.spec.ConceptSpec;
 import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 import org.ihtsdo.ttk.dto.chronicle.reader.ExternalChronicalReaderZip;
+import org.ihtsdo.ttk.dto.component.description.TtkDescriptionChronicle;
 
 /**
  *
  * @author kec
  */
 public class ExternalChronicleWriterZip implements ExternalChronicleWriterBI {
+
+    private static boolean testForMatch(TtkConceptChronicle eConcept, ConceptSpec match) {
+        boolean found = false;
+        if (eConcept.getPrimordialUuid().equals(match.getUuids()[0])) {
+            System.out.println("[1] Found: " + eConcept);
+            found = true;
+        }
+//        } else {
+//            for (TtkDescriptionChronicle desc: eConcept.getDescriptions()) {
+//                if (desc.getText().toLowerCase().equals(match.getDescription().toLowerCase())) {
+//                    System.out.println("[2] Found: " + eConcept);
+//                    found = true;
+//                }
+//            }
+//        }
+        return found;
+    }
 
     ZipOutputStream zos;
     ByteArrayOutputStream baos = new ByteArrayOutputStream(10240);
@@ -90,9 +110,15 @@ public class ExternalChronicleWriterZip implements ExternalChronicleWriterBI {
             
             int count = 0;
             long startTime = System.currentTimeMillis();
+            boolean found = false;
             while (dataStream.available() > 0) {
                 TtkConceptChronicle eConcept = new TtkConceptChronicle(dataStream);
+                found = (testForMatch(eConcept, Snomed.RESPIRATORY_DISORDER) ||
+                         testForMatch(eConcept, Snomed.ALLERGIC_ASTHMA));
                 count++;
+            }
+            if (!found) {
+                            System.out.println("[3] cannot find HYPERSENSITIVITY_CONDITION. ");
             }
             dataStream.close();
             long elapsed = System.currentTimeMillis() - startTime;
@@ -133,8 +159,9 @@ public class ExternalChronicleWriterZip implements ExternalChronicleWriterBI {
                 TtkConceptChronicle ttkConceptChronicle = reader.readEntry(entry);
                 xmlWriter.write(ttkConceptChronicle, startTime);
             }
+            xmlWriter.close();;
             elapsed = System.currentTimeMillis() - startTime;
-            System.out.println("Read/wrote xml" + entries.size() + " sorted entries in: " + elapsed + " ms");
+            System.out.println("Read/wrote xml " + entries.size() + " sorted entries in: " + elapsed + " ms");
             
             
             startTime = System.currentTimeMillis();
