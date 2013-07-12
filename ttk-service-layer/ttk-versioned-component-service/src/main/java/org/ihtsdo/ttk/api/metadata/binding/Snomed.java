@@ -6,12 +6,15 @@ import org.ihtsdo.ttk.api.spec.ConceptSpec;
 
 public class Snomed {
 
+    public static ConceptSpec RESPIRATORY_DISORDER =
+            new ConceptSpec("Respiratory disorder",
+            UUID.fromString("275f19cb-83fc-3f8c-992d-9ad866602c88"));
+    public static ConceptSpec BRONCHIAL_HYPERREACTIVITY =
+            new ConceptSpec("BHR - Bronchial hyperreactivity",
+            UUID.fromString("c265cf22-2a11-3488-b71e-296ec0317f96"));
     public static ConceptSpec ALLERGIC_ASTHMA =
             new ConceptSpec("Allergic asthma",
             UUID.fromString("531abe20-8324-3db9-9104-8bcdbf251ac7"));
-    public static ConceptSpec HYPERSENSITIVITY_CONDITION =
-            new ConceptSpec("Hypersensitivity condition (disorder)",
-            UUID.fromString("dd5e423f-2483-4465-8f5c-5fe886c00d77"));
     public static ConceptSpec BODY_STRUCTURE =
             new ConceptSpec("Body structures",
             UUID.fromString("4be3f62e-28d5-3bb4-a424-9aa7856a1790"));
