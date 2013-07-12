@@ -194,6 +194,7 @@ public class ConceptChronicleDTO implements ConceptChronicleBI {
         if (conceptAttributes != null) {
             conceptAttributes.writeToBdb(to, Integer.MIN_VALUE);
             byte[] bytes = to.toByteArray();
+            to.reset();
             out.writeInt(bytes.length);
             out.write(bytes);
         } else {
@@ -205,6 +206,7 @@ public class ConceptChronicleDTO implements ConceptChronicleBI {
             for (Description desc : descriptions) {
                 desc.writeToBdb(to, Integer.MIN_VALUE);
                 byte[] bytes = to.toByteArray();
+                to.reset();
                 out.writeInt(bytes.length);
                 out.write(bytes);
             }
@@ -217,6 +219,7 @@ public class ConceptChronicleDTO implements ConceptChronicleBI {
             for (Relationship rel : relationshipsOutgoing) {
                 rel.writeToBdb(to, Integer.MIN_VALUE);
                 byte[] bytes = to.toByteArray();
+                to.reset();
                 out.writeInt(bytes.length);
                 out.write(bytes);
             }
@@ -229,6 +232,7 @@ public class ConceptChronicleDTO implements ConceptChronicleBI {
             for (Media medium : media) {
                 medium.writeToBdb(to, Integer.MIN_VALUE);
                 byte[] bytes = to.toByteArray();
+                to.reset();
                 out.writeInt(bytes.length);
                 out.write(bytes);
             }
@@ -244,8 +248,13 @@ public class ConceptChronicleDTO implements ConceptChronicleBI {
                 out.writeInt(refsetMember.getRefexType().getTypeToken());
                 refsetMember.writeToBdb(to, Integer.MIN_VALUE);
                 byte[] bytes = to.toByteArray();
+                to.reset();
                 out.writeInt(bytes.length);
-                out.write(bytes);
+                try {
+                    out.write(bytes);
+                } catch (OutOfMemoryError ex) {
+                    throw ex;
+                }
             }
 
         } else {
