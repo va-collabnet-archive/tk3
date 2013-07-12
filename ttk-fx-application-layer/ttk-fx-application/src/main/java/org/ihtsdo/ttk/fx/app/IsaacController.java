@@ -67,7 +67,8 @@ public class IsaacController
                 try {
                     dbStartup = new DbStartupListener(embeddedDb,
                             new TaxonomySetup(taxonomyBorderPane),
-                            new ConceptDetailsSetup(conceptDetailsBorderPane));
+                            new ConceptDetailsSetup(conceptDetailsBorderPane), 
+                            new ConceptTest());
                 } catch (Exception ex) {
                     Logger.getLogger(IsaacController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -77,7 +78,8 @@ public class IsaacController
                         new File("/Users/kec/NetBeansProjects/econ/DescriptionLogicMetadata.econ").toPath()};
                     dbStartup = new DbStartupListener(embeddedDb, econFiles,
                             new TaxonomySetup(taxonomyBorderPane),
-                            new ConceptDetailsSetup(conceptDetailsBorderPane));
+                            new ConceptDetailsSetup(conceptDetailsBorderPane), 
+                            new ConceptTest());
                     System.out.println("Finished load of eConcept.jbin");
                 } catch (Exception ex) {
                     Logger.getLogger(IsaacController.class.getName()).log(Level.SEVERE, null, ex);
@@ -88,7 +90,8 @@ public class IsaacController
             // initialize your logic here: all @FXML variables will have been injected
             dbStartup = new DbStartupListener(embeddedDb,
                     new TaxonomySetup(taxonomyBorderPane),
-                    new ConceptDetailsSetup(conceptDetailsBorderPane));
+                    new ConceptDetailsSetup(conceptDetailsBorderPane),
+                    new ConceptTest());
         }
 
     }
