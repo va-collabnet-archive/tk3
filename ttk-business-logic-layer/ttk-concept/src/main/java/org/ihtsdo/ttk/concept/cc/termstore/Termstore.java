@@ -509,7 +509,6 @@ public abstract class Termstore implements PersistentStoreI {
    @Override
    public final ComponentChronicleBI<?> getComponent(int nid) throws IOException {
        if (getConceptNidForNid(nid) == Integer.MAX_VALUE) {
-           System.out.println("No concept for component: " + nid);
            return null;
        }
       return getConceptForNid(nid).getComponent(nid);

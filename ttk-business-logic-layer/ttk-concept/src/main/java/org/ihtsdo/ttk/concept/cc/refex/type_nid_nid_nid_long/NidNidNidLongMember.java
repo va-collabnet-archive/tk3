@@ -5,7 +5,6 @@ package org.ihtsdo.ttk.concept.cc.refex.type_nid_nid_nid_long;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
@@ -34,6 +33,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import org.apache.mahout.math.list.IntArrayList;
 
 public class NidNidNidLongMember
         extends RefexMember<NidNidNidLongRevision, NidNidNidLongMember>

@@ -41,10 +41,9 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>ttk-cern-prim</artifactId>
-            <version>${project.version}</version>
-            <type>jar</type>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-collections</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>com.sleepycat</groupId>

@@ -15,7 +15,6 @@ import com.sleepycat.je.OperationStatus;
 import org.ihtsdo.ttk.bdb.Bdb;
 import org.ihtsdo.ttk.bdb.ComponentBdb;
 import org.ihtsdo.ttk.bdb.temp.AceLog;
-import org.ihtsdo.cern.colt.map.OpenIntIntHashMap;
 import org.ihtsdo.ttk.helpers.concurrency.ConcurrentReentrantLocks;
 import org.ihtsdo.ttk.helpers.version.RelativePositionComputer;
 import org.ihtsdo.ttk.helpers.version.RelativePositionComputerBI;
@@ -38,6 +37,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
+import org.apache.mahout.math.map.OpenIntIntHashMap;
 import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
@@ -538,7 +538,7 @@ found:
     }
 
     public void setCNidForNid(int cNid, int nid) throws IOException {
-        assert cNid != Integer.MAX_VALUE;
+        assert cNid != Integer.MAX_VALUE: "cNid: " + cNid + " nid: " + nid;
 
         int mapIndex = (nid - Integer.MIN_VALUE) / NID_CNID_MAP_SIZE;
 

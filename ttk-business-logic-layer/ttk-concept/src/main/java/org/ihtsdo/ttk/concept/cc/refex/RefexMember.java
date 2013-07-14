@@ -4,7 +4,6 @@ package org.ihtsdo.ttk.concept.cc.refex;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-import org.ihtsdo.cern.colt.list.IntArrayList;
 
 //import org.dwfa.ace.api.I_IntSet;
 
@@ -34,6 +33,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.blueprint.RefexDirective;

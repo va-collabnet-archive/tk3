@@ -8,7 +8,6 @@ import com.sleepycat.bind.tuple.TupleOutput;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.Revision;
-import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.api.id.IdBI;
 
 //import org.ihtsdo.db.bdb.Bdb;
@@ -22,6 +21,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Date;
 import java.util.Set;
+import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.api.Status;
 
 public abstract class IdentifierVersion implements IdBI {

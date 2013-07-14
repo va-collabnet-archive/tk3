@@ -21,7 +21,7 @@ package org.ihtsdo.ttk.bdb.id;
 import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
-import org.ihtsdo.cern.colt.list.IntArrayList;
+import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipChronicleBI;
 import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;

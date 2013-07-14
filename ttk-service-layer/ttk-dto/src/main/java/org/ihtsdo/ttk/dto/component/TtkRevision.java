@@ -245,12 +245,13 @@ public abstract class TtkRevision implements ExternalStampBI {
                 } else {
                     ComponentBI component = Ts.get().getComponent(nid);
 
-                    sb.append("' ");
+                    
 
                     if (component != null) {
+                        sb.append("' ");
                         sb.append(component.toUserString());
                     } else {
-                        sb.append("null");
+                        sb.append("'null");
                     }
 
                     sb.append("' ");

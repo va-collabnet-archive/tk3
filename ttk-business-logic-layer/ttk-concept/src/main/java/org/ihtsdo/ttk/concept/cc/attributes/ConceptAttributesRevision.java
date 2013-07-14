@@ -6,7 +6,6 @@ import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
 import java.io.IOException;
-import org.ihtsdo.cern.colt.list.IntArrayList;
 
 
 import org.ihtsdo.ttk.concept.cc.component.Revision;
@@ -19,6 +18,7 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 
 import java.util.Collection;
 import java.util.Set;
+import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.concept.cc.P;

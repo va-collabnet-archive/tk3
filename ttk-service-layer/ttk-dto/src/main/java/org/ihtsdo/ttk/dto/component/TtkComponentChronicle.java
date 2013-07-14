@@ -617,9 +617,6 @@ nextId:
          for (TtkIdentifier idv : additionalIds) {
             if (TtkIdentifierUuid.class.isAssignableFrom(idv.getClass())) {
                uuids.add((UUID) idv.getDenotation());
-            } else {
-               uuids.add(UuidFactory.getUuidFromAlternateId(idv.authorityUuid,
-                   idv.getDenotation().toString()));
             }
          }
       }

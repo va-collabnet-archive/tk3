@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.uuidhashmap;
+package org.ihtsdo.ttk.bdb.uuidnidmap;
 
 /**
  *
  * @author kec
  */
-public class UuidUnsigned64BitComparator implements I_CompareUuids {
+public class UuidUnsigned64BitComparator implements UuidComparatorBI {
 
     /**
      * This algorithm performs unsigned 64 bit comparison of the msb and lsb of 2 uuids. This method is based

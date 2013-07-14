@@ -4,14 +4,12 @@ package org.ihtsdo.ttk.concept.cc.component;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.api.AnalogBI;
 import org.ihtsdo.ttk.api.AnalogGeneratorBI;
 import org.ihtsdo.ttk.api.ComponentBI;
 import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.ComponentVersionBI;
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.PositionBI;
 import org.ihtsdo.ttk.api.TerminologySnapshotDI;
 import org.ihtsdo.ttk.api.Ts;
@@ -58,6 +56,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.api.Status;
 
 /**

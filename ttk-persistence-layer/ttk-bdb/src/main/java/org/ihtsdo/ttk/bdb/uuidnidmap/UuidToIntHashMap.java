@@ -13,16 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.uuidhashmap;
+package org.ihtsdo.ttk.bdb.uuidnidmap;
 
+import com.sleepycat.bind.tuple.TupleBinding;
+import com.sleepycat.bind.tuple.TupleInput;
+import com.sleepycat.bind.tuple.TupleOutput;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import org.ihtsdo.cern.colt.function.DoubleProcedure;
-import org.ihtsdo.cern.colt.list.ByteArrayList;
-import org.ihtsdo.cern.colt.list.IntArrayList;
-import org.ihtsdo.cern.colt.map.HashFunctions;
-import org.ihtsdo.cern.colt.map.PrimeFinder;
+import org.apache.mahout.math.function.DoubleProcedure;
+import org.apache.mahout.math.list.ByteArrayList;
+import org.apache.mahout.math.list.IntArrayList;
+import org.apache.mahout.math.map.HashFunctions;
+import org.apache.mahout.math.map.PrimeFinder;
 
 /**
  *
@@ -30,10 +35,6 @@ import org.ihtsdo.cern.colt.map.PrimeFinder;
  */
 public class UuidToIntHashMap extends AbstractUuidToIntHashMap {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
     /**
      * The hash table keys.
      *
@@ -99,9 +100,14 @@ public class UuidToIntHashMap extends AbstractUuidToIntHashMap {
         setUp(initialCapacity, minLoadFactor, maxLoadFactor);
     }
 
+    public static UuidToIntHashMapBinder getUuidIntMapBinder() {
+        return new UuidToIntHashMapBinder();
+    }
+
     /**
      * Removes all (key,value) associations from the receiver. Implicitly calls <tt>trimToSize()</tt>.
      */
+    @Override
     public void clear() {
         new ByteArrayList(this.state).fillFromToWith(0, this.state.length - 1,
                 FREE);
@@ -168,6 +174,7 @@ public class UuidToIntHashMap extends AbstractUuidToIntHashMap {
      *
      * @param minCapacity the desired minimum capacity.
      */
+    @Override
     public void ensureCapacity(int minCapacity) {
         if (state.length < minCapacity) {
             int newCapacity = nextPrime(minCapacity);
@@ -184,6 +191,7 @@ public class UuidToIntHashMap extends AbstractUuidToIntHashMap {
      * @return <tt>false</tt> if the procedure stopped before all keys where iterated over, <tt>true</tt>
      * otherwise.
      */
+    @Override
     public boolean forEachPair(final UuidIntProcedure procedure) {
         for (int i = state.length; i-- > 0;) {
             if (state[i] == FULL) {
@@ -206,9 +214,10 @@ public class UuidToIntHashMap extends AbstractUuidToIntHashMap {
      * @param key the key to be searched for.
      * @return the value associated with the specified key; <tt>0</tt> if no such key is present.
      */
+    @Override
     public int get(long[] key) {
+        r.lock();
         try {
-            r.lock();
             int i = indexOfKey(key);
             if (i < 0) {
                 return Integer.MAX_VALUE; // not contained
@@ -220,8 +229,8 @@ public class UuidToIntHashMap extends AbstractUuidToIntHashMap {
     }
 
     public int get(UUID key) {
+        r.lock();
         try {
-            r.lock();
             int i = indexOfKey(key);
             if (i < 0) {
                 return Integer.MAX_VALUE; // not contained
@@ -371,6 +380,18 @@ public class UuidToIntHashMap extends AbstractUuidToIntHashMap {
 
         return -1; // not found
     }
+	protected List<Integer> indexesOfValue(int value) {
+                List<Integer> indexes = new ArrayList<>();
+		final int val[] = values;
+		final byte stat[] = state;
+
+		for (int i = stat.length; --i >= 0;) {
+			if (stat[i] == FULL && val[i] == value)
+				indexes.add(i);
+		}
+
+		return indexes; // not found
+	}
 
     /**
      * Returns the first key the given value is associated with. It is often a good idea to first check with
@@ -396,6 +417,17 @@ public class UuidToIntHashMap extends AbstractUuidToIntHashMap {
         uuid[1] = table[lsb];
         return uuid;
     }
+	public List<UUID> keysOf(int value) {
+		List<Integer> indexes = indexesOfValue(value);
+                List<UUID> keys = new ArrayList<>(indexes.size());
+		
+                for (int index: indexes) {
+                    int msb = index * 2;
+                    int lsb = msb + 1;
+                    keys.add(new UUID(table[msb], table[lsb]));
+                }
+		return keys;
+	}
 
     /**
      * Fills all keys contained in the receiver into the specified list. Fills the list, starting at index 0.
@@ -445,14 +477,12 @@ public class UuidToIntHashMap extends AbstractUuidToIntHashMap {
             if (i < 0) { // already contained
                 i = -i - 1;
                 this.values[i] = value;
-                w.unlock();
                 return false;
             }
             if (this.distinct > this.highWaterMark) {
                 int newCapacity = chooseGrowCapacity(this.distinct + 1,
                         this.minLoadFactor, this.maxLoadFactor);
                 rehash(newCapacity);
-                w.unlock();
                 return put(key, value);
             }
 
@@ -487,7 +517,6 @@ public class UuidToIntHashMap extends AbstractUuidToIntHashMap {
         if (oldCapacity == newCapacity) {
             return;
         }
-        long start = System.currentTimeMillis();
         long oldTable[] = table;
         int oldValues[] = values;
         byte oldState[] = state;
@@ -563,7 +592,7 @@ public class UuidToIntHashMap extends AbstractUuidToIntHashMap {
      * maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt> .
      */
     @Override
-    protected void setUp(int initialCapacity, double minLoadFactor,
+    protected final void setUp(int initialCapacity, double minLoadFactor,
             double maxLoadFactor) {
         int capacity = initialCapacity;
         super.setUp(capacity, minLoadFactor, maxLoadFactor);
@@ -651,4 +680,38 @@ public class UuidToIntHashMap extends AbstractUuidToIntHashMap {
         }
         return true;
     }
+    public static class UuidToIntHashMapBinder extends TupleBinding<UuidToIntHashMap> {
+
+        @Override
+        public UuidToIntHashMap entryToObject(TupleInput input) {
+                int length = input.readInt();
+                UuidToIntHashMap map = new UuidToIntHashMap(length);
+
+                for (int i = 0; i < length; i++) {
+                    map.values[i] = input.readInt();
+                    map.state[i] = input.readByte();
+                }
+
+                length = input.readInt();
+                for (int i = 0; i < length; i++) {
+                    map.table[i] = input.readLong();
+                }
+                return map;
+            
+        }
+
+        @Override
+        public void objectToEntry(UuidToIntHashMap map, TupleOutput output) {
+            output.writeInt(map.values.length);
+            for (int i = 0; i < map.values.length; i++) {
+                output.writeInt(map.values[i]);
+                output.writeByte(map.state[i]);
+            }
+            output.writeInt(map.table.length);
+            for (int i = 0; i < map.table.length; i++) {
+                output.writeLong(map.table[i]);
+            }
+        }
+    }
+
 }

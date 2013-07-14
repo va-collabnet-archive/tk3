@@ -3,7 +3,7 @@ package org.ihtsdo.ttk.concept.cc;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import org.ihtsdo.cern.colt.list.IntArrayList;
+import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.hash.Hashcode;
 

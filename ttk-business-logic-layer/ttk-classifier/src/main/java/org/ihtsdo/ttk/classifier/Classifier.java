@@ -71,6 +71,7 @@ public class Classifier {
                              Snomed.SNOMED_RELEASE_PATH.getNid());
 
       // Convert to new form.
+      Ts.get().suspendChangeNotifications();
       SnomedToLogicTree converter = new SnomedToLogicTree(vc, ec);
       long             time      = System.currentTimeMillis();
 
@@ -80,6 +81,7 @@ public class Classifier {
       System.out.println("Conversion time: "
                          + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
 
+      Ts.get().resumeChangeNotifications();
       // Implement the action as a FX Service...
       // Step 1: Determine all current descendents of the SNOMED root concept
       // for parallel iteration...

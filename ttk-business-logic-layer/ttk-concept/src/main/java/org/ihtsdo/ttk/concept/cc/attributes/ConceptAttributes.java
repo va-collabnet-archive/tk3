@@ -4,7 +4,6 @@ package org.ihtsdo.ttk.concept.cc.attributes;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-import org.ihtsdo.cern.colt.list.IntArrayList;
 
 
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
@@ -13,7 +12,6 @@ import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.api.ContradictionManagerBI;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.PositionBI;
 import org.ihtsdo.ttk.api.PositionSetBI;
 import org.ihtsdo.ttk.api.Precedence;
 import org.ihtsdo.ttk.api.conattr.ConceptAttributeAnalogBI;
@@ -30,6 +28,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.blueprint.ConceptAttributeAB;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
@@ -53,10 +52,14 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
 
     public ConceptAttributes(ConceptChronicleBI enclosingConcept, TupleInput input) throws IOException {
         super(enclosingConcept.getNid(), input);
+        assert this.nid == enclosingConcept.getNid(): "[1] nid and cNid don't match: " + 
+                enclosingConcept + "\n\n" + this;
     }
 
     public ConceptAttributes(TtkConceptAttributesChronicle eAttr, ConceptChronicleBI c) throws IOException {
         super(eAttr, c.getNid());
+        assert this.nid == c.getNid(): "[2] nid and cNid don't match: " + 
+                eAttr + "\n\n" + c;
         defined = eAttr.isDefined();
 
         if (eAttr.getRevisionList() != null) {

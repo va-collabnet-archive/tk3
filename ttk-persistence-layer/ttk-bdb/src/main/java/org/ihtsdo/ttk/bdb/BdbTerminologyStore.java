@@ -242,7 +242,6 @@ public class BdbTerminologyStore extends Termstore {
                while (true) {
                   TtkConceptChronicle eConcept = new TtkConceptChronicle(in);
                   int       read     = conceptsRead.incrementAndGet();
-
                   if (consoleFeedback && read % 100 == 0) {
                      if (read % 8000 == 0) {
                         System.out.println('.');

@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.uuidhashmap;
+package org.ihtsdo.ttk.bdb.uuidnidmap;
 
-import org.ihtsdo.cern.colt.list.AbstractList;
 import java.util.Comparator;
+import org.apache.mahout.math.Arrays;
+import org.apache.mahout.math.Sorting;
+import org.apache.mahout.math.list.AbstractList;
 
 /**
  *
@@ -28,7 +30,7 @@ public abstract class AbstractUuidList extends AbstractList {
      *
      */
     private static final long serialVersionUID = 1L;
-    private static I_CompareUuids c = new UuidUnsigned64BitComparator();
+    private static UuidComparatorBI c = new UuidUnsigned64BitComparator();
     /**
      * The size of the list. This is a READ_ONLY variable for all methods but setSizeRaw(int newSize) !!! If
      * you violate this principle in subclasses, you should exactly know what you are doing.
@@ -184,6 +186,7 @@ public abstract class AbstractUuidList extends AbstractList {
      *
      * @return a deep copy of the receiver.
      */
+    @Override
     public Object clone() {
         return partFromTo(0, size - 1);
     }
@@ -404,7 +407,7 @@ public abstract class AbstractUuidList extends AbstractList {
         checkRangeFromTo(from, to, mySize);
 
         long[] myElements = elements();
-        org.ihtsdo.cern.colt.Sorting.mergeSort(myElements, from, to + 1);
+        Sorting.mergeSort(myElements, from, to + 1);
         elements(myElements);
         setSizeRaw(mySize);
     }
@@ -433,7 +436,7 @@ public abstract class AbstractUuidList extends AbstractList {
      * @exception IndexOutOfBoundsException index is out of range ( <tt>size()&gt;0 && (from&lt;0 ||
      * from&gt;to || to&gt;=size())</tt> ).
      */
-    public void mergeSortFromTo(int from, int to, I_CompareUuids c) {
+    public void mergeSortFromTo(int from, int to, UuidComparatorBI c) {
         int mySize = size();
         checkRangeFromTo(from, to, mySize);
 
@@ -511,7 +514,7 @@ public abstract class AbstractUuidList extends AbstractList {
      * @exception IndexOutOfBoundsException index is out of range ( <tt>size()&gt;0 && (from&lt;0 ||
      * from&gt;to || to&gt;=size())</tt> ).
      */
-    public void quickSortFromTo(int from, int to, I_CompareUuids c) {
+    public void quickSortFromTo(int from, int to, UuidComparatorBI c) {
         int mySize = size();
         checkRangeFromTo(from, to, mySize);
 
@@ -779,32 +782,6 @@ public abstract class AbstractUuidList extends AbstractList {
     }
 
     /**
-     * Randomly permutes the part of the receiver between
-     * <code>from</code> (inclusive) and
-     * <code>to</code> (inclusive).
-     *
-     * @param from the index of the first element (inclusive) to be permuted.
-     * @param to the index of the last element (inclusive) to be permuted.
-     * @exception IndexOutOfBoundsException index is out of range ( <tt>size()&gt;0 && (from&lt;0 ||
-     * from&gt;to || to&gt;=size())</tt> ).
-     */
-    @Override
-    public void shuffleFromTo(int from, int to) {
-        checkRangeFromTo(from, to, size());
-
-        org.ihtsdo.cern.jet.random.Uniform gen = new org.ihtsdo.cern.jet.random.Uniform(
-                new org.ihtsdo.cern.jet.random.engine.DRand(new java.util.Date()));
-        for (int i = from; i < to; i++) {
-            int random = gen.nextIntFromTo(i, to);
-
-            // swap(i, random)
-            long[] tmpElement = getQuick(random);
-            setQuick(random, getQuick(i));
-            setQuick(i, tmpElement);
-        }
-    }
-
-    /**
      * Returns the number of elements contained in the receiver.
      *
      * @returns the number of elements contained in the receiver.
@@ -833,6 +810,6 @@ public abstract class AbstractUuidList extends AbstractList {
      */
     @Override
     public String toString() {
-        return org.ihtsdo.cern.colt.Arrays.toString(partFromTo(0, size() - 1).elements());
+        return Arrays.toString(partFromTo(0, size() - 1).elements());
     }
 }

@@ -8,7 +8,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Set;
-import org.ihtsdo.cern.colt.list.IntArrayList;
+import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.concept.cc.refex.type_long.LongMember.Version;
 import org.ihtsdo.ttk.api.ContradictionException;

@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.uuidhashmap;
+package org.ihtsdo.ttk.bdb.uuidnidmap;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.UUID;
+import org.apache.mahout.collections.Arithmetic;
+import org.apache.mahout.math.Arrays;
 
 /**
  *
@@ -77,6 +78,7 @@ public class UuidArrayList  extends AbstractUuidList {
 	 * @param element
 	 *            element to be appended to this list.
 	 */
+        @Override
 	public void add(long[] element) {
 		// overridden for performance only.
 		int msbIndex = size * 2;
@@ -114,6 +116,7 @@ public class UuidArrayList  extends AbstractUuidList {
 	 *                index is out of range (
 	 *                <tt>index &lt; 0 || index &gt; size()</tt>).
 	 */
+        @Override
 	public void beforeInsert(int index, long[] element) {
 		// overridden for performance only.
 		if (index > size || index < 0)
@@ -154,6 +157,7 @@ public class UuidArrayList  extends AbstractUuidList {
 	 * @see org.ihtsdo.cern.colt.Sorting
 	 * @see java.util.Arrays
 	 */
+        @Override
 	public int binarySearchFromTo(long[] key, int from, int to) {
 		return UuidSorting.binarySearchFromTo(this.elements, key, from,
 				to);
@@ -164,6 +168,7 @@ public class UuidArrayList  extends AbstractUuidList {
 	 * 
 	 * @return a deep copy of the receiver.
 	 */
+        @Override
 	public Object clone() {
 		// overridden for performance only.
 		UuidArrayList clone = new UuidArrayList((long[]) elements.clone());
@@ -193,6 +198,7 @@ public class UuidArrayList  extends AbstractUuidList {
 	 * 
 	 * @return the elements currently stored.
 	 */
+        @Override
 	public long[] elements() {
 		return elements;
 	}
@@ -211,6 +217,7 @@ public class UuidArrayList  extends AbstractUuidList {
 	 *            the new elements to be stored.
 	 * @return the receiver itself.
 	 */
+        @Override
 	public AbstractUuidList elements(long[] elements) {
 		this.elements = elements;
 		this.size = elements.length;
@@ -225,8 +232,9 @@ public class UuidArrayList  extends AbstractUuidList {
 	 * @param minCapacity
 	 *            the desired minimum capacity.
 	 */
+        @Override
 	public void ensureCapacity(int minCapacity) {
-		elements = org.ihtsdo.cern.colt.Arrays.ensureCapacity(elements, minCapacity);
+		elements = Arrays.ensureCapacity(elements, minCapacity);
 	}
 
 	/**
@@ -240,6 +248,7 @@ public class UuidArrayList  extends AbstractUuidList {
 	 *            the Object to be compared for equality with the receiver.
 	 * @return true if the specified Object is equal to the receiver.
 	 */
+        @Override
 	public boolean equals(Object otherObj) { // delta
 		// overridden for performance only.
 		if (!(otherObj instanceof UuidArrayList))
@@ -271,6 +280,7 @@ public class UuidArrayList  extends AbstractUuidList {
 	 * @return <tt>false</tt> if the procedure stopped before all elements where
 	 *         iterated over, <tt>true</tt> otherwise.
 	 */
+        @Override
 	public boolean forEach(UuidProcedure procedure) {
 		// overridden for performance only.
 		long[] theElements = elements;
@@ -326,6 +336,7 @@ public class UuidArrayList  extends AbstractUuidList {
 	 * @param index
 	 *            index of element to return.
 	 */
+        @Override
 	public long[] getQuick(int index) {
 		return getUuid(index);
 	}
@@ -412,6 +423,7 @@ public class UuidArrayList  extends AbstractUuidList {
 	 *                <tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>
 	 *                ).
 	 */
+        @Override
 	public AbstractUuidList partFromTo(int from, int to) {
 		if (size == 0)
 			return new UuidArrayList(0);
@@ -432,6 +444,7 @@ public class UuidArrayList  extends AbstractUuidList {
 	 * @return <code>true</code> if the receiver changed as a result of the
 	 *         call.
 	 */
+        @Override
 	public boolean removeAll(AbstractUuidList other) {
 		// overridden for performance only.
 		if (!(other instanceof UuidArrayList))
@@ -457,7 +470,7 @@ public class UuidArrayList  extends AbstractUuidList {
 
 		double N = (double) other.size();
 		double M = (double) mySize;
-		if ((N + M) * org.ihtsdo.cern.jet.math.Arithmetic.log2(N) < M * N) {
+		if ((N + M) * Arithmetic.log2(N) < M * N) {
 			// it is faster to sort other before searching in it
 			UuidArrayList sortedList = (UuidArrayList) other.clone();
 			sortedList.quickSort();
@@ -513,6 +526,7 @@ public class UuidArrayList  extends AbstractUuidList {
 	 * @param otherFrom
 	 *            position of first element within other list to be copied.
 	 */
+        @Override
 	public void replaceFromToWithFrom(int from, int to, AbstractUuidList other,
 			int otherFrom) {
 		// overridden for performance only.
@@ -540,6 +554,7 @@ public class UuidArrayList  extends AbstractUuidList {
 	 * @return <code>true</code> if the receiver changed as a result of the
 	 *         call.
 	 */
+        @Override
 	public boolean retainAll(AbstractUuidList other) {
 		// overridden for performance only.
 		if (!(other instanceof UuidArrayList))
@@ -562,7 +577,7 @@ public class UuidArrayList  extends AbstractUuidList {
 
 		double N = (double) other.size();
 		double M = (double) mySize;
-		if ((N + M) * org.ihtsdo.cern.jet.math.Arithmetic.log2(N) < M * N) {
+		if ((N + M) * Arithmetic.log2(N) < M * N) {
 			// it is faster to sort other before searching in it
 			UuidArrayList sortedList = (UuidArrayList) other.clone();
 			sortedList.quickSort();
@@ -604,6 +619,7 @@ public class UuidArrayList  extends AbstractUuidList {
 	 * Reverses the elements of the receiver. Last becomes first, second last
 	 * becomes second first, and so on.
 	 */
+        @Override
 	public void reverse() {
 		// overridden for performance only.
 		long[] tmp = new long[2];
@@ -661,40 +677,6 @@ public class UuidArrayList  extends AbstractUuidList {
 	}
 
 	/**
-	 * Randomly permutes the part of the receiver between <code>from</code>
-	 * (inclusive) and <code>to</code> (inclusive).
-	 * 
-	 * @param from
-	 *            the index of the first element (inclusive) to be permuted.
-	 * @param to
-	 *            the index of the last element (inclusive) to be permuted.
-	 * @exception IndexOutOfBoundsException
-	 *                index is out of range (
-	 *                <tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>
-	 *                ).
-	 */
-	public void shuffleFromTo(int from, int to) {
-		// overridden for performance only.
-		if (size == 0)
-			return;
-		checkRangeFromTo(from, to, size);
-
-		org.ihtsdo.cern.jet.random.Uniform gen = new org.ihtsdo.cern.jet.random.Uniform(
-				new org.ihtsdo.cern.jet.random.engine.DRand(new java.util.Date()));
-		long tmpElement;
-		long[] theElements = elements;
-		int random;
-		for (int i = from; i < to; i++) {
-			random = gen.nextIntFromTo(i, to);
-
-			// swap(i, random)
-			tmpElement = theElements[random];
-			theElements[random] = theElements[i];
-			theElements[i] = tmpElement;
-		}
-	}
-
-	/**
 	 * Sorts the specified range of the receiver into ascending order.
 	 * 
 	 * The sorting algorithm is dynamically chosen according to the
@@ -716,6 +698,7 @@ public class UuidArrayList  extends AbstractUuidList {
 	 *                index is out of range (<tt>size()&gt;0 && (from&lt;0 ||
 	 *                from&gt;to || to&gt;=size())</tt>).
 	 */
+        @Override
 	public void sortFromTo(int from, int to) {
 		if (size == 0)
 			return;
@@ -728,8 +711,9 @@ public class UuidArrayList  extends AbstractUuidList {
 	 * Releases any superfluous internal memory. An application can use this
 	 * operation to minimize the storage of the receiver.
 	 */
+        @Override
 	public void trimToSize() {
-		elements = org.ihtsdo.cern.colt.Arrays.trimToCapacity(elements, size() * 2 + 1);
+		elements = Arrays.trimToCapacity(elements, size() * 2 + 1);
 	}
 
 	@Override
@@ -738,13 +722,6 @@ public class UuidArrayList  extends AbstractUuidList {
 		elements[index * 2 + 1] = element[1];
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void replaceFromWith(int arg0, Collection arg1) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public ArrayList<UUID> toList() {
 		ArrayList<UUID> resultList = new ArrayList<>(size);
 		for (int i = 0; i < size; i++) {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.uuidhashmap;
+package org.ihtsdo.ttk.bdb.uuidnidmap;
 
 /**
  *
@@ -68,7 +68,7 @@ public class UuidSorting extends Object {
     /**
      * Returns the index of the median of the three indexed chars.
      */
-    private static int med3(long x[], int a, int b, int c, I_CompareUuids comp) {
+    private static int med3(long x[], int a, int b, int c, UuidComparatorBI comp) {
         int ab = comp.compare(x[2 * a], x[2 * a + 1], x[2 * b], x[2 * b + 1]);
         int ac = comp.compare(x[2 * a], x[2 * a + 1], x[2 * c], x[2 * c + 1]);
         int bc = comp.compare(x[2 * b], x[2 * b + 1], x[2 * c], x[2 * c + 1]);
@@ -122,7 +122,7 @@ public class UuidSorting extends Object {
      * @see Comparator
      */
     public static void mergeSort(long[] a, int fromIndex, int toIndex,
-            I_CompareUuids c) {
+            UuidComparatorBI c) {
         rangeCheck(a.length, fromIndex, toIndex);
         long aux[] = (long[]) a.clone();
         mergeSort1(aux, a, fromIndex, toIndex, c);
@@ -170,7 +170,7 @@ public class UuidSorting extends Object {
     }
 
     private static void mergeSort1(long src[], long dest[], int low, int high,
-            I_CompareUuids c) {
+            UuidComparatorBI c) {
         int length = high - low;
 
         // Insertion sort on smallest arrays
@@ -231,7 +231,7 @@ public class UuidSorting extends Object {
      * @see Comparator
      */
     public static void quickSort(long[] a, int fromIndex, int toIndex,
-            I_CompareUuids c) {
+            UuidComparatorBI c) {
         rangeCheck(a.length, fromIndex, toIndex);
         quickSort1(a, fromIndex, toIndex - fromIndex, c);
     }
@@ -240,7 +240,7 @@ public class UuidSorting extends Object {
      * Sorts the specified sub-array of chars into ascending order.
      */
     private static void quickSort1(long x[], int off, int len,
-            I_CompareUuids comp) {
+            UuidComparatorBI comp) {
         // Insertion sort on smallest arrays
         if (len < SMALL) {
             for (int i = off; i < len + off; i++) {

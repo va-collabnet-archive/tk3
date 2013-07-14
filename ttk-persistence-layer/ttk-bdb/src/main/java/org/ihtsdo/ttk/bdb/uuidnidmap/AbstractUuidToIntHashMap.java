@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.uuidhashmap;
+package org.ihtsdo.ttk.bdb.uuidnidmap;
 
 import java.util.UUID;
-import org.ihtsdo.cern.colt.list.IntArrayList;
-import org.ihtsdo.cern.colt.map.AbstractMap;
+import org.apache.mahout.math.list.IntArrayList;
+import org.apache.mahout.math.set.AbstractSet;
 
 /**
  *
  * @author kec
  */
-public abstract class AbstractUuidToIntHashMap extends AbstractMap {
+public abstract class AbstractUuidToIntHashMap extends AbstractSet {
 
     /**
      *
@@ -170,19 +170,6 @@ public abstract class AbstractUuidToIntHashMap extends AbstractMap {
     }
 
     /**
-     * Fills all keys <i>sorted ascending by their associated value</i> into the specified list. Fills into
-     * the list, starting at index 0. After this call returns the specified list has a new size that equals
-     * <tt>this.size()</tt>. Primary sort criterium is "value", secondary sort criterium is "key". This means
-     * that if any two values are equal, the smaller key comes first. <p> <b>Example:</b> <br> <tt>keys =
-     * (8,7,6), values = (1,2,2) --> keyList = (8,6,7)</tt>
-     *
-     * @param keyList the list to be filled, can have any size.
-     */
-    public void keysSortedByValue(final UuidArrayList keyList) {
-        pairsSortedByValue(keyList, new IntArrayList(size()));
-    }
-
-    /**
      * Fills all pairs satisfying a given condition into the specified lists. Fills into the lists, starting
      * at index 0. After this call returns the specified lists both have a new size, the number of pairs
      * satisfying the condition. Iteration order is guaranteed to be <i>identical</i> to the order used by
@@ -262,61 +249,6 @@ public abstract class AbstractUuidToIntHashMap extends AbstractMap {
     }
 
     /**
-     * Fills all keys and values <i>sorted ascending by value</i> into the specified lists. Fills into the
-     * lists, starting at index 0. After this call returns the specified lists both have a new size that
-     * equals <tt>this.size()</tt>. Primary sort criterium is "value", secondary sort criterium is "key". This
-     * means that if any two values are equal, the smaller key comes first. <p> <b>Example:</b> <br> <tt>keys
-     * = (8,7,6), values = (1,2,2) --> keyList = (8,6,7), valueList = (1,2,2)</tt>
-     *
-     * @param keyList the list to be filled with keys, can have any size.
-     * @param valueList the list to be filled with values, can have any size.
-     */
-    public void pairsSortedByValue(final UuidArrayList keyList,
-            final IntArrayList valueList) {
-        keys(keyList);
-        values(valueList);
-
-        final long[] k = keyList.elements();
-        final int[] v = valueList.elements();
-        org.ihtsdo.cern.colt.Swapper swapper = new org.ihtsdo.cern.colt.Swapper() {
-            @Override
-            public void swap(int a, int b) {
-                int t1;
-                long[] t2 = new long[2];
-                int aMsb = a * 2;
-                int aLsb = aMsb + 1;
-                int bMsb = b * 2;
-                int bLsb = bMsb + 1;
-                t1 = v[a];
-                v[a] = v[b];
-                v[b] = t1;
-                t2[0] = k[aMsb];
-                t2[1] = k[aLsb];
-                k[aMsb] = k[bMsb];
-                k[aLsb] = k[bLsb];
-                k[bMsb] = t2[0];
-                k[bLsb] = t2[1];
-            }
-        };
-
-        org.ihtsdo.cern.colt.function.IntComparator comp = new org.ihtsdo.cern.colt.function.IntComparator() {
-            @Override
-            public int compare(int a, int b) {
-                int aMsb = a * 2;
-                int aLsb = aMsb + 1;
-                int bMsb = b * 2;
-                int bLsb = bMsb + 1;
-                return v[a] < v[b] ? -1 : v[a] > v[b] ? 1 : ((k[aMsb] < k[bMsb] || k[aLsb] < k[bLsb]) ? -1
-                        : ((k[aMsb] == k[bMsb] && k[aLsb] == k[bLsb]) ? 0 : 1));
-            }
-        };
-
-        // org.ihtsdo.map.OpenDoubleIntHashMap.hashCollisions = 0;
-        org.ihtsdo.cern.colt.GenericSorting.quickSort(0, keyList.size(), comp, swapper);
-        // System.out.println("collisions="+org.ihtsdo.map.OpenDoubleIntHashMap.hashCollisions);
-    }
-
-    /**
      * Associates the given key with the given value. Replaces any old <tt>(key,someOtherValue)</tt>
      * association, if existing.
      *
@@ -362,31 +294,6 @@ public abstract class AbstractUuidToIntHashMap extends AbstractMap {
     }
 
     /**
-     * Returns a string representation of the receiver, containing the String representation of each key-value
-     * pair, sorted ascending by value.
-     */
-    public String toStringByValue() {
-        UuidArrayList theKeys = new UuidArrayList();
-        keysSortedByValue(theKeys);
-
-        StringBuilder buf = new StringBuilder();
-        buf.append("[");
-        int maxIndex = theKeys.size() - 1;
-        for (int i = 0; i <= maxIndex; i++) {
-            long[] key = theKeys.get(i);
-            UUID uuidKey = new UUID(key[0], key[1]);
-            buf.append(uuidKey.toString());
-            buf.append("->");
-            buf.append(String.valueOf(get(key)));
-            if (i < maxIndex) {
-                buf.append(", ");
-            }
-        }
-        buf.append("]");
-        return buf.toString();
-    }
-
-    /**
      * Returns a list filled with all values contained in the receiver. The returned list has a size that
      * equals <tt>this.size()</tt>. Iteration order is guaranteed to be <i>identical</i> to the order used by
      * method {@link #forEachKey(UuidProcedure)}. <p> This method can be used to iterate over the values of
@@ -394,7 +301,7 @@ public abstract class AbstractUuidToIntHashMap extends AbstractMap {
      *
      * @return the values.
      */
-    public IntArrayList values() {
+     public IntArrayList values() {
         IntArrayList list = new IntArrayList(size());
         values(list);
         return list;

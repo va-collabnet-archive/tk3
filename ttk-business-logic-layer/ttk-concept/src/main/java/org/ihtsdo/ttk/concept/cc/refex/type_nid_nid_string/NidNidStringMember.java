@@ -26,8 +26,8 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.api.refex.type_nid_nid_string.RefexNidNidStringVersionBI;
 

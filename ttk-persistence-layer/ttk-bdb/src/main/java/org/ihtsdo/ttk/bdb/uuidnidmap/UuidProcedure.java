@@ -13,22 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.uuidhashmap;
+package org.ihtsdo.ttk.bdb.uuidnidmap;
 
 /**
  *
  * @author kec
  */
-public interface UuidIntProcedure {
+public interface UuidProcedure {
 
-    /**
-     *
-     * @param uuid
-     * @param second
-     * @return iteration will stop if <tt>false</tt>, otherwise continues.
-     *
-     */
-    boolean apply(long[] uuid, int second);
-
-    void close();
+    boolean apply(long[] uuid);
 }

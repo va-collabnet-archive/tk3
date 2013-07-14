@@ -5,7 +5,6 @@ package org.ihtsdo.ttk.concept.cc.refex.type_nid_boolean;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.api.ToolkitRefexType;
 import org.ihtsdo.ttk.api.blueprint.RefexCAB;
 import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
@@ -26,6 +25,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.api.refex.type_nid_boolean.RefexNidBooleanVersionBI;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TtkRefexUuidBooleanMemberChronicle;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TtkRefexUuidBooleanRevision;

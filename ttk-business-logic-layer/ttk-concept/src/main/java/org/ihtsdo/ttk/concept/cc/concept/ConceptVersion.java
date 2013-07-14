@@ -22,7 +22,6 @@ import org.ihtsdo.ttk.concept.cc.LanguageSortPrefs.LANGUAGE_SORT_PREF;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
 import org.ihtsdo.ttk.concept.cc.relationship.group.RelGroupVersion;
-import org.ihtsdo.cern.colt.map.OpenIntIntHashMap;
 import org.ihtsdo.ttk.api.blueprint.ConceptCB;
 import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
@@ -59,11 +58,11 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.mahout.math.map.OpenIntIntHashMap;
 import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.api.blueprint.RefexDirective;
-import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
 
 public class ConceptVersion implements ConceptVersionBI, Comparable<ConceptVersion> {
    private static NidSetBI classifierCharacteristics;

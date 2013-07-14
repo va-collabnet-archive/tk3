@@ -4,7 +4,6 @@ package org.ihtsdo.ttk.concept.cc.refex.type_nid_nid_nid;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-import org.ihtsdo.cern.colt.list.IntArrayList;
 
 
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
@@ -27,6 +26,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import java.util.*;
+import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 

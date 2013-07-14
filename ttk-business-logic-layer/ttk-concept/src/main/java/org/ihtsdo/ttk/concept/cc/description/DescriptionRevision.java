@@ -5,7 +5,6 @@ package org.ihtsdo.ttk.concept.cc.description;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-import org.ihtsdo.cern.colt.list.IntArrayList;
 
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.Revision;
@@ -26,6 +25,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.api.blueprint.RefexDirective;

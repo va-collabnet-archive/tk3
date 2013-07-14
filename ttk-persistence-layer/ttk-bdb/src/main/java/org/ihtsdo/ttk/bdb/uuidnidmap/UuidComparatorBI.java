@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.uuidhashmap;
+package org.ihtsdo.ttk.bdb.uuidnidmap;
 
 /**
  *
  * @author kec
  */
-public interface I_CompareUuids {
+public interface UuidComparatorBI {
 
 	int compare(long msb1, long lsb1, long msb2, long lsb2);
 }

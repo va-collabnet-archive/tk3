@@ -34,12 +34,13 @@ import java.util.Arrays;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import org.ihtsdo.ttk.bdb.nidmaps.UuidToNidMapBdb;
+import org.ihtsdo.ttk.bdb.uuidnidmap.UuidToNidMapBdb;
 import org.ihtsdo.ttk.helpers.io.FileIO;
 import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
@@ -50,7 +51,6 @@ import org.ihtsdo.ttk.bdb.temp.I_ShowActivity;
 import org.ihtsdo.ttk.api.ExternalStampBI;
 import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.bdb.stamp.Stamp;
 import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
@@ -330,8 +330,9 @@ public class Bdb {
             @Override
             public void run() {
                 try {
+                    Future<?> task = startupService.submit(setupPropDbTask);
+                    task.get();
                     startupService.submit(setupUuidsToNidMapDb);
-                    startupService.submit(setupPropDbTask);
                     startupService.submit(setupStampDb);
                     setupUuidsToNidMapDb.get(); // prerequisite for setupComponentNidToConceptNidDb
                     startupService.submit(setupComponentNidToConceptNidDb);
@@ -400,8 +401,9 @@ public class Bdb {
         });
 
         ExecutorService startupService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
+        Future<?> task = startupService.submit(setupPropDbTask);
+        task.get();
         startupService.submit(setupUuidsToNidMapDb);
-        startupService.submit(setupPropDbTask);
         startupService.submit(setupStampDb);
         setupUuidsToNidMapDb.get(); // prerequisite for setupComponentNidToConceptNidDb
         startupService.submit(setupComponentNidToConceptNidDb);

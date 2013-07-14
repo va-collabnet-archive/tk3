@@ -5,7 +5,6 @@ import org.ihtsdo.ttk.api.TypedComponentVersionBI;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-import org.ihtsdo.cern.colt.list.IntArrayList;
 
 
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
@@ -32,6 +31,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.api.lang.LanguageCode;

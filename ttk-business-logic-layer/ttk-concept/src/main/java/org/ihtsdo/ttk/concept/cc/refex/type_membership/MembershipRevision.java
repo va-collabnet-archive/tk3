@@ -5,7 +5,6 @@ package org.ihtsdo.ttk.concept.cc.refex.type_membership;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-import org.ihtsdo.cern.colt.list.IntArrayList;
 
 
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
@@ -21,6 +20,7 @@ import org.ihtsdo.ttk.dto.component.refex.type_member.TtkRefexRevision;
 import java.io.IOException;
 
 import java.util.*;
+import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.refex.type_member.RefexMemberAnalogBI;
 

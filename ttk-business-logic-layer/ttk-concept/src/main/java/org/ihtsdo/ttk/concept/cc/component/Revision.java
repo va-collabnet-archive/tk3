@@ -8,7 +8,6 @@ import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.concept.cc.Position;
 import org.ihtsdo.ttk.api.AnalogBI;
 import org.ihtsdo.ttk.api.ComponentChronicleBI;
-import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.AnalogGeneratorBI;
 import org.ihtsdo.ttk.api.PositionBI;
 import com.sleepycat.bind.tuple.TupleInput;
@@ -16,7 +15,6 @@ import com.sleepycat.bind.tuple.TupleOutput;
 
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
-import org.ihtsdo.cern.colt.list.IntArrayList;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
 import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
@@ -36,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.api.Status;
 
 public abstract class Revision<V extends Revision<V, C>, C extends ConceptComponent<V, C>>
