@@ -155,8 +155,8 @@
  * 
  * <p>All members of a <code>{@link org.ihtsdo.ttk.logic.DefinitionTree}</code> 
  * 
- * have the same {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#REFEX_EXTENSION_ID}, and that
- * {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#REFEX_EXTENSION_ID} represents the specific variety of
+ * have the same {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#REFEX_EXTENSION_ID}, and that
+ * {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#REFEX_EXTENSION_ID} represents the specific variety of
  * description logic. For example: {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#EL_PLUS_PLUS}
  *
  * <p>Annotations represent Nodes and Edges
@@ -166,17 +166,17 @@
  * <dt><b><a name="edges">Edges</a></b></dt>
  * <dd>
  * <ul>
- * <li>Edges are represented by annotations of type: {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID_BOOLEAN}.
+ * <li>Edges are represented by annotations of type: {@link org.ihtsdo.ttk.api.ToolkitRefexType#CID_BOOLEAN}.
  * <br> <img src="doc-files/edge.svg"/></li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#REFEX_EXTENSION_ID} field of the edge represents
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#REFEX_EXTENSION_ID} field of the edge represents
  * the specific variety of description logic. For example:
  * {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#EL_PLUS_PLUS}.</li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#REFERENCED_COMPONENT_ID} field of the edge
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#REFERENCED_COMPONENT_ID} field of the edge
  * is the identifier of the node from which the edge originates.</li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the edge is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_1_ID} field of the edge is
  * the identifier of the destination node of the edge. The destination node must be an annotation on the
  * Concept that also contains the edge.</li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#BOOLEAN_EXTENSION_1} field of the edge
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#BOOLEAN_EXTENSION_1} field of the edge
  * determines if the destination node is negated.</li>
  * <li>Edges will not have annotations</li>
  * </ul>
@@ -186,25 +186,25 @@
  * <ul>
  * <li>Nodes are represented as annotations on the concept to which the axioms apply.</li>
  * <li>Nodes may be represented by a number of refex types, determined by the type of the node.</li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#REFEX_EXTENSION_ID} field of the node represents
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#REFEX_EXTENSION_ID} field of the node represents
  * the specific variety of description logic. For example:
  * {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#EL_PLUS_PLUS}.</li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#REFERENCED_COMPONENT_ID} field of the node is the
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#REFERENCED_COMPONENT_ID} field of the node is the
  * identifier of the concept to which the axioms apply.</li>
  * </ul>
  * Additional refex properties will vary depending on the specific type and purpose of the node as follows:
  *
  *
- * <dl><dt>{@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID}</dt>
+ * <dl><dt>{@link org.ihtsdo.ttk.api.ToolkitRefexType#CID}</dt>
  * <dd>
  * <dl>
  * <dt id="definition-root"><b>Definition Root</b></dt>
  * <dd><ul>
  * <li>The definition root is represented by an annotation on the concept being defined.  
  * The annotation is of type:
- *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID}.
+ *      {@link org.ihtsdo.ttk.api.ToolkitRefexType#CID}.
  * <br> <img src="doc-files/definition-root.svg"/></li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_1_ID} field of the node is
  * the identifier for the {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#DEFINITION_ROOT}
  * concept.</li>
  * <li>The Definition Root will have one or more annotations, either Edges that connect the Definition Root
@@ -215,9 +215,9 @@
  * <dt id="sufficient-set"><b>Sufficient Set</b></dt>
  * <dd><ul>
  * <li>A Sufficient set is represented by an annotation of type:
- *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID}.
+ *      {@link org.ihtsdo.ttk.api.ToolkitRefexType#CID}.
  * <br> <img src="doc-files/sufficient-set.svg"/></li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_1_ID} field of the node is
  * the identifier for the {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#SUFFICIENT_SET}
  * concept.</li>
  * <li>The Sufficient Set will have one or more annotations, either Edges that connect the Sufficient Set
@@ -228,9 +228,9 @@
  * <dt id="necessary-set"><b>Necessary Set</b></dt>
  * <dd><ul>
  * <li>A necessary set is represented by an annotation of type:
- *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID}.
+ *      {@link org.ihtsdo.ttk.api.ToolkitRefexType#CID}.
  * <br> <img src="doc-files/necessary-set.svg"/></li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_1_ID} field of the node is
  * the identifier for the {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#NECESSARY_SET}
  * concept.</li>
 * <li>The Necessary Set will have one or more annotations, either Edges that connect the Necessary Set
@@ -241,9 +241,9 @@
  * <dt id="logical-and"><b>Logical And</b></dt>
  * <dd><ul>
  * <li>A logical and is represented by an annotation of type:
- *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID}.
+ *      {@link org.ihtsdo.ttk.api.ToolkitRefexType#CID}.
  * <br> <img src="doc-files/logical-and.svg"/></li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_1_ID} field of the node is
  * the identifier for the {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#AND}
  * concept.</li>
 * <li>The Logical And will have one or more annotations, either Edges that connect the Logical And
@@ -253,9 +253,9 @@
  * <dt id="logical-or"><b>Logical Or</b></dt>
  * <dd><ul>
  * <li>A logical or is represented by an annotation of type:
- *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID}.
+ *      {@link org.ihtsdo.ttk.api.ToolkitRefexType#CID}.
  * <br> <img src="doc-files/logical-or.svg"/></li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_1_ID} field of the node is
  * the identifier for the {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#OR}
  * concept.</li>
 * <li>The Logical Or will have one or more annotations, either Edges that connect the Logical Or
@@ -265,9 +265,9 @@
  * <dt id="disjoint-with"><b>Disjoint With</b></dt>
  * <dd><ul>
  * <li>Disjoint with is represented by an annotation of type:
- *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID}.
+ *      {@link org.ihtsdo.ttk.api.ToolkitRefexType#CID}.
  * <br> <img src="doc-files/disjoint-with.svg"/></li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_1_ID} field of the node is
  * the identifier for the {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#DISJOINT_WITH}
  * concept.</li>
 * <li>The Disjoint With will have one or more annotations, either Edges that connect the Disjoint With
@@ -277,12 +277,12 @@
  * <dt id="concept"><b>Concept Reference</b></dt>
  * <dd><ul>
  * <li>A concept, as used in a conjunction or a role restriction is represented by an annotation of type:
- *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID_CID}.
+ *      {@link org.ihtsdo.ttk.api.ToolkitRefexType#CID_CID}.
  * <br><br>NEED TO update diagram!
  * <br> <img src="doc-files/referenced-concept.svg"/></li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_1_ID} field of the node is
  * {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#CONCEPT_REFERENCE}.</li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_2_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_2_ID} field of the node is
  * the identifier for the concept.</li>
 * <li>The Concept Reference node will not have annotations.</li>
  * </ul> 
@@ -295,16 +295,16 @@
  * <dd><ul>
  * <li>A concept substitution, as used in a conjunction or a role restriction is
  *  represented by an annotation of type:
- *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID_CID}.
+ *      {@link org.ihtsdo.ttk.api.ToolkitRefexType#CID_CID}.
  * <br><br>NEED TO update diagram!
  * <br> <img src="doc-files/concept-substitution.svg"/></li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_1_ID} field of the node is
  * {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#FIELD_SUBSTITUTION}</li>
  * <ul>
  * <li></li>
  * </ul>
  * 
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_2_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_2_ID} field of the node is
  * the one of the following:</li>
  * <ul>
  * <li>{@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#COMPONENT_EXTENSION_1_ID_SUBSTITUTION},</li>
@@ -320,19 +320,19 @@
  * </dl>
  * </dd>
  *
- * <dt>{@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID_CID}
+ * <dt>{@link org.ihtsdo.ttk.api.ToolkitRefexType#CID_CID}
  * <dd>
  * <dl>
  * <dt id="role"><b>Role</b></dt>
  * <dd><ul>
  * <li>A role is represented by an annotation of type:
- *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID_CID}.
+ *      {@link org.ihtsdo.ttk.api.ToolkitRefexType#CID_CID}.
  * <br> <img src="doc-files/role.svg"/></dt></li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_1_ID} field of the node is
  * the identifier for the role operator concept, either
  * {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#EXISTENTIAL_RESTRICTION} or
  * {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#UNIVERSAL_RESTRICTION}.</li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_2_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_2_ID} field of the node is
  * the identifier for the concept that defines the type of role, for example, in the case of role groups, the
  * role type concept would be:
  * {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#ROLE_GROUP}.</li>
@@ -344,12 +344,12 @@
  * <dt id="template-merge"><b>Template Merge</b></dt>
  * <dd><ul>
  * <li>A template merge is represented by an annotation of type:
- *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID_CID}.
+ *      {@link org.ihtsdo.ttk.api.ToolkitRefexType#CID_CID}.
  * <br> <img src="doc-files/template-merge.svg"/></dt></li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_1_ID} field of the node is
  * the identifier for 
  * {@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#TEMPLATE_MERGE}.</li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_2_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_2_ID} field of the node is
  * the identifier for refex member which contains the substitution values for the substitutions specified
  * within the template. The concept id for the template can be retrieved as the enclosing concept of the 
  * refex member. The refex member should be created at the time this Template Merge node is associated 
@@ -365,17 +365,17 @@
  *
  *
  *
- * <dt>{@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID_CID_CID_INT}</dt>
+ * <dt>{@link org.ihtsdo.ttk.api.ToolkitRefexType#CID_CID_CID_INT}</dt>
  * <dd>
  * <dl>
  * <dt  id="integer-feature"><b>Integer Feature</b></dt>
  * <dd><ul>
  * <li>An integer (32 bit signed) feature is represented by an annotation of type:
- *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID_CID_CID_INT}.
+ *      {@link org.ihtsdo.ttk.api.ToolkitRefexType#CID_CID_CID_INT}.
  * <br> <img src="doc-files/feature-int.svg"/></li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_1_ID} field of the node is
  * the identifier for the feature type concept, for example a concept representing <em>area</em>.</li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_2_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_2_ID} field of the node is
  * the identifier for the concept that defines the concrete domain operator, such as:
  * <ul>
  * <li>{@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#GREATER_THAN},</li>
@@ -384,9 +384,9 @@
  * <li>{@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#LESS_THAN_OR_EQUAL_TO}, or</li>
  * <li>{@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#LESS_THAN}.</li>
  * </ul>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#INTEGER_EXTENSION_1} field
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#INTEGER_EXTENSION_1} field
  *     holds the concrete value.</li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_3_ID} field
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_3_ID} field
  *     holds the identifier for a concept that represents the units of measure for the
  * concrete value of the feature, such as: <em>square centimeters</em>.</li>
  * </li>
@@ -398,17 +398,17 @@
  *
  *
  *
- * <dt>{@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID_CID_CID_LONG}</dt>
+ * <dt>{@link org.ihtsdo.ttk.api.ToolkitRefexType#CID_CID_CID_LONG}</dt>
  * <dd>
  * <dl>
  * <dt id="long-feature"><b>Long Integer Feature</b></dt>
  * <dd><ul>
  * <li>A long integer (64 bit signed) feature is represented by an annotation of type:
- *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID_CID_CID_LONG}.
+ *      {@link org.ihtsdo.ttk.api.ToolkitRefexType#CID_CID_CID_LONG}.
  * <br> <img src="doc-files/feature-long.svg"/></li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_1_ID} field of the node is
  * the identifier for the feature type concept, for example a concept representing <em>area</em>.</li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_2_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_2_ID} field of the node is
  * the identifier for the concept that defines the concrete domain operator, such as:
  * <ul>
  * <li>{@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#GREATER_THAN},</li>
@@ -417,9 +417,9 @@
  * <li>{@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#LESS_THAN_OR_EQUAL_TO}, or</li>
  * <li>{@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#LESS_THAN}.</li>
  * </ul>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#LONG_EXTENSION_1} field
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#LONG_EXTENSION_1} field
  *     holds the concrete value.</li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_3_ID} field
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_3_ID} field
  *     holds the identifier for a concept that represents the units of measure for the
  * concrete value of the feature, such as: <em>square centimeters</em>.</li>
  * </li>
@@ -429,17 +429,17 @@
  * </dd>
  *
  *
- * <dt>{@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID_CID_CID_FLOAT}</dt>
+ * <dt>{@link org.ihtsdo.ttk.api.ToolkitRefexType#CID_CID_CID_FLOAT}</dt>
  * <dd>
  * <dl>
  * <dt  id="float-feature"><b>Float Feature</b></dt>
  * <dd><ul>
  * <li>A float (32-bit IEEE 754) feature is represented by an annotation of type:
- *      {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID_CID_CID_FLOAT}.
+ *      {@link org.ihtsdo.ttk.api.ToolkitRefexType#CID_CID_CID_FLOAT}.
  * <br> <img src="doc-files/feature-float.svg"/></li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_1_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_1_ID} field of the node is
  * the identifier for the feature type concept, for example a concept representing <em>area</em>.</li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_2_ID} field of the node is
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_2_ID} field of the node is
  * the identifier for the concept that defines the concrete domain operator, such as:
  * <ul>
  * <li>{@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#GREATER_THAN},</li>
@@ -448,9 +448,9 @@
  * <li>{@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#LESS_THAN_OR_EQUAL_TO}, or</li>
  * <li>{@link org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding#LESS_THAN}.</li>
  * </ul>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#FLOAT_EXTENSION_1} field
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#FLOAT_EXTENSION_1} field
  *     holds the concrete value.</li>
- * <li>The {@link org.ihtsdo.ttk.api.blueprint.RefexProperty#COMPONENT_EXTENSION_3_ID} field
+ * <li>The {@link org.ihtsdo.ttk.api.blueprint.ComponentProperty#COMPONENT_EXTENSION_3_ID} field
  *     holds the identifier for a concept that represents the units of measure for the
  * concrete value of the feature, such as: <em>square centimeters</em>.</li>
  * </li>
@@ -479,7 +479,7 @@
  * substitution values to represent a specific region of skin (given a specification of laterality and of 
  * location). This template uses two different substitution 
  * values in  multiple places for the concepts "left" and "buttock" in the example. These values would be
- * stored in a {@link org.ihtsdo.ttk.api.TK_REFEX_TYPE#CID_CID} type refex where the fields of a member 
+ * stored in a {@link org.ihtsdo.ttk.api.ToolkitRefexType#CID_CID} type refex where the fields of a member 
  * represent the substitution values. The concept that defines the template (a concept outside of the 
  * taxonomy to be classified) also defines and holds the refex members used in the substitution. The template
  * concept also defines labels for the fields, and default values for the fields using annotations on the 
