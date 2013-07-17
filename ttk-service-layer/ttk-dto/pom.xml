@@ -20,7 +20,7 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
-            <plugin>
+<!--            <plugin>              
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
                 <version>1.5</version>
@@ -34,7 +34,7 @@
                 </executions>
                 <configuration>
                     <transformSchemas>
-                        <!--
+                        
                             Each schema element defines:
 
                             a) A <<namespace uri>> for one of your namespaces.
@@ -54,7 +54,7 @@
 
                             c) The desired <<toFile>> name of the generated XML schema definition file,
                                excluding the ".xsd" suffix (which will be added automatically).
-                        -->
+                        
                         <transformSchema>
                             <uri>http://org.ihtsdo.snomed</uri>
                             <toPrefix>sct</toPrefix>
@@ -65,7 +65,7 @@
                         <include>**/Ttk*.java</include>
                     </includes>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
     <properties>

@@ -181,9 +181,9 @@ public class ExternalChronicleWriterZip implements ExternalChronicleWriterBI {
             
             
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(ExternalChronicleWriterZipFSP.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExternalChronicleWriterZip.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(ExternalChronicleWriterZipFSP.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExternalChronicleWriterZip.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
