@@ -13,10 +13,6 @@
 package org.ihtsdo.ttk.bdb.uuidnidmap;
 
 //~--- non-JDK imports --------------------------------------------------------
-import com.sleepycat.bind.tuple.IntegerBinding;
-import com.sleepycat.je.DatabaseEntry;
-import com.sleepycat.je.LockMode;
-import com.sleepycat.je.OperationStatus;
 
 import org.ihtsdo.ttk.bdb.Bdb;
 import org.ihtsdo.ttk.bdb.ComponentBdb;
@@ -27,6 +23,7 @@ import org.ihtsdo.ttk.bdb.temp.PrimordialId;
 import java.io.IOException;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -38,23 +35,23 @@ public class UuidToNidMapBdb extends ComponentBdb {
 
     private static final String ID_NEXT = "org.ihtsdo.ID_NEXT";
     private IdSequence idSequence;
-    UuidToIntHashMap readOnlyMap;
-    UuidToIntHashMap mutableMap;
-    UuidToIntHashMap.UuidToIntHashMapBinder uuidIntMapBinder;
+    ConcurrentHashMap<Byte, UuidToNidSoftMapSegment> readOnlyMap = new ConcurrentHashMap<>();
+    ConcurrentHashMap<Byte, UuidToNidSoftMapSegment> mutableMap = new ConcurrentHashMap<>();
     ReentrantLock generateLock = new ReentrantLock();
 
     //~--- constructors --------------------------------------------------------
     public UuidToNidMapBdb(Bdb readOnlyBdbEnv, Bdb mutableBdbEnv) throws IOException {
         super(readOnlyBdbEnv, mutableBdbEnv);
         idSequence = new IdSequence();
+        for (int b = Byte.MIN_VALUE; b <= Byte.MAX_VALUE; b++) {
+            readOnlyMap.put((byte) b, new UuidToNidSoftMapSegment(readOnly, (byte) b));
+            mutableMap.put((byte) b, new UuidToNidSoftMapSegment(mutable, (byte) b));
+        }
     }
 
     //~--- methods -------------------------------------------------------------
     private void addToDb(UUID key, int nid) {
-        if (mutableMap != null) {
-            mutableMap.put(UuidUtil.convert(key), nid);
-        }
-
+        mutableMap.get((byte) key.hashCode()).put(key, nid);
     }
 
     private int generate(UUID key) {
@@ -79,43 +76,18 @@ public class UuidToNidMapBdb extends ComponentBdb {
         }
     }
 
-    @Override
-    protected void init() throws IOException {
-        idSequence = new IdSequence();
-
-        DatabaseEntry theKey = new DatabaseEntry();
-        IntegerBinding.intToEntry(0, theKey);
-
-        DatabaseEntry theData = new DatabaseEntry();
-        uuidIntMapBinder = UuidToIntHashMap.getUuidIntMapBinder();
-        if (readOnly.get(null, theKey, theData, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
-            readOnlyMap = uuidIntMapBinder.entryToObject(theData);
-        } else {
-            readOnlyMap = new UuidToIntHashMap();
-        }
-
-        if (mutable.get(null, theKey, theData, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS) {
-            mutableMap = uuidIntMapBinder.entryToObject(theData);
-        } else {
-            mutableMap = new UuidToIntHashMap();
-        }
-    }
-
-    public void put(UUID uuid, int nid) {
-        mutableMap.put(UuidUtil.convert(uuid), nid);
+    public void put(UUID key, int nid) {
+        mutableMap.get((byte) key.hashCode()).put(key, nid);
     }
 
     @Override
     public void sync() throws IOException {
         Bdb.setProperty(ID_NEXT, Integer.toString(idSequence.sequence.get()));
 
-        DatabaseEntry valueEntry = new DatabaseEntry();
-        uuidIntMapBinder.objectToEntry(mutableMap, valueEntry);
-        DatabaseEntry theKey = new DatabaseEntry();
-
-        IntegerBinding.intToEntry(0, theKey);
-        mutable.put(null, theKey, valueEntry);
-
+        for (int b = Byte.MIN_VALUE; b <= Byte.MAX_VALUE; b++) {
+            readOnlyMap.get((byte) b).write();
+            mutableMap.get((byte) b).write();
+        }
         super.sync();
     }
 
@@ -174,34 +146,30 @@ public class UuidToNidMapBdb extends ComponentBdb {
     }
 
     private int getNoGen(UUID key) {
-        if (readOnlyMap != null) {
-            int nid = readOnlyMap.get(key);
-            if (nid != Integer.MAX_VALUE) {
-                return nid;
-            }
+        int nid = readOnlyMap.get((byte) key.hashCode()).getNid(key);
+        if (nid != Integer.MAX_VALUE) {
+            return nid;
         }
-        if (mutableMap != null && mutableMap.containsKey(key)) {
-            int nid = mutableMap.get(key);
-            if (nid != Integer.MAX_VALUE) {
-                return nid;
-            }
+
+        nid = mutableMap.get((byte) key.hashCode()).getNid(key);
+        if (nid != Integer.MAX_VALUE) {
+            return nid;
         }
+
         return Integer.MIN_VALUE;
     }
 
     public List<UUID> getUuidsForNid(int nid) throws IOException {
-        List<UUID> uuids = new ArrayList<>();
-        if (readOnlyMap != null) {
-            uuids = readOnlyMap.keysOf(nid);
-        }
-        if (mutableMap != null && mutableMap.containsValue(nid)) {
-            uuids.addAll(mutableMap.keysOf(nid));
-        }
-        return uuids;
+        throw new UnsupportedOperationException();
     }
 
     public boolean hasUuid(UUID uuid) {
         return getNoGen(uuid) != Integer.MIN_VALUE;
+    }
+
+    @Override
+    protected void init() throws IOException {
+        // nothing to do, using lazy initilization
     }
 
     //~--- inner classes -------------------------------------------------------

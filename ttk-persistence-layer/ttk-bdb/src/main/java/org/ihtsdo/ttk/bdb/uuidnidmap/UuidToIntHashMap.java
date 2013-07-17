@@ -21,6 +21,7 @@ import com.sleepycat.bind.tuple.TupleOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.apache.mahout.math.function.DoubleProcedure;
@@ -124,6 +125,7 @@ public class UuidToIntHashMap extends AbstractUuidToIntHashMap {
      *
      * @return a deep copy of the receiver.
      */
+    @Override
     public Object clone() {
         UuidToIntHashMap copy = (UuidToIntHashMap) super.clone();
         copy.table = (long[]) copy.table.clone();
@@ -699,7 +701,7 @@ public class UuidToIntHashMap extends AbstractUuidToIntHashMap {
                 return map;
             
         }
-
+        static final AtomicInteger fileCount = new AtomicInteger();
         @Override
         public void objectToEntry(UuidToIntHashMap map, TupleOutput output) {
             output.writeInt(map.values.length);
@@ -713,5 +715,4 @@ public class UuidToIntHashMap extends AbstractUuidToIntHashMap {
             }
         }
     }
-
 }
