@@ -15,6 +15,7 @@
  */
 package org.ihtsdo.otf.query;
 
+import org.ihtsdo.otf.query.clauses.ConceptIsKindOf;
 import java.io.IOException;
 import java.util.HashMap;
 import org.ihtsdo.ttk.api.spec.ConceptSpec;
