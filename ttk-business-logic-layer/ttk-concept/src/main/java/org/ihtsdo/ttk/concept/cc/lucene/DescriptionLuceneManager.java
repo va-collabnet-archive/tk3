@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.Collection;
 
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.ihtsdo.ttk.concept.cc.description.Description;
+import static org.ihtsdo.ttk.concept.cc.lucene.LuceneManager.descWriter;
 
 public class DescriptionLuceneManager extends LuceneManager {
 
@@ -23,20 +23,12 @@ public class DescriptionLuceneManager extends LuceneManager {
         }
 
         if (descWriter != null) {
-            IndexWriter writerCopy = descWriter;
             for (Description desc : descriptions) {
                 if (desc != null) {
-                    writerCopy.deleteDocuments(new Term("dnid", Integer.toString(desc.getNid())));
-                    writerCopy.addDocument(DescriptionIndexGenerator.createDoc(desc));
+                    descWriter.deleteDocuments(new Term("dnid", Integer.toString(desc.getNid())));
+                    descWriter.addDocument(DescriptionIndexGenerator.createDoc(desc));
                 }
             }
-            writerCopy.commit();
         }
-
-        if (descSearcher != null) {
-            descSearcher.getIndexReader().close();
-            LuceneManager.logger.info("Closing lucene desc Searcher");
-        }
-        descSearcher = null;
     }
 }
