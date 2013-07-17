@@ -15,6 +15,7 @@
  */
 package org.ihtsdo.otf.query.clauses;
 
+import org.ihtsdo.otf.query.NativeIdSetBI;
 import org.ihtsdo.otf.query.WhereClause;
 import org.ihtsdo.ttk.api.spec.ConceptSpec;
 
@@ -22,11 +23,16 @@ import org.ihtsdo.ttk.api.spec.ConceptSpec;
  *
  * @author kec
  */
-public class ConceptIsKindOf implements WhereClause {
+public class ConceptIsKindOf extends WhereClause {
     ConceptSpec kindOfSpec;
 
     public ConceptIsKindOf(ConceptSpec kindOfSpec) {
         this.kindOfSpec = kindOfSpec;
+    }
+
+    @Override
+    public NativeIdSetBI compute(NativeIdSetBI searchSpace) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

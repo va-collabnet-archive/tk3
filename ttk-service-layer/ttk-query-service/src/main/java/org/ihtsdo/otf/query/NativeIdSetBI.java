@@ -19,17 +19,6 @@ package org.ihtsdo.otf.query;
  *
  * @author kec
  */
-public class And extends WhereClause {
-    WhereClause[] clauses;
-
-    public And(WhereClause... clauses) {
-        this.clauses = clauses;
-    }
-
-    @Override
-    public NativeIdSetBI compute(NativeIdSetBI searchSpace) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+public interface NativeIdSetBI {
     
 }

@@ -27,6 +27,7 @@ import org.ihtsdo.ttk.api.metadata.binding.Snomed;
  */
 public class ExampleQuery {
     
+    // Questions: where do we put TRUE/FALSE, or NOT?
     
     public void main(String[] args) {
         try {
@@ -41,7 +42,9 @@ public class ExampleQuery {
                 @Override
                 protected WhereClause declareWhere() {
                     return And(ConceptIsKindOf("allergic-asthma"),
-                               ConceptIsKindOf("another-let"));
+                               ConceptIsKindOf("another-let"),
+                               Intersection(ConceptIsKindOf(""), 
+                                            ConceptIsKindOf(""))); 
                 }
             };
             

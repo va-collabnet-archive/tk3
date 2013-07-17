@@ -19,7 +19,7 @@ package org.ihtsdo.otf.query;
  *
  * @author kec
  */
-public interface WhereClause {
+public abstract class WhereClause {
     
-    
+    protected abstract NativeIdSetBI compute(NativeIdSetBI searchSpace);
 }
