@@ -6,7 +6,7 @@ import org.ihtsdo.ttk.api.spec.ConceptSpec;
 
 public class Snomed {
 
-    public static ConceptSpec  =
+    public static ConceptSpec RESPIRATORY_DISORDER =
             new ConceptSpec("Respiratory disorder",
             UUID.fromString("275f19cb-83fc-3f8c-992d-9ad866602c88"));
     public static ConceptSpec BRONCHIAL_HYPERREACTIVITY =
