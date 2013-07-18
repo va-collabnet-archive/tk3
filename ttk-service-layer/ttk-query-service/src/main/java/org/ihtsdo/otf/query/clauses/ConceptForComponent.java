@@ -15,11 +15,13 @@
  */
 package org.ihtsdo.otf.query.clauses;
 
+import java.io.IOException;
 import org.ihtsdo.otf.query.ClauseComputeType;
 import org.ihtsdo.otf.query.Clause;
+import org.ihtsdo.otf.query.HybridNidSet;
 import org.ihtsdo.otf.query.NativeIdSetBI;
 import org.ihtsdo.otf.query.Query;
-import org.ihtsdo.ttk.api.NidSetBI;
+import org.ihtsdo.ttk.api.NidBitSetItrBI;
 
 /**
  *
@@ -37,8 +39,16 @@ public class ConceptForComponent extends Clause {
     }
 
     @Override
-    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException {
+        HybridNidSet conceptsForComponents = new HybridNidSet(incomingPossibleComponents.size());
+        
+        NidBitSetItrBI itr = incomingPossibleComponents.getIterator();
+        
+        
+        while (itr.next()) {
+            conceptsForComponents.add(itr.nid());
+        }
+        return conceptsForComponents;
     }
 
     @Override

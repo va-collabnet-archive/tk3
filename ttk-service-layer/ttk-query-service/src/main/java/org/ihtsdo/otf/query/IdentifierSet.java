@@ -422,6 +422,11 @@ public class IdentifierSet implements NativeIdSetBI, NidBitSetBI, Serializable {
     }
     //~--- inner classes -------------------------------------------------------
 
+    @Override
+    public NidBitSetItrBI getIterator() {
+        return new NidIterator(this.bitSet.iterator());
+    }
+
     private class NidIterator implements NidBitSetItrBI {
 
         private DocIdSetIterator docIterator;

@@ -15,11 +15,11 @@
  */
 package org.ihtsdo.otf.query;
 
+import java.io.IOException;
 import java.util.Arrays;
-import java.util.Iterator;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.mahout.math.list.IntArrayList;
 import org.apache.mahout.math.set.OpenIntHashSet;
+import org.ihtsdo.ttk.api.NidBitSetItrBI;
 
 /**
  *
@@ -203,5 +203,41 @@ public class IntSet implements NativeIdSetBI {
     @Override
     public String toString() {
         return "IntSet{" + "hashSet=" + hashSet + '}';
+    }
+
+    @Override
+    public NidBitSetItrBI getIterator() {
+        return new Iterator();
+    }
+    
+    private class Iterator implements NidBitSetItrBI {
+        IntArrayList items;
+        int index = -1;
+        int size;
+        public Iterator() {
+            items = hashSet.keys();
+            size = items.size();
+        }
+
+        
+        @Override
+        public int nid() {
+            return items.get(index);
+        }
+
+        @Override
+        public boolean next() throws IOException {
+            if (index < size - 1) {
+                index++;
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean skipTo(int target) throws IOException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        
     }
 }

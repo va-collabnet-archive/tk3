@@ -16,6 +16,7 @@
 package org.ihtsdo.otf.query;
 
 import org.ihtsdo.ttk.api.NidBitSetBI;
+import org.ihtsdo.ttk.api.NidBitSetItrBI;
 
 /**
  *
@@ -74,6 +75,10 @@ public class HybridNidSet implements NativeIdSetBI {
         return HybridNidSet.threshold;
     }
 
+    public NidBitSetItrBI getIterator() {
+        throw new UnsupportedOperationException();
+    }
+    
     @Override
     public void and(NativeIdSetBI other) {
         nidSet.and(other);

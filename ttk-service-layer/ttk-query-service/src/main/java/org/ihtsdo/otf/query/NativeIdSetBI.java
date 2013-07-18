@@ -15,6 +15,8 @@
  */
 package org.ihtsdo.otf.query;
 
+import org.ihtsdo.ttk.api.NidBitSetItrBI;
+
 /**
  *
  * @author kec
@@ -22,6 +24,8 @@ package org.ihtsdo.otf.query;
 public interface NativeIdSetBI {
 
 
+    NidBitSetItrBI getIterator();
+    
     int size();
 
     boolean isMember(int nid);

@@ -16,6 +16,7 @@
  */
 package org.ihtsdo.otf.query;
 
+import java.io.IOException;
 import org.ihtsdo.ttk.api.NidSetBI;
 
 /**
@@ -47,7 +48,7 @@ public abstract class Clause {
      * @return 
      */
     public abstract NativeIdSetBI computePossibleComponents(
-            NativeIdSetBI incomingPossibleComponents);
+            NativeIdSetBI incomingPossibleComponents) throws IOException;
     
     public abstract boolean matches();
     
