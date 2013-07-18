@@ -15,7 +15,7 @@
  */
 package org.ihtsdo.otf.query;
 
-import org.apache.lucene.util.OpenBitSet;
+import java.util.BitSet;
 /**
  * The Interface NidBitSetBI represents a bit set optimized for use with nids. It should be used for sets with large numbers of nids.
  * For example, the lists of all concept identifiers when iterating the

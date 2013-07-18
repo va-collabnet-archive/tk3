@@ -1,5 +1,6 @@
 /*
- * Copyright 2013 International Health Terminology Standards Development Organisation.
+ * Copyright 2013 International Health Terminology Standards Development 
+ * Organisation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +16,21 @@
  */
 package org.ihtsdo.otf.query;
 
+import org.ihtsdo.ttk.api.NidSetBI;
+
 /**
  *
  * @author kec
  */
 public abstract class Clause {
+    
+    Query enclosingQuery;
+
+    public Clause(Query enclosingQuery) {
+        this.enclosingQuery = enclosingQuery;
+    }
+    
+    
     
     /**
      * 
@@ -35,7 +46,8 @@ public abstract class Clause {
      * @param incomingPossibleComponents
      * @return 
      */
-    public abstract NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents);
+    public abstract NativeIdSetBI computePossibleComponents(
+            NativeIdSetBI incomingPossibleComponents);
     
     public abstract boolean matches();
     

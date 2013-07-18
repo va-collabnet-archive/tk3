@@ -17,30 +17,28 @@ package org.ihtsdo.otf.query;
 
 /**
  *
- * @author dylangrald
+ * @author kec
  */
 public class Not extends Clause {
 
-    Clause clause;
-
-    public Not(Clause clause) {
-        this.clause = clause;
-    }
-
-    @Override
-    public NativeIdSetBI computePossibleComponents(NativeIdSetBI searchSpace) {
-        NativeIdSetBI results = this.clause.computePossibleComponents(searchSpace);
-        searchSpace.andNot(results);
-        return searchSpace;
+    public Not(Query enclosingQuery) {
+        super(enclosingQuery);
     }
 
     @Override
     public ClauseComputeType computeType() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ClauseComputeType.POST_ITERATION;
+    }
+
+    @Override
+    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
+       // return enclosingQuery.getForSet().removeAll(incomintPossibleComponents);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean matches() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
+    
 }

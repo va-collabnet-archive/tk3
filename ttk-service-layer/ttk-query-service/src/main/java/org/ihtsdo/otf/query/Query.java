@@ -18,6 +18,7 @@ package org.ihtsdo.otf.query;
 import org.ihtsdo.otf.query.clauses.ConceptIsKindOf;
 import java.io.IOException;
 import java.util.HashMap;
+import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.spec.ConceptSpec;
 
 /**
@@ -25,51 +26,65 @@ import org.ihtsdo.ttk.api.spec.ConceptSpec;
  * @author kec
  */
 public abstract class Query {
-    
-    private final HashMap<String, Object> letDeclarations = new HashMap<String, Object>();
+
+    private final HashMap<String, Object> letDeclarations = 
+            new HashMap<String, Object>();
+    private NativeIdSetBI forSet;
+
 
     public Query() {
     }
-    
-    protected abstract void declareLets()throws IOException;
 
-    protected abstract Clause declareWhere();
-    
-    
+    protected abstract NativeIdSetBI For();
+
+    protected abstract void Let() throws IOException;
+
+    protected abstract Clause Where();
+
     public void let(String key, Object object) throws IOException {
         letDeclarations.put(key, object);
     }
-    
+
     public void where(Clause clause) {
-        declareWhere();
+        Where();
     }
 
     void compute() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        forSet = For();
+
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
-    
+
     protected ConceptIsKindOf ConceptIsKindOf(String conceptSpecKey) {
-        return new ConceptIsKindOf((ConceptSpec) letDeclarations.get(conceptSpecKey));
-       
+        return new ConceptIsKindOf(this, 
+                (ConceptSpec) letDeclarations.get(conceptSpecKey));
     }
-    
+
     protected Clause DescriptionRegexMatch(String regex) {
         throw new UnsupportedOperationException();
     }
-    
+
     protected And And(Clause... clauses) {
-        return new And(clauses);
+        return new And(this, clauses);
+    }
+
+    protected And Intersection(Clause... clauses) {
+        return new And(this, clauses);
     }
     
-    protected And Intersection(Clause... clauses) {
-        return new And(clauses);
+    public Not Not(Clause clause) {
+        return new Not(this);
+    }
+    
+    public NativeIdSetBI getForSet() {
+        return forSet;
     }
     
     protected Or Or(Clause... clauses) {
-        return new Or(clauses);
+        return new Or(this, clauses);
     }
     
     protected Or Union(Clause... clauses){
-        return new Or(clauses);
+        return new Or(this, clauses);
     }
 }

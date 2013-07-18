@@ -23,7 +23,8 @@ public class Or extends Clause{
     
     Clause[] clauses;
     
-    public Or(Clause... clauses){
+    public Or(Query enclosingQuery, Clause... clauses){
+        super(enclosingQuery);
         this.clauses = clauses;
     }
 

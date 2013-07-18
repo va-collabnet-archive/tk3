@@ -16,14 +16,20 @@
 package org.ihtsdo.otf.query.clauses;
 
 import org.ihtsdo.otf.query.ClauseComputeType;
-import org.ihtsdo.otf.query.NativeIdSetBI;
 import org.ihtsdo.otf.query.Clause;
+import org.ihtsdo.otf.query.NativeIdSetBI;
+import org.ihtsdo.otf.query.Query;
+import org.ihtsdo.ttk.api.NidSetBI;
 
 /**
  *
  * @author kec
  */
 public class ConceptForComponent extends Clause {
+
+    public ConceptForComponent(Query enclosingQuery) {
+        super(enclosingQuery);
+    }
 
     @Override
     public ClauseComputeType computeType() {

@@ -20,5 +20,5 @@ package org.ihtsdo.otf.query;
  * @author kec
  */
 public enum ClauseComputeType {
-    ITERATION, INDEXED_NO_ITERATION
+    ITERATION, INDEXED_NO_ITERATION, POST_ITERATION
 }

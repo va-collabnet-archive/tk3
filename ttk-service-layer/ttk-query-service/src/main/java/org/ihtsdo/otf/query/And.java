@@ -22,7 +22,8 @@ package org.ihtsdo.otf.query;
 public class And extends Clause {
     Clause[] clauses;
 
-    public And(Clause... clauses) {
+    public And(Query enclosingQuery, Clause... clauses) {
+        super(enclosingQuery);
         this.clauses = clauses;
         
     }

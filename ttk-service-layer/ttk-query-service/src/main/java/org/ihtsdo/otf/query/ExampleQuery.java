@@ -18,6 +18,8 @@ package org.ihtsdo.otf.query;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.ttk.api.NidSetBI;
+import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.ttk.api.metadata.binding.Snomed;
 
@@ -30,25 +32,33 @@ public class ExampleQuery {
     // Questions: where do we put TRUE/FALSE, or NOT?
     public void main(String[] args) {
         Query q = new Query() {
+
             @Override
-            protected void declareLets() throws IOException {
+            protected NativeIdSetBI For() {
+                return new HybridNidSet(Ts.get().getAllConceptNids()); 
+            }
+            
+            @Override
+            protected void Let() throws IOException {
                 let("allergic-asthma", Snomed.ALLERGIC_ASTHMA);
-                let("snomed-latest", StandardViewCoordinates.getSnomedInferredLatest());
+                let("snomed-latest", 
+                        StandardViewCoordinates.getSnomedInferredLatest());
             }
 
             @Override
-            protected Clause declareWhere() {
+            protected Clause Where() {
                 return And(ConceptIsKindOf("allergic-asthma"),
-                           ConceptIsKindOf("another-let"),
+                           Not(ConceptIsKindOf("another-let")),
                            Intersection(ConceptIsKindOf(""),
-                                     ConceptIsKindOf("")));
+                                        ConceptIsKindOf("")));
             }
         };
         try {
 
             q.compute();
         } catch (IOException ex) {
-            Logger.getLogger(ExampleQuery.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExampleQuery.class.getName()).log(
+                    Level.SEVERE, null, ex);
         }
     }
 }

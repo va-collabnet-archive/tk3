@@ -16,8 +16,9 @@
 package org.ihtsdo.otf.query.clauses;
 
 import org.ihtsdo.otf.query.ClauseComputeType;
-import org.ihtsdo.otf.query.NativeIdSetBI;
 import org.ihtsdo.otf.query.Clause;
+import org.ihtsdo.otf.query.NativeIdSetBI;
+import org.ihtsdo.otf.query.Query;
 import org.ihtsdo.ttk.api.spec.ConceptSpec;
 
 /**
@@ -27,7 +28,8 @@ import org.ihtsdo.ttk.api.spec.ConceptSpec;
 public class ConceptIsKindOf extends Clause {
     ConceptSpec kindOfSpec;
 
-    public ConceptIsKindOf(ConceptSpec kindOfSpec) {
+    public ConceptIsKindOf(Query enclosingQuery, ConceptSpec kindOfSpec) {
+        super(enclosingQuery);
         this.kindOfSpec = kindOfSpec;
     }
 
