@@ -20,5 +20,53 @@ package org.ihtsdo.otf.query;
  * @author kec
  */
 public interface NativeIdSetBI {
+
+
+    public int size();
+
+    public boolean isMember(int nid);
+    
+    public void setMember(int nid);
+    
+    public void and(NativeIdSetBI other);
+    
+    public void or(NativeIdSetBI other);
+    
+    public void xor(NativeIdSetBI other);
+    
+    public boolean contains(int nid);
+    
+    public int[] getSetValues();
+    
+    public void add(int nid);
+    
+    public void addAll(int[] nids);
+    
+    public void remove(int nid);
+    
+    public void removeAll(int[] nids);
+    
+    public void clear();
+    
+    @Override
+    public boolean equals(Object obj);
+    
+    @Override
+    public int hashCode();
+    
+    public int getMax();
+    
+    public int getMin();
+    
+    public boolean contiguous();
+    
+    @Override
+    public String toString();
+    
+    public void union(NativeIdSetBI other);
+    
+    public void setNotMember(int nid);
+    
+    public void andNot(NativeIdSetBI other); 
     
 }

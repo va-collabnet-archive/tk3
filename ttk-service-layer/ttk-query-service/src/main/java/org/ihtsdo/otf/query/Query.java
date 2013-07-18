@@ -64,4 +64,12 @@ public abstract class Query {
     protected And Intersection(Clause... clauses) {
         return new And(clauses);
     }
+    
+    protected Or Or(Clause... clauses) {
+        return new Or(clauses);
+    }
+    
+    protected Or Union(Clause... clauses){
+        return new Or(clauses);
+    }
 }
