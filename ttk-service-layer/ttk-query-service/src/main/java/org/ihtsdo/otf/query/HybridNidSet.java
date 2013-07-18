@@ -39,6 +39,13 @@ public class HybridNidSet implements NativeIdSetBI {
         nidSet = new IntSet();
         nidSet.add(nid);
     }
+    
+    public HybridNidSet(NidBitSetBI anotherSet){
+        this.nidSet = new IdentifierSet((IdentifierSet) anotherSet);
+        if(this.nidSet.size() < threshold){
+            this.nidSet = new IntSet((IdentifierSet)anotherSet);
+        }
+    }
 
     public HybridNidSet(IdentifierSet bitSet) {
         super();

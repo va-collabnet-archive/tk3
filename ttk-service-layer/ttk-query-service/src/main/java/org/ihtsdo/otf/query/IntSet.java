@@ -39,6 +39,14 @@ public class IntSet implements NativeIdSetBI {
             this.hashSet.add(i);
         }
     }
+    
+    public IntSet(IdentifierSet other){
+        this.hashSet = new OpenIntHashSet();
+        int[] otherSet = other.getSetValues();
+        for(int i: otherSet){
+            this.hashSet.add(i);
+        }
+    }
 
     @Override
     public int size() {
