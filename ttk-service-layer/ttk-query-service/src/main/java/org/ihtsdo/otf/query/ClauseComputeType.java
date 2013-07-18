@@ -19,7 +19,6 @@ package org.ihtsdo.otf.query;
  *
  * @author kec
  */
-public abstract class WhereClause {
-    
-    protected abstract NativeIdSetBI compute(NativeIdSetBI searchSpace);
+public enum ClauseComputeType {
+    ITERATION, INDEXED_NO_ITERATION
 }

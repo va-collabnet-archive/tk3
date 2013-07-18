@@ -26,34 +26,29 @@ import org.ihtsdo.ttk.api.metadata.binding.Snomed;
  * @author kec
  */
 public class ExampleQuery {
-    
+
     // Questions: where do we put TRUE/FALSE, or NOT?
-    
     public void main(String[] args) {
+        Query q = new Query() {
+            @Override
+            protected void declareLets() throws IOException {
+                let("allergic-asthma", Snomed.ALLERGIC_ASTHMA);
+                let("snomed-latest", StandardViewCoordinates.getSnomedInferredLatest());
+            }
+
+            @Override
+            protected Clause declareWhere() {
+                return And(ConceptIsKindOf("allergic-asthma"),
+                           ConceptIsKindOf("another-let"),
+                           Intersection(ConceptIsKindOf(""),
+                                     ConceptIsKindOf("")));
+            }
+        };
         try {
-            Query q = new Query() {
 
-                @Override
-                protected void declareLets() throws IOException {
-                    let("allergic-asthma", Snomed.ALLERGIC_ASTHMA);
-                    let("snomed-latest", StandardViewCoordinates.getSnomedInferredLatest());
-                }
-
-                @Override
-                protected WhereClause declareWhere() {
-                    return And(ConceptIsKindOf("allergic-asthma"),
-                               ConceptIsKindOf("another-let"),
-                               Intersection(ConceptIsKindOf(""), 
-                                            ConceptIsKindOf(""))); 
-                }
-            };
-            
             q.compute();
         } catch (IOException ex) {
             Logger.getLogger(ExampleQuery.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
-    //q.let("respiratory-disorder", Snomed.RESPIRATORY_DISORDER);
 }

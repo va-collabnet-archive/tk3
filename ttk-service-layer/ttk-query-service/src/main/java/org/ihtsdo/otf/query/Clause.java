@@ -19,28 +19,24 @@ package org.ihtsdo.otf.query;
  *
  * @author kec
  */
-public class And extends Clause {
-    Clause[] clauses;
-
-    public And(Clause... clauses) {
-        this.clauses = clauses;
-        
-    }
-
-    @Override
-    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ClauseComputeType computeType() {
-        return ClauseComputeType.INDEXED_NO_ITERATION;
-    }
-
-    @Override
-    public boolean matches() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+public abstract class Clause {
     
+    /**
+     * 
+     * @return the ClauseComputeType for this clause. 
+     */
+    
+    public abstract ClauseComputeType computeType();
+    
+    /**
+     * Compute components that meet the where clause criterion without using 
+     * iteration. If the set of possibilities cannot be computed without iteration, 
+     * the set of incomingPossibleComponents will be returned. 
+     * @param incomingPossibleComponents
+     * @return 
+     */
+    public abstract NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents);
+    
+    public abstract boolean matches();
     
 }

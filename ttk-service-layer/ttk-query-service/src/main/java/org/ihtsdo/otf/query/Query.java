@@ -33,14 +33,14 @@ public abstract class Query {
     
     protected abstract void declareLets()throws IOException;
 
-    protected abstract WhereClause declareWhere();
+    protected abstract Clause declareWhere();
     
     
     public void let(String key, Object object) throws IOException {
         letDeclarations.put(key, object);
     }
     
-    public void where(WhereClause clause) {
+    public void where(Clause clause) {
         declareWhere();
     }
 
@@ -53,15 +53,15 @@ public abstract class Query {
        
     }
     
-    protected WhereClause DescriptionRegexMatch(String regex) {
+    protected Clause DescriptionRegexMatch(String regex) {
         throw new UnsupportedOperationException();
     }
     
-    protected And And(WhereClause... clauses) {
+    protected And And(Clause... clauses) {
         return new And(clauses);
     }
     
-    protected And Intersection(WhereClause... clauses) {
+    protected And Intersection(Clause... clauses) {
         return new And(clauses);
     }
 }

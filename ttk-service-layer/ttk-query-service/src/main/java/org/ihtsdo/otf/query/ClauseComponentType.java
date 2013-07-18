@@ -19,28 +19,6 @@ package org.ihtsdo.otf.query;
  *
  * @author kec
  */
-public class And extends Clause {
-    Clause[] clauses;
-
-    public And(Clause... clauses) {
-        this.clauses = clauses;
-        
-    }
-
-    @Override
-    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ClauseComputeType computeType() {
-        return ClauseComputeType.INDEXED_NO_ITERATION;
-    }
-
-    @Override
-    public boolean matches() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
+public enum ClauseComponentType {
+    CONCEPT, DESCRIPTION, RELATIONSHIP, MEDIA, REFEX
 }
