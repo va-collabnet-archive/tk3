@@ -18,7 +18,6 @@ package org.ihtsdo.otf.query;
 import org.ihtsdo.otf.query.clauses.ConceptIsKindOf;
 import java.io.IOException;
 import java.util.HashMap;
-import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.spec.ConceptSpec;
 
 /**
@@ -30,6 +29,7 @@ public abstract class Query {
     private final HashMap<String, Object> letDeclarations = 
             new HashMap<String, Object>();
     private NativeIdSetBI forSet;
+    private Clause rootClause;
 
 
     public Query() {
@@ -45,12 +45,9 @@ public abstract class Query {
         letDeclarations.put(key, object);
     }
 
-    public void where(Clause clause) {
-        Where();
-    }
-
     void compute() throws IOException {
         forSet = For();
+        rootClause = Where();
 
         throw new UnsupportedOperationException("Not supported yet."); 
     }
