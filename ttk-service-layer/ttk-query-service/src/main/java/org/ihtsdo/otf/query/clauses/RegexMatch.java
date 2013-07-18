@@ -19,19 +19,21 @@ import org.ihtsdo.otf.query.Clause;
 import org.ihtsdo.otf.query.ClauseComputeType;
 import org.ihtsdo.otf.query.NativeIdSetBI;
 import org.ihtsdo.otf.query.Query;
+import org.ihtsdo.ttk.api.Ts;
 
 /**
  *
  * @author dylangrald
  */
 public class RegexMatch extends Clause {
-        
+
     String regex;
-    
+
     public RegexMatch(Query enclosingQuery, String regex) {
         super(enclosingQuery);
         this.regex = regex;
     }
+
     @Override
     public ClauseComputeType computeType() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -39,12 +41,20 @@ public class RegexMatch extends Clause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return incomingPossibleComponents;
     }
 
     @Override
     public boolean matches() {
+        /*
+        ConceptVersionBI conceptVersion2 = ((ConceptChronicleBI) component).getVersion(v1Is);
+        for (DescriptionVersionBI dv : conceptVersion2.getDescriptionsActive()) {
+            if (dv.getText().matches(s.getQueryText())) {
+                return true;
+            }
+        }
+        return false;
+        */
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
 }

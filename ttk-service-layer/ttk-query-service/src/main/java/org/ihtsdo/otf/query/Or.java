@@ -15,6 +15,8 @@
  */
 package org.ihtsdo.otf.query;
 
+import java.io.IOException;
+
 /**
  *
  * @author dylangrald
@@ -29,7 +31,7 @@ public class Or extends Clause{
     }
 
     @Override
-    public NativeIdSetBI computePossibleComponents(NativeIdSetBI searchSpace) {
+    public NativeIdSetBI computePossibleComponents(NativeIdSetBI searchSpace) throws IOException {
         NativeIdSetBI results = new HybridNidSet();
         for(Clause clause : clauses){
             results.union(clause.computePossibleComponents(searchSpace));

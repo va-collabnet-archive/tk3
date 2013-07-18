@@ -32,13 +32,13 @@ public class Not extends Clause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
-       // return enclosingQuery.getForSet().removeAll(incomintPossibleComponents);
-        throw new UnsupportedOperationException();
+        NativeIdSetBI forSet = enclosingQuery.getForSet();
+        forSet.andNot(incomingPossibleComponents);
+        return forSet;
     }
 
     @Override
     public boolean matches() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        throw new UnsupportedOperationException("Not supported yet.");
     }
-    
 }

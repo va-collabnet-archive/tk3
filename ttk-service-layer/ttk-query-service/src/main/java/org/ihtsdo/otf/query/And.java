@@ -15,6 +15,8 @@
  */
 package org.ihtsdo.otf.query;
 
+import java.io.IOException;
+
 /**
  *
  * @author kec
@@ -29,8 +31,12 @@ public class And extends Clause {
     }
 
     @Override
-    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException {
+        NativeIdSetBI results = new HybridNidSet();
+        for(Clause clause : clauses){
+            results.and(clause.computePossibleComponents(incomingPossibleComponents));
+        }
+        return results;
     }
 
     @Override
