@@ -18,7 +18,6 @@ package org.ihtsdo.otf.query;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.ttk.api.metadata.binding.Snomed;
@@ -34,7 +33,7 @@ public class ExampleQuery {
         Query q = new Query() {
 
             @Override
-            protected NativeIdSetBI For() {
+            protected NativeIdSetBI For() throws IOException {
                 return new HybridNidSet(Ts.get().getAllConceptNids()); 
             }
             

@@ -24,13 +24,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.util.OpenBitSet;
+import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.NidBitSetItrBI;
 
 /**
  *
  * @author dylangrald
  */
-public class IdentifierSet implements NativeIdSetBI, NidBitSetBI, Serializable{
+public class IdentifierSet implements NativeIdSetBI, NidBitSetBI, Serializable {
 
     // TODO Consider using an implementation that uses
     // AtomicLongArray rather than simply a long[]...
@@ -252,8 +253,7 @@ public class IdentifierSet implements NativeIdSetBI, NidBitSetBI, Serializable{
         this.toStringMax = toStringMax;
     }
 
-    @Override
-    public synchronized void setAll() {
+    public void setAll() {
         bitSet.set(0, bitSet.size());
     }
 
@@ -421,6 +421,7 @@ public class IdentifierSet implements NativeIdSetBI, NidBitSetBI, Serializable{
         }
     }
     //~--- inner classes -------------------------------------------------------
+
     private class NidIterator implements NidBitSetItrBI {
 
         private DocIdSetIterator docIterator;
@@ -455,23 +456,23 @@ public class IdentifierSet implements NativeIdSetBI, NidBitSetBI, Serializable{
             buff.append(nid());
             buff.append(" component: ");
             /*
-            try {
-                if (nid() != Integer.MAX_VALUE) {
-                    Object component = Terms.get().getComponent(nid());
+             try {
+             if (nid() != Integer.MAX_VALUE) {
+             Object component = Terms.get().getComponent(nid());
 
-                    if (component != null) {
-                        buff.append(component.toString());
-                    } else {
-                        buff.append(nid());
-                    }
-                } else {
-                    buff.append(nid());
-                }
-            } catch (TerminologyException e) {
-                AceLog.getAppLog().alertAndLogException(e);
-            } catch (IOException e) {
-                AceLog.getAppLog().alertAndLogException(e);
-            }*/
+             if (component != null) {
+             buff.append(component.toString());
+             } else {
+             buff.append(nid());
+             }
+             } else {
+             buff.append(nid());
+             }
+             } catch (TerminologyException e) {
+             AceLog.getAppLog().alertAndLogException(e);
+             } catch (IOException e) {
+             AceLog.getAppLog().alertAndLogException(e);
+             }*/
 
             return buff.toString();
         }

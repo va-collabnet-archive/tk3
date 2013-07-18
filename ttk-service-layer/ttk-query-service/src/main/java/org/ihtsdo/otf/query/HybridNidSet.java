@@ -15,6 +15,8 @@
  */
 package org.ihtsdo.otf.query;
 
+import org.ihtsdo.ttk.api.NidBitSetBI;
+
 /**
  *
  * @author dylangrald

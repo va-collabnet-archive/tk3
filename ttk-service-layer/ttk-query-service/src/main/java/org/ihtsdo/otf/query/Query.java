@@ -35,7 +35,7 @@ public abstract class Query {
     public Query() {
     }
 
-    protected abstract NativeIdSetBI For();
+    protected abstract NativeIdSetBI For() throws IOException;
 
     protected abstract void Let() throws IOException;
 
