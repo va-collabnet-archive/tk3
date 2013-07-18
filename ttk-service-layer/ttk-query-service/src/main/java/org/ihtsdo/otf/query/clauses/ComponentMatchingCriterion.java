@@ -15,7 +15,9 @@
  */
 package org.ihtsdo.otf.query.clauses;
 
+import java.util.EnumSet;
 import org.ihtsdo.otf.query.Clause;
+import org.ihtsdo.otf.query.ClauseComponentType;
 import org.ihtsdo.otf.query.ClauseComputeType;
 import org.ihtsdo.otf.query.NativeIdSetBI;
 import org.ihtsdo.otf.query.Query;
@@ -25,9 +27,13 @@ import org.ihtsdo.otf.query.Query;
  * @author dylangrald
  */
 public class ComponentMatchingCriterion extends Clause {
+    
+    EnumSet<ClauseComponentType> componentTypes;
 
-    public ComponentMatchingCriterion(Query enclosingQuery) {
+    public ComponentMatchingCriterion(Query enclosingQuery, EnumSet<ClauseComponentType> componentTypes) {
         super(enclosingQuery);
+        this.componentTypes = componentTypes;
+        
     }
 
     @Override
