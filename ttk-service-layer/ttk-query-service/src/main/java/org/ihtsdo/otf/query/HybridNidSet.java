@@ -76,7 +76,7 @@ public class HybridNidSet implements NativeIdSetBI {
     }
 
     public NidBitSetItrBI getIterator() {
-        throw new UnsupportedOperationException();
+        return this.nidSet.getIterator();
     }
     
     @Override
