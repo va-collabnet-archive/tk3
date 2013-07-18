@@ -21,19 +21,16 @@ import java.io.IOException;
  *
  * @author dylangrald
  */
-public class Or extends Clause{
-    
-    Clause[] clauses;
+public class Or extends ParentClause{
     
     public Or(Query enclosingQuery, Clause... clauses){
-        super(enclosingQuery);
-        this.clauses = clauses;
+        super(enclosingQuery, clauses);
     }
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI searchSpace) throws IOException {
         NativeIdSetBI results = new HybridNidSet();
-        for(Clause clause : clauses){
+        for(Clause clause : getChildren()){
             results.union(clause.computePossibleComponents(searchSpace));
         }
         return results;

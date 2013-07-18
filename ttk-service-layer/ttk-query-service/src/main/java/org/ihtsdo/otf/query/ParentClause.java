@@ -19,26 +19,17 @@ package org.ihtsdo.otf.query;
  *
  * @author kec
  */
-public class Not extends ParentClause {
+public abstract class ParentClause extends Clause {
 
-    public Not(Query enclosingQuery, Clause child) {
-        super(enclosingQuery, child);
-    }
+    private Clause[] children;
 
-    @Override
-    public ClauseComputeType computeType() {
-        return ClauseComputeType.POST_ITERATION;
+    public Clause[] getChildren() {
+        return children;
     }
-
-    @Override
-    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
-        NativeIdSetBI forSet = enclosingQuery.getForSet();
-        forSet.andNot(incomingPossibleComponents);
-        return forSet;
+    
+    public ParentClause(Query enclosingQuery, Clause... children) {
+        super(enclosingQuery);
+        this.children = children;
     }
-
-    @Override
-    public boolean matches() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    
 }

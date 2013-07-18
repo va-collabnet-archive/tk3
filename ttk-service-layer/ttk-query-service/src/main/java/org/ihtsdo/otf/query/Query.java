@@ -70,7 +70,7 @@ public abstract class Query {
     }
     
     public Not Not(Clause clause) {
-        return new Not(this);
+        return new Not(this, clause);
     }
     
     public NativeIdSetBI getForSet() {
