@@ -15,6 +15,8 @@
  */
 package org.ihtsdo.otf.query;
 
+import java.io.IOException;
+import org.ihtsdo.ttk.api.NidBitSetItrBI;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -299,5 +301,18 @@ public class HybridNidSetTest {
         instance.setNotMember(nid);
         assertTrue(!instance.isMember(-2));
 
+    }
+    
+    @Test
+    public void testIterator() throws IOException{
+        System.out.println("iterator");
+        HybridNidSet instance = new HybridNidSet(new int[] {-4,-3,-2});
+        NidBitSetItrBI iter = instance.getIterator();
+        int[] setValues = new int[] {-2,-3,-4};
+        int count = 0;
+        while(iter.next()){
+            assertEquals(setValues[count], iter.nid());
+            count++;
+        }
     }
 }
