@@ -18,17 +18,16 @@ package org.ihtsdo.otf.query.clauses;
 import org.ihtsdo.otf.query.ClauseComputeType;
 import org.ihtsdo.otf.query.NativeIdSetBI;
 import org.ihtsdo.otf.query.Clause;
-import org.ihtsdo.ttk.api.spec.ConceptSpec;
 
 /**
  *
  * @author kec
  */
-public class ConceptIsKindOf extends Clause {
-    ConceptSpec kindOfSpec;
+public class ConceptForComponent extends Clause {
 
-    public ConceptIsKindOf(ConceptSpec kindOfSpec) {
-        this.kindOfSpec = kindOfSpec;
+    @Override
+    public ClauseComputeType computeType() {
+        return ClauseComputeType.INDEXED_NO_ITERATION;
     }
 
     @Override
@@ -37,15 +36,8 @@ public class ConceptIsKindOf extends Clause {
     }
 
     @Override
-    public ClauseComputeType computeType() {
-        return ClauseComputeType.INDEXED_NO_ITERATION;
-    }
-
-    @Override
     public boolean matches() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
     
 }
