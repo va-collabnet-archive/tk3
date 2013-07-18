@@ -22,51 +22,51 @@ package org.ihtsdo.otf.query;
 public interface NativeIdSetBI {
 
 
-    public int size();
+    int size();
 
-    public boolean isMember(int nid);
+    boolean isMember(int nid);
     
-    public void setMember(int nid);
+    void setMember(int nid);
     
-    public void and(NativeIdSetBI other);
+    void and(NativeIdSetBI other);
     
-    public void or(NativeIdSetBI other);
+    void or(NativeIdSetBI other);
     
-    public void xor(NativeIdSetBI other);
+    void xor(NativeIdSetBI other);
     
-    public boolean contains(int nid);
+    boolean contains(int nid);
     
-    public int[] getSetValues();
+    int[] getSetValues();
     
-    public void add(int nid);
+    void add(int nid);
     
-    public void addAll(int[] nids);
+    void addAll(int[] nids);
     
-    public void remove(int nid);
+    void remove(int nid);
     
-    public void removeAll(int[] nids);
+    void removeAll(int[] nids);
     
-    public void clear();
-    
-    @Override
-    public boolean equals(Object obj);
+    void clear();
     
     @Override
-    public int hashCode();
-    
-    public int getMax();
-    
-    public int getMin();
-    
-    public boolean contiguous();
+    boolean equals(Object obj);
     
     @Override
-    public String toString();
+    int hashCode();
     
-    public void union(NativeIdSetBI other);
+    int getMax();
     
-    public void setNotMember(int nid);
+    int getMin();
     
-    public void andNot(NativeIdSetBI other); 
+    boolean contiguous();
+    
+    @Override
+    String toString();
+    
+    void union(NativeIdSetBI other);
+    
+    void setNotMember(int nid);
+    
+    void andNot(NativeIdSetBI other); 
     
 }
