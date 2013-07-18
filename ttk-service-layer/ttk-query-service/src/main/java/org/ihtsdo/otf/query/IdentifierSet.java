@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.util.OpenBitSet;
+import org.ihtsdo.ttk.api.NidBitSetItrBI;
 
 /**
  *
@@ -221,7 +222,7 @@ public class IdentifierSet implements NativeIdSetBI, NidBitSetBI, Serializable{
     }
 
 //    @Override
-    public I_IterateIds iterator() {
+    public NidBitSetItrBI iterator() {
         return new NidIterator(bitSet.iterator());
     }
 
@@ -283,7 +284,7 @@ public class IdentifierSet implements NativeIdSetBI, NidBitSetBI, Serializable{
     public int[] getSetValues() {
         int[] intArray = new int[(int) bitSet.cardinality()];
         int count = 0;
-        I_IterateIds idIterator = iterator();
+        NidBitSetItrBI idIterator = iterator();
         try {
             while (idIterator.next()) {
                 intArray[count] = idIterator.nid();
@@ -420,7 +421,7 @@ public class IdentifierSet implements NativeIdSetBI, NidBitSetBI, Serializable{
         }
     }
     //~--- inner classes -------------------------------------------------------
-    private class NidIterator implements I_IterateIds {
+    private class NidIterator implements NidBitSetItrBI {
 
         private DocIdSetIterator docIterator;
 
