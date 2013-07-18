@@ -20,6 +20,7 @@ import org.ihtsdo.otf.query.ClauseComputeType;
 import org.ihtsdo.otf.query.Clause;
 import org.ihtsdo.otf.query.HybridNidSet;
 import org.ihtsdo.otf.query.NativeIdSetBI;
+import org.ihtsdo.otf.query.ParentClause;
 import org.ihtsdo.otf.query.Query;
 import org.ihtsdo.ttk.api.NidBitSetItrBI;
 
@@ -27,10 +28,10 @@ import org.ihtsdo.ttk.api.NidBitSetItrBI;
  *
  * @author kec
  */
-public class ConceptForComponent extends Clause {
+public class ConceptForComponent extends ParentClause {
 
-    public ConceptForComponent(Query enclosingQuery) {
-        super(enclosingQuery);
+    public ConceptForComponent(Query enclosingQuery, Clause child) {
+        super(enclosingQuery, child);
     }
 
     @Override
