@@ -40,10 +40,10 @@ public class ConceptForComponent extends ParentClause {
     }
 
     @Override
-    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException {
-        HybridNidSet conceptsForComponents = new HybridNidSet(incomingPossibleComponents.size());
+    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleConcepts) throws IOException {
+        HybridNidSet conceptsForComponents = new HybridNidSet(incomingPossibleConcepts.size());
         
-        NidBitSetItrBI itr = incomingPossibleComponents.getIterator();
+        NidBitSetItrBI itr = incomingPossibleConcepts.getIterator();
         
         
         while (itr.next()) {

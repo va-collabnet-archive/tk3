@@ -25,12 +25,27 @@ import java.io.IOException;
 public abstract class Clause {
     
     Query enclosingQuery;
+    Clause parent = null;
+
+    public Query getEnclosingQuery() {
+        return enclosingQuery;
+    }
+
+    public Clause getParent() {
+        return parent;
+    }
+
+    public void setParent(Clause parent) {
+        this.parent = parent;
+    }
 
     public Clause(Query enclosingQuery) {
         this.enclosingQuery = enclosingQuery;
     }
     
-    
+    public Clause[] getChildren() {
+        return new Clause[] {};
+    }
     
     /**
      * 

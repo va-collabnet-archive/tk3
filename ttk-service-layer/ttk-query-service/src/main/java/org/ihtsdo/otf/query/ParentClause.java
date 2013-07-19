@@ -23,6 +23,7 @@ public abstract class ParentClause extends Clause {
 
     private Clause[] children;
 
+    @Override
     public Clause[] getChildren() {
         return children;
     }
@@ -30,6 +31,9 @@ public abstract class ParentClause extends Clause {
     public ParentClause(Query enclosingQuery, Clause... children) {
         super(enclosingQuery);
         this.children = children;
+        for (Clause child: children) {
+            child.setParent(this);
+        }
     }
     
 }

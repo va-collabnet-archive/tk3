@@ -29,7 +29,6 @@ public abstract class Query {
     private final HashMap<String, Object> letDeclarations = 
             new HashMap<String, Object>();
     private NativeIdSetBI forSet;
-    private Clause rootClause;
 
 
     public Query() {
@@ -47,7 +46,8 @@ public abstract class Query {
 
     void compute() throws IOException {
         forSet = For();
-        rootClause = Where();
+        Clause rootClause = Where();
+        rootClause.computePossibleComponents(forSet);
 
         throw new UnsupportedOperationException("Not supported yet."); 
     }

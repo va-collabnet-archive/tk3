@@ -28,7 +28,6 @@ import org.ihtsdo.ttk.api.metadata.binding.Snomed;
  */
 public class ExampleQuery {
 
-    // Questions: where do we put TRUE/FALSE, or NOT?
     public void main(String[] args) {
         Query q = new Query() {
 
@@ -53,7 +52,6 @@ public class ExampleQuery {
             }
         };
         try {
-
             q.compute();
         } catch (IOException ex) {
             Logger.getLogger(ExampleQuery.class.getName()).log(
