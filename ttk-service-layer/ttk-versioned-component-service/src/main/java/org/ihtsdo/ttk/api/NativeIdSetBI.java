@@ -69,6 +69,8 @@ public interface NativeIdSetBI {
     
     void setNotMember(int nid);
     
-    void andNot(NativeIdSetBI other); 
+    void andNot(NativeIdSetBI other);
+    
+    boolean isEmpty();
     
 }
