@@ -95,6 +95,10 @@ public interface TerminologyDI {
    //~--- get methods ---------------------------------------------------------
 
    NidBitSetBI getAllConceptNids() throws IOException;
+   
+   NativeIdSetBI getConceptNidsForComponentNids(NativeIdSetBI componentNativeIds) throws IOException;
+
+   NativeIdSetBI getComponentNidsForConceptNids(NativeIdSetBI conceptNativeIds) throws IOException;
 
    int getAuthorNidForStamp(int sapNid);
 

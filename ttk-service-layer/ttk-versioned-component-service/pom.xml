@@ -29,6 +29,12 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-collections</artifactId>
+            <version>1.0</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>

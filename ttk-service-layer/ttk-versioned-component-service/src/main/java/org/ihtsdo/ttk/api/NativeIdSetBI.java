@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.otf.query;
-
-import org.ihtsdo.ttk.api.NidBitSetItrBI;
+package org.ihtsdo.ttk.api;
 
 /**
  *
