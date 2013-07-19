@@ -19,10 +19,10 @@ import java.io.IOException;
 import org.ihtsdo.otf.query.ClauseComputeType;
 import org.ihtsdo.otf.query.Clause;
 import org.ihtsdo.otf.query.HybridNidSet;
-import org.ihtsdo.otf.query.NativeIdSetBI;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.otf.query.ParentClause;
 import org.ihtsdo.otf.query.Query;
-import org.ihtsdo.ttk.api.NidBitSetItrBI;
+import org.ihtsdo.ttk.api.Ts;
 
 /**
  *
@@ -40,16 +40,16 @@ public class ConceptForComponent extends ParentClause {
     }
 
     @Override
-    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleConcepts) throws IOException {
-        HybridNidSet conceptsForComponents = new HybridNidSet(incomingPossibleConcepts.size());
+    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleConcepNids) throws IOException {
+        NativeIdSetBI  incomingPossibleComponentNids = Ts.get().getComponentNidsForConceptNids(incomingPossibleConcepNids);
         
-        NidBitSetItrBI itr = incomingPossibleConcepts.getIterator();
+        NativeIdSetBI outgoingPossibleConceptNids = new HybridNidSet();
+        for (Clause childClause: getChildren()) {
+            NativeIdSetBI  childPossibleComponentNids = childClause.computePossibleComponents(incomingPossibleComponentNids);
+            outgoingPossibleConceptNids.or(Ts.get().getConceptNidsForComponentNids(childPossibleComponentNids));
         
-        
-        while (itr.next()) {
-            conceptsForComponents.add(itr.nid());
         }
-        return conceptsForComponents;
+        return outgoingPossibleConceptNids;
     }
 
     @Override

@@ -16,6 +16,7 @@
  */
 package org.ihtsdo.otf.query;
 
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import java.io.IOException;
 
 /**

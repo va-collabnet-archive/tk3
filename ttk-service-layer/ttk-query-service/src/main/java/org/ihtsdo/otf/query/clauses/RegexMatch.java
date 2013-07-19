@@ -17,7 +17,7 @@ package org.ihtsdo.otf.query.clauses;
 
 import org.ihtsdo.otf.query.Clause;
 import org.ihtsdo.otf.query.ClauseComputeType;
-import org.ihtsdo.otf.query.NativeIdSetBI;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.otf.query.Query;
 import org.ihtsdo.ttk.api.Ts;
 

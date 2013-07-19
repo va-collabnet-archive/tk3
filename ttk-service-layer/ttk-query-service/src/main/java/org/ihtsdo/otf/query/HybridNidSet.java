@@ -15,6 +15,7 @@
  */
 package org.ihtsdo.otf.query;
 
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.NidBitSetItrBI;
 

@@ -19,7 +19,7 @@ import java.util.EnumSet;
 import org.ihtsdo.otf.query.Clause;
 import org.ihtsdo.otf.query.ClauseComponentType;
 import org.ihtsdo.otf.query.ClauseComputeType;
-import org.ihtsdo.otf.query.NativeIdSetBI;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.otf.query.Query;
 
 /**

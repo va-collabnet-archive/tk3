@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import org.apache.mahout.math.list.IntArrayList;
 import org.apache.mahout.math.set.OpenIntHashSet;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.ttk.api.NidBitSetItrBI;
 
 /**
