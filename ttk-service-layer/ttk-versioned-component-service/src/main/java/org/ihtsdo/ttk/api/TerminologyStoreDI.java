@@ -22,6 +22,8 @@ public interface TerminologyStoreDI extends TerminologyDI {
 
    boolean isConceptNid(int nid);
 
+    public NativeIdSetBI getComponentNidsForConceptNids(NativeIdSetBI incomingPossibleConcepNids);
+
     enum DatabaseOptionPreferences {
         DB_LOCATION, BASELINE_FILES;
     }

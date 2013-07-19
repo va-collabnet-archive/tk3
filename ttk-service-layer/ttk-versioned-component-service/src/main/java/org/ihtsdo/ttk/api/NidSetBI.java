@@ -15,7 +15,7 @@ public interface NidSetBI {
 
     NidSetBI addAll(int[] nids);
     
-    NidSet addAll(Collection<Integer> keys);
+    NidSetBI addAll(Collection<Integer> keys);
     
     void removeAll(int[] nids);
 
