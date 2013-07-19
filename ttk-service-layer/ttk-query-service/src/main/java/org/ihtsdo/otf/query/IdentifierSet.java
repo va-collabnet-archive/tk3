@@ -33,7 +33,7 @@ import org.ihtsdo.ttk.api.NidBitSetItrBI;
  * @author dylangrald
  */
 public class IdentifierSet implements NativeIdSetBI, NidBitSetBI, Serializable {
-
+// See http://stackoverflow.com/questions/12424633/atomicbitset-implementation-for-java
     // TODO Consider using an implementation that uses
     // AtomicLongArray rather than simply a long[]...
     // Find power-of-two sizes best matching arguments
