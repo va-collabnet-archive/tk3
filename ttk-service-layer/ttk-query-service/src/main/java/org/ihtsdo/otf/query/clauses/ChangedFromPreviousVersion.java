@@ -16,19 +16,19 @@
 package org.ihtsdo.otf.query.clauses;
 
 import java.io.IOException;
-import org.ihtsdo.otf.query.Clause;
+import java.util.EnumSet;
 import org.ihtsdo.otf.query.ClauseComputeType;
-import org.ihtsdo.otf.query.HybridNidSet;
+import org.ihtsdo.otf.query.LeafClause;
 import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.otf.query.Query;
-import org.ihtsdo.ttk.api.NidBitSetItrBI;
+import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 
 /**
  *
  * @author dylangrald
  */
-public class ChangedFromPreviousVersion extends Clause {
+public class ChangedFromPreviousVersion extends LeafClause {
     
     ViewCoordinate previousViewCoordinate;
 
@@ -38,25 +38,17 @@ public class ChangedFromPreviousVersion extends Clause {
     }
 
     @Override
-    public ClauseComputeType computeType() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public EnumSet<ClauseComputeType> getComputePhases() {
+        return ITERATION;
     }
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException {
-        HybridNidSet conceptsForComponents = new HybridNidSet(incomingPossibleComponents.size());
-        
-        NidBitSetItrBI itr = incomingPossibleComponents.getIterator();
-        
-        
-        while (itr.next()) {
-            conceptsForComponents.add(itr.nid());
-        }
-        return conceptsForComponents;
+        return incomingPossibleComponents;
     }
 
     @Override
-    public boolean matches() {
+    public void getQueryMatches(ConceptVersionBI conceptVersion) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

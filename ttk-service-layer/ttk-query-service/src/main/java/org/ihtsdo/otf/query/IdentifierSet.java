@@ -428,6 +428,11 @@ public class IdentifierSet implements NativeIdSetBI, NidBitSetBI, Serializable {
         return new NidIterator(this.bitSet.iterator());
     }
 
+    @Override
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     private class NidIterator implements NidBitSetItrBI {
 
         private DocIdSetIterator docIterator;

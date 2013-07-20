@@ -15,10 +15,28 @@
  */
 package org.ihtsdo.otf.query;
 
+import java.io.IOException;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
+
 /**
  *
  * @author kec
  */
-public enum ClauseComputeType {
-    PRE_ITERATION, ITERATION, POST_ITERATION;
+public abstract class LeafClause extends Clause {
+    
+    HybridNidSet resultsCache = new HybridNidSet();
+
+    public LeafClause(Query enclosingQuery) {
+        super(enclosingQuery);
+    }
+
+    public HybridNidSet getResultsCache() {
+        return resultsCache;
+    }
+
+    @Override
+    public final NativeIdSetBI computeComponents(NativeIdSetBI incomingComponents) throws IOException {
+        return resultsCache;
+    }
+    
 }

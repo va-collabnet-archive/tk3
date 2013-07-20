@@ -15,26 +15,25 @@
  */
 package org.ihtsdo.otf.query.clauses;
 
-import org.ihtsdo.otf.query.Clause;
+import java.util.EnumSet;
 import org.ihtsdo.otf.query.ClauseComputeType;
+import org.ihtsdo.otf.query.LeafClause;
 import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.otf.query.Query;
+import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
 
 /**
  *
  * @author dylangrald
  */
-public class LuceneMatch extends Clause {
+public class ConceptIsMemberOfRefset extends LeafClause {
 
-    String luceneMatch;
-
-    public LuceneMatch(Query enclosingQuery, String luceneMatch) {
+    public ConceptIsMemberOfRefset(Query enclosingQuery) {
         super(enclosingQuery);
-        this.luceneMatch = luceneMatch;
     }
 
     @Override
-    public ClauseComputeType computeType() {
+    public EnumSet<ClauseComputeType> getComputePhases() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -44,7 +43,8 @@ public class LuceneMatch extends Clause {
     }
 
     @Override
-    public boolean matches() {
+    public void getQueryMatches(ConceptVersionBI conceptVersion) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 }

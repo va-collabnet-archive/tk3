@@ -31,12 +31,13 @@ import org.ihtsdo.ttk.api.spec.ValidationException;
 
 /**
  *
- * @author kec
+ * @author dylangrald
  */
-public class ConceptIsKindOf extends LeafClause {
+public class ConceptIsDescendentOf extends LeafClause {
+
     ConceptSpec kindOfSpec;
 
-    public ConceptIsKindOf(Query enclosingQuery, ConceptSpec kindOfSpec) {
+    public ConceptIsDescendentOf(Query enclosingQuery, ConceptSpec kindOfSpec) {
         super(enclosingQuery);
         this.kindOfSpec = kindOfSpec;
     }
@@ -48,7 +49,7 @@ public class ConceptIsKindOf extends LeafClause {
         int parentNid = kindOfSpec.getNid(viewCoordinate);
         NidBitSetItrBI itr = incomingPossibleComponents.getIterator();
         while (itr.next()) {
-            if (Ts.get().isKindOf(itr.nid(), parentNid, viewCoordinate)) {
+            if (itr.nid() != parentNid && Ts.get().isKindOf(itr.nid(), parentNid, viewCoordinate)) {
                 getResultsCache().setMember(itr.nid());
             }
         }

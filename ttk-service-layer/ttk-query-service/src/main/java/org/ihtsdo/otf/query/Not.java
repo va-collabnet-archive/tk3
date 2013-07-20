@@ -22,25 +22,15 @@ import org.ihtsdo.ttk.api.NativeIdSetBI;
  * @author kec
  */
 public class Not extends ParentClause {
-
+    
     public Not(Query enclosingQuery, Clause child) {
         super(enclosingQuery, child);
     }
 
     @Override
-    public ClauseComputeType computeType() {
-        return ClauseComputeType.POST_ITERATION;
-    }
-
-    @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
-        NativeIdSetBI forSet = enclosingQuery.getForSet();
-        forSet.andNot(incomingPossibleComponents);
-        return forSet;
-    }
-
-    @Override
-    public boolean matches() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        NativeIdSetBI notSet = new HybridNidSet((HybridNidSet) enclosingQuery.getForSet());
+        notSet.andNot(incomingPossibleComponents);
+        return notSet;
     }
 }

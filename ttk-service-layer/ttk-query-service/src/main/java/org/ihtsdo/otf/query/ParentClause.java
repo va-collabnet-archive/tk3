@@ -15,6 +15,13 @@
  */
 package org.ihtsdo.otf.query;
 
+import java.io.IOException;
+import java.util.EnumSet;
+import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
+import org.ihtsdo.ttk.api.spec.ValidationException;
+
 /**
  *
  * @author kec
@@ -34,6 +41,22 @@ public abstract class ParentClause extends Clause {
         for (Clause child: children) {
             child.setParent(this);
         }
+    }
+
+    
+    @Override
+    public final EnumSet<ClauseComputeType> getComputePhases() {
+        return PRE_AND_POST_ITERATION;
+    }
+
+    @Override
+    public final void getQueryMatches(ConceptVersionBI conceptVersion) {
+        // nothing to do...
+    }
+
+    @Override
+    public final NativeIdSetBI computeComponents(NativeIdSetBI incomingComponents) throws ContradictionException, IOException, ValidationException {
+        return computePossibleComponents(incomingComponents);
     }
     
 }

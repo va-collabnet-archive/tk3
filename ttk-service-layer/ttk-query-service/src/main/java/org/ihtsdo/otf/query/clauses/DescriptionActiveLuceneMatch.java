@@ -15,33 +15,31 @@
  */
 package org.ihtsdo.otf.query.clauses;
 
-import org.ihtsdo.otf.query.Clause;
+import java.util.EnumSet;
 import org.ihtsdo.otf.query.ClauseComputeType;
-import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.otf.query.Query;
+import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
 
 /**
  *
  * @author dylangrald
  */
-public class IsDescendentOf extends Clause {
+public class DescriptionActiveLuceneMatch extends DescriptionLuceneMatch {
 
-    public IsDescendentOf(Query enclosingQuery) {
-        super(enclosingQuery);
+    public DescriptionActiveLuceneMatch(Query enclosingQuery, String luceneMatch) {
+        super(enclosingQuery, luceneMatch);
+        this.luceneMatch = luceneMatch;
+    }
+    @Override
+    public EnumSet<ClauseComputeType> getComputePhases() {
+        return PRE_ITERATION_AND_ITERATION;
     }
 
-    @Override
-    public ClauseComputeType computeType() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
-    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean matches() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void getQueryMatches(ConceptVersionBI conceptVersion) {
+        // see if the descriptions are active...
+        // remove any from the cached set that are not active
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 }

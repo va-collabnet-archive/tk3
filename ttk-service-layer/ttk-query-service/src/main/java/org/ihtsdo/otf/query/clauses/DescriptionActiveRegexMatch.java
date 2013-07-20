@@ -15,33 +15,46 @@
  */
 package org.ihtsdo.otf.query.clauses;
 
-import org.ihtsdo.otf.query.Clause;
+import java.io.IOException;
+import java.util.EnumSet;
 import org.ihtsdo.otf.query.ClauseComputeType;
+import org.ihtsdo.otf.query.LeafClause;
 import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.otf.query.Query;
+import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
+import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
 
 /**
  *
  * @author dylangrald
  */
-public class IsChildOf extends Clause {
+public class DescriptionActiveRegexMatch extends LeafClause {
 
-    public IsChildOf(Query enclosingQuery) {
+    String regex;
+
+    public DescriptionActiveRegexMatch(Query enclosingQuery, String regex) {
         super(enclosingQuery);
+        this.regex = regex;
     }
 
     @Override
-    public ClauseComputeType computeType() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public EnumSet<ClauseComputeType> getComputePhases() {
+        return ITERATION;
     }
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return incomingPossibleComponents;
     }
 
     @Override
-    public boolean matches() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void getQueryMatches(ConceptVersionBI conceptVersion) throws IOException, ContradictionException {
+        
+        for (DescriptionVersionBI dv : conceptVersion.getDescriptionsActive()) {
+            if (dv.getText().matches(regex)) {
+                getResultsCache().add(dv.getNid());
+            }
+        }
     }
 }

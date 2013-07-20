@@ -210,6 +210,11 @@ public class IntSet implements NativeIdSetBI {
     public NidBitSetItrBI getIterator() {
         return new Iterator();
     }
+
+    @Override
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     private class Iterator implements NidBitSetItrBI {
         IntArrayList items;

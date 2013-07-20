@@ -17,6 +17,7 @@ package org.ihtsdo.otf.query.clauses;
 
 import java.io.IOException;
 import java.util.EnumSet;
+import org.ihtsdo.otf.query.Clause;
 import org.ihtsdo.otf.query.ClauseComputeType;
 import org.ihtsdo.otf.query.LeafClause;
 import org.ihtsdo.ttk.api.NativeIdSetBI;
@@ -31,12 +32,12 @@ import org.ihtsdo.ttk.api.spec.ValidationException;
 
 /**
  *
- * @author kec
+ * @author dylangrald
  */
-public class ConceptIsKindOf extends LeafClause {
+public class ConceptIsChildOf extends LeafClause {
     ConceptSpec kindOfSpec;
 
-    public ConceptIsKindOf(Query enclosingQuery, ConceptSpec kindOfSpec) {
+    public ConceptIsChildOf(Query enclosingQuery, ConceptSpec kindOfSpec) {
         super(enclosingQuery);
         this.kindOfSpec = kindOfSpec;
     }
@@ -48,7 +49,7 @@ public class ConceptIsKindOf extends LeafClause {
         int parentNid = kindOfSpec.getNid(viewCoordinate);
         NidBitSetItrBI itr = incomingPossibleComponents.getIterator();
         while (itr.next()) {
-            if (Ts.get().isKindOf(itr.nid(), parentNid, viewCoordinate)) {
+            if (Ts.get().isChildOf(itr.nid(), parentNid, viewCoordinate)) {
                 getResultsCache().setMember(itr.nid());
             }
         }

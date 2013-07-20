@@ -17,6 +17,8 @@ package org.ihtsdo.otf.query;
 
 import org.ihtsdo.ttk.api.NativeIdSetBI;
 import java.io.IOException;
+import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.spec.ValidationException;
 
 /**
  *
@@ -29,23 +31,12 @@ public class And extends ParentClause {
     }
 
     @Override
-    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException {
+    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException {
         NativeIdSetBI results = new HybridNidSet();
         for(Clause clause : getChildren()){
             results.and(clause.computePossibleComponents(incomingPossibleComponents));
         }
         return results;
     }
-
-    @Override
-    public ClauseComputeType computeType() {
-        return ClauseComputeType.INDEXED_NO_ITERATION;
-    }
-
-    @Override
-    public boolean matches() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
     
 }

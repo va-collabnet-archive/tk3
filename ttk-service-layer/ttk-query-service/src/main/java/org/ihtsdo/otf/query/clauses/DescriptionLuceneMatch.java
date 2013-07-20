@@ -16,38 +16,38 @@
 package org.ihtsdo.otf.query.clauses;
 
 import java.util.EnumSet;
-import org.ihtsdo.otf.query.Clause;
-import org.ihtsdo.otf.query.ClauseComponentType;
 import org.ihtsdo.otf.query.ClauseComputeType;
-import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.otf.query.LeafClause;
 import org.ihtsdo.otf.query.Query;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
 
 /**
  *
- * @author dylangrald
+ * @author kec
  */
-public class ComponentMatchingCriterion extends Clause {
-    
-    EnumSet<ClauseComponentType> componentTypes;
+public class DescriptionLuceneMatch extends LeafClause {
 
-    public ComponentMatchingCriterion(Query enclosingQuery, EnumSet<ClauseComponentType> componentTypes) {
+    String luceneMatch;
+
+    public DescriptionLuceneMatch(Query enclosingQuery, String luceneMatch) {
         super(enclosingQuery);
-        this.componentTypes = componentTypes;
-        
+        this.luceneMatch = luceneMatch;
     }
 
     @Override
-    public ClauseComputeType computeType() {
+    public EnumSet<ClauseComputeType> getComputePhases() {
+        return PRE_ITERATION;
+    }
+
+    @Override
+    public final NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
+        // get a list from lucene
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean matches() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void getQueryMatches(ConceptVersionBI conceptVersion) {
+        // Nothing to do...
     }
 }

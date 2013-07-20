@@ -18,6 +18,10 @@ package org.ihtsdo.otf.query;
 
 import org.ihtsdo.ttk.api.NativeIdSetBI;
 import java.io.IOException;
+import java.util.EnumSet;
+import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
+import org.ihtsdo.ttk.api.spec.ValidationException;
 
 /**
  *
@@ -27,6 +31,10 @@ public abstract class Clause {
     
     Query enclosingQuery;
     Clause parent = null;
+    protected static final EnumSet<ClauseComputeType> PRE_AND_POST_ITERATION = EnumSet.of(ClauseComputeType.PRE_ITERATION, ClauseComputeType.POST_ITERATION);
+    protected static final EnumSet<ClauseComputeType> PRE_ITERATION = EnumSet.of(ClauseComputeType.PRE_ITERATION);
+    protected static final EnumSet<ClauseComputeType> PRE_ITERATION_AND_ITERATION = EnumSet.of(ClauseComputeType.PRE_ITERATION, ClauseComputeType.ITERATION);
+    protected static final EnumSet<ClauseComputeType> ITERATION = EnumSet.of(ClauseComputeType.ITERATION);
 
     public Query getEnclosingQuery() {
         return enclosingQuery;
@@ -42,6 +50,7 @@ public abstract class Clause {
 
     public Clause(Query enclosingQuery) {
         this.enclosingQuery = enclosingQuery;
+        enclosingQuery.getComputeTypes().addAll(getComputePhases());
     }
     
     public Clause[] getChildren() {
@@ -53,7 +62,7 @@ public abstract class Clause {
      * @return the ClauseComputeType for this clause. 
      */
     
-    public abstract ClauseComputeType computeType();
+    public abstract EnumSet<ClauseComputeType> getComputePhases();
     
     /**
      * Compute components that meet the where clause criterion without using 
@@ -63,8 +72,30 @@ public abstract class Clause {
      * @return 
      */
     public abstract NativeIdSetBI computePossibleComponents(
-            NativeIdSetBI incomingPossibleComponents) throws IOException;
+            NativeIdSetBI incomingPossibleComponents) throws IOException, ValidationException, ContradictionException;
     
-    public abstract boolean matches();
     
+    /**
+     * Collect intermediate results for clauses that require iteration over the 
+     * database. This method will only be called if one of the clauses has a 
+     * compute type of <code>ClauseComputeType.ITERATION</code>. The clause
+     * will cache results, and return the final results during the computeComponents
+     * method. 
+     * @param conceptVersion
+     */
+    public abstract void getQueryMatches(ConceptVersionBI conceptVersion) 
+            throws IOException, ContradictionException;
+    
+    
+    /**
+     * Compute final results based on possible components, 
+     *  and any cached query matches. This third pass was necessary to 
+     * support the NOT operator. 
+     * @param incomingComponents
+     * @return
+     * @throws IOException 
+     */
+    public abstract NativeIdSetBI computeComponents(
+            NativeIdSetBI incomingComponents) throws IOException, ValidationException, ContradictionException;
+
 }

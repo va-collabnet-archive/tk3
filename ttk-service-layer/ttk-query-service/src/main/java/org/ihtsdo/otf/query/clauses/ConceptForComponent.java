@@ -16,13 +16,14 @@
 package org.ihtsdo.otf.query.clauses;
 
 import java.io.IOException;
-import org.ihtsdo.otf.query.ClauseComputeType;
 import org.ihtsdo.otf.query.Clause;
 import org.ihtsdo.otf.query.HybridNidSet;
 import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.otf.query.ParentClause;
 import org.ihtsdo.otf.query.Query;
+import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.ttk.api.spec.ValidationException;
 
 /**
  *
@@ -35,26 +36,14 @@ public class ConceptForComponent extends ParentClause {
     }
 
     @Override
-    public ClauseComputeType computeType() {
-        return ClauseComputeType.INDEXED_NO_ITERATION;
-    }
+    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleConcepNids) throws IOException, ValidationException, ContradictionException {
+        NativeIdSetBI incomingPossibleComponentNids = Ts.get().getComponentNidsForConceptNids(incomingPossibleConcepNids);
 
-    @Override
-    public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleConcepNids) throws IOException {
-        NativeIdSetBI  incomingPossibleComponentNids = Ts.get().getComponentNidsForConceptNids(incomingPossibleConcepNids);
-        
         NativeIdSetBI outgoingPossibleConceptNids = new HybridNidSet();
-        for (Clause childClause: getChildren()) {
-            NativeIdSetBI  childPossibleComponentNids = childClause.computePossibleComponents(incomingPossibleComponentNids);
+        for (Clause childClause : getChildren()) {
+            NativeIdSetBI childPossibleComponentNids = childClause.computePossibleComponents(incomingPossibleComponentNids);
             outgoingPossibleConceptNids.or(Ts.get().getConceptNidsForComponentNids(childPossibleComponentNids));
-        
         }
         return outgoingPossibleConceptNids;
     }
-
-    @Override
-    public boolean matches() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

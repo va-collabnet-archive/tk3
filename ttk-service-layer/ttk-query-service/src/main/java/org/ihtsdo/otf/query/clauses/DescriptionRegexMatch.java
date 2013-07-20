@@ -15,28 +15,33 @@
  */
 package org.ihtsdo.otf.query.clauses;
 
-import org.ihtsdo.otf.query.Clause;
+import java.io.IOException;
+import java.util.EnumSet;
 import org.ihtsdo.otf.query.ClauseComputeType;
-import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.otf.query.LeafClause;
 import org.ihtsdo.otf.query.Query;
-import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
+import org.ihtsdo.ttk.api.description.DescriptionChronicleBI;
+import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
 
 /**
  *
- * @author dylangrald
+ * @author kec
  */
-public class RegexMatch extends Clause {
+public class DescriptionRegexMatch extends LeafClause {
 
     String regex;
 
-    public RegexMatch(Query enclosingQuery, String regex) {
+    public DescriptionRegexMatch(Query enclosingQuery, String regex) {
         super(enclosingQuery);
         this.regex = regex;
     }
 
     @Override
-    public ClauseComputeType computeType() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public EnumSet<ClauseComputeType> getComputePhases() {
+        return ITERATION;
     }
 
     @Override
@@ -45,16 +50,14 @@ public class RegexMatch extends Clause {
     }
 
     @Override
-    public boolean matches() {
-        /*
-        ConceptVersionBI conceptVersion2 = ((ConceptChronicleBI) component).getVersion(v1Is);
-        for (DescriptionVersionBI dv : conceptVersion2.getDescriptionsActive()) {
-            if (dv.getText().matches(s.getQueryText())) {
-                return true;
+    public void getQueryMatches(ConceptVersionBI conceptVersion) throws IOException, ContradictionException {
+
+        for (DescriptionChronicleBI dc : conceptVersion.getDescriptions()) {
+            for (DescriptionVersionBI dv : dc.getVersions()) {
+                if (dv.getText().matches(regex)) {
+                    getResultsCache().add(dv.getNid());
+                }
             }
         }
-        return false;
-        */
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

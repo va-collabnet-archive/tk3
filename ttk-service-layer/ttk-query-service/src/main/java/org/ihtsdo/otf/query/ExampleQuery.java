@@ -30,33 +30,33 @@ import org.ihtsdo.ttk.api.metadata.binding.Snomed;
 public class ExampleQuery {
 
     public void main(String[] args) {
-        Query q = new Query() {
-
-            @Override
-            protected NativeIdSetBI For() throws IOException {
-                return new HybridNidSet(Ts.get().getAllConceptNids()); 
-            }
-            
-            @Override
-            protected void Let() throws IOException {
-                let("allergic-asthma", Snomed.ALLERGIC_ASTHMA);
-                let("snomed-latest", 
-                        StandardViewCoordinates.getSnomedInferredLatest());
-            }
-
-            @Override
-            protected Clause Where() {
-                return And(ConceptIsKindOf("allergic-asthma"),
-                           Not(ConceptIsKindOf("another-let")),
-                           Intersection(ConceptIsKindOf(""),
-                                        ConceptIsKindOf("")));
-            }
-        };
         try {
-            q.compute();
+            Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
+                @Override
+                protected NativeIdSetBI For() throws IOException {
+                    return new HybridNidSet(Ts.get().getAllConceptNids());
+                }
+
+                @Override
+                protected void Let() throws IOException {
+                    let("allergic-asthma", Snomed.ALLERGIC_ASTHMA);
+                }
+
+                @Override
+                protected Clause Where() {
+                    return And(ConceptIsKindOf("allergic-asthma"),
+                            Not(ConceptIsKindOf("another-let")),
+                            Intersection(ConceptIsKindOf(""),
+                            ConceptIsKindOf("")));
+                }
+            };
+
+            NativeIdSetBI results = q.compute();
         } catch (IOException ex) {
             Logger.getLogger(ExampleQuery.class.getName()).log(
                     Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(ExampleQuery.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

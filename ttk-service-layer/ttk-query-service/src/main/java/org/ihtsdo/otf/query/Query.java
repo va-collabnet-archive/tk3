@@ -18,7 +18,14 @@ package org.ihtsdo.otf.query;
 import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.otf.query.clauses.ConceptIsKindOf;
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.HashMap;
+import org.ihtsdo.ttk.api.ConceptFetcherBI;
+import org.ihtsdo.ttk.api.NidBitSetBI;
+import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
+import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.spec.ConceptSpec;
 
 /**
@@ -26,46 +33,104 @@ import org.ihtsdo.ttk.api.spec.ConceptSpec;
  * @author kec
  */
 public abstract class Query {
-
-    private final HashMap<String, Object> letDeclarations = 
+    
+    private final HashMap<String, Object> letDeclarations =
             new HashMap<String, Object>();
     private NativeIdSetBI forSet;
-
-
-    public Query() {
+    private EnumSet<ClauseComputeType> computeTypes =
+            EnumSet.noneOf(ClauseComputeType.class);
+    private ViewCoordinate viewCoordinate;
+    
+    public EnumSet<ClauseComputeType> getComputeTypes() {
+        return computeTypes;
     }
-
+    
+    public Query(ViewCoordinate viewCoordinate) {
+        this.viewCoordinate = viewCoordinate;
+    }
+    
     protected abstract NativeIdSetBI For() throws IOException;
-
+    
     protected abstract void Let() throws IOException;
-
+    
     protected abstract Clause Where();
-
+    
     public void let(String key, Object object) throws IOException {
         letDeclarations.put(key, object);
     }
-
-    void compute() throws IOException {
+    
+    NativeIdSetBI compute() throws IOException, Exception {
         forSet = For();
         Clause rootClause = Where();
-        rootClause.computePossibleComponents(forSet);
-
-        throw new UnsupportedOperationException("Not supported yet."); 
+        NativeIdSetBI possibleComponents =
+                rootClause.computePossibleComponents(forSet);
+                if (computeTypes.contains(ClauseComputeType.ITERATION)) {
+            NativeIdSetBI conceptsToIterateOver =
+                    Ts.get().getConceptNidsForComponentNids(possibleComponents);
+            
+            Iterator itr = new Iterator(rootClause, conceptsToIterateOver);
+            Ts.get().iterateConceptDataInParallel(itr);
+             
+        }
+        return rootClause.computeComponents(possibleComponents);        
     }
 
+    public ViewCoordinate getViewCoordinate() {
+        return viewCoordinate;
+    }
+    
+    private class Iterator implements ProcessUnfetchedConceptDataBI {
+        
+        NativeIdSetBI conceptsToIterate;
+        Clause rootClause;
+        
+        public Iterator(Clause rootClause, NativeIdSetBI conceptsToIterate) {
+            this.rootClause = rootClause;
+            this.conceptsToIterate = conceptsToIterate;
+        }
+        
+        @Override
+        public boolean allowCancel() {
+            return true;
+        }
+        
+        @Override
+        public void processUnfetchedConceptData(int cNid, ConceptFetcherBI fetcher) throws Exception {
+            if (conceptsToIterate.contains(cNid)) {
+                ConceptVersionBI concept = fetcher.fetch(viewCoordinate);
+                this.rootClause.getQueryMatches(concept);
+            }
+        }
+        
+        @Override
+        public NidBitSetBI getNidSet() throws IOException {
+            return conceptsToIterate;
+        }
+        
+        @Override
+        public String getTitle() {
+            return "Query Iterator";
+        }
+        
+        @Override
+        public boolean continueWork() {
+            return true;
+        }
+    }
+    
     protected ConceptIsKindOf ConceptIsKindOf(String conceptSpecKey) {
-        return new ConceptIsKindOf(this, 
+        return new ConceptIsKindOf(this,
                 (ConceptSpec) letDeclarations.get(conceptSpecKey));
     }
-
+    
     protected Clause DescriptionRegexMatch(String regex) {
         throw new UnsupportedOperationException();
     }
-
+    
     protected And And(Clause... clauses) {
         return new And(this, clauses);
     }
-
+    
     protected And Intersection(Clause... clauses) {
         return new And(this, clauses);
     }
@@ -82,7 +147,7 @@ public abstract class Query {
         return new Or(this, clauses);
     }
     
-    protected Or Union(Clause... clauses){
+    protected Or Union(Clause... clauses) {
         return new Or(this, clauses);
     }
 }
