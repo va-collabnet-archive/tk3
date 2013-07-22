@@ -22,7 +22,6 @@ package org.ihtsdo.ttk.logic;
 
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.TerminologyBuilderBI;
 import org.ihtsdo.ttk.api.Ts;
@@ -43,6 +42,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 
 /**
  *
@@ -200,7 +200,7 @@ public class SnomedToLogicTree extends LogicBlueprintBuilder implements ProcessU
     * @throws IOException
     */
    @Override
-   public NidBitSetBI getNidSet() throws IOException {
+   public NativeIdSetBI getNidSet() throws IOException {
       return Ts.get().getAllConceptNids();
    }
 
