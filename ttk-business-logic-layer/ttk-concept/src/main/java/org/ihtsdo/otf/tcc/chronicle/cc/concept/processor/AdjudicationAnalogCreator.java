@@ -15,8 +15,8 @@
  */
 package org.ihtsdo.otf.tcc.chronicle.cc.concept.processor;
 
-import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
-import org.ihtsdo.otf.tcc.api.ProcessComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ProcessComponentChronicleBI;
 import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 

@@ -2,7 +2,7 @@ package org.ihtsdo.otf.tcc.api.changeset;
 
 import java.io.IOException;
 
-import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 
 public interface ChangeSetGeneratorBI {

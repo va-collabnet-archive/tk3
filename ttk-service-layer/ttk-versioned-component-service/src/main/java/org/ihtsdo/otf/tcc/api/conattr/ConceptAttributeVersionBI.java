@@ -3,8 +3,8 @@ package org.ihtsdo.otf.tcc.api.conattr;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.otf.tcc.api.AnalogGeneratorBI;
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.blueprint.ConceptAttributeAB;
 import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
 import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;

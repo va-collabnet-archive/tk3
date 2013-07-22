@@ -20,7 +20,7 @@
 package org.ihtsdo.otf.tcc.api.conflict;
 
 import java.util.Comparator;
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
 
 class PartDateOrderSortComparator implements Comparator<ComponentVersionBI> {
     private boolean reverseOrder = false;

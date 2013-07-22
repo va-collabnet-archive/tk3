@@ -6,7 +6,7 @@ import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.type_long.RefexLongVersionBI;
 import org.ihtsdo.otf.tcc.dto.component.TtkRevision;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.dto.component.refex.TtkRefexAbstractMemberChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -174,8 +174,8 @@ public class TtkRefexLongMemberChronicle extends TtkRefexAbstractMemberChronicle
    }
 
    @Override
-   public ToolkitRefexType getType() {
-      return ToolkitRefexType.LONG;
+   public RefexType getType() {
+      return RefexType.LONG;
    }
 
    //~--- set methods ---------------------------------------------------------

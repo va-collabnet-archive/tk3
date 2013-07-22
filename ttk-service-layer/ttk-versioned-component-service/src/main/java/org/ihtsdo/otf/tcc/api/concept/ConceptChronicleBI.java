@@ -3,8 +3,8 @@ package org.ihtsdo.otf.tcc.api.concept;
 //~--- non-JDK imports --------------------------------------------------------
 
 import java.io.DataOutput;
-import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.otf.tcc.api.changeset.ChangeSetGenerationThreadingPolicy;
 import org.ihtsdo.otf.tcc.api.conattr.ConceptAttributeChronicleBI;
@@ -21,7 +21,7 @@ import org.ihtsdo.otf.tcc.api.relationship.group.RelGroupVersionBI;
 import java.io.IOException;
 
 import java.util.Collection;
-import org.ihtsdo.otf.tcc.api.ProcessComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ProcessComponentChronicleBI;
 
 public interface ConceptChronicleBI extends ComponentChronicleBI<ConceptVersionBI> {
     

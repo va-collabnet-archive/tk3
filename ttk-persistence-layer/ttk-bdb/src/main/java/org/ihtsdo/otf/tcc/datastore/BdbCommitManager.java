@@ -1,10 +1,10 @@
 package org.ihtsdo.otf.tcc.datastore;
 
 //~--- non-JDK imports --------------------------------------------------------
-import org.ihtsdo.otf.tcc.api.NidSetBI;
-import org.ihtsdo.otf.tcc.api.ComponentBI;
-import org.ihtsdo.otf.tcc.api.TerminologyStoreDI;
-import org.ihtsdo.otf.tcc.api.NativeIdSetItrBI;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentBI;
+import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.*;
@@ -16,8 +16,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import org.ihtsdo.otf.tcc.api.ConcurrentBitSet;
-import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.datastore.id.NidCNidMapBdb;
 import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
 import org.ihtsdo.otf.tcc.datastore.temp.AceLog;

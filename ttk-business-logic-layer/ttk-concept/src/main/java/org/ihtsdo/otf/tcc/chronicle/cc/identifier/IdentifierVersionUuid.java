@@ -13,7 +13,7 @@ import org.ihtsdo.otf.tcc.dto.component.identifier.TtkIdentifierUuid;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 
 public class IdentifierVersionUuid extends IdentifierVersion implements UuidIdBI {
    private long lsb;

@@ -20,8 +20,8 @@ package org.ihtsdo.ttk.helpers.refex;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
@@ -44,24 +44,24 @@ import org.ihtsdo.otf.tcc.api.refex.type_nid_string.RefexNidStringVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.type_string.RefexStringVersionBI;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
 
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.BOOLEAN;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_BOOLEAN;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_FLOAT;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_INT;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_LONG;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_STRING;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_STR;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_FLOAT;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_INT;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_LONG;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_STR;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.INT;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.LONG;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.MEMBER;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.STR;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.BOOLEAN;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_BOOLEAN;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID_FLOAT;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID_INT;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID_LONG;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID_STRING;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_STR;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_FLOAT;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_INT;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_LONG;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_STR;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.INT;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.LONG;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.MEMBER;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.STR;
 
 //~--- JDK imports ------------------------------------------------------------
 

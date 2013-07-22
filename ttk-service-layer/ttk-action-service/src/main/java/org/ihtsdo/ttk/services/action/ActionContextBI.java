@@ -18,7 +18,7 @@ package org.ihtsdo.ttk.services.action;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
 import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 

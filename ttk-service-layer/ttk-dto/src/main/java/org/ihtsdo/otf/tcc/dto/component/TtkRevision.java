@@ -2,11 +2,11 @@ package org.ihtsdo.otf.tcc.dto.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.Ts;
-import org.ihtsdo.otf.tcc.api.ComponentBI;
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
-import org.ihtsdo.otf.tcc.api.ExternalStampBI;
+import org.ihtsdo.otf.tcc.api.coordinate.ExternalStampBI;
 import org.ihtsdo.otf.tcc.api.id.IdBI;
 import org.ihtsdo.otf.tcc.dto.component.transformer.ComponentFields;
 import org.ihtsdo.otf.tcc.dto.component.transformer.ComponentTransformerBI;
@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class TtkRevision implements ExternalStampBI {

@@ -1,9 +1,9 @@
 package org.ihtsdo.otf.tcc.api.concept;
 
 //~--- non-JDK imports --------------------------------------------------------
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
 import org.ihtsdo.otf.tcc.api.conattr.ConceptAttributeVersionBI;
 import org.ihtsdo.otf.tcc.api.constraint.ConstraintBI;
 import org.ihtsdo.otf.tcc.api.constraint.ConstraintCheckType;

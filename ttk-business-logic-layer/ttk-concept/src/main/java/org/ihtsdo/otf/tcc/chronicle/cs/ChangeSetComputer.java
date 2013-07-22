@@ -13,7 +13,7 @@ import org.ihtsdo.otf.tcc.chronicle.cc.identifier.IdentifierVersionUuid;
 import org.ihtsdo.otf.tcc.chronicle.cc.refex.RefexMember;
 import org.ihtsdo.otf.tcc.chronicle.cc.relationship.Relationship;
 import org.ihtsdo.otf.tcc.chronicle.cc.ReferenceConcepts;
-import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
 import org.ihtsdo.otf.tcc.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.otf.tcc.dto.component.TtkComponentChronicle;
 import org.ihtsdo.otf.tcc.dto.component.TtkRevision;

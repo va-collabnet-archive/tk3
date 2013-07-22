@@ -2,7 +2,7 @@ package org.ihtsdo.otf.tcc.dto.component.media;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.media.MediaVersionBI;
 import org.ihtsdo.otf.tcc.dto.component.TtkRevision;
 

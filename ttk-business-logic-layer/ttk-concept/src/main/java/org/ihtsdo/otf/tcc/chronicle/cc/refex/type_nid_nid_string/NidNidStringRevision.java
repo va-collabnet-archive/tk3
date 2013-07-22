@@ -8,13 +8,13 @@ import com.sleepycat.bind.tuple.TupleOutput;
 
 
 import org.ihtsdo.otf.tcc.chronicle.cc.refex.RefexRevision;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_string.RefexNidNidStringAnalogBI;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid_string.TtkRefexUuidUuidStringRevision;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.util.*;
 import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.otf.tcc.chronicle.cc.P;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 
 public class NidNidStringRevision extends RefexRevision<NidNidStringRevision, NidNidStringMember>
         implements RefexNidNidStringAnalogBI<NidNidStringRevision> {
@@ -114,7 +114,7 @@ public class NidNidStringRevision extends RefexRevision<NidNidStringRevision, Ni
    }
 
    @Override
-   public NidNidStringRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public NidNidStringRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatus(status);
          this.setAuthorNid(authorNid);
@@ -189,8 +189,8 @@ public class NidNidStringRevision extends RefexRevision<NidNidStringRevision, Ni
    }
 
    @Override
-   protected ToolkitRefexType getTkRefsetType() {
-      return ToolkitRefexType.CID_CID_STR;
+   protected RefexType getTkRefsetType() {
+      return RefexType.CID_CID_STR;
    }
 
    @Override

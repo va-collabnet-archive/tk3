@@ -20,10 +20,8 @@ package org.ihtsdo.otf.tcc.api.coordinate;
 
 import java.io.IOException;
 import java.util.UUID;
-import org.ihtsdo.otf.tcc.api.Ts;
-import org.ihtsdo.otf.tcc.api.PositionBI;
-import org.ihtsdo.otf.tcc.api.PositionSet;
-import org.ihtsdo.otf.tcc.api.RelAssertionType;
+import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.api.relationship.RelAssertionType;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 
 /**

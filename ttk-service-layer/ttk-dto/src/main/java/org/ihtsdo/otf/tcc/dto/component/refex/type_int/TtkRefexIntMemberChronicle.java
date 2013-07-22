@@ -2,12 +2,12 @@ package org.ihtsdo.otf.tcc.dto.component.refex.type_int;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.Ts;
-import org.ihtsdo.otf.tcc.api.TerminologyStoreDI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
 import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.type_int.RefexIntVersionBI;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.dto.component.refex.TtkRefexAbstractMemberChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -188,8 +188,8 @@ public class TtkRefexIntMemberChronicle extends TtkRefexAbstractMemberChronicle<
    }
 
    @Override
-   public ToolkitRefexType getType() {
-      return ToolkitRefexType.INT;
+   public RefexType getType() {
+      return RefexType.INT;
    }
 
    //~--- set methods ---------------------------------------------------------

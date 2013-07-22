@@ -2,8 +2,8 @@ package org.ihtsdo.otf.tcc.dto.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.api.id.IdBI;
 import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.api.uuid.UuidFactory;
@@ -307,7 +307,7 @@ nextId:
          annotations = new ArrayList<>(annotationCount);
 
          for (int i = 0; i < annotationCount; i++) {
-            ToolkitRefexType type = ToolkitRefexType.readType(in);
+            RefexType type = RefexType.readType(in);
 
             switch (type) {
             case CID :

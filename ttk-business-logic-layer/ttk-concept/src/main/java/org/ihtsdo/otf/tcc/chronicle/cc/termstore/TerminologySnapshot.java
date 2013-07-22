@@ -2,16 +2,16 @@ package org.ihtsdo.otf.tcc.chronicle.cc.termstore;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.ComponentContainerBI;
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
-import org.ihtsdo.otf.tcc.api.ConceptContainerBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.PathBI;
-import org.ihtsdo.otf.tcc.api.PositionBI;
-import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
-import org.ihtsdo.otf.tcc.api.TermChangeListener;
-import org.ihtsdo.otf.tcc.api.TerminologyBuilderBI;
-import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentContainerBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptContainerBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.coordinate.PathBI;
+import org.ihtsdo.otf.tcc.api.coordinate.PositionBI;
+import org.ihtsdo.otf.tcc.api.concept.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.otf.tcc.api.store.TermChangeListener;
+import org.ihtsdo.otf.tcc.api.blueprint.TerminologyBuilderBI;
+import org.ihtsdo.otf.tcc.api.store.TerminologySnapshotDI;
 import org.ihtsdo.otf.tcc.api.changeset.ChangeSetGenerationPolicy;
 import org.ihtsdo.otf.tcc.api.changeset.ChangeSetGeneratorBI;
 import org.ihtsdo.otf.tcc.api.conattr.ConceptAttributeVersionBI;
@@ -26,12 +26,12 @@ import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.otf.tcc.chronicle.cc.P;
 import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
 import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptVersion;
-import org.ihtsdo.ttk.fx.FxComponentReference;
-import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
-import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
-import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
-import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
-import org.ihtsdo.ttk.fx.store.FxTerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.ddo.ComponentReference;
+import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RefexPolicy;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RelationshipPolicy;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.VersionPolicy;
+import org.ihtsdo.otf.tcc.ddo.store.FxTerminologySnapshotDI;
 import org.ihtsdo.ttk.helpers.uuid.UuidFactory;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -47,8 +47,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 
 /**
  * Class description
@@ -733,11 +733,11 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     * @throws IOException
     */
    @Override
-   public FxConceptChronicle getFxConcept(UUID conceptUUID, ViewCoordinate vc)
+   public ConceptChronicleDdo getFxConcept(UUID conceptUUID, ViewCoordinate vc)
            throws IOException, ContradictionException {
       ConceptVersionBI c = getConceptVersion(conceptUUID);
 
-      return new FxConceptChronicle(this, c, VersionPolicy.ACTIVE_VERSIONS, RefexPolicy.REFEX_MEMBERS,
+      return new ConceptChronicleDdo(this, c, VersionPolicy.ACTIVE_VERSIONS, RefexPolicy.REFEX_MEMBERS,
                            RelationshipPolicy.ORIGINATING_RELATIONSHIPS);
    }
 
@@ -755,7 +755,7 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     * @throws IOException
     */
    @Override
-   public FxConceptChronicle getFxConcept(FxComponentReference ref, RefexPolicy refexPolicy,
+   public ConceptChronicleDdo getFxConcept(ComponentReference ref, RefexPolicy refexPolicy,
                                  RelationshipPolicy relationshipPolicy)
            throws IOException, ContradictionException {
       ConceptVersionBI c;
@@ -766,7 +766,7 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
          c = getConceptVersion(ref.getUuid());
       }
 
-      return new FxConceptChronicle(this, c, VersionPolicy.ACTIVE_VERSIONS, refexPolicy, relationshipPolicy);
+      return new ConceptChronicleDdo(this, c, VersionPolicy.ACTIVE_VERSIONS, refexPolicy, relationshipPolicy);
    }
 
    /**
@@ -783,12 +783,12 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     * @throws IOException
     */
    @Override
-   public FxConceptChronicle getFxConcept(UUID conceptUUID, RefexPolicy refexPolicy,
+   public ConceptChronicleDdo getFxConcept(UUID conceptUUID, RefexPolicy refexPolicy,
                                  RelationshipPolicy relationshipPolicy)
            throws IOException, ContradictionException {
       ConceptVersionBI c = getConceptVersion(conceptUUID);
 
-      return new FxConceptChronicle(this, c, VersionPolicy.ACTIVE_VERSIONS, refexPolicy, relationshipPolicy);
+      return new ConceptChronicleDdo(this, c, VersionPolicy.ACTIVE_VERSIONS, refexPolicy, relationshipPolicy);
    }
 
    /**

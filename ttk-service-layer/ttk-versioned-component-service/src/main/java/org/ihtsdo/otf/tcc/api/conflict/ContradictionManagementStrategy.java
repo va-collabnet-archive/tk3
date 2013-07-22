@@ -16,7 +16,7 @@
  */
 package org.ihtsdo.otf.tcc.api.conflict;
 
-import org.ihtsdo.otf.tcc.api.ContradictionManagerBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionManagerBI;
 import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 

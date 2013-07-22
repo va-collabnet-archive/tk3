@@ -7,7 +7,7 @@ import org.ihtsdo.otf.tcc.chronicle.cc.component.Revision;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.refex.RefexAnalogBI;
 import org.ihtsdo.otf.tcc.dto.component.TtkRevision;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -17,8 +17,8 @@ import java.io.IOException;
 
 import java.util.Set;
 import org.ihtsdo.otf.tcc.chronicle.cc.P;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
 import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
@@ -61,7 +61,7 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
 
     protected abstract void addSpecProperties(RefexCAB rcs);
     @Override
-    public ToolkitRefexType getRefexType() {
+    public RefexType getRefexType() {
         return getTkRefsetType();
     }
 
@@ -150,7 +150,7 @@ public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends Ref
         return rcs;
     }
 
-    protected abstract ToolkitRefexType getTkRefsetType();
+    protected abstract RefexType getTkRefsetType();
 
     //~--- set methods ---------------------------------------------------------
     @Override

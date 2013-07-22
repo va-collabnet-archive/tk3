@@ -2,8 +2,8 @@ package org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid_uuid;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.Ts;
-import org.ihtsdo.otf.tcc.api.TerminologyStoreDI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
 import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
 import org.ihtsdo.otf.tcc.dto.component.TtkRevision;
 

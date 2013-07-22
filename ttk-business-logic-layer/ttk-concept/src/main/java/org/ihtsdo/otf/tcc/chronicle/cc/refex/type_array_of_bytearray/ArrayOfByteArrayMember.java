@@ -30,7 +30,7 @@ import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayAnalogBI;
 import org.ihtsdo.otf.tcc.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayVersionBI;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_array_of_bytearray.TtkRefexArrayOfByteArrayRevision;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_array_of_bytearray.TtkRefexArrayOfByteArrayMemberChronicle;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
@@ -127,7 +127,7 @@ public class ArrayOfByteArrayMember extends RefexMember<ArrayOfByteArrayRevision
     }
     
     @Override
-    public ArrayOfByteArrayRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+    public ArrayOfByteArrayRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
         ArrayOfByteArrayRevision newR = new ArrayOfByteArrayRevision(status, time,
                 authorNid, moduleNid, pathNid, this);
 
@@ -214,13 +214,13 @@ public class ArrayOfByteArrayMember extends RefexMember<ArrayOfByteArrayRevision
     //~--- get methods ---------------------------------------------------------
 
     @Override
-    protected ToolkitRefexType getTkRefsetType() {
-        return ToolkitRefexType.ARRAY_BYTEARRAY;
+    protected RefexType getTkRefsetType() {
+        return RefexType.ARRAY_BYTEARRAY;
     }
 
     @Override
     public int getTypeNid() {
-        return ToolkitRefexType.ARRAY_BYTEARRAY.getTypeToken();
+        return RefexType.ARRAY_BYTEARRAY.getTypeToken();
     }
 
     @Override

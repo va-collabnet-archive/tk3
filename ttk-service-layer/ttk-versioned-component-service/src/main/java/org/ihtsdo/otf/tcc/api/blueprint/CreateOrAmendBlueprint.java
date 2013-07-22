@@ -16,12 +16,11 @@
 package org.ihtsdo.otf.tcc.api.blueprint;
 
 //~--- non-JDK imports --------------------------------------------------------
-import org.ihtsdo.otf.tcc.api.ComponentBI;
-import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.TerminologyBuilderBI;
-import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.metadata.binding.SnomedMetadataRf2;
@@ -47,7 +46,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 
 /**
  * The Class CreateOrAmendBlueprint contains methods for creating a terminology generic blueprint. This

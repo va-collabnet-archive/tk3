@@ -10,11 +10,11 @@ import org.ihtsdo.otf.tcc.chronicle.cc.component.ConceptComponent;
 import org.ihtsdo.otf.tcc.chronicle.cc.component.RevisionSet;
 import org.ihtsdo.otf.tcc.chronicle.cc.attributes.ConceptAttributes;
 import org.ihtsdo.otf.tcc.chronicle.cc.computer.version.VersionComputer;
-import org.ihtsdo.otf.tcc.api.ContradictionManagerBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.NidSetBI;
-import org.ihtsdo.otf.tcc.api.PositionSetBI;
-import org.ihtsdo.otf.tcc.api.Precedence;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionManagerBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
+import org.ihtsdo.otf.tcc.api.coordinate.PositionSetBI;
+import org.ihtsdo.otf.tcc.api.coordinate.Precedence;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.dto.component.media.TtkMediaChronicle;
 import org.ihtsdo.otf.tcc.dto.component.media.TtkMediaRevision;
@@ -28,7 +28,7 @@ import java.io.IOException;
 
 import java.util.*;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
 import org.ihtsdo.otf.tcc.chronicle.cc.P;
 import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
@@ -133,7 +133,7 @@ public class Media extends ConceptComponent<MediaRevision, Media>
     }
 
     @Override
-    public MediaRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+    public MediaRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
         MediaRevision newR;
 
         newR = new MediaRevision(this, status, time, authorNid, moduleNid, pathNid, this);
@@ -446,7 +446,7 @@ public class Media extends ConceptComponent<MediaRevision, Media>
         }
 
         @Override
-        public MediaRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+        public MediaRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
             return (MediaRevision) getCv().makeAnalog(status, time, authorNid, moduleNid, pathNid);
         }
 

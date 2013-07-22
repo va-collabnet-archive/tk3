@@ -1,6 +1,6 @@
 package org.ihtsdo.otf.tcc.chronicle.cc.concept;
 
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
 import org.ihtsdo.otf.tcc.api.contradiction.ComponentType;
 
 public abstract class AttributeComparer {

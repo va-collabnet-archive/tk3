@@ -4,7 +4,7 @@ package org.ihtsdo.otf.tcc.dto.component.refex.type_member;
 
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.dto.component.TtkRevision;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.dto.component.refex.TtkRefexAbstractMemberChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -149,7 +149,7 @@ public class TtkRefexMemberChronicle extends TtkRefexAbstractMemberChronicle<Ttk
    }
 
    @Override
-   public ToolkitRefexType getType() {
-      return ToolkitRefexType.MEMBER;
+   public RefexType getType() {
+      return RefexType.MEMBER;
    }
 }

@@ -9,9 +9,9 @@ import org.ihtsdo.otf.tcc.chronicle.cc.attributes.ConceptAttributes;
 import org.ihtsdo.otf.tcc.chronicle.cc.description.Description;
 import org.ihtsdo.otf.tcc.chronicle.cc.refex.RefexMember;
 import org.ihtsdo.otf.tcc.chronicle.cc.relationship.Relationship;
-import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
-import org.ihtsdo.otf.tcc.api.NidListBI;
-import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.nid.NidListBI;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

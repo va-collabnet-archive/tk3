@@ -23,7 +23,7 @@ import java.util.*;
 import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayVersionBI;
 import org.ihtsdo.otf.tcc.dto.TtkConceptChronicle;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.dto.component.refex.TtkRefexAbstractMemberChronicle;
 import org.ihtsdo.otf.tcc.dto.component.transformer.ComponentFields;
 import org.ihtsdo.otf.tcc.dto.component.transformer.ComponentTransformerBI;
@@ -300,11 +300,11 @@ public class TtkRefexArrayOfByteArrayMemberChronicle extends TtkRefexAbstractMem
 
     /**
      * 
-     * @return ToolkitRefexType.ARRAY_BYTEARRAY
+     * @return RefexType.ARRAY_BYTEARRAY
      */
     @Override
-    public ToolkitRefexType getType() {
-        return ToolkitRefexType.ARRAY_BYTEARRAY;
+    public RefexType getType() {
+        return RefexType.ARRAY_BYTEARRAY;
     }
 
     /**

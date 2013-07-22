@@ -2,9 +2,9 @@ package org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid_uuid_string;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
-import org.ihtsdo.otf.tcc.api.TerminologyStoreDI;
-import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
+import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_nid_string
@@ -231,8 +231,8 @@ public class TtkRefexUuidUuidUuidStringMemberChronicle
    }
 
    @Override
-   public ToolkitRefexType getType() {
-      return ToolkitRefexType.CID_CID_CID_STRING;
+   public RefexType getType() {
+      return RefexType.CID_CID_CID_STRING;
    }
 
    public UUID getUuid1() {

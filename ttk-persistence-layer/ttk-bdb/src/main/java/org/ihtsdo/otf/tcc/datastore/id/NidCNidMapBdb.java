@@ -18,9 +18,9 @@ import org.ihtsdo.otf.tcc.datastore.temp.AceLog;
 import org.ihtsdo.ttk.helpers.concurrency.ConcurrentReentrantLocks;
 import org.ihtsdo.ttk.helpers.version.RelativePositionComputer;
 import org.ihtsdo.ttk.helpers.version.RelativePositionComputerBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.NidSetBI;
-import org.ihtsdo.otf.tcc.api.PositionBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
+import org.ihtsdo.otf.tcc.api.coordinate.PositionBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -37,7 +37,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import org.apache.mahout.math.map.OpenIntIntHashMap;
-import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.chronicle.cc.NidPairForRefex;
 import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
 import org.ihtsdo.otf.tcc.chronicle.cc.relationship.Relationship;

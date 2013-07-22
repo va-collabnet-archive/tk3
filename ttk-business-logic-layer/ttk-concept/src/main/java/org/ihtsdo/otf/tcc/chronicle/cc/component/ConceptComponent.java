@@ -6,13 +6,13 @@ import com.sleepycat.bind.tuple.TupleOutput;
 
 import org.ihtsdo.otf.tcc.api.AnalogBI;
 import org.ihtsdo.otf.tcc.api.AnalogGeneratorBI;
-import org.ihtsdo.otf.tcc.api.ComponentBI;
-import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.PositionBI;
-import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
-import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.coordinate.PositionBI;
+import org.ihtsdo.otf.tcc.api.store.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
@@ -38,7 +38,7 @@ import org.ihtsdo.otf.tcc.dto.component.identifier.TtkIdentifierLong;
 import org.ihtsdo.otf.tcc.dto.component.identifier.TtkIdentifierString;
 import org.ihtsdo.otf.tcc.dto.component.identifier.TtkIdentifierUuid;
 import org.ihtsdo.otf.tcc.dto.component.refex.TtkRefexAbstractMemberChronicle;
-import org.ihtsdo.ttk.helpers.time.TimeHelper;
+import org.ihtsdo.otf.tcc.api.time.TimeHelper;
 import org.ihtsdo.ttk.helpers.uuid.Type3UuidFactory;
 import org.ihtsdo.ttk.helpers.uuid.Type5UuidFactory;
 
@@ -57,7 +57,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 
 /**
  * Class description

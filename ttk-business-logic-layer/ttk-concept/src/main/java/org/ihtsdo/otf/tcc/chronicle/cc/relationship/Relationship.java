@@ -1,11 +1,11 @@
 package org.ihtsdo.otf.tcc.chronicle.cc.relationship;
 
-import org.ihtsdo.otf.tcc.api.PositionSetBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.Precedence;
-import org.ihtsdo.otf.tcc.api.ContradictionManagerBI;
-import org.ihtsdo.otf.tcc.api.TypedComponentVersionBI;
-import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.coordinate.PositionSetBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.coordinate.Precedence;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionManagerBI;
+import org.ihtsdo.otf.tcc.api.chronicle.TypedComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 import java.beans.PropertyVetoException;
@@ -18,15 +18,15 @@ import org.ihtsdo.otf.tcc.chronicle.cc.component.ConceptComponent;
 import org.ihtsdo.otf.tcc.chronicle.cc.component.RevisionSet;
 import org.ihtsdo.otf.tcc.chronicle.cc.computer.version.VersionComputer;
 import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
-import org.ihtsdo.otf.tcc.api.Status;
-import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.RelationshipCAB;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.relationship.RelationshipAnalogBI;
 import org.ihtsdo.otf.tcc.api.metadata.binding.SnomedMetadataRf1;
 import org.ihtsdo.otf.tcc.api.metadata.binding.SnomedMetadataRf2;
-import org.ihtsdo.otf.tcc.api.TkRelationshipType;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipType;
 import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
@@ -183,7 +183,7 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
    }
 
    @Override
-   public RelationshipRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public RelationshipRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       RelationshipRevision newR = new RelationshipRevision(this, status, time, authorNid, moduleNid,
                                      pathNid, this);
 
@@ -195,7 +195,7 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
    @Override
    public RelationshipCAB makeBlueprint(ViewCoordinate vc, 
             IdDirective idDirective, RefexDirective refexDirective) throws IOException, ContradictionException, InvalidCAB {
-      TkRelationshipType relType = null;
+      RelationshipType relType = null;
 
       if ((getCharacteristicNid()
               == SnomedMetadataRf1.INFERRED_DEFINING_CHARACTERISTIC_TYPE_RF1.getLenient()
@@ -208,7 +208,7 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
                   == SnomedMetadataRf1.STATED_DEFINING_CHARACTERISTIC_TYPE_RF1.getLenient()
                      .getNid()) || (getCharacteristicNid()
                                     == SnomedMetadataRf2.STATED_RELATIONSHIP_RF2.getLenient().getNid())) {
-         relType = TkRelationshipType.STATED_HIERARCHY;
+         relType = RelationshipType.STATED_HIERARCHY;
       }
 
       RelationshipCAB relBp = new RelationshipCAB(getOriginNid(), getTypeNid(), getDestinationNid(), getGroup(), relType,
@@ -593,7 +593,7 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
       }
 
       @Override
-      public RelationshipRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+      public RelationshipRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
          return (RelationshipRevision) getCv().makeAnalog(status, time, authorNid, moduleNid, pathNid);
       }
 

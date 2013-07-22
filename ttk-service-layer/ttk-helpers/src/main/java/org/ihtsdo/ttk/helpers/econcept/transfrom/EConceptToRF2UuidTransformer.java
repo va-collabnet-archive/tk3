@@ -20,7 +20,7 @@ package org.ihtsdo.ttk.helpers.econcept.transfrom;
 
 //~--- non-JDK imports --------------------------------------------------------
 import org.ihtsdo.otf.tcc.api.country.COUNTRY_CODE;
-import org.ihtsdo.ttk.helpers.time.TimeHelper;
+import org.ihtsdo.otf.tcc.api.time.TimeHelper;
 import org.ihtsdo.otf.tcc.api.lang.LanguageCode;
 import org.ihtsdo.otf.tcc.dto.TtkConceptChronicle;
 import org.ihtsdo.otf.tcc.dto.component.attribute.TtkConceptAttributesChronicle;

@@ -17,9 +17,8 @@
 package org.ihtsdo.otf.tcc.api.blueprint;
 
 //~--- non-JDK imports --------------------------------------------------------
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.TerminologyBuilderBI;
-import org.ihtsdo.otf.tcc.api.TkRelationshipType;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipType;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
@@ -42,7 +41,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.api.lang.LanguageCode;
 
 /**
@@ -421,7 +420,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
         RefexCAB usAnnot;
         RefexCAB gbAnnot;
         if (dialect == LanguageCode.EN) {
-            usAnnot = new RefexCAB(ToolkitRefexType.CID,
+            usAnnot = new RefexCAB(RefexType.CID,
                     fullySpecifiedNameBlueprint.getComponentUuid(),
                     usRefexUuid, idDirective, refexDirective);
             usAnnot.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, SnomedMetadataRfx.getDESC_PREFERRED_NID());
@@ -429,7 +428,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
                 usAnnot.properties.put(ComponentProperty.MODULE_ID, moduleUuid);
             }
 
-            gbAnnot = new RefexCAB(ToolkitRefexType.CID,
+            gbAnnot = new RefexCAB(RefexType.CID,
                     fullySpecifiedNameBlueprint.getComponentUuid(),
                     gbRefexUuid, idDirective, refexDirective);
             gbAnnot.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, SnomedMetadataRfx.getDESC_PREFERRED_NID());
@@ -439,7 +438,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
             fullySpecifiedNameBlueprint.addAnnotationBlueprint(usAnnot);
             fullySpecifiedNameBlueprint.addAnnotationBlueprint(gbAnnot);
         } else if (dialect == LanguageCode.EN_US) {
-            usAnnot = new RefexCAB(ToolkitRefexType.CID,
+            usAnnot = new RefexCAB(RefexType.CID,
                     fullySpecifiedNameBlueprint.getComponentUuid(),
                     usRefexUuid, idDirective, refexDirective);
             usAnnot.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, SnomedMetadataRfx.getDESC_PREFERRED_NID());
@@ -587,7 +586,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
         RefexCAB usAnnot;
         RefexCAB gbAnnot;
         if (dialect == LanguageCode.EN) {
-            usAnnot = new RefexCAB(ToolkitRefexType.CID,
+            usAnnot = new RefexCAB(RefexType.CID,
                     preferredBlueprint.getComponentUuid(),
                     usRefexUuid, idDirective, refexDirective);
             usAnnot.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, SnomedMetadataRfx.getDESC_PREFERRED_NID());
@@ -595,7 +594,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
                 usAnnot.properties.put(ComponentProperty.MODULE_ID, moduleUuid);
             }
 
-            gbAnnot = new RefexCAB(ToolkitRefexType.CID,
+            gbAnnot = new RefexCAB(RefexType.CID,
                     preferredBlueprint.getComponentUuid(),
                     gbRefexUuid, idDirective, refexDirective);
             gbAnnot.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, SnomedMetadataRfx.getDESC_PREFERRED_NID());
@@ -605,7 +604,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
             preferredBlueprint.addAnnotationBlueprint(usAnnot);
             preferredBlueprint.addAnnotationBlueprint(gbAnnot);
         } else if (dialect == LanguageCode.EN_US) {
-            usAnnot = new RefexCAB(ToolkitRefexType.CID,
+            usAnnot = new RefexCAB(RefexType.CID,
                     preferredBlueprint.getComponentUuid(),
                     usRefexUuid, idDirective, refexDirective);
             usAnnot.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, SnomedMetadataRfx.getDESC_PREFERRED_NID());
@@ -614,7 +613,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
             }
             preferredBlueprint.addAnnotationBlueprint(usAnnot);
         } else if (dialect == LanguageCode.EN_GB) {
-            gbAnnot = new RefexCAB(ToolkitRefexType.CID,
+            gbAnnot = new RefexCAB(RefexType.CID,
                     preferredBlueprint.getComponentUuid(),
                     gbRefexUuid, idDirective, refexDirective);
             gbAnnot.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, SnomedMetadataRfx.getDESC_PREFERRED_NID());
@@ -768,7 +767,7 @@ public final class ConceptCB extends CreateOrAmendBlueprint {
                     isaType,
                     parentUuid,
                     0,
-                    TkRelationshipType.STATED_HIERARCHY,
+                    RelationshipType.STATED_HIERARCHY,
                     idDirective);
             if (moduleUuid != null) {
                 parent.properties.put(ComponentProperty.MODULE_ID, moduleUuid);

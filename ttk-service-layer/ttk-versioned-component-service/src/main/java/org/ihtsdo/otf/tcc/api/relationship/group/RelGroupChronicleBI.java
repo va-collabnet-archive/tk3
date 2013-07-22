@@ -2,7 +2,7 @@ package org.ihtsdo.otf.tcc.api.relationship.group;
 
 import java.util.Collection;
 
-import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
 import org.ihtsdo.otf.tcc.api.relationship.RelationshipChronicleBI;
 
 public interface RelGroupChronicleBI extends ComponentChronicleBI<RelGroupVersionBI> {

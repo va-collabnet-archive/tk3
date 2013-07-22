@@ -2,20 +2,20 @@ package org.ihtsdo.otf.tcc.chronicle.cc.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.store.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.chronicle.cc.Position;
 import org.ihtsdo.otf.tcc.api.AnalogBI;
-import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
 import org.ihtsdo.otf.tcc.api.AnalogGeneratorBI;
-import org.ihtsdo.otf.tcc.api.PositionBI;
+import org.ihtsdo.otf.tcc.api.coordinate.PositionBI;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
 import org.ihtsdo.otf.tcc.chronicle.cc.P;
 import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
-import org.ihtsdo.ttk.helpers.time.TimeHelper;
+import org.ihtsdo.otf.tcc.api.time.TimeHelper;
 import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.id.IdBI;
@@ -35,7 +35,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 
 public abstract class Revision<V extends Revision<V, C>, C extends ConceptComponent<V, C>>
         implements ComponentVersionBI, AnalogBI, AnalogGeneratorBI<V> {
@@ -92,7 +92,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
    abstract protected void addComponentNids(Set<Integer> allNids);
 
    @Override
-   public boolean addLongId(Long longId, int authorityNid, org.ihtsdo.otf.tcc.api.Status status, EditCoordinate ec, long time) {
+   public boolean addLongId(Long longId, int authorityNid, org.ihtsdo.otf.tcc.api.coordinate.Status status, EditCoordinate ec, long time) {
       return primordialComponent.addLongId(longId, authorityNid, status, ec, time);
    }
 
@@ -143,7 +143,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
     * @return
     */
    @Override
-   public abstract V makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid);
+   public abstract V makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid);
 
    protected void modified() {
       if (primordialComponent != null) {
@@ -489,7 +489,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
    }
 
    @Override
-   public final void setStatus(org.ihtsdo.otf.tcc.api.Status nid) {
+   public final void setStatus(org.ihtsdo.otf.tcc.api.coordinate.Status nid) {
       if (getTime() != Long.MAX_VALUE) {
          throw new UnsupportedOperationException("Cannot change status if time != Long.MAX_VALUE; "
                  + "Use makeAnalog instead.");

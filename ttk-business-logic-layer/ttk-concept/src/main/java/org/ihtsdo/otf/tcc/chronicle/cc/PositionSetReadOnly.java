@@ -18,8 +18,8 @@ package org.ihtsdo.otf.tcc.chronicle.cc;
 
 import java.util.Set;
 
-import org.ihtsdo.otf.tcc.api.PositionBI;
-import org.ihtsdo.otf.tcc.api.PositionSet;
+import org.ihtsdo.otf.tcc.api.coordinate.PositionBI;
+import org.ihtsdo.otf.tcc.api.coordinate.PositionSet;
 
 
 public class PositionSetReadOnly extends PositionSet {

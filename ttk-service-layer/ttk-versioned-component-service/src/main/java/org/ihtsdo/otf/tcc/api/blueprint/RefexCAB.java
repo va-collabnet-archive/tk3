@@ -25,13 +25,12 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import org.ihtsdo.otf.tcc.api.AnalogBI;
-import org.ihtsdo.otf.tcc.api.ComponentBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.Status;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
-import org.ihtsdo.otf.tcc.api.TerminologyBuilderBI;
-import org.ihtsdo.otf.tcc.api.TerminologyStoreDI;
-import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
+import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import static org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty.AUTHOR_ID;
 import static org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty.COMPONENT_EXTENSION_1_ID;
 import static org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty.COMPONENT_EXTENSION_2_ID;
@@ -82,7 +81,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
 
     public static final UUID refexSpecNamespace =
             UUID.fromString("c44bc030-1166-11e0-ac64-0800200c9a66");
-    private ToolkitRefexType memberType;
+    private RefexType memberType;
 
     /**
      * Computes the uuid of the refex member based on the member type, refex collection, and referenced
@@ -244,7 +243,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
      * @throws ContradictionException if more than one version is found for a given position or view
      * coordinate
      */
-    public RefexCAB(ToolkitRefexType memberType,
+    public RefexCAB(RefexType memberType,
             int referencedComponentNid,
             int collectionNid,
             IdDirective idDirective,
@@ -261,7 +260,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
                 getComponentUuid());
     }
 
-    public RefexCAB(ToolkitRefexType memberType,
+    public RefexCAB(RefexType memberType,
             UUID referencedComponentUUID,
             UUID collectionUuid,
             IdDirective idDirective,
@@ -300,7 +299,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
      * coordinate
      */
     public RefexCAB(
-            ToolkitRefexType memberType,
+            RefexType memberType,
             UUID referencedComponentUuid,
             int collectionNid,
             RefexVersionBI refexVersion,
@@ -332,7 +331,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
      * @throws ContradictionException if more than one version is found for a given position or view
      * coordinate
      */
-    public RefexCAB(ToolkitRefexType memberType,
+    public RefexCAB(RefexType memberType,
             UUID referencedComponentUuid,
             int collectionNid,
             UUID memberUuid,
@@ -775,7 +774,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
      */
     public boolean validate(RefexVersionBI<?> refexVersion) {
         if (memberType != null) {
-            if (ToolkitRefexType.classToType(refexVersion.getClass()) != memberType) {
+            if (RefexType.classToType(refexVersion.getClass()) != memberType) {
                 return false;
             }
         }
@@ -978,7 +977,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
      *
      * @return the refex member type
      */
-    public ToolkitRefexType getMemberType() {
+    public RefexType getMemberType() {
         return memberType;
     }
 
@@ -987,7 +986,7 @@ public class RefexCAB extends CreateOrAmendBlueprint {
      *
      * @param memberType the refex member type
      */
-    public void setMemberType(ToolkitRefexType memberType) {
+    public void setMemberType(RefexType memberType) {
         this.memberType = memberType;
     }
 

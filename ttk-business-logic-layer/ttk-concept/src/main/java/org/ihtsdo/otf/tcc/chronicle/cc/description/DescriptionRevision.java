@@ -8,7 +8,7 @@ import com.sleepycat.bind.tuple.TupleOutput;
 
 import org.ihtsdo.otf.tcc.chronicle.cc.component.ConceptComponent;
 import org.ihtsdo.otf.tcc.chronicle.cc.component.Revision;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.blueprint.DescriptionCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
 import org.ihtsdo.otf.tcc.chronicle.cc.P;
@@ -151,7 +151,7 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
    }
 
    @Override
-   public DescriptionRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public DescriptionRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatus(status);
          this.setAuthorNid(authorNid);

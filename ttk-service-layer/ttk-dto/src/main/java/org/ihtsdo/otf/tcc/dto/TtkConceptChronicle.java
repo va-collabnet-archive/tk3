@@ -2,7 +2,7 @@ package org.ihtsdo.otf.tcc.dto;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
 import org.ihtsdo.otf.tcc.api.media.MediaChronicleBI;
@@ -50,10 +50,10 @@ import org.ihtsdo.otf.tcc.dto.component.relationship.TtkRelationshipChronicle;
 import org.ihtsdo.otf.tcc.dto.component.transformer.ComponentFields;
 import org.ihtsdo.otf.tcc.dto.component.transformer.ComponentTransformerBI;
 
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_FLOAT;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_INT;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_LONG;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_STRING;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID_FLOAT;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID_INT;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID_LONG;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID_STRING;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -452,7 +452,7 @@ public class TtkConceptChronicle {
          refsetMembers = new ArrayList<>(refsetMemberCount);
 
          for (int i = 0; i < refsetMemberCount; i++) {
-            ToolkitRefexType type = ToolkitRefexType.readType(in);
+            RefexType type = RefexType.readType(in);
 
             switch (type) {
             case CID :

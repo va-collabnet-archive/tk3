@@ -5,7 +5,7 @@ package org.ihtsdo.otf.tcc.chronicle.cc.refex.type_nid_nid_nid_long;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
@@ -120,7 +120,7 @@ public class NidNidNidLongMember
    }
 
    @Override
-   public NidNidNidLongRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public NidNidNidLongRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       NidNidNidLongRevision newR = new NidNidNidLongRevision(status, time,
                                        authorNid, moduleNid, pathNid, this);
 
@@ -227,13 +227,13 @@ public class NidNidNidLongMember
    }
 
    @Override
-   protected ToolkitRefexType getTkRefsetType() {
-      return ToolkitRefexType.CID_CID_CID_LONG;
+   protected RefexType getTkRefsetType() {
+      return RefexType.CID_CID_CID_LONG;
    }
 
    @Override
    public int getTypeNid() {
-      return ToolkitRefexType.CID_CID_CID_LONG.getTypeToken();
+      return RefexType.CID_CID_CID_LONG.getTypeToken();
    }
 
    @Override

@@ -20,8 +20,8 @@ package org.ihtsdo.ttk.logic;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
@@ -32,7 +32,7 @@ import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
 import org.ihtsdo.ttk.helpers.refex.RefexStringHelper;
 
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_INT;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID_INT;
 
 //~--- JDK imports ------------------------------------------------------------
 

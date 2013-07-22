@@ -9,11 +9,11 @@ import com.sleepycat.bind.tuple.TupleOutput;
 import org.ihtsdo.otf.tcc.chronicle.cc.component.ConceptComponent;
 import org.ihtsdo.otf.tcc.chronicle.cc.component.RevisionSet;
 import org.ihtsdo.otf.tcc.chronicle.cc.computer.version.VersionComputer;
-import org.ihtsdo.otf.tcc.api.ContradictionManagerBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.NidSetBI;
-import org.ihtsdo.otf.tcc.api.PositionSetBI;
-import org.ihtsdo.otf.tcc.api.Precedence;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionManagerBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
+import org.ihtsdo.otf.tcc.api.coordinate.PositionSetBI;
+import org.ihtsdo.otf.tcc.api.coordinate.Precedence;
 import org.ihtsdo.otf.tcc.api.conattr.ConceptAttributeAnalogBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
@@ -29,7 +29,7 @@ import java.io.IOException;
 
 import java.util.*;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 import org.ihtsdo.otf.tcc.api.blueprint.ConceptAttributeAB;
 import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
 import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
@@ -383,7 +383,7 @@ public class ConceptAttributes extends ConceptComponent<ConceptAttributesRevisio
         }
 
         @Override
-        public ConceptAttributesRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+        public ConceptAttributesRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
             return getCv().makeAnalog(status, time, authorNid, moduleNid, pathNid);
         }
 

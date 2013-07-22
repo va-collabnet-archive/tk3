@@ -4,7 +4,7 @@ package org.ihtsdo.otf.tcc.datastore.stamp;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 
 public class StampToIntHashMap {
    private static final int defaultCapacity = 277;

@@ -36,9 +36,9 @@ import javafx.scene.control.TextField;
 
 import javafx.util.Callback;
 
-import org.ihtsdo.otf.tcc.api.Ts;
-import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
-import org.ihtsdo.ttk.fx.context.TerminologyContext;
+import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.context.TerminologyContext;
 import org.ihtsdo.ttk.lookup.Looker;
 
 import org.openide.util.Lookup;
@@ -57,8 +57,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
@@ -71,7 +71,7 @@ import org.ihtsdo.ttk.services.aa.SessionAttributes;
  * @author kec
  */
 public class ConceptDetailsViewController
-        implements LookupListener, Initializable, ChangeListener<FxConceptChronicle> {
+        implements LookupListener, Initializable, ChangeListener<ConceptChronicleDdo> {
 
    /** Field description */
    @FXML                                        // fx:id="contextComboBox"
@@ -96,7 +96,7 @@ public class ConceptDetailsViewController
     *
     * @param contextConcept
     */
-   private void changeConcept(FxConceptChronicle contextConcept) {
+   private void changeConcept(ConceptChronicleDdo contextConcept) {
       if (contextConcept != null) {
           try {
               
@@ -132,8 +132,8 @@ public class ConceptDetailsViewController
     * @param newValue
     */
    @Override
-   public void changed(ObservableValue<? extends FxConceptChronicle> ov, FxConceptChronicle oldValue,
-                       final FxConceptChronicle newValue) {
+   public void changed(ObservableValue<? extends ConceptChronicleDdo> ov, ConceptChronicleDdo oldValue,
+                       final ConceptChronicleDdo newValue) {
       Platform.runLater(new Runnable() {
          @Override
          public void run() {

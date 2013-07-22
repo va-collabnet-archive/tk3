@@ -1,9 +1,9 @@
 package org.ihtsdo.otf.tcc.datastore.stamp;
 
-import org.ihtsdo.otf.tcc.api.PathBI;
-import org.ihtsdo.otf.tcc.api.NidSetBI;
-import org.ihtsdo.otf.tcc.api.PositionBI;
-import org.ihtsdo.otf.tcc.api.NidSet;
+import org.ihtsdo.otf.tcc.api.coordinate.PathBI;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
+import org.ihtsdo.otf.tcc.api.coordinate.PositionBI;
+import org.ihtsdo.otf.tcc.api.nid.NidSet;
 import com.sleepycat.bind.tuple.IntegerBinding;
 import com.sleepycat.bind.tuple.TupleBinding;
 import com.sleepycat.bind.tuple.TupleInput;
@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 import org.ihtsdo.otf.tcc.datastore.Bdb;
 import org.ihtsdo.otf.tcc.datastore.ComponentBdb;
 import org.ihtsdo.otf.tcc.datastore.temp.AceLog;

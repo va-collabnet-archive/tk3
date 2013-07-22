@@ -15,9 +15,9 @@
  */
 package org.ihtsdo.ttk.api;
 
-import org.ihtsdo.otf.tcc.api.NativeIdSetItrBI;
-import org.ihtsdo.otf.tcc.api.ConcurrentBitSet;
-import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
+import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

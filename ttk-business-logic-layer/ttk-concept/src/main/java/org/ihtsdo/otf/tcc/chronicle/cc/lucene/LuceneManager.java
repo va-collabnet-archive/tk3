@@ -20,7 +20,7 @@ import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 
-import org.ihtsdo.otf.tcc.api.NativeIdSetItrBI;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.chronicle.cc.P;
 import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
@@ -43,9 +43,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.lucene.index.IndexNotFoundException;
-import org.ihtsdo.otf.tcc.api.ConcurrentBitSet;
-import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
-import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
 
 public abstract class LuceneManager {

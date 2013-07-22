@@ -1,7 +1,7 @@
 package org.ihtsdo.otf.tcc.api.coordinate;
 
-import org.ihtsdo.otf.tcc.api.NidSet;
-import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.nid.NidSet;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
 
 
 public class EditCoordinate {

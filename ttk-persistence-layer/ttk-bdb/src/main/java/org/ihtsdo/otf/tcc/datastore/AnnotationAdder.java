@@ -20,9 +20,9 @@ package org.ihtsdo.otf.tcc.datastore;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
-import org.ihtsdo.otf.tcc.api.ConceptFetcherBI;
-import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptFetcherBI;
+import org.ihtsdo.otf.tcc.api.concept.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.otf.tcc.datastore.temp.AceLog;
 import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
 import org.ihtsdo.otf.tcc.chronicle.cc.refex.RefexMemberFactory;
@@ -35,8 +35,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
-import org.ihtsdo.otf.tcc.api.ConcurrentBitSet;
-import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 
 /**
  *

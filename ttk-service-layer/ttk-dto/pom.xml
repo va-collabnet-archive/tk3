@@ -7,7 +7,7 @@
         <version>3.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-dto</artifactId>
-    <name>OTF:TCC Data transfer objects</name>
+    <name>OTF:TCC Data Display &amp; Transfer Objects</name>
     <url>http://maven.apache.org</url>
     <build>
         <plugins>
@@ -93,4 +93,15 @@
             <version>2.1</version>
         </dependency>
     </dependencies>
+    <profiles>
+        <profile>
+            <id>java7</id>
+            <dependencies>
+                <dependency>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>jfxrt</artifactId>
+                </dependency>
+            </dependencies>              
+        </profile>
+    </profiles>
 </project>

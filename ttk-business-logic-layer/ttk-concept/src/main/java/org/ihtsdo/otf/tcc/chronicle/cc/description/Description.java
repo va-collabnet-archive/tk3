@@ -1,7 +1,7 @@
 package org.ihtsdo.otf.tcc.chronicle.cc.description;
 
 //~--- non-JDK imports --------------------------------------------------------
-import org.ihtsdo.otf.tcc.api.TypedComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.chronicle.TypedComponentVersionBI;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
@@ -11,11 +11,11 @@ import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
 import org.ihtsdo.otf.tcc.chronicle.cc.component.ConceptComponent;
 import org.ihtsdo.otf.tcc.chronicle.cc.component.RevisionSet;
 import org.ihtsdo.otf.tcc.chronicle.cc.computer.version.VersionComputer;
-import org.ihtsdo.otf.tcc.api.ContradictionManagerBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.NidSetBI;
-import org.ihtsdo.otf.tcc.api.PositionSetBI;
-import org.ihtsdo.otf.tcc.api.Precedence;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionManagerBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
+import org.ihtsdo.otf.tcc.api.coordinate.PositionSetBI;
+import org.ihtsdo.otf.tcc.api.coordinate.Precedence;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.description.DescriptionAnalogBI;
 import org.ihtsdo.otf.tcc.dto.component.description.TtkDescriptionChronicle;
@@ -32,7 +32,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 import org.ihtsdo.otf.tcc.chronicle.cc.P;
 import org.ihtsdo.otf.tcc.api.lang.LanguageCode;
 import org.ihtsdo.otf.tcc.api.blueprint.DescriptionCAB;
@@ -475,7 +475,7 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
         }
 
         @Override
-        public DescriptionRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+        public DescriptionRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
             return getCv().makeAnalog(status, time, authorNid, moduleNid, pathNid);
         }
 

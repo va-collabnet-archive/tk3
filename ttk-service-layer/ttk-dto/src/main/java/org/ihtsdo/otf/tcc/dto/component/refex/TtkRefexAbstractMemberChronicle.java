@@ -2,8 +2,8 @@ package org.ihtsdo.otf.tcc.dto.component.refex;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
-import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.dto.component.TtkComponentChronicle;
 import org.ihtsdo.otf.tcc.dto.component.TtkRevision;
@@ -147,7 +147,7 @@ public abstract class TtkRefexAbstractMemberChronicle<V extends TtkRevision> ext
       return refexExtensionUuid;
    }
 
-   public abstract ToolkitRefexType getType();
+   public abstract RefexType getType();
 
    //~--- set methods ---------------------------------------------------------
 

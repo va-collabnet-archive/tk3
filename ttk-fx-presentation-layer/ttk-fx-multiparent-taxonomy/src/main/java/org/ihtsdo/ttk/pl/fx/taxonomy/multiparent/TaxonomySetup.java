@@ -37,16 +37,16 @@ import javafx.scene.layout.BorderPane;
 
 import javafx.util.Callback;
 
-import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Taxonomies;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
-import org.ihtsdo.ttk.fx.FxTaxonomyReferenceWithConcept;
-import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
-import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
-import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
-import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
-import org.ihtsdo.ttk.fx.store.FxTs;
+import org.ihtsdo.otf.tcc.ddo.TaxonomyReferenceWithConcept;
+import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RefexPolicy;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RelationshipPolicy;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.VersionPolicy;
+import org.ihtsdo.otf.tcc.ddo.store.FxTs;
 import org.ihtsdo.ttk.pl.fx.helper.GetConceptService;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -86,13 +86,13 @@ public class TaxonomySetup implements EventHandler<ActionEvent> {
     * @return
     */
    private Node createTaxonomyNode() {
-      TreeView<FxTaxonomyReferenceWithConcept> treeView = new TaxonomyView("taxonomy selection", "main");
+      TreeView<TaxonomyReferenceWithConcept> treeView = new TaxonomyView("taxonomy selection", "main");
 
       try {
-         treeView.setCellFactory(new Callback<TreeView<FxTaxonomyReferenceWithConcept>,
-             TreeCell<FxTaxonomyReferenceWithConcept>>() {
+         treeView.setCellFactory(new Callback<TreeView<TaxonomyReferenceWithConcept>,
+             TreeCell<TaxonomyReferenceWithConcept>>() {
             @Override
-            public TreeCell<FxTaxonomyReferenceWithConcept> call(TreeView<FxTaxonomyReferenceWithConcept> p) {
+            public TreeCell<TaxonomyReferenceWithConcept> call(TreeView<TaxonomyReferenceWithConcept> p) {
                return new SimTreeCell();
             }
          });
@@ -102,7 +102,7 @@ public class TaxonomySetup implements EventHandler<ActionEvent> {
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                if (newValue instanceof SimTreeItem) {
                   SimTreeItem simTreeItem = (SimTreeItem) newValue;
-                  FxConceptChronicle   concept     = simTreeItem.getValue().getConcept();
+                  ConceptChronicleDdo   concept     = simTreeItem.getValue().getConcept();
 
                   conceptService.setConceptUuid(simTreeItem.getValue().getConcept().getPrimordialUuid());
                   conceptService.setViewCoordinateUuid(concept.getViewCoordinateUuid());
@@ -112,16 +112,16 @@ public class TaxonomySetup implements EventHandler<ActionEvent> {
          });
          treeView.setShowRoot(false);
 
-         FxTaxonomyReferenceWithConcept root       = new FxTaxonomyReferenceWithConcept();
+         TaxonomyReferenceWithConcept root       = new TaxonomyReferenceWithConcept();
          SimTreeItem                    rootItem   = new SimTreeItem(root);
-         FxTaxonomyReferenceWithConcept snomedRoot = new FxTaxonomyReferenceWithConcept();
+         TaxonomyReferenceWithConcept snomedRoot = new TaxonomyReferenceWithConcept();
 
          snomedRoot.setConcept(FxTs.get().getFxConcept(Taxonomies.SNOMED.getUuids()[0],
              StandardViewCoordinates.getSnomedInferredLatest(), VersionPolicy.ACTIVE_VERSIONS,
              RefexPolicy.REFEX_MEMBERS,
              RelationshipPolicy.ORIGINATING_AND_DESTINATION_TAXONOMY_RELATIONSHIPS));
 
-         FxTaxonomyReferenceWithConcept dlRoot = new FxTaxonomyReferenceWithConcept();
+         TaxonomyReferenceWithConcept dlRoot = new TaxonomyReferenceWithConcept();
 
          dlRoot.setConcept(
              FxTs.get().getFxConcept(

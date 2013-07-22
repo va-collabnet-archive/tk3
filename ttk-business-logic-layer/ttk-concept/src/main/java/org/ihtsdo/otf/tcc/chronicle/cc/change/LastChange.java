@@ -31,7 +31,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.ihtsdo.otf.tcc.chronicle.cc.P;
 import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.helpers.concurrency.ConcurrentReentrantLocks;
-import org.ihtsdo.otf.tcc.api.TermChangeListener;
+import org.ihtsdo.otf.tcc.api.store.TermChangeListener;
 
 /**
  *

@@ -21,7 +21,7 @@ import javafx.scene.control.TreeItem;
 
 import org.ihtsdo.ttk.helpers.concurrency.FutureHelper;
 import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -36,15 +36,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.ttk.fx.FxTaxonomyReferenceWithConcept;
-import org.ihtsdo.ttk.fx.concept.component.relationship.FxRelationshipChronicle;
-import org.ihtsdo.ttk.fx.concept.component.relationship.FxRelationshipVersion;
+import org.ihtsdo.otf.tcc.ddo.TaxonomyReferenceWithConcept;
+import org.ihtsdo.otf.tcc.ddo.concept.component.relationship.RelationshipChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.concept.component.relationship.RelationshipVersionDdo;
 
 /**
  *
  * @author kec
  */
-public class SimTreeItem extends TreeItem<FxTaxonomyReferenceWithConcept> implements Comparable<SimTreeItem> {
+public class SimTreeItem extends TreeItem<TaxonomyReferenceWithConcept> implements Comparable<SimTreeItem> {
 
     private static ThreadGroup simTreeItemThreadGroup = new ThreadGroup("SimTreeItem child fetcher pool");
     private static ExecutorService childFetcherPool;
@@ -63,11 +63,11 @@ public class SimTreeItem extends TreeItem<FxTaxonomyReferenceWithConcept> implem
     private ProgressIndicator pi;
 
     //~--- constructors --------------------------------------------------------
-    public SimTreeItem(FxTaxonomyReferenceWithConcept t) {
+    public SimTreeItem(TaxonomyReferenceWithConcept t) {
         this(t, (Node) null);
     }
 
-    public SimTreeItem(FxTaxonomyReferenceWithConcept t, Node node) {
+    public SimTreeItem(TaxonomyReferenceWithConcept t, Node node) {
         super(t, node);
     }
 
@@ -83,10 +83,10 @@ public class SimTreeItem extends TreeItem<FxTaxonomyReferenceWithConcept> implem
 
             ArrayList<SimTreeItem> childrenToProcess = new ArrayList<>();
 
-            for (FxRelationshipChronicle r : getValue().conceptProperty().get().getDestinationRelationships()) {
-                for (FxRelationshipVersion rv : r.getVersions()) {
+            for (RelationshipChronicleDdo r : getValue().conceptProperty().get().getDestinationRelationships()) {
+                for (RelationshipVersionDdo rv : r.getVersions()) {
                     try {
-                        FxTaxonomyReferenceWithConcept fxtrc = new FxTaxonomyReferenceWithConcept(rv);
+                        TaxonomyReferenceWithConcept fxtrc = new TaxonomyReferenceWithConcept(rv);
                         SimTreeItem childItem = new SimTreeItem(fxtrc);
 
                         childrenToProcess.add(childItem);
@@ -109,10 +109,10 @@ public class SimTreeItem extends TreeItem<FxTaxonomyReferenceWithConcept> implem
     public void addChildrenConceptsAndGrandchildrenItems(ProgressIndicator p1) {
         ArrayList<SimTreeItem> grandChildrenToProcess = new ArrayList<>();
 
-        for (TreeItem<FxTaxonomyReferenceWithConcept> child : getChildren()) {
+        for (TreeItem<TaxonomyReferenceWithConcept> child : getChildren()) {
             if (child.getChildren().isEmpty() && (child.getValue().getConcept() != null)) {
                 if (child.getValue().getConcept().getDestinationRelationships().isEmpty()) {
-                    FxTaxonomyReferenceWithConcept value = child.getValue();
+                    TaxonomyReferenceWithConcept value = child.getValue();
                     child.setValue(null);
                     SimTreeItem noChildItem = (SimTreeItem) child;
                     noChildItem.computeGraphic();
@@ -120,11 +120,11 @@ public class SimTreeItem extends TreeItem<FxTaxonomyReferenceWithConcept> implem
                 } else {
                     ArrayList<SimTreeItem> grandChildrenToAdd = new ArrayList<>();
 
-                    for (FxRelationshipChronicle r :
+                    for (RelationshipChronicleDdo r :
                             child.getValue().conceptProperty().get().getDestinationRelationships()) {
-                        for (FxRelationshipVersion rv : r.getVersions()) {
+                        for (RelationshipVersionDdo rv : r.getVersions()) {
                             try {
-                                FxTaxonomyReferenceWithConcept fxtrc = new FxTaxonomyReferenceWithConcept(rv);
+                                TaxonomyReferenceWithConcept fxtrc = new TaxonomyReferenceWithConcept(rv);
                                 SimTreeItem grandChildItem = new SimTreeItem(fxtrc);
 
                                 grandChildrenToProcess.add(grandChildItem);
@@ -166,7 +166,7 @@ public class SimTreeItem extends TreeItem<FxTaxonomyReferenceWithConcept> implem
     }
 
     public Node computeGraphic() {
-        FxTaxonomyReferenceWithConcept ref = getValue();
+        TaxonomyReferenceWithConcept ref = getValue();
         if (ref != null && ref.getRelationshipVersion() == null) {
             return SimTreeIcons.ROOT.getImageView();
         } else if (ref != null && ref.getConcept() != null && ref.getConcept().getOriginRelationships().isEmpty()) {
@@ -191,23 +191,23 @@ public class SimTreeItem extends TreeItem<FxTaxonomyReferenceWithConcept> implem
     }
  
     @Override
-    public TreeItem<FxTaxonomyReferenceWithConcept> nextSibling() {
+    public TreeItem<TaxonomyReferenceWithConcept> nextSibling() {
         return super.nextSibling();
     }
 
     @Override
-    public TreeItem<FxTaxonomyReferenceWithConcept> nextSibling(TreeItem<FxTaxonomyReferenceWithConcept> ti) {
+    public TreeItem<TaxonomyReferenceWithConcept> nextSibling(TreeItem<TaxonomyReferenceWithConcept> ti) {
         return super.nextSibling(ti);
     }
 
     @Override
-    public TreeItem<FxTaxonomyReferenceWithConcept> previousSibling() {
+    public TreeItem<TaxonomyReferenceWithConcept> previousSibling() {
         return super.previousSibling();
     }
 
     @Override
-    public TreeItem<FxTaxonomyReferenceWithConcept> previousSibling(
-            TreeItem<FxTaxonomyReferenceWithConcept> ti) {
+    public TreeItem<TaxonomyReferenceWithConcept> previousSibling(
+            TreeItem<TaxonomyReferenceWithConcept> ti) {
         return super.previousSibling(ti);
     }
 
@@ -217,7 +217,7 @@ public class SimTreeItem extends TreeItem<FxTaxonomyReferenceWithConcept> implem
     }
 
     public void removeGrandchildren() {
-        for (TreeItem<FxTaxonomyReferenceWithConcept> child : getChildren()) {
+        for (TreeItem<TaxonomyReferenceWithConcept> child : getChildren()) {
             child.getChildren().clear();
         }
     }
@@ -348,7 +348,7 @@ public class SimTreeItem extends TreeItem<FxTaxonomyReferenceWithConcept> implem
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    FxTaxonomyReferenceWithConcept item = SimTreeItem.this.getValue();
+                    TaxonomyReferenceWithConcept item = SimTreeItem.this.getValue();
 
                     SimTreeItem.this.setValue(null);
                     setProgressIndicator(null);

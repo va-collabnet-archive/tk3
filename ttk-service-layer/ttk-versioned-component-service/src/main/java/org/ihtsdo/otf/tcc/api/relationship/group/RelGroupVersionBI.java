@@ -2,8 +2,8 @@ package org.ihtsdo.otf.tcc.api.relationship.group;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------

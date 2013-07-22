@@ -14,7 +14,7 @@ import java.util.logging.Level;
 
 import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
 
-import org.ihtsdo.ttk.helpers.time.TimeHelper;
+import org.ihtsdo.otf.tcc.api.time.TimeHelper;
 import org.ihtsdo.otf.tcc.chronicle.cc.P;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.otf.tcc.chronicle.cs.ChangeSetLogger;

@@ -18,8 +18,8 @@
 
 package org.ihtsdo.otf.tcc.datastore.id;
 
-import org.ihtsdo.otf.tcc.api.Status;
-import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 
 /**
  *

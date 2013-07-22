@@ -4,9 +4,9 @@ package org.ihtsdo.otf.tcc.chronicle.cc.refex;
 
 import com.sleepycat.bind.tuple.TupleInput;
 
-import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
-import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
@@ -52,10 +52,10 @@ import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid_uuid_int.TtkRefexUu
 import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid_uuid_long.TtkRefexUuidUuidUuidLongMemberChronicle;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid_uuid_string.TtkRefexUuidUuidUuidStringMemberChronicle;
 
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_FLOAT;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_INT;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_LONG;
-import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_STRING;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID_FLOAT;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID_INT;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID_LONG;
+import static org.ihtsdo.otf.tcc.api.refex.RefexType.CID_CID_CID_STRING;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -184,7 +184,7 @@ public class RefexMemberFactory {
    @SuppressWarnings("rawtypes")
    public static RefexMember create(int nid, int typeToken, int enclosingConceptNid, TupleInput input)
            throws IOException {
-      ToolkitRefexType memberType = ToolkitRefexType.getFromToken(typeToken);
+      RefexType memberType = RefexType.getFromToken(typeToken);
 
       switch (memberType) {
       case BOOLEAN :

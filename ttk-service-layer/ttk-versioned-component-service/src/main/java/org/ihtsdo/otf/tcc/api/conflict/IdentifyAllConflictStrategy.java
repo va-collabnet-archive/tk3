@@ -22,7 +22,7 @@ package org.ihtsdo.otf.tcc.api.conflict;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
 
 /**
  * Implements the original ACE conflict resolution strategy. This is also used

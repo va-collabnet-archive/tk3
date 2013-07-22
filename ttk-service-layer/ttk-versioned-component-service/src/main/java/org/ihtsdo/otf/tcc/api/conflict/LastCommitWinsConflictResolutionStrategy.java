@@ -21,7 +21,7 @@ package org.ihtsdo.otf.tcc.api.conflict;
 
 import java.io.Serializable;
 import java.util.*;
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
 
 /**
  * "Last commit wins" implementation of a conflict resolution strategy.

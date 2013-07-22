@@ -22,7 +22,7 @@ package org.ihtsdo.ttk.concept.nbm;
 
 import org.ihtsdo.otf.tcc.chronicle.cc.P;
 import org.ihtsdo.otf.tcc.chronicle.cc.termstore.PersistentStoreI;
-import org.ihtsdo.ttk.fx.store.FxTs;
+import org.ihtsdo.otf.tcc.ddo.store.FxTs;
 
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Lookup;

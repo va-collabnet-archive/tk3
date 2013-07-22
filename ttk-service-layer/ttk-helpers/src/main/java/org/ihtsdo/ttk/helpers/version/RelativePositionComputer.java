@@ -21,9 +21,9 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.ihtsdo.otf.tcc.api.PositionBI;
-import org.ihtsdo.otf.tcc.api.Precedence;
-import org.ihtsdo.otf.tcc.api.VersionPointBI;
+import org.ihtsdo.otf.tcc.api.coordinate.PositionBI;
+import org.ihtsdo.otf.tcc.api.coordinate.Precedence;
+import org.ihtsdo.otf.tcc.api.coordinate.VersionPointBI;
 
 /**
  *

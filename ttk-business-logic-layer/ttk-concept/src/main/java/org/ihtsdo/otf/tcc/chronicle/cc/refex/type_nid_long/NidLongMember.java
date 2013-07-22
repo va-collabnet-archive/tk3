@@ -14,7 +14,7 @@ import org.ihtsdo.otf.tcc.chronicle.cc.computer.version.VersionComputer;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.refex.type_nid_long.RefexNidLongAnalogBI;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_long.TtkRefexUuidLongMemberChronicle;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_long.TtkRefexUuidLongRevision;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
@@ -106,7 +106,7 @@ public class NidLongMember extends RefexMember<NidLongRevision, NidLongMember>
    }
 
    @Override
-   public NidLongRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public NidLongRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       NidLongRevision newR = new NidLongRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);
@@ -196,13 +196,13 @@ public class NidLongMember extends RefexMember<NidLongRevision, NidLongMember>
    }
 
    @Override
-   protected ToolkitRefexType getTkRefsetType() {
-      return ToolkitRefexType.CID_LONG;
+   protected RefexType getTkRefsetType() {
+      return RefexType.CID_LONG;
    }
 
    @Override
    public int getTypeNid() {
-      return ToolkitRefexType.CID_LONG.getTypeToken();
+      return RefexType.CID_LONG.getTypeToken();
    }
 
    @Override

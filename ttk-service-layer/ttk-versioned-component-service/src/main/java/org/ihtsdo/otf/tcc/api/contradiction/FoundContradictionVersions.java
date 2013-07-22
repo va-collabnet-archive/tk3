@@ -2,7 +2,7 @@
 
 import java.util.Collection;
 
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
 
 public class FoundContradictionVersions {
 	private ContradictionResult result;

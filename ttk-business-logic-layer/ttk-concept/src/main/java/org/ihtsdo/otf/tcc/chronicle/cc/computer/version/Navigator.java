@@ -9,7 +9,7 @@ import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.util.OpenBitSet;
 import org.ihtsdo.otf.tcc.chronicle.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.helpers.version.RelativePositionComputer;
-import org.ihtsdo.otf.tcc.api.PositionBI;
+import org.ihtsdo.otf.tcc.api.coordinate.PositionBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 
 /**

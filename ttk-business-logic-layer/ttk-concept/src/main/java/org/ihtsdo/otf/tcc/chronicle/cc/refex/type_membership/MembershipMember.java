@@ -14,7 +14,7 @@ import org.ihtsdo.otf.tcc.chronicle.cc.computer.version.VersionComputer;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.refex.RefexAnalogBI;
 import org.ihtsdo.otf.tcc.api.refex.type_long.RefexLongAnalogBI;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_member.TtkRefexMemberChronicle;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_member.TtkRefexRevision;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
@@ -99,7 +99,7 @@ public class MembershipMember extends RefexMember<MembershipRevision, Membership
    }
 
    @Override
-   public MembershipRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public MembershipRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       MembershipRevision newR = new MembershipRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);
@@ -164,13 +164,13 @@ public class MembershipMember extends RefexMember<MembershipRevision, Membership
    //~--- get methods ---------------------------------------------------------
 
    @Override
-   protected ToolkitRefexType getTkRefsetType() {
-      return ToolkitRefexType.MEMBER;
+   protected RefexType getTkRefsetType() {
+      return RefexType.MEMBER;
    }
 
    @Override
    public int getTypeNid() {
-      return ToolkitRefexType.MEMBER.getTypeToken();
+      return RefexType.MEMBER.getTypeToken();
    }
 
    @Override

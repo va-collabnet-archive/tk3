@@ -5,7 +5,7 @@ package org.ihtsdo.otf.tcc.chronicle.cc.refex.type_nid_boolean;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
@@ -176,7 +176,7 @@ public class NidBooleanMember extends RefexMember<NidBooleanRevision, NidBoolean
     * @return
     */
    @Override
-   public NidBooleanRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public NidBooleanRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       NidBooleanRevision newR = new NidBooleanRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);
@@ -336,8 +336,8 @@ public class NidBooleanMember extends RefexMember<NidBooleanRevision, NidBoolean
     * @return
     */
    @Override
-   protected ToolkitRefexType getTkRefsetType() {
-      return ToolkitRefexType.CID_BOOLEAN;
+   protected RefexType getTkRefsetType() {
+      return RefexType.CID_BOOLEAN;
    }
 
    /**
@@ -348,7 +348,7 @@ public class NidBooleanMember extends RefexMember<NidBooleanRevision, NidBoolean
     */
    @Override
    public int getTypeNid() {
-      return ToolkitRefexType.CID_BOOLEAN.getTypeToken();
+      return RefexType.CID_BOOLEAN.getTypeToken();
    }
 
    /**

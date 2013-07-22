@@ -4,15 +4,15 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.blueprint.ConceptAttributeAB;
 import org.ihtsdo.otf.tcc.api.blueprint.DescriptionCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.blueprint.RelationshipCAB;
-import org.ihtsdo.otf.tcc.api.TerminologyBuilderBI;
+import org.ihtsdo.otf.tcc.api.blueprint.TerminologyBuilderBI;
 import org.ihtsdo.otf.tcc.api.blueprint.ConceptCB;
 import org.ihtsdo.otf.tcc.api.blueprint.MediaCAB;
 import org.ihtsdo.otf.tcc.api.conattr.ConceptAttributeChronicleBI;
@@ -28,7 +28,7 @@ import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.relationship.RelationshipChronicleBI;
 import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.chronicle.cc.P;
 import org.ihtsdo.otf.tcc.chronicle.cc.attributes.ConceptAttributes;
 import org.ihtsdo.otf.tcc.chronicle.cc.attributes.ConceptAttributesRevision;
@@ -106,12 +106,12 @@ public class BdbTermBuilder implements TerminologyBuilderBI {
                 return null;
             }
             if (blueprint.getMemberType()
-                    == ToolkitRefexType.classToType(component.getClass())) {
+                    == RefexType.classToType(component.getClass())) {
                 return (RefexMember<?, ?>) component;
             } else {
                 throw new InvalidCAB(
                         "Component exists of different type. Class to type:  "
-                        + ToolkitRefexType.classToType(component.getClass()) 
+                        + RefexType.classToType(component.getClass()) 
                         + "\ncomponent: "
                         + component + "\n\nRefexCAB: " + blueprint);
             }

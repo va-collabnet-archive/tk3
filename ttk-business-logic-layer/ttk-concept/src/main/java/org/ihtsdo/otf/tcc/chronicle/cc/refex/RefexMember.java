@@ -13,16 +13,16 @@ import org.ihtsdo.otf.tcc.chronicle.cc.attributes.ConceptAttributes;
 import org.ihtsdo.otf.tcc.chronicle.cc.computer.version.VersionComputer;
 import org.ihtsdo.otf.tcc.chronicle.cc.NidPair;
 import org.ihtsdo.otf.tcc.chronicle.cc.NidPairForRefex;
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.NidSetBI;
-import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
+import org.ihtsdo.otf.tcc.api.store.TerminologySnapshotDI;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.refex.RefexAnalogBI;
 import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.dto.component.TtkRevision;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.dto.component.refex.TtkRefexAbstractMemberChronicle;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
@@ -301,7 +301,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
     }
 
   
-    protected abstract ToolkitRefexType getTkRefsetType();
+    protected abstract RefexType getTkRefsetType();
 
     @Override
     public RefexMember<R, C>.Version getVersion(ViewCoordinate c) throws ContradictionException {
@@ -414,7 +414,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
     }
 
     @Override
-    public ToolkitRefexType getRefexType() {
+    public RefexType getRefexType() {
         return getTkRefsetType();
     }
 
@@ -429,7 +429,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
 
         //~--- methods ----------------------------------------------------------
         @Override
-        public ToolkitRefexType getRefexType() {
+        public RefexType getRefexType() {
             return RefexMember.this.getRefexType();
         }
 
@@ -443,7 +443,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
 
  
         @Override
-        public R makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+        public R makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
             return getCv().makeAnalog(status, time, authorNid, moduleNid, pathNid);
         }
 

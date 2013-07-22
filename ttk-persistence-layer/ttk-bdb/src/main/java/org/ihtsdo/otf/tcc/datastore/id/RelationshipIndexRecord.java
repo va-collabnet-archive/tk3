@@ -24,9 +24,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.ihtsdo.ttk.helpers.version.RelativePositionComputerBI;
-import org.ihtsdo.otf.tcc.api.Ts;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.VersionPoint;
+import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.coordinate.VersionPoint;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.metadata.binding.SnomedMetadataRf2;
 

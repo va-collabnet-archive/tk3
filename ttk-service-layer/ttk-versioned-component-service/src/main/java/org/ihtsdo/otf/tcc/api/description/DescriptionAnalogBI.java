@@ -2,7 +2,7 @@ package org.ihtsdo.otf.tcc.api.description;
 
 import java.beans.PropertyVetoException;
 
-import org.ihtsdo.otf.tcc.api.TypedComponentAnalogBI;
+import org.ihtsdo.otf.tcc.api.chronicle.TypedComponentAnalogBI;
 
 public interface DescriptionAnalogBI<A extends DescriptionAnalogBI>
         extends TypedComponentAnalogBI, DescriptionVersionBI<A> {

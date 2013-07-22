@@ -49,7 +49,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 
-import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.ttk.logic.DefinitionPart;
 import org.ihtsdo.ttk.logic.DefinitionPartType;
 import org.ihtsdo.ttk.logic.DefinitionTree;

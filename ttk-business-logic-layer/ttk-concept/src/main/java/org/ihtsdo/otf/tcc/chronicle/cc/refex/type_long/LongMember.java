@@ -16,7 +16,7 @@ import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.refex.type_long.RefexLongAnalogBI;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_long.TtkRefexLongMemberChronicle;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_long.TtkRefexLongRevision;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -103,7 +103,7 @@ public class LongMember extends RefexMember<LongRevision, LongMember>
    }
 
    @Override
-   public LongRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public LongRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       LongRevision newR = new LongRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);
@@ -175,13 +175,13 @@ public class LongMember extends RefexMember<LongRevision, LongMember>
    }
 
    @Override
-   protected ToolkitRefexType getTkRefsetType() {
-      return ToolkitRefexType.LONG;
+   protected RefexType getTkRefsetType() {
+      return RefexType.LONG;
    }
 
    @Override
    public int getTypeNid() {
-      return ToolkitRefexType.LONG.getTypeToken();
+      return RefexType.LONG.getTypeToken();
    }
 
    @Override

@@ -2,7 +2,7 @@ package org.ihtsdo.otf.tcc.api.conflict;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
 
 public class ViewPathWinsStrategy extends ContradictionManagementStrategy {
 

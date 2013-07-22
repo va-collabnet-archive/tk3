@@ -11,13 +11,13 @@ import org.ihtsdo.otf.tcc.chronicle.cc.component.ConceptComponent;
 import org.ihtsdo.otf.tcc.chronicle.cc.component.RevisionSet;
 import org.ihtsdo.otf.tcc.chronicle.cc.refex.RefexMember;
 import org.ihtsdo.otf.tcc.chronicle.cc.computer.version.VersionComputer;
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.store.TerminologySnapshotDI;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.refex.type_nid.RefexNidAnalogBI;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid.TtkRefexUuidMemberChronicle;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid.TtkRefexUuidRevision;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
@@ -108,7 +108,7 @@ public class NidMember extends RefexMember<NidRevision, NidMember>
 
 
    @Override
-   public NidRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public NidRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       NidRevision newR = new NidRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);
@@ -193,13 +193,13 @@ public class NidMember extends RefexMember<NidRevision, NidMember>
    }
 
    @Override
-   protected ToolkitRefexType getTkRefsetType() {
-      return ToolkitRefexType.CID;
+   protected RefexType getTkRefsetType() {
+      return RefexType.CID;
    }
 
    @Override
    public int getTypeNid() {
-      return ToolkitRefexType.CID.getTypeToken();
+      return RefexType.CID.getTypeToken();
    }
 
    @Override

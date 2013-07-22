@@ -29,10 +29,10 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-import org.ihtsdo.otf.tcc.api.ComponentBI;
-import org.ihtsdo.otf.tcc.api.ConceptFetcherBI;
-import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
-import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptFetcherBI;
+import org.ihtsdo.otf.tcc.api.concept.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.id.IdBI;
@@ -46,7 +46,7 @@ import au.csiro.ontology.axioms.IAxiom;
 import au.csiro.ontology.axioms.RoleInclusion;
 import au.csiro.ontology.model.IConcept;
 import au.csiro.ontology.model.INamedRole;
-import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 //~--- JDK imports ------------------------------------------------------------
 
 /**

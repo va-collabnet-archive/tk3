@@ -26,16 +26,16 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 
-import org.ihtsdo.ttk.fx.FxTaxonomyReferenceWithConcept;
-import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
-import org.ihtsdo.ttk.fx.context.TerminologyContext;
+import org.ihtsdo.otf.tcc.ddo.TaxonomyReferenceWithConcept;
+import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.context.TerminologyContext;
 
 /**
  *
  * @author kec
  */
-public class TaxonomyView extends TreeView<FxTaxonomyReferenceWithConcept>
-        implements ChangeListener<TreeItem<FxTaxonomyReferenceWithConcept>> {
+public class TaxonomyView extends TreeView<TaxonomyReferenceWithConcept>
+        implements ChangeListener<TreeItem<TaxonomyReferenceWithConcept>> {
 
    /** Field description */
    final String contextName, windowName;
@@ -62,7 +62,7 @@ public class TaxonomyView extends TreeView<FxTaxonomyReferenceWithConcept>
     * @param windowName
     * @param ti
     */
-   public TaxonomyView(String contextName, String windowName, TreeItem<FxTaxonomyReferenceWithConcept> ti) {
+   public TaxonomyView(String contextName, String windowName, TreeItem<TaxonomyReferenceWithConcept> ti) {
       super(ti);
       this.contextName = contextName;
       this.windowName  = windowName;
@@ -80,13 +80,13 @@ public class TaxonomyView extends TreeView<FxTaxonomyReferenceWithConcept>
     * @param newValue
     */
    @Override
-   public void changed(ObservableValue<? extends TreeItem<FxTaxonomyReferenceWithConcept>> observableValue,
-                       TreeItem<FxTaxonomyReferenceWithConcept> oldValue,
-                       TreeItem<FxTaxonomyReferenceWithConcept> newValue) {
+   public void changed(ObservableValue<? extends TreeItem<TaxonomyReferenceWithConcept>> observableValue,
+                       TreeItem<TaxonomyReferenceWithConcept> oldValue,
+                       TreeItem<TaxonomyReferenceWithConcept> newValue) {
       if (newValue == null) {
          context.getContextProperty().setValue(null);
       } else {
-         FxConceptChronicle value = newValue.getValue().getConcept();
+         ConceptChronicleDdo value = newValue.getValue().getConcept();
          context.getContextProperty().setValue(value);
       }
 

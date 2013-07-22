@@ -5,7 +5,7 @@ package org.ihtsdo.otf.tcc.dto.component.refex.type_boolean;
 import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.type_boolean.RefexBooleanVersionBI;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.dto.component.refex.TtkRefexAbstractMemberChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -172,8 +172,8 @@ public class TtkRefexBooleanMemberChronicle extends TtkRefexAbstractMemberChroni
    }
 
    @Override
-   public ToolkitRefexType getType() {
-      return ToolkitRefexType.BOOLEAN;
+   public RefexType getType() {
+      return RefexType.BOOLEAN;
    }
 
    //~--- set methods ---------------------------------------------------------

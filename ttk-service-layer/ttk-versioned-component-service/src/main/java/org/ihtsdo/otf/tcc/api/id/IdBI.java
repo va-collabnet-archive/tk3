@@ -20,8 +20,8 @@ package org.ihtsdo.otf.tcc.api.id;
 import java.io.IOException;
 
 import java.util.Set;
-import org.ihtsdo.otf.tcc.api.Status;
-import org.ihtsdo.otf.tcc.api.VersionPointBI;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.VersionPointBI;
 
 /**
  *

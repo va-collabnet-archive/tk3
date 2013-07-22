@@ -5,7 +5,7 @@ package org.ihtsdo.otf.tcc.chronicle.cc.identifier;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 import java.io.IOException;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 
 
 import org.ihtsdo.otf.tcc.chronicle.cc.component.ConceptComponent.IDENTIFIER_PART_TYPES;

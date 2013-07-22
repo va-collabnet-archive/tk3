@@ -14,7 +14,7 @@ import org.ihtsdo.otf.tcc.chronicle.cc.computer.version.VersionComputer;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.refex.type_string.RefexStringAnalogBI;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_string.TtkRefexStringMemberChronicle;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_string.TtkRefexStringRevision;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
@@ -101,7 +101,7 @@ public class StringMember extends RefexMember<StringRevision, StringMember>
    }
 
    @Override
-   public StringRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public StringRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       StringRevision newR = new StringRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);
@@ -175,13 +175,13 @@ public class StringMember extends RefexMember<StringRevision, StringMember>
    }
 
    @Override
-   protected ToolkitRefexType getTkRefsetType() {
-      return ToolkitRefexType.STR;
+   protected RefexType getTkRefsetType() {
+      return RefexType.STR;
    }
 
    @Override
    public int getTypeNid() {
-      return ToolkitRefexType.STR.getTypeToken();
+      return RefexType.STR.getTypeToken();
    }
 
    @Override

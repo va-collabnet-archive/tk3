@@ -16,7 +16,7 @@
 package org.ihtsdo.ttk.services.search;
 
 import javafx.collections.ObservableList;
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 
 /**

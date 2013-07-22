@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.Date;
 import java.util.Set;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 
 public abstract class IdentifierVersion implements IdBI {
    protected int authorityNid;

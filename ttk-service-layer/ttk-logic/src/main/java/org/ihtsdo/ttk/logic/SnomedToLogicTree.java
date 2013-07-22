@@ -20,11 +20,11 @@ package org.ihtsdo.ttk.logic;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.ConceptFetcherBI;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
-import org.ihtsdo.otf.tcc.api.TerminologyBuilderBI;
-import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.concept.ConceptFetcherBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.concept.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.otf.tcc.api.blueprint.TerminologyBuilderBI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
@@ -42,7 +42,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 
 /**
  *

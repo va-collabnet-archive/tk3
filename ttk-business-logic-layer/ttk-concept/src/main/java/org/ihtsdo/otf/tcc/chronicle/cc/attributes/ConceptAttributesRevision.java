@@ -9,7 +9,7 @@ import java.io.IOException;
 
 
 import org.ihtsdo.otf.tcc.chronicle.cc.component.Revision;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.blueprint.ConceptAttributeAB;
 import org.ihtsdo.otf.tcc.api.conattr.ConceptAttributeAnalogBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
@@ -19,7 +19,7 @@ import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import java.util.Collection;
 import java.util.Set;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
 import org.ihtsdo.otf.tcc.chronicle.cc.P;
 import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
@@ -91,7 +91,7 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
    }
 
    @Override
-   public ConceptAttributesRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public ConceptAttributesRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatus(status);
          this.setAuthorNid(authorNid);

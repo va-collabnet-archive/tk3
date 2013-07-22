@@ -21,11 +21,11 @@ package org.ihtsdo.ttk.helpers.metrics;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import org.ihtsdo.otf.tcc.api.Ts;
-import org.ihtsdo.otf.tcc.api.ConceptFetcherBI;
-import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
-import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
-import org.ihtsdo.otf.tcc.api.TerminologyStoreDI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.api.concept.ConceptFetcherBI;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.concept.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 
 /**

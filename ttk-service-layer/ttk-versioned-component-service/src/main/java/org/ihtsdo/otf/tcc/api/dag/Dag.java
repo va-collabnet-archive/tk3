@@ -28,7 +28,7 @@ import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import java.io.IOException;
 
 import java.util.Collection;
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
 
 /**
  *

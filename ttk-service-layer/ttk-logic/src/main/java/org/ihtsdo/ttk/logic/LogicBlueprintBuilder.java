@@ -20,9 +20,9 @@ package org.ihtsdo.ttk.logic;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
-import org.ihtsdo.otf.tcc.api.TerminologyBuilderBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
+import org.ihtsdo.otf.tcc.api.blueprint.TerminologyBuilderBI;
 import org.ihtsdo.otf.tcc.api.blueprint.BlueprintBuilder;
 import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
@@ -288,7 +288,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
    public RefexCAB newEdge(RefexCAB originNode, boolean truth, RefexCAB destinationNode)
            throws IOException, InvalidCAB, ContradictionException {
       RefexCAB newEdge = new RefexCAB(
-              ToolkitRefexType.CID_BOOLEAN, 
+              RefexType.CID_BOOLEAN, 
               originNode.getMemberUUID(),
               refexExtensionUuid, 
               IdDirective.GENERATE_RANDOM, RefexDirective.EXCLUDE);
@@ -325,7 +325,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
 
       switch (specs.length) {
       case 1 :
-         newNode = newNode(ToolkitRefexType.CID);
+         newNode = newNode(RefexType.CID);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, specs[0]);
          newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
 
@@ -336,7 +336,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          return newNode;
 
       case 2 :
-         newNode = newNode(ToolkitRefexType.CID_CID);
+         newNode = newNode(RefexType.CID_CID);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, specs[0]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, specs[1]);
          newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
@@ -349,7 +349,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          return newNode;
 
       case 3 :
-         newNode = newNode(ToolkitRefexType.CID_CID_CID);
+         newNode = newNode(RefexType.CID_CID_CID);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, specs[0]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, specs[1]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_3_ID, specs[2]);
@@ -401,7 +401,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
 
       switch (specs.length) {
       case 1 :
-         newNode = newNode(ToolkitRefexType.CID);
+         newNode = newNode(RefexType.CID);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, specs[0]);
          newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
 
@@ -412,7 +412,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          return newNode;
 
       case 2 :
-         newNode = newNode(ToolkitRefexType.CID_CID);
+         newNode = newNode(RefexType.CID_CID);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, specs[0]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, specs[1]);
          newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
@@ -424,7 +424,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          return newNode;
 
       case 3 :
-         newNode = newNode(ToolkitRefexType.CID_CID_CID);
+         newNode = newNode(RefexType.CID_CID_CID);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, specs[0]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, specs[1]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_3_ID, specs[2]);
@@ -453,7 +453,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
     * @throws IOException
     * @throws InvalidCAB
     */
-   public RefexCAB newNode(ToolkitRefexType refexType)
+   public RefexCAB newNode(RefexType refexType)
            throws IOException, InvalidCAB, ContradictionException {
       RefexCAB newNode = new RefexCAB(refexType, conceptUuid.get(), refexExtensionUuid,
                                       IdDirective.GENERATE_RANDOM, RefexDirective.EXCLUDE);
@@ -488,7 +488,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
 
       switch (nids.length) {
       case 1 :
-         newNode = newNode(ToolkitRefexType.CID_CID);
+         newNode = newNode(RefexType.CID_CID);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, spec);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, nids[0]);
          newNode.put(ComponentProperty.ENCLOSING_CONCEPT_ID, conceptUuid.get());
@@ -500,7 +500,7 @@ public class LogicBlueprintBuilder extends BlueprintBuilder {
          return newNode;
 
       case 2 :
-         newNode = newNode(ToolkitRefexType.CID_CID_CID);
+         newNode = newNode(RefexType.CID_CID_CID);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_1_ID, spec);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_2_ID, nids[0]);
          newNode.put(ComponentProperty.COMPONENT_EXTENSION_3_ID, nids[1]);

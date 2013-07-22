@@ -6,7 +6,7 @@ package org.ihtsdo.otf.tcc.datastore.stamp;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 public class Stamp implements Comparable<Stamp> {

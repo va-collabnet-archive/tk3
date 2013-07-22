@@ -5,7 +5,7 @@ package org.ihtsdo.otf.tcc.chronicle.cc.refex.type_nid_nid_nid_int;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
@@ -118,7 +118,7 @@ public class NidNidNidIntMember
    }
 
    @Override
-   public NidNidNidIntRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public NidNidNidIntRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       NidNidNidIntRevision newR = new NidNidNidIntRevision(status, time,
                                      authorNid, moduleNid, pathNid, this);
 
@@ -226,13 +226,13 @@ public class NidNidNidIntMember
    }
 
    @Override
-   protected ToolkitRefexType getTkRefsetType() {
-      return ToolkitRefexType.CID_CID_CID_INT;
+   protected RefexType getTkRefsetType() {
+      return RefexType.CID_CID_CID_INT;
    }
 
    @Override
    public int getTypeNid() {
-      return ToolkitRefexType.CID_CID_CID_INT.getTypeToken();
+      return RefexType.CID_CID_CID_INT.getTypeToken();
    }
 
    @Override

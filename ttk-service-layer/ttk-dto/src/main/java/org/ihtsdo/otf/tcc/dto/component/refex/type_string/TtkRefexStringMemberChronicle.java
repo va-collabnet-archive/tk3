@@ -6,7 +6,7 @@ import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.type_string.RefexStringVersionBI;
 import org.ihtsdo.otf.tcc.dto.UtfHelper;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.dto.component.refex.TtkRefexAbstractMemberChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -175,8 +175,8 @@ public class TtkRefexStringMemberChronicle extends TtkRefexAbstractMemberChronic
    }
 
    @Override
-   public ToolkitRefexType getType() {
-      return ToolkitRefexType.STR;
+   public RefexType getType() {
+      return RefexType.STR;
    }
 
    //~--- set methods ---------------------------------------------------------

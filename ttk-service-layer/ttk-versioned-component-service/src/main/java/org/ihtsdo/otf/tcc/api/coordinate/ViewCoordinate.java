@@ -2,19 +2,15 @@ package org.ihtsdo.otf.tcc.api.coordinate;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.Ts;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.ContradictionManagerBI;
-import org.ihtsdo.otf.tcc.api.NidList;
-import org.ihtsdo.otf.tcc.api.NidListBI;
-import org.ihtsdo.otf.tcc.api.NidSetBI;
-import org.ihtsdo.otf.tcc.api.PositionBI;
-import org.ihtsdo.otf.tcc.api.PositionSet;
-import org.ihtsdo.otf.tcc.api.PositionSetBI;
-import org.ihtsdo.otf.tcc.api.Precedence;
-import org.ihtsdo.otf.tcc.api.RelAssertionType;
-import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
-import org.ihtsdo.otf.tcc.api.TerminologyStoreDI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionManagerBI;
+import org.ihtsdo.otf.tcc.api.nid.NidList;
+import org.ihtsdo.otf.tcc.api.nid.NidListBI;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
+import org.ihtsdo.otf.tcc.api.relationship.RelAssertionType;
+import org.ihtsdo.otf.tcc.api.store.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -28,7 +24,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.UUID;
-import org.ihtsdo.otf.tcc.api.Status;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 

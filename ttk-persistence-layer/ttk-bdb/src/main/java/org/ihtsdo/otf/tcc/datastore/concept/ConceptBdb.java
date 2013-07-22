@@ -15,12 +15,12 @@ import javafx.application.Platform;
 
 import javafx.concurrent.Worker;
 
-import org.ihtsdo.otf.tcc.api.NativeIdSetItrBI;
-import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetItrBI;
+import org.ihtsdo.otf.tcc.api.concept.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.otf.tcc.datastore.Bdb;
 import org.ihtsdo.otf.tcc.datastore.ComponentBdb;
 import org.ihtsdo.otf.tcc.datastore.id.NidCNidMapBdb;
-import org.ihtsdo.ttk.fx.progress.AggregateProgressItem;
+import org.ihtsdo.otf.tcc.ddo.progress.AggregateProgressItem;
 import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
 import org.ihtsdo.ttk.lookup.Looker;
 import org.ihtsdo.ttk.lookup.TtkEnvironment;
@@ -43,9 +43,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import org.ihtsdo.otf.tcc.api.ConcurrentBitSet;
-import org.ihtsdo.otf.tcc.api.ConcurrentBitSetReadOnly;
-import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.nid.ConcurrentBitSetReadOnly;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
 import org.ihtsdo.otf.tcc.chronicle.cc.lucene.LuceneManager;
 

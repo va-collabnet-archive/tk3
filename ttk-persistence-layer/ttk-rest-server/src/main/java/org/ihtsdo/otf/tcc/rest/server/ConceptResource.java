@@ -10,11 +10,11 @@ import java.io.OutputStream;
 import java.util.UUID;
 import javax.ws.rs.*;
 import javax.ws.rs.core.StreamingOutput;
-import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
-import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
-import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
-import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RefexPolicy;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RelationshipPolicy;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.VersionPolicy;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
@@ -60,7 +60,7 @@ public class ConceptResource {
             uuid = BdbSingleton.get().getUuidPrimordialForNid(Integer.parseInt(id));
         }
         ViewCoordinate vc = StandardViewCoordinates.getSnomedInferredLatest();
-        FxConceptChronicle fxc = BdbSingleton.get().getFxConcept(uuid, vc,
+        ConceptChronicleDdo fxc = BdbSingleton.get().getFxConcept(uuid, vc,
                     VersionPolicy.ACTIVE_VERSIONS,
                     RefexPolicy.ANNOTATION_MEMBERS,
                     RelationshipPolicy.ORIGINATING_AND_DESTINATION_RELATIONSHIPS);

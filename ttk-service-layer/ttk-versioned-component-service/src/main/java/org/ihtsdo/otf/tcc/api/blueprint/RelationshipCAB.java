@@ -19,10 +19,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
-import org.ihtsdo.otf.tcc.api.TkRelationshipType;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.TerminologyBuilderBI;
-import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipType;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.metadata.binding.SnomedMetadataRf2;
 import org.ihtsdo.otf.tcc.api.relationship.RelationshipChronicleBI;
@@ -69,7 +68,7 @@ public class RelationshipCAB extends CreateOrAmendBlueprint {
      */
     public RelationshipCAB(
             int sourceNid, int typeNid, int targetNid, int group, 
-            TkRelationshipType relationshipType,
+            RelationshipType relationshipType,
             IdDirective idDirective)
             throws IOException, InvalidCAB, ContradictionException {
         this(Ts.get().getComponent(sourceNid).getPrimordialUuid(),
@@ -101,7 +100,7 @@ public class RelationshipCAB extends CreateOrAmendBlueprint {
             UUID typeUuid, 
             UUID targetUuid, 
             int group, 
-            TkRelationshipType relationshipType,
+            RelationshipType relationshipType,
             IdDirective idDirective)
             throws IOException, InvalidCAB, ContradictionException {
         this(sourceUuid, typeUuid, targetUuid, group, null, 
@@ -137,7 +136,7 @@ public class RelationshipCAB extends CreateOrAmendBlueprint {
      */
     public RelationshipCAB(
             int sourceNid, int typeNid, int targetNid, int group, 
-            TkRelationshipType relationshipType,
+            RelationshipType relationshipType,
             RelationshipVersionBI relationshipVersion, 
             ViewCoordinate viewCoordinate,
             IdDirective idDirective,
@@ -180,7 +179,7 @@ public class RelationshipCAB extends CreateOrAmendBlueprint {
             UUID typeUuid, 
             UUID targetUuid, 
             int group,
-            TkRelationshipType relationshipType, 
+            RelationshipType relationshipType, 
             RelationshipVersionBI relationshipVersion,
             ViewCoordinate viewCoordinate,
             IdDirective idDirective,
@@ -221,7 +220,7 @@ public class RelationshipCAB extends CreateOrAmendBlueprint {
      */
     public RelationshipCAB(
             UUID sourceUuid, UUID typeUuid, UUID targetUuid, int group,
-            UUID componentUuid, TkRelationshipType relationshipType, RelationshipVersionBI relationshipVersion,
+            UUID componentUuid, RelationshipType relationshipType, RelationshipVersionBI relationshipVersion,
             ViewCoordinate viewCoordinate,
             IdDirective idDirective,
             RefexDirective refexDirective) throws IOException, InvalidCAB, ContradictionException {

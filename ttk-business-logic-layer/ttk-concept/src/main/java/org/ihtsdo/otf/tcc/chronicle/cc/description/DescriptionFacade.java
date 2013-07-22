@@ -12,6 +12,6 @@ public interface DescriptionFacade
  void setLang(String lang) throws PropertyVetoException;
  public void setText(String text) throws PropertyVetoException;
  @Override
- DescriptionRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid);
+ DescriptionRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid);
 
 }

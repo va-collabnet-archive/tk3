@@ -9,21 +9,21 @@ package org.ihtsdo.ttk.pl.fx.helper;
 
 import javafx.concurrent.Task;
 
-import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
-import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
-import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
-import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
+import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RefexPolicy;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RelationshipPolicy;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.VersionPolicy;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
-import org.ihtsdo.ttk.fx.store.FxTs;
+import org.ihtsdo.otf.tcc.ddo.store.FxTs;
 
 /**
  *
  * @author kec
  */
-public class GetConceptTask extends Task<FxConceptChronicle> {
+public class GetConceptTask extends Task<ConceptChronicleDdo> {
    private VersionPolicy      versionPolicy      = VersionPolicy.ALL_VERSIONS;
    private RefexPolicy        refexPolicy        = RefexPolicy.REFEX_MEMBERS;
    private RelationshipPolicy relationshipPolicy =
@@ -43,7 +43,7 @@ public class GetConceptTask extends Task<FxConceptChronicle> {
    }
 
    @Override
-   public FxConceptChronicle call() throws Exception {
+   public ConceptChronicleDdo call() throws Exception {
       return FxTs.get().getFxConcept(conceptUuid, viewCoordinateUuid, versionPolicy,
           refexPolicy, relationshipPolicy);
    }

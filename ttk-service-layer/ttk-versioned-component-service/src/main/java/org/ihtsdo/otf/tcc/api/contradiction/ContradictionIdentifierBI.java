@@ -18,7 +18,7 @@ package org.ihtsdo.otf.tcc.api.contradiction;
 
 import java.util.Collection;
 
-import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentVersionBI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 
 /**

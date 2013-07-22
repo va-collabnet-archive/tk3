@@ -22,9 +22,9 @@ package org.ihtsdo.otf.tcc.datastore.id;
 
 import org.ihtsdo.otf.tcc.datastore.Bdb;
 import org.ihtsdo.ttk.helpers.version.RelativePositionComputerBI;
-import org.ihtsdo.otf.tcc.api.Ts;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.store.Ts;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.relationship.RelationshipChronicleBI;

@@ -19,7 +19,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.RectangleBuilder;
 
-import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -29,17 +29,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.ttk.fx.FxTaxonomyReferenceWithConcept;
-import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
-import org.ihtsdo.ttk.fx.concept.component.relationship.FxRelationshipChronicle;
-import org.ihtsdo.ttk.fx.concept.component.relationship.FxRelationshipVersion;
+import org.ihtsdo.otf.tcc.ddo.TaxonomyReferenceWithConcept;
+import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.concept.component.relationship.RelationshipChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.concept.component.relationship.RelationshipVersionDdo;
 import org.ihtsdo.ttk.helpers.concurrency.FutureHelper;
 
 /**
  *
  * @author kec
  */
-public final class SimTreeCell extends TreeCell<FxTaxonomyReferenceWithConcept> {
+public final class SimTreeCell extends TreeCell<TaxonomyReferenceWithConcept> {
 
     public SimTreeCell() {
         setOnMouseClicked(new ClickListener());
@@ -47,29 +47,29 @@ public final class SimTreeCell extends TreeCell<FxTaxonomyReferenceWithConcept> 
 
     //~--- methods -------------------------------------------------------------
     private void openOrCloseParent(SimTreeItem treeItem) throws IOException, ContradictionException {
-        FxTaxonomyReferenceWithConcept value = treeItem.getValue();
-        FxConceptChronicle c = value.getConcept();
+        TaxonomyReferenceWithConcept value = treeItem.getValue();
+        ConceptChronicleDdo c = value.getConcept();
 
         if (c != null) {
             treeItem.setValue(null);
 
             SimTreeItem parentItem = (SimTreeItem) treeItem.getParent();
-            ObservableList<TreeItem<FxTaxonomyReferenceWithConcept>> siblings = parentItem.getChildren();
+            ObservableList<TreeItem<TaxonomyReferenceWithConcept>> siblings = parentItem.getChildren();
 
             if (treeItem.isSecondaryParentOpened()) {
                 removeExtraParents(treeItem, siblings);
             } else {
-                ArrayList<FxRelationshipChronicle> extraParents = new ArrayList<>(c.getOriginRelationships());
+                ArrayList<RelationshipChronicleDdo> extraParents = new ArrayList<>(c.getOriginRelationships());
 
                 extraParents.remove(value.getRelationshipVersion().getChronicle());
 
                 ArrayList<SimTreeItem> extraParentItems = new ArrayList<>(extraParents.size());
 
-                for (FxRelationshipChronicle extraParent : extraParents) {
-                    for (FxRelationshipVersion extraParentVersion : extraParent.getVersions()) {
+                for (RelationshipChronicleDdo extraParent : extraParents) {
+                    for (RelationshipVersionDdo extraParentVersion : extraParent.getVersions()) {
                         SimTreeItem extraParentItem =
-                                new SimTreeItem(new FxTaxonomyReferenceWithConcept(extraParentVersion,
-                                FxTaxonomyReferenceWithConcept.WhichConcept.DESTINATION));
+                                new SimTreeItem(new TaxonomyReferenceWithConcept(extraParentVersion,
+                                TaxonomyReferenceWithConcept.WhichConcept.DESTINATION));
                         ProgressIndicator indicator = new ProgressIndicator();
 
                         indicator.setSkin(new TaxonomyProgressIndicatorSkin(indicator));
@@ -101,7 +101,7 @@ public final class SimTreeCell extends TreeCell<FxTaxonomyReferenceWithConcept> 
     }
 
     @Override
-    protected void updateItem(FxTaxonomyReferenceWithConcept t, boolean bln) {
+    protected void updateItem(TaxonomyReferenceWithConcept t, boolean bln) {
         super.updateItem(t, bln);
         double opacity = 0.0;
 
@@ -175,7 +175,7 @@ public final class SimTreeCell extends TreeCell<FxTaxonomyReferenceWithConcept> 
         }
     }
 
-    private void removeExtraParents(SimTreeItem treeItem, ObservableList<TreeItem<FxTaxonomyReferenceWithConcept>> siblings) {
+    private void removeExtraParents(SimTreeItem treeItem, ObservableList<TreeItem<TaxonomyReferenceWithConcept>> siblings) {
         for (SimTreeItem extraParent : treeItem.getExtraParents()) {
             removeExtraParents(extraParent, siblings);
             siblings.remove(extraParent);

@@ -1,8 +1,10 @@
 package org.ihtsdo.otf.tcc.api;
 
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 import java.beans.PropertyVetoException;
 import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
 
+@Deprecated
 public interface AnalogBI {
 
     void setNid(int nid) throws PropertyVetoException;

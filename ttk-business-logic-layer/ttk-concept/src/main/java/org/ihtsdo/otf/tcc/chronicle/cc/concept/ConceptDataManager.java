@@ -23,7 +23,7 @@ import org.ihtsdo.otf.tcc.chronicle.cc.lucene.LuceneManager;
 import org.ihtsdo.otf.tcc.chronicle.cc.media.Media;
 import org.ihtsdo.otf.tcc.chronicle.cc.refex.RefexMember;
 import org.ihtsdo.otf.tcc.chronicle.cc.relationship.Relationship;
-import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
 import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
 
 /**

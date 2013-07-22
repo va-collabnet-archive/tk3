@@ -18,7 +18,7 @@ import org.ihtsdo.otf.tcc.api.refex.type_boolean.RefexBooleanAnalogBI;
 import org.ihtsdo.otf.tcc.api.refex.type_boolean.RefexBooleanVersionBI;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_boolean.TtkRefexBooleanMemberChronicle;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_boolean.TtkRefexBooleanRevision;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 public class BooleanMember extends RefexMember<BooleanRevision, BooleanMember>
@@ -91,7 +91,7 @@ public class BooleanMember extends RefexMember<BooleanRevision, BooleanMember>
     }
 
     @Override
-    public BooleanRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+    public BooleanRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
         BooleanRevision newR = new BooleanRevision(status, time,
                 authorNid, moduleNid, pathNid, this);
 
@@ -163,13 +163,13 @@ public class BooleanMember extends RefexMember<BooleanRevision, BooleanMember>
     }
 
     @Override
-    protected ToolkitRefexType getTkRefsetType() {
-        return ToolkitRefexType.BOOLEAN;
+    protected RefexType getTkRefsetType() {
+        return RefexType.BOOLEAN;
     }
 
     @Override
     public int getTypeNid() {
-        return ToolkitRefexType.BOOLEAN.getTypeToken();
+        return RefexType.BOOLEAN.getTypeToken();
     }
 
     @Override

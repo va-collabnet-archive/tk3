@@ -32,5 +32,5 @@ public interface RefexAnalogBI<R extends RefexRevision<R, ?>>
     void setReferencedComponentNid(int componentNid) throws PropertyVetoException;
 
     @Override
-    R makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid);
+    R makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid);
 }

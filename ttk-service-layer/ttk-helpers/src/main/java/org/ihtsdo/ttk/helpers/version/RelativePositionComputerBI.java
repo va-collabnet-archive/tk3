@@ -16,9 +16,9 @@
 package org.ihtsdo.ttk.helpers.version;
 
 import java.io.IOException;
-import org.ihtsdo.otf.tcc.api.PositionBI;
-import org.ihtsdo.otf.tcc.api.Precedence;
-import org.ihtsdo.otf.tcc.api.VersionPointBI;
+import org.ihtsdo.otf.tcc.api.coordinate.PositionBI;
+import org.ihtsdo.otf.tcc.api.coordinate.Precedence;
+import org.ihtsdo.otf.tcc.api.coordinate.VersionPointBI;
 
 /**
  *

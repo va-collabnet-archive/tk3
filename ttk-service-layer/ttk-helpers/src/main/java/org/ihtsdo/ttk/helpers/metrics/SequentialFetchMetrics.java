@@ -20,10 +20,10 @@ package org.ihtsdo.ttk.helpers.metrics;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
-import org.ihtsdo.otf.tcc.api.ConceptFetcherBI;
-import org.ihtsdo.otf.tcc.api.ProcessComponentChronicleBI;
-import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptFetcherBI;
+import org.ihtsdo.otf.tcc.api.chronicle.ProcessComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.concept.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -32,7 +32,7 @@ import java.io.IOException;
 
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.nid.NativeIdSetBI;
 
 /**
  *

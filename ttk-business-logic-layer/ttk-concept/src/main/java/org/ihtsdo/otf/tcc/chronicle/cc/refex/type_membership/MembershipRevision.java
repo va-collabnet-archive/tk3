@@ -8,11 +8,11 @@ import com.sleepycat.bind.tuple.TupleOutput;
 
 
 import org.ihtsdo.otf.tcc.chronicle.cc.refex.RefexRevision;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
-import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.refex.RefexType;
 import org.ihtsdo.otf.tcc.dto.component.refex.type_member.TtkRefexRevision;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import java.util.*;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.coordinate.Status;
 import org.ihtsdo.otf.tcc.api.refex.type_member.RefexMemberAnalogBI;
 
 public class MembershipRevision extends RefexRevision<MembershipRevision, MembershipMember> 
@@ -86,7 +86,7 @@ public class MembershipRevision extends RefexRevision<MembershipRevision, Member
    }
 
    @Override
-   public MembershipRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public MembershipRevision makeAnalog(org.ihtsdo.otf.tcc.api.coordinate.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatus(status);
          this.setAuthorNid(authorNid);
@@ -130,8 +130,8 @@ public class MembershipRevision extends RefexRevision<MembershipRevision, Member
    //~--- get methods ---------------------------------------------------------
 
     @Override
-   protected ToolkitRefexType getTkRefsetType() {
-      return ToolkitRefexType.MEMBER;
+   protected RefexType getTkRefsetType() {
+      return RefexType.MEMBER;
    }
 
    @Override

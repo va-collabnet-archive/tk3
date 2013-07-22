@@ -7,12 +7,12 @@ package org.ihtsdo.otf.tcc.rest.server;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
-import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
-import org.ihtsdo.ttk.fx.fetchpolicy.RelationshipPolicy;
-import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
-import org.ihtsdo.otf.tcc.api.ContradictionException;
-import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RefexPolicy;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.RelationshipPolicy;
+import org.ihtsdo.otf.tcc.ddo.fetchpolicy.VersionPolicy;
+import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
+import org.ihtsdo.otf.tcc.api.store.TerminologySnapshotDI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.dto.TtkConceptChronicle;
@@ -117,7 +117,7 @@ public class FxConceptResource {
    @GET
    @Path("{id}/{vcUuid}")
    @Produces("application/xml")
-   public FxConceptChronicle getConceptXml(@PathParam("id") String id, @PathParam("vcUuid") String vcUuid)
+   public ConceptChronicleDdo getConceptXml(@PathParam("id") String id, @PathParam("vcUuid") String vcUuid)
            throws IOException, ContradictionException {
       ConceptChronicleBI c;
 
@@ -130,14 +130,14 @@ public class FxConceptResource {
       ViewCoordinate        vc   = BdbSingleton.get().getViewCoordinate(UUID.fromString(vcUuid));
       TerminologySnapshotDI snap = BdbSingleton.get().getSnapshot(vc);
 
-      return new FxConceptChronicle(snap, c, VersionPolicy.ALL_VERSIONS, RefexPolicy.REFEX_MEMBERS,
+      return new ConceptChronicleDdo(snap, c, VersionPolicy.ALL_VERSIONS, RefexPolicy.REFEX_MEMBERS,
                            RelationshipPolicy.ORIGINATING_RELATIONSHIPS);
    }
 
    @GET
    @Path("{id}/{vcUuid}/{versionPolicy}/{refexPolicy}/{relationshipPolicy}")
    @Produces("application/xml")
-   public FxConceptChronicle getConceptXmlPerPolicy(@PathParam("id") String id, @PathParam("vcUuid") String vcUuid,
+   public ConceptChronicleDdo getConceptXmlPerPolicy(@PathParam("id") String id, @PathParam("vcUuid") String vcUuid,
            @PathParam("versionPolicy") VersionPolicy versionPolicy,
            @PathParam("refexPolicy") RefexPolicy refexPolicy,
            @PathParam("relationshipPolicy") RelationshipPolicy relationshipPolicy)
@@ -153,7 +153,7 @@ public class FxConceptResource {
       ViewCoordinate        vc   = BdbSingleton.get().getViewCoordinate(UUID.fromString(vcUuid));
       TerminologySnapshotDI snap = BdbSingleton.get().getSnapshot(vc);
 
-      return new FxConceptChronicle(snap, c, versionPolicy, refexPolicy, relationshipPolicy);
+      return new ConceptChronicleDdo(snap, c, versionPolicy, refexPolicy, relationshipPolicy);
    }
 
    @GET

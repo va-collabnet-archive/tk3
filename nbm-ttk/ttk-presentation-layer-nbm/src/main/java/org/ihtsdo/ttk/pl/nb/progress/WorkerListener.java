@@ -22,7 +22,7 @@ package org.ihtsdo.ttk.pl.nb.progress;
 
 import javafx.concurrent.Worker;
 
-import org.ihtsdo.ttk.fx.progress.AggregateProgressItem;
+import org.ihtsdo.otf.tcc.ddo.progress.AggregateProgressItem;
 import org.ihtsdo.ttk.lookup.InstanceWrapper;
 import org.ihtsdo.ttk.lookup.properties.AllowItemCancel;
 import org.ihtsdo.ttk.lookup.properties.ShowGlobalTaskProgress;
