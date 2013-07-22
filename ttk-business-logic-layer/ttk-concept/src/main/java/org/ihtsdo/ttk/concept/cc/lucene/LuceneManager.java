@@ -20,11 +20,9 @@ import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 
-import org.ihtsdo.ttk.api.NidBitSetBI;
-import org.ihtsdo.ttk.api.NidBitSetItrBI;
+import org.ihtsdo.ttk.api.NativeIdSetItrBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.concept.cc.component.IdentifierSet;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.description.Description;
 import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
@@ -45,13 +43,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.lucene.index.IndexNotFoundException;
+import org.ihtsdo.ttk.api.ConcurrentBitSet;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.description.DescriptionChronicleBI;
 
 public abstract class LuceneManager {
 
     protected static final Logger logger = Logger.getLogger(ConceptChronicle.class.getName());
-    private static NidBitSetBI uncommittedDescNids = new IdentifierSet();
+    private static NativeIdSetBI uncommittedDescNids = new ConcurrentBitSet();
     protected static DescriptionIndexGenerator descIndexer = null;
     public final static Version version = Version.LUCENE_40;
     private static Semaphore initSemaphore = new Semaphore(1);
@@ -67,7 +67,7 @@ public abstract class LuceneManager {
     public static void commitDescriptionsToLucene() throws InterruptedException {
         luceneWriterPermit.acquire();
 
-        IdentifierSet descNidsToCommit = new IdentifierSet((IdentifierSet) uncommittedDescNids);
+        NativeIdSetBI descNidsToCommit = new ConcurrentBitSet(uncommittedDescNids);
 
         uncommittedDescNids.clear();
         luceneWriterService.execute(new DescLuceneWriter(descNidsToCommit));
@@ -76,7 +76,7 @@ public abstract class LuceneManager {
     public static void commitDescriptionsToLucene(ConceptChronicle c) throws InterruptedException, IOException {
         luceneWriterPermit.acquire();
 
-        IdentifierSet descNidsToCommit = new IdentifierSet();
+        NativeIdSetBI descNidsToCommit = new ConcurrentBitSet();
 
         for (int dnid : c.getDescriptionNids()) {
             descNidsToCommit.setMember(dnid);
@@ -364,9 +364,9 @@ public abstract class LuceneManager {
     private static class DescLuceneWriter implements Runnable {
 
         private int batchSize = 200;
-        private IdentifierSet descNidsToWrite;
+        private NativeIdSetBI descNidsToWrite;
 
-        public DescLuceneWriter(IdentifierSet descNidsToCommit) {
+        public DescLuceneWriter(NativeIdSetBI descNidsToCommit) {
             super();
             this.descNidsToWrite = descNidsToCommit;
         }
@@ -375,7 +375,7 @@ public abstract class LuceneManager {
         public void run() {
             try {
                 ArrayList<Description> toIndex = new ArrayList<>(batchSize + 1);
-                NidBitSetItrBI idItr = descNidsToWrite.iterator();
+                NativeIdSetItrBI idItr = descNidsToWrite.getIterator();
                 int count = 0;
 
                 while (idItr.next()) {

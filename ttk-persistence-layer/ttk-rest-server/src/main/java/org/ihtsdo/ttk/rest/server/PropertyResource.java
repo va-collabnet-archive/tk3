@@ -12,9 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.StreamingOutput;
-import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 
 /**
  *
@@ -22,8 +20,9 @@ import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
  */
 @Path("/property")
 public class PropertyResource {
-    @Context
-    PersistentStoreI ts;
+    static {
+        BdbSingleton.get();
+    }
         
     @GET
     @Path("")
@@ -34,7 +33,7 @@ public class PropertyResource {
             @Override
             public void write(OutputStream output) throws IOException, WebApplicationException {
                 ObjectOutputStream oos = new ObjectOutputStream(output);
-                oos.writeObject(ts.getProperties());
+                oos.writeObject(BdbSingleton.get().getProperties());
             }
         };
     }
@@ -43,7 +42,7 @@ public class PropertyResource {
     @Path("{key}")
     @Produces("text/plain")
     public String getProperty(@PathParam("key") String key) throws IOException  {
-        return ts.getProperty(key);
+        return BdbSingleton.get().getProperty(key);
     }
 
     

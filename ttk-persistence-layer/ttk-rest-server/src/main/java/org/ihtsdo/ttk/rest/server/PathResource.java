@@ -13,10 +13,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.StreamingOutput;
 import org.ihtsdo.ttk.api.PathBI;
-import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 
 /**
  *
@@ -24,9 +22,10 @@ import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
  */
 @Path("/path")
 public class PathResource {
+    static {
+        BdbSingleton.get();
+    }
     
-    @Context
-    PersistentStoreI ts;
 
     @GET
     @Path("{id}")
@@ -35,7 +34,7 @@ public class PathResource {
         final int pathNid;
         if (id.length() == 36) {
             UUID uuid = UUID.fromString(id);
-            pathNid = ts.getNidForUuids(uuid);
+            pathNid = BdbSingleton.get().getNidForUuids(uuid);
         } else {
             pathNid = Integer.parseInt(id);
         }
@@ -43,7 +42,7 @@ public class PathResource {
 
             @Override
             public void write(OutputStream output) throws IOException, WebApplicationException {
-                PathBI path = ts.getPath(pathNid);
+                PathBI path = BdbSingleton.get().getPath(pathNid);
                 ObjectOutputStream oos = new ObjectOutputStream(output);
                 oos.writeObject(path);
             }

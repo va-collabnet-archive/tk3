@@ -12,9 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.StreamingOutput;
-import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 
 /**
  *
@@ -22,8 +20,9 @@ import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
  */
 @Path("/nidpairs/refex")
 public class RefexPairResource {
-    @Context
-    PersistentStoreI ts;
+    static {
+        BdbSingleton.get();
+    }
         
     @GET
     @Path("{nid}")
@@ -34,7 +33,7 @@ public class RefexPairResource {
             @Override
             public void write(OutputStream output) throws IOException, WebApplicationException {
                 ObjectOutputStream oos = new ObjectOutputStream(output);
-                oos.writeObject(ts.getRefexPairs(nid));
+                oos.writeObject(BdbSingleton.get().getRefexPairs(nid));
             }
         };
     }

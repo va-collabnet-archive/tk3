@@ -35,9 +35,6 @@ import org.ihtsdo.ttk.api.ConceptContainerBI;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.ContradictionManagerBI;
 import org.ihtsdo.ttk.api.ExternalStampBI;
-import org.ihtsdo.ttk.api.NidBitSetBI;
-import org.ihtsdo.ttk.api.NidSet;
-import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.PathBI;
 import org.ihtsdo.ttk.api.PositionBI;
 import org.ihtsdo.ttk.api.PositionSetBI;
@@ -80,6 +77,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
 
@@ -876,7 +874,7 @@ public abstract class Termstore implements PersistentStoreI {
     * @throws IOException
     */
    @Override
-   public Map<Integer, ConceptVersionBI> getConceptVersions(ViewCoordinate c, NidBitSetBI cNids)
+   public Map<Integer, ConceptVersionBI> getConceptVersions(ViewCoordinate c, NativeIdSetBI cNids)
            throws IOException {
       ConceptVersionGetter processor = new ConceptVersionGetter(cNids, c);
 
@@ -900,7 +898,7 @@ public abstract class Termstore implements PersistentStoreI {
     * @throws IOException
     */
    @Override
-   public Map<Integer, ConceptChronicleBI> getConcepts(NidBitSetBI cNids) throws IOException {
+   public Map<Integer, ConceptChronicleBI> getConcepts(NativeIdSetBI cNids) throws IOException {
       ConceptGetter processor = new ConceptGetter(cNids);
 
       try {

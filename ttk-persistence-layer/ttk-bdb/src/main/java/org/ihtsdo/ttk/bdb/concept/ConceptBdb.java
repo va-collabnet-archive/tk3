@@ -15,15 +15,11 @@ import javafx.application.Platform;
 
 import javafx.concurrent.Worker;
 
-import org.ihtsdo.ttk.api.NidBitSetBI;
-import org.ihtsdo.ttk.api.NidBitSetItrBI;
+import org.ihtsdo.ttk.api.NativeIdSetItrBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.bdb.Bdb;
 import org.ihtsdo.ttk.bdb.ComponentBdb;
 import org.ihtsdo.ttk.bdb.id.NidCNidMapBdb;
-import org.ihtsdo.ttk.concept.cc.component.IdentifierSet;
-import org.ihtsdo.ttk.concept.cc.component.IdentifierSetReadOnly;
-import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.fx.progress.AggregateProgressItem;
 import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
 import org.ihtsdo.ttk.lookup.Looker;
@@ -47,6 +43,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import org.ihtsdo.ttk.api.ConcurrentBitSet;
+import org.ihtsdo.ttk.api.ConcurrentBitSetReadOnly;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
 
 /**
@@ -69,7 +69,7 @@ public class ConceptBdb extends ComponentBdb {
       Executors.newCachedThreadPool(new NamedThreadFactory(conDbThreadGroup, "parallel iterator service"));
 
    /** Field description */
-   private IdentifierSet conceptIdSet;
+   private NativeIdSetBI conceptIdSet;
 
    /**
     * Constructs ...
@@ -137,18 +137,18 @@ public class ConceptBdb extends ComponentBdb {
            throws IOException, InterruptedException, ExecutionException {
 
       // AceLog.getAppLog().info("Iterate in parallel. Executors: " + executors);
-      IdentifierSet ids = (IdentifierSet) processor.getNidSet();
+      NativeIdSetBI ids = processor.getNidSet();
 
       if (ids == null) {
          ids = getReadOnlyConceptIdSet();
       }
 
       boolean useFx                         = Looker.lookup(TtkEnvironment.class).useFxWorkers();
-      int     cardinality                   = ids.cardinality();
+      int     cardinality                   = ids.size();
       int     idsPerParallelConceptIterator = cardinality / executors;
 
       // AceLog.getAppLog().info("Iterate in parallel. idsPerParallelConceptIterator: " + idsPerParallelConceptIterator);
-      NidBitSetItrBI  idsItr  = ids.iterator();
+      NativeIdSetItrBI  idsItr  = ids.getIterator();
       List<Future<?>> futures = new ArrayList<>(executors + 1);
 
       // TODO: add optimizations that make use of the PCI. Search in old workbench for examples.
@@ -314,8 +314,8 @@ public class ConceptBdb extends ComponentBdb {
     * @return a mutable bit set, with all concept identifiers set to true.
     * @throws IOException
     */
-   public NidBitSetBI getConceptNidSet() throws IOException {
-      return new IdentifierSet(conceptIdSet);
+   public NativeIdSetBI getConceptNidSet() throws IOException {
+      return new ConcurrentBitSet(conceptIdSet);
    }
 
    /**
@@ -349,8 +349,8 @@ public class ConceptBdb extends ComponentBdb {
     *
     * @throws IOException
     */
-   public NidBitSetBI getEmptyIdSet() throws IOException {
-      return new IdentifierSet(getReadOnlyConceptIdSet().totalBits());
+   public NativeIdSetBI getEmptyIdSet() throws IOException {
+      return new ConcurrentBitSet(getReadOnlyConceptIdSet().size());
    }
 
    /**
@@ -358,23 +358,23 @@ public class ConceptBdb extends ComponentBdb {
     * @return a read-only bit set, with all concept identifiers set to true.
     * @throws IOException
     */
-   public final IdentifierSetReadOnly getReadOnlyConceptIdSet() throws IOException {
+   public final ConcurrentBitSetReadOnly getReadOnlyConceptIdSet() throws IOException {
       if (conceptIdSet == null) {
          GetCNids readOnlyGetter = new GetCNids(readOnly);
          GetCNids mutableGetter  = new GetCNids(mutable);
 
          try {
-            IdentifierSet readOnlyMap = readOnlyGetter.call();
-            IdentifierSet mutableMap  = mutableGetter.call();
+            ConcurrentBitSet readOnlyMap = readOnlyGetter.call();
+            ConcurrentBitSet mutableMap  = mutableGetter.call();
 
             readOnlyMap.or(mutableMap);
-            conceptIdSet = new IdentifierSet(readOnlyMap);
+            conceptIdSet = new ConcurrentBitSet(readOnlyMap);
          } catch (Exception e) {
             throw new IOException(e);
          }
       }
 
-      return new IdentifierSetReadOnly(conceptIdSet);
+      return new ConcurrentBitSetReadOnly(conceptIdSet);
    }
 
    /**
@@ -412,7 +412,7 @@ public class ConceptBdb extends ComponentBdb {
     * @version        Enter version here..., 13/04/25
     * @author         Enter your name here...
     */
-   private static class GetCNids implements Callable<IdentifierSet> {
+   private static class GetCNids implements Callable<ConcurrentBitSet> {
 
       /** Field description */
       private Database db;
@@ -437,9 +437,9 @@ public class ConceptBdb extends ComponentBdb {
        * @throws Exception
        */
       @Override
-      public IdentifierSet call() throws Exception {
+      public ConcurrentBitSet call() throws Exception {
          int           size         = (int) db.count();
-         IdentifierSet nidMap       = new IdentifierSet(size + 2);
+         ConcurrentBitSet nidMap       = new ConcurrentBitSet(size + 2);
          CursorConfig  cursorConfig = new CursorConfig();
 
          cursorConfig.setReadUncommitted(true);

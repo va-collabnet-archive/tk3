@@ -5,12 +5,11 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
-import org.ihtsdo.ttk.api.NidBitSetBI;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
@@ -21,7 +20,7 @@ public class ChangeSetWriterHandler implements Runnable, ProcessUnfetchedConcept
 
    private static ConcurrentHashMap<String, ChangeSetGeneratorBI> writerMap = new ConcurrentHashMap<>();
    public static AtomicInteger changeSetWriters = new AtomicInteger();
-   private NidBitSetBI cNidsToWrite;
+   private NativeIdSetBI cNidsToWrite;
    private long commitTime;
    private String commitTimeStr;
    private NidSetBI sapNidsFromCommit;
@@ -33,17 +32,17 @@ public class ChangeSetWriterHandler implements Runnable, ProcessUnfetchedConcept
    private ChangeSetGenerationPolicy changeSetPolicy;
    private List<ChangeSetGeneratorBI> writerListForHandler;
 
-   public ChangeSetWriterHandler(NidBitSetBI cNidsToWrite,
+   public ChangeSetWriterHandler(NativeIdSetBI cNidsToWrite,
            long commitTime, NidSetBI sapNidsFromCommit, ChangeSetGenerationPolicy changeSetPolicy,
            ChangeSetWriterThreading changeSetWriterThreading) {
       super();
       assert commitTime != Long.MAX_VALUE;
       assert commitTime != Long.MIN_VALUE;
       this.cNidsToWrite = cNidsToWrite;
-      changedCount = cNidsToWrite.cardinality();
+      changedCount = cNidsToWrite.size();
       this.commitTime = commitTime;
       this.commitTimeStr = TimeHelper.formatDate(commitTime)
-              + " (" + cNidsToWrite.cardinality() + " concepts)";
+              + " (" + cNidsToWrite.size() + " concepts)";
       this.sapNidsFromCommit = sapNidsFromCommit;
       this.changeSetWriterThreading = changeSetWriterThreading;
       changeSetWriters.incrementAndGet();
@@ -109,7 +108,7 @@ public class ChangeSetWriterHandler implements Runnable, ProcessUnfetchedConcept
    }
 
    @Override
-   public NidBitSetBI getNidSet() {
+   public NativeIdSetBI getNidSet() {
       return cNidsToWrite;
    }
 

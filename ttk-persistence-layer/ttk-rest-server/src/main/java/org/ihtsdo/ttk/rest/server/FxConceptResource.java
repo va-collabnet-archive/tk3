@@ -30,10 +30,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.StreamingOutput;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptDataFetcherI;
-import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 
 /**
  *
@@ -41,8 +39,9 @@ import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
  */
 @Path("/fx-concept")
 public class FxConceptResource {
-   @Context
-   PersistentStoreI ts;
+    static {
+        BdbSingleton.get();
+    }
 
    //~--- get methods ---------------------------------------------------------
 
@@ -56,12 +55,12 @@ public class FxConceptResource {
       if (id.length() == 36) {
          UUID uuid = UUID.fromString(id);
 
-         cnid = ts.getNidForUuids(uuid);
+         cnid = BdbSingleton.get().getNidForUuids(uuid);
       } else {
          cnid = Integer.parseInt(id);
       }
 
-      final ConceptDataFetcherI fetcher = ts.getConceptDataFetcher(cnid);
+      final ConceptDataFetcherI fetcher = BdbSingleton.get().getConceptDataFetcher(cnid);
 
       return new StreamingOutput() {
          @Override
@@ -91,9 +90,9 @@ public class FxConceptResource {
       ConceptChronicleBI c;
 
       if (id.length() == 36) {
-         c = ts.getConcept(UUID.fromString(id));
+         c = BdbSingleton.get().getConcept(UUID.fromString(id));
       } else {
-         c = ts.getConcept(Integer.parseInt(id));
+         c = BdbSingleton.get().getConcept(Integer.parseInt(id));
       }
 
       return "Concept html: " + id + " " + c.toLongString();
@@ -107,9 +106,9 @@ public class FxConceptResource {
       ConceptChronicleBI c;
 
       if (id.length() == 36) {
-         c = ts.getConcept(UUID.fromString(id));
+         c = BdbSingleton.get().getConcept(UUID.fromString(id));
       } else {
-         c = ts.getConcept(Integer.parseInt(id));
+         c = BdbSingleton.get().getConcept(Integer.parseInt(id));
       }
 
       return "Concept plain: " + id + " " + c.toLongString();
@@ -123,13 +122,13 @@ public class FxConceptResource {
       ConceptChronicleBI c;
 
       if (id.length() == 36) {
-         c = ts.getConcept(UUID.fromString(id));
+         c = BdbSingleton.get().getConcept(UUID.fromString(id));
       } else {
-         c = ts.getConcept(Integer.parseInt(id));
+         c = BdbSingleton.get().getConcept(Integer.parseInt(id));
       }
 
-      ViewCoordinate        vc   = ts.getViewCoordinate(UUID.fromString(vcUuid));
-      TerminologySnapshotDI snap = ts.getSnapshot(vc);
+      ViewCoordinate        vc   = BdbSingleton.get().getViewCoordinate(UUID.fromString(vcUuid));
+      TerminologySnapshotDI snap = BdbSingleton.get().getSnapshot(vc);
 
       return new FxConceptChronicle(snap, c, VersionPolicy.ALL_VERSIONS, RefexPolicy.REFEX_MEMBERS,
                            RelationshipPolicy.ORIGINATING_RELATIONSHIPS);
@@ -146,13 +145,13 @@ public class FxConceptResource {
       ConceptChronicleBI c;
 
       if (id.length() == 36) {
-         c = ts.getConcept(UUID.fromString(id));
+         c = BdbSingleton.get().getConcept(UUID.fromString(id));
       } else {
-         c = ts.getConcept(Integer.parseInt(id));
+         c = BdbSingleton.get().getConcept(Integer.parseInt(id));
       }
 
-      ViewCoordinate        vc   = ts.getViewCoordinate(UUID.fromString(vcUuid));
-      TerminologySnapshotDI snap = ts.getSnapshot(vc);
+      ViewCoordinate        vc   = BdbSingleton.get().getViewCoordinate(UUID.fromString(vcUuid));
+      TerminologySnapshotDI snap = BdbSingleton.get().getSnapshot(vc);
 
       return new FxConceptChronicle(snap, c, versionPolicy, refexPolicy, relationshipPolicy);
    }
@@ -165,9 +164,9 @@ public class FxConceptResource {
       ConceptChronicleBI c;
 
       if (id.length() == 36) {
-         c = ts.getConcept(UUID.fromString(id));
+         c = BdbSingleton.get().getConcept(UUID.fromString(id));
       } else {
-         c = ts.getConcept(Integer.parseInt(id));
+         c = BdbSingleton.get().getConcept(Integer.parseInt(id));
       }
 
       final TtkConceptChronicle econ = new TtkConceptChronicle(c);

@@ -9,7 +9,6 @@ import org.ihtsdo.ttk.api.ContradictionManagerBI;
 import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.NidSet;
 import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.RelAssertionType;
 import org.ihtsdo.ttk.api.PositionBI;
 import java.io.DataInputStream;
@@ -21,6 +20,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.ttk.api.Status;
 import org.ihtsdo.ttk.concept.jsr166y.ConcurrentReferenceHashMap;
 import org.ihtsdo.ttk.concept.cc.LanguageSortPrefs.LANGUAGE_SORT_PREF;
@@ -203,7 +203,7 @@ public class ConceptChronicle implements ConceptChronicleBI, Comparable<ConceptC
         }
     }
 
-    private void collectPossibleKindOf(NidSetBI isATypes, NidBitSetBI possibleKindOfConcepts, int cNid)
+    private void collectPossibleKindOf(NidSetBI isATypes, NativeIdSetBI possibleKindOfConcepts, int cNid)
             throws IOException {
         for (int cNidForOrigin : P.s.getDestRelOriginNids(cNid, isATypes)) {
             if (possibleKindOfConcepts.isMember(cNidForOrigin) == false) {
@@ -1234,8 +1234,8 @@ public class ConceptChronicle implements ConceptChronicleBI, Comparable<ConceptC
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public NidBitSetBI getPossibleKindOfConcepts(NidSetBI isATypes) throws IOException {
-        NidBitSetBI possibleKindOfConcepts = P.s.getEmptyNidSet();
+    public NativeIdSetBI getPossibleKindOfConcepts(NidSetBI isATypes) throws IOException {
+        NativeIdSetBI possibleKindOfConcepts = P.s.getEmptyNidSet();
 
         possibleKindOfConcepts.setMember(getNid());
         collectPossibleKindOf(isATypes, possibleKindOfConcepts, nid);

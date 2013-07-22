@@ -31,7 +31,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
-import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 
 /**
  *
@@ -39,9 +38,11 @@ import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
  */
 @Path("/coordinate/view")
 public class ViewCoordinateResource {
-   @Context
-   PersistentStoreI ts;
-   @Context
+    static {
+        BdbSingleton.get();
+    }
+
+    @Context
    UriInfo          uriInfo;
 
    //~--- methods -------------------------------------------------------------
@@ -55,7 +56,7 @@ public class ViewCoordinateResource {
       ObjectInputStream ois = new ObjectInputStream(is);
       ViewCoordinate    vc  = (ViewCoordinate) ois.readObject();
 
-      ts.putViewCoordinate(vc);
+      BdbSingleton.get().putViewCoordinate(vc);
 
       return Response.created(uriInfo.getAbsolutePath()).build();
    }
@@ -71,7 +72,7 @@ public class ViewCoordinateResource {
          public void write(OutputStream output) throws IOException, WebApplicationException {
             ObjectOutputStream oos = new ObjectOutputStream(output);
 
-            oos.writeObject(ts.getViewCoordinate(UUID.fromString(uuidStr)));
+            oos.writeObject(BdbSingleton.get().getViewCoordinate(UUID.fromString(uuidStr)));
          }
       };
    }
@@ -85,7 +86,7 @@ public class ViewCoordinateResource {
          public void write(OutputStream output) throws IOException, WebApplicationException {
             ObjectOutputStream oos = new ObjectOutputStream(output);
 
-            oos.writeObject(ts.getViewCoordinates());
+            oos.writeObject(BdbSingleton.get().getViewCoordinates());
          }
       };
    }

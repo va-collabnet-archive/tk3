@@ -31,7 +31,6 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.ihtsdo.ttk.api.ComponentBI;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
@@ -47,6 +46,7 @@ import au.csiro.ontology.axioms.IAxiom;
 import au.csiro.ontology.axioms.RoleInclusion;
 import au.csiro.ontology.model.IConcept;
 import au.csiro.ontology.model.INamedRole;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
@@ -54,8 +54,8 @@ import au.csiro.ontology.model.INamedRole;
  * @author kec
  */
 public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
-    NidBitSetBI                         kindOfConcepts;
-    NidBitSetBI                         roleConcepts;
+    NativeIdSetBI                         kindOfConcepts;
+    NativeIdSetBI                         roleConcepts;
     Factory<String>                       f;
     ConcurrentSkipListSet<IAxiom>       axioms;
     ViewCoordinate                      vc;
@@ -65,15 +65,15 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
 	ConcurrentHashMap<String, INamedRole> roles;
     Set<String>                           neverGroupedUuids;
 
-    public AxiomConstructor(NidBitSetBI kindOfConcepts, NidBitSetBI roleConcepts, Factory<String> f, ViewCoordinate vc)
+    public AxiomConstructor(NativeIdSetBI kindOfConcepts, NativeIdSetBI roleConcepts, Factory<String> f, ViewCoordinate vc)
             throws IOException, ValidationException {
         this.kindOfConcepts = kindOfConcepts;
         this.roleConcepts   = roleConcepts;
         this.f              = f;
         this.vc             = vc;
         axioms              = new ConcurrentSkipListSet<>();
-        concepts            = new ConcurrentHashMap<>(kindOfConcepts.cardinality());
-        roles               = new ConcurrentHashMap<>(roleConcepts.cardinality());
+        concepts            = new ConcurrentHashMap<>(kindOfConcepts.size());
+        roles               = new ConcurrentHashMap<>(roleConcepts.size());
         roleGroup           = f.createRole("RoleGroup");
 
         // Add right identity for SNOMED.
@@ -208,7 +208,7 @@ public class AxiomConstructor implements ProcessUnfetchedConceptDataBI {
     }
 
     @Override
-    public NidBitSetBI getNidSet() throws IOException {
+    public NativeIdSetBI getNidSet() throws IOException {
         return kindOfConcepts;
     }
 

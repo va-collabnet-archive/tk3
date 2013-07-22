@@ -19,7 +19,6 @@ import org.ihtsdo.ttk.helpers.concurrency.ConcurrentReentrantLocks;
 import org.ihtsdo.ttk.helpers.version.RelativePositionComputer;
 import org.ihtsdo.ttk.helpers.version.RelativePositionComputerBI;
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.PositionBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
@@ -38,6 +37,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import org.apache.mahout.math.map.OpenIntIntHashMap;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
@@ -594,8 +594,8 @@ found:
         return indexCacheRecord.isChildOf(parentNid, vc, computer);
     }
 
-    public NidBitSetBI getKindOfNids(int conceptNid, ViewCoordinate vc) throws IOException, ContradictionException {
-        NidBitSetBI   kindOfSet = Bdb.getConceptDb().getEmptyIdSet();
+    public NativeIdSetBI getKindOfNids(int conceptNid, ViewCoordinate vc) throws IOException, ContradictionException {
+        NativeIdSetBI   kindOfSet = Bdb.getConceptDb().getEmptyIdSet();
         HashSet<Long> testedSet = new HashSet<>();
 
         kindOfSet.setMember(conceptNid);
@@ -604,7 +604,7 @@ found:
         return kindOfSet;
     }
 
-    private void getKindOfNids(int conceptNid, ViewCoordinate vc, NidBitSetBI kindOfSet, HashSet<Long> testedSet)
+    private void getKindOfNids(int conceptNid, ViewCoordinate vc, NativeIdSetBI kindOfSet, HashSet<Long> testedSet)
             throws IOException, ContradictionException {
         for (int cNid : getIndexCacheRecord(conceptNid).getDestinationOriginNids()) {
             long testedKey = conceptNid;

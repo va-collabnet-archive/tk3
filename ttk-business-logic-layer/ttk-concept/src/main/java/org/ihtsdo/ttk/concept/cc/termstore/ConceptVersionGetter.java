@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptVersion;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
-import org.ihtsdo.ttk.api.NidBitSetBI;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
@@ -32,12 +32,12 @@ import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
  */
 class ConceptVersionGetter implements ProcessUnfetchedConceptDataBI {
     Map<Integer, ConceptVersionBI> conceptMap = new ConcurrentHashMap<>();
-    NidBitSetBI cNids;
+    NativeIdSetBI cNids;
     ViewCoordinate coordinate;
 
     //~--- constructors -----------------------------------------------------
     //~--- constructors -----------------------------------------------------
-    public ConceptVersionGetter(NidBitSetBI cNids, ViewCoordinate c) {
+    public ConceptVersionGetter(NativeIdSetBI cNids, ViewCoordinate c) {
         super();
         this.cNids = cNids;
         this.coordinate = c;
@@ -59,7 +59,7 @@ class ConceptVersionGetter implements ProcessUnfetchedConceptDataBI {
 
     //~--- get methods ------------------------------------------------------
     @Override
-    public NidBitSetBI getNidSet() throws IOException {
+    public NativeIdSetBI getNidSet() throws IOException {
         return cNids;
     }
 

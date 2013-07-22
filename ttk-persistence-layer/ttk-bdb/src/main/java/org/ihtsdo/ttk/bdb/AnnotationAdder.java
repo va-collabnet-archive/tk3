@@ -22,10 +22,8 @@ package org.ihtsdo.ttk.bdb;
 
 import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.bdb.temp.AceLog;
-import org.ihtsdo.ttk.concept.cc.component.IdentifierSet;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMemberFactory;
 import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
@@ -37,6 +35,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
+import org.ihtsdo.ttk.api.ConcurrentBitSet;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 
 /**
  *
@@ -45,7 +45,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 public class AnnotationAdder implements ProcessUnfetchedConceptDataBI {
 
    /** Field description */
-   NidBitSetBI conceptNids = new IdentifierSet();
+   NativeIdSetBI conceptNids = new ConcurrentBitSet();
 
    /** Field description */
    ConcurrentHashMap<Integer, ConcurrentSkipListSet<TtkRefexAbstractMemberChronicle<?>>> membersForConcept =
@@ -152,7 +152,7 @@ public class AnnotationAdder implements ProcessUnfetchedConceptDataBI {
     * @throws IOException
     */
    @Override
-   public NidBitSetBI getNidSet() throws IOException {
+   public NativeIdSetBI getNidSet() throws IOException {
       return conceptNids;
    }
 

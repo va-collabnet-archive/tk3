@@ -10,8 +10,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 
 /**
  *
@@ -19,16 +17,15 @@ import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
  */
 @Path("/uuid")
 public class UuidResource {
+    static {
+        BdbSingleton.get();
+    }
     
-    @Context
-    PersistentStoreI ts;
-
-        
     @GET
     @Path("{uuid}")
     @Produces("text/plain")
     public String getNid(@PathParam("uuid") String uuidStr) throws IOException {
-        return Boolean.toString(ts.hasUuid(UUID.fromString(uuidStr)));
+        return Boolean.toString(BdbSingleton.get().hasUuid(UUID.fromString(uuidStr)));
     }
     
 
@@ -36,7 +33,7 @@ public class UuidResource {
     @Path("primordial/{nid}")
     @Produces("text/plain")
     public String getNid(@PathParam("nid") int nid) throws IOException {
-        return ts.getUuidPrimordialForNid(nid).toString();
+        return BdbSingleton.get().getUuidPrimordialForNid(nid).toString();
     }
     
 }

@@ -5,7 +5,6 @@ package org.ihtsdo.ttk.bdb;
 import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.ExternalStampBI;
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.PathBI;
 import org.ihtsdo.ttk.api.PositionBI;
@@ -59,6 +58,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.ttk.api.Status;
 
 public class BdbTerminologyStore extends Termstore {
@@ -380,8 +380,8 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public NidBitSetBI getAllConceptNids() throws IOException {
-      return Bdb.getConceptDb().getReadOnlyConceptIdSet();
+   public NativeIdSetBI getAllConceptNids() throws IOException {
+      return Bdb.getConceptDb().getConceptNidSet();
    }
 
    @Override
@@ -420,7 +420,7 @@ public class BdbTerminologyStore extends Termstore {
    }
 
    @Override
-   public NidBitSetBI getEmptyNidSet() throws IOException {
+   public NativeIdSetBI getEmptyNidSet() throws IOException {
       return Bdb.getConceptDb().getEmptyIdSet();
    }
 
@@ -745,6 +745,21 @@ public class BdbTerminologyStore extends Termstore {
    public void setProperty(String key, String value) throws IOException {
       Bdb.setProperty(key, value);
    }
+
+    @Override
+    public boolean isChildOf(int childNid, int parentNid, ViewCoordinate vc) throws IOException, ContradictionException {
+       return Bdb.getNidCNidMap().isChildOf(childNid, parentNid, vc);
+    }
+
+    @Override
+    public NativeIdSetBI getConceptNidsForComponentNids(NativeIdSetBI componentNativeIds) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public NativeIdSetBI getComponentNidsForConceptNids(NativeIdSetBI conceptNativeIds) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
    private static class ConceptConverter implements Runnable {
       TtkConceptChronicle                                 eConcept   = null;

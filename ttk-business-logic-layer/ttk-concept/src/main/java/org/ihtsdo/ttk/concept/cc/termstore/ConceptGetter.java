@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
-import org.ihtsdo.ttk.api.NidBitSetBI;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
 
@@ -30,10 +30,10 @@ import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
  */
 class ConceptGetter implements ProcessUnfetchedConceptDataBI {
     Map<Integer, ConceptChronicleBI> conceptMap = new ConcurrentHashMap<>();
-    NidBitSetBI cNids;
+    NativeIdSetBI cNids;
     //~--- constructors -----------------------------------------------------
     //~--- constructors -----------------------------------------------------
-    public ConceptGetter(NidBitSetBI cNids) {
+    public ConceptGetter(NativeIdSetBI cNids) {
         super();
         this.cNids = cNids;
     }
@@ -54,7 +54,7 @@ class ConceptGetter implements ProcessUnfetchedConceptDataBI {
 
     //~--- get methods ------------------------------------------------------
     @Override
-    public NidBitSetBI getNidSet() throws IOException {
+    public NativeIdSetBI getNidSet() throws IOException {
         return cNids;
     }
 

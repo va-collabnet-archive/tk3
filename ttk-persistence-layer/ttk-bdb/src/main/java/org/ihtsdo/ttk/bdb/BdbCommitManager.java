@@ -3,9 +3,8 @@ package org.ihtsdo.ttk.bdb;
 //~--- non-JDK imports --------------------------------------------------------
 import org.ihtsdo.ttk.api.NidSetBI;
 import org.ihtsdo.ttk.api.ComponentBI;
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
-import org.ihtsdo.ttk.api.NidBitSetItrBI;
+import org.ihtsdo.ttk.api.NativeIdSetItrBI;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.*;
@@ -17,6 +16,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import org.ihtsdo.ttk.api.ConcurrentBitSet;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.ttk.bdb.id.NidCNidMapBdb;
 import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
 import org.ihtsdo.ttk.bdb.temp.AceLog;
@@ -33,7 +34,6 @@ import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributesRevision;
 import org.ihtsdo.ttk.concept.cc.change.BdbCommitSequence;
 import org.ihtsdo.ttk.concept.cc.change.LastChange;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
-import org.ihtsdo.ttk.concept.cc.component.IdentifierSet;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.description.Description;
 import org.ihtsdo.ttk.concept.cc.description.DescriptionRevision;
@@ -50,8 +50,8 @@ public class BdbCommitManager {
     public static String pluginRoot = "plugins";
     private static final AtomicInteger writerCount = new AtomicInteger(0);
     private static boolean writeChangeSets = true;
-    private static NidBitSetBI uncommittedCNidsNoChecks = new IdentifierSet();
-    private static NidBitSetBI uncommittedCNids = new IdentifierSet();
+    private static NativeIdSetBI uncommittedCNidsNoChecks = new ConcurrentBitSet();
+    private static NativeIdSetBI uncommittedCNids = new ConcurrentBitSet();
     private static boolean performCreationTests = true;
     private static boolean performCommitTests = true;
     private static long lastDoUpdate = Long.MIN_VALUE;
@@ -139,8 +139,8 @@ public class BdbCommitManager {
         synchronized (uncommittedCNids) {
             synchronized (uncommittedCNidsNoChecks) {
                     try {
-                        NidBitSetItrBI uncommittedCNidsItr = uncommittedCNids.iterator();
-                        NidBitSetItrBI uncommittedCNidsNoChecksItr = uncommittedCNidsNoChecks.iterator();
+                        NativeIdSetItrBI uncommittedCNidsItr = uncommittedCNids.getIterator();
+                        NativeIdSetItrBI uncommittedCNidsNoChecksItr = uncommittedCNidsNoChecks.getIterator();
                         Set<Integer> cNidSet = new HashSet<>();
 
                         while (uncommittedCNidsItr.next()) {
@@ -190,7 +190,7 @@ public class BdbCommitManager {
         try {
             synchronized (uncommittedCNids) {
                 synchronized (uncommittedCNidsNoChecks) {
-                        NidBitSetBI allUncommitted = new IdentifierSet();
+                        NativeIdSetBI allUncommitted = new ConcurrentBitSet();
                         allUncommitted.or(uncommittedCNids);
                         allUncommitted.or(uncommittedCNidsNoChecks);
                         try {
@@ -200,7 +200,7 @@ public class BdbCommitManager {
                         }
 
                         if (performCreationTests) {
-                            NidBitSetItrBI uncommittedCNidItr = uncommittedCNids.iterator();
+                            NativeIdSetItrBI uncommittedCNidItr = uncommittedCNids.getIterator();
 
                         if (performCommit) {
                             lastCommit = Bdb.gVersion.incrementAndGet();
@@ -221,7 +221,7 @@ public class BdbCommitManager {
                                 
                             }
 
-                            NidBitSetItrBI uncommittedCNidItrNoChecks = uncommittedCNidsNoChecks.iterator();
+                            NativeIdSetItrBI uncommittedCNidItrNoChecks = uncommittedCNidsNoChecks.getIterator();
 
                             long commitTime = System.currentTimeMillis();
                             NidSetBI sapNidsFromCommit = Bdb.getStampDb().commit(commitTime);
@@ -241,7 +241,7 @@ public class BdbCommitManager {
                                     case MUTABLE_ONLY:
                                         uncommittedCNidsNoChecks.or(uncommittedCNids);
 
-                                        if (uncommittedCNidsNoChecks.cardinality() > 0) {
+                                        if (uncommittedCNidsNoChecks.size() > 0) {
                                             ChangeSetWriterHandler handler =
                                                     new ChangeSetWriterHandler(uncommittedCNidsNoChecks, commitTime,
                                                     sapNidsFromCommit, changeSetPolicy.convert(),
@@ -290,18 +290,18 @@ public class BdbCommitManager {
 
     public static boolean commit(ConceptChronicle c, ChangeSetPolicy changeSetPolicy,
             ChangeSetWriterThreading changeSetWriterThreading) {
-        if ((uncommittedCNids.cardinality() == 1) && (uncommittedCNidsNoChecks.cardinality() == 1)
+        if ((uncommittedCNids.size() == 1) && (uncommittedCNidsNoChecks.size() == 1)
                 && uncommittedCNids.isMember(c.getNid()) && uncommittedCNidsNoChecks.isMember(c.getNid())) {
             return commit(changeSetPolicy, changeSetWriterThreading);
-        } else if ((uncommittedCNids.cardinality() == 1) && (uncommittedCNidsNoChecks.cardinality() == 0)
+        } else if ((uncommittedCNids.size() == 1) && (uncommittedCNidsNoChecks.isEmpty())
                 && uncommittedCNids.isMember(c.getNid())) {
             return commit(changeSetPolicy, changeSetWriterThreading);
-        } else if ((uncommittedCNids.cardinality() == 0) && (uncommittedCNidsNoChecks.cardinality() == 1)
+        } else if ((uncommittedCNids.isEmpty()) && (uncommittedCNidsNoChecks.size() == 1)
                 && uncommittedCNidsNoChecks.isMember(c.getNid())) {
             return commit(changeSetPolicy, changeSetWriterThreading);
         }
 
-        NidBitSetBI allUncommitted = new IdentifierSet();
+        NativeIdSetBI allUncommitted = new ConcurrentBitSet();
         allUncommitted.setMember(c.getConceptNid());
         try {
             GlobalPropertyChange.fireVetoableChange(TerminologyStoreDI.CONCEPT_EVENT.PRE_COMMIT, null, allUncommitted);
@@ -325,7 +325,7 @@ public class BdbCommitManager {
 
                 long commitTime = System.currentTimeMillis();
                 NidSetBI sapNidsFromCommit = c.setCommitTime(commitTime);
-                IdentifierSet commitSet = new IdentifierSet();
+                NativeIdSetBI commitSet = new ConcurrentBitSet();
 
                 commitSet.setMember(c.getNid());
                 c.modified();
@@ -558,8 +558,8 @@ public class BdbCommitManager {
         addUncommittedNoChecks(c);
     }
 
-    private static void handleCanceledConcepts(NidBitSetBI uncommittedCNids2) throws IOException {
-        NidBitSetItrBI idItr = uncommittedCNids2.iterator();
+    private static void handleCanceledConcepts(NativeIdSetBI uncommittedCNids2) throws IOException {
+        NativeIdSetItrBI idItr = uncommittedCNids2.getIterator();
 
         while (idItr.next()) {
             try {
@@ -680,13 +680,13 @@ public class BdbCommitManager {
     public static Set<ConceptChronicle> getUncommitted() {
         try {
             Set<ConceptChronicle> returnSet = new HashSet<>();
-            NidBitSetItrBI cNidItr = uncommittedCNids.iterator();
+            NativeIdSetItrBI cNidItr = uncommittedCNids.getIterator();
 
             while (cNidItr.next()) {
                 returnSet.add(ConceptChronicle.get(cNidItr.nid()));
             }
 
-            cNidItr = uncommittedCNidsNoChecks.iterator();
+            cNidItr = uncommittedCNidsNoChecks.getIterator();
 
             while (cNidItr.next()) {
                 returnSet.add(ConceptChronicle.get(cNidItr.nid()));

@@ -6,7 +6,6 @@ import org.ihtsdo.ttk.api.ComponentContainerBI;
 import org.ihtsdo.ttk.api.ComponentVersionBI;
 import org.ihtsdo.ttk.api.ConceptContainerBI;
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.PathBI;
 import org.ihtsdo.ttk.api.PositionBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
@@ -48,6 +47,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.ttk.api.Status;
 
 /**
@@ -495,7 +495,7 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     * @throws IOException
     */
    @Override
-   public NidBitSetBI getAllConceptNids() throws IOException {
+   public NativeIdSetBI getAllConceptNids() throws IOException {
       return store.getAllConceptNids();
    }
 
@@ -703,7 +703,7 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     * @throws IOException
     */
    @Override
-   public Map<Integer, ConceptVersionBI> getConceptVersions(NidBitSetBI cNids) throws IOException {
+   public Map<Integer, ConceptVersionBI> getConceptVersions(NativeIdSetBI cNids) throws IOException {
       return store.getConceptVersions(vc, cNids);
    }
 
@@ -716,7 +716,7 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
     * @throws IOException
     */
    @Override
-   public NidBitSetBI getEmptyNidSet() throws IOException {
+   public NativeIdSetBI getEmptyNidSet() throws IOException {
       return store.getEmptyNidSet();
    }
 
@@ -1043,5 +1043,15 @@ public class TerminologySnapshot implements TerminologySnapshotDI, FxTerminology
             informAboutNid((Integer) id);
         }
         return id.toString();
+    }
+
+    @Override
+    public NativeIdSetBI getConceptNidsForComponentNids(NativeIdSetBI componentNativeIds) throws IOException {
+        return store.getConceptNidsForComponentNids(componentNativeIds);
+    }
+
+    @Override
+    public NativeIdSetBI getComponentNidsForConceptNids(NativeIdSetBI conceptNativeIds) throws IOException {
+        return store.getComponentNidsForConceptNids(conceptNativeIds);
     }
 }

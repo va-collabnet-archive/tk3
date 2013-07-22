@@ -5,12 +5,11 @@
  */
 package org.ihtsdo.ttk.rest.server;
 
-import com.sun.jersey.spi.inject.SingletonTypeInjectableProvider;
 import java.io.File;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PreDestroy;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
@@ -22,7 +21,7 @@ import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
  * @author kec
  */
 @Provider
-public class BdbSingleton extends SingletonTypeInjectableProvider<Context, PersistentStoreI> {
+public class BdbSingleton {
 
     static {
         try {
@@ -32,18 +31,19 @@ public class BdbSingleton extends SingletonTypeInjectableProvider<Context, Persi
             if (System.getProperty("BdbSingleton.BDB_LOCATION") != null) {
                 directory = System.getProperty("BdbSingleton.BDB_LOCATION");
             }
+            System.out.println("Initializing BdbSingleton from directory: " + directory);
             if (new File(directory).exists()) {
                 Ts.setup(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS, directory);
             } else {
                 Ts.setup(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS, directory);
+                System.out.println("Loading new files tp: " + directory);
 
                 File[] econFiles = new File[]{new File("/Users/kec/NetBeansProjects/econ/eConcept.econ"),
                     new File("/Users/kec/NetBeansProjects/econ/DescriptionLogicMetadata.econ")};
 
                 Ts.get().loadEconFiles(econFiles);
-                System.out.println("Finished load of eConcept.jbin");
+                System.out.println("Finished load of: " + Arrays.asList(econFiles));
             }
-        System.out.println("3. Initializing BdbSingleton.");
             Ts.get().setGlobalSnapshot(Ts.get().getSnapshot(StandardViewCoordinates.getSnomedInferredLatest()));
             Ts.get().putViewCoordinate(StandardViewCoordinates.getSnomedInferredThenStatedLatest());
             Ts.get().putViewCoordinate(StandardViewCoordinates.getSnomedStatedLatest());
@@ -52,14 +52,18 @@ public class BdbSingleton extends SingletonTypeInjectableProvider<Context, Persi
         }
     }
 
-    //~--- constructors --------------------------------------------------------
-    public BdbSingleton() {
-        super(PersistentStoreI.class, P.s);
+    public static PersistentStoreI get() {
+        return P.s;
     }
 
+    public static void close() {
+        singleton.closeBdb();
+    }
+    private static final BdbSingleton singleton = new BdbSingleton();
     //~--- methods -------------------------------------------------------------
+
     @PreDestroy
-    public void close() {
+    public void closeBdb() {
         try {
             Ts.close(Ts.EMBEDDED_BERKELEY_DB_IMPL_CLASS);
         } catch (Exception ex) {

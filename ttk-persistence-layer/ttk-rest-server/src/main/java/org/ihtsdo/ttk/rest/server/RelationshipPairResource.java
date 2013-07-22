@@ -14,10 +14,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.StreamingOutput;
 import org.ihtsdo.ttk.api.NidSet;
-import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 
 /**
  *
@@ -25,9 +23,9 @@ import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
  */
 @Path("/relationship")
 public class RelationshipPairResource {
-   @Context
-   PersistentStoreI ts;
-
+    static {
+        BdbSingleton.get();
+    }
    //~--- get methods ---------------------------------------------------------
 
    @GET
@@ -39,7 +37,7 @@ public class RelationshipPairResource {
          public void write(OutputStream output) throws IOException, WebApplicationException {
             ObjectOutputStream oos = new ObjectOutputStream(output);
 
-            oos.writeObject(ts.getDestRelOriginNids(nid));
+            oos.writeObject(BdbSingleton.get().getDestRelOriginNids(nid));
          }
       };
    }
@@ -55,7 +53,7 @@ public class RelationshipPairResource {
          public void write(OutputStream output) throws IOException, WebApplicationException {
             ObjectOutputStream oos = new ObjectOutputStream(output);
 
-            oos.writeObject(ts.getDestRelOriginNids(nid, relTypes));
+            oos.writeObject(BdbSingleton.get().getDestRelOriginNids(nid, relTypes));
          }
       };
    }

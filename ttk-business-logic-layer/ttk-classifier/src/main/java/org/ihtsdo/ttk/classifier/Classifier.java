@@ -27,7 +27,6 @@ import au.csiro.ontology.classification.IReasoner;
 import au.csiro.ontology.model.IConcept;
 import au.csiro.snorocket.core.SnorocketReasoner;
 
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.RelAssertionType;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
@@ -47,6 +46,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
 
 /**
@@ -92,7 +92,7 @@ public class Classifier {
 
       Ts.get().iterateConceptDataInSequence(kindOfFetcher);
 
-      NidBitSetBI kindOfConcepts = kindOfFetcher.getKindOfBitSet();
+      NativeIdSetBI kindOfConcepts = kindOfFetcher.getKindOfBitSet();
 
       System.out.println("Kind of fetch: "
                          + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
@@ -104,11 +104,11 @@ public class Classifier {
 
       Ts.get().iterateConceptDataInSequence(roleFetcher);
 
-      NidBitSetBI roleConcepts = roleFetcher.getKindOfBitSet();
+      NativeIdSetBI roleConcepts = roleFetcher.getKindOfBitSet();
 
       System.out.println("Role fetch: " + TimeHelper.getElapsedTimeString(System.currentTimeMillis() - time));
-      System.out.println("Kind of concepts: " + kindOfConcepts.cardinality());
-      System.out.println("Role concepts: " + roleConcepts.cardinality());
+      System.out.println("Kind of concepts: " + kindOfConcepts.size());
+      System.out.println("Role concepts: " + roleConcepts.size());
 
       // Step 3:
       time = System.currentTimeMillis();
