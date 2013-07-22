@@ -16,8 +16,8 @@ import com.sleepycat.je.OperationStatus;
 import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.datastore.temp.AceLog;
-import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
-import org.ihtsdo.ttk.concept.cc.concept.ConceptVersion;
+import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
+import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptVersion;
 
 //~--- JDK imports ------------------------------------------------------------
 

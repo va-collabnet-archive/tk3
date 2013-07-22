@@ -28,21 +28,21 @@ import org.ihtsdo.otf.tcc.api.cs.ChangeSetWriterThreading;
 import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
-import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
-import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributesRevision;
-import org.ihtsdo.ttk.concept.cc.change.BdbCommitSequence;
-import org.ihtsdo.ttk.concept.cc.change.LastChange;
-import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
-import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
-import org.ihtsdo.ttk.concept.cc.description.Description;
-import org.ihtsdo.ttk.concept.cc.description.DescriptionRevision;
-import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
-import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
-import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
-import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
-import org.ihtsdo.ttk.concept.cc.relationship.RelationshipRevision;
-import org.ihtsdo.ttk.concept.cs.ChangeSetWriterHandler;
+import org.ihtsdo.otf.tcc.chronicle.cc.P;
+import org.ihtsdo.otf.tcc.chronicle.cc.attributes.ConceptAttributes;
+import org.ihtsdo.otf.tcc.chronicle.cc.attributes.ConceptAttributesRevision;
+import org.ihtsdo.otf.tcc.chronicle.cc.change.BdbCommitSequence;
+import org.ihtsdo.otf.tcc.chronicle.cc.change.LastChange;
+import org.ihtsdo.otf.tcc.chronicle.cc.component.ConceptComponent;
+import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
+import org.ihtsdo.otf.tcc.chronicle.cc.description.Description;
+import org.ihtsdo.otf.tcc.chronicle.cc.description.DescriptionRevision;
+import org.ihtsdo.otf.tcc.chronicle.cc.lucene.LuceneManager;
+import org.ihtsdo.otf.tcc.chronicle.cc.refex.RefexMember;
+import org.ihtsdo.otf.tcc.chronicle.cc.refex.RefexRevision;
+import org.ihtsdo.otf.tcc.chronicle.cc.relationship.Relationship;
+import org.ihtsdo.otf.tcc.chronicle.cc.relationship.RelationshipRevision;
+import org.ihtsdo.otf.tcc.chronicle.ChangeSetWriterHandler;
 
 public class BdbCommitManager {
 

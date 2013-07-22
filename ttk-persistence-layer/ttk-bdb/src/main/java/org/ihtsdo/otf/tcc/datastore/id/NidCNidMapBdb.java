@@ -38,9 +38,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import org.apache.mahout.math.map.OpenIntIntHashMap;
 import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
-import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
-import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
-import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
+import org.ihtsdo.otf.tcc.chronicle.cc.NidPairForRefex;
+import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
+import org.ihtsdo.otf.tcc.chronicle.cc.relationship.Relationship;
 
 /**
  * <h2>Implementation Details</h2> The

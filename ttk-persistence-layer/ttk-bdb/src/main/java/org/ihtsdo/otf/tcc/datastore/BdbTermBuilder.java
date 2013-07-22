@@ -29,20 +29,20 @@ import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.relationship.RelationshipChronicleBI;
 import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
-import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
-import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributesRevision;
-import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
-import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
-import org.ihtsdo.ttk.concept.cc.description.Description;
-import org.ihtsdo.ttk.concept.cc.description.DescriptionRevision;
-import org.ihtsdo.ttk.concept.cc.media.Media;
-import org.ihtsdo.ttk.concept.cc.media.MediaRevision;
-import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
-import org.ihtsdo.ttk.concept.cc.refex.RefexMemberFactory;
-import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
-import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
-import org.ihtsdo.ttk.concept.cc.relationship.RelationshipRevision;
+import org.ihtsdo.otf.tcc.chronicle.cc.P;
+import org.ihtsdo.otf.tcc.chronicle.cc.attributes.ConceptAttributes;
+import org.ihtsdo.otf.tcc.chronicle.cc.attributes.ConceptAttributesRevision;
+import org.ihtsdo.otf.tcc.chronicle.cc.component.RevisionSet;
+import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
+import org.ihtsdo.otf.tcc.chronicle.cc.description.Description;
+import org.ihtsdo.otf.tcc.chronicle.cc.description.DescriptionRevision;
+import org.ihtsdo.otf.tcc.chronicle.cc.media.Media;
+import org.ihtsdo.otf.tcc.chronicle.cc.media.MediaRevision;
+import org.ihtsdo.otf.tcc.chronicle.cc.refex.RefexMember;
+import org.ihtsdo.otf.tcc.chronicle.cc.refex.RefexMemberFactory;
+import org.ihtsdo.otf.tcc.chronicle.cc.refex.RefexRevision;
+import org.ihtsdo.otf.tcc.chronicle.cc.relationship.Relationship;
+import org.ihtsdo.otf.tcc.chronicle.cc.relationship.RelationshipRevision;
 
 public class BdbTermBuilder implements TerminologyBuilderBI {
 

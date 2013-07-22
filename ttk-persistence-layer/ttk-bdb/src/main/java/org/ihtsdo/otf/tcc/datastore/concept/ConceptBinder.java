@@ -12,21 +12,21 @@ import java.util.concurrent.ExecutionException;
 import com.sleepycat.bind.tuple.TupleBinding;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
-import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
-import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributesRevision;
-import org.ihtsdo.ttk.concept.cc.component.ConceptAttributesBinder;
-import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
-import org.ihtsdo.ttk.concept.cc.component.ConceptComponentBinder;
-import org.ihtsdo.ttk.concept.cc.component.DescriptionBinder;
-import org.ihtsdo.ttk.concept.cc.component.MediaBinder;
-import org.ihtsdo.ttk.concept.cc.component.RefexMemberBinder;
-import org.ihtsdo.ttk.concept.cc.component.RelationshipBinder;
-import org.ihtsdo.ttk.concept.cc.component.Revision;
-import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
-import org.ihtsdo.ttk.concept.cc.concept.I_ManageConceptData;
-import org.ihtsdo.ttk.concept.cc.concept.IntSetBinder;
-import org.ihtsdo.ttk.concept.cc.concept.OFFSETS;
-import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
+import org.ihtsdo.otf.tcc.chronicle.cc.attributes.ConceptAttributes;
+import org.ihtsdo.otf.tcc.chronicle.cc.attributes.ConceptAttributesRevision;
+import org.ihtsdo.otf.tcc.chronicle.cc.component.ConceptAttributesBinder;
+import org.ihtsdo.otf.tcc.chronicle.cc.component.ConceptComponent;
+import org.ihtsdo.otf.tcc.chronicle.cc.component.ConceptComponentBinder;
+import org.ihtsdo.otf.tcc.chronicle.cc.component.DescriptionBinder;
+import org.ihtsdo.otf.tcc.chronicle.cc.component.MediaBinder;
+import org.ihtsdo.otf.tcc.chronicle.cc.component.RefexMemberBinder;
+import org.ihtsdo.otf.tcc.chronicle.cc.component.RelationshipBinder;
+import org.ihtsdo.otf.tcc.chronicle.cc.component.Revision;
+import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
+import org.ihtsdo.otf.tcc.chronicle.cc.concept.I_ManageConceptData;
+import org.ihtsdo.otf.tcc.chronicle.cc.concept.IntSetBinder;
+import org.ihtsdo.otf.tcc.chronicle.cc.concept.OFFSETS;
+import org.ihtsdo.otf.tcc.chronicle.cc.refex.RefexMember;
 
 public class ConceptBinder extends TupleBinding<ConceptChronicle> {
 

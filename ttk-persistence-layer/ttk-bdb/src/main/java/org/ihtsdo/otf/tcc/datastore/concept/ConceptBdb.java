@@ -46,8 +46,8 @@ import java.util.concurrent.Future;
 import org.ihtsdo.otf.tcc.api.ConcurrentBitSet;
 import org.ihtsdo.otf.tcc.api.ConcurrentBitSetReadOnly;
 import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
-import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
-import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
+import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptChronicle;
+import org.ihtsdo.otf.tcc.chronicle.cc.lucene.LuceneManager;
 
 /**
  * Class description

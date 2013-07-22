@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import com.sleepycat.bind.tuple.TupleInput;
 import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
 import org.ihtsdo.otf.tcc.datastore.temp.AceLog;
-import org.ihtsdo.ttk.concept.cc.concept.ConceptDataFetcherI;
+import org.ihtsdo.otf.tcc.chronicle.cc.concept.ConceptDataFetcherI;
 
 public class NidDataFromBdb implements ConceptDataFetcherI {
 
