@@ -8,11 +8,11 @@ import com.sleepycat.bind.tuple.TupleOutput;
 
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.Revision;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.blueprint.DescriptionCAB;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.description.DescriptionAnalogBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.blueprint.DescriptionCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.description.DescriptionAnalogBI;
 import org.ihtsdo.ttk.dto.component.description.TtkDescriptionRevision;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -26,12 +26,12 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.ttk.api.Status;
-import org.ihtsdo.ttk.api.blueprint.IdDirective;
-import org.ihtsdo.ttk.api.blueprint.RefexDirective;
+import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.lang.LanguageCode;
-import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
+import org.ihtsdo.otf.tcc.api.lang.LanguageCode;
+import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 
 public class DescriptionRevision extends Revision<DescriptionRevision, Description>
         implements DescriptionAnalogBI<DescriptionRevision> {
@@ -151,7 +151,7 @@ public class DescriptionRevision extends Revision<DescriptionRevision, Descripti
    }
 
    @Override
-   public DescriptionRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public DescriptionRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatus(status);
          this.setAuthorNid(authorNid);

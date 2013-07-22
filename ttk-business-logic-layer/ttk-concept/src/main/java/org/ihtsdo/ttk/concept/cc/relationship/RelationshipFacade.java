@@ -3,7 +3,7 @@ package org.ihtsdo.ttk.concept.cc.relationship;
 import java.beans.PropertyVetoException;
 
 import org.ihtsdo.ttk.concept.cc.component.TypedComponentFacade;
-import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
 
 public interface RelationshipFacade
         extends TypedComponentFacade, RelationshipVersionBI {

@@ -6,9 +6,9 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import org.ihtsdo.ttk.fx.FxComponentReference;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

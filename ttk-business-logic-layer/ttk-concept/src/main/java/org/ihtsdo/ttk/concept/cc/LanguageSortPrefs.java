@@ -15,7 +15,7 @@
  */
 package org.ihtsdo.ttk.concept.cc;
 
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate.LANGUAGE_SORT;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate.LANGUAGE_SORT;
 
 /**
  *

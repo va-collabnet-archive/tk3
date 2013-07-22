@@ -20,15 +20,15 @@ package org.ihtsdo.ttk.logic;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.api.TerminologyBuilderBI;
-import org.ihtsdo.ttk.api.blueprint.BlueprintBuilder;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.spec.ConceptSpec;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.TerminologyBuilderBI;
+import org.ihtsdo.otf.tcc.api.blueprint.BlueprintBuilder;
+import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -38,8 +38,8 @@ import java.io.IOException;
 import java.util.Stack;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.ihtsdo.ttk.api.blueprint.IdDirective;
-import org.ihtsdo.ttk.api.blueprint.RefexDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
 
 /**
  *

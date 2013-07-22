@@ -9,12 +9,12 @@ import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.identifier.FxIdentifier;
 import org.ihtsdo.ttk.fx.concept.component.identifier.FxIdentifierUuid;
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexChronicle;
-import org.ihtsdo.ttk.api.ComponentChronicleBI;
-import org.ihtsdo.ttk.api.ComponentVersionBI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.id.IdBI;
-import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.id.IdBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -27,7 +27,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 
 public abstract class FxComponentChronicle<V extends FxComponentVersion, T extends ComponentVersionBI>
         implements Serializable {

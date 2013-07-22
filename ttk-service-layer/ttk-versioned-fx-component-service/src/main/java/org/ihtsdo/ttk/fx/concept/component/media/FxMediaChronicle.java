@@ -5,10 +5,10 @@ package org.ihtsdo.ttk.fx.concept.component.media;
 
 import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.FxComponentChronicle;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.media.MediaChronicleBI;
-import org.ihtsdo.ttk.api.media.MediaVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.media.MediaChronicleBI;
+import org.ihtsdo.otf.tcc.api.media.MediaVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

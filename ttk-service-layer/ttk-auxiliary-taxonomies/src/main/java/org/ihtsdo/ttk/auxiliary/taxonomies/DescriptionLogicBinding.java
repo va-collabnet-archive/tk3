@@ -2,7 +2,7 @@ package org.ihtsdo.ttk.auxiliary.taxonomies;
 
 
 import java.util.UUID;
-import org.ihtsdo.ttk.api.spec.ConceptSpec;
+import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 
 
 public class DescriptionLogicBinding {

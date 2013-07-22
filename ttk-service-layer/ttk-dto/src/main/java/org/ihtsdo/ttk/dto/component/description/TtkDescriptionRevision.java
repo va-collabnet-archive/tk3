@@ -2,8 +2,8 @@ package org.ihtsdo.ttk.dto.component.description;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------

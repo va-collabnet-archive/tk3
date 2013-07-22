@@ -6,8 +6,8 @@ package org.ihtsdo.ttk.bdb.stamp;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.Status;
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 public class Stamp implements Comparable<Stamp> {
    public int   hashCode = Integer.MAX_VALUE;

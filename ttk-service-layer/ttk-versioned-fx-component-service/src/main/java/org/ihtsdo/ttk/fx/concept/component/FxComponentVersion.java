@@ -23,10 +23,10 @@ package org.ihtsdo.ttk.fx.concept.component;
 import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.identifier.FxIdentifier;
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexChronicle;
-import org.ihtsdo.ttk.api.ComponentVersionBI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.id.IdBI;
+import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.id.IdBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

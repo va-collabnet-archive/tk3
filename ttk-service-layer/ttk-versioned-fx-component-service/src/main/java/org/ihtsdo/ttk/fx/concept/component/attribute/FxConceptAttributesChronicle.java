@@ -5,10 +5,10 @@ package org.ihtsdo.ttk.fx.concept.component.attribute;
 
 import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.FxComponentChronicle;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.conattr.ConceptAttributeChronicleBI;
-import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.conattr.ConceptAttributeChronicleBI;
+import org.ihtsdo.otf.tcc.api.conattr.ConceptAttributeVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

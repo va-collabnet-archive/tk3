@@ -11,13 +11,13 @@ import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
-import org.ihtsdo.ttk.api.refex.type_long.RefexLongAnalogBI;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.refex.type_long.RefexLongAnalogBI;
 import org.ihtsdo.ttk.dto.component.refex.type_long.TtkRefexLongMemberChronicle;
 import org.ihtsdo.ttk.dto.component.refex.type_long.TtkRefexLongRevision;
-import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -27,8 +27,8 @@ import java.io.IOException;
 
 import java.util.*;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.refex.type_long.RefexLongVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_long.RefexLongVersionBI;
 
 public class LongMember extends RefexMember<LongRevision, LongMember>
         implements RefexLongAnalogBI<LongRevision> {
@@ -103,7 +103,7 @@ public class LongMember extends RefexMember<LongRevision, LongMember>
    }
 
    @Override
-   public LongRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public LongRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       LongRevision newR = new LongRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);

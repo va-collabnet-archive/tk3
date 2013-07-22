@@ -14,6 +14,5 @@
       <module>ttk-bdb</module>
       <module>ttk-rest-client</module>
       <module>ttk-rest-server</module>
-      <module>ttk-uuid-maps</module>
   </modules>
 </project>

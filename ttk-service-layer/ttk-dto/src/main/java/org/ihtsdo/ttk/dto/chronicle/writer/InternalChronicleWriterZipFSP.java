@@ -22,7 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.dto.ChronicleConverter;
 import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 import org.ihtsdo.ttk.dto.chronicle.FileChronicleZipFSP;

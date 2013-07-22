@@ -18,10 +18,10 @@ import org.ihtsdo.ttk.bdb.temp.AceLog;
 import org.ihtsdo.ttk.helpers.concurrency.ConcurrentReentrantLocks;
 import org.ihtsdo.ttk.helpers.version.RelativePositionComputer;
 import org.ihtsdo.ttk.helpers.version.RelativePositionComputerBI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.PositionBI;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.PositionBI;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -37,7 +37,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import org.apache.mahout.math.map.OpenIntIntHashMap;
-import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
 import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;

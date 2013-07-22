@@ -13,8 +13,8 @@ import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
 
 
-import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.bdb.temp.AceLog;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptVersion;
@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.ttk.api.ConceptFetcherBI;
+import org.ihtsdo.otf.tcc.api.ConceptFetcherBI;
 
 /**
  * Class description

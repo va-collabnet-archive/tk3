@@ -16,8 +16,8 @@
 package org.ihtsdo.ttk.services;
 
 import javafx.collections.ObservableList;
-import org.ihtsdo.ttk.api.ComponentVersionBI;
-import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
+import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 
 /**
  *

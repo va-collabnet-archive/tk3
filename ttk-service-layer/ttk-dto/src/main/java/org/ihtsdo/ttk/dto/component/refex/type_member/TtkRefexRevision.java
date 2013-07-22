@@ -10,7 +10,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
 public class TtkRefexRevision extends TtkRevision {

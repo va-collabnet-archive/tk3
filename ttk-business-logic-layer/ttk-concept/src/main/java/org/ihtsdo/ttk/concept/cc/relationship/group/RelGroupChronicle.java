@@ -5,16 +5,16 @@ package org.ihtsdo.ttk.concept.cc.relationship.group;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.helpers.uuid.Type5UuidFactory;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.PositionBI;
-import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.id.IdBI;
-import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.relationship.RelationshipChronicleBI;
-import org.ihtsdo.ttk.api.relationship.group.RelGroupChronicleBI;
-import org.ihtsdo.ttk.api.relationship.group.RelGroupVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.PositionBI;
+import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.id.IdBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipChronicleBI;
+import org.ihtsdo.otf.tcc.api.relationship.group.RelGroupChronicleBI;
+import org.ihtsdo.otf.tcc.api.relationship.group.RelGroupVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

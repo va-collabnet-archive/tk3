@@ -2,9 +2,9 @@ package org.ihtsdo.ttk.dto.component.refex.type_member;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
-import org.ihtsdo.ttk.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -14,8 +14,8 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import java.util.*;
-import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
 public class TtkRefexMemberChronicle extends TtkRefexAbstractMemberChronicle<TtkRefexRevision> {

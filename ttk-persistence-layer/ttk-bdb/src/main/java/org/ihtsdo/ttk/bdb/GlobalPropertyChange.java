@@ -19,8 +19,8 @@ import java.beans.*;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import org.ihtsdo.ttk.api.TerminologyStoreDI;
-import org.ihtsdo.ttk.api.TerminologyDI.CONCEPT_EVENT;
+import org.ihtsdo.otf.tcc.api.TerminologyStoreDI;
+import org.ihtsdo.otf.tcc.api.TerminologyDI.CONCEPT_EVENT;
 
 /**
  *

@@ -22,13 +22,13 @@ package org.ihtsdo.ttk.bdb.id;
 
 import org.ihtsdo.ttk.bdb.Bdb;
 import org.ihtsdo.ttk.helpers.version.RelativePositionComputerBI;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.relationship.RelationshipChronicleBI;
-import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipChronicleBI;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

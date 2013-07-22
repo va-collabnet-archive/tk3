@@ -16,7 +16,7 @@
 package org.ihtsdo.ttk.concept.cc.concept;
 
 import java.io.IOException;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.dto.ChronicleConverter;
 import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 

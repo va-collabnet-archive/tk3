@@ -30,7 +30,7 @@ import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 import org.ihtsdo.ttk.dto.chronicle.FileChronicleZipFSP;
 import org.ihtsdo.ttk.dto.chronicle.reader.ExternalChronicleReaderZipFSP;

@@ -20,10 +20,10 @@ package org.ihtsdo.ttk.auxiliary.taxonomies;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.blueprint.ConceptCB;
-import org.ihtsdo.ttk.api.lang.LanguageCode;
-import org.ihtsdo.ttk.api.spec.ConceptSpec;
-import org.ihtsdo.ttk.api.uuid.UuidT5Generator;
+import org.ihtsdo.otf.tcc.api.blueprint.ConceptCB;
+import org.ihtsdo.otf.tcc.api.lang.LanguageCode;
+import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
+import org.ihtsdo.otf.tcc.api.uuid.UuidT5Generator;
 import org.ihtsdo.ttk.dto.UuidDtoBuilder;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.UUID;
-import org.ihtsdo.ttk.api.blueprint.IdDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
 
 /**
  *

@@ -4,22 +4,22 @@ package org.ihtsdo.ttk.concept.cc.relationship.group;
 
 import org.ihtsdo.ttk.concept.cc.Position;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.ComponentChronicleBI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.PositionBI;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.blueprint.CreateOrAmendBlueprint;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
-import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.id.IdBI;
-import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.relationship.RelationshipChronicleBI;
-import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
-import org.ihtsdo.ttk.api.relationship.group.RelGroupChronicleBI;
-import org.ihtsdo.ttk.api.relationship.group.RelGroupVersionBI;
+import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.PositionBI;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.blueprint.CreateOrAmendBlueprint;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.id.IdBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipChronicleBI;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
+import org.ihtsdo.otf.tcc.api.relationship.group.RelGroupChronicleBI;
+import org.ihtsdo.otf.tcc.api.relationship.group.RelGroupVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -31,9 +31,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import org.ihtsdo.ttk.api.Status;
-import org.ihtsdo.ttk.api.blueprint.IdDirective;
-import org.ihtsdo.ttk.api.blueprint.RefexDirective;
+import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
 
 public class RelGroupVersion implements RelGroupVersionBI {
    private long                time = Long.MIN_VALUE;

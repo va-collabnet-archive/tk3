@@ -24,11 +24,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.ihtsdo.ttk.helpers.version.RelativePositionComputerBI;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.VersionPoint;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.VersionPoint;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.metadata.binding.SnomedMetadataRf2;
 
 /**
  * Origin relationship data stores the following data for each entry:

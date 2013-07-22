@@ -20,11 +20,11 @@ import java.util.EnumSet;
 import org.ihtsdo.otf.query.ClauseComputeType;
 import org.ihtsdo.otf.query.LeafClause;
 import org.ihtsdo.otf.query.Query;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NativeIdSetBI;
-import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
-import org.ihtsdo.ttk.api.description.DescriptionChronicleBI;
-import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
+import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
+import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 
 /**
  *

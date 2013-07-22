@@ -18,8 +18,8 @@ package org.ihtsdo.ttk.concept.cc;
 
 import java.util.Set;
 
-import org.ihtsdo.ttk.api.PositionBI;
-import org.ihtsdo.ttk.api.PositionSet;
+import org.ihtsdo.otf.tcc.api.PositionBI;
+import org.ihtsdo.otf.tcc.api.PositionSet;
 
 
 public class PositionSetReadOnly extends PositionSet {

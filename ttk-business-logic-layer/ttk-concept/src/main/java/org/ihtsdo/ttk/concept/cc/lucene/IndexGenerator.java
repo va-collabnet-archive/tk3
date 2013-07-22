@@ -3,9 +3,9 @@ package org.ihtsdo.ttk.concept.cc.lucene;
 import java.io.IOException;
 
 import org.apache.lucene.index.IndexWriter;
-import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
 
 public abstract class IndexGenerator implements ProcessUnfetchedConceptDataBI {
 

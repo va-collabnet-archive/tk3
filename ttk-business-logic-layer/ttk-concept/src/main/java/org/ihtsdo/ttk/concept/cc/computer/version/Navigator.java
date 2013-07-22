@@ -9,8 +9,8 @@ import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.util.OpenBitSet;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.helpers.version.RelativePositionComputer;
-import org.ihtsdo.ttk.api.PositionBI;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.PositionBI;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 
 /**
  * The Navigation class can take multiple positions and determine where they are in the bundle's "path space"

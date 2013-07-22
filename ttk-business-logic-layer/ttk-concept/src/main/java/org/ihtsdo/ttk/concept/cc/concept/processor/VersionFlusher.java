@@ -16,8 +16,8 @@
 package org.ihtsdo.ttk.concept.cc.concept.processor;
 
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
-import org.ihtsdo.ttk.api.ComponentChronicleBI;
-import org.ihtsdo.ttk.api.ProcessComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.ProcessComponentChronicleBI;
 
 /**
  *

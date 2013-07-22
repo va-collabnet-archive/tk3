@@ -2,7 +2,7 @@ package org.ihtsdo.ttk.dto.component.attribute;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
+import org.ihtsdo.otf.tcc.api.conattr.ConceptAttributeVersionBI;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------

@@ -2,11 +2,11 @@ package org.ihtsdo.ttk.dto.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.ComponentVersionBI;
-import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.api.id.IdBI;
-import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
-import org.ihtsdo.ttk.api.uuid.UuidFactory;
+import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.id.IdBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.uuid.UuidFactory;
 import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 import org.ihtsdo.ttk.dto.component.identifier.IDENTIFIER_PART_TYPES;
 import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifier;

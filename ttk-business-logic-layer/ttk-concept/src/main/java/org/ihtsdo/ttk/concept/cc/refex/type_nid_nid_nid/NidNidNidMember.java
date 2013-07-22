@@ -10,14 +10,14 @@ import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_nid.RefexNidNidNidAnalogBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
-import org.ihtsdo.ttk.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_nid.RefexNidNidNidAnalogBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TtkRefexUuidUuidUuidMemberChronicle;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TtkRefexUuidUuidUuidRevision;
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.*;
 import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 
 public class NidNidNidMember extends RefexMember<NidNidNidRevision, NidNidNidMember>
         implements
@@ -109,7 +109,7 @@ public class NidNidNidMember extends RefexMember<NidNidNidRevision, NidNidNidMem
     }
 
     @Override
-    public NidNidNidRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+    public NidNidNidRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
         NidNidNidRevision newR = new NidNidNidRevision(status, time, authorNid, moduleNid, pathNid, this);
 
         addRevision(newR);

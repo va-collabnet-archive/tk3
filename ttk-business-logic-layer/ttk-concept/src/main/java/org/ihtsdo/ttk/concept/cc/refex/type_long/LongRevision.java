@@ -11,15 +11,15 @@ import java.util.Set;
 import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.concept.cc.refex.type_long.LongMember.Version;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.Status;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.refex.type_long.RefexLongAnalogBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_long.RefexLongAnalogBI;
 import org.ihtsdo.ttk.dto.component.refex.type_long.TtkRefexLongRevision;
-import org.ihtsdo.ttk.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
 
 public class LongRevision extends RefexRevision<LongRevision, LongMember>
         implements RefexLongAnalogBI<LongRevision> {
@@ -90,7 +90,7 @@ public class LongRevision extends RefexRevision<LongRevision, LongMember>
    }
    
    @Override
-   public LongRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public LongRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
        if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatus(status);
          this.setAuthorNid(authorNid);

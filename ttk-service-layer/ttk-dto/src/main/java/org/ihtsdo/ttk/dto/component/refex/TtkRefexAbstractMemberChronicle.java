@@ -2,9 +2,9 @@ package org.ihtsdo.ttk.dto.component.refex;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.dto.component.TtkComponentChronicle;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
 

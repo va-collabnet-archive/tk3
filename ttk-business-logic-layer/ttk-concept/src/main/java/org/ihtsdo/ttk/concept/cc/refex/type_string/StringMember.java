@@ -11,13 +11,13 @@ import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
-import org.ihtsdo.ttk.api.refex.type_string.RefexStringAnalogBI;
-import org.ihtsdo.ttk.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.refex.type_string.RefexStringAnalogBI;
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.type_string.TtkRefexStringMemberChronicle;
 import org.ihtsdo.ttk.dto.component.refex.type_string.TtkRefexStringRevision;
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -27,8 +27,8 @@ import java.io.IOException;
 
 import java.util.*;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.refex.type_string.RefexStringVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_string.RefexStringVersionBI;
 
 public class StringMember extends RefexMember<StringRevision, StringMember>
         implements RefexStringAnalogBI<StringRevision> {
@@ -101,7 +101,7 @@ public class StringMember extends RefexMember<StringRevision, StringMember>
    }
 
    @Override
-   public StringRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public StringRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       StringRevision newR = new StringRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);

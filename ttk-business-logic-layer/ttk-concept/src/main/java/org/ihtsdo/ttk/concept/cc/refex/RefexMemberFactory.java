@@ -4,12 +4,12 @@ package org.ihtsdo.ttk.concept.cc.refex;
 
 import com.sleepycat.bind.tuple.TupleInput;
 
-import org.ihtsdo.ttk.api.ComponentChronicleBI;
-import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
+import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.refex.type_array_of_bytearray.ArrayOfByteArrayMember;
@@ -52,10 +52,10 @@ import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int.TtkRefexUuidUu
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long.TtkRefexUuidUuidUuidLongMemberChronicle;
 import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TtkRefexUuidUuidUuidStringMemberChronicle;
 
-import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_FLOAT;
-import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_INT;
-import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_LONG;
-import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_STRING;
+import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_FLOAT;
+import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_INT;
+import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_LONG;
+import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_STRING;
 
 //~--- JDK imports ------------------------------------------------------------
 

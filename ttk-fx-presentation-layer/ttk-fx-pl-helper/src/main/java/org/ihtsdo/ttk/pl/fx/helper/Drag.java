@@ -23,7 +23,7 @@ package org.ihtsdo.ttk.pl.fx.helper;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 
-import org.ihtsdo.ttk.api.ComponentBI;
+import org.ihtsdo.otf.tcc.api.ComponentBI;
 
 /**
  *

@@ -18,7 +18,7 @@ package org.ihtsdo.otf.query.clauses;
 import java.util.EnumSet;
 import org.ihtsdo.otf.query.ClauseComputeType;
 import org.ihtsdo.otf.query.Query;
-import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 
 /**
  *

@@ -19,7 +19,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.RectangleBuilder;
 
-import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
 
 //~--- JDK imports ------------------------------------------------------------
 

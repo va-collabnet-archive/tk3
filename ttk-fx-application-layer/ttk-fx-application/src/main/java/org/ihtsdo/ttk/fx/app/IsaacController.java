@@ -25,7 +25,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.otf.tcc.api.Ts;
 import org.ihtsdo.ttk.helpers.database.DbStartupListener;
 import org.ihtsdo.ttk.pl.fx.concept.details.ConceptDetailsSetup;
 import org.ihtsdo.ttk.pl.fx.taxonomy.multiparent.TaxonomySetup;

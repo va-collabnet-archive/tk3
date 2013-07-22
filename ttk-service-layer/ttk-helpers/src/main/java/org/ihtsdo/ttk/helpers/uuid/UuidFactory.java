@@ -18,7 +18,7 @@ package org.ihtsdo.ttk.helpers.uuid;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
-import org.ihtsdo.ttk.api.metadata.binding.TermAux;
+import org.ihtsdo.otf.tcc.api.metadata.binding.TermAux;
 
 /**
  *

@@ -5,9 +5,9 @@ package org.ihtsdo.ttk.fx.concept.component.attribute;
 import javafx.beans.property.SimpleBooleanProperty;
 
 import org.ihtsdo.ttk.fx.concept.component.FxComponentVersion;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.conattr.ConceptAttributeVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

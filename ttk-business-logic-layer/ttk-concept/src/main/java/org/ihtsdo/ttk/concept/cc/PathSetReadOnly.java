@@ -20,10 +20,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
-import org.ihtsdo.ttk.api.NidSet;
-import org.ihtsdo.ttk.api.NidSetBI;
-
-import org.ihtsdo.ttk.api.PathBI;
+import org.ihtsdo.otf.tcc.api.NidSet;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.PathBI;
 
 public class PathSetReadOnly implements Set<PathBI> {
 	PathBI[] paths = new PathBI[0];

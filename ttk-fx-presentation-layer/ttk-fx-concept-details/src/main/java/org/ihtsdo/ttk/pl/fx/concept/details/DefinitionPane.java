@@ -49,7 +49,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 
-import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
 import org.ihtsdo.ttk.logic.DefinitionPart;
 import org.ihtsdo.ttk.logic.DefinitionPartType;
 import org.ihtsdo.ttk.logic.DefinitionTree;
@@ -89,7 +89,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
+import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.pl.fx.helper.Drag;
 import org.ihtsdo.ttk.services.action.InterfaceContext;
 

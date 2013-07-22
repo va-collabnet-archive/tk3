@@ -16,7 +16,7 @@
 package org.ihtsdo.ttk.concept.cc.attributes;
 
 import java.beans.PropertyVetoException;
-import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
+import org.ihtsdo.otf.tcc.api.conattr.ConceptAttributeVersionBI;
 
 /**
  *

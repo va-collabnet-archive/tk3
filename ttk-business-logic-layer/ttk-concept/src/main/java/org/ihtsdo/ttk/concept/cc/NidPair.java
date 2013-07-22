@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 public abstract class NidPair implements Comparable<NidPair>, Serializable {
    private int   hash;

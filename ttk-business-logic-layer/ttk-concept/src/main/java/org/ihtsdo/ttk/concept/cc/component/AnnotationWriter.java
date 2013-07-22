@@ -32,8 +32,8 @@ import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMemberFactory;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
-import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 
 /**
  *

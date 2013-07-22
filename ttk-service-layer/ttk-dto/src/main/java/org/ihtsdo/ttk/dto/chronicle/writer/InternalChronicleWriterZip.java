@@ -24,7 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.dto.ChronicleConverter;
 import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 

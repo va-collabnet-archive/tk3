@@ -37,9 +37,9 @@ import javafx.scene.layout.BorderPane;
 
 import javafx.util.Callback;
 
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
-import org.ihtsdo.ttk.api.metadata.binding.Taxonomies;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
+import org.ihtsdo.otf.tcc.api.metadata.binding.Taxonomies;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
 import org.ihtsdo.ttk.fx.FxTaxonomyReferenceWithConcept;
 import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;

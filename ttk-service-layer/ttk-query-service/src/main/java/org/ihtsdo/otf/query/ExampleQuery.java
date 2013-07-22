@@ -15,15 +15,15 @@
  */
 package org.ihtsdo.otf.query;
 
-import org.ihtsdo.ttk.api.HybridNidSet;
-import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.HybridNidSet;
+import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.ttk.api.ConcurrentBitSet;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
-import org.ihtsdo.ttk.api.metadata.binding.Snomed;
+import org.ihtsdo.otf.tcc.api.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
+import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
 
 /**
  *

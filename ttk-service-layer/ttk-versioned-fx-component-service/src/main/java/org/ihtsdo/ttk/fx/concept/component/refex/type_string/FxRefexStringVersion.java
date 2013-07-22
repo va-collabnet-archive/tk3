@@ -5,9 +5,9 @@ package org.ihtsdo.ttk.fx.concept.component.refex.type_string;
 import javafx.beans.property.SimpleStringProperty;
 
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexVersion;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.refex.type_string.RefexStringVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.refex.type_string.RefexStringVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

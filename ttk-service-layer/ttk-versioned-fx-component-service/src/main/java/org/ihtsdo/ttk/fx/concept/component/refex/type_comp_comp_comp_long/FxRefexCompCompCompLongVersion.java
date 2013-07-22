@@ -3,8 +3,8 @@ package org.ihtsdo.ttk.fx.concept.component.refex.type_comp_comp_comp_long;
 //~--- non-JDK imports --------------------------------------------------------
 
 
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexChronicle;
 import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_comp_comp.FxRefexCompCompCompVersion;
 
@@ -12,7 +12,7 @@ import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_comp_comp.FxRefexComp
 
 import java.io.IOException;
 import javafx.beans.property.SimpleLongProperty;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_long.RefexNidNidNidLongVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_nid_long.RefexNidNidNidLongVersionBI;
 
 /**
  * Class description

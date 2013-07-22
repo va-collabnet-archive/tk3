@@ -19,9 +19,9 @@
 package org.ihtsdo.ttk.helpers.econcept.transfrom;
 
 //~--- non-JDK imports --------------------------------------------------------
-import org.ihtsdo.ttk.api.country.COUNTRY_CODE;
+import org.ihtsdo.otf.tcc.api.country.COUNTRY_CODE;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
-import org.ihtsdo.ttk.api.lang.LanguageCode;
+import org.ihtsdo.otf.tcc.api.lang.LanguageCode;
 import org.ihtsdo.ttk.dto.TtkConceptChronicle;
 import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesChronicle;
 import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesRevision;

@@ -36,7 +36,7 @@ import javafx.scene.control.TextField;
 
 import javafx.util.Callback;
 
-import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.otf.tcc.api.Ts;
 import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.context.TerminologyContext;
 import org.ihtsdo.ttk.lookup.Looker;
@@ -57,10 +57,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
-import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
+import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
 import org.ihtsdo.ttk.logic.DefinitionTree;
 import org.ihtsdo.ttk.services.aa.SessionAttributeKeys;

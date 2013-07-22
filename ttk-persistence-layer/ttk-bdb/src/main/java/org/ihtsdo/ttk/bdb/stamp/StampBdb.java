@@ -1,9 +1,9 @@
 package org.ihtsdo.ttk.bdb.stamp;
 
-import org.ihtsdo.ttk.api.PathBI;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.PositionBI;
-import org.ihtsdo.ttk.api.NidSet;
+import org.ihtsdo.otf.tcc.api.PathBI;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.PositionBI;
+import org.ihtsdo.otf.tcc.api.NidSet;
 import com.sleepycat.bind.tuple.IntegerBinding;
 import com.sleepycat.bind.tuple.TupleBinding;
 import com.sleepycat.bind.tuple.TupleInput;
@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.ihtsdo.ttk.api.Status;
+import org.ihtsdo.otf.tcc.api.Status;
 import org.ihtsdo.ttk.bdb.Bdb;
 import org.ihtsdo.ttk.bdb.ComponentBdb;
 import org.ihtsdo.ttk.bdb.temp.AceLog;

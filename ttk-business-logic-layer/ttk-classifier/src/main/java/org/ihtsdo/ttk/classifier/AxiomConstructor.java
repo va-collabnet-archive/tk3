@@ -29,24 +29,24 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-import org.ihtsdo.ttk.api.ComponentBI;
-import org.ihtsdo.ttk.api.ConceptFetcherBI;
-import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.id.IdBI;
-import org.ihtsdo.ttk.api.metadata.binding.Snomed;
-import org.ihtsdo.ttk.api.metadata.binding.Taxonomies;
-import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
-import org.ihtsdo.ttk.api.spec.ValidationException;
+import org.ihtsdo.otf.tcc.api.ComponentBI;
+import org.ihtsdo.otf.tcc.api.ConceptFetcherBI;
+import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.id.IdBI;
+import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
+import org.ihtsdo.otf.tcc.api.metadata.binding.Taxonomies;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
+import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 
 import au.csiro.ontology.Factory;
 import au.csiro.ontology.axioms.IAxiom;
 import au.csiro.ontology.axioms.RoleInclusion;
 import au.csiro.ontology.model.IConcept;
 import au.csiro.ontology.model.INamedRole;
-import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
 //~--- JDK imports ------------------------------------------------------------
 
 /**

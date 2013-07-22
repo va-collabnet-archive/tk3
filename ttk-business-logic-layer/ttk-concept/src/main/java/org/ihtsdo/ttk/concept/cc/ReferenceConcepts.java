@@ -6,9 +6,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf1;
-import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
-import org.ihtsdo.ttk.api.metadata.binding.TermAux;
+import org.ihtsdo.otf.tcc.api.metadata.binding.SnomedMetadataRf1;
+import org.ihtsdo.otf.tcc.api.metadata.binding.SnomedMetadataRf2;
+import org.ihtsdo.otf.tcc.api.metadata.binding.TermAux;
 
 public enum ReferenceConcepts {
 

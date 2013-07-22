@@ -4,12 +4,12 @@ package org.ihtsdo.ttk.fx.concept.component.identifier;
 
 import org.ihtsdo.ttk.fx.FxComponentReference;
 import org.ihtsdo.ttk.fx.concept.component.FxVersion;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.id.IdBI;
-import org.ihtsdo.ttk.api.id.LongIdBI;
-import org.ihtsdo.ttk.api.id.StringIdBI;
-import org.ihtsdo.ttk.api.id.UuidIdBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.id.IdBI;
+import org.ihtsdo.otf.tcc.api.id.LongIdBI;
+import org.ihtsdo.otf.tcc.api.id.StringIdBI;
+import org.ihtsdo.otf.tcc.api.id.UuidIdBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

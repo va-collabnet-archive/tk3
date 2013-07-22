@@ -13,18 +13,18 @@ import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.concept.cc.NidPair;
 import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
-import org.ihtsdo.ttk.api.ComponentVersionBI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.refex.RefexAnalogBI;
-import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.refex.RefexAnalogBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
-import org.ihtsdo.ttk.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -34,12 +34,12 @@ import java.io.IOException;
 
 import java.util.*;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.ttk.api.blueprint.IdDirective;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 
 public abstract class RefexMember<R extends RefexRevision<R, C>, C extends RefexMember<R, C>>
         extends ConceptComponent<R, C> implements RefexChronicleBI<R>, RefexAnalogBI<R> {
@@ -443,7 +443,7 @@ public abstract class RefexMember<R extends RefexRevision<R, C>, C extends Refex
 
  
         @Override
-        public R makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+        public R makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
             return getCv().makeAnalog(status, time, authorNid, moduleNid, pathNid);
         }
 

@@ -11,13 +11,13 @@ import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.refex.RefexAnalogBI;
-import org.ihtsdo.ttk.api.refex.type_long.RefexLongAnalogBI;
-import org.ihtsdo.ttk.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.refex.RefexAnalogBI;
+import org.ihtsdo.otf.tcc.api.refex.type_long.RefexLongAnalogBI;
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
 import org.ihtsdo.ttk.dto.component.refex.type_member.TtkRefexMemberChronicle;
 import org.ihtsdo.ttk.dto.component.refex.type_member.TtkRefexRevision;
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -25,9 +25,9 @@ import java.io.IOException;
 
 import java.util.*;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.refex.type_member.RefexMemberAnalogBI;
-import org.ihtsdo.ttk.api.refex.type_member.RefexMemberVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_member.RefexMemberAnalogBI;
+import org.ihtsdo.otf.tcc.api.refex.type_member.RefexMemberVersionBI;
 
 public class MembershipMember extends RefexMember<MembershipRevision, MembershipMember> 
     implements RefexMemberAnalogBI<MembershipRevision> {
@@ -99,7 +99,7 @@ public class MembershipMember extends RefexMember<MembershipRevision, Membership
    }
 
    @Override
-   public MembershipRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public MembershipRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       MembershipRevision newR = new MembershipRevision(status, time, authorNid, moduleNid, pathNid, this);
 
       addRevision(newR);

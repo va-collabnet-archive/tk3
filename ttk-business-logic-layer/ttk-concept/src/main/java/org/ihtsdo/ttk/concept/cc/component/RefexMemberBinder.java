@@ -25,7 +25,7 @@ import java.util.logging.Level;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 
 public class RefexMemberBinder extends TupleBinding<Collection<RefexMember<?, ?>>>
         implements I_BindConceptComponents {

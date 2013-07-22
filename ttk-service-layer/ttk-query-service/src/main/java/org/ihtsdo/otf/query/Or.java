@@ -15,11 +15,11 @@
  */
 package org.ihtsdo.otf.query;
 
-import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
 import java.io.IOException;
-import org.ihtsdo.ttk.api.ConcurrentBitSet;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.spec.ValidationException;
+import org.ihtsdo.otf.tcc.api.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 
 /**
  *

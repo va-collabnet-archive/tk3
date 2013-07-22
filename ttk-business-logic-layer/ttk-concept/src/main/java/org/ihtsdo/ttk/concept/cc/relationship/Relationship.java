@@ -1,11 +1,11 @@
 package org.ihtsdo.ttk.concept.cc.relationship;
 
-import org.ihtsdo.ttk.api.PositionSetBI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.Precedence;
-import org.ihtsdo.ttk.api.ContradictionManagerBI;
-import org.ihtsdo.ttk.api.TypedComponentVersionBI;
-import org.ihtsdo.ttk.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.PositionSetBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.Precedence;
+import org.ihtsdo.otf.tcc.api.ContradictionManagerBI;
+import org.ihtsdo.otf.tcc.api.TypedComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 import java.beans.PropertyVetoException;
@@ -18,21 +18,21 @@ import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
-import org.ihtsdo.ttk.api.Status;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
-import org.ihtsdo.ttk.api.blueprint.RelationshipCAB;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.relationship.RelationshipAnalogBI;
-import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf1;
-import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
-import org.ihtsdo.ttk.api.TkRelationshipType;
-import org.ihtsdo.ttk.api.blueprint.IdDirective;
-import org.ihtsdo.ttk.api.blueprint.RefexDirective;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.RelationshipCAB;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipAnalogBI;
+import org.ihtsdo.otf.tcc.api.metadata.binding.SnomedMetadataRf1;
+import org.ihtsdo.otf.tcc.api.metadata.binding.SnomedMetadataRf2;
+import org.ihtsdo.otf.tcc.api.TkRelationshipType;
+import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipChronicle;
 import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipRevision;
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 public class Relationship extends ConceptComponent<RelationshipRevision, Relationship>
         implements RelationshipAnalogBI<RelationshipRevision> {
@@ -183,7 +183,7 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
    }
 
    @Override
-   public RelationshipRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public RelationshipRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       RelationshipRevision newR = new RelationshipRevision(this, status, time, authorNid, moduleNid,
                                      pathNid, this);
 
@@ -593,7 +593,7 @@ public class Relationship extends ConceptComponent<RelationshipRevision, Relatio
       }
 
       @Override
-      public RelationshipRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+      public RelationshipRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
          return (RelationshipRevision) getCv().makeAnalog(status, time, authorNid, moduleNid, pathNid);
       }
 

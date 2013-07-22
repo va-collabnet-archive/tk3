@@ -2,9 +2,9 @@ package org.ihtsdo.ttk.dto.component.relationship;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.TerminologyStoreDI;
-import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.TerminologyStoreDI;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.ihtsdo.ttk.api.metadata.binding.Snomed;
-import org.ihtsdo.ttk.api.metadata.binding.TermAux;
+import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
+import org.ihtsdo.otf.tcc.api.metadata.binding.TermAux;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 

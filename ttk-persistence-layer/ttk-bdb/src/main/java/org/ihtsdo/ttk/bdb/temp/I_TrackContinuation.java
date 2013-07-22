@@ -16,7 +16,7 @@
  */
 package org.ihtsdo.ttk.bdb.temp;
 
-import org.ihtsdo.ttk.api.ContinuationTrackerBI;
+import org.ihtsdo.otf.tcc.api.ContinuationTrackerBI;
 
 public interface I_TrackContinuation  extends ContinuationTrackerBI {
 

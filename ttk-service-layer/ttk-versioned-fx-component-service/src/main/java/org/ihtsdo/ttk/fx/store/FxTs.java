@@ -15,7 +15,7 @@
  */
 package org.ihtsdo.ttk.fx.store;
 
-import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.otf.tcc.api.Ts;
 
 /**
  *

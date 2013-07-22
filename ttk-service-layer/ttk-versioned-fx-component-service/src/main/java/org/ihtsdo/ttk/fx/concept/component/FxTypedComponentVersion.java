@@ -23,9 +23,9 @@ package org.ihtsdo.ttk.fx.concept.component;
 import javafx.beans.property.SimpleObjectProperty;
 
 import org.ihtsdo.ttk.fx.FxComponentReference;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.TypedComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.TypedComponentVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

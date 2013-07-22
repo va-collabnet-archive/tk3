@@ -1,7 +1,7 @@
 package org.ihtsdo.ttk.concept.cc.description;
 
 //~--- non-JDK imports --------------------------------------------------------
-import org.ihtsdo.ttk.api.TypedComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.TypedComponentVersionBI;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
@@ -11,16 +11,16 @@ import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
-import org.ihtsdo.ttk.api.ContradictionManagerBI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.PositionSetBI;
-import org.ihtsdo.ttk.api.Precedence;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.description.DescriptionAnalogBI;
+import org.ihtsdo.otf.tcc.api.ContradictionManagerBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.PositionSetBI;
+import org.ihtsdo.otf.tcc.api.Precedence;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.description.DescriptionAnalogBI;
 import org.ihtsdo.ttk.dto.component.description.TtkDescriptionChronicle;
 import org.ihtsdo.ttk.dto.component.description.TtkDescriptionRevision;
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -32,14 +32,14 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.ttk.api.Status;
+import org.ihtsdo.otf.tcc.api.Status;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.lang.LanguageCode;
-import org.ihtsdo.ttk.api.blueprint.DescriptionCAB;
-import org.ihtsdo.ttk.api.blueprint.IdDirective;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexDirective;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.lang.LanguageCode;
+import org.ihtsdo.otf.tcc.api.blueprint.DescriptionCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 
 public class Description extends ConceptComponent<DescriptionRevision, Description>
         implements DescriptionAnalogBI<DescriptionRevision> {
@@ -475,7 +475,7 @@ public class Description extends ConceptComponent<DescriptionRevision, Descripti
         }
 
         @Override
-        public DescriptionRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+        public DescriptionRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
             return getCv().makeAnalog(status, time, authorNid, moduleNid, pathNid);
         }
 

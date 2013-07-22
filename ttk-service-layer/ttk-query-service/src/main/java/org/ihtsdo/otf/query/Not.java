@@ -15,8 +15,8 @@
  */
 package org.ihtsdo.otf.query;
 
-import org.ihtsdo.ttk.api.ConcurrentBitSet;
-import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
 
 /**
  *

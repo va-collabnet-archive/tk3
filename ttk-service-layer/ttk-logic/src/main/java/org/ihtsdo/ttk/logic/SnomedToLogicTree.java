@@ -20,20 +20,20 @@ package org.ihtsdo.ttk.logic;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.ConceptFetcherBI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
-import org.ihtsdo.ttk.api.TerminologyBuilderBI;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
-import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.metadata.binding.Snomed;
-import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
-import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
-import org.ihtsdo.ttk.api.relationship.group.RelGroupVersionBI;
+import org.ihtsdo.otf.tcc.api.ConceptFetcherBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.otf.tcc.api.TerminologyBuilderBI;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
+import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
+import org.ihtsdo.otf.tcc.api.metadata.binding.SnomedMetadataRf2;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
+import org.ihtsdo.otf.tcc.api.relationship.group.RelGroupVersionBI;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -42,7 +42,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
 
 /**
  *

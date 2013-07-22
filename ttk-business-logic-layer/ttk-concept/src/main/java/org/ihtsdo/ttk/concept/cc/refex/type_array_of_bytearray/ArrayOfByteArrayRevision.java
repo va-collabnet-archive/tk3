@@ -23,16 +23,16 @@ import java.util.Collection;
 import java.util.Set;
 import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.Status;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayAnalogBI;
-import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayAnalogBI;
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TtkRefexArrayOfByteArrayRevision;
-import org.ihtsdo.ttk.api.uuid.UuidT5Generator;
+import org.ihtsdo.otf.tcc.api.uuid.UuidT5Generator;
 
 /**
  *
@@ -129,7 +129,7 @@ public class ArrayOfByteArrayRevision extends RefexRevision<ArrayOfByteArrayRevi
    }
    
    @Override
-   public ArrayOfByteArrayRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public ArrayOfByteArrayRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatus(status);
          this.setAuthorNid(authorNid);

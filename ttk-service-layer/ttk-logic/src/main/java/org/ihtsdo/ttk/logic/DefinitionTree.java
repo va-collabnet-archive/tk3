@@ -20,13 +20,13 @@ package org.ihtsdo.ttk.logic;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid.RefexNidVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_boolean.RefexNidBooleanVersionBI;
-import org.ihtsdo.ttk.api.spec.ValidationException;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid.RefexNidVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_boolean.RefexNidBooleanVersionBI;
+import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
 import org.ihtsdo.ttk.helpers.refex.RefexStringHelper;
 

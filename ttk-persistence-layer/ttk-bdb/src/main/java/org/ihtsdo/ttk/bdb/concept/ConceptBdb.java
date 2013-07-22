@@ -15,8 +15,8 @@ import javafx.application.Platform;
 
 import javafx.concurrent.Worker;
 
-import org.ihtsdo.ttk.api.NativeIdSetItrBI;
-import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.otf.tcc.api.NativeIdSetItrBI;
+import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.bdb.Bdb;
 import org.ihtsdo.ttk.bdb.ComponentBdb;
 import org.ihtsdo.ttk.bdb.id.NidCNidMapBdb;
@@ -43,9 +43,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import org.ihtsdo.ttk.api.ConcurrentBitSet;
-import org.ihtsdo.ttk.api.ConcurrentBitSetReadOnly;
-import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.ConcurrentBitSetReadOnly;
+import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
 

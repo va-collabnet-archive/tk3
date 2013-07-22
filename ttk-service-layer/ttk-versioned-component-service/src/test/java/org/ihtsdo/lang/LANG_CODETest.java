@@ -15,7 +15,7 @@
  */
 package org.ihtsdo.lang;
 
-import org.ihtsdo.ttk.api.lang.LanguageCode;
+import org.ihtsdo.otf.tcc.api.lang.LanguageCode;
 import org.junit.*;
 import static org.junit.Assert.*;
 

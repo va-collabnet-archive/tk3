@@ -21,7 +21,7 @@ import javafx.scene.control.TreeItem;
 
 import org.ihtsdo.ttk.helpers.concurrency.FutureHelper;
 import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
-import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
 
 //~--- JDK imports ------------------------------------------------------------
 

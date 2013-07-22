@@ -22,7 +22,7 @@ package org.ihtsdo.ttk.fx;
 
 import javafx.beans.property.SimpleObjectProperty;
 
-import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
 import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.concept.component.relationship.FxRelationshipVersion;
 

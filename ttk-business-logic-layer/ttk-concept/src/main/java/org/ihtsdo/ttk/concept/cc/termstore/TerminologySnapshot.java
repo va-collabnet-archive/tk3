@@ -2,27 +2,27 @@ package org.ihtsdo.ttk.concept.cc.termstore;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.ComponentContainerBI;
-import org.ihtsdo.ttk.api.ComponentVersionBI;
-import org.ihtsdo.ttk.api.ConceptContainerBI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.PathBI;
-import org.ihtsdo.ttk.api.PositionBI;
-import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
-import org.ihtsdo.ttk.api.TermChangeListener;
-import org.ihtsdo.ttk.api.TerminologyBuilderBI;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
-import org.ihtsdo.ttk.api.changeset.ChangeSetGeneratorBI;
-import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
-import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
-import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.db.DbDependency;
-import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
-import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
-import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
+import org.ihtsdo.otf.tcc.api.ComponentContainerBI;
+import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.ConceptContainerBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.PathBI;
+import org.ihtsdo.otf.tcc.api.PositionBI;
+import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.otf.tcc.api.TermChangeListener;
+import org.ihtsdo.otf.tcc.api.TerminologyBuilderBI;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.changeset.ChangeSetGenerationPolicy;
+import org.ihtsdo.otf.tcc.api.changeset.ChangeSetGeneratorBI;
+import org.ihtsdo.otf.tcc.api.conattr.ConceptAttributeVersionBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
+import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.db.DbDependency;
+import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptVersion;
@@ -47,8 +47,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import org.ihtsdo.ttk.api.NativeIdSetBI;
-import org.ihtsdo.ttk.api.Status;
+import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.Status;
 
 /**
  * Class description

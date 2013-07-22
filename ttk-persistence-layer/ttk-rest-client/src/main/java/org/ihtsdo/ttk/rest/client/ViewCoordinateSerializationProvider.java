@@ -20,7 +20,7 @@ package org.ihtsdo.ttk.rest.client;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 
 //~--- JDK imports ------------------------------------------------------------
 

@@ -17,8 +17,8 @@ package org.ihtsdo.ttk.concept.cc.refex;
 
 import java.beans.PropertyVetoException;
 
-import org.ihtsdo.ttk.api.AnalogBI;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.AnalogBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 
 /**
  *
@@ -32,5 +32,5 @@ public interface RefexAnalogBI<R extends RefexRevision<R, ?>>
     void setReferencedComponentNid(int componentNid) throws PropertyVetoException;
 
     @Override
-    R makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid);
+    R makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid);
 }

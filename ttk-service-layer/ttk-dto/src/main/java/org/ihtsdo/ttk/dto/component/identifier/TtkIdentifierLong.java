@@ -2,7 +2,7 @@ package org.ihtsdo.ttk.dto.component.identifier;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.id.LongIdBI;
+import org.ihtsdo.otf.tcc.api.id.LongIdBI;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------

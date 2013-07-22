@@ -11,8 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PreDestroy;
 import javax.ws.rs.ext.Provider;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.termstore.PersistentStoreI;
 

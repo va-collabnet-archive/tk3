@@ -1,7 +1,7 @@
 package org.ihtsdo.ttk.concept.cc.concept;
 
 import java.util.Comparator;
-import org.ihtsdo.ttk.api.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
 
 public class ComponentComparator implements Comparator<ComponentChronicleBI> {
 

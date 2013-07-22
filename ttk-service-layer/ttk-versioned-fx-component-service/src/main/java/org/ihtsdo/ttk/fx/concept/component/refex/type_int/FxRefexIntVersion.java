@@ -4,9 +4,9 @@ package org.ihtsdo.ttk.fx.concept.component.refex.type_int;
 
 import javafx.beans.property.SimpleIntegerProperty;
 
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.refex.type_int.RefexIntVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.refex.type_int.RefexIntVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

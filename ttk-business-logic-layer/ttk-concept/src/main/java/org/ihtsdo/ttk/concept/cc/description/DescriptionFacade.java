@@ -3,7 +3,7 @@ package org.ihtsdo.ttk.concept.cc.description;
 import java.beans.PropertyVetoException;
 
 import org.ihtsdo.ttk.concept.cc.component.TypedComponentFacade;
-import org.ihtsdo.ttk.api.description.DescriptionVersionBI;
+import org.ihtsdo.otf.tcc.api.description.DescriptionVersionBI;
 
 public interface DescriptionFacade
         extends TypedComponentFacade, DescriptionVersionBI {
@@ -12,6 +12,6 @@ public interface DescriptionFacade
  void setLang(String lang) throws PropertyVetoException;
  public void setText(String text) throws PropertyVetoException;
  @Override
- DescriptionRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid);
+ DescriptionRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid);
 
 }

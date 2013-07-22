@@ -9,21 +9,21 @@ import java.io.IOException;
 
 
 import org.ihtsdo.ttk.concept.cc.component.Revision;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.blueprint.ConceptAttributeAB;
-import org.ihtsdo.ttk.api.conattr.ConceptAttributeAnalogBI;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.blueprint.ConceptAttributeAB;
+import org.ihtsdo.otf.tcc.api.conattr.ConceptAttributeAnalogBI;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Collection;
 import java.util.Set;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.ttk.api.Status;
-import org.ihtsdo.ttk.api.blueprint.IdDirective;
+import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
 import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesRevision;
 
 public class ConceptAttributesRevision extends Revision<ConceptAttributesRevision, ConceptAttributes>
@@ -91,7 +91,7 @@ public class ConceptAttributesRevision extends Revision<ConceptAttributesRevisio
    }
 
    @Override
-   public ConceptAttributesRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public ConceptAttributesRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
          this.setStatus(status);
          this.setAuthorNid(authorNid);

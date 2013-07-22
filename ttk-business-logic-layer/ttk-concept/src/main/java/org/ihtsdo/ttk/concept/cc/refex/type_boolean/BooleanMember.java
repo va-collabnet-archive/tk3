@@ -11,15 +11,15 @@ import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanAnalogBI;
-import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanVersionBI;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_boolean.RefexBooleanAnalogBI;
+import org.ihtsdo.otf.tcc.api.refex.type_boolean.RefexBooleanVersionBI;
 import org.ihtsdo.ttk.dto.component.refex.type_boolean.TtkRefexBooleanMemberChronicle;
 import org.ihtsdo.ttk.dto.component.refex.type_boolean.TtkRefexBooleanRevision;
-import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 public class BooleanMember extends RefexMember<BooleanRevision, BooleanMember>
         implements RefexBooleanAnalogBI<BooleanRevision> {
@@ -91,7 +91,7 @@ public class BooleanMember extends RefexMember<BooleanRevision, BooleanMember>
     }
 
     @Override
-    public BooleanRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+    public BooleanRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
         BooleanRevision newR = new BooleanRevision(status, time,
                 authorNid, moduleNid, pathNid, this);
 

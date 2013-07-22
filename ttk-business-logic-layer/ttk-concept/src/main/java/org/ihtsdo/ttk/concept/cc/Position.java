@@ -37,12 +37,12 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.ihtsdo.ttk.api.PathBI;
-import org.ihtsdo.ttk.api.PositionBI;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
-import org.ihtsdo.ttk.api.hash.Hashcode;
-import org.ihtsdo.ttk.api.metadata.binding.TermAux;
+import org.ihtsdo.otf.tcc.api.PathBI;
+import org.ihtsdo.otf.tcc.api.PositionBI;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.metadata.binding.TermAux;
 
 public class Position implements PositionBI, Serializable {
 

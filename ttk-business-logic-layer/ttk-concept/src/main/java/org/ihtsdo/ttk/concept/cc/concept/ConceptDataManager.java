@@ -23,8 +23,8 @@ import org.ihtsdo.ttk.concept.cc.lucene.LuceneManager;
 import org.ihtsdo.ttk.concept.cc.media.Media;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
 
 /**
  * File format:<br>

@@ -2,7 +2,7 @@ package org.ihtsdo.ttk.dto.component.refex.type_boolean;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_boolean.RefexBooleanVersionBI;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------

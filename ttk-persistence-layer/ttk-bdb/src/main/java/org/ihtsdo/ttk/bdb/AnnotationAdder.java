@@ -20,9 +20,9 @@ package org.ihtsdo.ttk.bdb;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.ComponentChronicleBI;
-import org.ihtsdo.ttk.api.ConceptFetcherBI;
-import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.ConceptFetcherBI;
+import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.bdb.temp.AceLog;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMemberFactory;
@@ -35,8 +35,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
-import org.ihtsdo.ttk.api.ConcurrentBitSet;
-import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
 
 /**
  *

@@ -17,13 +17,13 @@ package org.ihtsdo.otf.query.clauses;
 
 import java.io.IOException;
 import org.ihtsdo.otf.query.Clause;
-import org.ihtsdo.ttk.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
 import org.ihtsdo.otf.query.ParentClause;
 import org.ihtsdo.otf.query.Query;
-import org.ihtsdo.ttk.api.ConcurrentBitSet;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.spec.ValidationException;
+import org.ihtsdo.otf.tcc.api.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.spec.ValidationException;
 
 /**
  *

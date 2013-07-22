@@ -16,7 +16,7 @@ import com.sleepycat.bind.tuple.TupleOutput;
 import com.sleepycat.je.DatabaseEntry;
 import java.util.HashSet;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 
 public class ConceptComponentBinder<V extends Revision<V, C>, C extends ConceptComponent<V, C>>
         extends TupleBinding<Collection<C>>

@@ -19,14 +19,14 @@ import org.ihtsdo.ttk.concept.cc.component.RefexMemberBinder;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 import org.ihtsdo.ttk.concept.cc.component.RelationshipBinder;
-import org.ihtsdo.ttk.api.ComponentChronicleBI;
-import org.ihtsdo.ttk.api.NidList;
-import org.ihtsdo.ttk.api.NidListBI;
-import org.ihtsdo.ttk.api.NidSet;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
-import org.ihtsdo.ttk.api.relationship.RelationshipChronicleBI;
-import org.ihtsdo.ttk.api.relationship.group.RelGroupChronicleBI;
+import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.NidList;
+import org.ihtsdo.otf.tcc.api.NidListBI;
+import org.ihtsdo.otf.tcc.api.NidSet;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipChronicleBI;
+import org.ihtsdo.otf.tcc.api.relationship.group.RelGroupChronicleBI;
 
 import java.io.IOException;
 

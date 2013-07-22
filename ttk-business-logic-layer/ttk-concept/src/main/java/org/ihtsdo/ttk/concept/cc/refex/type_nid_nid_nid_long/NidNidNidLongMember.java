@@ -5,14 +5,14 @@ package org.ihtsdo.ttk.concept.cc.refex.type_nid_nid_nid_long;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
-import org.ihtsdo.ttk.api.hash.Hashcode;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_long
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_nid_long
    .RefexNidNidNidLongAnalogBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_long
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_nid_long
    .RefexNidNidNidLongVersionBI;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
@@ -120,7 +120,7 @@ public class NidNidNidLongMember
    }
 
    @Override
-   public NidNidNidLongRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+   public NidNidNidLongRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
       NidNidNidLongRevision newR = new NidNidNidLongRevision(status, time,
                                        authorNid, moduleNid, pathNid, this);
 

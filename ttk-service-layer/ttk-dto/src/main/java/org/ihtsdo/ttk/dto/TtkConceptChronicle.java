@@ -2,26 +2,26 @@ package org.ihtsdo.ttk.dto;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.ToolkitRefexType;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
-import org.ihtsdo.ttk.api.description.DescriptionChronicleBI;
-import org.ihtsdo.ttk.api.media.MediaChronicleBI;
-import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
-import org.ihtsdo.ttk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayVersionBI;
-import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanVersionBI;
-import org.ihtsdo.ttk.api.refex.type_int.RefexIntVersionBI;
-import org.ihtsdo.ttk.api.refex.type_long.RefexLongVersionBI;
-import org.ihtsdo.ttk.api.refex.type_member.RefexMemberVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid.RefexNidVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_float.RefexNidFloatVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_int.RefexNidIntVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_long.RefexNidLongVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid.RefexNidNidVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_string.RefexNidNidStringVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_string.RefexNidStringVersionBI;
-import org.ihtsdo.ttk.api.refex.type_string.RefexStringVersionBI;
-import org.ihtsdo.ttk.api.relationship.RelationshipChronicleBI;
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.description.DescriptionChronicleBI;
+import org.ihtsdo.otf.tcc.api.media.MediaChronicleBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_boolean.RefexBooleanVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_int.RefexIntVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_long.RefexLongVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_member.RefexMemberVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid.RefexNidVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_float.RefexNidFloatVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_int.RefexNidIntVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_long.RefexNidLongVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid.RefexNidNidVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_string.RefexNidNidStringVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_string.RefexNidStringVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_string.RefexStringVersionBI;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipChronicleBI;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
 import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesChronicle;
 import org.ihtsdo.ttk.dto.component.description.TtkDescriptionChronicle;
@@ -50,10 +50,10 @@ import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipChronicle;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
 import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
 
-import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_FLOAT;
-import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_INT;
-import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_LONG;
-import static org.ihtsdo.ttk.api.ToolkitRefexType.CID_CID_CID_STRING;
+import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_FLOAT;
+import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_INT;
+import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_LONG;
+import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_STRING;
 
 //~--- JDK imports ------------------------------------------------------------
 

@@ -2,25 +2,25 @@ package org.ihtsdo.ttk.fx.concept.component.refex;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayVersionBI;
-import org.ihtsdo.ttk.api.refex.type_boolean.RefexBooleanVersionBI;
-import org.ihtsdo.ttk.api.refex.type_int.RefexIntVersionBI;
-import org.ihtsdo.ttk.api.refex.type_long.RefexLongVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid.RefexNidVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_boolean.RefexNidBooleanVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_float.RefexNidFloatVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_int.RefexNidIntVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_long.RefexNidLongVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid.RefexNidNidVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_float.RefexNidNidNidFloatVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_int.RefexNidNidNidIntVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_long.RefexNidNidNidLongVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_nid_string.RefexNidNidNidStringVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_nid_string.RefexNidNidStringVersionBI;
-import org.ihtsdo.ttk.api.refex.type_nid_string.RefexNidStringVersionBI;
-import org.ihtsdo.ttk.api.refex.type_string.RefexStringVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_boolean.RefexBooleanVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_int.RefexIntVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_long.RefexLongVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid.RefexNidVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_boolean.RefexNidBooleanVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_float.RefexNidFloatVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_int.RefexNidIntVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_long.RefexNidLongVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid.RefexNidNidVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_nid.RefexNidNidNidVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_nid_float.RefexNidNidNidFloatVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_nid_int.RefexNidNidNidIntVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_nid_long.RefexNidNidNidLongVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_nid_string.RefexNidNidNidStringVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_string.RefexNidNidStringVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_string.RefexNidStringVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_string.RefexStringVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

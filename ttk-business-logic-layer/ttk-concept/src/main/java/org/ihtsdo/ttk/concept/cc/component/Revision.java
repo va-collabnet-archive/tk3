@@ -2,26 +2,26 @@ package org.ihtsdo.ttk.concept.cc.component;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.ComponentVersionBI;
-import org.ihtsdo.ttk.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
 import org.ihtsdo.ttk.concept.cc.Position;
-import org.ihtsdo.ttk.api.AnalogBI;
-import org.ihtsdo.ttk.api.ComponentChronicleBI;
-import org.ihtsdo.ttk.api.AnalogGeneratorBI;
-import org.ihtsdo.ttk.api.PositionBI;
+import org.ihtsdo.otf.tcc.api.AnalogBI;
+import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.AnalogGeneratorBI;
+import org.ihtsdo.otf.tcc.api.PositionBI;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
-import org.ihtsdo.ttk.api.coordinate.EditCoordinate;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.id.IdBI;
-import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.id.IdBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -35,7 +35,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.ttk.api.Status;
+import org.ihtsdo.otf.tcc.api.Status;
 
 public abstract class Revision<V extends Revision<V, C>, C extends ConceptComponent<V, C>>
         implements ComponentVersionBI, AnalogBI, AnalogGeneratorBI<V> {
@@ -92,7 +92,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
    abstract protected void addComponentNids(Set<Integer> allNids);
 
    @Override
-   public boolean addLongId(Long longId, int authorityNid, org.ihtsdo.ttk.api.Status status, EditCoordinate ec, long time) {
+   public boolean addLongId(Long longId, int authorityNid, org.ihtsdo.otf.tcc.api.Status status, EditCoordinate ec, long time) {
       return primordialComponent.addLongId(longId, authorityNid, status, ec, time);
    }
 
@@ -143,7 +143,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
     * @return
     */
    @Override
-   public abstract V makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid);
+   public abstract V makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid);
 
    protected void modified() {
       if (primordialComponent != null) {
@@ -489,7 +489,7 @@ public abstract class Revision<V extends Revision<V, C>, C extends ConceptCompon
    }
 
    @Override
-   public final void setStatus(org.ihtsdo.ttk.api.Status nid) {
+   public final void setStatus(org.ihtsdo.otf.tcc.api.Status nid) {
       if (getTime() != Long.MAX_VALUE) {
          throw new UnsupportedOperationException("Cannot change status if time != Long.MAX_VALUE; "
                  + "Use makeAnalog instead.");

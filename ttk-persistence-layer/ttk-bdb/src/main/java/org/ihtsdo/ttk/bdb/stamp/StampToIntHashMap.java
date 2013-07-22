@@ -4,7 +4,7 @@ package org.ihtsdo.ttk.bdb.stamp;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
-import org.ihtsdo.ttk.api.Status;
+import org.ihtsdo.otf.tcc.api.Status;
 
 public class StampToIntHashMap {
    private static final int defaultCapacity = 277;

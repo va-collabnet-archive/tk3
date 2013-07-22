@@ -5,14 +5,14 @@ package org.ihtsdo.ttk.fx.concept.component.refex.type_comp_boolean;
 
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexChronicle;
 import org.ihtsdo.ttk.fx.concept.component.refex.type_comp.FxRefexCompVersion;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 import javafx.beans.property.SimpleBooleanProperty;
-import org.ihtsdo.ttk.api.refex.type_nid_boolean.RefexNidBooleanVersionBI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid_boolean.RefexNidBooleanVersionBI;
 
 
 public class FxRefexCompBooleanVersion<T extends FxRefexChronicle, V extends FxRefexCompBooleanVersion>

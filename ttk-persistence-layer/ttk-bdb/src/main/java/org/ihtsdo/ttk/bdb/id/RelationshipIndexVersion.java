@@ -18,8 +18,8 @@
 
 package org.ihtsdo.ttk.bdb.id;
 
-import org.ihtsdo.ttk.api.Status;
-import org.ihtsdo.ttk.api.Ts;
+import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.Ts;
 
 /**
  *

@@ -15,7 +15,7 @@
  */
 package org.ihtsdo.otf.query;
 
-import org.ihtsdo.ttk.api.IntSet;
+import org.ihtsdo.otf.tcc.api.IntSet;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

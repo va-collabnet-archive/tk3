@@ -1,6 +1,6 @@
 package org.ihtsdo.ttk.bdb;
 
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 public class UncommittedStatusForPath {
 	public int statusNid;

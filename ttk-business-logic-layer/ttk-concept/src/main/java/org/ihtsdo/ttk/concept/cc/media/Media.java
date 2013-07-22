@@ -10,15 +10,15 @@ import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
-import org.ihtsdo.ttk.api.ContradictionManagerBI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.PositionSetBI;
-import org.ihtsdo.ttk.api.Precedence;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.ContradictionManagerBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.PositionSetBI;
+import org.ihtsdo.otf.tcc.api.Precedence;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.dto.component.media.TtkMediaChronicle;
 import org.ihtsdo.ttk.dto.component.media.TtkMediaRevision;
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -28,13 +28,13 @@ import java.io.IOException;
 
 import java.util.*;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.ttk.api.Status;
-import org.ihtsdo.ttk.api.blueprint.IdDirective;
+import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
-import org.ihtsdo.ttk.api.blueprint.MediaCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexDirective;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.MediaCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 
 public class Media extends ConceptComponent<MediaRevision, Media>
         implements MediaVersionFacade {
@@ -133,7 +133,7 @@ public class Media extends ConceptComponent<MediaRevision, Media>
     }
 
     @Override
-    public MediaRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+    public MediaRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
         MediaRevision newR;
 
         newR = new MediaRevision(this, status, time, authorNid, moduleNid, pathNid, this);
@@ -446,7 +446,7 @@ public class Media extends ConceptComponent<MediaRevision, Media>
         }
 
         @Override
-        public MediaRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+        public MediaRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
             return (MediaRevision) getCv().makeAnalog(status, time, authorNid, moduleNid, pathNid);
         }
 

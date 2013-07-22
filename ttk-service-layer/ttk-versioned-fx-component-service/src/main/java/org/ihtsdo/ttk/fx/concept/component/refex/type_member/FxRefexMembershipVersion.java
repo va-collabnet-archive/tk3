@@ -3,9 +3,9 @@ package org.ihtsdo.ttk.fx.concept.component.refex.type_member;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.ttk.fx.concept.component.refex.FxRefexVersion;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

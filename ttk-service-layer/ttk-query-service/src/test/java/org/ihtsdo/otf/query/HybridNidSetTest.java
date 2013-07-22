@@ -15,11 +15,11 @@
  */
 package org.ihtsdo.otf.query;
 
-import org.ihtsdo.ttk.api.HybridNidSet;
-import org.ihtsdo.ttk.api.IntSet;
+import org.ihtsdo.otf.tcc.api.HybridNidSet;
+import org.ihtsdo.otf.tcc.api.IntSet;
 import java.io.IOException;
-import org.ihtsdo.ttk.api.ConcurrentBitSet;
-import org.ihtsdo.ttk.api.NativeIdSetItrBI;
+import org.ihtsdo.otf.tcc.api.ConcurrentBitSet;
+import org.ihtsdo.otf.tcc.api.NativeIdSetItrBI;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

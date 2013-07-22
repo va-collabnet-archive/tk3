@@ -2,8 +2,8 @@ package org.ihtsdo.ttk.dto.component.media;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.media.MediaVersionBI;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.media.MediaVersionBI;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
 
 //~--- JDK imports ------------------------------------------------------------

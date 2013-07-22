@@ -4,13 +4,13 @@ package org.ihtsdo.ttk.fx.concept.component;
 
 import javafx.beans.property.SimpleObjectProperty;
 
-import org.ihtsdo.ttk.api.ComponentBI;
-import org.ihtsdo.ttk.api.ComponentVersionBI;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
-import org.ihtsdo.ttk.api.id.IdBI;
+import org.ihtsdo.otf.tcc.api.ComponentBI;
+import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.id.IdBI;
 import org.ihtsdo.ttk.fx.FxComponentReference;
 import org.ihtsdo.ttk.fx.FxTime;
 import org.ihtsdo.ttk.fx.concept.component.attribute.FxConceptAttributesVersion;
@@ -35,7 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.bind.annotation.XmlSeeAlso;
-import org.ihtsdo.ttk.api.Status;
+import org.ihtsdo.otf.tcc.api.Status;
 
 @XmlSeeAlso( {
    FxConceptAttributesVersion.class, FxDescriptionVersion.class, FxIdentifier.class,

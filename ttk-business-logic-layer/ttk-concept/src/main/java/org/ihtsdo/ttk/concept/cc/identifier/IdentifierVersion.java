@@ -8,11 +8,11 @@ import com.sleepycat.bind.tuple.TupleOutput;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.Revision;
-import org.ihtsdo.ttk.api.id.IdBI;
+import org.ihtsdo.otf.tcc.api.id.IdBI;
 
 //import org.ihtsdo.db.bdb.Bdb;
 import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifier;
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.Date;
 import java.util.Set;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.ttk.api.Status;
+import org.ihtsdo.otf.tcc.api.Status;
 
 public abstract class IdentifierVersion implements IdBI {
    protected int authorityNid;

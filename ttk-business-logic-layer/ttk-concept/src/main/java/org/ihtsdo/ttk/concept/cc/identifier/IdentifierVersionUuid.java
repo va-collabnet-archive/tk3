@@ -7,13 +7,13 @@ import com.sleepycat.bind.tuple.TupleOutput;
 import java.io.IOException;
 
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent.IDENTIFIER_PART_TYPES;
-import org.ihtsdo.ttk.api.id.UuidIdBI;
+import org.ihtsdo.otf.tcc.api.id.UuidIdBI;
 import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierUuid;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
-import org.ihtsdo.ttk.api.Status;
+import org.ihtsdo.otf.tcc.api.Status;
 
 public class IdentifierVersionUuid extends IdentifierVersion implements UuidIdBI {
    private long lsb;

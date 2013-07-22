@@ -15,7 +15,7 @@
  */
 package org.ihtsdo.country;
 
-import org.ihtsdo.ttk.api.country.COUNTRY_CODE;
+import org.ihtsdo.otf.tcc.api.country.COUNTRY_CODE;
 import org.junit.*;
 import static org.junit.Assert.*;
 

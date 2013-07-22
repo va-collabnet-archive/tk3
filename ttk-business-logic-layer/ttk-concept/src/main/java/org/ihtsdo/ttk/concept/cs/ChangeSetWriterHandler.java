@@ -8,13 +8,13 @@ import java.util.logging.Level;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
-import org.ihtsdo.ttk.api.ConceptFetcherBI;
-import org.ihtsdo.ttk.api.NativeIdSetBI;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
-import org.ihtsdo.ttk.api.changeset.ChangeSetGenerationPolicy;
-import org.ihtsdo.ttk.api.changeset.ChangeSetGeneratorBI;
-import org.ihtsdo.ttk.api.cs.ChangeSetWriterThreading;
+import org.ihtsdo.otf.tcc.api.ConceptFetcherBI;
+import org.ihtsdo.otf.tcc.api.NativeIdSetBI;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
+import org.ihtsdo.otf.tcc.api.changeset.ChangeSetGenerationPolicy;
+import org.ihtsdo.otf.tcc.api.changeset.ChangeSetGeneratorBI;
+import org.ihtsdo.otf.tcc.api.cs.ChangeSetWriterThreading;
 
 public class ChangeSetWriterHandler implements Runnable, ProcessUnfetchedConceptDataBI {
 

@@ -9,9 +9,9 @@ import org.ihtsdo.ttk.concept.cc.attributes.ConceptAttributes;
 import org.ihtsdo.ttk.concept.cc.description.Description;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
-import org.ihtsdo.ttk.api.ComponentChronicleBI;
-import org.ihtsdo.ttk.api.NidListBI;
-import org.ihtsdo.ttk.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
+import org.ihtsdo.otf.tcc.api.NidListBI;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

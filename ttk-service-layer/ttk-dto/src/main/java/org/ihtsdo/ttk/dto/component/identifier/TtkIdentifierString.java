@@ -2,7 +2,7 @@ package org.ihtsdo.ttk.dto.component.identifier;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.id.StringIdBI;
+import org.ihtsdo.otf.tcc.api.id.StringIdBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

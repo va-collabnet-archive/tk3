@@ -43,8 +43,8 @@ import org.ihtsdo.ttk.services.aa.SessionAttributeKeys;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
-import org.ihtsdo.ttk.api.metadata.binding.Snomed;
-import org.ihtsdo.ttk.api.metadata.binding.TermAux;
+import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
+import org.ihtsdo.otf.tcc.api.metadata.binding.TermAux;
 import org.ihtsdo.ttk.services.aa.SessionAttributes;
 import org.ihtsdo.ttk.services.action.ActionService;
 

@@ -20,8 +20,8 @@ package org.ihtsdo.ttk.fx.store;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.fx.FxComponentReference;
 import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;
@@ -33,7 +33,7 @@ import org.ihtsdo.ttk.fx.fetchpolicy.VersionPolicy;
 import java.io.IOException;
 
 import java.util.UUID;
-import org.ihtsdo.ttk.api.TerminologyStoreDI;
+import org.ihtsdo.otf.tcc.api.TerminologyStoreDI;
 
 /**
  *

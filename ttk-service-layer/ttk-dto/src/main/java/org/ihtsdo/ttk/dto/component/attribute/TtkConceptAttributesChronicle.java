@@ -2,9 +2,9 @@ package org.ihtsdo.ttk.dto.component.attribute;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.conattr.ConceptAttributeChronicleBI;
-import org.ihtsdo.ttk.api.conattr.ConceptAttributeVersionBI;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.conattr.ConceptAttributeChronicleBI;
+import org.ihtsdo.otf.tcc.api.conattr.ConceptAttributeVersionBI;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.dto.component.TtkComponentChronicle;
 
 //~--- JDK imports ------------------------------------------------------------

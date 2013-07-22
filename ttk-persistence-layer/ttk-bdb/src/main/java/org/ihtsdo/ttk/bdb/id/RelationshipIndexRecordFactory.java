@@ -22,9 +22,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 import org.apache.mahout.math.list.IntArrayList;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
-import org.ihtsdo.ttk.api.relationship.RelationshipChronicleBI;
-import org.ihtsdo.ttk.api.relationship.RelationshipVersionBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipChronicleBI;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
 
 /**
  *

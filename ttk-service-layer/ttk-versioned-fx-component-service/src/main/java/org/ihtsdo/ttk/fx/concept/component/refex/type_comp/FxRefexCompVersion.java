@@ -9,9 +9,9 @@ import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_float.FxRefexCompFloa
 import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_int.FxRefexCompIntVersion;
 import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_long.FxRefexCompLongVersion;
 import org.ihtsdo.ttk.fx.concept.component.refex.type_comp_string.FxRefexCompStringVersion;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.TerminologySnapshotDI;
-import org.ihtsdo.ttk.api.refex.type_nid.RefexNidVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
+import org.ihtsdo.otf.tcc.api.refex.type_nid.RefexNidVersionBI;
 
 //~--- JDK imports ------------------------------------------------------------
 

@@ -21,8 +21,8 @@ package org.ihtsdo.ttk.auxiliary.taxonomies;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.lang.LanguageCode;
-import org.ihtsdo.ttk.api.metadata.binding.TermAux;
+import org.ihtsdo.otf.tcc.api.lang.LanguageCode;
+import org.ihtsdo.otf.tcc.api.metadata.binding.TermAux;
 
 //~--- JDK imports ------------------------------------------------------------
 

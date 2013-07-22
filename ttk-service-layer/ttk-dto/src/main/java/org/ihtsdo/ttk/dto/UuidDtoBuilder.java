@@ -20,15 +20,15 @@ package org.ihtsdo.ttk.dto;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.blueprint.ConceptAttributeAB;
-import org.ihtsdo.ttk.api.blueprint.ConceptCB;
-import org.ihtsdo.ttk.api.blueprint.DescriptionCAB;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
-import org.ihtsdo.ttk.api.blueprint.MediaCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.blueprint.ComponentProperty;
-import org.ihtsdo.ttk.api.blueprint.RelationshipCAB;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.blueprint.ConceptAttributeAB;
+import org.ihtsdo.otf.tcc.api.blueprint.ConceptCB;
+import org.ihtsdo.otf.tcc.api.blueprint.DescriptionCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.MediaCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
+import org.ihtsdo.otf.tcc.api.blueprint.RelationshipCAB;
 import org.ihtsdo.ttk.dto.component.TtkComponentChronicle;
 import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesChronicle;
 import org.ihtsdo.ttk.dto.component.description.TtkDescriptionChronicle;

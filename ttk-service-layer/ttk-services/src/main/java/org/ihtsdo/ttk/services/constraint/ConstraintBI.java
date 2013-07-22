@@ -16,7 +16,7 @@
 package org.ihtsdo.ttk.services.constraint;
 
 import javafx.collections.ObservableList;
-import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 
 /**
  * May include QA constraints, definitional constraints (precoordination or postcoordination)

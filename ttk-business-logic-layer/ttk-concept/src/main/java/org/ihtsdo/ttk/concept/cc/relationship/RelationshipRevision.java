@@ -10,17 +10,17 @@ import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.Revision;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.Status;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
-import org.ihtsdo.ttk.api.blueprint.RelationshipCAB;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.relationship.RelationshipAnalogBI;
-import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf1;
-import org.ihtsdo.ttk.api.metadata.binding.SnomedMetadataRf2;
-import org.ihtsdo.ttk.api.TkRelationshipType;
-import org.ihtsdo.ttk.api.blueprint.IdDirective;
-import org.ihtsdo.ttk.api.blueprint.RefexDirective;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.RelationshipCAB;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.relationship.RelationshipAnalogBI;
+import org.ihtsdo.otf.tcc.api.metadata.binding.SnomedMetadataRf1;
+import org.ihtsdo.otf.tcc.api.metadata.binding.SnomedMetadataRf2;
+import org.ihtsdo.otf.tcc.api.TkRelationshipType;
+import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
 import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipRevision;
 
 public class RelationshipRevision extends Revision<RelationshipRevision, Relationship>
@@ -108,7 +108,7 @@ public class RelationshipRevision extends Revision<RelationshipRevision, Relatio
     }
 
     @Override
-    public RelationshipRevision makeAnalog(org.ihtsdo.ttk.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
+    public RelationshipRevision makeAnalog(org.ihtsdo.otf.tcc.api.Status status, long time, int authorNid, int moduleNid, int pathNid) {
         if ((this.getTime() == time) && (this.getPathNid() == pathNid)) {
             this.setStatus(status);
             this.setAuthorNid(authorNid);

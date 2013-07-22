@@ -24,13 +24,13 @@ import org.ihtsdo.ttk.concept.cc.NidPairForRefex;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptDataFetcherI;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 import org.ihtsdo.ttk.fx.store.FxTerminologyStoreDI;
-import org.ihtsdo.ttk.api.NidSetBI;
-import org.ihtsdo.ttk.api.Status;
-import org.ihtsdo.ttk.api.TerminologyStoreDI;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
-import org.ihtsdo.ttk.api.cs.ChangeSetPolicy;
-import org.ihtsdo.ttk.api.cs.ChangeSetWriterThreading;
-import org.ihtsdo.ttk.api.refex.RefexChronicleBI;
+import org.ihtsdo.otf.tcc.api.NidSetBI;
+import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.TerminologyStoreDI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.cs.ChangeSetPolicy;
+import org.ihtsdo.otf.tcc.api.cs.ChangeSetWriterThreading;
+import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
 
 /**
  *

@@ -16,7 +16,7 @@ import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.concept.cs.ChangeSetLogger;
 import org.ihtsdo.ttk.concept.cs.ChangeSetReaderI;
 import org.ihtsdo.ttk.concept.cs.CsProperty;

@@ -17,7 +17,7 @@
 package org.ihtsdo.ttk.bdb.nidmaps;
 
 import java.util.UUID;
-import org.ihtsdo.ttk.api.hash.Hashcode;
+import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 /**
  *

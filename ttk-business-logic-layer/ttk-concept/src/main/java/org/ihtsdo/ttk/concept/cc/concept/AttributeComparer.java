@@ -1,7 +1,7 @@
 package org.ihtsdo.ttk.concept.cc.concept;
 
-import org.ihtsdo.ttk.api.ComponentVersionBI;
-import org.ihtsdo.ttk.api.contradiction.ComponentType;
+import org.ihtsdo.otf.tcc.api.ComponentVersionBI;
+import org.ihtsdo.otf.tcc.api.contradiction.ComponentType;
 
 public abstract class AttributeComparer {
 	protected boolean comparerInitialized = false;

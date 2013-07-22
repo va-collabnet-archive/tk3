@@ -25,8 +25,8 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
-import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
+import org.ihtsdo.otf.tcc.api.Ts;
+import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.ttk.helpers.timer.TtkTimer;
 import org.ihtsdo.ttk.lookup.Looker;
 import org.ihtsdo.ttk.lookup.TermstoreLatch;

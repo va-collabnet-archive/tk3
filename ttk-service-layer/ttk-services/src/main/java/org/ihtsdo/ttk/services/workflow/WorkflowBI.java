@@ -15,7 +15,7 @@
  */
 package org.ihtsdo.ttk.services.workflow;
 
-import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
+import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 
 /**
  *

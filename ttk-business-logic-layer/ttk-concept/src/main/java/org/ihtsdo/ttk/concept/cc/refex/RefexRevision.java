@@ -4,10 +4,10 @@ package org.ihtsdo.ttk.concept.cc.refex;
 import com.sleepycat.bind.tuple.TupleInput;
 
 import org.ihtsdo.ttk.concept.cc.component.Revision;
-import org.ihtsdo.ttk.api.blueprint.RefexCAB;
-import org.ihtsdo.ttk.api.refex.RefexAnalogBI;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
+import org.ihtsdo.otf.tcc.api.refex.RefexAnalogBI;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
-import org.ihtsdo.ttk.api.ToolkitRefexType;
+import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -17,13 +17,13 @@ import java.io.IOException;
 
 import java.util.Set;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.Status;
-import org.ihtsdo.ttk.api.blueprint.IdDirective;
-import org.ihtsdo.ttk.api.blueprint.InvalidCAB;
-import org.ihtsdo.ttk.api.blueprint.RefexDirective;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.api.refex.RefexVersionBI;
+import org.ihtsdo.otf.tcc.api.ContradictionException;
+import org.ihtsdo.otf.tcc.api.Status;
+import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
+import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
+import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
+import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
+import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 
 public abstract class RefexRevision<V extends RefexRevision<V, C>, C extends RefexMember<V, C>>
         extends Revision<V, C> implements RefexAnalogBI<V> {

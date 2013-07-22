@@ -4,11 +4,11 @@ package org.ihtsdo.ttk.concept.cc.identifier;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 import java.io.IOException;
-import org.ihtsdo.ttk.api.Status;
+import org.ihtsdo.otf.tcc.api.Status;
 
 
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent.IDENTIFIER_PART_TYPES;
-import org.ihtsdo.ttk.api.id.StringIdBI;
+import org.ihtsdo.otf.tcc.api.id.StringIdBI;
 import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierString;
 
 public class IdentifierVersionString extends IdentifierVersion implements StringIdBI {
