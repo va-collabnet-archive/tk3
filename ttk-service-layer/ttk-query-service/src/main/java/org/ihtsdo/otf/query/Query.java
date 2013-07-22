@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashMap;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
@@ -103,7 +102,7 @@ public abstract class Query {
         }
         
         @Override
-        public NidBitSetBI getNidSet() throws IOException {
+        public NativeIdSetBI getNidSet() throws IOException {
             return conceptsToIterate;
         }
         

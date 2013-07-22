@@ -22,7 +22,7 @@ import org.ihtsdo.otf.query.LeafClause;
 import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.otf.query.Query;
 import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidBitSetItrBI;
+import org.ihtsdo.ttk.api.NativeIdSetItrBI;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.concept.ConceptVersionBI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
@@ -47,7 +47,7 @@ public class ConceptIsDescendentOf extends LeafClause {
             throws ValidationException, IOException, ContradictionException {
         ViewCoordinate viewCoordinate = getEnclosingQuery().getViewCoordinate();
         int parentNid = kindOfSpec.getNid(viewCoordinate);
-        NidBitSetItrBI itr = incomingPossibleComponents.getIterator();
+        NativeIdSetItrBI itr = incomingPossibleComponents.getIterator();
         while (itr.next()) {
             if (itr.nid() != parentNid && Ts.get().isKindOf(itr.nid(), parentNid, viewCoordinate)) {
                 getResultsCache().setMember(itr.nid());

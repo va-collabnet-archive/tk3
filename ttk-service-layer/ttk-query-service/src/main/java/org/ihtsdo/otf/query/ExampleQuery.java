@@ -15,10 +15,12 @@
  */
 package org.ihtsdo.otf.query;
 
+import org.ihtsdo.ttk.api.HybridNidSet;
 import org.ihtsdo.ttk.api.NativeIdSetBI;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.ttk.api.ConcurrentBitSet;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.ttk.api.metadata.binding.Snomed;
@@ -34,7 +36,7 @@ public class ExampleQuery {
             Query q = new Query(StandardViewCoordinates.getSnomedInferredLatest()) {
                 @Override
                 protected NativeIdSetBI For() throws IOException {
-                    return new HybridNidSet(Ts.get().getAllConceptNids());
+                    return Ts.get().getAllConceptNids();
                 }
 
                 @Override

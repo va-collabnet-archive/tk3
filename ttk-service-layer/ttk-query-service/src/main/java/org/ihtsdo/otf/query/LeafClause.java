@@ -16,6 +16,7 @@
 package org.ihtsdo.otf.query;
 
 import java.io.IOException;
+import org.ihtsdo.ttk.api.ConcurrentBitSet;
 import org.ihtsdo.ttk.api.NativeIdSetBI;
 
 /**
@@ -24,13 +25,13 @@ import org.ihtsdo.ttk.api.NativeIdSetBI;
  */
 public abstract class LeafClause extends Clause {
     
-    HybridNidSet resultsCache = new HybridNidSet();
+    ConcurrentBitSet resultsCache = new ConcurrentBitSet();
 
     public LeafClause(Query enclosingQuery) {
         super(enclosingQuery);
     }
 
-    public HybridNidSet getResultsCache() {
+    public NativeIdSetBI getResultsCache() {
         return resultsCache;
     }
 

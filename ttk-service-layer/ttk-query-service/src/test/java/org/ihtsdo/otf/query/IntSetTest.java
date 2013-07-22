@@ -15,12 +15,14 @@
  */
 package org.ihtsdo.otf.query;
 
+import org.ihtsdo.ttk.api.IntSet;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -84,6 +86,8 @@ public class IntSetTest {
      * Test of and method, of class IntSet.
      */
     @Test
+        @Ignore // to slow for now... KEC
+
     public void testAnd() {
         System.out.println("and");
        IntSet first = new IntSet(new int[]{-4, -3, -2});

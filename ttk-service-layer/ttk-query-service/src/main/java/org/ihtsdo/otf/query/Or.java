@@ -17,6 +17,7 @@ package org.ihtsdo.otf.query;
 
 import org.ihtsdo.ttk.api.NativeIdSetBI;
 import java.io.IOException;
+import org.ihtsdo.ttk.api.ConcurrentBitSet;
 import org.ihtsdo.ttk.api.ContradictionException;
 import org.ihtsdo.ttk.api.spec.ValidationException;
 
@@ -32,7 +33,7 @@ public class Or extends ParentClause{
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI searchSpace) throws IOException, ValidationException, ContradictionException {
-        NativeIdSetBI results = new HybridNidSet();
+        NativeIdSetBI results = new ConcurrentBitSet();
         for(Clause clause : getChildren()){
             results.union(clause.computePossibleComponents(searchSpace));
         }

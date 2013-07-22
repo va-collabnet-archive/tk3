@@ -15,6 +15,7 @@
  */
 package org.ihtsdo.otf.query;
 
+import org.ihtsdo.ttk.api.ConcurrentBitSet;
 import org.ihtsdo.ttk.api.NativeIdSetBI;
 
 /**
@@ -29,7 +30,7 @@ public class Not extends ParentClause {
 
     @Override
     public NativeIdSetBI computePossibleComponents(NativeIdSetBI incomingPossibleComponents) {
-        NativeIdSetBI notSet = new HybridNidSet((HybridNidSet) enclosingQuery.getForSet());
+        ConcurrentBitSet notSet = new ConcurrentBitSet(enclosingQuery.getForSet());
         notSet.andNot(incomingPossibleComponents);
         return notSet;
     }

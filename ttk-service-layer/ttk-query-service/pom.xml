@@ -11,12 +11,6 @@
     <name>${branch}:L2: Service Layer: Query service</name>
     <dependencies>
         <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-core</artifactId>
-            <type>jar</type>
-            <version>3.5.0</version>
-        </dependency>
-        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>ttk-versioned-component-service</artifactId>
             <version>${project.version}</version>
@@ -25,12 +19,6 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
             <type>jar</type>
         </dependency>
     </dependencies>
