@@ -94,7 +94,7 @@ public interface TerminologyDI {
 
    //~--- get methods ---------------------------------------------------------
 
-   NidBitSetBI getAllConceptNids() throws IOException;
+   NativeIdSetBI getAllConceptNids() throws IOException;
    
    NativeIdSetBI getConceptNidsForComponentNids(NativeIdSetBI componentNativeIds) throws IOException;
 
@@ -102,7 +102,7 @@ public interface TerminologyDI {
 
    int getAuthorNidForStamp(int sapNid);
 
-   NidBitSetBI getEmptyNidSet() throws IOException;
+   NativeIdSetBI getEmptyNidSet() throws IOException;
 
    ViewCoordinate getMetadataVC() throws IOException;
 

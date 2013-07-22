@@ -27,6 +27,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class ConcurrentBitSet implements NativeIdSetBI {
 
+    private final int          offset      = Integer.MIN_VALUE;
+
     private static final int BITS_PER_UNIT = 64;
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private volatile AtomicLongArray units;
@@ -43,6 +45,16 @@ public class ConcurrentBitSet implements NativeIdSetBI {
         this(bitSet.length());
         for (int bit = bitSet.nextSetBit(0); bit >= 0; bit = bitSet.nextSetBit(bit + 1)) {
             set(bit);
+        }
+    }
+    
+    public ConcurrentBitSet(NativeIdSetBI nativeIdSet) {
+        if (nativeIdSet instanceof ConcurrentBitSet) {
+            ConcurrentBitSet other = (ConcurrentBitSet) nativeIdSet;
+            units = new AtomicLongArray(1 + (other.size() - 1) / BITS_PER_UNIT);
+            privateOr(other);
+        } else {
+            throw new UnsupportedOperationException();
         }
     }
 
@@ -87,6 +99,7 @@ public class ConcurrentBitSet implements NativeIdSetBI {
     }
 
     public boolean get(int bit) {
+        bit = bit + offset;
         final int unit = bit / BITS_PER_UNIT;
         final int index = bit % BITS_PER_UNIT;
         final long mask = 1L << index;
@@ -103,6 +116,7 @@ public class ConcurrentBitSet implements NativeIdSetBI {
     }
 
     public void set(int bit, boolean value) {
+        bit = bit + offset;
         if (value) {
             set(bit);
         } else {
@@ -110,7 +124,8 @@ public class ConcurrentBitSet implements NativeIdSetBI {
         }
     }
 
-    public void set(int bit) {
+    public final void set(int bit) {
+        bit = bit + offset;
         final int unit = bit / BITS_PER_UNIT;
         final int index = bit % BITS_PER_UNIT;
         final long mask = 1L << index;
@@ -128,6 +143,7 @@ public class ConcurrentBitSet implements NativeIdSetBI {
     }
 
     public void clear(int bit) {
+        bit = bit + offset;
         int unit = bit / BITS_PER_UNIT;
         int index = bit % BITS_PER_UNIT;
         long mask = 1L << index;
@@ -157,6 +173,7 @@ public class ConcurrentBitSet implements NativeIdSetBI {
     }
 
     public int nextSetBit(int from) {
+        from = from + offset;
         final int fromBit = from % BITS_PER_UNIT;
         final int fromUnit = from / BITS_PER_UNIT;
         lock.readLock().lock();
@@ -169,7 +186,7 @@ public class ConcurrentBitSet implements NativeIdSetBI {
                         nextBit &= (0xffffffffffffffffL << fromBit);
                     }
                     if (nextBit != 0L) {
-                        return i * BITS_PER_UNIT + Long.numberOfTrailingZeros(nextBit);
+                        return i * BITS_PER_UNIT + Long.numberOfTrailingZeros(nextBit) + offset;
                     }
                 }
             }
@@ -254,43 +271,7 @@ public class ConcurrentBitSet implements NativeIdSetBI {
     }
 
     public void or(ConcurrentBitSet with) {
-        if (this == with) {
-            return;
-        }
-
-        while (true) {
-            final int withLength;
-            with.lock.readLock().lock();
-            try {
-                withLength = with.units.length();
-            } finally {
-                with.lock.readLock().lock();
-            }
-            //(i) see comment below
-            ensureCapacityAndAquireReadLock(withLength);
-            try {
-                if (with.lock.readLock().tryLock()) {
-                    try {
-                        final int len = with.units.length();
-                        if (units.length() >= len) {
-                            for (int i = 0; i < len; i++) {//else could happen if changed at (i)                                                    for (int i = 0; i < len; i++) {
-                                long old = units.get(i);
-                                long upd = old | with.units.get(i);
-                                while (!units.compareAndSet(i, old, upd)) {
-                                    old = units.get(i);
-                                    upd = old | with.units.get(i);
-                                }
-                            }
-                            return;
-                        }
-                    } finally {
-                        with.lock.readLock().unlock();
-                    }
-                }
-            } finally {
-                lock.readLock().unlock();
-            }
-        }
+        privateOr(with);
     }
 
     /**
@@ -405,7 +386,7 @@ public class ConcurrentBitSet implements NativeIdSetBI {
                 arr = new int[len + offset];
             }
             for (int i = 0; i < len; i++) {
-                arr[i] = (int) units.get(i);
+                arr[i] = (int) units.get(i) + this.offset;
             }
             return arr;
         } finally {
@@ -488,9 +469,27 @@ public class ConcurrentBitSet implements NativeIdSetBI {
         return sb.toString();
     }
 
+    private class Iterator implements NativeIdSetItrBI {
+        
+        int currentBit = 0;
+
+        @Override
+        public int nid() {
+            return currentBit;
+        }
+
+        @Override
+        public boolean next() throws IOException {
+            if (currentBit != -1) {
+                currentBit = nextSetBit(currentBit+1);
+            }
+            return currentBit != -1;
+        }
+        
+    }
     @Override
-    public NidBitSetItrBI getIterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public NativeIdSetItrBI getIterator() {
+        return new Iterator();
     }
 
     @Override
@@ -548,13 +547,15 @@ public class ConcurrentBitSet implements NativeIdSetBI {
 
     @Override
     public void remove(int nid) {
+        nid = nid + offset;
         this.clear(nid);
     }
 
     @Override
     public void removeAll(int[] nids) {
         for (int i : nids) {
-            this.clear(i);
+            int index = i + offset;
+            this.clear(index);
         }
     }
 
@@ -571,10 +572,10 @@ public class ConcurrentBitSet implements NativeIdSetBI {
     @Override
     public int getMin() {
         if (this.cardinality() == 0) {
-            return -1;
+            return offset;
         } else {
             int min = 0;
-            return this.nextSetBit(min);
+            return this.nextSetBit(min) + offset;
         }
     }
 
@@ -590,6 +591,7 @@ public class ConcurrentBitSet implements NativeIdSetBI {
 
     @Override
     public void setNotMember(int nid) {
+        nid = nid + offset;
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -610,5 +612,44 @@ public class ConcurrentBitSet implements NativeIdSetBI {
             lock.readLock().unlock();
         }
         return index < 0;
+    }
+
+    private void privateOr(ConcurrentBitSet with) {
+        if (this == with) {
+            return;
+        }
+        while (true) {
+            final int withLength;
+            with.lock.readLock().lock();
+            try {
+                withLength = with.units.length();
+            } finally {
+                with.lock.readLock().unlock();
+            }
+            //(i) see comment below
+            ensureCapacityAndAquireReadLock(withLength);
+            try {
+                if (with.lock.readLock().tryLock()) {
+                    try {
+                        final int len = with.units.length();
+                        if (units.length() >= len) {
+                            for (int i = 0; i < len; i++) {//else could happen if changed at (i)                                                    for (int i = 0; i < len; i++) {
+                                long old = units.get(i);
+                                long upd = old | with.units.get(i);
+                                while (!units.compareAndSet(i, old, upd)) {
+                                    old = units.get(i);
+                                    upd = old | with.units.get(i);
+                                }
+                            }
+                            return;
+                        }
+                    } finally {
+                        with.lock.readLock().unlock();
+                    }
+                }
+            } finally {
+                lock.readLock().unlock();
+            }
+        }
     }
 }

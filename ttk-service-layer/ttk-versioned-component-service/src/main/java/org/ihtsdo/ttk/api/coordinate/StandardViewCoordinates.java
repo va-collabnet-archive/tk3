@@ -25,7 +25,6 @@ import org.ihtsdo.ttk.api.PositionBI;
 import org.ihtsdo.ttk.api.PositionSet;
 import org.ihtsdo.ttk.api.RelAssertionType;
 import org.ihtsdo.ttk.api.metadata.binding.Snomed;
-import org.ihtsdo.ttk.api.metadata.binding.TermAux;
 
 /**
  *

@@ -36,7 +36,7 @@ public interface TerminologySnapshotDI extends TerminologyDI {
 
    ConceptVersionBI getConceptVersion(UUID... uuids) throws IOException;
 
-   Map<Integer, ConceptVersionBI> getConceptVersions(NidBitSetBI cNids) throws IOException;
+   Map<Integer, ConceptVersionBI> getConceptVersions(NativeIdSetBI cNids) throws IOException;
 
    int[] getPossibleChildren(int cNid) throws IOException;
 

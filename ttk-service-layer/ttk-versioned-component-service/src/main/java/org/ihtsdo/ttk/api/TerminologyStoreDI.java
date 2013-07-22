@@ -22,8 +22,6 @@ public interface TerminologyStoreDI extends TerminologyDI {
 
    boolean isConceptNid(int nid);
 
-    public NativeIdSetBI getComponentNidsForConceptNids(NativeIdSetBI incomingPossibleConcepNids);
-
     enum DatabaseOptionPreferences {
         DB_LOCATION, BASELINE_FILES;
     }
@@ -73,9 +71,9 @@ public interface TerminologyStoreDI extends TerminologyDI {
    ConceptVersionBI getConceptVersionFromAlternateId(ViewCoordinate vc, int authorityNid, String altId) throws IOException;
    ConceptVersionBI getConceptVersionFromAlternateId(ViewCoordinate vc, UUID authorityUuid, String altId) throws IOException;
 
-   Map<Integer, ConceptVersionBI> getConceptVersions(ViewCoordinate vc, NidBitSetBI cNids) throws IOException;
+   Map<Integer, ConceptVersionBI> getConceptVersions(ViewCoordinate vc, NativeIdSetBI cNids) throws IOException;
 
-   Map<Integer, ConceptChronicleBI> getConcepts(NidBitSetBI cNids) throws IOException;
+   Map<Integer, ConceptChronicleBI> getConcepts(NativeIdSetBI cNids) throws IOException;
 
    Collection<DbDependency> getLatestChangeSetDependencies() throws IOException;
 
@@ -121,5 +119,8 @@ public interface TerminologyStoreDI extends TerminologyDI {
    void putViewCoordinate(ViewCoordinate vc) throws IOException;
 
    boolean isKindOf(int childNid, int parentNid, ViewCoordinate vc)
+           throws IOException, ContradictionException;
+   
+   boolean isChildOf(int childNid, int parentNid, ViewCoordinate vc)
            throws IOException, ContradictionException;
 }

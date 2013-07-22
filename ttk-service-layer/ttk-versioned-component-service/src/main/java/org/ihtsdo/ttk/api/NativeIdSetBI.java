@@ -22,7 +22,7 @@ package org.ihtsdo.ttk.api;
 public interface NativeIdSetBI {
 
 
-    NidBitSetItrBI getIterator();
+    NativeIdSetItrBI getIterator();
     
     int size();
 
