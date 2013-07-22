@@ -16,7 +16,7 @@ import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.type_nid_string.RefexNidStringAnalogBI;
 import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TtkRefexUuidStringRevision;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_string.TtkRefexUuidStringRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 

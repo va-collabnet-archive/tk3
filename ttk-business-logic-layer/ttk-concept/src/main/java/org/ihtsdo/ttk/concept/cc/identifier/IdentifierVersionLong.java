@@ -10,7 +10,7 @@ import org.ihtsdo.otf.tcc.api.Status;
 
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent.IDENTIFIER_PART_TYPES;
 import org.ihtsdo.otf.tcc.api.id.LongIdBI;
-import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierLong;
+import org.ihtsdo.otf.tcc.dto.component.identifier.TtkIdentifierLong;
 
 public class IdentifierVersionLong extends IdentifierVersion implements LongIdBI {
    private long longDenotation;

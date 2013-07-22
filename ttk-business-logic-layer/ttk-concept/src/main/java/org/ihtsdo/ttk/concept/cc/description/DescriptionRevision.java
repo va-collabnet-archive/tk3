@@ -13,7 +13,7 @@ import org.ihtsdo.otf.tcc.api.blueprint.DescriptionCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.description.DescriptionAnalogBI;
-import org.ihtsdo.ttk.dto.component.description.TtkDescriptionRevision;
+import org.ihtsdo.otf.tcc.dto.component.description.TtkDescriptionRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 

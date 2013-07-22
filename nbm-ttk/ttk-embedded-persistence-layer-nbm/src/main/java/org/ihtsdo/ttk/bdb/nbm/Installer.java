@@ -15,7 +15,7 @@
  */
 package org.ihtsdo.ttk.bdb.nbm;
 
-import org.ihtsdo.ttk.bdb.Bdb;
+import org.ihtsdo.otf.tcc.datastore.Bdb;
 import org.openide.modules.ModuleInstall;
 
 public class Installer extends ModuleInstall {

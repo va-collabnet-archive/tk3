@@ -27,7 +27,7 @@ import org.apache.mahout.math.list.IntArrayList;
 import org.ihtsdo.otf.tcc.api.Status;
 import org.ihtsdo.otf.tcc.api.refex.type_nid_boolean.RefexNidBooleanAnalogBI;
 import org.ihtsdo.ttk.concept.cc.P;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TtkRefexUuidBooleanRevision;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_boolean.TtkRefexUuidBooleanRevision;
 
 public class NidBooleanRevision extends RefexRevision<NidBooleanRevision, NidBooleanMember>
         implements RefexNidBooleanAnalogBI<NidBooleanRevision> {

@@ -31,7 +31,7 @@ import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.type_array_of_bytearray.RefexArrayOfBytearrayAnalogBI;
 import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
-import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TtkRefexArrayOfByteArrayRevision;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_array_of_bytearray.TtkRefexArrayOfByteArrayRevision;
 import org.ihtsdo.otf.tcc.api.uuid.UuidT5Generator;
 
 /**

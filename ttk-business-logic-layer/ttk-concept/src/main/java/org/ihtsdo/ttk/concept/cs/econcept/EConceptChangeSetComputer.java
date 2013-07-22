@@ -15,15 +15,15 @@ import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 import org.ihtsdo.ttk.concept.cc.ReferenceConcepts;
 import org.ihtsdo.otf.tcc.api.NidSetBI;
 import org.ihtsdo.otf.tcc.api.changeset.ChangeSetGenerationPolicy;
-import org.ihtsdo.ttk.dto.component.TtkComponentChronicle;
-import org.ihtsdo.ttk.dto.component.TtkRevision;
-import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesChronicle;
-import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesRevision;
-import org.ihtsdo.ttk.dto.component.description.TtkDescriptionChronicle;
-import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifier;
-import org.ihtsdo.ttk.dto.component.media.TtkMediaChronicle;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
-import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipChronicle;
+import org.ihtsdo.otf.tcc.dto.component.TtkComponentChronicle;
+import org.ihtsdo.otf.tcc.dto.component.TtkRevision;
+import org.ihtsdo.otf.tcc.dto.component.attribute.TtkConceptAttributesChronicle;
+import org.ihtsdo.otf.tcc.dto.component.attribute.TtkConceptAttributesRevision;
+import org.ihtsdo.otf.tcc.dto.component.description.TtkDescriptionChronicle;
+import org.ihtsdo.otf.tcc.dto.component.identifier.TtkIdentifier;
+import org.ihtsdo.otf.tcc.dto.component.media.TtkMediaChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.TtkRefexAbstractMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.relationship.TtkRelationshipChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -43,13 +43,13 @@ import org.ihtsdo.otf.tcc.api.id.StringIdBI;
 import org.ihtsdo.otf.tcc.api.id.UuidIdBI;
 import org.ihtsdo.ttk.concept.cs.ChangeSetLogger;
 import org.ihtsdo.ttk.concept.cs.ComputeEConceptForChangeSetI;
-import org.ihtsdo.ttk.dto.TtkConceptChronicle;
-import org.ihtsdo.ttk.dto.component.description.TtkDescriptionRevision;
-import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierLong;
-import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierString;
-import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierUuid;
-import org.ihtsdo.ttk.dto.component.media.TtkMediaRevision;
-import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipRevision;
+import org.ihtsdo.otf.tcc.dto.TtkConceptChronicle;
+import org.ihtsdo.otf.tcc.dto.component.description.TtkDescriptionRevision;
+import org.ihtsdo.otf.tcc.dto.component.identifier.TtkIdentifierLong;
+import org.ihtsdo.otf.tcc.dto.component.identifier.TtkIdentifierString;
+import org.ihtsdo.otf.tcc.dto.component.identifier.TtkIdentifierUuid;
+import org.ihtsdo.otf.tcc.dto.component.media.TtkMediaRevision;
+import org.ihtsdo.otf.tcc.dto.component.relationship.TtkRelationshipRevision;
 
 public class EConceptChangeSetComputer implements ComputeEConceptForChangeSetI {
 

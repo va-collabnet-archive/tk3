@@ -28,7 +28,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.ihtsdo.ttk.dto.TtkConceptChronicle;
+import org.ihtsdo.otf.tcc.dto.TtkConceptChronicle;
 
 /**
  * Convert eConcept files to change set files, using the current time as the commit time for the change set.

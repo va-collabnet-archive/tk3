@@ -66,12 +66,12 @@ import org.ihtsdo.otf.tcc.api.relationship.RelationshipVersionBI;
 import org.ihtsdo.otf.tcc.api.relationship.group.RelGroupChronicleBI;
 import org.ihtsdo.otf.tcc.api.relationship.group.RelGroupVersionBI;
 import org.ihtsdo.otf.tcc.api.metadata.binding.SnomedMetadataRfx;
-import org.ihtsdo.ttk.dto.TtkConceptChronicle;
-import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesChronicle;
-import org.ihtsdo.ttk.dto.component.description.TtkDescriptionChronicle;
-import org.ihtsdo.ttk.dto.component.media.TtkMediaChronicle;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
-import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipChronicle;
+import org.ihtsdo.otf.tcc.dto.TtkConceptChronicle;
+import org.ihtsdo.otf.tcc.dto.component.attribute.TtkConceptAttributesChronicle;
+import org.ihtsdo.otf.tcc.dto.component.description.TtkDescriptionChronicle;
+import org.ihtsdo.otf.tcc.dto.component.media.TtkMediaChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.TtkRefexAbstractMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.relationship.TtkRelationshipChronicle;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 import org.ihtsdo.ttk.concept.cc.DataMarker;
 

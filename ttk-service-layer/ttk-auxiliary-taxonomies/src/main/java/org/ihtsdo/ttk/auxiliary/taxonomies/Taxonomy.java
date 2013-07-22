@@ -24,7 +24,7 @@ import org.ihtsdo.otf.tcc.api.blueprint.ConceptCB;
 import org.ihtsdo.otf.tcc.api.lang.LanguageCode;
 import org.ihtsdo.otf.tcc.api.spec.ConceptSpec;
 import org.ihtsdo.otf.tcc.api.uuid.UuidT5Generator;
-import org.ihtsdo.ttk.dto.UuidDtoBuilder;
+import org.ihtsdo.otf.tcc.dto.UuidDtoBuilder;
 
 //~--- JDK imports ------------------------------------------------------------
 

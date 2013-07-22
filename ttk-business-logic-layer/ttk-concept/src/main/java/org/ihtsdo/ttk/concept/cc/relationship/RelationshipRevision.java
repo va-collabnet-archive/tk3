@@ -21,7 +21,7 @@ import org.ihtsdo.otf.tcc.api.metadata.binding.SnomedMetadataRf2;
 import org.ihtsdo.otf.tcc.api.TkRelationshipType;
 import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
-import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipRevision;
+import org.ihtsdo.otf.tcc.dto.component.relationship.TtkRelationshipRevision;
 
 public class RelationshipRevision extends Revision<RelationshipRevision, Relationship>
         implements RelationshipAnalogBI<RelationshipRevision> {

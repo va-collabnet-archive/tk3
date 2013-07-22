@@ -9,7 +9,7 @@ import org.ihtsdo.otf.tcc.api.Status;
 
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent.IDENTIFIER_PART_TYPES;
 import org.ihtsdo.otf.tcc.api.id.StringIdBI;
-import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierString;
+import org.ihtsdo.otf.tcc.dto.component.identifier.TtkIdentifierString;
 
 public class IdentifierVersionString extends IdentifierVersion implements StringIdBI {
 

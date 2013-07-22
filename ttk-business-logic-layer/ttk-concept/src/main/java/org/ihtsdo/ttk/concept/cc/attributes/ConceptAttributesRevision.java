@@ -24,7 +24,7 @@ import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.otf.tcc.api.blueprint.InvalidCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
-import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesRevision;
+import org.ihtsdo.otf.tcc.dto.component.attribute.TtkConceptAttributesRevision;
 
 public class ConceptAttributesRevision extends Revision<ConceptAttributesRevision, ConceptAttributes>
         implements ConceptAttributeAnalogBI<ConceptAttributesRevision> {  

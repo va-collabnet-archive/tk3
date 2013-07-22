@@ -26,7 +26,7 @@ import org.ihtsdo.otf.tcc.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.otf.tcc.datastore.temp.AceLog;
 import org.ihtsdo.ttk.concept.cc.concept.ConceptChronicle;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMemberFactory;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.TtkRefexAbstractMemberChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
 

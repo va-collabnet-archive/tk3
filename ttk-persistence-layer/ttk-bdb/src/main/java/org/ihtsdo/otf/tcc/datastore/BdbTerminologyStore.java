@@ -37,7 +37,7 @@ import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
 import org.ihtsdo.ttk.concept.cc.termstore.TerminologySnapshot;
 import org.ihtsdo.ttk.concept.cc.termstore.Termstore;
 import org.ihtsdo.ttk.concept.cs.CsProperty;
-import org.ihtsdo.ttk.dto.TtkConceptChronicle;
+import org.ihtsdo.otf.tcc.dto.TtkConceptChronicle;
 import org.ihtsdo.ttk.fx.FxComponentReference;
 import org.ihtsdo.ttk.fx.concept.FxConceptChronicle;
 import org.ihtsdo.ttk.fx.fetchpolicy.RefexPolicy;

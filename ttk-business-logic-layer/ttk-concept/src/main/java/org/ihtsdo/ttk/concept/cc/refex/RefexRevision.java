@@ -6,7 +6,7 @@ import com.sleepycat.bind.tuple.TupleInput;
 import org.ihtsdo.ttk.concept.cc.component.Revision;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.refex.RefexAnalogBI;
-import org.ihtsdo.ttk.dto.component.TtkRevision;
+import org.ihtsdo.otf.tcc.dto.component.TtkRevision;
 import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
 
 //~--- JDK imports ------------------------------------------------------------

@@ -50,12 +50,12 @@ import org.ihtsdo.ttk.concept.cc.media.Media;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMemberFactory;
 import org.ihtsdo.ttk.concept.cc.relationship.Relationship;
-import org.ihtsdo.ttk.dto.TtkConceptChronicle;
-import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesChronicle;
-import org.ihtsdo.ttk.dto.component.description.TtkDescriptionChronicle;
-import org.ihtsdo.ttk.dto.component.media.TtkMediaChronicle;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
-import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipChronicle;
+import org.ihtsdo.otf.tcc.dto.TtkConceptChronicle;
+import org.ihtsdo.otf.tcc.dto.component.attribute.TtkConceptAttributesChronicle;
+import org.ihtsdo.otf.tcc.dto.component.description.TtkDescriptionChronicle;
+import org.ihtsdo.otf.tcc.dto.component.media.TtkMediaChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.TtkRefexAbstractMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.relationship.TtkRelationshipChronicle;
  
 /**
  *

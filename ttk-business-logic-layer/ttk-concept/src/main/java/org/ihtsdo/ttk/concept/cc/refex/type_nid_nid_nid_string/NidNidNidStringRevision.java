@@ -16,7 +16,7 @@ import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_nid_string
 import org.ihtsdo.ttk.concept.cc.P;
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.refex.RefexRevision;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid_uuid_string
    .TtkRefexUuidUuidUuidStringRevision;
 
 //~--- JDK imports ------------------------------------------------------------

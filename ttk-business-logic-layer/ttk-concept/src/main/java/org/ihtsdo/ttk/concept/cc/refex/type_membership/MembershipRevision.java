@@ -13,7 +13,7 @@ import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_member.TtkRefexRevision;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_member.TtkRefexRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 

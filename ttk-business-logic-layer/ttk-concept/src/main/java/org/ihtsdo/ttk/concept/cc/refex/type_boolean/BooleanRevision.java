@@ -15,7 +15,7 @@ import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.type_boolean.RefexBooleanAnalogBI;
-import org.ihtsdo.ttk.dto.component.refex.type_boolean.TtkRefexBooleanRevision;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_boolean.TtkRefexBooleanRevision;
 import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
 
 //~--- JDK imports ------------------------------------------------------------

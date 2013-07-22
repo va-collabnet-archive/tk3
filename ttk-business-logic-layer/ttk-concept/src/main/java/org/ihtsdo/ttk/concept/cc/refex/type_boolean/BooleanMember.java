@@ -16,8 +16,8 @@ import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.type_boolean.RefexBooleanAnalogBI;
 import org.ihtsdo.otf.tcc.api.refex.type_boolean.RefexBooleanVersionBI;
-import org.ihtsdo.ttk.dto.component.refex.type_boolean.TtkRefexBooleanMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_boolean.TtkRefexBooleanRevision;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_boolean.TtkRefexBooleanMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_boolean.TtkRefexBooleanRevision;
 import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 

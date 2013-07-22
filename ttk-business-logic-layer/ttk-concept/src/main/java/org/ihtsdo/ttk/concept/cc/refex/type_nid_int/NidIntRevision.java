@@ -19,7 +19,7 @@ import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.type_nid_int.RefexNidIntAnalogBI;
 import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_int.TtkRefexUuidIntRevision;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_int.TtkRefexUuidIntRevision;
 
 public class NidIntRevision extends RefexRevision<NidIntRevision, NidIntMember>
         implements RefexNidIntAnalogBI<NidIntRevision> {

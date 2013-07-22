@@ -25,7 +25,7 @@ import org.ihtsdo.otf.tcc.api.Ts;
 import org.ihtsdo.otf.tcc.api.ComponentBI;
 import org.ihtsdo.otf.tcc.api.ComponentChronicleBI;
 import org.ihtsdo.otf.tcc.api.refex.RefexChronicleBI;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.TtkRefexAbstractMemberChronicle;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;

@@ -18,7 +18,7 @@ import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.refex.RefexVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.type_long.RefexLongAnalogBI;
-import org.ihtsdo.ttk.dto.component.refex.type_long.TtkRefexLongRevision;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_long.TtkRefexLongRevision;
 import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
 
 public class LongRevision extends RefexRevision<LongRevision, LongMember>

@@ -20,7 +20,7 @@ import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.ttk.concept.cs.ChangeSetLogger;
 import org.ihtsdo.ttk.concept.cs.ChangeSetReaderI;
 import org.ihtsdo.ttk.concept.cs.CsProperty;
-import org.ihtsdo.ttk.dto.TtkConceptChronicle;
+import org.ihtsdo.otf.tcc.dto.TtkConceptChronicle;
 
 public class EConceptChangeSetReader implements ChangeSetReaderI {
 

@@ -16,8 +16,8 @@ import org.ihtsdo.otf.tcc.api.NidSetBI;
 import org.ihtsdo.otf.tcc.api.PositionSetBI;
 import org.ihtsdo.otf.tcc.api.Precedence;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.dto.component.media.TtkMediaChronicle;
-import org.ihtsdo.ttk.dto.component.media.TtkMediaRevision;
+import org.ihtsdo.otf.tcc.dto.component.media.TtkMediaChronicle;
+import org.ihtsdo.otf.tcc.dto.component.media.TtkMediaRevision;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------

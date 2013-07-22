@@ -11,7 +11,7 @@ import org.ihtsdo.ttk.concept.cc.component.Revision;
 import org.ihtsdo.otf.tcc.api.id.IdBI;
 
 //import org.ihtsdo.db.bdb.Bdb;
-import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifier;
+import org.ihtsdo.otf.tcc.dto.component.identifier.TtkIdentifier;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------

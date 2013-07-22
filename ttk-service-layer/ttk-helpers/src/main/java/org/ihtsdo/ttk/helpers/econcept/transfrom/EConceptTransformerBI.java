@@ -16,7 +16,7 @@
 package org.ihtsdo.ttk.helpers.econcept.transfrom;
 
 import java.io.IOException;
-import org.ihtsdo.ttk.dto.TtkConceptChronicle;
+import org.ihtsdo.otf.tcc.dto.TtkConceptChronicle;
 
 /**
  *

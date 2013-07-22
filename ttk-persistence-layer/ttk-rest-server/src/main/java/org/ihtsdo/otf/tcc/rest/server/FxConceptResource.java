@@ -15,7 +15,7 @@ import org.ihtsdo.otf.tcc.api.ContradictionException;
 import org.ihtsdo.otf.tcc.api.TerminologySnapshotDI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
-import org.ihtsdo.ttk.dto.TtkConceptChronicle;
+import org.ihtsdo.otf.tcc.dto.TtkConceptChronicle;
 
 //~--- JDK imports ------------------------------------------------------------
 

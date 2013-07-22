@@ -27,7 +27,7 @@ import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Snomed;
-import org.ihtsdo.ttk.dto.chronicle.writer.ExternalChronicleWriterZip;
+import org.ihtsdo.otf.tcc.dto.chronicle.writer.ExternalChronicleWriterZip;
 
 /**
  *

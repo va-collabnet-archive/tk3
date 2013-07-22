@@ -18,8 +18,8 @@ import org.ihtsdo.otf.tcc.api.PositionSetBI;
 import org.ihtsdo.otf.tcc.api.Precedence;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.description.DescriptionAnalogBI;
-import org.ihtsdo.ttk.dto.component.description.TtkDescriptionChronicle;
-import org.ihtsdo.ttk.dto.component.description.TtkDescriptionRevision;
+import org.ihtsdo.otf.tcc.dto.component.description.TtkDescriptionChronicle;
+import org.ihtsdo.otf.tcc.dto.component.description.TtkDescriptionRevision;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 //~--- JDK imports ------------------------------------------------------------

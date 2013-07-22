@@ -14,8 +14,8 @@ import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexCAB;
 import org.ihtsdo.otf.tcc.api.blueprint.ComponentProperty;
 import org.ihtsdo.otf.tcc.api.refex.type_long.RefexLongAnalogBI;
-import org.ihtsdo.ttk.dto.component.refex.type_long.TtkRefexLongMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_long.TtkRefexLongRevision;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_long.TtkRefexLongMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_long.TtkRefexLongRevision;
 import org.ihtsdo.otf.tcc.api.ToolkitRefexType;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 

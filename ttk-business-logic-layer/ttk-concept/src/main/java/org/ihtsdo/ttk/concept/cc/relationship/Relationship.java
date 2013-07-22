@@ -30,8 +30,8 @@ import org.ihtsdo.otf.tcc.api.TkRelationshipType;
 import org.ihtsdo.otf.tcc.api.blueprint.IdDirective;
 import org.ihtsdo.otf.tcc.api.blueprint.RefexDirective;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
-import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipChronicle;
-import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipRevision;
+import org.ihtsdo.otf.tcc.dto.component.relationship.TtkRelationshipChronicle;
+import org.ihtsdo.otf.tcc.dto.component.relationship.TtkRelationshipRevision;
 import org.ihtsdo.otf.tcc.api.hash.Hashcode;
 
 public class Relationship extends ConceptComponent<RelationshipRevision, Relationship>

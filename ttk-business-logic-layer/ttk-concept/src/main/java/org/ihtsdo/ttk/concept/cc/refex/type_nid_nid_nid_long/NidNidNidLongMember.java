@@ -19,9 +19,9 @@ import org.ihtsdo.ttk.concept.cc.component.ConceptComponent;
 import org.ihtsdo.ttk.concept.cc.component.RevisionSet;
 import org.ihtsdo.ttk.concept.cc.computer.version.VersionComputer;
 import org.ihtsdo.ttk.concept.cc.refex.RefexMember;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid_uuid_long
    .TtkRefexUuidUuidUuidLongMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid_uuid_long
    .TtkRefexUuidUuidUuidLongRevision;
 
 //~--- JDK imports ------------------------------------------------------------

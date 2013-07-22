@@ -13,7 +13,7 @@ import org.ihtsdo.ttk.concept.cc.component.Revision;
 import org.ihtsdo.otf.tcc.api.ContradictionException;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.otf.tcc.api.media.MediaVersionBI;
-import org.ihtsdo.ttk.dto.component.media.TtkMediaRevision;
+import org.ihtsdo.otf.tcc.dto.component.media.TtkMediaRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 

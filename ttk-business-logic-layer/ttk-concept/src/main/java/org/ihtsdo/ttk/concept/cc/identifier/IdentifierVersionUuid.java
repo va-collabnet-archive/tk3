@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import org.ihtsdo.ttk.concept.cc.component.ConceptComponent.IDENTIFIER_PART_TYPES;
 import org.ihtsdo.otf.tcc.api.id.UuidIdBI;
-import org.ihtsdo.ttk.dto.component.identifier.TtkIdentifierUuid;
+import org.ihtsdo.otf.tcc.dto.component.identifier.TtkIdentifierUuid;
 
 //~--- JDK imports ------------------------------------------------------------
 

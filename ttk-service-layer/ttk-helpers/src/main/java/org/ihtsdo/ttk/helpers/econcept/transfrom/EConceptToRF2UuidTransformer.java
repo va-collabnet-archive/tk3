@@ -22,13 +22,13 @@ package org.ihtsdo.ttk.helpers.econcept.transfrom;
 import org.ihtsdo.otf.tcc.api.country.COUNTRY_CODE;
 import org.ihtsdo.ttk.helpers.time.TimeHelper;
 import org.ihtsdo.otf.tcc.api.lang.LanguageCode;
-import org.ihtsdo.ttk.dto.TtkConceptChronicle;
-import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesChronicle;
-import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesRevision;
-import org.ihtsdo.ttk.dto.component.description.TtkDescriptionChronicle;
-import org.ihtsdo.ttk.dto.component.description.TtkDescriptionRevision;
-import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipChronicle;
-import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipRevision;
+import org.ihtsdo.otf.tcc.dto.TtkConceptChronicle;
+import org.ihtsdo.otf.tcc.dto.component.attribute.TtkConceptAttributesChronicle;
+import org.ihtsdo.otf.tcc.dto.component.attribute.TtkConceptAttributesRevision;
+import org.ihtsdo.otf.tcc.dto.component.description.TtkDescriptionChronicle;
+import org.ihtsdo.otf.tcc.dto.component.description.TtkDescriptionRevision;
+import org.ihtsdo.otf.tcc.dto.component.relationship.TtkRelationshipChronicle;
+import org.ihtsdo.otf.tcc.dto.component.relationship.TtkRelationshipRevision;
 
 //~--- JDK imports ------------------------------------------------------------
 
