@@ -7,7 +7,7 @@
         <version>3.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-concept</artifactId>
-    <name>${branch}:L1: Business Logic Layer: Concept</name>
+    <name>OTF:TCC Component Chronicle Implementation</name>
     <description>Classes that provide state and behaviour to implement the concepts and 
         concept components defined by the API. </description>
     <url>http://maven.apache.org</url>
