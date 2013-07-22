@@ -18,7 +18,7 @@
           </node>
           <node name="org.ihtsdo.ttk.queue.QueuePreferences.Fields">
             <map>
-              <entry key="ID" value="c1ba56a3-108c-4600-a2e6-d42bd37019f3"/>
+              <entry key="ID" value="c7c768a5-f01a-4ee2-afc4-0b9286022e7e"/>
               <entry key="READ_INSTEAD_OF_TAKE" value="false"/>
               <entry key="DISPLAY_NAME" value="unnamed queue"/>
               <entry key="QUEUE_DIRECTORY" value="queues/queue.inbox"/>
