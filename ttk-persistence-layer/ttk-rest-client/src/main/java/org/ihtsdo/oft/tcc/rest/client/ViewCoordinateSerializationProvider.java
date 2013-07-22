@@ -16,7 +16,7 @@
 
 
 
-package org.ihtsdo.ttk.rest.client;
+package org.ihtsdo.oft.tcc.rest.client;
 
 //~--- non-JDK imports --------------------------------------------------------
 
