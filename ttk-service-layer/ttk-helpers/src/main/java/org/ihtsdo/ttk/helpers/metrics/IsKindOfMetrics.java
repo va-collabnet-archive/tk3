@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import org.ihtsdo.ttk.api.Ts;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
-import org.ihtsdo.ttk.api.NidBitSetBI;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
@@ -71,7 +71,7 @@ public class IsKindOfMetrics implements ProcessUnfetchedConceptDataBI {
    //~--- get methods ---------------------------------------------------------
 
    @Override
-   public NidBitSetBI getNidSet() throws IOException {
+   public NativeIdSetBI getNidSet() throws IOException {
       return null;
    }
 

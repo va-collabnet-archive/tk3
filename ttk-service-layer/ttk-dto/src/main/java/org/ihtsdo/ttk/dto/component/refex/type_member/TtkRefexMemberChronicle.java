@@ -2,9 +2,6 @@ package org.ihtsdo.ttk.dto.component.refex.type_member;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidBitSetBI;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.refex.RefexVersionBI;
 import org.ihtsdo.ttk.dto.component.TtkRevision;
 import org.ihtsdo.ttk.api.ToolkitRefexType;

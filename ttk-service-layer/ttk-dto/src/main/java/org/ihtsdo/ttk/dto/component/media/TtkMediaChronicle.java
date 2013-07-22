@@ -3,10 +3,7 @@ package org.ihtsdo.ttk.dto.component.media;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.ttk.api.Ts;
-import org.ihtsdo.ttk.api.ContradictionException;
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
-import org.ihtsdo.ttk.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.api.media.MediaChronicleBI;
 import org.ihtsdo.ttk.api.media.MediaVersionBI;
 import org.ihtsdo.ttk.dto.component.TtkComponentChronicle;

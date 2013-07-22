@@ -22,7 +22,6 @@ package org.ihtsdo.ttk.helpers.metrics;
 
 import org.ihtsdo.ttk.api.ComponentChronicleBI;
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.ProcessComponentChronicleBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.concept.ConceptChronicleBI;
@@ -33,6 +32,7 @@ import java.io.IOException;
 
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 
 /**
  *
@@ -79,7 +79,7 @@ public class SequentialFetchMetrics implements ProcessComponentChronicleBI, Proc
    //~--- get methods ---------------------------------------------------------
 
    @Override
-   public NidBitSetBI getNidSet() throws IOException {
+   public NativeIdSetBI getNidSet() throws IOException {
       return null;
    }
 

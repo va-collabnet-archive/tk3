@@ -21,7 +21,6 @@ package org.ihtsdo.ttk.helpers.classifier;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.ihtsdo.ttk.api.ConceptFetcherBI;
-import org.ihtsdo.ttk.api.NidBitSetBI;
 import org.ihtsdo.ttk.api.ProcessUnfetchedConceptDataBI;
 import org.ihtsdo.ttk.api.TerminologyStoreDI;
 import org.ihtsdo.ttk.api.Ts;
@@ -33,6 +32,7 @@ import java.io.IOException;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.ttk.api.NativeIdSetBI;
 
 /**
  *
@@ -50,7 +50,7 @@ public class FetchKindOf implements ProcessUnfetchedConceptDataBI {
    private ViewCoordinate vc;
 
    /** Field description */
-   private NidBitSetBI kindOfBitSet;
+   private NativeIdSetBI kindOfBitSet;
 
    /**
     * Constructs ...
@@ -112,7 +112,7 @@ public class FetchKindOf implements ProcessUnfetchedConceptDataBI {
     *
     * @return
     */
-   public NidBitSetBI getKindOfBitSet() {
+   public NativeIdSetBI getKindOfBitSet() {
       return kindOfBitSet;
    }
 
@@ -125,7 +125,7 @@ public class FetchKindOf implements ProcessUnfetchedConceptDataBI {
     * @throws IOException
     */
    @Override
-   public NidBitSetBI getNidSet() throws IOException {
+   public NativeIdSetBI getNidSet() throws IOException {
       return null;
    }
 
