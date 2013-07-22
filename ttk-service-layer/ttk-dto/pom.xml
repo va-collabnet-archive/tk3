@@ -7,7 +7,7 @@
         <version>3.1.1-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-dto</artifactId>
-    <name>${branch}:L2: Service Layer: Data transfer objects</name>
+    <name>OTF:TCC Data transfer objects</name>
     <url>http://maven.apache.org</url>
     <build>
         <plugins>

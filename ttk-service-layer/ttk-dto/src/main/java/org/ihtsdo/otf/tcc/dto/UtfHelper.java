@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ihtsdo.ttk.dto;
+package org.ihtsdo.otf.tcc.dto;
 
 import java.io.DataInput;
 import java.io.DataOutput;

@@ -1,4 +1,4 @@
-package org.ihtsdo.ttk.dto;
+package org.ihtsdo.otf.tcc.dto;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -22,33 +22,33 @@ import org.ihtsdo.otf.tcc.api.refex.type_nid_nid_string.RefexNidNidStringVersion
 import org.ihtsdo.otf.tcc.api.refex.type_nid_string.RefexNidStringVersionBI;
 import org.ihtsdo.otf.tcc.api.refex.type_string.RefexStringVersionBI;
 import org.ihtsdo.otf.tcc.api.relationship.RelationshipChronicleBI;
-import org.ihtsdo.ttk.dto.component.TtkRevision;
-import org.ihtsdo.ttk.dto.component.attribute.TtkConceptAttributesChronicle;
-import org.ihtsdo.ttk.dto.component.description.TtkDescriptionChronicle;
-import org.ihtsdo.ttk.dto.component.media.TtkMediaChronicle;
-import org.ihtsdo.ttk.dto.component.refex.TtkRefexAbstractMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_array_of_bytearray.TtkRefexArrayOfByteArrayMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_boolean.TtkRefexBooleanMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_int.TtkRefexIntMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_long.TtkRefexLongMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_member.TtkRefexMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_string.TtkRefexStringMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid.TtkRefexUuidMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_boolean.TtkRefexUuidBooleanMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_float.TtkRefexUuidFloatMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_int.TtkRefexUuidIntMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_long.TtkRefexUuidLongMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_string.TtkRefexUuidStringMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid.TtkRefexUuidUuidMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_string.TtkRefexUuidUuidStringMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid.TtkRefexUuidUuidUuidMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_float.TtkRefexUuidUuidUuidFloatMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_int.TtkRefexUuidUuidUuidIntMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_long.TtkRefexUuidUuidUuidLongMemberChronicle;
-import org.ihtsdo.ttk.dto.component.refex.type_uuid_uuid_uuid_string.TtkRefexUuidUuidUuidStringMemberChronicle;
-import org.ihtsdo.ttk.dto.component.relationship.TtkRelationshipChronicle;
-import org.ihtsdo.ttk.dto.component.transformer.ComponentFields;
-import org.ihtsdo.ttk.dto.component.transformer.ComponentTransformerBI;
+import org.ihtsdo.otf.tcc.dto.component.TtkRevision;
+import org.ihtsdo.otf.tcc.dto.component.attribute.TtkConceptAttributesChronicle;
+import org.ihtsdo.otf.tcc.dto.component.description.TtkDescriptionChronicle;
+import org.ihtsdo.otf.tcc.dto.component.media.TtkMediaChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.TtkRefexAbstractMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_array_of_bytearray.TtkRefexArrayOfByteArrayMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_boolean.TtkRefexBooleanMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_int.TtkRefexIntMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_long.TtkRefexLongMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_member.TtkRefexMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_string.TtkRefexStringMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid.TtkRefexUuidMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_boolean.TtkRefexUuidBooleanMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_float.TtkRefexUuidFloatMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_int.TtkRefexUuidIntMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_long.TtkRefexUuidLongMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_string.TtkRefexUuidStringMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid.TtkRefexUuidUuidMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid_string.TtkRefexUuidUuidStringMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid_uuid.TtkRefexUuidUuidUuidMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid_uuid_float.TtkRefexUuidUuidUuidFloatMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid_uuid_int.TtkRefexUuidUuidUuidIntMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid_uuid_long.TtkRefexUuidUuidUuidLongMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.refex.type_uuid_uuid_uuid_string.TtkRefexUuidUuidUuidStringMemberChronicle;
+import org.ihtsdo.otf.tcc.dto.component.relationship.TtkRelationshipChronicle;
+import org.ihtsdo.otf.tcc.dto.component.transformer.ComponentFields;
+import org.ihtsdo.otf.tcc.dto.component.transformer.ComponentTransformerBI;
 
 import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_FLOAT;
 import static org.ihtsdo.otf.tcc.api.ToolkitRefexType.CID_CID_CID_INT;
