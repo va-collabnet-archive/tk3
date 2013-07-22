@@ -7,7 +7,7 @@
     </parent>
     <artifactId>ttk-rest-server</artifactId>
     <packaging>war</packaging>
-    <name>${branch}:L0: Persistence Layer: REST Server</name>
+    <name>OTF:TCC REST Server</name>
     <properties>
         <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
     </properties>

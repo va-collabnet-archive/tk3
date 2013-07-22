@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.ihtsdo.ttk.rest.server;
+package org.ihtsdo.otf.tcc.rest.server;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -18,24 +18,32 @@ import javax.ws.rs.core.StreamingOutput;
  *
  * @author kec
  */
-@Path("/nidpairs/refex")
-public class RefexPairResource {
+@Path("/property")
+public class PropertyResource {
     static {
         BdbSingleton.get();
     }
         
     @GET
-    @Path("{nid}")
+    @Path("")
     @Produces("application/bdb")
-    public StreamingOutput getRefexPairs(@PathParam("nid") final int nid) throws IOException  {
+    public StreamingOutput getProperties() throws IOException  {
         return new StreamingOutput() {
 
             @Override
             public void write(OutputStream output) throws IOException, WebApplicationException {
                 ObjectOutputStream oos = new ObjectOutputStream(output);
-                oos.writeObject(BdbSingleton.get().getRefexPairs(nid));
+                oos.writeObject(BdbSingleton.get().getProperties());
             }
         };
     }
+
+    @GET
+    @Path("{key}")
+    @Produces("text/plain")
+    public String getProperty(@PathParam("key") String key) throws IOException  {
+        return BdbSingleton.get().getProperty(key);
+    }
+
     
 }
