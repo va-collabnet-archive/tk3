@@ -15,7 +15,7 @@ the specific language governing permissions and limitations under the License. -
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.ihtsdo.ttk</groupId>
     <artifactId>ttk-mmb</artifactId>
-    <version>3.1.1-SNAPSHOT</version>
+    <version>3.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${branch}: (MMP) Terminology Toolkit</name>
     <description>The IHTSDO toolkit provides two software frameworks for
@@ -50,6 +50,7 @@ the specific language governing permissions and limitations under the License. -
         <je.version>5.0.73</je.version>
         <juint.version>4.11</juint.version>
         <jersey-version>2.0</jersey-version>
+        <otf.version>1.0-SNAPSHOT</otf.version>
         <maven-release-plugin.version>2.0</maven-release-plugin.version>
         <maven-jxr-plugin.version>2.2</maven-jxr-plugin.version>
         <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
@@ -376,7 +377,6 @@ the specific language governing permissions and limitations under the License. -
         </plugins>
     </build>
     <modules>
-        <module>ttk-persistence-layer</module>
         <module>ttk-business-logic-layer</module>
         <module>ttk-service-layer</module>
         <module>ttk-fx-presentation-layer</module>

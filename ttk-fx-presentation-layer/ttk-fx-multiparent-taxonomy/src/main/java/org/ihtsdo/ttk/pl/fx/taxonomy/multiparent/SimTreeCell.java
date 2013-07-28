@@ -29,11 +29,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.otf.tcc.api.concurrency.FutureHelper;
 import org.ihtsdo.otf.tcc.ddo.TaxonomyReferenceWithConcept;
 import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
 import org.ihtsdo.otf.tcc.ddo.concept.component.relationship.RelationshipChronicleDdo;
 import org.ihtsdo.otf.tcc.ddo.concept.component.relationship.RelationshipVersionDdo;
-import org.ihtsdo.ttk.helpers.concurrency.FutureHelper;
 
 /**
  *

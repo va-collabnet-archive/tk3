@@ -20,7 +20,6 @@ package org.ihtsdo.ttk.preferences;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.helpers.io.FileIO;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -33,6 +32,7 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.prefs.AbstractPreferences;
 import java.util.prefs.BackingStoreException;
+import org.ihtsdo.otf.tcc.api.io.FileIO;
 
 /**
  *

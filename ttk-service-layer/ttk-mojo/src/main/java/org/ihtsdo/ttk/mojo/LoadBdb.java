@@ -19,16 +19,16 @@ import org.ihtsdo.ttk.helpers.metrics.IsKindOfMetrics;
 import java.io.File;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.ihtsdo.ttk.helpers.io.FileIO;
 import org.ihtsdo.otf.tcc.api.time.TimeHelper;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.concept.ConceptChronicleBI;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
+import org.ihtsdo.otf.tcc.api.io.FileIO;
 import org.ihtsdo.otf.tcc.api.metadata.binding.Taxonomies;
 import org.ihtsdo.otf.tcc.api.metadata.binding.TermAux;
 import org.ihtsdo.ttk.classifier.Classifier;
-import org.ihtsdo.ttk.lookup.Looker;
-import org.ihtsdo.ttk.lookup.TermstoreLatch;
+import org.ihtsdo.otf.tcc.lookup.Looker;
+import org.ihtsdo.otf.tcc.lookup.TermstoreLatch;
 
 /**
  * Goal which touches a timestamp file.

@@ -19,8 +19,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TreeItem;
 
-import org.ihtsdo.ttk.helpers.concurrency.FutureHelper;
-import org.ihtsdo.ttk.helpers.thread.NamedThreadFactory;
 import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -36,6 +34,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.ihtsdo.otf.tcc.api.concurrency.FutureHelper;
+import org.ihtsdo.otf.tcc.api.thread.NamedThreadFactory;
 import org.ihtsdo.otf.tcc.ddo.TaxonomyReferenceWithConcept;
 import org.ihtsdo.otf.tcc.ddo.concept.component.relationship.RelationshipChronicleDdo;
 import org.ihtsdo.otf.tcc.ddo.concept.component.relationship.RelationshipVersionDdo;
