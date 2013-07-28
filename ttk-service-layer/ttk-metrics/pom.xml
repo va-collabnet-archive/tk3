@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.ihtsdo.ttk</groupId>
         <artifactId>ttk-service-layer</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-metrics</artifactId>
     <name>${branch}:L2: Service Layer: Metrics</name>
@@ -29,9 +29,10 @@
                 <version>${project.version}</version>
                 <dependencies>
                     <dependency>
-                        <groupId>${project.groupId}</groupId>
-                        <artifactId>ttk-bdb</artifactId>
-                        <version>${project.version}</version>
+                        <groupId>org.ihtsdo.otf</groupId>
+                        <artifactId>tcc-datastore</artifactId>
+                        <version>${otf.version}</version>
+                        <type>jar</type>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.lucene</groupId>
@@ -43,12 +44,12 @@
                         <artifactId>lucene-core</artifactId>
                         <version>${org.apache.lucene.version}</version>
                     </dependency>
-                 <dependency>
-                    <groupId>com.oracle</groupId>
-                    <artifactId>jfxrt</artifactId>
-                    <version>${javafx.version}</version>
-                </dependency>
-               </dependencies>
+                    <dependency>
+                        <groupId>com.oracle</groupId>
+                        <artifactId>jfxrt</artifactId>
+                        <version>${javafx.version}</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>load-bdb</id>

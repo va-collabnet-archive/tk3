@@ -46,7 +46,7 @@ import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
 import org.ihtsdo.otf.tcc.api.coordinate.ViewCoordinate;
 import org.ihtsdo.ttk.logic.DefinitionPart;
 import org.ihtsdo.ttk.logic.DefinitionPartType;
-import org.ihtsdo.ttk.lookup.Looker;
+import org.ihtsdo.otf.tcc.lookup.Looker;
 import org.ihtsdo.ttk.pl.fx.helper.Drag;
 import org.ihtsdo.ttk.services.action.ActionBI;
 import org.ihtsdo.ttk.services.action.ActionContextBI;

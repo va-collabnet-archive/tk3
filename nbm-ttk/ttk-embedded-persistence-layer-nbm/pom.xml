@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.ihtsdo.ttk</groupId>
         <artifactId>nbm-ttk</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-embedded-persistence-layer-nbm</artifactId>
     <packaging>nbm</packaging>
@@ -37,37 +37,33 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>ttk-bdb</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.ihtsdo.otf</groupId>
+            <artifactId>tcc-datastore</artifactId>
+            <version>${otf.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>${project.groupId}</groupId>
                     <artifactId>ttk-cern-prim</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>${project.groupId}</groupId>
-                    <artifactId>ttk-api</artifactId>
+                    <groupId>org.ihtsdo.otf</groupId>
+                    <artifactId>tcc-api</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>${project.groupId}</groupId>
-                    <artifactId>ttk-lookup</artifactId>
+                    <groupId>org.ihtsdo.otf</groupId>
+                    <artifactId>tcc-lookup</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>${project.groupId}</groupId>
-                    <artifactId>ttk-dto</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>${project.groupId}</groupId>
-                    <artifactId>ttk-api-with-fx-properties</artifactId>
+                    <groupId>org.ihtsdo.otf</groupId>
+                    <artifactId>tcc-dto-ddo</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>${project.groupId}</groupId>
                     <artifactId>ttk-helpers</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>${project.groupId}</groupId>
-                    <artifactId>ttk-concept</artifactId>
+                    <groupId>org.ihtsdo.otf</groupId>
+                    <artifactId>tc-model-impl</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.apache.lucene</groupId>
@@ -113,7 +109,7 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <configuration>
                     <publicPackages>
-                        <publicPackage>org.ihtsdo.ttk.bdb.*</publicPackage>
+                        <publicPackage>org.ihtsdo.otc.tcc.datastore.*</publicPackage>
                         <publicPackage>au.csiro.*</publicPackage>
                     </publicPackages>
                 </configuration>

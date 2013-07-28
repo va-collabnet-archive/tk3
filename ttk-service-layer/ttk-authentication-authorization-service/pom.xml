@@ -4,7 +4,7 @@
     <parent>
         <artifactId>ttk-service-layer</artifactId>
         <groupId>org.ihtsdo.ttk</groupId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     <groupId>org.ihtsdo.ttk</groupId>
     <artifactId>ttk-authentication-authorization-service</artifactId>
@@ -12,9 +12,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.ihtsdo.ttk</groupId>
-            <artifactId>ttk-lookup</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.ihtsdo.otf</groupId>
+            <artifactId>tcc-lookup</artifactId>
+            <version>${otf.version}</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.shiro</groupId>

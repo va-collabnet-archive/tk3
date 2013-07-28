@@ -39,7 +39,7 @@ import javafx.util.Callback;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.ddo.concept.ConceptChronicleDdo;
 import org.ihtsdo.otf.tcc.ddo.context.TerminologyContext;
-import org.ihtsdo.ttk.lookup.Looker;
+import org.ihtsdo.otf.tcc.lookup.Looker;
 
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;

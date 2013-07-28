@@ -20,8 +20,8 @@ package org.ihtsdo.ttk.concept.nbm;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.otf.tcc.chronicle.cc.P;
-import org.ihtsdo.otf.tcc.chronicle.cc.termstore.PersistentStoreI;
+import org.ihtsdo.otf.tcc.model.cc.P;
+import org.ihtsdo.otf.tcc.model.cc.termstore.PersistentStoreI;
 import org.ihtsdo.otf.tcc.ddo.store.FxTs;
 
 import org.openide.modules.ModuleInstall;

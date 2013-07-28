@@ -20,8 +20,8 @@ package org.ihtsdo.ttk.services.action;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.ihtsdo.ttk.lookup.InstanceWrapper;
-import org.ihtsdo.ttk.lookup.Looker;
+import org.ihtsdo.otf.tcc.lookup.InstanceWrapper;
+import org.ihtsdo.otf.tcc.lookup.Looker;
 import org.ihtsdo.ttk.services.action.drools.DroolsActionService;
 
 //~--- JDK imports ------------------------------------------------------------

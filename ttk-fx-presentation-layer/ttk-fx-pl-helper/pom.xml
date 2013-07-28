@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.ihtsdo.ttk</groupId>
         <artifactId>ttk-fx-presentation-layer</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-fx-pl-helper</artifactId>
     <name>${branch}:L3: FX Presentation Layer: helper</name>
@@ -21,9 +21,10 @@
              <version>1.3.0</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>ttk-versioned-fx-component-service</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.ihtsdo.otf</groupId>
+            <artifactId>tcc-dto-ddo</artifactId>
+            <version>${otf.version}</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>

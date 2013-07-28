@@ -23,9 +23,9 @@ package org.ihtsdo.ttk.pl.nb.progress;
 import javafx.concurrent.Worker;
 
 import org.ihtsdo.otf.tcc.ddo.progress.AggregateProgressItem;
-import org.ihtsdo.ttk.lookup.InstanceWrapper;
-import org.ihtsdo.ttk.lookup.properties.AllowItemCancel;
-import org.ihtsdo.ttk.lookup.properties.ShowGlobalTaskProgress;
+import org.ihtsdo.otf.tcc.lookup.InstanceWrapper;
+import org.ihtsdo.otf.tcc.lookup.properties.AllowItemCancel;
+import org.ihtsdo.otf.tcc.lookup.properties.ShowGlobalTaskProgress;
 
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;

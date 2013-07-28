@@ -28,8 +28,8 @@ import javafx.event.EventHandler;
 import org.ihtsdo.otf.tcc.api.store.Ts;
 import org.ihtsdo.otf.tcc.api.coordinate.StandardViewCoordinates;
 import org.ihtsdo.ttk.helpers.timer.TtkTimer;
-import org.ihtsdo.ttk.lookup.Looker;
-import org.ihtsdo.ttk.lookup.TermstoreLatch;
+import org.ihtsdo.otf.tcc.lookup.Looker;
+import org.ihtsdo.otf.tcc.lookup.TermstoreLatch;
 
 //~--- JDK imports ------------------------------------------------------------
 

@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.ihtsdo.ttk</groupId>
         <artifactId>ttk-fx-application-layer</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     <artifactId>ttk-fx-application</artifactId>
     <name>${branch}:L4: FX Application Layer: Isaac</name>
@@ -44,10 +44,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.ihtsdo.ttk</groupId>
-            <artifactId>ttk-lookup</artifactId>
+            <groupId>org.ihtsdo.otf</groupId>
+            <artifactId>tcc-lookup</artifactId>
+            <version>${otf.version}</version>
             <type>jar</type>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.ihtsdo.ttk</groupId>
@@ -62,10 +62,10 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.ihtsdo.ttk</groupId>
-            <artifactId>ttk-versioned-component-service</artifactId>
+            <groupId>org.ihtsdo.otf</groupId>
+            <artifactId>tcc-dto-ddo</artifactId>
+            <version>${otf.version}</version>
             <type>jar</type>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.ihtsdo.ttk</groupId>
@@ -110,16 +110,10 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.ihtsdo.ttk</groupId>
-            <artifactId>ttk-bdb</artifactId>
+            <groupId>org.ihtsdo.otf</groupId>
+            <artifactId>tcc-rest-client</artifactId>
+            <version>${otf.version}</version>
             <type>jar</type>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.ihtsdo.ttk</groupId>
-            <artifactId>ttk-rest-client</artifactId>
-            <type>jar</type>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
     <profiles>

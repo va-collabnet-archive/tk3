@@ -18,7 +18,7 @@ package org.ihtsdo.ttk.services.aa;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import org.ihtsdo.ttk.lookup.Looker;
+import org.ihtsdo.otf.tcc.lookup.Looker;
 
 /**
  *

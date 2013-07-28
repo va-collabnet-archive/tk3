@@ -3,7 +3,7 @@
 <preferences EXTERNAL_XML_VERSION="1.0">
   <root type="system">
     <map/>
-    <node name="org.ihtsdo.ttk;ttk-preferences;3.1.1-SNAPSHOT;maven-surefire-plugin">
+    <node name="org.ihtsdo.ttk;ttk-preferences;3.2.0-SNAPSHOT;maven-surefire-plugin">
       <map/>
       <node name="org.ihtsdo.ttk.queue.QueueList.Fields">
         <map>
@@ -18,7 +18,7 @@
           </node>
           <node name="org.ihtsdo.ttk.queue.QueuePreferences.Fields">
             <map>
-              <entry key="ID" value="fdbec2c7-6f29-460a-b79f-bc5d2e899f9f"/>
+              <entry key="ID" value="c2b74bb4-9276-4271-a591-d4fe77b28f3a"/>
               <entry key="READ_INSTEAD_OF_TAKE" value="false"/>
               <entry key="DISPLAY_NAME" value="unnamed queue"/>
               <entry key="QUEUE_DIRECTORY" value="queues/queue.inbox"/>

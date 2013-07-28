@@ -37,8 +37,8 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
 
-import org.ihtsdo.ttk.lookup.Looker;
-import org.ihtsdo.ttk.lookup.TtkEnvironment;
+import org.ihtsdo.otf.tcc.lookup.Looker;
+import org.ihtsdo.otf.tcc.lookup.TtkEnvironment;
 import org.ihtsdo.ttk.services.aa.SessionAttributeKeys;
 //~--- JDK imports ------------------------------------------------------------
 

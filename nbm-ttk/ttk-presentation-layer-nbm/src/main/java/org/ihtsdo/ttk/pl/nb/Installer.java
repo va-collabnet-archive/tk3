@@ -24,8 +24,8 @@ import javafx.concurrent.Worker;
 
 import javafx.embed.swing.JFXPanel;
 
-import org.ihtsdo.ttk.lookup.Looker;
-import org.ihtsdo.ttk.lookup.TtkEnvironment;
+import org.ihtsdo.otf.tcc.lookup.Looker;
+import org.ihtsdo.otf.tcc.lookup.TtkEnvironment;
 import org.ihtsdo.ttk.pl.nb.progress.WorkerListener;
 
 import org.openide.modules.ModuleInstall;
