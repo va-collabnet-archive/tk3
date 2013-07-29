@@ -61,6 +61,7 @@ import org.ihtsdo.otf.tcc.api.contradiction.ContradictionException;
 import org.ihtsdo.otf.tcc.api.nid.NidSetBI;
 import org.ihtsdo.otf.tcc.api.concept.ConceptVersionBI;
 import org.ihtsdo.otf.tcc.api.coordinate.EditCoordinate;
+import org.ihtsdo.otf.tcc.api.nid.NidSet;
 import org.ihtsdo.ttk.auxiliary.taxonomies.DescriptionLogicBinding;
 import org.ihtsdo.ttk.logic.DefinitionTree;
 import org.ihtsdo.ttk.services.aa.SessionAttributeKeys;
@@ -104,7 +105,8 @@ public class ConceptDetailsViewController
               int authorNid = Ts.get().getNidForUuids(userUuidArray);
               UUID[] moduleUuids = (UUID[]) Looker.lookup(SessionAttributes.class).get(SessionAttributeKeys.EDIT_MODULE_UUID_ARRAY);
               int moduleNid = Ts.get().getNidForUuids(moduleUuids);
-              NidSetBI editPathNidSet = Ts.getGlobalSnapshot().getViewCoordinate().getPositionSet().getViewPathNidSet();
+              NidSetBI editPathNidSet = new NidSet();
+              editPathNidSet.add(Ts.getGlobalSnapshot().getViewCoordinate().getViewPosition().getPath().getConceptNid());
               // TODO how to specify the module nid? Should it be dynamic? Drools should specify the module nid in the action?
               
               EditCoordinate editCoordinate = new EditCoordinate(authorNid, moduleNid, editPathNidSet);
