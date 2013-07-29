@@ -65,7 +65,7 @@ public class Classifier {
    public static void classify() throws Exception {
       ViewCoordinate vc = StandardViewCoordinates.getSnomedInferredLatest();
 
-      vc.setRelAssertionType(RelAssertionType.STATED);
+      vc.setRelationshipAssertionType(RelAssertionType.STATED);
 
       EditCoordinate ec = new EditCoordinate(TermAux.USER.getNid(), DescriptionLogicBinding.DL_MODULE.getNid(),
                              Snomed.SNOMED_RELEASE_PATH.getNid());
