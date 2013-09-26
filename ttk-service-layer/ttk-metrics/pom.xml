@@ -45,7 +45,7 @@
                         <version>${org.apache.lucene.version}</version>
                     </dependency>
                     <dependency>
-                        <groupId>com.oracle</groupId>
+                        <groupId>com.sun.javafx</groupId>
                         <artifactId>jfxrt</artifactId>
                         <version>${javafx.version}</version>
                     </dependency>
