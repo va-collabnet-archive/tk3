@@ -32,7 +32,7 @@
             <version>${project.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.oracle</groupId>
+                    <groupId>com.sun.javafx</groupId>
                     <artifactId>jfxrt</artifactId>
                 </exclusion>
                  <exclusion>
@@ -51,7 +51,7 @@
             <version>${project.version}</version>
            <exclusions>
                 <exclusion>
-                    <groupId>com.oracle</groupId>
+                    <groupId>com.sun.javafx</groupId>
                     <artifactId>jfxrt</artifactId>
                 </exclusion>
                 <exclusion>
@@ -74,7 +74,7 @@
             <version>${project.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.oracle</groupId>
+                    <groupId>com.sun.javafx</groupId>
                     <artifactId>jfxrt</artifactId>
                 </exclusion>
                 <exclusion>
