@@ -15,19 +15,21 @@
  */
 package org.ihtsdo.ttk.bdb.nbm;
 
-import org.ihtsdo.otf.tcc.datastore.Bdb;
+import org.ihtsdo.otf.tcc.api.store.TerminologyStoreDI;
+import org.ihtsdo.otf.tcc.lookup.Hk2Looker;
 import org.openide.modules.ModuleInstall;
 
 public class Installer extends ModuleInstall {
-
+    private static TerminologyStoreDI store;
     @Override
     public void restored() {
+      System.setProperty("org.ihtsdo.otf.tcc.datastore.bdb-location", "berkeley-db");
         
         new Thread(new Runnable() {
 
             @Override
             public void run() {
-                Bdb.setup("berkeley-db", true);
+                store = Hk2Looker.get().getService(TerminologyStoreDI.class);
             }
         }).start();
      }

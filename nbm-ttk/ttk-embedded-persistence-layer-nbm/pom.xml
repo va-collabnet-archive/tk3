@@ -90,7 +90,7 @@
                     <artifactId>je</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>com.oracle</groupId>
+                    <groupId>com.sun.javafx</groupId>
                     <artifactId>jfxrt</artifactId>
                 </exclusion>
             </exclusions>
