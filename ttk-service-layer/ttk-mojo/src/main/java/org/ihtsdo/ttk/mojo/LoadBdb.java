@@ -104,7 +104,7 @@ public class LoadBdb extends AbstractMojo {
          metrics = new IsKindOfMetrics(Taxonomies.SNOMED.getLenient().getNid(),
                                       StandardViewCoordinates.getSnomedInferredLatest());
 
-         Ts.get().iterateConceptDataInParallel(metrics);
+         Ts.get().iterateConceptDataInParallel(metrics); 
 
          end = System.currentTimeMillis();
 
