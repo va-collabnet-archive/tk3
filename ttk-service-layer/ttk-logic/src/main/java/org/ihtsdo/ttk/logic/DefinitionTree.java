@@ -102,7 +102,7 @@ public class DefinitionTree {
 
       for (RefexVersionBI<?> annotation :
           cv.getConceptAttributesActive().getAnnotationsActive(cv.getViewCoordinate())) {
-         if (annotation.getRefexExtensionNid() == refexExtensionNid) {
+         if (annotation.getAssemblageNid() == refexExtensionNid) {
             DefinitionPart part = new DefinitionPart(annotation);
 
             parts.put(annotation.getNid(), part);
@@ -221,7 +221,7 @@ public class DefinitionTree {
          node.getRefexVersion().getAnnotationsActive(cv.getViewCoordinate());
 
       for (RefexVersionBI<?> edge : edges) {
-         if ((edge.getRefexExtensionNid() == refexExtensionNid)
+         if ((edge.getAssemblageNid() == refexExtensionNid)
              && (edge instanceof RefexNidBooleanVersionBI)) {
             RefexNidBooleanVersionBI theEdge = (RefexNidBooleanVersionBI) edge;
 
